@@ -7,6 +7,7 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [01-competitor-research.md](01-competitor-research.md) | Existing Sri Lankan sites and apps, their features, gaps, and a verification checklist |
 | [02-feature-recommendations.md](02-feature-recommendations.md) | Suggested MVP, v2 and later features, accuracy plan, business models, open questions |
 | [03-porondam-domain-notes.md](03-porondam-domain-notes.md) | Notes on the 20 point porondam, Kuja dosha and engine inputs |
+| [04-ai-features.md](04-ai-features.md) | Which Sri Lankan sites already have AI chat, Indian benchmarks, recommended AI features, architecture and guardrails |
 
 ## Read this first
 

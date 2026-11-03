@@ -2,6 +2,8 @@
 
 Date of research: 2026-11-03
 
+> **Update:** this file does not cover the Sri Lankan sites that advertise AI chat (MyHoroscope.LK, AstroGPT Lanka, Gurunnanse AI, and sinhalahoroscope.com reportedly has an AI chatbot). See [04-ai-features.md](04-ai-features.md). The "gaps" below should be read together with that file.
+
 ## Terms
 
 | Term | Sinhala | Meaning |
