@@ -10,6 +10,7 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [04-ai-features.md](04-ai-features.md) | Which Sri Lankan sites already have AI chat, Indian benchmarks, recommended AI features, architecture and guardrails |
 | [05-pricing.md](05-pricing.md) | Free vs paid offers, human astrologer prices in LKR, app and telecom pricing, AI pricing benchmarks, pricing suggestions |
 | [06-release-plan.md](06-release-plan.md) | First release (v0.1) plan for the Python backend: scope, stack, API, AI design, testing, milestones, decisions needed |
+| [07-free-and-paid-features.md](07-free-and-paid-features.md) | What every user gets and what paid users get on top, the five added features in detail, what paid features need, later services, and a market check |
 
 ## Read this first
 

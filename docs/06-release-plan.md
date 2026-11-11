@@ -4,6 +4,8 @@ Date: 2026-11-11
 
 Built from files 01 to 05. This is a proposal for you to react to. Items marked **[Decide]** need your call before or during the build.
 
+> **Update:** the scope grew after this plan was first written. Free and paid levels, the Kuja dosha deep check, dasha detail, the personal forecast, share links and the PDF report are now part of the first release. The scope, API and milestones below include them. The full description of each feature is in [07-free-and-paid-features.md](07-free-and-paid-features.md).
+
 ## 1. Goal of the first release
 
 Ship a backend that does three things **correctly** and **explains** them:
@@ -12,7 +14,7 @@ Ship a backend that does three things **correctly** and **explains** them:
 2. Match two charts for porondam, with a per factor result and Kuja dosha.
 3. Explain a result in Sinhala or English using AI, grounded only in the computed facts.
 
-Everything else (nakath finder, palapala, accounts, payments, marketplace) waits. Research shows a plain chart and score are free everywhere (file 05), so v0.1 must win on **accuracy, transparency and explanation**, not feature count.
+Everything else (nakath finder, daily palapala, baby names, marketplace) waits. Research shows a plain chart and score are free everywhere (file 05), so v0.1 must win on **accuracy, transparency and explanation**, not feature count.
 
 ## 2. Scope
 
@@ -25,16 +27,21 @@ Everything else (nakath finder, palapala, accounts, payments, marketplace) waits
 | Time zones | Historical offsets from the IANA tz database (Sri Lanka changed offset several times between 1996 and 2006) |
 | Porondam | Rule engine driven by a config file. Starts with the factors confirmed in file 03 and adds the rest once the astrologer supplies the full list of 20. Rajju and Vedha (and Yoni if confirmed) as hard pass or fail checks shown apart from the score |
 | Quick match | Match by two birth stars only, for users without a birth time |
-| Kuja dosha | Check for both people, house list and cancellation rules taken from config, with the reasoning returned |
+| Kuja dosha | Check for both people, house list and cancellation rules taken from config, with the reasoning returned. Paid level lists every cancellation rule and whether it applies |
+| Dasha detail | Main periods for everyone. Paid level adds all sub periods, the third level for the current period, and what each period means for the chart |
+| Personal forecast | From real transits against the person's chart. This month for everyone. Paid level covers twelve months, key dates and email alerts |
+| Share link | A link and WhatsApp share for any result. Created only when the user asks, expires, can be deleted |
+| PDF report | For everyone, in Sinhala or English, with the kendara drawing. Paid level adds the explanations and both languages in one file |
+| Free and paid levels | One engine. The paid level returns more detail and the explanations. Needs sign in, payments and an entitlement check |
 | Tamil porutham | Engine supports a second rule set, but only enabled if rules are validated in time |
-| AI explain | One endpoint: "explain this chart or match" in Sinhala, English or Singlish. The model gets the engine JSON and must use only those facts |
-| Chart output | JSON plus an SVG of the Sri Lankan style square chart. PDF can come later |
-| Privacy | Stateless by default. No birth data stored, no birth data in logs |
+| AI explain (paid) | One endpoint: "explain this chart or match" in Sinhala, English or Singlish. The model gets the engine JSON and must use only those facts |
+| Chart output | JSON plus an SVG of the Sri Lankan style square chart |
+| Privacy | Nothing stored by default, no birth data in logs. Data is saved only when the user shares a result, turns on alerts or buys something, and can be deleted |
 | Labels | Sinhala and English names for every rashi, nakshatra, graha and factor, served from the API |
 
 ### Not in v0.1
 
-Accounts and login, saved profiles, proposal manager, nakath finder, daily palapala, payments, astrologer marketplace, PDF reports, voice, WhatsApp bot, mobile app. These are v0.2 and later (section 9).
+Baby name letters, nakath finder, proposal manager, daily palapala, astrologer marketplace, Tamil, voice, WhatsApp bot, mobile app. These come after the first release (section 9).
 
 ## 3. Tech stack
 
@@ -122,6 +129,13 @@ All endpoints are versioned under `/v1`. Requests carry birth data in the body o
 | `POST /v1/charts/svg` | Same input, returns the chart drawing |
 | `POST /v1/porondam` | Two people (full birth data or birth star only). Returns factors, hard checks, score, kuja dosha for both, rule set version |
 | `POST /v1/explain` | Body: a chart or porondam result id or payload, language, optional question. Returns text plus the list of facts used |
+| `POST /v1/kuja-dosha` | Kuja dosha for one person or a couple. Paid level returns every cancellation rule |
+| `POST /v1/dasha` | Dasha periods. Paid level returns sub periods and meanings |
+| `POST /v1/forecast` | Transit forecast. Current month, or twelve months with key dates for paid |
+| `POST /v1/reports/pdf` | Hadahan or porondam report as a PDF |
+| `POST /v1/shares`, `GET /v1/shares/{code}`, `DELETE /v1/shares/{code}` | Create, open and delete a share link |
+| `POST /v1/alerts`, `DELETE /v1/alerts/{id}` | Turn forecast alerts on and off (paid) |
+| `/v1/auth/*`, `/v1/billing/*` | Sign in, purchases, and what the user is entitled to |
 | `GET /v1/meta` | Ayanamsa in use, rule set versions, supported languages, label tables |
 | `GET /healthz` | Health check |
 
@@ -169,24 +183,43 @@ Follows the rule from file 04: **the LLM talks, the engine calculates.**
 
 ## 9. Milestones
 
-Assumes one developer working part time. Adjust to your pace.
+Assumes one developer working part time. Adjust to your pace. The work is in three stages so that something usable exists at the end of each.
+
+**Stage 1: the free product (weeks 1 to 7)**
 
 | Week | Deliverable |
 |---|---|
 | 1 | Repo setup (uv, FastAPI skeleton, ruff, mypy, pytest, CI, Docker). Ephemeris interface and Swiss Ephemeris adapter. Time conversion with historical tz. |
-| 2 | Chart engine: lagna, houses, grahas, nakshatra, pada, navamsha. First golden tests. Place search with Sri Lankan towns. |
-| 3 | Vimshottari dasha. `/v1/charts` and SVG chart. Sinhala and English labels. |
+| 2 | Chart engine: lagna, houses, grahas, nakshatra, pada, navamsha. First golden tests. Worldwide place search. |
+| 3 | Vimshottari dasha (all levels). `/v1/charts` and SVG chart. Sinhala and English labels. |
 | 4 | Porondam engine and YAML rule format. Confirmed factors, hard checks, quick match by birth star. |
-| 5 | Kuja dosha with cancellations. Remaining factors once the astrologer list arrives. `/v1/porondam`. |
-| 6 | AI explain endpoint, guardrails, caching, rate limits. Model comparison on Sinhala quality. |
-| 7 | Accuracy pass with the astrologer. Fix differences. Load and security checks. Privacy policy text. |
-| 8 | Deploy to staging, connect a minimal frontend, soft launch to 20 to 50 test users. |
+| 5 | Kuja dosha with every cancellation rule. Remaining factors once the astrologer list arrives. `/v1/porondam`, `/v1/kuja-dosha`, `/v1/dasha`. |
+| 6 | Transit forecast engine and `/v1/forecast`. One line rule based reasons for every result, in both languages. |
+| 7 | PDF report (free level), with a Sinhala rendering test first. Share links. |
 
-### After v0.1
+**Stage 2: the paid level (weeks 8 to 11)**
 
-- **v0.2**: accounts (phone OTP or Google), saved profiles, proposal manager, PDF report, nakath finder, daily palapala from real transits.
-- **v0.3**: payments (PayHere or similar), premium report, unlimited chat plan.
-- **v0.4**: astrologer review and marketplace, WhatsApp bot, Sinhala voice.
+| Week | Deliverable |
+|---|---|
+| 8 | Detailed rule based explanations for porondam, Kuja dosha and dasha. Paid sections of the PDF. |
+| 9 | AI explain endpoint, guardrails, caching, rate limits. Model comparison on Sinhala quality. |
+| 10 | Sign in, entitlement check on every paid field, payment gateway in test mode. |
+| 11 | Forecast alerts by email. Stored data controls: delete share, delete profile, delete account. |
+
+**Stage 3: launch (weeks 12 and 13)**
+
+| Week | Deliverable |
+|---|---|
+| 12 | Accuracy pass with the astrologer. Fix differences. Load and security checks. Privacy policy text. Ephemeris licence settled. |
+| 13 | Deploy to staging, connect the frontend, soft launch to 20 to 50 test users. Payments switched to live after the test. |
+
+### After the first release
+
+1. Baby name letters from the birth star
+2. Wedding nakath finder for a matched couple
+3. Proposal manager and saved family profiles
+4. Astrologer reviewed report
+5. Tamil language and Tamil porutham, WhatsApp bot, Sinhala voice
 
 ## 10. Blockers and decisions needed
 
@@ -196,10 +229,11 @@ Assumes one developer working part time. Adjust to your pace.
 | 2 | The authoritative list of 20 porondam factors and their rules | Week 4 |
 | 3 | Ayanamsa default: Lahiri or Thirukanitham? | Week 2 |
 | 4 | Kuja dosha house list and cancellation rules | Week 5 |
-| 5 | Ephemeris licence: AGPL open source or commercial licence | Before public launch |
-| 6 | AI provider and model, after the Sinhala test | Week 6 |
-| 7 | Tamil porutham in v0.1 or v0.2? | Week 4 |
-| 8 | Frontend: who builds it, and with what (web first is assumed) | Week 6 |
+| 5 | Ephemeris licence: buy it (CHF 700) or publish the code. Swiss Ephemeris is used meanwhile | Week 12 |
+| 6 | AI provider and model, after the Sinhala test | Week 9 |
+| 7 | Frontend: who builds it, and with what (web first is assumed) | Week 6 |
+| 8 | How people pay (per report, subscription or both), prices and payment gateways. See file 07 | Week 10 |
+| 9 | Sign in method: email link, Google or phone OTP | Week 10 |
 
 ## 11. Risks
 
