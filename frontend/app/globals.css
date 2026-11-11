@@ -232,3 +232,12 @@ html[lang="si"] .display {
     transition: none !important;
   }
 }
+
+/* Wraps a form's fields so they can be disabled together, without changing the layout. */
+.form-lock {
+  display: contents;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
