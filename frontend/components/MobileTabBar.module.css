@@ -1,0 +1,43 @@
+.bar {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .bar {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 20;
+    display: flex;
+    border-top: 1px solid var(--line-soft);
+    background: rgb(14 20 48 / 96%);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  :global(body) {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+}
+
+.tab,
+.tabActive {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 72px;
+  font-size: 13px;
+}
+
+.tab {
+  color: var(--ink-soft);
+}
+.tab:hover {
+  color: var(--ink);
+}
+
+.tabActive {
+  color: var(--gold);
+  font-weight: 600;
+}

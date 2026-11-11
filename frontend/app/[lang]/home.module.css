@@ -1,0 +1,278 @@
+.heroWrap {
+  position: relative;
+  overflow: hidden;
+  /* Pull the sky up behind the site header, as in the design. */
+  margin-top: calc(-1 * var(--header-height));
+  padding-top: var(--header-height);
+}
+
+.heroSky {
+  object-fit: cover;
+  object-position: right center;
+}
+
+.heroShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(11 16 38 / 55%), rgb(11 16 38 / 0%) 60%);
+}
+
+@media (max-width: 860px) {
+  .heroShade {
+    background: rgb(11 16 38 / 55%);
+  }
+}
+
+.heroFade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 180px;
+  background: linear-gradient(rgb(11 16 38 / 0%), var(--night));
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 48px;
+  padding-block: 48px 96px;
+}
+
+.heroText {
+  flex: 1 1 460px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 17px;
+  letter-spacing: 0.06em;
+}
+
+.heroTitle {
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.1;
+}
+
+html[lang="si"] .heroTitle {
+  font-size: clamp(34px, 4.4vw, 54px);
+  line-height: 1.3;
+}
+
+.heroLead {
+  max-width: 520px;
+  color: var(--ink-soft);
+  font-size: 18px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.privacy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.heroWheel {
+  flex: 1 1 400px;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-block: 32px 96px;
+}
+
+.sectionTight {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-bottom: 96px;
+}
+
+.sectionHead {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionTitle {
+  font-size: 36px;
+  line-height: 1.2;
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 24px;
+}
+
+.toolCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+  color: var(--ink);
+}
+.toolCard:hover {
+  color: var(--ink);
+}
+
+.toolImage {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.toolHead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.toolLabel {
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.toolTitle {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.toolList {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--ink-soft);
+}
+
+.toolCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.rashiGrid {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .rashiGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .rashiGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.rashi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.rashiName {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rashiSinhala {
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.howBand {
+  border-block: 1px solid var(--line-soft);
+  background: var(--night-raised);
+}
+
+.how {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-block: 80px;
+}
+
+.steps {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 32px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stepNumber {
+  font-family: var(--font-marcellus), serif;
+  font-size: 44px;
+  line-height: 1;
+  color: var(--gold);
+}
+
+.stepTitle {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.trust {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 24px;
+  padding-block: 80px;
+}
+
+.trustItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.trustItem > svg {
+  flex: none;
+}
+
+.trustTitle {
+  margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 600;
+}

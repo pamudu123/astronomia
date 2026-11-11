@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Astronomia: hadahan and porondam",
+    "description": "Your birth chart and marriage matching, worked out precisely and explained in Sinhala or English."
+  },
+  "nav": {
+    "home": "Astronomia home",
+    "skip": "Skip to content",
+    "main": "Main",
+    "homeTab": "Home",
+    "hadahan": "Hadahan",
+    "porondam": "Porondam",
+    "how": "How it works",
+    "plans": "Plans",
+    "language": "Language"
+  },
+  "hero": {
+    "eyebrow": "හඳහන · පොරොන්දම්",
+    "title": "Your birth chart, read with clarity.",
+    "lead": "Astronomia works out your hadahan and porondam from precise planetary positions. Then it explains every result in plain Sinhala or English, for a birth anywhere in the world.",
+    "ctaHadahan": "Create my hadahan",
+    "ctaPorondam": "Match two charts",
+    "privacy": "No sign up. Nothing you enter is stored.",
+    "wheelLabel": "A slowly turning zodiac wheel with the twelve rashi named in Sinhala and planets in orbit"
+  },
+  "tools": {
+    "title": "Two tools, done properly",
+    "lead": "Start with either one. Both show how the result was reached.",
+    "hadahan": {
+      "label": "හඳහන",
+      "title": "Hadahan, your birth chart",
+      "items": [
+        "Lagna, rashi and nakath at a glance",
+        "Nine planets, navamsha and the kendara drawing",
+        "A dasha timeline of your life periods"
+      ],
+      "cta": "Create my hadahan"
+    },
+    "porondam": {
+      "label": "පොරොන්දම්",
+      "title": "Porondam, marriage matching",
+      "items": [
+        "Every factor shown one by one, with the reason",
+        "Rajju and Vedha kept apart from the score",
+        "Kuja dosha checked for both people"
+      ],
+      "cta": "Match two charts"
+    }
+  },
+  "rashi": {
+    "title": "The twelve rashi",
+    "lead": "Your lagna and your Moon sign each fall in one of these."
+  },
+  "how": {
+    "title": "How it works",
+    "steps": [
+      {
+        "title": "Enter the birth details",
+        "text": "Date, time and place. Search any town in the world, or type the coordinates yourself."
+      },
+      {
+        "title": "We calculate the sky",
+        "text": "Planet positions come from astronomical data. Time zones follow the real history of each country."
+      },
+      {
+        "title": "Read a clear result",
+        "text": "A visual chart with plain reasons beside each point. Switch between Sinhala and English at any time."
+      }
+    ]
+  },
+  "trust": [
+    {
+      "title": "The method is shown",
+      "text": "Each result names the ayanamsa and the rule set used."
+    },
+    {
+      "title": "Private by default",
+      "text": "Birth details are used for the calculation and then discarded."
+    },
+    {
+      "title": "Made for the world",
+      "text": "Born in Colombo, London or Melbourne, the chart is worked out the same careful way."
+    }
+  ],
+  "footer": {
+    "disclaimer": "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer."
+  },
+  "soon": {
+    "title": "Coming soon",
+    "text": "This part of the site is being built.",
+    "back": "Back to home"
+  }
+}

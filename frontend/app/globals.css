@@ -1,0 +1,234 @@
+/* Design tokens from the Astronomia design canvas (night sky look). */
+:root {
+  --night: #0b1026;
+  --night-raised: #0e1430;
+  --panel: #131a3a;
+  --panel-raised: #1b2450;
+  --line: #2a3364;
+  --line-soft: #1b2450;
+  --gold: #e3b866;
+  --gold-hover: #f3d598;
+  --teal: #7fd6c2;
+  --coral: #f08a5d;
+  --ink: #f2eee3;
+  --ink-soft: #b4b9d6;
+
+  --font-display: var(--font-marcellus), var(--font-serif-sinhala), serif;
+  --font-body: var(--font-dm-sans), var(--font-sans-sinhala), system-ui, sans-serif;
+  --font-sinhala: var(--font-sans-sinhala), sans-serif;
+  --font-sinhala-display: var(--font-serif-sinhala), serif;
+
+  --radius-card: 24px;
+  --radius-field: 12px;
+  --page-width: 1200px;
+  --gutter: 32px;
+  --header-height: 92px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+html[lang="si"] body {
+  line-height: 1.75;
+}
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--gold-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+}
+
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+/* The header wraps to two rows on narrow screens. */
+@media (max-width: 860px) {
+  :root {
+    --header-height: 0px;
+  }
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+html[lang="si"] .display {
+  font-family: var(--font-sinhala-display);
+  font-weight: 600;
+}
+
+.sinhala {
+  font-family: var(--font-sinhala);
+}
+
+.soft {
+  color: var(--ink-soft);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 10;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--night);
+  font-weight: 600;
+}
+.skip-link:focus {
+  top: 12px;
+  color: var(--night);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 16px;
+}
+.btn-primary {
+  background: var(--gold);
+  color: var(--night);
+}
+.btn-primary:hover {
+  background: var(--gold-hover);
+  color: var(--night);
+}
+.btn-outline {
+  border: 1px solid var(--gold);
+  color: var(--gold);
+}
+
+/* Motion from the design. Everything is switched off when the device asks for less motion. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.22;
+    transform: scale(1.12);
+  }
+}
+
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.lift {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgb(227 184 102 / 16%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
