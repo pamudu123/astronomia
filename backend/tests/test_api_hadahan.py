@@ -87,3 +87,10 @@ def test_labels(client: TestClient) -> None:
     assert si["planet"]["mars"]["name"] == "කුජ"
     assert client.get("/v1/labels/en").json()["rashi"]["simha"]["western"] == "Leo"
     assert client.get("/v1/labels/fr").status_code == 422
+
+
+def test_labels_include_porondam_names(client: TestClient) -> None:
+    en = client.get("/v1/labels/en").json()
+    for key in ("gana", "yoni", "nadi", "rajju", "porondam_factor"):
+        assert key in en
+    assert en["porondam_factor"]["rajju"]["name"] == "Rajju"

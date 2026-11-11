@@ -118,11 +118,31 @@ export interface paths {
         };
         /**
          * Get Labels
-         * @description Names of rashi, nakshatra, planets and Kuja rules in one language.
+         * @description Names used by the hadahan and porondam pages, in one language.
          */
         get: operations["get_labels_v1_labels__lang__get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/porondam": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Porondam
+         * @description Match two people. Each is either full birth details or a birth star and pada.
+         */
+        post: operations["porondam_v1_porondam_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -190,6 +210,55 @@ export interface components {
             periods: components["schemas"]["PeriodOut"][];
             /** Current */
             current: components["schemas"]["PeriodOut"][];
+        };
+        /** FactorOut */
+        FactorOut: {
+            /** Id */
+            id: string;
+            /** Hard */
+            hard: boolean;
+            /** Passed */
+            passed: boolean;
+            /** Facts */
+            facts: {
+                [key: string]: string | number;
+            };
+            /** Reason */
+            reason: string;
+        };
+        /** FullPerson */
+        FullPerson: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Time
+             * Format: time
+             */
+            time: string;
+            /**
+             * Place Id
+             * @description A place id from /v1/places
+             */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /**
+             * Timezone
+             * @description Needed with latitude and longitude
+             */
+            timezone?: string | null;
+            /** Fold */
+            fold?: (0 | 1) | null;
+            /**
+             * Name
+             * @default
+             */
+            name: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -266,6 +335,18 @@ export interface components {
             /** Reasons */
             reasons: string[];
         };
+        /** KujaPairOut */
+        KujaPairOut: {
+            bride: components["schemas"]["KujaOut"];
+            groom: components["schemas"]["KujaOut"];
+            /**
+             * Comparison
+             * @enum {string}
+             */
+            comparison: "both" | "neither" | "bride_only" | "groom_only";
+            /** Reason */
+            reason: string;
+        };
         /** KujaPointOut */
         KujaPointOut: {
             /** Point */
@@ -274,6 +355,26 @@ export interface components {
             house: number;
             /** Counts */
             counts: boolean;
+        };
+        /** MatchOut */
+        MatchOut: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            score: components["schemas"]["ScoreOut"];
+            /** Hard Checks */
+            hard_checks: components["schemas"]["FactorOut"][];
+            /** Factors */
+            factors: components["schemas"]["FactorOut"][];
+            /** Summary */
+            summary: string;
+            /** Summary Text */
+            summary_text: string;
+            /** Same Star */
+            same_star: boolean;
+            /** Same Star Text */
+            same_star_text: string | null;
         };
         /** Meta */
         Meta: {
@@ -334,6 +435,26 @@ export interface components {
              * @default []
              */
             sub: components["schemas"]["PeriodOut"][];
+        };
+        /** PersonOut */
+        PersonOut: {
+            /** Name */
+            name: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "full" | "quick";
+            /** Nakshatra */
+            nakshatra: string;
+            /** Pada */
+            pada: number;
+            /** Rashi */
+            rashi: string;
+            /** Lagna */
+            lagna: string | null;
+            /** Offset Label */
+            offset_label: string | null;
         };
         /** PlaceList */
         PlaceList: {
@@ -411,6 +532,53 @@ export interface components {
             pada: number;
             /** Navamsha Sign */
             navamsha_sign: string;
+        };
+        /** PorondamRequest */
+        PorondamRequest: {
+            /** Bride */
+            bride: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /** Groom */
+            groom: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+        };
+        /** PorondamResponse */
+        PorondamResponse: {
+            /** Status */
+            status: string;
+            /** Waiting For */
+            waiting_for?: ("bride" | "groom") | null;
+            time?: components["schemas"]["TimeResolveResponse"] | null;
+            bride?: components["schemas"]["PersonOut"] | null;
+            groom?: components["schemas"]["PersonOut"] | null;
+            match?: components["schemas"]["MatchOut"] | null;
+            kuja?: components["schemas"]["KujaPairOut"] | null;
+        };
+        /**
+         * QuickPerson
+         * @description Birth star only: the pada fixes the Moon sign. Lagna based checks are not possible.
+         */
+        QuickPerson: {
+            /**
+             * Name
+             * @default
+             */
+            name: string;
+            /** Nakshatra */
+            nakshatra: string;
+            /** Pada */
+            pada: number;
+        };
+        /** ScoreOut */
+        ScoreOut: {
+            /** Passed */
+            passed: number;
+            /** Total */
+            total: number;
         };
         /** TimeCheckOut */
         TimeCheckOut: {
@@ -697,6 +865,39 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    porondam_v1_porondam_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PorondamRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PorondamResponse"];
                 };
             };
             /** @description Validation Error */

@@ -1,5 +1,6 @@
 """Sinhala and English names and one line reasons, from app/data/labels/*.yaml."""
 
+from collections.abc import Mapping
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Literal
@@ -17,18 +18,36 @@ def labels(lang: Lang) -> dict[str, Any]:
     return data
 
 
-def reason(lang: Lang, code: str, **facts: str | int) -> str:
-    """Fill a reason template. Sign keys become sign names, house numbers become ordinals."""
+# Fact names ending in these suffixes are keys to look up in a label table.
+_GROUP_TABLES = ("gana", "yoni", "nadi", "rajju")
+
+
+def _value(table: dict[str, Any], name: str, value: str | int) -> str:
+    if name == "house" or name.endswith("_house"):
+        return str(table["house"][int(value) - 1])
+    if name == "sign" or name.endswith("_sign"):
+        return str(table["rashi"][str(value)]["name"])
+    if name == "point":
+        return str(table["point"][str(value)])
+    if name.endswith("_star"):
+        return str(table["nakshatra"][str(value)])
+    if name.endswith("_lord"):
+        return str(table["planet"][str(value)]["name"])
+    for group in _GROUP_TABLES:
+        if name.endswith(f"_{group}"):
+            return str(table[group][str(value)])
+    return str(value)
+
+
+def reason(
+    lang: Lang,
+    code: str,
+    facts: Mapping[str, str | int] | None = None,
+    *,
+    section: str = "reason",
+) -> str:
+    """Fill a reason template. Keys in the facts become names in the chosen language."""
     table = labels(lang)
-    values: dict[str, str] = {}
-    for name, value in facts.items():
-        if name == "house" or name.endswith("_house"):
-            values[name] = table["house"][int(value) - 1]
-        elif name == "sign" or name.endswith("_sign"):
-            values[name] = table["rashi"][str(value)]["name"]
-        elif name == "point":
-            values[name] = table["point"][str(value)]
-        else:
-            values[name] = str(value)
-    text: str = table["reason"][code].format(**values)
+    values = {name: _value(table, name, value) for name, value in (facts or {}).items()}
+    text: str = table[section][code].format(**values)
     return text[0].upper() + text[1:] if lang == "en" else text

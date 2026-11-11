@@ -73,6 +73,23 @@ test("the Sinhala result uses Sinhala names", async ({ page }) => {
   await expect(page.getByText("1995 අප්‍රේල් 19").first()).toBeVisible();
 });
 
+test("the form waits for the page to be ready, so nothing typed is lost", async ({ page }) => {
+  await mockBackend(page, "en");
+  // Hold the page scripts back, as on a slow phone.
+  let release = () => {};
+  const scripts = new Promise<void>((resolve) => (release = resolve));
+  await page.route("**/_next/static/chunks/**", async (route) => {
+    await scripts;
+    await route.continue();
+  });
+  await page.goto("/en/hadahan", { waitUntil: "commit" });
+  await expect(page.getByLabel("Date of birth")).toBeDisabled();
+  release();
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.locator('[data-card="lagna"]')).toContainText("Simha");
+});
+
 test("a time that happened twice asks which one", async ({ page }) => {
   await mockBackend(page, "en", "hadahan-ambiguous.json");
   await page.goto("/en/hadahan");

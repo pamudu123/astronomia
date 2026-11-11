@@ -82,3 +82,67 @@ kuja_rule:
 
 # Ordinal house numbers, 1 to 12.
 house: [1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, 11th, 12th]
+
+gana: {deva: Deva, manushya: Manushya, rakshasa: Rakshasa}
+yoni:
+  horse: horse
+  elephant: elephant
+  goat: goat
+  snake: snake
+  dog: dog
+  cat: cat
+  rat: rat
+  cow: cow
+  buffalo: buffalo
+  tiger: tiger
+  deer: deer
+  monkey: monkey
+  mongoose: mongoose
+  lion: lion
+nadi: {aadi: Aadi, madhya: Madhya, antya: Antya}
+rajju: {pada: Pada (feet), kati: Kati (waist), nabhi: Nabhi (navel), kantha: Kantha (neck), shiro: Shiro (head)}
+
+porondam_factor:
+  dina: {name: Dina, meaning: Health and long life}
+  gana: {name: Gana, meaning: Temperament}
+  mahendra: {name: Mahendra, meaning: Family growth}
+  stree_deergha: {name: Stree Deergha, meaning: Wellbeing of the bride}
+  yoni: {name: Yoni, meaning: Physical compatibility}
+  rashi: {name: Rashi, meaning: Emotional bond}
+  rashyadhipathi: {name: Rashyadhipathi, meaning: Rulers of the two signs}
+  vashya: {name: Vashya, meaning: Mutual attraction}
+  nadi: {name: Nadi, meaning: Health of the family line}
+  rajju: {name: Rajju, meaning: Long life of the couple}
+  vedha: {name: Vedha, meaning: Stars that must not afflict each other}
+
+porondam_reason:
+  dina_pass: "Counting from the bride's star, the groom's is number {count}. The remainder after nine is {remainder}, which is favourable."
+  dina_fail: "Counting from the bride's star, the groom's is number {count}. The remainder after nine is {remainder}, which is not favourable."
+  gana_pass: "The bride is {bride_gana} gana and the groom is {groom_gana} gana. These go together."
+  gana_fail: "The bride is {bride_gana} gana and the groom is {groom_gana} gana. These are not counted as a good pair."
+  mahendra_pass: "The groom's star is number {count} from the bride's, one of the counts that favour family growth."
+  mahendra_fail: "The groom's star is number {count} from the bride's, which is not one of the favourable counts."
+  stree_deergha_pass: "The groom's star is number {count} from the bride's, more than {threshold}, which is far enough."
+  stree_deergha_fail: "The groom's star is number {count} from the bride's, not more than {threshold}, which is too close."
+  yoni_pass: "The animal of the bride's star is the {bride_yoni} and of the groom's the {groom_yoni}. They are not enemies."
+  yoni_fail: "The animal of the bride's star is the {bride_yoni} and of the groom's the {groom_yoni}. They are counted as enemies."
+  rashi_pass: "The groom's Moon sign is number {count} from the bride's, which is favourable."
+  rashi_fail: "The groom's Moon sign is number {count} from the bride's, which is a difficult distance."
+  rashyadhipathi_pass: "{bride_lord} rules the bride's sign and {groom_lord} the groom's. They are not enemies."
+  rashyadhipathi_fail: "{bride_lord} rules the bride's sign and {groom_lord} the groom's. They are counted as enemies."
+  vashya_pass: "One of the two signs, {bride_sign} and {groom_sign}, is under the influence of the other."
+  vashya_fail: "Neither sign, {bride_sign} or {groom_sign}, is under the influence of the other."
+  nadi_pass: "The bride is {bride_nadi} nadi and the groom is {groom_nadi} nadi. Different nadi is favourable."
+  nadi_fail: "Both are {bride_nadi} nadi. The same nadi is not favourable."
+  rajju_pass: "The bride's star is in the {bride_rajju} rajju and the groom's in the {groom_rajju} rajju. Different rajju is essential."
+  rajju_fail: "Both stars are in the {bride_rajju} rajju. This essential check does not pass."
+  vedha_pass: "{bride_star} and {groom_star} are not an afflicting pair."
+  vedha_fail: "{bride_star} and {groom_star} are an afflicting pair. This essential check does not pass."
+  summary_majority_pass: "More than half of the factors agree, and both essential checks pass."
+  summary_minority_pass: "Both essential checks pass, but fewer than half of the factors agree."
+  summary_essential_fail: "An essential check does not pass. Tradition treats this seriously, whatever the count."
+  same_star: "Both have the same birth star. Traditions differ on this case, so an astrologer should review it."
+  kuja_both: "Both charts show Kuja dosha, so they are often read as balancing each other."
+  kuja_neither: "Neither chart shows Kuja dosha."
+  kuja_bride_only: "The bride's chart shows Kuja dosha and the groom's does not. This is something to review."
+  kuja_groom_only: "The groom's chart shows Kuja dosha and the bride's does not. This is something to review."

@@ -237,7 +237,7 @@
           "meta"
         ],
         "summary": "Get Labels",
-        "description": "Names of rashi, nakshatra, planets and Kuja rules in one language.",
+        "description": "Names used by the hadahan and porondam pages, in one language.",
         "operationId": "get_labels_v1_labels__lang__get",
         "parameters": [
           {
@@ -263,6 +263,48 @@
                   "type": "object",
                   "additionalProperties": true,
                   "title": "Response Get Labels V1 Labels  Lang  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/porondam": {
+      "post": {
+        "tags": [
+          "porondam"
+        ],
+        "summary": "Porondam",
+        "description": "Match two people. Each is either full birth details or a birth star and pada.",
+        "operationId": "porondam_v1_porondam_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PorondamRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PorondamResponse"
                 }
               }
             }
@@ -446,6 +488,141 @@
           "current"
         ],
         "title": "DashaOut"
+      },
+      "FactorOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "hard": {
+            "type": "boolean",
+            "title": "Hard"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          },
+          "facts": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Facts"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "hard",
+          "passed",
+          "facts",
+          "reason"
+        ],
+        "title": "FactorOut"
+      },
+      "FullPerson": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "time": {
+            "type": "string",
+            "format": "time",
+            "title": "Time"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id",
+            "description": "A place id from /v1/places"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "Needed with latitude and longitude"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "title": "Name",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date",
+          "time"
+        ],
+        "title": "FullPerson"
       },
       "HTTPValidationError": {
         "properties": {
@@ -686,6 +863,38 @@
         ],
         "title": "KujaOut"
       },
+      "KujaPairOut": {
+        "properties": {
+          "bride": {
+            "$ref": "#/components/schemas/KujaOut"
+          },
+          "groom": {
+            "$ref": "#/components/schemas/KujaOut"
+          },
+          "comparison": {
+            "type": "string",
+            "enum": [
+              "both",
+              "neither",
+              "bride_only",
+              "groom_only"
+            ],
+            "title": "Comparison"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bride",
+          "groom",
+          "comparison",
+          "reason"
+        ],
+        "title": "KujaPairOut"
+      },
       "KujaPointOut": {
         "properties": {
           "point": {
@@ -708,6 +917,71 @@
           "counts"
         ],
         "title": "KujaPointOut"
+      },
+      "MatchOut": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "score": {
+            "$ref": "#/components/schemas/ScoreOut"
+          },
+          "hard_checks": {
+            "items": {
+              "$ref": "#/components/schemas/FactorOut"
+            },
+            "type": "array",
+            "title": "Hard Checks"
+          },
+          "factors": {
+            "items": {
+              "$ref": "#/components/schemas/FactorOut"
+            },
+            "type": "array",
+            "title": "Factors"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "summary_text": {
+            "type": "string",
+            "title": "Summary Text"
+          },
+          "same_star": {
+            "type": "boolean",
+            "title": "Same Star"
+          },
+          "same_star_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Same Star Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "score",
+          "hard_checks",
+          "factors",
+          "summary",
+          "summary_text",
+          "same_star",
+          "same_star_text"
+        ],
+        "title": "MatchOut"
       },
       "Meta": {
         "properties": {
@@ -837,6 +1111,67 @@
           "end"
         ],
         "title": "PeriodOut"
+      },
+      "PersonOut": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "full",
+              "quick"
+            ],
+            "title": "Mode"
+          },
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "lagna": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lagna"
+          },
+          "offset_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offset Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "mode",
+          "nakshatra",
+          "pada",
+          "rashi",
+          "lagna",
+          "offset_label"
+        ],
+        "title": "PersonOut"
       },
       "PlaceList": {
         "properties": {
@@ -1064,6 +1399,171 @@
           "navamsha_sign"
         ],
         "title": "PointOut"
+      },
+      "PorondamRequest": {
+        "properties": {
+          "bride": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Bride"
+          },
+          "groom": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Groom"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bride",
+          "groom"
+        ],
+        "title": "PorondamRequest"
+      },
+      "PorondamResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "waiting_for": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bride",
+                  "groom"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waiting For"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeResolveResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bride": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "groom": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "match": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MatchOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kuja": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/KujaPairOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "PorondamResponse"
+      },
+      "QuickPerson": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "title": "Name",
+            "default": ""
+          },
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "pada": {
+            "type": "integer",
+            "maximum": 4.0,
+            "minimum": 1.0,
+            "title": "Pada"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nakshatra",
+          "pada"
+        ],
+        "title": "QuickPerson",
+        "description": "Birth star only: the pada fixes the Moon sign. Lagna based checks are not possible."
+      },
+      "ScoreOut": {
+        "properties": {
+          "passed": {
+            "type": "integer",
+            "title": "Passed"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "passed",
+          "total"
+        ],
+        "title": "ScoreOut"
       },
       "TimeCheckOut": {
         "properties": {

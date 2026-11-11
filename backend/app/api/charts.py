@@ -141,9 +141,9 @@ class HadahanRequest(BirthInput):
 def chart_out(chart: Chart, lang: Lang) -> ChartOut:
     check = chart.time_check
     if check.lagna_changes_within is not None:
-        text = reason(lang, "time_lagna", minutes=check.lagna_changes_within)
+        text = reason(lang, "time_lagna", {"minutes": check.lagna_changes_within})
     elif check.nakshatra_changes_within is not None:
-        text = reason(lang, "time_nakshatra", minutes=check.nakshatra_changes_within)
+        text = reason(lang, "time_nakshatra", {"minutes": check.nakshatra_changes_within})
     else:
         text = reason(lang, "time_stable")
     return ChartOut(
@@ -203,7 +203,7 @@ def dasha_out(timeline: DashaTimeline, now: dt.datetime) -> DashaOut:
 
 def kuja_out(result: KujaResult, lang: Lang) -> KujaOut:
     reasons = [
-        reason(lang, "kuja_present", house=p.house, point=p.point)
+        reason(lang, "kuja_present", {"house": p.house, "point": p.point})
         for p in result.points
         if p.counts
     ]
@@ -216,7 +216,7 @@ def kuja_out(result: KujaResult, lang: Lang) -> KujaOut:
         code = f"kuja_cancel_{c.id}" if c.applies else f"kuja_not_{c.id}"
         cancellations.append(
             CancellationOut(
-                id=c.id, applies=c.applies, facts=c.facts, reason=reason(lang, code, **c.facts)
+                id=c.id, applies=c.applies, facts=c.facts, reason=reason(lang, code, c.facts)
             )
         )
     return KujaOut(
@@ -265,8 +265,19 @@ def hadahan(body: HadahanRequest, db: PlacesDb) -> HadahanResponse:
 
 @router.get("/v1/labels/{lang}", tags=["meta"])
 def get_labels(lang: Annotated[Lang, Path()]) -> dict[str, Any]:
-    """Names of rashi, nakshatra, planets and Kuja rules in one language."""
+    """Names used by the hadahan and porondam pages, in one language."""
     table = labels(lang)
-    return {
-        key: table[key] for key in ("rashi", "nakshatra", "planet", "point", "kuja_rule", "house")
-    }
+    keys = (
+        "rashi",
+        "nakshatra",
+        "planet",
+        "point",
+        "kuja_rule",
+        "house",
+        "gana",
+        "yoni",
+        "nadi",
+        "rajju",
+        "porondam_factor",
+    )
+    return {key: table[key] for key in keys}

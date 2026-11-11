@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 
 from app import __version__
-from app.api import charts, meta, places, timeresolve
+from app.api import charts, meta, places, porondam, timeresolve
 from app.config import get_settings
 from app.logging import AccessLogMiddleware, configure_logging
 
@@ -22,6 +22,7 @@ def create_app() -> FastAPI:
     app.include_router(places.router)
     app.include_router(timeresolve.router)
     app.include_router(charts.router)
+    app.include_router(porondam.router)
     return app
 
 

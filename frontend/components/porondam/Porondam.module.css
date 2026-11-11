@@ -1,0 +1,517 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-block: 24px 96px;
+}
+
+.formHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.formIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 640px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.title {
+  font-size: clamp(32px, 4vw, 46px);
+  line-height: 1.15;
+}
+
+.toggle {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.toggleOn,
+.toggleOff,
+.toggleGold {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.toggleOn {
+  background: var(--panel-raised);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.toggleGold {
+  background: var(--gold);
+  color: var(--night);
+  font-weight: 600;
+}
+
+.toggleOff {
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.people {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+  gap: 24px;
+}
+
+.personSlot {
+  min-width: 0;
+}
+
+.person {
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 32px 32px;
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+@media (max-width: 640px) {
+  .person {
+    padding: 20px;
+  }
+}
+
+.bride {
+  border: 1px solid var(--teal);
+}
+
+.groom {
+  border: 1px solid var(--gold);
+}
+
+.legend {
+  padding: 0 10px;
+  font-weight: 600;
+}
+
+.bride .legend {
+  color: var(--teal);
+}
+
+.groom .legend {
+  color: var(--gold);
+}
+
+.submitRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.privacy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.submit {
+  min-height: 56px;
+  border: 0;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.quickNote {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 24px 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--night-raised);
+}
+
+.quickTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Result */
+
+.couple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.pairRow {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.who {
+  flex: 1 1 240px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 18px 24px;
+  border-radius: 20px;
+  background: var(--panel);
+  text-align: left;
+}
+
+.whoBride {
+  border: 1px solid var(--teal);
+}
+
+.whoGroom {
+  border: 1px solid var(--gold);
+}
+
+.whoName {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.link {
+  flex: 0 1 120px;
+  display: flex;
+  align-items: center;
+}
+
+.link span {
+  flex: 1;
+  height: 1px;
+  transform-origin: center;
+  animation: link 1.2s ease-out 0.2s both;
+}
+
+.link span:first-child {
+  background: var(--teal);
+}
+
+.link span:last-child {
+  background: var(--gold);
+}
+
+.link i {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--panel);
+}
+
+@media (max-width: 640px) {
+  .summary {
+    padding: 24px 20px;
+  }
+}
+
+.ring {
+  flex: 0 1 240px;
+  min-width: 200px;
+  margin: 0 auto;
+  height: auto;
+}
+
+.halo {
+  fill: none;
+  stroke: var(--gold);
+  stroke-opacity: 0.45;
+  stroke-width: 1.2;
+  stroke-dasharray: 2 10;
+  transform-origin: 110px 110px;
+  animation: spin 90s linear infinite;
+}
+
+.track {
+  fill: none;
+  stroke: var(--panel-raised);
+  stroke-width: 14;
+}
+
+.fill {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-dasharray: var(--ring);
+  stroke-dashoffset: var(--offset);
+  animation: ring 1.8s cubic-bezier(0.3, 0.7, 0.2, 1) 0.3s both;
+}
+
+.ringNumber {
+  fill: var(--ink);
+  font-family: var(--font-marcellus), serif;
+  font-size: 58px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.ringText {
+  fill: var(--ink-soft);
+  font-size: 14px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.summaryText {
+  flex: 1 1 420px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryTitle {
+  font-size: clamp(24px, 3vw, 30px);
+  line-height: 1.25;
+}
+
+.note {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--ink-soft);
+}
+
+.hardGrid,
+.kujaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 16px;
+}
+
+.hardPass,
+.hardFail,
+.kujaYes,
+.kujaNo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: var(--night);
+}
+
+.hardPass,
+.kujaNo {
+  border: 1px solid var(--teal);
+}
+
+.hardFail,
+.kujaYes {
+  border: 1px solid var(--coral);
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.factorName {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pillPass,
+.pillFail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: var(--night);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pillPass {
+  background: var(--teal);
+}
+
+.pillFail {
+  background: var(--coral);
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.factorsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.factorsHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 30px;
+}
+
+.factorGrid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 20px;
+}
+
+.factor,
+.factorFail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  border-radius: 20px;
+  background: var(--panel);
+}
+
+.factor {
+  border: 1px solid var(--line);
+}
+
+.factorFail {
+  border: 1px solid var(--coral);
+}
+
+.meaning {
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 20px;
+  }
+}
+
+.footRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.footText {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.again {
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+@keyframes ring {
+  from {
+    stroke-dashoffset: var(--ring);
+  }
+  to {
+    stroke-dashoffset: var(--offset);
+  }
+}
+
+@keyframes link {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* When the two people stack on a phone, the joining line has nothing to join. */
+@media (max-width: 640px) {
+  .link {
+    display: none;
+  }
+}
