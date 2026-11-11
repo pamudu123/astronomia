@@ -38,10 +38,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/places": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Find Places */
+        get: operations["find_places_v1_places_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/time/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve Time */
+        post: operations["resolve_time_v1_time_resolve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
         /** Health */
         Health: {
             /** Status */
@@ -55,6 +94,128 @@ export interface components {
             languages: string[];
             /** Default Language */
             default_language: string;
+        };
+        /** OffsetOption */
+        OffsetOption: {
+            /**
+             * Fold
+             * @enum {integer}
+             */
+            fold: 0 | 1;
+            /**
+             * Utc
+             * Format: date-time
+             */
+            utc: string;
+            /** Offset Seconds */
+            offset_seconds: number;
+            /** Offset Label */
+            offset_label: string;
+            /** Abbreviation */
+            abbreviation: string;
+        };
+        /** PlaceList */
+        PlaceList: {
+            /** Places */
+            places: components["schemas"]["PlaceOut"][];
+        };
+        /** PlaceOut */
+        PlaceOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Name Si */
+            name_si: string | null;
+            /** Country Code */
+            country_code: string;
+            /** Country Name */
+            country_name: string;
+            /** Country Name Si */
+            country_name_si: string | null;
+            /** Region */
+            region: string | null;
+            /** Region Si */
+            region_si: string | null;
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+            /** Timezone */
+            timezone: string;
+            /** Population */
+            population: number;
+        };
+        /**
+         * TimeResolveRequest
+         * @description Birth details travel in the request body, never in the URL.
+         */
+        TimeResolveRequest: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Time
+             * Format: time
+             */
+            time: string;
+            /**
+             * Place Id
+             * @description A place id from /v1/places
+             */
+            place_id?: number | null;
+            /**
+             * Timezone
+             * @description An IANA time zone, e.g. Asia/Colombo
+             */
+            timezone?: string | null;
+            /**
+             * Fold
+             * @description Only when a clock change makes the time ambiguous or nonexistent: 0 = the earlier offset, 1 = the later offset
+             */
+            fold?: (0 | 1) | null;
+        };
+        /** TimeResolveResponse */
+        TimeResolveResponse: {
+            status: components["schemas"]["TimeStatus"];
+            /** Timezone */
+            timezone: string;
+            /**
+             * Local
+             * Format: date-time
+             */
+            local: string;
+            /** Utc */
+            utc: string | null;
+            /** Offset Seconds */
+            offset_seconds: number | null;
+            /** Offset Label */
+            offset_label: string | null;
+            /** Abbreviation */
+            abbreviation: string | null;
+            clock_change: components["schemas"]["TimeStatus"] | null;
+            /** Options */
+            options: components["schemas"]["OffsetOption"][];
+        };
+        /**
+         * TimeStatus
+         * @enum {string}
+         */
+        TimeStatus: "ok" | "ambiguous" | "nonexistent";
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
         };
     };
     responses: never;
@@ -101,6 +262,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Meta"];
+                };
+            };
+        };
+    };
+    find_places_v1_places_get: {
+        parameters: {
+            query: {
+                /** @description Place name, any script */
+                q: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaceList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    resolve_time_v1_time_resolve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TimeResolveRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TimeResolveResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
