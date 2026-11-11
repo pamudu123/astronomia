@@ -61,3 +61,33 @@ A Daily Mirror column warns that many astrologers declare the dosha too quickly 
 ## Privacy
 
 Birth details plus marriage intent are sensitive. Prefer no storage by default, minimal logging, clear deletion, and no selling of data.
+
+## What the site uses now (provisional)
+
+The engine applies 11 factors from `backend/app/data/rules/porondam_si_v1.yaml`. "Count" means the groom's star counted from the bride's, both included.
+
+| Factor | Rule used |
+|---|---|
+| Dina | Count divided by 9 leaves 2, 4, 6, 8 or 0 |
+| Gana | Same gana, or Deva with Manushya |
+| Mahendra | Count is 4, 7, 10, 13, 16, 19, 22 or 25 |
+| Stree Deergha | Count is more than 13 |
+| Yoni | The two star animals are not an enemy pair |
+| Rashi | The groom's Moon sign is not 2nd, 6th, 8th or 12th from the bride's |
+| Rashyadhipathi | Neither sign lord counts the other as an enemy |
+| Vashya | Either sign holds the other in vashya |
+| Nadi | Different nadi |
+| Rajju (essential) | Different rajju |
+| Vedha (essential) | Not an afflicting star pair |
+
+## Questions for the astrologer
+
+1. The other 9 of the 20 factors, and their rules.
+2. Is the Stree Deergha threshold 13, or another number (some sources use 9 or 15)?
+3. Which Rashi distances fail: 2/12 and 6/8 only, or also 5/9?
+4. Is Yoni an essential check, like Rajju and Vedha?
+5. How should the same birth star for both people be treated?
+6. Should Gana count direction (for example a Manushya bride with a Deva groom)?
+7. Is the planet friendship table the natural one, or a Sinhala variant?
+8. Is the pass mark "more than half of the scored factors"?
+

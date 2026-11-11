@@ -34,7 +34,7 @@ test("the language switch keeps the same page", async ({ page }) => {
   await page.goto("/en/porondam");
   await page.getByRole("group", { name: "Language" }).getByRole("link", { name: "සිංහල" }).click();
   await expect(page).toHaveURL(/\/si\/porondam$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("පොරොන්දම්");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("කේන්දර දෙකක් ගළපන්න");
 });
 
 test("the page does not scroll sideways on a phone", async ({ page }) => {

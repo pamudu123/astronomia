@@ -18,6 +18,11 @@ export type Labels = {
   point: Record<string, string>;
   kuja_rule: Record<string, string>;
   house: string[];
+  gana: Record<string, string>;
+  yoni: Record<string, string>;
+  nadi: Record<string, string>;
+  rajju: Record<string, string>;
+  porondam_factor: Record<string, { name: string; meaning: string }>;
 };
 
 export type BirthRequest = {
@@ -144,26 +149,29 @@ export function formatDegree(degree: number): string {
   return `${whole}° ${String(minutes).padStart(2, "0")}′`;
 }
 
-const STORAGE_KEY = "astronomia.hadahan";
-
 /** Keeps the last result for this tab only, so a reload does not lose it. Never sent anywhere. */
-export function saveResult(saved: SavedResult | null): void {
+export function saveSession<T>(key: string, value: T | null): void {
   try {
-    if (saved) sessionStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-    else sessionStorage.removeItem(STORAGE_KEY);
+    if (value) sessionStorage.setItem(key, JSON.stringify(value));
+    else sessionStorage.removeItem(key);
   } catch {
     // Storage can be unavailable (private mode). The page works without it.
   }
 }
 
-export function loadResult(): SavedResult | null {
+export function loadSession<T>(key: string): T | null {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as SavedResult) : null;
+    const raw = sessionStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
   } catch {
     return null;
   }
 }
+
+const STORAGE_KEY = "astronomia.hadahan";
+
+export const saveResult = (saved: SavedResult | null) => saveSession(STORAGE_KEY, saved);
+export const loadResult = () => loadSession<SavedResult>(STORAGE_KEY);
 
 export const RASHI_ORDER = [
   "mesha",

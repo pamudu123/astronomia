@@ -31,21 +31,35 @@ def test_every_name_exists(lang: Lang) -> None:
 
 
 @pytest.mark.parametrize("lang", ["si", "en"])
-def test_templates_use_the_same_placeholders(lang: Lang) -> None:
-    en, other = labels("en")["reason"], labels(lang)["reason"]
+@pytest.mark.parametrize("section", ["reason", "porondam_reason"])
+def test_templates_use_the_same_placeholders(lang: Lang, section: str) -> None:
+    en, other = labels("en")[section], labels(lang)[section]
     for code, text in en.items():
         fields = {f for _, f, _, _ in string.Formatter().parse(text) if f}
         assert fields == {f for _, f, _, _ in string.Formatter().parse(other[code]) if f}, code
 
 
+def test_every_porondam_factor_has_names_and_both_reasons() -> None:
+    from app.engine.porondam import load_rules
+
+    ids = [f["id"] for f in load_rules()["factors"]]
+    for lang in ("si", "en"):
+        table = labels(lang)
+        assert set(table["porondam_factor"]) == set(ids)
+        for factor_id in ids:
+            assert f"{factor_id}_pass" in table["porondam_reason"]
+            assert f"{factor_id}_fail" in table["porondam_reason"]
+
+
 def test_reason_fills_names_and_ordinals() -> None:
-    assert reason("en", "kuja_present", house=12, point="lagna") == (
+    assert reason("en", "kuja_present", {"house": 12, "point": "lagna"}) == (
         "Mars is in the 12th house counted from the lagna."
     )
-    assert reason("si", "kuja_cancel_mars_own_or_exalted", sign="makara").startswith("කුජ මකර")
+    assert reason("si", "kuja_cancel_mars_own_or_exalted", {"sign": "makara"}).startswith("කුජ මකර")
 
 
 def test_sinhala_text_has_no_stray_latin_words() -> None:
-    for code, text in labels("si")["reason"].items():
+    table = labels("si")
+    for code, text in {**table["reason"], **table["porondam_reason"]}.items():
         cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
         assert not re.search(r"[A-Za-z]", cleaned), code

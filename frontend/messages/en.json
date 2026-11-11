@@ -176,5 +176,57 @@
       "method": "Method: {ayanamsa} ayanamsa, whole sign houses, mean node, time zone {offset} on the birth date.",
       "ayanamsaLahiri": "Lahiri"
     }
+  },
+  "porondam": {
+    "form": {
+      "eyebrow": "පොරොන්දම්",
+      "title": "Match two charts",
+      "lead": "Enter the birth details of both people. Tradition counts some points from the bride's star, so we ask who is who.",
+      "mode": "How to match",
+      "full": "Full birth details",
+      "quick": "Birth stars only",
+      "bride": "Bride",
+      "groom": "Groom",
+      "star": "Birth star (nakath)",
+      "pada": "Pada",
+      "choose": "Choose",
+      "submit": "Match the charts",
+      "working": "Matching the charts",
+      "privacy": "Nothing is stored. Your details are used once for the calculation.",
+      "quickTitle": "No birth time? Use the birth stars.",
+      "quickText": "If you only know each person's nakath, choose \"Birth stars only\". You get the star based points. Lagna based checks such as Kuja dosha need the full details."
+    },
+    "clockFor": "For the {who}:",
+    "errors": {
+      "missing": "Please fill in the details for both people.",
+      "failed": "We could not match the charts. Please try again.",
+      "notFound": "A place was not found. Please search again."
+    },
+    "result": {
+      "title": "{bride} and {groom}",
+      "agree": "of {total} agree",
+      "scoreLabel": "{passed} of {total} factors agree",
+      "essential": "Essential check",
+      "pass": "Pass",
+      "fail": "Does not pass",
+      "factors": "Factor by factor",
+      "factorsLead": "Each point shows what it means and why it came out this way.",
+      "filter": "Filter",
+      "all": "All",
+      "agreeOnly": "Agree",
+      "disagree": "Do not agree",
+      "agrees": "Agrees",
+      "notAgrees": "Does not agree",
+      "kuja": "Kuja dosha",
+      "present": "Present",
+      "absent": "Not present",
+      "kujaQuick": "Kuja dosha needs the full birth details of both people.",
+      "guide": "This is a guide to the charts, not a decision. Share it with your family and your astrologer.",
+      "provisional": "These rules are provisional: 11 of the 20 traditional factors, until a practising astrologer confirms them.",
+      "method": "Method: Lahiri ayanamsa · rule set {rules} · Rajju and Vedha are kept apart from the count.",
+      "again": "Try another match",
+      "star": "{star} · {rashi}",
+      "lagna": "Lagna {lagna}"
+    }
   }
 }

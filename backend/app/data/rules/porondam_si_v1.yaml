@@ -1,0 +1,105 @@
+# Sinhala porondam rules, version 1.
+#
+# PROVISIONAL: 11 of the traditional 20 factors, from public sources (see
+# docs/03-porondam-domain-notes.md). Not yet confirmed by a practising astrologer.
+# Every table is here, so the astrologer's corrections and the other factors only need
+# changes to this file and to the label files.
+#
+# "count" is the groom's star counted from the bride's star, both included (1 to 27).
+# "sign_count" is the groom's Moon sign counted from the bride's (1 to 12).
+
+version: porondam_si_v1
+provisional: true
+
+tables:
+  gana:
+    deva: [ashwini, mrigashira, punarvasu, pushya, hasta, swati, anuradha, shravana, revati]
+    manushya: [bharani, rohini, ardra, purva_phalguni, uttara_phalguni, purva_ashadha, uttara_ashadha, purva_bhadrapada, uttara_bhadrapada]
+    rakshasa: [krittika, ashlesha, magha, chitra, vishakha, jyeshtha, mula, dhanishta, shatabhisha]
+  yoni:
+    horse: [ashwini, shatabhisha]
+    elephant: [bharani, revati]
+    goat: [krittika, pushya]
+    snake: [rohini, mrigashira]
+    dog: [ardra, mula]
+    cat: [punarvasu, ashlesha]
+    rat: [magha, purva_phalguni]
+    cow: [uttara_phalguni, uttara_bhadrapada]
+    buffalo: [hasta, swati]
+    tiger: [chitra, vishakha]
+    deer: [anuradha, jyeshtha]
+    monkey: [purva_ashadha, shravana]
+    mongoose: [uttara_ashadha]
+    lion: [dhanishta, purva_bhadrapada]
+  nadi:
+    aadi: [ashwini, ardra, punarvasu, uttara_phalguni, hasta, jyeshtha, mula, shatabhisha, purva_bhadrapada]
+    madhya: [bharani, mrigashira, pushya, purva_phalguni, chitra, anuradha, purva_ashadha, dhanishta, uttara_bhadrapada]
+    antya: [krittika, rohini, ashlesha, magha, swati, vishakha, uttara_ashadha, shravana, revati]
+  rajju:
+    pada: [ashwini, ashlesha, magha, jyeshtha, mula, revati]
+    kati: [bharani, pushya, purva_phalguni, anuradha, purva_ashadha, uttara_bhadrapada]
+    nabhi: [krittika, punarvasu, uttara_phalguni, vishakha, uttara_ashadha, purva_bhadrapada]
+    kantha: [rohini, ardra, hasta, swati, shravana, shatabhisha]
+    shiro: [mrigashira, chitra, dhanishta]
+
+# Natural friendship between planets: who each planet counts as an enemy.
+enemies:
+  sun: [venus, saturn]
+  moon: []
+  mars: [mercury]
+  mercury: [moon]
+  jupiter: [mercury, venus]
+  venus: [sun, moon]
+  saturn: [sun, moon, mars]
+
+# Signs each sign holds in vashya (control).
+vashya:
+  mesha: [simha, vrischika]
+  vrishabha: [kataka, tula]
+  mithuna: [kanya]
+  kataka: [vrischika, dhanu]
+  simha: [tula]
+  kanya: [mithuna, meena]
+  tula: [kanya, makara]
+  vrischika: [kataka]
+  dhanu: [meena]
+  makara: [mesha, kumbha]
+  kumbha: [mesha]
+  meena: [makara]
+
+factors:
+  - {id: dina, type: count_mod, mod: 9, pass: [2, 4, 6, 8, 0]}
+  - id: gana
+    type: group_pairs
+    table: gana
+    pass: [[deva, deva], [manushya, manushya], [rakshasa, rakshasa], [deva, manushya]]
+  - {id: mahendra, type: count_in, pass: [4, 7, 10, 13, 16, 19, 22, 25]}
+  - {id: stree_deergha, type: count_above, threshold: 13}
+  - id: yoni
+    type: group_avoid
+    table: yoni
+    fail: [[cow, tiger], [elephant, lion], [horse, buffalo], [dog, deer], [snake, mongoose], [monkey, goat], [cat, rat]]
+  - {id: rashi, type: sign_count_avoid, fail: [2, 6, 8, 12]}
+  - {id: rashyadhipathi, type: lords_friendly}
+  - {id: vashya, type: sign_vashya}
+  - {id: nadi, type: group_different, table: nadi}
+  - {id: rajju, type: group_different, table: rajju, hard: true}
+  - id: vedha
+    type: star_pairs_avoid
+    hard: true
+    fail:
+      - [ashwini, jyeshtha]
+      - [bharani, anuradha]
+      - [krittika, vishakha]
+      - [rohini, swati]
+      - [ardra, shravana]
+      - [punarvasu, uttara_ashadha]
+      - [pushya, purva_ashadha]
+      - [ashlesha, mula]
+      - [magha, revati]
+      - [purva_phalguni, uttara_bhadrapada]
+      - [uttara_phalguni, purva_bhadrapada]
+      - [hasta, shatabhisha]
+      - [mrigashira, dhanishta]
+      - [mrigashira, chitra]
+      - [chitra, dhanishta]

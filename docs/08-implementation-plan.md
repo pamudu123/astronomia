@@ -112,6 +112,14 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 - **Provisional until confirmed:** the kendara house direction (anticlockwise from the top box).
 
 
+**Done together in one pull request:** steps 6 and 8, and the porondam part of step 9.
+
+- **Rules:** `backend/app/data/rules/porondam_si_v1.yaml`, with 11 of the 20 factors: Dina, Gana, Mahendra, Stree Deergha, Yoni, Rashi, Rashyadhipathi, Vashya and Nadi are scored, and Rajju and Vedha are separate essential checks. Every table (gana, yoni, nadi, rajju, vedha pairs, vashya, planet enemies) is in the file. Marked provisional.
+- **Matching:** full birth details, birth star and pada only (quick match), or one of each. Kuja dosha for both people, and how the two compare, when both are full.
+- **Endpoint:** `POST /v1/porondam`. The page uses the same labels endpoint, now with the porondam names.
+- **Pages:** the two-person form with the full or birth stars switch, and the result with the score ring, essential checks, a factor grid with filter, Kuja for both, and the method line.
+- **Adding the other 9 factors** needs only the rule file and the two label files.
+
 At the end of stage 1 the site is a complete free product.
 
 ### Stage 2: the paid level
