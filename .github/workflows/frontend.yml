@@ -20,6 +20,7 @@ defaults:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -40,7 +41,5 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
-      - name: Install browser
-        run: npx playwright install --with-deps chromium
       - name: Browser tests
         run: npx playwright test --trace off
