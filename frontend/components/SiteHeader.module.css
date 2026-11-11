@@ -1,0 +1,91 @@
+.header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  color: var(--ink);
+}
+.brand:hover {
+  color: var(--ink);
+}
+
+.brandName {
+  font-family: var(--font-marcellus), serif;
+  font-size: 24px;
+  letter-spacing: 0.04em;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.languages {
+  display: flex;
+  margin-left: 8px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.language,
+.languageActive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  min-width: 56px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.language {
+  color: var(--ink-soft);
+}
+.language:hover {
+  color: var(--ink);
+}
+
+.languageActive {
+  background: var(--gold);
+  color: var(--night);
+  font-weight: 600;
+}
+.languageActive:hover {
+  color: var(--night);
+}
+
+/* On narrow screens the page links move to the bottom tab bar. */
+@media (max-width: 860px) {
+  .wide {
+    display: none;
+  }
+
+  .header {
+    padding-block: 12px;
+  }
+}

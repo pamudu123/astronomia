@@ -1,0 +1,29 @@
+.wheel {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+}
+
+.ring,
+.glow,
+.orbitA,
+.orbitB,
+.orbitC {
+  transform-origin: 240px 240px;
+}
+
+.ring {
+  animation: spin-reverse 160s linear infinite;
+}
+.glow {
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+.orbitA {
+  animation: spin 60s linear infinite;
+}
+.orbitB {
+  animation: spin-reverse 38s linear infinite;
+}
+.orbitC {
+  animation: spin 95s linear infinite;
+}

@@ -1,2 +1,16 @@
 __pycache__/
 *.pyc
+
+# Python
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.next/
+
+# Local environment
+.env
+.env.*
