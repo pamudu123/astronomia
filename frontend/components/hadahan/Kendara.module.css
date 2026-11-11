@@ -1,0 +1,80 @@
+.chart {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  align-self: center;
+  font-family: var(--font-body);
+}
+
+.lines {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-dasharray: 1600;
+  animation: draw 2.2s ease-out both;
+}
+
+.lagnaBox {
+  fill: var(--gold);
+  opacity: 0.08;
+}
+
+.lagnaMark {
+  fill: var(--gold);
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.planet,
+.highlight {
+  font-size: 15px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+}
+
+.planet {
+  fill: var(--ink);
+}
+
+.highlight {
+  fill: var(--coral);
+}
+
+.centreTitle {
+  fill: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: 17px;
+  text-anchor: middle;
+}
+
+.centreSub {
+  fill: var(--ink-soft);
+  font-size: 12px;
+  text-anchor: middle;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1600;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

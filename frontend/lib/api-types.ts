@@ -72,19 +72,208 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/charts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Chart */
+        post: operations["chart_v1_charts_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/hadahan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Hadahan
+         * @description The full birth chart page: chart, vimshottari dasha and Kuja dosha.
+         */
+        post: operations["hadahan_v1_hadahan_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/labels/{lang}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Labels
+         * @description Names of rashi, nakshatra, planets and Kuja rules in one language.
+         */
+        get: operations["get_labels_v1_labels__lang__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * Body
+         * @enum {string}
+         */
+        Body: "sun" | "moon" | "mars" | "mercury" | "jupiter" | "venus" | "saturn" | "rahu" | "ketu";
+        /** CancellationOut */
+        CancellationOut: {
+            /** Id */
+            id: string;
+            /** Applies */
+            applies: boolean;
+            /** Facts */
+            facts: {
+                [key: string]: string | number;
+            };
+            /** Reason */
+            reason: string;
+        };
+        /** ChartOut */
+        ChartOut: {
+            /**
+             * Utc
+             * Format: date-time
+             */
+            utc: string;
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+            lagna: components["schemas"]["PointOut"];
+            moon: components["schemas"]["PointOut"];
+            /** Planets */
+            planets: components["schemas"]["PlanetOut"][];
+            time_check: components["schemas"]["TimeCheckOut"];
+            method: components["schemas"]["MethodOut"];
+        };
+        /** ChartResponse */
+        ChartResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            chart: components["schemas"]["ChartOut"] | null;
+        };
+        /** DashaOut */
+        DashaOut: {
+            /**
+             * System
+             * @default vimshottari
+             * @constant
+             */
+            system: "vimshottari";
+            /** Balance Years */
+            balance_years: number;
+            /** Periods */
+            periods: components["schemas"]["PeriodOut"][];
+            /** Current */
+            current: components["schemas"]["PeriodOut"][];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HadahanRequest */
+        HadahanRequest: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Time
+             * Format: time
+             */
+            time: string;
+            /**
+             * Place Id
+             * @description A place id from /v1/places
+             */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /**
+             * Timezone
+             * @description Needed with latitude and longitude
+             */
+            timezone?: string | null;
+            /** Fold */
+            fold?: (0 | 1) | null;
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+            /** As Of */
+            as_of?: string | null;
+        };
+        /** HadahanResponse */
+        HadahanResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            chart: components["schemas"]["ChartOut"] | null;
+            dasha: components["schemas"]["DashaOut"] | null;
+            kuja: components["schemas"]["KujaOut"] | null;
+        };
         /** Health */
         Health: {
             /** Status */
             status: string;
+        };
+        /** KujaOut */
+        KujaOut: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Present */
+            present: boolean;
+            /** Strength */
+            strength: number;
+            /** Reduced */
+            reduced: boolean;
+            /** Points */
+            points: components["schemas"]["KujaPointOut"][];
+            /** Cancellations */
+            cancellations: components["schemas"]["CancellationOut"][];
+            /** Reasons */
+            reasons: string[];
+        };
+        /** KujaPointOut */
+        KujaPointOut: {
+            /** Point */
+            point: string;
+            /** House */
+            house: number;
+            /** Counts */
+            counts: boolean;
         };
         /** Meta */
         Meta: {
@@ -94,6 +283,19 @@ export interface components {
             languages: string[];
             /** Default Language */
             default_language: string;
+        };
+        /** MethodOut */
+        MethodOut: {
+            /** Ayanamsa */
+            ayanamsa: string;
+            /** Ayanamsa Degrees */
+            ayanamsa_degrees: number;
+            /** Node */
+            node: string;
+            /** House System */
+            house_system: string;
+            /** Ephemeris */
+            ephemeris: string;
         };
         /** OffsetOption */
         OffsetOption: {
@@ -113,6 +315,25 @@ export interface components {
             offset_label: string;
             /** Abbreviation */
             abbreviation: string;
+        };
+        /** PeriodOut */
+        PeriodOut: {
+            lord: components["schemas"]["Body"];
+            /**
+             * Start
+             * Format: date-time
+             */
+            start: string;
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+            /**
+             * Sub
+             * @default []
+             */
+            sub: components["schemas"]["PeriodOut"][];
         };
         /** PlaceList */
         PlaceList: {
@@ -145,6 +366,64 @@ export interface components {
             timezone: string;
             /** Population */
             population: number;
+        };
+        /** PlanetOut */
+        PlanetOut: {
+            /** Longitude */
+            longitude: number;
+            /** Sign */
+            sign: string;
+            /** Sign Number */
+            sign_number: number;
+            /** Degree */
+            degree: number;
+            /** Nakshatra */
+            nakshatra: string;
+            /** Nakshatra Number */
+            nakshatra_number: number;
+            /** Pada */
+            pada: number;
+            /** Navamsha Sign */
+            navamsha_sign: string;
+            body: components["schemas"]["Body"];
+            /** House */
+            house: number;
+            /** Navamsha House */
+            navamsha_house: number;
+            /** Retrograde */
+            retrograde: boolean;
+        };
+        /** PointOut */
+        PointOut: {
+            /** Longitude */
+            longitude: number;
+            /** Sign */
+            sign: string;
+            /** Sign Number */
+            sign_number: number;
+            /** Degree */
+            degree: number;
+            /** Nakshatra */
+            nakshatra: string;
+            /** Nakshatra Number */
+            nakshatra_number: number;
+            /** Pada */
+            pada: number;
+            /** Navamsha Sign */
+            navamsha_sign: string;
+        };
+        /** TimeCheckOut */
+        TimeCheckOut: {
+            /** Stable */
+            stable: boolean;
+            /** Lagna Changes Within */
+            lagna_changes_within: number | null;
+            /** Nakshatra Changes Within */
+            nakshatra_changes_within: number | null;
+            /** Pada Changes Within */
+            pada_changes_within: number | null;
+            /** Reason */
+            reason: string;
         };
         /**
          * TimeResolveRequest
@@ -319,6 +598,105 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TimeResolveResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    chart_v1_charts_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChartResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    hadahan_v1_hadahan_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HadahanResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_labels_v1_labels__lang__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lang: "si" | "en";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
