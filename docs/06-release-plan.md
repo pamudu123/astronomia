@@ -231,7 +231,7 @@ Assumes one developer working part time. Adjust to your pace. The work is in thr
 | 4 | Kuja dosha house list and cancellation rules | Week 5 |
 | 5 | Ephemeris licence: buy it (CHF 700) or publish the code. Swiss Ephemeris is used meanwhile | Week 12 |
 | 6 | AI provider and model, after the Sinhala test | Week 9 |
-| 7 | Frontend: who builds it, and with what (web first is assumed) | Week 6 |
+| 7 | Frontend: decided. A Next.js app, built by Claude and reviewed by the owner. See file 08 | Done |
 | 8 | How people pay (per report, subscription or both), prices and payment gateways. See file 07 | Week 10 |
 | 9 | Sign in method: email link, Google or phone OTP | Week 10 |
 
