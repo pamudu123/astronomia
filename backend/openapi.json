@@ -146,10 +146,307 @@
           }
         }
       }
+    },
+    "/v1/charts": {
+      "post": {
+        "tags": [
+          "hadahan"
+        ],
+        "summary": "Chart",
+        "operationId": "chart_v1_charts_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChartResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/hadahan": {
+      "post": {
+        "tags": [
+          "hadahan"
+        ],
+        "summary": "Hadahan",
+        "description": "The full birth chart page: chart, vimshottari dasha and Kuja dosha.",
+        "operationId": "hadahan_v1_hadahan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HadahanResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/labels/{lang}": {
+      "get": {
+        "tags": [
+          "hadahan",
+          "meta"
+        ],
+        "summary": "Get Labels",
+        "description": "Names of rashi, nakshatra, planets and Kuja rules in one language.",
+        "operationId": "get_labels_v1_labels__lang__get",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Labels V1 Labels  Lang  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "Body": {
+        "type": "string",
+        "enum": [
+          "sun",
+          "moon",
+          "mars",
+          "mercury",
+          "jupiter",
+          "venus",
+          "saturn",
+          "rahu",
+          "ketu"
+        ],
+        "title": "Body"
+      },
+      "CancellationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "applies": {
+            "type": "boolean",
+            "title": "Applies"
+          },
+          "facts": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Facts"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "applies",
+          "facts",
+          "reason"
+        ],
+        "title": "CancellationOut"
+      },
+      "ChartOut": {
+        "properties": {
+          "utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Utc"
+          },
+          "latitude": {
+            "type": "number",
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "lagna": {
+            "$ref": "#/components/schemas/PointOut"
+          },
+          "moon": {
+            "$ref": "#/components/schemas/PointOut"
+          },
+          "planets": {
+            "items": {
+              "$ref": "#/components/schemas/PlanetOut"
+            },
+            "type": "array",
+            "title": "Planets"
+          },
+          "time_check": {
+            "$ref": "#/components/schemas/TimeCheckOut"
+          },
+          "method": {
+            "$ref": "#/components/schemas/MethodOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "utc",
+          "latitude",
+          "longitude",
+          "lagna",
+          "moon",
+          "planets",
+          "time_check",
+          "method"
+        ],
+        "title": "ChartOut"
+      },
+      "ChartResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "chart": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChartOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "chart"
+        ],
+        "title": "ChartResponse"
+      },
+      "DashaOut": {
+        "properties": {
+          "system": {
+            "type": "string",
+            "const": "vimshottari",
+            "title": "System",
+            "default": "vimshottari"
+          },
+          "balance_years": {
+            "type": "number",
+            "title": "Balance Years"
+          },
+          "periods": {
+            "items": {
+              "$ref": "#/components/schemas/PeriodOut"
+            },
+            "type": "array",
+            "title": "Periods"
+          },
+          "current": {
+            "items": {
+              "$ref": "#/components/schemas/PeriodOut"
+            },
+            "type": "array",
+            "title": "Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "balance_years",
+          "periods",
+          "current"
+        ],
+        "title": "DashaOut"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -163,6 +460,162 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HadahanRequest": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "time": {
+            "type": "string",
+            "format": "time",
+            "title": "Time"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id",
+            "description": "A place id from /v1/places"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "Needed with latitude and longitude"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "time"
+        ],
+        "title": "HadahanRequest"
+      },
+      "HadahanResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "chart": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChartOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dasha": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DashaOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kuja": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/KujaOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "chart",
+          "dasha",
+          "kuja"
+        ],
+        "title": "HadahanResponse"
+      },
       "Health": {
         "properties": {
           "status": {
@@ -175,6 +628,86 @@
           "status"
         ],
         "title": "Health"
+      },
+      "KujaOut": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "present": {
+            "type": "boolean",
+            "title": "Present"
+          },
+          "strength": {
+            "type": "integer",
+            "title": "Strength"
+          },
+          "reduced": {
+            "type": "boolean",
+            "title": "Reduced"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/KujaPointOut"
+            },
+            "type": "array",
+            "title": "Points"
+          },
+          "cancellations": {
+            "items": {
+              "$ref": "#/components/schemas/CancellationOut"
+            },
+            "type": "array",
+            "title": "Cancellations"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reasons"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "present",
+          "strength",
+          "reduced",
+          "points",
+          "cancellations",
+          "reasons"
+        ],
+        "title": "KujaOut"
+      },
+      "KujaPointOut": {
+        "properties": {
+          "point": {
+            "type": "string",
+            "title": "Point"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "counts": {
+            "type": "boolean",
+            "title": "Counts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "point",
+          "house",
+          "counts"
+        ],
+        "title": "KujaPointOut"
       },
       "Meta": {
         "properties": {
@@ -201,6 +734,39 @@
           "default_language"
         ],
         "title": "Meta"
+      },
+      "MethodOut": {
+        "properties": {
+          "ayanamsa": {
+            "type": "string",
+            "title": "Ayanamsa"
+          },
+          "ayanamsa_degrees": {
+            "type": "number",
+            "title": "Ayanamsa Degrees"
+          },
+          "node": {
+            "type": "string",
+            "title": "Node"
+          },
+          "house_system": {
+            "type": "string",
+            "title": "House System"
+          },
+          "ephemeris": {
+            "type": "string",
+            "title": "Ephemeris"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ayanamsa",
+          "ayanamsa_degrees",
+          "node",
+          "house_system",
+          "ephemeris"
+        ],
+        "title": "MethodOut"
       },
       "OffsetOption": {
         "properties": {
@@ -239,6 +805,38 @@
           "abbreviation"
         ],
         "title": "OffsetOption"
+      },
+      "PeriodOut": {
+        "properties": {
+          "lord": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "sub": {
+            "items": {
+              "$ref": "#/components/schemas/PeriodOut"
+            },
+            "type": "array",
+            "title": "Sub",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "lord",
+          "start",
+          "end"
+        ],
+        "title": "PeriodOut"
       },
       "PlaceList": {
         "properties": {
@@ -351,6 +949,175 @@
           "population"
         ],
         "title": "PlaceOut"
+      },
+      "PlanetOut": {
+        "properties": {
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "sign_number": {
+            "type": "integer",
+            "title": "Sign Number"
+          },
+          "degree": {
+            "type": "number",
+            "title": "Degree"
+          },
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "nakshatra_number": {
+            "type": "integer",
+            "title": "Nakshatra Number"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "navamsha_sign": {
+            "type": "string",
+            "title": "Navamsha Sign"
+          },
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "navamsha_house": {
+            "type": "integer",
+            "title": "Navamsha House"
+          },
+          "retrograde": {
+            "type": "boolean",
+            "title": "Retrograde"
+          }
+        },
+        "type": "object",
+        "required": [
+          "longitude",
+          "sign",
+          "sign_number",
+          "degree",
+          "nakshatra",
+          "nakshatra_number",
+          "pada",
+          "navamsha_sign",
+          "body",
+          "house",
+          "navamsha_house",
+          "retrograde"
+        ],
+        "title": "PlanetOut"
+      },
+      "PointOut": {
+        "properties": {
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "sign_number": {
+            "type": "integer",
+            "title": "Sign Number"
+          },
+          "degree": {
+            "type": "number",
+            "title": "Degree"
+          },
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "nakshatra_number": {
+            "type": "integer",
+            "title": "Nakshatra Number"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "navamsha_sign": {
+            "type": "string",
+            "title": "Navamsha Sign"
+          }
+        },
+        "type": "object",
+        "required": [
+          "longitude",
+          "sign",
+          "sign_number",
+          "degree",
+          "nakshatra",
+          "nakshatra_number",
+          "pada",
+          "navamsha_sign"
+        ],
+        "title": "PointOut"
+      },
+      "TimeCheckOut": {
+        "properties": {
+          "stable": {
+            "type": "boolean",
+            "title": "Stable"
+          },
+          "lagna_changes_within": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lagna Changes Within"
+          },
+          "nakshatra_changes_within": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nakshatra Changes Within"
+          },
+          "pada_changes_within": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pada Changes Within"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stable",
+          "lagna_changes_within",
+          "nakshatra_changes_within",
+          "pada_changes_within",
+          "reason"
+        ],
+        "title": "TimeCheckOut"
       },
       "TimeResolveRequest": {
         "properties": {

@@ -51,3 +51,5 @@ When the API changes, run `uv run python scripts/export_openapi.py` in `backend/
 ## Data credits
 
 Place data © [GeoNames](https://www.geonames.org), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [`backend/app/data/README.md`](backend/app/data/README.md).
+
+Planet positions come from [Swiss Ephemeris](https://www.astro.com/swisseph/) through `pyswisseph`, used under the AGPL for now. A commercial licence will be bought, or the code published, before public launch (see `docs/06-release-plan.md`).

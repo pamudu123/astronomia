@@ -10,6 +10,7 @@ from app.api.deps import PlacesDb
 from app.engine.timeconv import (
     TimeConversionError,
     TimeOption,
+    TimeResolution,
     TimeStatus,
     format_offset,
     resolve_local_time,
@@ -82,6 +83,10 @@ def resolve_time(body: TimeResolveRequest, db: PlacesDb) -> TimeResolveResponse:
         result = resolve_local_time(body.date, body.time, timezone, body.fold)
     except TimeConversionError as error:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from error
+    return to_response(result)
+
+
+def to_response(result: TimeResolution) -> TimeResolveResponse:
     return TimeResolveResponse(
         status=result.status,
         timezone=result.timezone,

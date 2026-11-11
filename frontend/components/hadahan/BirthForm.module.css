@@ -1,0 +1,268 @@
+.page {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 64px;
+  padding-block: 32px 96px;
+}
+
+.card {
+  flex: 1 1 480px;
+  min-width: 0;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 24px 20px;
+  }
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 36px);
+  line-height: 1.2;
+}
+
+.field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.input {
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--night);
+  color: var(--ink);
+  font: inherit;
+  color-scheme: dark;
+}
+
+.input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.input:disabled {
+  opacity: 0.5;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 16px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--gold);
+}
+
+.note {
+  padding: 12px 16px;
+  border-radius: var(--radius-field);
+  background: var(--night);
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.manual {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  color: var(--ink-soft);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  padding-left: 46px;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.options {
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--panel-raised);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.option,
+.optionActive {
+  display: flex;
+  flex-direction: column;
+  min-height: 48px;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.optionActive {
+  background: rgb(227 184 102 / 14%);
+}
+
+.optionMeta {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.placeFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.linkButton {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.error {
+  padding: 12px 16px;
+  border: 1px solid var(--coral);
+  border-radius: var(--radius-field);
+  color: var(--ink);
+}
+
+.submit {
+  min-height: 56px;
+  border: 0;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.aside {
+  flex: 1 1 320px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding-top: 24px;
+}
+
+.moonWrap {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 1 / 1;
+  animation: drift 7s ease-in-out infinite;
+}
+
+.halo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.halo circle:first-child {
+  transform-origin: 160px 160px;
+  animation: spin 80s linear infinite;
+}
+
+.moon {
+  position: absolute;
+  left: 26%;
+  top: 26%;
+  width: 48%;
+  height: 48%;
+}
+
+.tips {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 360px;
+  color: var(--ink-soft);
+}
+
+.tips strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

@@ -1,0 +1,158 @@
+[
+  {
+    "name": "kandy_1995",
+    "input": {
+      "date": "1995-04-19",
+      "time": "14:35",
+      "latitude": 7.2906,
+      "longitude": 80.6336,
+      "timezone": "Asia/Colombo"
+    },
+    "checked": false,
+    "lagna": "simha",
+    "moon_rashi": "vrischika",
+    "moon_nakshatra": "jyeshtha",
+    "moon_pada": 4,
+    "planets": {
+      "sun": "mesha",
+      "moon": "vrischika",
+      "mars": "kataka",
+      "mercury": "mesha",
+      "jupiter": "vrischika",
+      "venus": "meena",
+      "saturn": "kumbha",
+      "rahu": "tula",
+      "ketu": "mesha"
+    }
+  },
+  {
+    "name": "colombo_1996",
+    "input": {
+      "date": "1996-06-01",
+      "time": "10:00",
+      "latitude": 6.9355,
+      "longitude": 79.8487,
+      "timezone": "Asia/Colombo"
+    },
+    "checked": false,
+    "lagna": "mithuna",
+    "moon_rashi": "vrischika",
+    "moon_nakshatra": "anuradha",
+    "moon_pada": 2,
+    "planets": {
+      "sun": "vrishabha",
+      "moon": "vrischika",
+      "mars": "mesha",
+      "mercury": "mesha",
+      "jupiter": "dhanu",
+      "venus": "mithuna",
+      "saturn": "meena",
+      "rahu": "kanya",
+      "ketu": "meena"
+    }
+  },
+  {
+    "name": "jaffna_1960",
+    "input": {
+      "date": "1960-11-11",
+      "time": "04:15",
+      "latitude": 9.6684,
+      "longitude": 80.0074,
+      "timezone": "Asia/Colombo"
+    },
+    "checked": false,
+    "lagna": "kanya",
+    "moon_rashi": "kataka",
+    "moon_nakshatra": "ashlesha",
+    "moon_pada": 1,
+    "planets": {
+      "sun": "tula",
+      "moon": "kataka",
+      "mars": "mithuna",
+      "mercury": "tula",
+      "jupiter": "dhanu",
+      "venus": "dhanu",
+      "saturn": "dhanu",
+      "rahu": "simha",
+      "ketu": "kumbha"
+    }
+  },
+  {
+    "name": "london_1985",
+    "input": {
+      "date": "1985-07-15",
+      "time": "08:20",
+      "latitude": 51.5085,
+      "longitude": -0.1257,
+      "timezone": "Europe/London"
+    },
+    "checked": false,
+    "lagna": "simha",
+    "moon_rashi": "vrishabha",
+    "moon_nakshatra": "mrigashira",
+    "moon_pada": 2,
+    "planets": {
+      "sun": "mithuna",
+      "moon": "vrishabha",
+      "mars": "mithuna",
+      "mercury": "kataka",
+      "jupiter": "makara",
+      "venus": "vrishabha",
+      "saturn": "tula",
+      "rahu": "mesha",
+      "ketu": "tula"
+    }
+  },
+  {
+    "name": "sydney_2001",
+    "input": {
+      "date": "2001-12-25",
+      "time": "23:50",
+      "latitude": -33.8678,
+      "longitude": 151.2073,
+      "timezone": "Australia/Sydney"
+    },
+    "checked": false,
+    "lagna": "simha",
+    "moon_rashi": "mesha",
+    "moon_nakshatra": "ashwini",
+    "moon_pada": 3,
+    "planets": {
+      "sun": "dhanu",
+      "moon": "mesha",
+      "mars": "kumbha",
+      "mercury": "dhanu",
+      "jupiter": "mithuna",
+      "venus": "dhanu",
+      "saturn": "vrishabha",
+      "rahu": "mithuna",
+      "ketu": "dhanu"
+    }
+  },
+  {
+    "name": "new_york_1970",
+    "input": {
+      "date": "1970-03-01",
+      "time": "06:00",
+      "latitude": 40.7143,
+      "longitude": -74.006,
+      "timezone": "America/New_York"
+    },
+    "checked": false,
+    "lagna": "kumbha",
+    "moon_rashi": "vrischika",
+    "moon_nakshatra": "jyeshtha",
+    "moon_pada": 2,
+    "planets": {
+      "sun": "kumbha",
+      "moon": "vrischika",
+      "mars": "mesha",
+      "mercury": "makara",
+      "jupiter": "tula",
+      "venus": "kumbha",
+      "saturn": "mesha",
+      "rahu": "kumbha",
+      "ketu": "simha"
+    }
+  }
+]

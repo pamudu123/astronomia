@@ -100,6 +100,18 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 | 11 | **PDF report (free)** | First a small test that Sinhala prints correctly. Then hadahan and porondam reports from print templates. `/v1/reports/pdf`. Screen: PDF report page 1. | Download a PDF in each language. Sinhala letters are joined correctly. Prints cleanly on A4. |
 | 12 | **Share links** | Database, `/v1/shares`, share dialog, shared page, link preview image, expiry and delete. Screens: Share dialog, Share preview image. | Share a result, open the link in a private window, delete it, confirm it is gone. |
 
+**Done together in one pull request:** steps 3, 4, 5, 7 and the hadahan part of step 9. What was built:
+
+- **Chart engine:** Swiss Ephemeris (built-in Moshier mode, no data files needed), Lahiri ayanamsa, mean node, whole sign houses. Planets checked against astropy's independent ephemeris: within 30 arcseconds (90 for Jupiter and Saturn, where astropy's model is less precise). A birth time check flags a lagna or nakshatra change within 5 or 15 minutes.
+- **Dasha:** vimshottari, three levels, years of 365.25 days.
+- **Kuja dosha:** houses 1, 2, 4, 7, 8, 12 from the lagna, Moon and Venus, plus four cancellation checks, from `backend/app/data/rules/kuja_v1.yaml`. Marked provisional until the astrologer confirms them.
+- **Labels and reasons:** `backend/app/data/labels/si.yaml` and `en.yaml` hold every name and one line reason. The Sinhala needs a native speaker's review.
+- **Pages:** the birth details form (place search, time zone shown for the date, coordinates option, clock change choice) and the result page (key cards, kendara in rashi and navamsha, planets table, dasha timeline, Kuja card, birth time check).
+- **Endpoints:** `POST /v1/charts`, `POST /v1/hadahan`, `GET /v1/labels/{lang}`.
+- **Golden charts:** 6 charts in `backend/tests/golden/charts.json`, marked `"checked": false` until confirmed.
+- **Provisional until confirmed:** the kendara house direction (anticlockwise from the top box).
+
+
 At the end of stage 1 the site is a complete free product.
 
 ### Stage 2: the paid level
