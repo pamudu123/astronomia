@@ -14,3 +14,7 @@ node_modules/
 # Local environment
 .env
 .env.*
+
+# Place search index, built from app/data/places_lk.csv and geonamescache
+backend/app/data/places.sqlite
+backend/app/data/places.tmp

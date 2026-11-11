@@ -47,3 +47,7 @@ The frontend forwards `/api/*` to the backend at `BACKEND_URL` (default `http://
 | Tests | `uv run pytest` | `npm test`, then `npx playwright test` after `npm run build` |
 
 When the API changes, run `uv run python scripts/export_openapi.py` in `backend/`, then `npm run gen:types` in `frontend/`. CI fails if either file is out of date.
+
+## Data credits
+
+Place data © [GeoNames](https://www.geonames.org), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [`backend/app/data/README.md`](backend/app/data/README.md).

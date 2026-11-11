@@ -47,10 +47,122 @@
           }
         }
       }
+    },
+    "/v1/places": {
+      "get": {
+        "tags": [
+          "places"
+        ],
+        "summary": "Find Places",
+        "operationId": "find_places_v1_places_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64,
+              "description": "Place name, any script",
+              "title": "Q"
+            },
+            "description": "Place name, any script"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaceList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/time/resolve": {
+      "post": {
+        "tags": [
+          "time"
+        ],
+        "summary": "Resolve Time",
+        "operationId": "resolve_time_v1_time_resolve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TimeResolveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeResolveResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
       "Health": {
         "properties": {
           "status": {
@@ -89,6 +201,357 @@
           "default_language"
         ],
         "title": "Meta"
+      },
+      "OffsetOption": {
+        "properties": {
+          "fold": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "title": "Fold"
+          },
+          "utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Utc"
+          },
+          "offset_seconds": {
+            "type": "integer",
+            "title": "Offset Seconds"
+          },
+          "offset_label": {
+            "type": "string",
+            "title": "Offset Label"
+          },
+          "abbreviation": {
+            "type": "string",
+            "title": "Abbreviation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fold",
+          "utc",
+          "offset_seconds",
+          "offset_label",
+          "abbreviation"
+        ],
+        "title": "OffsetOption"
+      },
+      "PlaceList": {
+        "properties": {
+          "places": {
+            "items": {
+              "$ref": "#/components/schemas/PlaceOut"
+            },
+            "type": "array",
+            "title": "Places"
+          }
+        },
+        "type": "object",
+        "required": [
+          "places"
+        ],
+        "title": "PlaceList"
+      },
+      "PlaceOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "name_si": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name Si"
+          },
+          "country_code": {
+            "type": "string",
+            "title": "Country Code"
+          },
+          "country_name": {
+            "type": "string",
+            "title": "Country Name"
+          },
+          "country_name_si": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country Name Si"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region"
+          },
+          "region_si": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Si"
+          },
+          "latitude": {
+            "type": "number",
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "population": {
+            "type": "integer",
+            "title": "Population"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "name_si",
+          "country_code",
+          "country_name",
+          "country_name_si",
+          "region",
+          "region_si",
+          "latitude",
+          "longitude",
+          "timezone",
+          "population"
+        ],
+        "title": "PlaceOut"
+      },
+      "TimeResolveRequest": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "time": {
+            "type": "string",
+            "format": "time",
+            "title": "Time"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id",
+            "description": "A place id from /v1/places"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "An IANA time zone, e.g. Asia/Colombo"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold",
+            "description": "Only when a clock change makes the time ambiguous or nonexistent: 0 = the earlier offset, 1 = the later offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "time"
+        ],
+        "title": "TimeResolveRequest",
+        "description": "Birth details travel in the request body, never in the URL."
+      },
+      "TimeResolveResponse": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/TimeStatus"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "local": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Local"
+          },
+          "utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Utc"
+          },
+          "offset_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offset Seconds"
+          },
+          "offset_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offset Label"
+          },
+          "abbreviation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abbreviation"
+          },
+          "clock_change": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/OffsetOption"
+            },
+            "type": "array",
+            "title": "Options"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "timezone",
+          "local",
+          "utc",
+          "offset_seconds",
+          "offset_label",
+          "abbreviation",
+          "clock_change",
+          "options"
+        ],
+        "title": "TimeResolveResponse"
+      },
+      "TimeStatus": {
+        "type": "string",
+        "enum": [
+          "ok",
+          "ambiguous",
+          "nonexistent"
+        ],
+        "title": "TimeStatus"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
       }
     }
   }

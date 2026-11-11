@@ -9,6 +9,8 @@ RUN uv sync --frozen --no-dev --no-install-project
 
 COPY app ./app
 RUN uv sync --frozen --no-dev
+# Build the place search index into the image, so the first request is fast.
+RUN /srv/.venv/bin/python -m app.geo.build
 
 RUN useradd --create-home appuser
 USER appuser

@@ -5,7 +5,9 @@ description = "Astronomia API: hadahan (birth chart) and porondam (marriage matc
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.162",
+    "geonamescache==3.0.2",
     "pydantic-settings>=2.4",
+    "tzdata==2026.6",
     "uvicorn[standard]>=0.30",
 ]
 
