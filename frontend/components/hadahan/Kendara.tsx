@@ -27,19 +27,23 @@ const TRIANGLES = new Set([2, 3, 5, 6, 8, 9, 11, 12]);
 const LINES =
   "M0 0H300V300H0ZM100 0V300M200 0V300M0 100H300M0 200H300M0 0L100 100M300 0L200 100M0 300L100 200M300 300L200 200";
 
+/** What the drawing needs to place a planet. */
+export type Placed = Pick<Planet, "body" | "house" | "navamsha_house">;
+
 type Props = {
-  planets: Planet[];
+  planets: Placed[];
   labels: Labels;
   mode: "rashi" | "navamsha";
   title: string;
   ariaLabel: string;
   lagnaMark: string;
-  highlight?: string;
+  highlight?: string | string[];
   subtitle: string;
 };
 
 export function Kendara({ planets, labels, mode, title, ariaLabel, lagnaMark, highlight, subtitle }: Props) {
-  const byHouse = new Map<number, Planet[]>();
+  const marked = highlight === undefined ? [] : [highlight].flat();
+  const byHouse = new Map<number, Placed[]>();
   for (const planet of planets) {
     const house = mode === "rashi" ? planet.house : planet.navamsha_house;
     byHouse.set(house, [...(byHouse.get(house) ?? []), planet]);
@@ -75,7 +79,7 @@ export function Kendara({ planets, labels, mode, title, ariaLabel, lagnaMark, hi
               key={planet.body}
               x={x}
               y={top + row * step}
-              className={planet.body === highlight ? styles.highlight : styles.planet}
+              className={marked.includes(planet.body) ? styles.highlight : styles.planet}
               style={{ animationDelay: `${0.9 + index * 0.08 + house * 0.04}s` }}
             >
               {labels.planet[planet.body].short}

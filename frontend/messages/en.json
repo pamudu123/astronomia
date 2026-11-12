@@ -183,7 +183,10 @@
       "forecastHouse": "{house} house",
       "forecastMoves": "Changes sign",
       "forecastNote": "A forecast describes general conditions. It does not predict events, health or outcomes.",
-      "forecastProvisional": "The house themes are provisional until a practising astrologer confirms them."
+      "forecastProvisional": "The house themes are provisional until a practising astrologer confirms them.",
+      "forecastSky": "This month",
+      "forecastSkyLabel": "The slow planets this month, in houses counted from your lagna.",
+      "forecastSkyNote": "The four slow planets, placed in your houses. A highlighted planet changes sign this month."
     }
   },
   "porondam": {

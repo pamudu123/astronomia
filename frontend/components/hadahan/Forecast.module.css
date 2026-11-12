@@ -29,6 +29,32 @@
   font-weight: 600;
 }
 
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.sky {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 860px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sky {
+    max-width: 320px;
+    width: 100%;
+    margin-inline: auto;
+  }
+}
+
 .grid {
   list-style: none;
   margin: 0;
@@ -36,6 +62,58 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
   gap: 14px;
+}
+
+.track {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar {
+  position: relative;
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--line-soft);
+}
+
+.barStay {
+  border-radius: 999px;
+  background: var(--teal);
+  opacity: 0.75;
+}
+
+.barMove {
+  border-radius: 999px;
+  background: var(--gold);
+}
+
+.marker {
+  position: absolute;
+  top: -4px;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border: 3px solid var(--night-raised);
+  border-radius: 50%;
+  background: var(--gold-hover);
+}
+
+.trackLabels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.trackTo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--gold);
+  font-weight: 600;
 }
 
 .card,
@@ -56,13 +134,12 @@
 
 .cardHead {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 
 .planet {
+  flex: 1;
   font-size: 17px;
   font-weight: 600;
 }
