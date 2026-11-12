@@ -16,7 +16,7 @@ A website for **hadahan** (Sri Lankan birth charts) and **porondam** (marriage m
 
 ## Run it locally
 
-You need Python 3.12 or newer with [uv](https://docs.astral.sh/uv/), and Node 22.
+You need Python 3.12 or newer with [uv](https://docs.astral.sh/uv/), and Node 22. The PDF reports also need the Pango library: `sudo apt-get install libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0` on Debian or Ubuntu, or `brew install pango` on a Mac.
 
 **Backend** (http://localhost:8000, API docs at `/docs`):
 

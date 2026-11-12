@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% from "kendara.html" import kendara %}
+{% block content %}
+<h1>{{ title }}</h1>
+
+<table class="people">
+  <tbody>
+    <tr>
+      {% for person in people %}
+      <td>
+        <p class="small soft">{{ person.role }}</p>
+        <h3 style="margin-top: 0.5mm">{{ person.name }}</h3>
+        <p>{{ person.star }}</p>
+        <p class="soft">{{ person.detail }}</p>
+      </td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+
+<p class="score">{{ score }}</p>
+<p class="lead">{{ summary }}</p>
+{% if same_star %}<p class="soft lead">{{ same_star }}</p>{% endif %}
+
+<h2>{{ r.essential }}</h2>
+<table class="table">
+  <tbody>
+    {% for row in hard_checks %}
+    <tr>
+      <td class="row-name" style="width: 24%">{{ row.name }}<br><span class="small soft" style="font-weight: 400">{{ row.meaning }}</span></td>
+      <td class="nowrap {{ 'pass' if row.passed else 'fail' }}" style="width: 16%">{{ row.result }}</td>
+      <td>{{ row.reason }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>{{ r.factors }}</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{{ r.factor }}</th>
+      <th scope="col">{{ r.result }}</th>
+      <th scope="col">{{ r.reason }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in factors %}
+    <tr>
+      <td class="row-name" style="width: 24%">{{ row.name }}<br><span class="small soft" style="font-weight: 400">{{ row.meaning }}</span></td>
+      <td class="nowrap {{ 'pass' if row.passed else 'fail' }}" style="width: 16%">{{ row.result }}</td>
+      <td>{{ row.reason }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<section class="box">
+  <h3>{{ r.kuja }}</h3>
+  {% if kuja %}
+  {% for line in kuja.people %}<p>{{ line }}</p>{% endfor %}
+  <p class="soft">{{ kuja.reason }}</p>
+  {% else %}
+  <p class="soft">{{ r.kuja_quick }}</p>
+  {% endif %}
+</section>
+
+{% if charts %}
+<section style="break-inside: avoid">
+  <h2>{{ r.charts }}</h2>
+  <table class="columns" style="margin-top: 0">
+    <tbody>
+      <tr>
+        {% for chart in charts %}
+        <td style="width: 50%">
+          <h3 class="chart-title">{{ chart.title }}</h3>
+          {{ kendara(chart) }}
+        </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  <p class="small soft" style="margin-top: 2mm">{{ r.kendara_note }}</p>
+</section>
+{% endif %}
+
+<p class="note">{{ r.guide }}</p>
+{% endblock %}

@@ -146,3 +146,76 @@ porondam_reason:
   kuja_neither: "කේන්දර දෙකේම කුජ දෝෂය නොපෙනේ."
   kuja_bride_only: "මනාලියගේ කේන්දරයේ කුජ දෝෂය පෙනෙන නමුත් මනාලයාගේ කේන්දරයේ නොපෙනේ. මෙය සලකා බැලිය යුතු කරුණකි."
   kuja_groom_only: "මනාලයාගේ කේන්දරයේ කුජ දෝෂය පෙනෙන නමුත් මනාලියගේ කේන්දරයේ නොපෙනේ. මෙය සලකා බැලිය යුතු කරුණකි."
+
+# PDF වාර්තාවේ දින සඳහා මාස නම්.
+month: [ජනවාරි, පෙබරවාරි, මාර්තු, අප්‍රේල්, මැයි, ජූනි, ජූලි, අගෝස්තු, සැප්තැම්බර්, ඔක්තෝබර්, නොවැම්බර්, දෙසැම්බර්]
+
+# PDF වාර්තාවේ මාතෘකා සහ ස්ථිර පෙළ.
+report:
+  hadahan_kind: හඳහන් වාර්තාව
+  porondam_kind: පොරොන්දම් වාර්තාව
+  hadahan_title: ඔබේ හඳහන
+  hadahan_title_named: "{name}ගේ හඳහන"
+  born: "උපත {date} {time} · {place}"
+  time_zone: "උපන් දින වේලා කලාපය {offset}"
+  coordinates: "අක්ෂාංශ {latitude}, දේශාංශ {longitude}"
+  lagna: ලග්නය
+  rashi: රාශිය
+  nakath: නැකත
+  star_pada: "{star}, පාද {pada}"
+  dasha_now: දැන් ගෙවෙන දශාව
+  dasha_now_value: "{main} මහ දශාව, {sub} අතුරු දශාව"
+  kuja: කුජ දෝෂය
+  kuja_present: ඇත
+  kuja_reduced: ඇත, අඩු වී ඇත
+  kuja_absent: නැත
+  chart_rashi: රාශි කේන්දරය
+  chart_navamsha: නවාංශ කේන්දරය
+  centre_rashi: රාශි
+  centre_navamsha: නවාංශ
+  lagna_mark: ලග්නය
+  planets: ග්‍රහයන් නවය
+  planet: ග්‍රහයා
+  sign: රාශිය
+  degree: අංශක
+  house: භාවය
+  star: නැකත
+  retrograde: ව
+  retrograde_note: ව යනු ග්‍රහයා වක්‍ර බවයි.
+  dasha: මහ දශා කාල
+  dasha_lord: දශාව
+  dasha_from: සිට
+  dasha_to: දක්වා
+  dasha_running: දැන් ගෙවේ
+  kuja_checks: දෝෂය අඩු කරන කරුණු
+  rule: නීතිය
+  result: ප්‍රතිඵලය
+  applies: අදාළයි
+  not_applies: අදාළ නොවේ
+  time_check: උපන් වේලාව පරීක්ෂාව
+  porondam_title: "{bride} සහ {groom}"
+  bride: මනාලිය
+  groom: මනාලයා
+  birth_star_only: උපන් නැකත පමණක් අනුව ගළපා ඇත
+  person_lagna: "ලග්නය {lagna}"
+  score: "කරුණු {total} න් {passed} ක් ගැළපේ"
+  essential: අත්‍යවශ්‍ය පරීක්ෂා
+  pass: සමත්
+  fail: සමත් නොවේ
+  factors: කරුණෙන් කරුණ
+  factor: කරුණ
+  reason: හේතුව
+  kuja_quick: කුජ දෝෂය සඳහා දෙදෙනාගේම සම්පූර්ණ උපන් විස්තර අවශ්‍යයි.
+  charts: රාශි කේන්දර
+  about: මෙම වාර්තාව ගැන
+  method_hadahan: "ලාහිරි අයනාංශය ({ayanamsa}°), සම්පූර්ණ රාශි භාව, මධ්‍යම රාහු, ස්විස් එෆෙමරිස්."
+  method_porondam: "ලාහිරි අයනාංශය. ගැළපීම එක් එක් අයගේ චන්ද්‍රයා අනුව කෙරේ. රජ්ජු සහ වේධ ගණනින් වෙන්ව තබා ඇත."
+  rule_sets: "නීති මාලා: {rules}."
+  provisional: "ප්‍රවීණ ජ්‍යොතිෂවේදියෙකු තහවුරු කරන තුරු පොරොන්දම් සහ කුජ දෝෂ නීති තාවකාලිකය."
+  porondam_provisional: "මෙම වාර්තාව සම්ප්‍රදායික පොරොන්දම් කරුණු 20 න් 11 ක් භාවිත කරයි."
+  kendara_note: "භාව ඉහළ ලග්න කොටුවේ සිට ගණන් කෙරේ. භාවවල දිශාව ජ්‍යොතිෂවේදියෙකු විසින් තහවුරු කිරීමට නියමිතය."
+  guide: "මෙය කේන්දර පිළිබඳ මාර්ගෝපදේශයක් මිස තීරණයක් නොවේ. එය ඔබේ පවුල සහ ජ්‍යොතිෂවේදියා සමඟ බෙදා ගන්න."
+  disclaimer: "මාර්ගෝපදේශය සහ සංස්කෘතික අවශ්‍යතා සඳහා පමණි. වැදගත් තීරණ සඳහා ඔබේ පවුල සහ ප්‍රවීණ ජ්‍යොතිෂවේදියෙකු සමඟ කතා කරන්න."
+  made_on: "සකස් කළ දිනය {date}."
+  footer: "ලාහිරි අයනාංශය · මාර්ගෝපදේශය සඳහා පමණි"
+  page: "පිටුව {page} / {pages}"

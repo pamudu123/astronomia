@@ -1,12 +1,14 @@
 """Birth chart (hadahan) endpoints."""
 
 import datetime as dt
+import pathlib
+from dataclasses import dataclass
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Path
 from pydantic import BaseModel
 
-from app.api.birth import BirthInput, resolve_birth
+from app.api.birth import BirthInput, ResolvedBirth, resolve_birth
 from app.api.deps import PlacesDb
 from app.api.timeresolve import TimeResolveResponse
 from app.engine.chart import Chart, Point, compute_chart
@@ -243,24 +245,40 @@ def chart(body: HadahanRequest, db: PlacesDb) -> ChartResponse:
     return ChartResponse(status="ok", time=birth.time, chart=chart_out(result, body.lang))
 
 
-@router.post("/v1/hadahan", response_model=HadahanResponse)
-def hadahan(body: HadahanRequest, db: PlacesDb) -> HadahanResponse:
-    """The full birth chart page: chart, vimshottari dasha and Kuja dosha."""
+@dataclass(frozen=True)
+class HadahanBuild:
+    """The page's response, plus what only the PDF report needs."""
+
+    response: HadahanResponse
+    birth: ResolvedBirth
+    chart: Chart | None
+
+
+def build_hadahan(body: HadahanRequest, db: pathlib.Path) -> HadahanBuild:
+    """The chart, vimshottari dasha and Kuja dosha for one birth."""
     birth = resolve_birth(body, db)
     if birth.utc is None:
-        return HadahanResponse(
+        response = HadahanResponse(
             status=birth.time.status, time=birth.time, chart=None, dasha=None, kuja=None
         )
+        return HadahanBuild(response, birth, None)
     result = compute_chart(EPHEMERIS, birth.utc, birth.latitude, birth.longitude)
     now = body.as_of or dt.datetime.now(dt.UTC)
     timeline = vimshottari(result.moon.longitude, result.utc)
-    return HadahanResponse(
+    response = HadahanResponse(
         status="ok",
         time=birth.time,
         chart=chart_out(result, body.lang),
         dasha=dasha_out(timeline, now),
         kuja=kuja_out(kuja_dosha(result), body.lang),
     )
+    return HadahanBuild(response, birth, result)
+
+
+@router.post("/v1/hadahan", response_model=HadahanResponse)
+def hadahan(body: HadahanRequest, db: PlacesDb) -> HadahanResponse:
+    """The full birth chart page: chart, vimshottari dasha and Kuja dosha."""
+    return build_hadahan(body, db).response
 
 
 @router.get("/v1/labels/{lang}", tags=["meta"])

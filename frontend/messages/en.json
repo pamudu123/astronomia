@@ -174,7 +174,10 @@
       "stable": "Stable",
       "sensitive": "Check the time",
       "method": "Method: {ayanamsa} ayanamsa, whole sign houses, mean node, time zone {offset} on the birth date.",
-      "ayanamsaLahiri": "Lahiri"
+      "ayanamsaLahiri": "Lahiri",
+      "download": "Download PDF",
+      "preparing": "Preparing the PDF…",
+      "downloadFailed": "The PDF could not be made. Please try again."
     }
   },
   "porondam": {
@@ -226,7 +229,10 @@
       "method": "Method: Lahiri ayanamsa · rule set {rules} · Rajju and Vedha are kept apart from the count.",
       "again": "Try another match",
       "star": "{star} · {rashi}",
-      "lagna": "Lagna {lagna}"
+      "lagna": "Lagna {lagna}",
+      "download": "Download PDF",
+      "preparing": "Preparing the PDF…",
+      "downloadFailed": "The PDF could not be made. Please try again."
     }
   }
 }
