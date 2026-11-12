@@ -321,6 +321,59 @@
           }
         }
       }
+    },
+    "/v1/reports/pdf": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Report Pdf",
+        "description": "A print ready A4 report, in the language of the request (`lang`).",
+        "operationId": "report_pdf_v1_reports_pdf_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/HadahanReport"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PorondamReport"
+                  }
+                ],
+                "title": "Body",
+                "discriminator": {
+                  "propertyName": "kind",
+                  "mapping": {
+                    "hadahan": "#/components/schemas/HadahanReport",
+                    "porondam": "#/components/schemas/PorondamReport"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The report",
+            "content": {
+              "application/pdf": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -636,6 +689,30 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "HadahanReport": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "hadahan",
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "title": "Name",
+            "default": ""
+          },
+          "birth": {
+            "$ref": "#/components/schemas/HadahanRequest"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "birth"
+        ],
+        "title": "HadahanReport"
       },
       "HadahanRequest": {
         "properties": {
@@ -1399,6 +1476,24 @@
           "navamsha_sign"
         ],
         "title": "PointOut"
+      },
+      "PorondamReport": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "porondam",
+            "title": "Kind"
+          },
+          "match": {
+            "$ref": "#/components/schemas/PorondamRequest"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "match"
+        ],
+        "title": "PorondamReport"
       },
       "PorondamRequest": {
         "properties": {

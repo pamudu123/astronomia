@@ -120,6 +120,15 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 - **Pages:** the two-person form with the full or birth stars switch, and the result with the score ring, essential checks, a factor grid with filter, Kuja for both, and the method line.
 - **Adding the other 9 factors** needs only the rule file and the two label files.
 
+**Done in one pull request:** step 11.
+
+- **Renderer:** WeasyPrint (HTML and CSS to PDF, shaped by Pango and HarfBuzz) with Jinja2 templates in `backend/app/reports/`. A test checks that Sinhala conjuncts such as ශ්‍රී are joined. SVG text is not joined, so the kendara draws its lines in SVG and places the planet names over them as normal text.
+- **Fonts:** Noto Sans Sinhala, DM Sans and Marcellus are bundled with their OFL licences in `backend/app/reports/fonts/`. Reports can load only these files: no other files and no web addresses.
+- **Reports:** hadahan (2 pages: key facts, rashi and navamsha kendara, planets, dasha periods, Kuja dosha with its checks, birth time check) and porondam (score, summary, Rajju and Vedha, all factors with their reasons, Kuja dosha for both, both rashi charts for a full match). Both end with the disclaimer, the method, the rule set versions and the provisional note.
+- **Endpoint:** `POST /v1/reports/pdf`. The server works the result out again from the birth details in the body. The PDF metadata carries no birth details, and the PDF and font tools are kept out of the logs.
+- **Pages:** a "Download PDF" button on the hadahan and porondam results.
+- **Provisional:** the Sinhala report wording needs the same native speaker review as the page wording.
+
 At the end of stage 1 the site is a complete free product.
 
 ### Stage 2: the paid level

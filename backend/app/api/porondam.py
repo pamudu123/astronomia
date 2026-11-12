@@ -1,5 +1,7 @@
 """Porondam (marriage matching) endpoint."""
 
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException, status
@@ -104,7 +106,7 @@ def _factor_out(result: FactorResult, lang: Lang) -> FactorOut:
 
 
 def _person(
-    person: FullPerson | QuickPerson, db: PlacesDb, role: Role
+    person: FullPerson | QuickPerson, db: Path, role: Role
 ) -> tuple[Point, Chart | None, PersonOut] | PorondamResponse:
     if isinstance(person, QuickPerson):
         if person.nakshatra not in NAKSHATRA:
@@ -136,14 +138,21 @@ def _person(
     return chart.moon, chart, out
 
 
-@router.post("/v1/porondam", response_model=PorondamResponse)
-def porondam(body: PorondamRequest, db: PlacesDb) -> PorondamResponse:
+@dataclass(frozen=True)
+class PorondamBuild:
+    """The page's response, plus each person's chart (None for a birth star only match)."""
+
+    response: PorondamResponse
+    charts: dict[Role, Chart | None]
+
+
+def build_porondam(body: PorondamRequest, db: Path) -> PorondamBuild:
     """Match two people. Each is either full birth details or a birth star and pada."""
     people = {}
     for role in ("bride", "groom"):
         found = _person(getattr(body, role), db, role)
         if isinstance(found, PorondamResponse):
-            return found
+            return PorondamBuild(found, {"bride": None, "groom": None})
         people[role] = found
     (b_moon, b_chart, b_out), (g_moon, g_chart, g_out) = people["bride"], people["groom"]
 
@@ -181,4 +190,11 @@ def porondam(body: PorondamRequest, db: PlacesDb) -> PorondamResponse:
             comparison=comparison,
             reason=reason(lang, f"kuja_{comparison}", section="porondam_reason"),
         )
-    return PorondamResponse(status="ok", bride=b_out, groom=g_out, match=match_out, kuja=kuja)
+    response = PorondamResponse(status="ok", bride=b_out, groom=g_out, match=match_out, kuja=kuja)
+    return PorondamBuild(response, {"bride": b_chart, "groom": g_chart})
+
+
+@router.post("/v1/porondam", response_model=PorondamResponse)
+def porondam(body: PorondamRequest, db: PlacesDb) -> PorondamResponse:
+    """Match two people. Each is either full birth details or a birth star and pada."""
+    return build_porondam(body, db).response

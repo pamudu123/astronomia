@@ -149,6 +149,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/reports/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Report Pdf
+         * @description A print ready A4 report, in the language of the request (`lang`).
+         */
+        post: operations["report_pdf_v1_reports_pdf_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -264,6 +284,20 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** HadahanReport */
+        HadahanReport: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "hadahan";
+            /**
+             * Name
+             * @default
+             */
+            name: string;
+            birth: components["schemas"]["HadahanRequest"];
         };
         /** HadahanRequest */
         HadahanRequest: {
@@ -532,6 +566,15 @@ export interface components {
             pada: number;
             /** Navamsha Sign */
             navamsha_sign: string;
+        };
+        /** PorondamReport */
+        PorondamReport: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "porondam";
+            match: components["schemas"]["PorondamRequest"];
         };
         /** PorondamRequest */
         PorondamRequest: {
@@ -898,6 +941,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PorondamResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    report_pdf_v1_reports_pdf_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            };
+        };
+        responses: {
+            /** @description The report */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": unknown;
                 };
             };
             /** @description Validation Error */

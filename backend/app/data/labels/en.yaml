@@ -146,3 +146,76 @@ porondam_reason:
   kuja_neither: "Neither chart shows Kuja dosha."
   kuja_bride_only: "The bride's chart shows Kuja dosha and the groom's does not. This is something to review."
   kuja_groom_only: "The groom's chart shows Kuja dosha and the bride's does not. This is something to review."
+
+# Month names for dates in the PDF report.
+month: [January, February, March, April, May, June, July, August, September, October, November, December]
+
+# Headings and fixed text of the PDF report.
+report:
+  hadahan_kind: Hadahan report
+  porondam_kind: Porondam report
+  hadahan_title: Your hadahan
+  hadahan_title_named: "{name}'s hadahan"
+  born: "Born {date} at {time} · {place}"
+  time_zone: "Time zone {offset} on the birth date"
+  coordinates: "Latitude {latitude}, longitude {longitude}"
+  lagna: Lagna
+  rashi: Rashi
+  nakath: Nakath
+  star_pada: "{star}, pada {pada}"
+  dasha_now: Dasha now
+  dasha_now_value: "{main} main period, {sub} sub period"
+  kuja: Kuja dosha
+  kuja_present: Present
+  kuja_reduced: Present, reduced
+  kuja_absent: Not present
+  chart_rashi: Rashi chart
+  chart_navamsha: Navamsha chart
+  centre_rashi: Rashi
+  centre_navamsha: Navamsha
+  lagna_mark: Lagna
+  planets: The nine planets
+  planet: Planet
+  sign: Sign
+  degree: Degree
+  house: House
+  star: Star
+  retrograde: R
+  retrograde_note: R means the planet is retrograde.
+  dasha: Main dasha periods
+  dasha_lord: Period
+  dasha_from: From
+  dasha_to: To
+  dasha_running: Running now
+  kuja_checks: Cancellation checks
+  rule: Rule
+  result: Result
+  applies: Applies
+  not_applies: Does not apply
+  time_check: Birth time check
+  porondam_title: "{bride} and {groom}"
+  bride: Bride
+  groom: Groom
+  birth_star_only: Matched by birth star only
+  person_lagna: "Lagna {lagna}"
+  score: "{passed} of {total} factors agree"
+  essential: Essential checks
+  pass: Pass
+  fail: Does not pass
+  factors: Factor by factor
+  factor: Factor
+  reason: Why
+  kuja_quick: Kuja dosha needs the full birth details of both people.
+  charts: Rashi charts
+  about: About this report
+  method_hadahan: "Lahiri ayanamsa ({ayanamsa}°), whole sign houses, mean node, Swiss Ephemeris."
+  method_porondam: "Lahiri ayanamsa. Matching uses the Moon of each person. Rajju and Vedha are kept apart from the count."
+  rule_sets: "Rule sets: {rules}."
+  provisional: "The porondam and Kuja dosha rules are provisional until a practising astrologer confirms them."
+  porondam_provisional: "This report uses 11 of the 20 traditional porondam factors."
+  kendara_note: "Houses run from the lagna box at the top. The direction of the houses is waiting for an astrologer's confirmation."
+  guide: "This is a guide to the charts, not a decision. Share it with your family and your astrologer."
+  disclaimer: "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer."
+  made_on: "Made on {date}."
+  footer: "Lahiri ayanamsa · For guidance only"
+  page: "Page {page} of {pages}"

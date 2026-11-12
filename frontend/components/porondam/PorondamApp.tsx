@@ -128,10 +128,12 @@ export function PorondamApp({
   if (view.kind === "result" && labels) {
     return (
       <PorondamResult
+        lang={lang}
         t={t.result}
         f={t.form}
         labels={labels}
         result={view.saved.result}
+        request={view.saved.request}
         onAgain={() => {
           saveSession(PORONDAM_KEY, null);
           setView({ kind: "form" });

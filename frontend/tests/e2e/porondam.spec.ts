@@ -102,3 +102,27 @@ test("missing details are reported", async ({ page }) => {
     page.getByRole("alert").filter({ hasText: "Please fill in the details for both people." }),
   ).toBeVisible();
 });
+
+test("a match downloads as a PDF report", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  const reports: string[] = [];
+  await page.route("**/api/v1/reports/pdf", (route) => {
+    reports.push(route.request().postData() ?? "");
+    return route.fulfill({ contentType: "application/pdf", body: "%PDF-1.7\n%test\n" });
+  });
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  expect((await download).suggestedFilename()).toBe("astronomia-porondam.pdf");
+  expect(JSON.parse(reports[0])).toMatchObject({
+    kind: "porondam",
+    match: {
+      bride: { name: "Nimali", nakshatra: "anuradha", pada: 2 },
+      groom: { name: "Kasun", nakshatra: "rohini", pada: 1 },
+      lang: "en",
+    },
+  });
+});

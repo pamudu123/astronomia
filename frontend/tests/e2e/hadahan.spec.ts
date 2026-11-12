@@ -108,3 +108,40 @@ test("missing details are reported", async ({ page }) => {
     page.getByRole("alert").filter({ hasText: "Please fill in the date, time and place." }),
   ).toBeVisible();
 });
+
+test("the result downloads as a PDF report", async ({ page }) => {
+  await mockBackend(page, "en");
+  const reports: string[] = [];
+  await page.route("**/api/v1/reports/pdf", (route) => {
+    reports.push(route.request().postData() ?? "");
+    return route.fulfill({ contentType: "application/pdf", body: "%PDF-1.7\n%test\n" });
+  });
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  expect((await download).suggestedFilename()).toBe("astronomia-hadahan.pdf");
+
+  // The details go in the request body, and the page address never changes.
+  expect(JSON.parse(reports[0])).toMatchObject({
+    kind: "hadahan",
+    name: "Nimali",
+    birth: { date: "1995-04-19", time: "14:35", lang: "en" },
+  });
+  expect(page.url()).not.toContain("1995");
+});
+
+test("a failed PDF says so", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.route("**/api/v1/reports/pdf", (route) => route.fulfill({ status: 500, body: "" }));
+  await page.goto("/si/hadahan");
+  await page.getByLabel("උපන් දිනය").fill("1995-04-19");
+  await page.getByLabel("උපන් වේලාව").fill("14:35");
+  await page.getByRole("combobox").fill("kandy");
+  await page.getByRole("option").first().click();
+  await page.getByRole("button", { name: "මගේ හඳහන පෙන්වන්න" }).click();
+  await page.getByRole("button", { name: "PDF ලෙස බාගන්න" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "PDF සෑදීමට නොහැකි විය" })).toBeVisible();
+});

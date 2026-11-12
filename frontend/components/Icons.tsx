@@ -18,6 +18,24 @@ export function ArrowRight({ size = 18 }: { size?: number }) {
   );
 }
 
+export function Download({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 18 18"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 2.5v9M5 8l4 4 4-4M3 15.5h12" />
+    </svg>
+  );
+}
+
 export function Lock({ size = 18, color = "var(--teal)" }: { size?: number; color?: string }) {
   return (
     <svg

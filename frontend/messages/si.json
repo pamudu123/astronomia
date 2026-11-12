@@ -174,7 +174,10 @@
       "stable": "ස්ථාවරයි",
       "sensitive": "වේලාව පරීක්ෂා කරන්න",
       "method": "ක්‍රමය: {ayanamsa} අයනාංශය, සම්පූර්ණ රාශි භාව, මධ්‍යම රාහු, උපන් දින වේලා කලාපය {offset}.",
-      "ayanamsaLahiri": "ලාහිරි"
+      "ayanamsaLahiri": "ලාහිරි",
+      "download": "PDF ලෙස බාගන්න",
+      "preparing": "PDF සකසමින්…",
+      "downloadFailed": "PDF සෑදීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න."
     }
   },
   "porondam": {
@@ -226,7 +229,10 @@
       "method": "ක්‍රමය: ලාහිරි අයනාංශය · නීති මාලාව {rules} · රජ්ජු සහ වේධ ගණනින් වෙන්ව තබා ඇත.",
       "again": "වෙනත් ගැළපීමක් උත්සාහ කරන්න",
       "star": "{star} · {rashi}",
-      "lagna": "ලග්නය {lagna}"
+      "lagna": "ලග්නය {lagna}",
+      "download": "PDF ලෙස බාගන්න",
+      "preparing": "PDF සකසමින්…",
+      "downloadFailed": "PDF සෑදීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න."
     }
   }
 }

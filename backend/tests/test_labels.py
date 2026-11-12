@@ -31,7 +31,7 @@ def test_every_name_exists(lang: Lang) -> None:
 
 
 @pytest.mark.parametrize("lang", ["si", "en"])
-@pytest.mark.parametrize("section", ["reason", "porondam_reason"])
+@pytest.mark.parametrize("section", ["reason", "porondam_reason", "report"])
 def test_templates_use_the_same_placeholders(lang: Lang, section: str) -> None:
     en, other = labels("en")[section], labels(lang)[section]
     for code, text in en.items():
@@ -60,6 +60,11 @@ def test_reason_fills_names_and_ordinals() -> None:
 
 def test_sinhala_text_has_no_stray_latin_words() -> None:
     table = labels("si")
-    for code, text in {**table["reason"], **table["porondam_reason"]}.items():
+    for code, text in {**table["reason"], **table["porondam_reason"], **table["report"]}.items():
         cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
         assert not re.search(r"[A-Za-z]", cleaned), code
+
+
+@pytest.mark.parametrize("lang", ["si", "en"])
+def test_twelve_month_names(lang: Lang) -> None:
+    assert len(labels(lang)["month"]) == 12

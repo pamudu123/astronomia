@@ -1,0 +1,13 @@
+{% macro kendara(chart) %}
+<div class="kendara" role="img" aria-label="{{ chart.title }}">
+  <svg viewBox="-4 -4 308 308" aria-hidden="true">
+    <rect x="101" y="1" width="98" height="98" fill="#f1ede0" stroke="none"></rect>
+    <path d="{{ lines }}" fill="none" stroke="#8a6410" stroke-width="1.6" stroke-linejoin="round"></path>
+  </svg>
+  <span class="label mark" style="left: 50%; top: 6.5%">{{ chart.lagna_mark }}</span>
+  {% for label in chart.labels %}
+  <span class="label{% if label.highlight %} highlight{% endif %}" style="left: {{ label.left }}%; top: {{ label.top }}%">{{ label.text }}</span>
+  {% endfor %}
+  <span class="label centre" style="left: 50%; top: 50%">{{ chart.centre }}</span>
+</div>
+{% endmacro %}

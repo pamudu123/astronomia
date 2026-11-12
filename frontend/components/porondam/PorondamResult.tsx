@@ -4,18 +4,30 @@ import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ArrowRight } from "@/components/Icons";
+import { ReportButton } from "@/components/ReportButton";
 import { type Labels, fill } from "@/lib/hadahan";
-import { type Factor, type FactorFilter, type Person, type Porondam, filterFactors, ringOffset } from "@/lib/porondam";
+import type { Locale } from "@/lib/i18n";
+import {
+  type Factor,
+  type FactorFilter,
+  type Person,
+  type Porondam,
+  type PorondamRequest,
+  filterFactors,
+  ringOffset,
+} from "@/lib/porondam";
 
 import styles from "./Porondam.module.css";
 
 const RING = 2 * Math.PI * 84;
 
 type Props = {
+  lang: Locale;
   t: Dictionary["porondam"]["result"];
   f: Dictionary["porondam"]["form"];
   labels: Labels;
   result: Porondam;
+  request: PorondamRequest;
   onAgain: () => void;
 };
 
@@ -31,7 +43,7 @@ function Check({ ok }: { ok: boolean }) {
   );
 }
 
-export function PorondamResult({ t, f, labels, result, onAgain }: Props) {
+export function PorondamResult({ lang, t, f, labels, result, request, onAgain }: Props) {
   const [filter, setFilter] = useState<FactorFilter>("all");
   const match = result.match!;
   const bride = result.bride!;
@@ -205,10 +217,13 @@ export function PorondamResult({ t, f, labels, result, onAgain }: Props) {
           {match.provisional && <p className={styles.small}>{t.provisional}</p>}
           <p className={styles.small}>{fill(t.method, { rules: match.rule_set })}</p>
         </div>
-        <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
-          {t.again}
-          <ArrowRight />
-        </button>
+        <div className={styles.footActions}>
+          <ReportButton request={{ kind: "porondam", match: { ...request, lang } }} t={t} />
+          <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
+            {t.again}
+            <ArrowRight />
+          </button>
+        </div>
       </section>
     </main>
   );

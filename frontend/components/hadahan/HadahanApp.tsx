@@ -82,6 +82,7 @@ export function HadahanApp({ lang, t }: { lang: Locale; t: Dictionary["hadahan"]
         date={saved.request.date}
         time={saved.request.time}
         placeText={saved.placeLabel}
+        request={saved.request}
         onEdit={() => {
           saveResult(null);
           setView({ kind: "form" });

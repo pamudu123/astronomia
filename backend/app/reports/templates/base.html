@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<title>{{ kind }} · Astronomia</title>
+<meta name="generator" content="Astronomia">
+</head>
+<body>
+{% block content %}{% endblock %}
+
+<section class="box box-quiet" aria-label="{{ r.about }}">
+  <h3>{{ r.about }}</h3>
+  {% for line in about %}
+  <p class="small{% if not loop.first %} soft{% endif %}">{{ line }}</p>
+  {% endfor %}
+</section>
+</body>
+</html>

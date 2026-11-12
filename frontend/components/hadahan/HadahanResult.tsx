@@ -4,7 +4,15 @@ import Image from "next/image";
 import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { type Hadahan, type Labels, fill, formatDate, formatDegree } from "@/lib/hadahan";
+import { ReportButton } from "@/components/ReportButton";
+import {
+  type BirthRequest,
+  type Hadahan,
+  type Labels,
+  fill,
+  formatDate,
+  formatDegree,
+} from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { RASHI } from "@/lib/rashi";
 
@@ -21,6 +29,7 @@ type Props = {
   date: string;
   time: string;
   placeText: string;
+  request: BirthRequest;
   onEdit: () => void;
 };
 
@@ -28,7 +37,18 @@ function rashiImage(key: string): string {
   return RASHI.find((r) => r.key === key)?.image ?? "";
 }
 
-export function HadahanResult({ lang, t, labels, result, name, date, time, placeText, onEdit }: Props) {
+export function HadahanResult({
+  lang,
+  t,
+  labels,
+  result,
+  name,
+  date,
+  time,
+  placeText,
+  request,
+  onEdit,
+}: Props) {
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
   const chart = result.chart!;
   const kuja = result.kuja!;
@@ -75,9 +95,12 @@ export function HadahanResult({ lang, t, labels, result, name, date, time, place
             {formatDate(`${date}T00:00:00Z`, lang)} · {time} · {placeText}
           </p>
         </div>
-        <button type="button" className={styles.outlineButton} onClick={onEdit}>
-          {t.edit}
-        </button>
+        <div className={styles.actions}>
+          <ReportButton request={{ kind: "hadahan", name, birth: { ...request, lang } }} t={t} />
+          <button type="button" className={styles.outlineButton} onClick={onEdit}>
+            {t.edit}
+          </button>
+        </div>
       </section>
 
       <section className={styles.cards} aria-label={t.lagna}>

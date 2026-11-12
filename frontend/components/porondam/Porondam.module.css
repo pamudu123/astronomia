@@ -473,6 +473,13 @@
   gap: 6px;
 }
 
+.footActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+}
+
 .again {
   background: none;
   cursor: pointer;

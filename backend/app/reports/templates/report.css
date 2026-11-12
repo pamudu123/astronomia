@@ -1,0 +1,289 @@
+/* Print layout from the design board "PDF report": cream paper, navy ink, dark gold rules. */
+
+@page {
+  size: A4;
+  margin: 24mm 18mm 20mm;
+  background: #fbfaf6;
+
+  @top-left {
+    content: "Astronomia";
+    font-family: "Marcellus";
+    font-size: 13pt;
+    letter-spacing: 0.04em;
+    color: #0b1026;
+    width: 50%;
+    vertical-align: bottom;
+    padding-bottom: 2.5mm;
+    border-bottom: 1.2pt solid #8a6410;
+  }
+  @top-right {
+    content: __KIND__;
+    width: 50%;
+    text-align: right;
+    font-family: "DM Sans", "Noto Sans Sinhala";
+    font-size: 9pt;
+    color: #4a5170;
+    vertical-align: bottom;
+    padding-bottom: 2.5mm;
+    border-bottom: 1.2pt solid #8a6410;
+  }
+  @bottom-left {
+    content: __FOOTER__;
+    width: 70%;
+    font-family: "DM Sans", "Noto Sans Sinhala";
+    font-size: 8pt;
+    color: #4a5170;
+    vertical-align: top;
+    padding-top: 2mm;
+    border-top: 0.6pt solid #e6e1d3;
+  }
+  @bottom-right {
+    content: __PAGE__;
+    width: 30%;
+    text-align: right;
+    font-family: "DM Sans", "Noto Sans Sinhala";
+    font-size: 8pt;
+    color: #4a5170;
+    vertical-align: top;
+    padding-top: 2mm;
+    border-top: 0.6pt solid #e6e1d3;
+  }
+}
+
+html {
+  font-family: "DM Sans", "Noto Sans Sinhala";
+  font-size: 9.5pt;
+  line-height: 1.4;
+  color: #0b1026;
+}
+html[lang="si"] {
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-weight: 400;
+  margin: 0;
+  break-after: avoid;
+}
+html[lang="si"] h1,
+html[lang="si"] h2,
+html[lang="si"] h3 {
+  font-family: "Noto Sans Sinhala", "DM Sans";
+  font-weight: 600;
+}
+h1 {
+  font-size: 22pt;
+  line-height: 1.2;
+}
+h2 {
+  font-size: 13pt;
+  margin: 5.5mm 0 1.5mm;
+}
+h3 {
+  font-size: 11pt;
+  margin: 0 0 1.5mm;
+}
+p {
+  margin: 0;
+}
+
+.soft {
+  color: #4a5170;
+}
+.small {
+  font-size: 8.5pt;
+}
+.strong {
+  font-weight: 600;
+}
+.lead {
+  margin-top: 1.5mm;
+}
+
+/* Two columns that never split across pages. */
+.columns {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6mm;
+  break-inside: avoid;
+}
+.columns > tbody > tr > td {
+  vertical-align: top;
+  padding: 0;
+}
+.columns > tbody > tr > td + td {
+  padding-left: 8mm;
+}
+
+/* Key facts beside the chart. */
+.facts {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10.5pt;
+}
+.facts th {
+  text-align: left;
+  font-weight: 400;
+  color: #4a5170;
+  padding: 1.4mm 4mm 1.4mm 0;
+  white-space: nowrap;
+  vertical-align: top;
+}
+.facts td {
+  font-weight: 600;
+  padding: 1.4mm 0;
+}
+
+/* Data tables. */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.table th {
+  font-weight: 500;
+  color: #4a5170;
+  padding: 1mm 3mm 1.5mm 0;
+  border-bottom: 0.8pt solid #8a6410;
+  vertical-align: bottom;
+}
+.table td {
+  padding: 1mm 3mm 1mm 0;
+  border-bottom: 0.6pt solid #e6e1d3;
+  vertical-align: top;
+}
+.table tr {
+  break-inside: avoid;
+}
+.table-tight td {
+  padding-top: 0.7mm;
+  padding-bottom: 0.7mm;
+}
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+.table .row-name {
+  font-weight: 600;
+}
+.table td.now {
+  background: #f1ede0;
+}
+.table .gap {
+  padding-left: 5mm;
+  border-left: 0.6pt solid #e6e1d3;
+}
+.nowrap {
+  white-space: nowrap;
+}
+
+/* Bordered boxes. */
+.box {
+  border: 0.8pt solid #8a6410;
+  border-radius: 4pt;
+  padding: 3mm 4mm;
+  margin-top: 4.5mm;
+  margin-break: keep;
+  break-inside: avoid;
+}
+.box-quiet {
+  border-color: #e6e1d3;
+}
+.box p + p {
+  margin-top: 1mm;
+}
+.note {
+  margin-top: 4mm;
+  padding: 2.5mm 4mm;
+  border-radius: 4pt;
+  background: #f1ede0;
+  color: #4a5170;
+  break-inside: avoid;
+}
+
+.pass {
+  font-weight: 600;
+}
+.fail {
+  font-weight: 600;
+  color: #8a3b10;
+}
+
+/* The square kendara: SVG lines with the names placed over them as text. */
+.kendara {
+  position: relative;
+  width: 64mm;
+  height: 64mm;
+}
+.kendara svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 64mm;
+  height: 64mm;
+}
+.kendara .label {
+  position: absolute;
+  width: 14mm;
+  margin-left: -7mm;
+  height: 5mm;
+  margin-top: -2.5mm;
+  line-height: 5mm;
+  text-align: center;
+  font-size: 9pt;
+  font-weight: 600;
+  white-space: nowrap;
+}
+html[lang="si"] .kendara .label {
+  font-size: 8pt;
+  line-height: 4.4mm;
+}
+.kendara .highlight {
+  color: #8a6410;
+}
+.kendara .mark {
+  color: #8a6410;
+  font-weight: 500;
+  font-size: 7.5pt;
+}
+.kendara .centre {
+  width: 30mm;
+  margin-left: -15mm;
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-weight: 400;
+  font-size: 10pt;
+  color: #4a5170;
+}
+.chart-title {
+  margin-bottom: 2mm;
+}
+
+/* Porondam. */
+.people {
+  width: calc(100% + 8mm);
+  margin: 4mm -4mm 0;
+  border-collapse: separate;
+  border-spacing: 4mm 0;
+}
+.people td {
+  width: 50%;
+  vertical-align: top;
+  border: 0.8pt solid #e6e1d3;
+  border-radius: 4pt;
+  padding: 3mm 4mm;
+}
+.score {
+  margin-top: 6mm;
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-size: 16pt;
+}
+html[lang="si"] .score {
+  font-family: "Noto Sans Sinhala", "DM Sans";
+  font-weight: 600;
+  font-size: 14pt;
+}
+.page-break {
+  break-before: page;
+}

@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from app.api.timeresolve import TimeResolveResponse, to_response
 from app.engine.timeconv import TimeConversionError, TimeStatus, resolve_local_time
-from app.geo.search import get_place
+from app.geo.search import Place, get_place
 
 
 class BirthInput(BaseModel):
@@ -40,10 +40,12 @@ class ResolvedBirth:
     utc: dt.datetime | None
     latitude: float
     longitude: float
+    place: Place | None = None  # None when coordinates were given
 
 
 def resolve_birth(body: BirthInput, places_db: Path) -> ResolvedBirth:
     latitude, longitude, timezone = body.latitude, body.longitude, body.timezone
+    place = None
     if body.place_id is not None:
         place = get_place(places_db, body.place_id)
         if place is None:
@@ -55,4 +57,4 @@ def resolve_birth(body: BirthInput, places_db: Path) -> ResolvedBirth:
     except TimeConversionError as error:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from error
     utc = result.utc if result.status is TimeStatus.OK else None
-    return ResolvedBirth(to_response(result), utc, latitude, longitude)
+    return ResolvedBirth(to_response(result), utc, latitude, longitude, place)

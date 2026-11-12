@@ -22,6 +22,10 @@ def configure_logging(level: str) -> None:
     )
     # Uvicorn's own access log prints the full URL, query string included. Use ours instead.
     logging.getLogger("uvicorn.access").disabled = True
+    # The PDF tools log each step, and the font subsetter lists the letters it used, which
+    # would spell out a visitor's name. Keep them to warnings.
+    for name in ("weasyprint", "fontTools"):
+        logging.getLogger(name).setLevel(logging.WARNING)
 
 
 class AccessLogMiddleware(BaseHTTPMiddleware):
