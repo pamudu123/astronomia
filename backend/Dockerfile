@@ -17,7 +17,8 @@ RUN uv sync --frozen --no-dev
 # Build the place search index into the image, so the first request is fast.
 RUN /srv/.venv/bin/python -m app.geo.build
 
-RUN useradd --create-home appuser
+RUN useradd --create-home appuser \
+    && mkdir -p /srv/var && chown appuser /srv/var
 USER appuser
 EXPOSE 8000
 CMD ["/srv/.venv/bin/uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

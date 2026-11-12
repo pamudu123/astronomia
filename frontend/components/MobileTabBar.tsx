@@ -9,8 +9,14 @@ import type { Locale } from "@/lib/i18n";
 import styles from "./MobileTabBar.module.css";
 
 /** Bottom tab bar for phones, as in the mobile design. Hidden on wide screens. */
-export function MobileTabBar({ lang, dict }: { lang: Locale; dict: Dictionary }) {
-  const pathname = usePathname() ?? `/${lang}`;
+export function MobileTabBar(props: Props) {
+  return <MobileTabs {...props} pathname={usePathname() ?? `/${props.lang}`} />;
+}
+
+type Props = { lang: Locale; dict: Dictionary };
+
+/** The tabs for a given page address. Also the stand-in while the address is not known. */
+export function MobileTabs({ lang, dict, pathname }: Props & { pathname: string }) {
   const tabs = [
     { href: `/${lang}`, label: dict.nav.homeTab, icon: <HomeIcon /> },
     { href: `/${lang}/hadahan`, label: dict.nav.hadahan, icon: <ChartIcon /> },

@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
 
 import { Logo } from "./Icons";
-import { LanguageSwitch } from "./LanguageSwitch";
-import { MobileTabBar } from "./MobileTabBar";
+import { LanguageLinks, LanguageSwitch } from "./LanguageSwitch";
+import { MobileTabBar, MobileTabs } from "./MobileTabBar";
 import styles from "./SiteHeader.module.css";
 
 export function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
@@ -28,9 +29,14 @@ export function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         <Link href={`/${lang}/plans`} className={`${styles.link} ${styles.wide}`}>
           {dict.nav.plans}
         </Link>
-        <LanguageSwitch current={lang} label={dict.nav.language} />
+        {/* Pages with a code in the address (shared links) only know it at request time. */}
+        <Suspense fallback={<LanguageLinks current={lang} label={dict.nav.language} pathname={`/${lang}`} />}>
+          <LanguageSwitch current={lang} label={dict.nav.language} />
+        </Suspense>
       </nav>
-      <MobileTabBar lang={lang} dict={dict} />
+      <Suspense fallback={<MobileTabs lang={lang} dict={dict} pathname="" />}>
+        <MobileTabBar lang={lang} dict={dict} />
+      </Suspense>
     </header>
   );
 }

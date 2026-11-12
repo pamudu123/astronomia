@@ -12,8 +12,15 @@ const OPTIONS: { locale: Locale; label: string }[] = [
   { locale: "en", label: "English" },
 ];
 
-export function LanguageSwitch({ current, label }: { current: Locale; label: string }) {
-  const pathname = usePathname() ?? `/${current}`;
+type Props = { current: Locale; label: string };
+
+/** Reads the page address, so it waits for request time on pages with unknown params. */
+export function LanguageSwitch(props: Props) {
+  return <LanguageLinks {...props} pathname={usePathname() ?? `/${props.current}`} />;
+}
+
+/** The two language links, for a given page address. Also the stand-in while it loads. */
+export function LanguageLinks({ current, label, pathname }: Props & { pathname: string }) {
   return (
     <div className={styles.languages} role="group" aria-label={label}>
       {OPTIONS.map((option) => {

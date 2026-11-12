@@ -1,0 +1,301 @@
+{
+  "kind": "porondam",
+  "created_at": "2026-11-12T08:00:00Z",
+  "expires_at": "2026-12-12T08:00:00Z",
+  "names_hidden": false,
+  "hadahan": null,
+  "porondam": {
+    "status": "ok",
+    "waiting_for": null,
+    "time": null,
+    "bride": {
+      "name": "Nimali",
+      "mode": "full",
+      "nakshatra": "jyeshtha",
+      "pada": 4,
+      "rashi": "vrischika",
+      "lagna": "simha",
+      "offset_label": "UTC+05:30"
+    },
+    "groom": {
+      "name": "Kasun",
+      "mode": "full",
+      "nakshatra": "hasta",
+      "pada": 3,
+      "rashi": "kanya",
+      "lagna": "kanya",
+      "offset_label": "UTC+05:30"
+    },
+    "match": {
+      "rule_set": "porondam_si_v1",
+      "provisional": true,
+      "score": {
+        "passed": 3,
+        "total": 9
+      },
+      "hard_checks": [
+        {
+          "id": "rajju",
+          "hard": true,
+          "passed": true,
+          "facts": {
+            "bride_rajju": "pada",
+            "groom_rajju": "kantha"
+          },
+          "reason": "The bride's star is in the Pada (feet) rajju and the groom's in the Kantha (neck) rajju. Different rajju is essential."
+        },
+        {
+          "id": "vedha",
+          "hard": true,
+          "passed": true,
+          "facts": {
+            "bride_star": "jyeshtha",
+            "groom_star": "hasta"
+          },
+          "reason": "Jyeshtha and Hasta are not an afflicting pair."
+        }
+      ],
+      "factors": [
+        {
+          "id": "dina",
+          "hard": false,
+          "passed": false,
+          "facts": {
+            "count": 23,
+            "remainder": 5
+          },
+          "reason": "Counting from the bride's star, the groom's is number 23. The remainder after nine is 5, which is not favourable."
+        },
+        {
+          "id": "gana",
+          "hard": false,
+          "passed": false,
+          "facts": {
+            "bride_gana": "rakshasa",
+            "groom_gana": "deva"
+          },
+          "reason": "The bride is Rakshasa gana and the groom is Deva gana. These are not counted as a good pair."
+        },
+        {
+          "id": "mahendra",
+          "hard": false,
+          "passed": false,
+          "facts": {
+            "count": 23
+          },
+          "reason": "The groom's star is number 23 from the bride's, which is not one of the favourable counts."
+        },
+        {
+          "id": "stree_deergha",
+          "hard": false,
+          "passed": true,
+          "facts": {
+            "count": 23,
+            "threshold": 13
+          },
+          "reason": "The groom's star is number 23 from the bride's, more than 13, which is far enough."
+        },
+        {
+          "id": "yoni",
+          "hard": false,
+          "passed": true,
+          "facts": {
+            "bride_yoni": "deer",
+            "groom_yoni": "buffalo"
+          },
+          "reason": "The animal of the bride's star is the deer and of the groom's the buffalo. They are not enemies."
+        },
+        {
+          "id": "rashi",
+          "hard": false,
+          "passed": true,
+          "facts": {
+            "count": 11
+          },
+          "reason": "The groom's Moon sign is number 11 from the bride's, which is favourable."
+        },
+        {
+          "id": "rashyadhipathi",
+          "hard": false,
+          "passed": false,
+          "facts": {
+            "bride_lord": "mars",
+            "groom_lord": "mercury"
+          },
+          "reason": "Mars rules the bride's sign and Mercury the groom's. They are counted as enemies."
+        },
+        {
+          "id": "vashya",
+          "hard": false,
+          "passed": false,
+          "facts": {
+            "bride_sign": "vrischika",
+            "groom_sign": "kanya"
+          },
+          "reason": "Neither sign, Vrischika or Kanya, is under the influence of the other."
+        },
+        {
+          "id": "nadi",
+          "hard": false,
+          "passed": false,
+          "facts": {
+            "bride_nadi": "aadi",
+            "groom_nadi": "aadi"
+          },
+          "reason": "Both are Aadi nadi. The same nadi is not favourable."
+        }
+      ],
+      "summary": "minority_pass",
+      "summary_text": "Both essential checks pass, but fewer than half of the factors agree.",
+      "same_star": false,
+      "same_star_text": null
+    },
+    "kuja": {
+      "bride": {
+        "rule_set": "kuja_v1",
+        "provisional": true,
+        "present": true,
+        "strength": 1,
+        "reduced": true,
+        "houses": [
+          1,
+          2,
+          4,
+          7,
+          8,
+          12
+        ],
+        "points": [
+          {
+            "point": "lagna",
+            "house": 12,
+            "counts": true
+          },
+          {
+            "point": "moon",
+            "house": 9,
+            "counts": false
+          },
+          {
+            "point": "venus",
+            "house": 5,
+            "counts": false
+          }
+        ],
+        "cancellations": [
+          {
+            "id": "lagna_kataka_simha",
+            "applies": true,
+            "facts": {
+              "sign": "simha"
+            },
+            "reason": "The lagna is Simha, where Mars is counted as helpful."
+          },
+          {
+            "id": "mars_own_or_exalted",
+            "applies": false,
+            "facts": {
+              "sign": "kataka"
+            },
+            "reason": "Mars is in Kataka, which is neither its own nor its exalted sign."
+          },
+          {
+            "id": "jupiter_aspects_mars",
+            "applies": true,
+            "facts": {
+              "jupiter_sign": "vrischika",
+              "mars_sign": "kataka"
+            },
+            "reason": "Jupiter in Vrischika looks at Mars in Kataka."
+          },
+          {
+            "id": "mars_house_sign_exception",
+            "applies": false,
+            "facts": {
+              "house": 12,
+              "sign": "kataka"
+            },
+            "reason": "This exception does not cover Mars in the 12th house in Kataka."
+          }
+        ],
+        "reasons": [
+          "Mars is in the 12th house counted from the lagna.",
+          "Some conditions that reduce it apply. An astrologer should review it."
+        ]
+      },
+      "groom": {
+        "rule_set": "kuja_v1",
+        "provisional": true,
+        "present": false,
+        "strength": 0,
+        "reduced": false,
+        "houses": [
+          1,
+          2,
+          4,
+          7,
+          8,
+          12
+        ],
+        "points": [
+          {
+            "point": "lagna",
+            "house": 9,
+            "counts": false
+          },
+          {
+            "point": "moon",
+            "house": 9,
+            "counts": false
+          },
+          {
+            "point": "venus",
+            "house": 10,
+            "counts": false
+          }
+        ],
+        "cancellations": [
+          {
+            "id": "lagna_kataka_simha",
+            "applies": false,
+            "facts": {
+              "sign": "kanya"
+            },
+            "reason": "The lagna is Kanya."
+          },
+          {
+            "id": "mars_own_or_exalted",
+            "applies": false,
+            "facts": {
+              "sign": "vrishabha"
+            },
+            "reason": "Mars is in Vrishabha, which is neither its own nor its exalted sign."
+          },
+          {
+            "id": "jupiter_aspects_mars",
+            "applies": false,
+            "facts": {
+              "jupiter_sign": "simha",
+              "mars_sign": "vrishabha"
+            },
+            "reason": "Jupiter in Simha does not look at Mars in Vrishabha."
+          },
+          {
+            "id": "mars_house_sign_exception",
+            "applies": false,
+            "facts": {
+              "house": 9,
+              "sign": "vrishabha"
+            },
+            "reason": "This exception does not cover Mars in the 9th house in Vrishabha."
+          }
+        ],
+        "reasons": [
+          "Mars is not in a house that counts, from the lagna, the Moon or Venus."
+        ]
+      },
+      "comparison": "bride_only",
+      "reason": "The bride's chart shows Kuja dosha and the groom's does not. This is something to review."
+    }
+  }
+}

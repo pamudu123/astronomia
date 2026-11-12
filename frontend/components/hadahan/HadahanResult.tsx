@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
+import { ShareButton } from "@/components/ShareButton";
 import {
   type BirthRequest,
   type Hadahan,
@@ -31,8 +32,11 @@ type Props = {
   date: string;
   time: string;
   placeText: string;
-  request: BirthRequest;
-  onEdit: () => void;
+  /** Share text. Left out on a shared page, where nothing can be shared again. */
+  share?: Dictionary["share"];
+  /** The birth details. Left out on a shared page: then the result is read only. */
+  request?: BirthRequest;
+  onEdit?: () => void;
 };
 
 function rashiImage(key: string): string {
@@ -48,6 +52,7 @@ export function HadahanResult({
   date,
   time,
   placeText,
+  share,
   request,
   onEdit,
 }: Props) {
@@ -97,12 +102,31 @@ export function HadahanResult({
             {formatDate(`${date}T00:00:00Z`, lang)} · {time} · {placeText}
           </p>
         </div>
-        <div className={styles.actions}>
-          <ReportButton request={{ kind: "hadahan", name, birth: { ...request, lang } }} t={t} />
-          <button type="button" className={styles.outlineButton} onClick={onEdit}>
-            {t.edit}
-          </button>
-        </div>
+        {request && (
+          <div className={styles.actions}>
+            <ReportButton request={{ kind: "hadahan", name, birth: { ...request, lang } }} t={t} />
+            {share && (
+              <ShareButton
+                lang={lang}
+                t={share}
+                request={{ kind: "hadahan", name, birth: { ...request, lang } }}
+                title={name ? fill(t.titleNamed, { name }) : t.title}
+                anonTitle={share.anonHadahan}
+                summary={fill(share.summaryHadahan, {
+                  lagna: sign(lagna.sign).name,
+                  rashi: sign(moon.sign).name,
+                  star: labels.nakshatra[moon.nakshatra],
+                })}
+                hasNames={Boolean(name)}
+              />
+            )}
+            {onEdit && (
+              <button type="button" className={styles.outlineButton} onClick={onEdit}>
+                {t.edit}
+              </button>
+            )}
+          </div>
+        )}
       </section>
 
       <section className={styles.cards} aria-label={t.lagna}>
@@ -204,7 +228,7 @@ export function HadahanResult({
 
       {result.dasha && <DashaTimeline dasha={result.dasha} labels={labels} lang={lang} t={t} />}
 
-      <Forecast lang={lang} t={t} labels={labels} request={request} />
+      {request && <Forecast lang={lang} t={t} labels={labels} request={request} />}
 
       <section className={styles.pair}>
         <article className={`rise ${styles.panel} ${kuja.present ? styles.kujaPresent : ""}`} data-card="kuja">

@@ -189,6 +189,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/shares": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Share
+         * @description Keep a snapshot of a hadahan or a match and return its link code.
+         */
+        post: operations["create_share_v1_shares_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shares/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Open Share
+         * @description The shared result in one language. Unknown, expired and deleted links are all 404.
+         */
+        get: operations["open_share_v1_shares__code__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Share
+         * @description Delete a link. Needs the delete token given when it was created, in a header.
+         */
+        delete: operations["delete_share_v1_shares__code__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -711,6 +755,88 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** ShareCreated */
+        ShareCreated: {
+            /** Code */
+            code: string;
+            /** Delete Token */
+            delete_token: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+        };
+        /** ShareHadahan */
+        ShareHadahan: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "hadahan";
+            /**
+             * Name
+             * @default
+             */
+            name: string;
+            birth: components["schemas"]["HadahanRequest"];
+            /**
+             * Hide Names
+             * @default false
+             */
+            hide_names: boolean;
+        };
+        /** ShareOut */
+        ShareOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Names Hidden */
+            names_hidden: boolean;
+            hadahan?: components["schemas"]["SharedHadahan"] | null;
+            porondam?: components["schemas"]["PorondamResponse"] | null;
+        };
+        /** SharePorondam */
+        SharePorondam: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "porondam";
+            match: components["schemas"]["PorondamRequest"];
+            /**
+             * Hide Names
+             * @default false
+             */
+            hide_names: boolean;
+        };
+        /** SharedHadahan */
+        SharedHadahan: {
+            /** Name */
+            name: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Time */
+            time: string;
+            /** Place */
+            place: string;
+            result: components["schemas"]["HadahanResponse"];
+        };
         /** TimeCheckOut */
         TimeCheckOut: {
             /** Stable */
@@ -1096,6 +1222,103 @@ export interface operations {
                 content: {
                     "application/pdf": unknown;
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_share_v1_shares_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ShareHadahan"] | components["schemas"]["SharePorondam"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShareCreated"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    open_share_v1_shares__code__get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShareOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_share_v1_shares__code__delete: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Delete-Token": string;
+            };
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
