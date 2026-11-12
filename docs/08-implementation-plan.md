@@ -129,6 +129,14 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 - **Pages:** a "Download PDF" button on the hadahan and porondam results.
 - **Provisional:** the Sinhala report wording needs the same native speaker review as the page wording.
 
+**Done in one pull request:** step 10.
+
+- **Transit engine** (`backend/app/engine/transits.py`): the sign of every planet at any moment, and every sign change in a date range, found to the minute. Retrograde steps back into an earlier sign are reported like any other change. Checked against published almanacs for 2025 to 2027 (Lahiri, mean node): Saturn into Meena and Mesha, Jupiter's five changes, and Rahu and Ketu on 5 December 2026 to the minute.
+- **Forecast** (`backend/app/engine/forecast.py`): for the current month, where Saturn, Jupiter, Rahu and Ketu are counted from the lagna, and any sign change inside the month.
+- **Endpoint:** `POST /v1/forecast`, with one line for each planet, a line for each move and a short theme for the house, in Sinhala and English.
+- **Page:** "This month for you" on the hadahan result. The hadahan still shows if the forecast cannot load.
+- **Provisional:** the twelve house themes (`house_theme` in the label files) are waiting for the astrologer, and the page says so. Months are counted in UTC.
+
 At the end of stage 1 the site is a complete free product.
 
 ### Stage 2: the paid level

@@ -219,3 +219,26 @@ report:
   made_on: "Made on {date}."
   footer: "Lahiri ayanamsa · For guidance only"
   page: "Page {page} of {pages}"
+
+# What each house is about, 1 to 12, in a few plain words. PROVISIONAL: for the astrologer.
+house_theme:
+  - yourself and how you begin things
+  - family, speech and savings
+  - effort, courage and siblings
+  - home and peace of mind
+  - learning, children and creativity
+  - daily work and challenges to get through
+  - partnership and marriage
+  - change and things shared with others
+  - fortune, teachers and beliefs
+  - career and standing
+  - gains and friends
+  - rest, spending and faraway places
+
+# This month for you: the slow planets counted from the lagna.
+forecast:
+  stays: "{planet} is in {sign} all month, your {house} house from the lagna."
+  starts: "{planet} begins the month in {sign}, your {house} house from the lagna."
+  moves: "On {date} it moves into {to_sign}, your {to_house} house."
+  theme: "The {house} house is about {theme}."
+  retrograde: "It is moving backwards (retrograde) as the month begins."

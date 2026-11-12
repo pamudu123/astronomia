@@ -1,0 +1,94 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  font-size: 26px;
+}
+
+.month {
+  padding: 4px 14px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: 14px;
+}
+
+.card,
+.cardMoves {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--night-raised);
+  font-size: 15px;
+}
+
+.cardMoves {
+  border-color: var(--gold);
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.planet {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.badge,
+.badgeGold {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.badgeGold {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.move {
+  color: var(--gold);
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 20px;
+  }
+}

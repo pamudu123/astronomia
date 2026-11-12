@@ -322,6 +322,48 @@
         }
       }
     },
+    "/v1/forecast": {
+      "post": {
+        "tags": [
+          "forecast"
+        ],
+        "summary": "Forecast",
+        "description": "The current month for one birth chart. Dates are UTC.",
+        "operationId": "forecast_v1_forecast_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/reports/pdf": {
       "post": {
         "tags": [
@@ -584,6 +626,64 @@
           "reason"
         ],
         "title": "FactorOut"
+      },
+      "ForecastOut": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "month": {
+            "$ref": "#/components/schemas/MonthOut"
+          },
+          "planets": {
+            "items": {
+              "$ref": "#/components/schemas/PlanetMonthOut"
+            },
+            "type": "array",
+            "title": "Planets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "month",
+          "planets"
+        ],
+        "title": "ForecastOut"
+      },
+      "ForecastResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "forecast": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ForecastOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "forecast"
+        ],
+        "title": "ForecastResponse"
       },
       "FullPerson": {
         "properties": {
@@ -1119,6 +1219,70 @@
         ],
         "title": "MethodOut"
       },
+      "MonthOut": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "month": {
+            "type": "integer",
+            "title": "Month"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "year",
+          "month",
+          "title",
+          "start",
+          "end"
+        ],
+        "title": "MonthOut"
+      },
+      "MoveOut": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "to_sign": {
+            "type": "string",
+            "title": "To Sign"
+          },
+          "to_house": {
+            "type": "integer",
+            "title": "To House"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "to_sign",
+          "to_house",
+          "text"
+        ],
+        "title": "MoveOut"
+      },
       "OffsetOption": {
         "properties": {
           "fold": {
@@ -1361,6 +1525,51 @@
           "population"
         ],
         "title": "PlaceOut"
+      },
+      "PlanetMonthOut": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "retrograde": {
+            "type": "boolean",
+            "title": "Retrograde"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "theme": {
+            "type": "string",
+            "title": "Theme"
+          },
+          "moves": {
+            "items": {
+              "$ref": "#/components/schemas/MoveOut"
+            },
+            "type": "array",
+            "title": "Moves"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body",
+          "sign",
+          "house",
+          "retrograde",
+          "text",
+          "theme",
+          "moves"
+        ],
+        "title": "PlanetMonthOut"
       },
       "PlanetOut": {
         "properties": {

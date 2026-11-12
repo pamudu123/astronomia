@@ -177,7 +177,13 @@
       "ayanamsaLahiri": "Lahiri",
       "download": "Download PDF",
       "preparing": "Preparing the PDF…",
-      "downloadFailed": "The PDF could not be made. Please try again."
+      "downloadFailed": "The PDF could not be made. Please try again.",
+      "forecast": "This month for you",
+      "forecastLead": "Where the slow planets are this month, counted from your lagna.",
+      "forecastHouse": "{house} house",
+      "forecastMoves": "Changes sign",
+      "forecastNote": "A forecast describes general conditions. It does not predict events, health or outcomes.",
+      "forecastProvisional": "The house themes are provisional until a practising astrologer confirms them."
     }
   },
   "porondam": {

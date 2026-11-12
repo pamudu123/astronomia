@@ -1,0 +1,77 @@
+{
+  "status": "ok",
+  "time": {
+    "status": "ok",
+    "timezone": "Asia/Colombo",
+    "local": "1995-04-19T14:35:00",
+    "utc": "1995-04-19T09:05:00Z",
+    "offset_seconds": 19800,
+    "offset_label": "UTC+05:30",
+    "abbreviation": "+0530",
+    "clock_change": null,
+    "options": []
+  },
+  "forecast": {
+    "rule_set": "forecast_v1",
+    "provisional": true,
+    "month": {
+      "year": 2026,
+      "month": 12,
+      "title": "December 2026",
+      "start": "2026-12-01",
+      "end": "2026-12-31"
+    },
+    "planets": [
+      {
+        "body": "saturn",
+        "sign": "meena",
+        "house": 8,
+        "retrograde": true,
+        "text": "Saturn is in Meena all month, your 8th house from the lagna. It is moving backwards (retrograde) as the month begins.",
+        "theme": "The 8th house is about change and things shared with others.",
+        "moves": []
+      },
+      {
+        "body": "jupiter",
+        "sign": "simha",
+        "house": 1,
+        "retrograde": false,
+        "text": "Jupiter is in Simha all month, your 1st house from the lagna.",
+        "theme": "The 1st house is about yourself and how you begin things.",
+        "moves": []
+      },
+      {
+        "body": "rahu",
+        "sign": "kumbha",
+        "house": 7,
+        "retrograde": false,
+        "text": "Rahu begins the month in Kumbha, your 7th house from the lagna.",
+        "theme": "The 6th house is about daily work and challenges to get through.",
+        "moves": [
+          {
+            "date": "2026-12-05",
+            "to_sign": "makara",
+            "to_house": 6,
+            "text": "On 5 December 2026 it moves into Makara, your 6th house."
+          }
+        ]
+      },
+      {
+        "body": "ketu",
+        "sign": "simha",
+        "house": 1,
+        "retrograde": false,
+        "text": "Ketu begins the month in Simha, your 1st house from the lagna.",
+        "theme": "The 12th house is about rest, spending and faraway places.",
+        "moves": [
+          {
+            "date": "2026-12-05",
+            "to_sign": "kataka",
+            "to_house": 12,
+            "text": "On 5 December 2026 it moves into Kataka, your 12th house."
+          }
+        ]
+      }
+    ]
+  }
+}

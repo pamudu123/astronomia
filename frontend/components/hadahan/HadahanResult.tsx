@@ -17,6 +17,7 @@ import type { Locale } from "@/lib/i18n";
 import { RASHI } from "@/lib/rashi";
 
 import { DashaTimeline } from "./DashaTimeline";
+import { Forecast } from "./Forecast";
 import styles from "./HadahanResult.module.css";
 import { Kendara } from "./Kendara";
 
@@ -201,6 +202,8 @@ export function HadahanResult({
       </section>
 
       {result.dasha && <DashaTimeline dasha={result.dasha} labels={labels} lang={lang} t={t} />}
+
+      <Forecast lang={lang} t={t} labels={labels} request={request} />
 
       <section className={styles.pair}>
         <article className={`rise ${styles.panel} ${kuja.present ? styles.kujaPresent : ""}`} data-card="kuja">
