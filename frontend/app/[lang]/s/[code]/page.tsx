@@ -6,6 +6,7 @@ import { SharedApp } from "@/components/SharedApp";
 import { fill } from "@/lib/hadahan";
 import { type Locale, hasLocale } from "@/lib/i18n";
 import { RASHI } from "@/lib/rashi";
+import { backendHeaders } from "@/lib/staging";
 import type { Shared } from "@/lib/share";
 
 import { getDictionary } from "../../dictionaries";
@@ -16,7 +17,10 @@ const BACKEND = process.env.BACKEND_URL ?? "http://localhost:8000";
 async function loadShare(code: string, lang: Locale): Promise<Shared | null> {
   if (!/^[A-Za-z0-9_-]{16,64}$/.test(code)) return null;
   try {
-    const response = await fetch(`${BACKEND}/v1/shares/${code}?lang=${lang}`, { cache: "no-store" });
+    const response = await fetch(`${BACKEND}/v1/shares/${code}?lang=${lang}`, {
+      cache: "no-store",
+      headers: backendHeaders(),
+    });
     return response.ok ? ((await response.json()) as Shared) : null;
   } catch {
     return null;

@@ -6,6 +6,7 @@ from app import __version__
 from app.api import charts, forecast, meta, places, porondam, reports, shares, timeresolve
 from app.config import get_settings
 from app.logging import AccessLogMiddleware, configure_logging
+from app.security import AccessKeyMiddleware
 
 
 def create_app() -> FastAPI:
@@ -17,6 +18,8 @@ def create_app() -> FastAPI:
         version=__version__,
         description="Hadahan (birth chart) and porondam (marriage matching).",
     )
+    if settings.access_key:
+        app.add_middleware(AccessKeyMiddleware, key=settings.access_key)
     app.add_middleware(AccessLogMiddleware)
     app.include_router(meta.router)
     app.include_router(places.router)

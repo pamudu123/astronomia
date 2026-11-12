@@ -58,7 +58,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         </a>
         <SiteHeader lang={lang} dict={dict} />
         {children}
-        <SiteFooter dict={dict} />
+        <SiteFooter lang={lang} dict={dict} />
       </body>
     </html>
   );

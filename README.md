@@ -48,6 +48,10 @@ The frontend forwards `/api/*` to the backend at `BACKEND_URL` (default `http://
 
 When the API changes, run `uv run python scripts/export_openapi.py` in `backend/`, then `npm run gen:types` in `frontend/`. CI fails if either file is out of date.
 
+## Hosting
+
+Staging runs privately on Render (backend and PostgreSQL) and Vercel (frontend). See [`docs/09-launch.md`](docs/09-launch.md) for the settings and what is left before launch.
+
 ## Data credits
 
 Place data © [GeoNames](https://www.geonames.org), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [`backend/app/data/README.md`](backend/app/data/README.md).
