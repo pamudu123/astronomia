@@ -133,6 +133,7 @@ export function PorondamApp({
         f={t.form}
         labels={labels}
         result={view.saved.result}
+        share={dict.share}
         request={view.saved.request}
         onAgain={() => {
           saveSession(PORONDAM_KEY, null);

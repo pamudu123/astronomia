@@ -25,7 +25,15 @@ type View =
   | { kind: "choice"; pending: Omit<SavedResult, "result">; result: Hadahan }
   | { kind: "result"; saved: SavedResult };
 
-export function HadahanApp({ lang, t }: { lang: Locale; t: Dictionary["hadahan"] }) {
+export function HadahanApp({
+  lang,
+  t,
+  share,
+}: {
+  lang: Locale;
+  t: Dictionary["hadahan"];
+  share: Dictionary["share"];
+}) {
   const [labels, setLabels] = useState<Labels | null>(null);
   const [view, setView] = useState<View>({ kind: "form" });
   const [form, setForm] = useState<FormValues>(EMPTY_FORM);
@@ -82,6 +90,7 @@ export function HadahanApp({ lang, t }: { lang: Locale; t: Dictionary["hadahan"]
         date={saved.request.date}
         time={saved.request.time}
         placeText={saved.placeLabel}
+        share={share}
         request={saved.request}
         onEdit={() => {
           saveResult(null);

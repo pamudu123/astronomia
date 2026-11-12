@@ -36,6 +36,27 @@ export function Download({ size = 18 }: { size?: number }) {
   );
 }
 
+export function ShareIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 18 18"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="13.5" cy="4" r="2" />
+      <circle cx="4.5" cy="9" r="2" />
+      <circle cx="13.5" cy="14" r="2" />
+      <path d="M6.3 8l5.4-3M6.3 10l5.4 3" />
+    </svg>
+  );
+}
+
 export function Lock({ size = 18, color = "var(--teal)" }: { size?: number; color?: string }) {
   return (
     <svg

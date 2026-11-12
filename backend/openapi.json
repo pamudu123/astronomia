@@ -416,6 +416,166 @@
           }
         }
       }
+    },
+    "/v1/shares": {
+      "post": {
+        "tags": [
+          "shares"
+        ],
+        "summary": "Create Share",
+        "description": "Keep a snapshot of a hadahan or a match and return its link code.",
+        "operationId": "create_share_v1_shares_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ShareHadahan"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SharePorondam"
+                  }
+                ],
+                "title": "Body",
+                "discriminator": {
+                  "propertyName": "kind",
+                  "mapping": {
+                    "hadahan": "#/components/schemas/ShareHadahan",
+                    "porondam": "#/components/schemas/SharePorondam"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareCreated"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/shares/{code}": {
+      "get": {
+        "tags": [
+          "shares"
+        ],
+        "summary": "Open Share",
+        "description": "The shared result in one language. Unknown, expired and deleted links are all 404.",
+        "operationId": "open_share_v1_shares__code__get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{16,64}$",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "shares"
+        ],
+        "summary": "Delete Share",
+        "description": "Delete a link. Needs the delete token given when it was created, in a header.",
+        "operationId": "delete_share_v1_shares__code__delete",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{16,64}$",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "X-Delete-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "title": "X-Delete-Token"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1876,6 +2036,169 @@
           "total"
         ],
         "title": "ScoreOut"
+      },
+      "ShareCreated": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "delete_token": {
+            "type": "string",
+            "title": "Delete Token"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "delete_token",
+          "expires_at"
+        ],
+        "title": "ShareCreated"
+      },
+      "ShareHadahan": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "hadahan",
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "title": "Name",
+            "default": ""
+          },
+          "birth": {
+            "$ref": "#/components/schemas/HadahanRequest"
+          },
+          "hide_names": {
+            "type": "boolean",
+            "title": "Hide Names",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "birth"
+        ],
+        "title": "ShareHadahan"
+      },
+      "ShareOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "names_hidden": {
+            "type": "boolean",
+            "title": "Names Hidden"
+          },
+          "hadahan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SharedHadahan"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "porondam": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PorondamResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "created_at",
+          "expires_at",
+          "names_hidden"
+        ],
+        "title": "ShareOut"
+      },
+      "SharePorondam": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "porondam",
+            "title": "Kind"
+          },
+          "match": {
+            "$ref": "#/components/schemas/PorondamRequest"
+          },
+          "hide_names": {
+            "type": "boolean",
+            "title": "Hide Names",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "match"
+        ],
+        "title": "SharePorondam"
+      },
+      "SharedHadahan": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "time": {
+            "type": "string",
+            "title": "Time"
+          },
+          "place": {
+            "type": "string",
+            "title": "Place"
+          },
+          "result": {
+            "$ref": "#/components/schemas/HadahanResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "date",
+          "time",
+          "place",
+          "result"
+        ],
+        "title": "SharedHadahan"
       },
       "TimeCheckOut": {
         "properties": {

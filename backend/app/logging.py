@@ -5,6 +5,7 @@ query strings are never logged, because they can hold names and birth details.
 """
 
 import logging
+import re
 import time
 from collections.abc import Awaitable, Callable
 
@@ -28,6 +29,14 @@ def configure_logging(level: str) -> None:
         logging.getLogger(name).setLevel(logging.WARNING)
 
 
+# A share code opens the shared result, so it never goes in the log.
+_SHARE_CODE = re.compile(r"^(/v1/shares/)[^/]+")
+
+
+def loggable_path(path: str) -> str:
+    return _SHARE_CODE.sub(r"\1…", path)
+
+
 class AccessLogMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
@@ -38,7 +47,7 @@ class AccessLogMiddleware(BaseHTTPMiddleware):
         logger.info(
             "%s %s %s %.1fms",
             request.method,
-            request.url.path,
+            loggable_path(request.url.path),
             response.status_code,
             duration_ms,
         )

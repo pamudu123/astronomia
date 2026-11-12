@@ -6,6 +6,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
+import { ShareButton } from "@/components/ShareButton";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
@@ -29,8 +30,13 @@ type Props = {
   f: Dictionary["porondam"]["form"];
   labels: Labels;
   result: Porondam;
-  request: PorondamRequest;
-  onAgain: () => void;
+  /** Share text. Left out on a shared page. */
+  share?: Dictionary["share"];
+  /** The two people's details. Left out on a shared page: then the result is read only. */
+  request?: PorondamRequest;
+  onAgain?: () => void;
+  /** Shown where the actions are when the result is read only. */
+  readOnlyAction?: React.ReactNode;
 };
 
 function Check({ ok }: { ok: boolean }) {
@@ -45,7 +51,17 @@ function Check({ ok }: { ok: boolean }) {
   );
 }
 
-export function PorondamResult({ lang, t, f, labels, result, request, onAgain }: Props) {
+export function PorondamResult({
+  lang,
+  t,
+  f,
+  labels,
+  result,
+  share,
+  request,
+  onAgain,
+  readOnlyAction,
+}: Props) {
   const [filter, setFilter] = useState<FactorFilter>("all");
   const match = result.match!;
   const bride = result.bride!;
@@ -234,11 +250,33 @@ export function PorondamResult({ lang, t, f, labels, result, request, onAgain }:
           <p className={styles.small}>{fill(t.method, { rules: match.rule_set })}</p>
         </div>
         <div className={styles.footActions}>
-          <ReportButton request={{ kind: "porondam", match: { ...request, lang } }} t={t} />
-          <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
-            {t.again}
-            <ArrowRight />
-          </button>
+          {request ? (
+            <>
+              <ReportButton request={{ kind: "porondam", match: { ...request, lang } }} t={t} />
+              {share && (
+                <ShareButton
+                  lang={lang}
+                  t={share}
+                  request={{ kind: "porondam", match: { ...request, lang } }}
+                  title={fill(t.title, { bride: nameOf(bride, f.bride), groom: nameOf(groom, f.groom) })}
+                  anonTitle={share.anonPorondam}
+                  summary={fill(share.summaryPorondam, {
+                    passed: match.score.passed,
+                    total: match.score.total,
+                  })}
+                  hasNames={Boolean(bride.name || groom.name)}
+                />
+              )}
+              {onAgain && (
+                <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
+                  {t.again}
+                  <ArrowRight />
+                </button>
+              )}
+            </>
+          ) : (
+            readOnlyAction
+          )}
         </div>
       </section>
     </main>

@@ -5,6 +5,9 @@ services:
     build: ./backend
     ports:
       - "8000:8000"
+    volumes:
+      # Share links live here, so they survive a restart.
+      - shares:/srv/var
 
   frontend:
     build:
@@ -18,3 +21,6 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+
+volumes:
+  shares:

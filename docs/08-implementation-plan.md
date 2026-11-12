@@ -137,6 +137,15 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 - **Page:** "This month for you" on the hadahan result. The hadahan still shows if the forecast cannot load.
 - **Provisional:** the twelve house themes (`house_theme` in the label files) are waiting for the astrologer, and the page says so. Months are counted in UTC.
 
+**Done in one pull request:** step 12.
+
+- **Share links:** a Share button on the hadahan and porondam results opens a dialog. Nothing is saved until "Create link" is pressed. The dialog then gives the link, Copy, Send on WhatsApp, the date it closes, and Delete.
+- **What is kept:** the finished result in both languages, and the name and birth line. The request (place id, coordinates, clock change choice) is not kept. "Hide names" keeps no names at all.
+- **Storage:** SQLite (`backend/app/store/shares.py`, file set by `ASTRONOMIA_SHARES_DB`) for now, behind a small `ShareStore` class so PostgreSQL can replace it at deploy. Only SHA-256 hashes of the link code and of the delete token are kept. Links close after 30 days (`ASTRONOMIA_SHARE_DAYS`), and expired rows are removed.
+- **Endpoints:** `POST /v1/shares`, `GET /v1/shares/{code}?lang=`, `DELETE /v1/shares/{code}` with the token in an `X-Delete-Token` header. Responses are `no-store` and `noindex`. The access log shows `/v1/shares/…`, never the code.
+- **Shared page** `/{lang}/s/{code}`: the result, read only, with a banner (shared, open until, make your own) and a link preview (title, one line, picture, noindex). The device that made the link keeps its delete token in local storage and can delete from there.
+- **Choosing how long a link lives** is the paid level (step 13 onwards).
+
 At the end of stage 1 the site is a complete free product.
 
 ### Stage 2: the paid level
