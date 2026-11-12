@@ -1,12 +1,14 @@
-FROM python:3.13-slim
+# Two stages: the first compiles what needs a C compiler (pyswisseph has no ready-made wheel
+# for every Python), the second runs it without the compiler.
 
-# Pango and HarfBuzz lay out the PDF reports and join Sinhala letters correctly.
+FROM python:3.13-slim AS build
+
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 \
+    && apt-get install -y --no-install-recommends gcc libc6-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:0.11 /uv /usr/local/bin/uv
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONUNBUFFERED=1
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 WORKDIR /srv
 COPY pyproject.toml uv.lock ./
@@ -16,6 +18,18 @@ COPY app ./app
 RUN uv sync --frozen --no-dev
 # Build the place search index into the image, so the first request is fast.
 RUN /srv/.venv/bin/python -m app.geo.build
+
+
+FROM python:3.13-slim
+
+# Pango and HarfBuzz lay out the PDF reports and join Sinhala letters correctly.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PYTHONUNBUFFERED=1
+WORKDIR /srv
+COPY --from=build /srv /srv
 
 RUN useradd --create-home appuser \
     && mkdir -p /srv/var && chown appuser /srv/var

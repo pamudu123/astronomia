@@ -54,6 +54,8 @@ Two locks keep it private:
 - **Roll back:** in Vercel, promote the previous deployment. In Render, open the service, then
   Events, and roll back to the previous deploy.
 - **Health:** `GET /healthz` on the backend returns `{"status": "ok"}`.
+- **The backend image** is built and smoke tested in CI (the `image` job in
+  `.github/workflows/backend.yml`): it starts the container and checks a chart and a PDF.
 
 ## Free plan limits
 
