@@ -2,9 +2,9 @@
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, Response, status
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.birth import BirthInput, resolve_birth
@@ -13,9 +13,9 @@ from app.api.deps import PlacesDb
 from app.api.timeresolve import TimeResolveResponse
 from app.engine.chart import Chart, Point, compute_chart
 from app.engine.kuja import kuja_dosha
-from app.engine.porondam import FactorResult, match, star_point
+from app.engine.porondam import FactorResult, match, star_matches, star_point
 from app.engine.zodiac import NAKSHATRA, RASHI
-from app.explain.labels import Lang, reason
+from app.explain.labels import Lang, labels, reason
 
 router = APIRouter(tags=["porondam"])
 
@@ -198,3 +198,83 @@ def build_porondam(body: PorondamRequest, db: Path) -> PorondamBuild:
 def porondam(body: PorondamRequest, db: PlacesDb) -> PorondamResponse:
     """Match two people. Each is either full birth details or a birth star and pada."""
     return build_porondam(body, db).response
+
+
+class CheckOut(BaseModel):
+    id: str
+    name: str
+    passed: bool
+
+
+class StarMatchOut(BaseModel):
+    nakshatra: str
+    name: str
+    rashi: str
+    rashi_name: str
+    padas: list[int]
+    score: ScoreOut
+    essential_pass: bool
+    hard_checks: list[CheckOut]
+    summary: str
+    same_star: bool
+
+
+class StarMatchesResponse(BaseModel):
+    nakshatra: str
+    name: str
+    pada: int
+    rashi: str
+    rashi_name: str
+    role: Role
+    rule_set: str
+    provisional: bool
+    matches: list[StarMatchOut]
+
+
+# The answer depends only on the star and the rule set, so browsers and caches may keep it.
+STAR_CACHE = {"Cache-Control": "public, max-age=3600"}
+
+
+@router.get("/v1/porondam/stars/{nakshatra}", response_model=StarMatchesResponse)
+def porondam_stars(
+    nakshatra: str,
+    response: Response,
+    pada: Annotated[int, Query(ge=1, le=4)] = 1,
+    role: Annotated[Role, Query()] = "bride",
+    lang: Annotated[Lang, Query()] = "en",
+) -> StarMatchesResponse:
+    """All 27 birth stars as partners for one star, best first. No birth details needed."""
+    if nakshatra not in NAKSHATRA:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown nakshatra")
+    names = labels(lang)
+    found = star_matches(nakshatra, pada, role)
+    own_sign = RASHI[star_point(nakshatra, pada).sign]
+    response.headers.update(STAR_CACHE)
+    return StarMatchesResponse(
+        nakshatra=nakshatra,
+        name=names["nakshatra"][nakshatra],
+        pada=pada,
+        rashi=own_sign,
+        rashi_name=names["rashi"][own_sign]["name"],
+        role=role,
+        rule_set=found[0].result.rule_set,
+        provisional=found[0].result.provisional,
+        matches=[
+            StarMatchOut(
+                nakshatra=NAKSHATRA[m.nakshatra],
+                name=names["nakshatra"][NAKSHATRA[m.nakshatra]],
+                rashi=RASHI[m.sign],
+                rashi_name=names["rashi"][RASHI[m.sign]]["name"],
+                padas=list(m.padas),
+                score=ScoreOut(passed=m.result.passed, total=len(m.result.scored)),
+                essential_pass=m.essential_pass,
+                hard_checks=[
+                    CheckOut(id=f.id, name=names["porondam_factor"][f.id]["name"], passed=f.passed)
+                    for f in m.result.hard_checks
+                ],
+                summary=m.result.summary,
+                same_star=m.result.same_star,
+            )
+            for m in found
+        ],
+    )

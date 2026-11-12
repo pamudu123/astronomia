@@ -101,6 +101,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             </Link>
           ))}
         </div>
+        <Link href={`/${lang}/porondam/stars`} className={styles.toolMore}>
+          {dict.porondam.stars.homeLink}
+          <ArrowRight />
+        </Link>
       </section>
 
       <section className={`container ${styles.sectionTight}`} aria-labelledby="rashi-title">

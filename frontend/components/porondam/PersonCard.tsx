@@ -6,16 +6,12 @@ import formStyles from "@/components/hadahan/BirthForm.module.css";
 import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
 import type { Labels } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
+import { NAKSHATRA } from "@/lib/nakshatra";
 import type { QuickInput } from "@/lib/porondam";
 
 import styles from "./Porondam.module.css";
 
-export const NAKSHATRA_ORDER = [
-  "ashwini", "bharani", "krittika", "rohini", "mrigashira", "ardra", "punarvasu", "pushya",
-  "ashlesha", "magha", "purva_phalguni", "uttara_phalguni", "hasta", "chitra", "swati",
-  "vishakha", "anuradha", "jyeshtha", "mula", "purva_ashadha", "uttara_ashadha", "shravana",
-  "dhanishta", "shatabhisha", "purva_bhadrapada", "uttara_bhadrapada", "revati",
-] as const;
+export const NAKSHATRA_ORDER = NAKSHATRA.map((star) => star.key);
 
 type Props = {
   role: "bride" | "groom";

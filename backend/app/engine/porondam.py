@@ -7,7 +7,7 @@ fail flags, never sentences: words come from the label files.
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 
@@ -136,3 +136,42 @@ def match(bride: Point, groom: Point, version: str = DEFAULT_RULES) -> MatchResu
         factors=[_factor(rule, rules, bride, groom) for rule in rules["factors"]],
         same_star=bride.nakshatra == groom.nakshatra,
     )
+
+
+Role = Literal["bride", "groom"]
+
+
+@dataclass(frozen=True)
+class StarMatch:
+    """One possible partner: a birth star and the Moon sign those padas fall in."""
+
+    nakshatra: int
+    sign: int
+    padas: tuple[int, ...]
+    result: MatchResult
+
+    @property
+    def essential_pass(self) -> bool:
+        return all(f.passed for f in self.result.hard_checks)
+
+
+def star_matches(
+    nakshatra: str, pada: int, role: Role, version: str = DEFAULT_RULES
+) -> list[StarMatch]:
+    """Every birth star as a partner for one star, best first.
+
+    Counts run from the bride's star, so the role matters. A star that lies across two
+    signs is listed once for each sign, because the sign based factors differ. Partners
+    that pass every essential check come first, then those with more factors agreeing.
+    """
+    own = star_point(nakshatra, pada)
+    found: list[StarMatch] = []
+    for index, partner_star in enumerate(NAKSHATRA):
+        by_sign: dict[int, list[int]] = {}
+        for partner_pada in (1, 2, 3, 4):
+            by_sign.setdefault(star_point(partner_star, partner_pada).sign, []).append(partner_pada)
+        for sign, padas in by_sign.items():
+            partner = star_point(partner_star, padas[0])
+            bride, groom = (own, partner) if role == "bride" else (partner, own)
+            found.append(StarMatch(index, sign, tuple(padas), match(bride, groom, version)))
+    return sorted(found, key=lambda m: (not m.essential_pass, -m.result.passed, m.nakshatra))

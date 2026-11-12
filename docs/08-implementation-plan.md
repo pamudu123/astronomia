@@ -175,6 +175,20 @@ At the end of stage 1 the site is a complete free product.
 | 20 | **Accuracy and review** | Astrologer review of the golden set and every rule file. Provisional flags removed where confirmed. Security and privacy check (no birth data in logs or URLs). Speed check. Ephemeris licence settled. | Astrologer sign off recorded in the rule files. Checklist complete. |
 | 21 | **Deploy** | Staging and production on the chosen hosts, domain, error monitoring, backups, privacy policy and terms pages. Soft launch to a test group, then payments go live. | Test users complete a chart, a match, a PDF, a share and a test purchase. |
 
+### Extra features
+
+Planned set by set in `docs/10-extra-features.md`. Category A is porondam depth.
+
+**Done in one pull request:** A1, which stars match mine.
+
+- **Engine:** `star_matches()` in `backend/app/engine/porondam.py` runs the usual match against all 27 stars. A star that lies across two signs is listed once for each sign, which gives 36 rows. Rows that pass both essential checks come first, then the higher count.
+- **Endpoint:** `GET /v1/porondam/stars/{star}?pada=&role=&lang=`. A star name is not personal data, so this one is a GET and may be cached for an hour.
+- **Pages:** `/{lang}/porondam/stars` lists the 27 stars. `/{lang}/porondam/stars/{star}` shows the ranked list, with a choice of bride or groom and, for the nine stars that lie across two signs, the Moon sign. The first list is in the page as served, for search engines.
+- **Links:** each row opens the quick match with both stars filled in (`/porondam?bride=star.pada&groom=star.pada`). The porondam form and the home page link to the star pages.
+- **Search:** `sitemap.xml` lists every public page in both languages, and `robots.txt` points to it. A staging site has an empty sitemap.
+- **Star names** for page titles live in `frontend/lib/nakshatra.ts`. A test keeps them equal to the backend label files.
+- **Known limit:** the first visit to an unknown star address shows the not found page with status 200. Later visits return 404.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

@@ -322,6 +322,89 @@
         }
       }
     },
+    "/v1/porondam/stars/{nakshatra}": {
+      "get": {
+        "tags": [
+          "porondam"
+        ],
+        "summary": "Porondam Stars",
+        "description": "All 27 birth stars as partners for one star, best first. No birth details needed.",
+        "operationId": "porondam_stars_v1_porondam_stars__nakshatra__get",
+        "parameters": [
+          {
+            "name": "nakshatra",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Nakshatra"
+            }
+          },
+          {
+            "name": "pada",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 4,
+              "minimum": 1,
+              "default": 1,
+              "title": "Pada"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "bride",
+                "groom"
+              ],
+              "type": "string",
+              "default": "bride",
+              "title": "Role"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StarMatchesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/forecast": {
       "post": {
         "tags": [
@@ -708,6 +791,29 @@
           "chart"
         ],
         "title": "ChartResponse"
+      },
+      "CheckOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "passed"
+        ],
+        "title": "CheckOut"
       },
       "DashaOut": {
         "properties": {
@@ -2199,6 +2305,129 @@
           "result"
         ],
         "title": "SharedHadahan"
+      },
+      "StarMatchOut": {
+        "properties": {
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "rashi_name": {
+            "type": "string",
+            "title": "Rashi Name"
+          },
+          "padas": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Padas"
+          },
+          "score": {
+            "$ref": "#/components/schemas/ScoreOut"
+          },
+          "essential_pass": {
+            "type": "boolean",
+            "title": "Essential Pass"
+          },
+          "hard_checks": {
+            "items": {
+              "$ref": "#/components/schemas/CheckOut"
+            },
+            "type": "array",
+            "title": "Hard Checks"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "same_star": {
+            "type": "boolean",
+            "title": "Same Star"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nakshatra",
+          "name",
+          "rashi",
+          "rashi_name",
+          "padas",
+          "score",
+          "essential_pass",
+          "hard_checks",
+          "summary",
+          "same_star"
+        ],
+        "title": "StarMatchOut"
+      },
+      "StarMatchesResponse": {
+        "properties": {
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "rashi_name": {
+            "type": "string",
+            "title": "Rashi Name"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "bride",
+              "groom"
+            ],
+            "title": "Role"
+          },
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/StarMatchOut"
+            },
+            "type": "array",
+            "title": "Matches"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nakshatra",
+          "name",
+          "pada",
+          "rashi",
+          "rashi_name",
+          "role",
+          "rule_set",
+          "provisional",
+          "matches"
+        ],
+        "title": "StarMatchesResponse"
       },
       "TimeCheckOut": {
         "properties": {

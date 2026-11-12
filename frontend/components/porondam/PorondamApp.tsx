@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import {
@@ -28,8 +29,9 @@ import {
   type SavedMatch,
   fetchPorondam,
 } from "@/lib/porondam";
+import { parseStarParam } from "@/lib/starmatch";
 
-import { PersonCard } from "./PersonCard";
+import { NAKSHATRA_ORDER, PersonCard } from "./PersonCard";
 import styles from "./Porondam.module.css";
 import { PorondamResult } from "./PorondamResult";
 
@@ -41,24 +43,51 @@ type View =
   | { kind: "choice"; request: PorondamRequest; result: Porondam }
   | { kind: "result"; saved: SavedMatch };
 
-export function PorondamApp({
+type Linked = Partial<Record<Role, { nakshatra: string; pada: number }>>;
+
+const noChanges = () => () => undefined;
+
+/**
+ * A link from the star pages names two stars (?bride=anuradha.2&groom=rohini.1). The form
+ * then opens on the quick match with them filled in. The query is read after the page is
+ * live, so the server HTML and the first browser render agree.
+ */
+export function PorondamApp(props: { lang: Locale; dict: Dictionary }) {
+  const search = useSyncExternalStore(
+    noChanges,
+    () => window.location.search,
+    () => "",
+  );
+  const linked = useMemo<Linked | null>(() => {
+    const query = new URLSearchParams(search);
+    const bride = parseStarParam(query.get("bride"), NAKSHATRA_ORDER);
+    const groom = parseStarParam(query.get("groom"), NAKSHATRA_ORDER);
+    if (!bride && !groom) return null;
+    return { ...(bride && { bride }), ...(groom && { groom }) };
+  }, [search]);
+  return <PorondamForm key={search} {...props} linked={linked} />;
+}
+
+function PorondamForm({
   lang,
   dict,
+  linked,
 }: {
   lang: Locale;
   dict: Dictionary;
+  linked: Linked | null;
 }) {
   const t = dict.porondam;
   const hydrated = useHydrated();
   const [labels, setLabels] = useState<Labels | null>(null);
-  const [mode, setMode] = useState<"full" | "quick">("full");
+  const [mode, setMode] = useState<"full" | "quick">(linked ? "quick" : "full");
   const [full, setFull] = useState<Record<Role, FormValues>>({
     bride: EMPTY_FORM,
     groom: EMPTY_FORM,
   });
   const [quick, setQuick] = useState<Record<Role, QuickInput>>({
-    bride: EMPTY_QUICK,
-    groom: EMPTY_QUICK,
+    bride: { ...EMPTY_QUICK, ...linked?.bride },
+    groom: { ...EMPTY_QUICK, ...linked?.groom },
   });
   const [view, setView] = useState<View>({ kind: "form" });
   const [busy, setBusy] = useState(false);
@@ -70,8 +99,10 @@ export function PorondamApp({
       .catch(() => setError(t.errors.failed));
   }, [lang, t.errors.failed]);
 
-  // Bring back the last match in this tab, in the current language.
+  // Bring back the last match in this tab, in the current language. A link from the star
+  // pages asks for a new match, so it wins.
   useEffect(() => {
+    if (linked) return;
     const saved = loadSession<SavedMatch>(PORONDAM_KEY);
     if (!saved) return;
     fetchPorondam(saved.request, lang)
@@ -80,7 +111,7 @@ export function PorondamApp({
           setView({ kind: "result", saved: { ...saved, result } });
       })
       .catch(() => saveSession(PORONDAM_KEY, null));
-  }, [lang]);
+  }, [lang, linked]);
 
   function person(role: Role): PersonInput | null {
     if (mode === "quick") {
@@ -283,6 +314,10 @@ export function PorondamApp({
       <section className={styles.quickNote}>
         <h2 className={styles.quickTitle}>{f.quickTitle}</h2>
         <p className="soft">{f.quickText}</p>
+        <Link href={`/${lang}/porondam/stars`} className={styles.starsLink}>
+          {t.stars.formLink}
+          <ArrowRight />
+        </Link>
       </section>
     </main>
   );

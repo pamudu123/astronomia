@@ -149,6 +149,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/porondam/stars/{nakshatra}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Porondam Stars
+         * @description All 27 birth stars as partners for one star, best first. No birth details needed.
+         */
+        get: operations["porondam_stars_v1_porondam_stars__nakshatra__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/forecast": {
         parameters: {
             query?: never;
@@ -279,6 +299,15 @@ export interface components {
             status: string;
             time: components["schemas"]["TimeResolveResponse"];
             chart: components["schemas"]["ChartOut"] | null;
+        };
+        /** CheckOut */
+        CheckOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Passed */
+            passed: boolean;
         };
         /** DashaOut */
         DashaOut: {
@@ -837,6 +866,52 @@ export interface components {
             place: string;
             result: components["schemas"]["HadahanResponse"];
         };
+        /** StarMatchOut */
+        StarMatchOut: {
+            /** Nakshatra */
+            nakshatra: string;
+            /** Name */
+            name: string;
+            /** Rashi */
+            rashi: string;
+            /** Rashi Name */
+            rashi_name: string;
+            /** Padas */
+            padas: number[];
+            score: components["schemas"]["ScoreOut"];
+            /** Essential Pass */
+            essential_pass: boolean;
+            /** Hard Checks */
+            hard_checks: components["schemas"]["CheckOut"][];
+            /** Summary */
+            summary: string;
+            /** Same Star */
+            same_star: boolean;
+        };
+        /** StarMatchesResponse */
+        StarMatchesResponse: {
+            /** Nakshatra */
+            nakshatra: string;
+            /** Name */
+            name: string;
+            /** Pada */
+            pada: number;
+            /** Rashi */
+            rashi: string;
+            /** Rashi Name */
+            rashi_name: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "bride" | "groom";
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Matches */
+            matches: components["schemas"]["StarMatchOut"][];
+        };
         /** TimeCheckOut */
         TimeCheckOut: {
             /** Stable */
@@ -1155,6 +1230,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PorondamResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    porondam_stars_v1_porondam_stars__nakshatra__get: {
+        parameters: {
+            query?: {
+                pada?: number;
+                role?: "bride" | "groom";
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                nakshatra: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StarMatchesResponse"];
                 };
             };
             /** @description Validation Error */

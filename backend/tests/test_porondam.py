@@ -1,6 +1,13 @@
 import pytest
 
-from app.engine.porondam import FactorResult, load_rules, match, star_point
+from app.engine.porondam import (
+    FactorResult,
+    Role,
+    load_rules,
+    match,
+    star_matches,
+    star_point,
+)
 from app.engine.zodiac import NAKSHATRA, RASHI
 
 
@@ -140,3 +147,49 @@ def test_score_and_summary() -> None:
 
 def test_same_star_is_flagged() -> None:
     assert match(star_point("rohini", 1), star_point("rohini", 3)).same_star
+
+
+def test_star_matches_lists_every_star_and_splits_those_across_two_signs() -> None:
+    found = star_matches("anuradha", 2, "bride")
+    assert {m.nakshatra for m in found} == set(range(27))
+    # Nine stars lie across two signs, so they are listed twice.
+    assert len(found) == 36
+    krittika = sorted(
+        (m for m in found if NAKSHATRA[m.nakshatra] == "krittika"), key=lambda m: m.padas
+    )
+    assert [(RASHI[m.sign], m.padas) for m in krittika] == [
+        ("mesha", (1,)),
+        ("vrishabha", (2, 3, 4)),
+    ]
+    rohini = next(m for m in found if NAKSHATRA[m.nakshatra] == "rohini")
+    assert rohini.padas == (1, 2, 3, 4)
+
+
+def test_star_matches_agree_with_a_single_match() -> None:
+    found = star_matches("anuradha", 2, "bride")
+    rohini = next(m for m in found if NAKSHATRA[m.nakshatra] == "rohini")
+    assert rohini.result == match(star_point("anuradha", 2), star_point("rohini", 1))
+
+
+def test_star_matches_put_essential_passes_first_then_the_higher_count() -> None:
+    found = star_matches("anuradha", 2, "bride")
+    keys = [(not m.essential_pass, -m.result.passed) for m in found]
+    assert keys == sorted(keys)
+    assert found[0].essential_pass
+    assert not found[-1].essential_pass
+
+
+def test_star_matches_depend_on_the_role() -> None:
+    def count(role: Role) -> int | str:
+        rohini = next(
+            m for m in star_matches("anuradha", 2, role) if NAKSHATRA[m.nakshatra] == "rohini"
+        )
+        return next(f for f in rohini.result.factors if f.id == "dina").facts["count"]
+
+    assert count("bride") == 15  # rohini counted from anuradha
+    assert count("groom") == 14  # anuradha counted from rohini
+
+
+def test_star_matches_reject_an_unknown_star() -> None:
+    with pytest.raises(ValueError, match="unknown nakshatra"):
+        star_matches("polaris", 1, "bride")

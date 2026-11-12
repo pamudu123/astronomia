@@ -75,3 +75,35 @@ def test_errors(client: TestClient) -> None:
     assert client.post("/v1/porondam", json={"bride": quick}).status_code == 422
     unknown = {**NIMALI, "place_id": 999999999}
     assert client.post("/v1/porondam", json={"bride": unknown, "groom": quick}).status_code == 404
+
+
+def test_stars_that_match_one_star(client: TestClient) -> None:
+    response = client.get("/v1/porondam/stars/anuradha", params={"pada": 2})
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "public, max-age=3600"
+    body = response.json()
+    assert body["name"] == "Anuradha"
+    assert body["rashi"] == "vrischika"
+    assert body["role"] == "bride"
+    assert body["provisional"] is True
+    assert len(body["matches"]) == 36
+    rohini = next(m for m in body["matches"] if m["nakshatra"] == "rohini")
+    # The same pair as the quick match above.
+    assert rohini["score"] == {"passed": 7, "total": 9}
+    assert rohini["essential_pass"] is True
+    assert [c["id"] for c in rohini["hard_checks"]] == ["rajju", "vedha"]
+    assert body["matches"][0]["essential_pass"] is True
+
+
+def test_stars_in_sinhala_and_as_the_groom(client: TestClient) -> None:
+    body = client.get("/v1/porondam/stars/rohini", params={"role": "groom", "lang": "si"}).json()
+    assert body["name"] == "රෙහෙණ"
+    assert body["role"] == "groom"
+    anuradha = next(m for m in body["matches"] if m["nakshatra"] == "anuradha")
+    assert anuradha["name"] == "අනුර"
+    assert anuradha["hard_checks"][0]["name"]
+
+
+def test_stars_reject_an_unknown_star_or_pada(client: TestClient) -> None:
+    assert client.get("/v1/porondam/stars/polaris").status_code == 422
+    assert client.get("/v1/porondam/stars/rohini", params={"pada": 5}).status_code == 422

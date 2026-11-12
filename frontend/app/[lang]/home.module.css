@@ -276,3 +276,12 @@ html[lang="si"] .heroTitle {
   font-size: 18px;
   font-weight: 600;
 }
+
+.toolMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: 20px;
+  font-weight: 600;
+}
