@@ -1,10 +1,10 @@
-# Two stages: the first compiles what needs a C compiler (pyswisseph has no ready-made wheel
-# for every Python), the second runs it without the compiler.
+# Two stages: the first compiles what needs C and C++ compilers (pyswisseph has no ready-made
+# wheel for every Python), the second runs it without them.
 
 FROM python:3.13-slim AS build
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libc6-dev \
+    && apt-get install -y --no-install-recommends build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:0.11 /uv /usr/local/bin/uv
