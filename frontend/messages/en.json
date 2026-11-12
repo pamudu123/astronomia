@@ -294,6 +294,21 @@
       "all": "All 27 birth stars",
       "formLink": "Which birth stars match mine?",
       "homeLink": "See which birth stars match yours"
+    },
+    "timeline": {
+      "title": "Years ahead for the couple",
+      "lead": "The next ten years for both people on one line: Saturn's periods counted from each Moon sign, and the dasha periods.",
+      "saturn": "Saturn",
+      "dasha": "Dasha",
+      "both": "Both",
+      "legendErashtaka": "Saturn in the 12th, 1st or 2nd sign from the Moon (Erashtaka)",
+      "legendAshtama": "Saturn in the 8th sign from the Moon",
+      "legendOverlap": "Both at the same time",
+      "noSaturn": "No Saturn period from the Moon in these ten years.",
+      "together": "Both together",
+      "noOverlap": "Their Saturn periods do not overlap in these ten years.",
+      "dashaQuick": "Dasha periods need the full birth details.",
+      "note": "These are dates only. How to read them for a marriage is waiting for an astrologer's confirmation. Dates are in UTC."
     }
   },
   "share": {

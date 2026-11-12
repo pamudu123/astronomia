@@ -131,3 +131,60 @@ test("a match downloads as a PDF report", async ({ page }) => {
     },
   });
 });
+
+const timeline = (page: Page, name: string) =>
+  page.route("**/api/v1/porondam/timeline", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture(name) }),
+  );
+
+test("years ahead for the couple, by birth stars", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await timeline(page, "timeline-quick-en.json");
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const section = page.locator('[data-card="timeline"]');
+  await expect(section.getByRole("heading", { name: "Years ahead for the couple" })).toBeVisible();
+  const bride = section.locator('[data-facts="bride"]');
+  await expect(bride).toContainText("Nimali");
+  await expect(bride).toContainText(
+    "Saturn is in the 8th sign from the Moon from 30 May 2032 to 12 July 2034.",
+  );
+  await expect(bride).toContainText("Dasha periods need the full birth details.");
+  await expect(section.locator('[data-facts="both"]')).toContainText(
+    "Both are in one of these Saturn periods from 30 May 2032 to 12 July 2034.",
+  );
+  await expect(section).toContainText("These are dates only.");
+});
+
+test("years ahead shows the running dasha for a full match, in Sinhala", async ({ page }) => {
+  await mockBackend(page, "si", "porondam-full-si.json");
+  await timeline(page, "timeline-full-si.json");
+  await page.goto("/si/porondam");
+  for (const role of ["මනාලිය", "මනාලයා"]) {
+    const card = page.getByRole("group", { name: role });
+    await card.locator('input[type="date"]').fill("1995-04-19");
+    await card.locator('input[type="time"]').fill("14:35");
+    await card.getByRole("combobox").fill("kandy");
+    await page.getByRole("option").first().click();
+  }
+  await page.locator('button[type="submit"]').click();
+
+  const section = page.locator('[data-card="timeline"]');
+  await expect(section.getByRole("heading", { name: "යුවළගේ ඉදිරි වසර" })).toBeVisible();
+  await expect(section.locator('[data-facts="bride"]')).toContainText("රවි මහ දශාව");
+  await expect(section.locator('[data-facts="both"]')).toContainText("එකිනෙක හමු නොවේ");
+});
+
+test("the match still shows when the years ahead cannot load", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.route("**/api/v1/porondam/timeline", (route) => route.fulfill({ status: 500, body: "" }));
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
+  await expect(page.locator("[data-factor]")).toHaveCount(13);
+  await expect(page.locator('[data-card="timeline"]')).toHaveCount(0);
+});

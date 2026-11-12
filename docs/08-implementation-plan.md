@@ -198,6 +198,14 @@ Planned set by set in `docs/10-extra-features.md`. Category A is porondam depth.
 - **Check:** `backend/tests/test_porondam_observed.py` replays 34 results from a Sri Lankan porondam site. The four added factors agree with all of them.
 - **Still missing:** Varna, Bhutha, Vruksha, Ayusha and Graha.
 
+**Done in the same pull request:** A3, years ahead for the couple.
+
+- **Engine** (`backend/app/engine/couple.py`): for the ten years from today, Saturn's stays in each sign (worked out once a day and kept), each person's Saturn periods counted from the Moon sign, where the two people's periods overlap, and the dasha periods that touch the window.
+- **Saturn periods shown:** the 12th, 1st and 2nd sign from the Moon as one period (Erashtaka), and the 8th on its own. A retrograde step back into an earlier sign splits a period.
+- **Endpoint:** `POST /v1/porondam/timeline`, with the same body as `/v1/porondam`. A birth star only person gets Saturn periods but no dasha, which needs the exact Moon position.
+- **Page:** "Years ahead for the couple" on the match result: one ten year line with a Saturn row and a dasha row for each person and a row for the overlaps, then the same facts in words. It loads on its own, so the match still shows if it fails. It is not on shared pages or in the PDF.
+- **Facts only:** dates, planets and houses. Nothing is judged good or bad. Marked provisional (`couple_v1`). Dates are UTC.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

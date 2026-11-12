@@ -261,3 +261,19 @@ forecast:
   moves: "On {date} it moves into {to_sign}, your {to_house} house."
   theme: "The {house} house is about {theme}."
   retrograde: "It is moving backwards (retrograde) as the month begins."
+
+# Years ahead for the couple: Saturn periods counted from each Moon sign, and dasha periods.
+couple:
+  erashtaka_between: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) from {from} to {to}."
+  erashtaka_until: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) now, until {to}."
+  erashtaka_from: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) from {from}, and stays past {to}."
+  erashtaka_all: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) for all of these years, from {from} to {to}."
+  ashtama_between: "{planet} is in the 8th sign from the Moon from {from} to {to}."
+  ashtama_until: "{planet} is in the 8th sign from the Moon now, until {to}."
+  ashtama_from: "{planet} is in the 8th sign from the Moon from {from}, and stays past {to}."
+  ashtama_all: "{planet} is in the 8th sign from the Moon for all of these years, from {from} to {to}."
+  overlap_between: "Both are in one of these {planet} periods from {from} to {to}."
+  overlap_until: "Both are in one of these {planet} periods now, until {to}."
+  overlap_from: "Both are in one of these {planet} periods from {from}, and past {to}."
+  overlap_all: "Both are in one of these {planet} periods for all of these years, from {from} to {to}."
+  dasha_now: "{main} main period until {main_to}. {sub} sub period until {sub_to}."

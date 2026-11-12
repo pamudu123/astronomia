@@ -138,3 +138,5 @@ The values seen, for the astrologer:
 
 9. Does the birth weekday (Dina) start at midnight or at sunrise?
 10. Should Vashya, Rashyadhipathi and Rajju use the Moon sign or the lagna?
+11. Years ahead for the couple shows Saturn in the 12th, 1st and 2nd sign from the Moon (Erashtaka) and in the 8th. Are these the right periods to show, and should any others be added (for example Saturn in the 4th)?
+12. How should a couple read these Saturn periods and their dasha periods together? Until this is answered the page shows dates only.

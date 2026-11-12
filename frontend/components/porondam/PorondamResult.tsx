@@ -19,6 +19,7 @@ import {
   ringOffset,
 } from "@/lib/porondam";
 
+import { CoupleTimeline } from "./CoupleTimeline";
 import { FactorVisual } from "./FactorVisual";
 import styles from "./Porondam.module.css";
 
@@ -34,6 +35,8 @@ type Props = {
   share?: Dictionary["share"];
   /** The two people's details. Left out on a shared page: then the result is read only. */
   request?: PorondamRequest;
+  /** Text for "Years ahead for the couple". That section needs the request too. */
+  timeline?: Dictionary["porondam"]["timeline"];
   onAgain?: () => void;
   /** Shown where the actions are when the result is read only. */
   readOnlyAction?: React.ReactNode;
@@ -59,6 +62,7 @@ export function PorondamResult({
   result,
   share,
   request,
+  timeline,
   onAgain,
   readOnlyAction,
 }: Props) {
@@ -251,6 +255,17 @@ export function PorondamResult({
           <p className="soft">{t.kujaQuick}</p>
         )}
       </section>
+
+      {request && timeline && (
+        <CoupleTimeline
+          lang={lang}
+          t={timeline}
+          labels={labels}
+          request={request}
+          brideName={nameOf(bride, f.bride)}
+          groomName={nameOf(groom, f.groom)}
+        />
+      )}
 
       <section className={styles.footRow}>
         <div className={styles.footText}>

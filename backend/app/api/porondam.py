@@ -1,5 +1,6 @@
 """Porondam (marriage matching) endpoint."""
 
+import datetime as dt
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated, Literal
@@ -11,11 +12,13 @@ from app.api.birth import BirthInput, resolve_birth
 from app.api.charts import EPHEMERIS, KujaOut, kuja_out
 from app.api.deps import PlacesDb
 from app.api.timeresolve import TimeResolveResponse
+from app.engine import couple
 from app.engine.chart import Chart, Point, compute_chart
 from app.engine.kuja import kuja_dosha
 from app.engine.porondam import FactorResult, match, star_matches, star_point
-from app.engine.zodiac import NAKSHATRA, RASHI
+from app.engine.zodiac import NAKSHATRA, RASHI, Body
 from app.explain.labels import Lang, labels, reason
+from app.reports.format import format_date
 
 router = APIRouter(tags=["porondam"])
 
@@ -291,4 +294,167 @@ def porondam_stars(
             )
             for m in found
         ],
+    )
+
+
+# ---------- years ahead for the couple ----------
+
+
+class TimelineRequest(PorondamRequest):
+    as_of: dt.datetime | None = None  # "today"; for tests
+
+
+class SpanOut(BaseModel):
+    start: dt.date
+    end: dt.date
+    from_before: bool  # already running when the window opens
+    continues: bool  # still running when the window closes
+    text: str
+
+
+class SaturnOut(SpanOut):
+    kind: couple.SaturnKind
+
+
+class DashaSubOut(BaseModel):
+    lord: Body
+    start: dt.date
+    end: dt.date
+
+
+class DashaMainOut(DashaSubOut):
+    sub: list[DashaSubOut]
+
+
+class PersonTimelineOut(BaseModel):
+    mode: Literal["full", "quick"]
+    saturn: list[SaturnOut]
+    # None for a birth star only person: dasha needs the exact position of the Moon.
+    dasha: list[DashaMainOut] | None
+    dasha_now: str | None
+
+
+class TimelineOut(BaseModel):
+    rule_set: str
+    provisional: bool
+    start: dt.date
+    end: dt.date
+    bride: PersonTimelineOut
+    groom: PersonTimelineOut
+    overlaps: list[SpanOut]
+
+
+class TimelineResponse(BaseModel):
+    status: str
+    waiting_for: Role | None = None
+    time: TimeResolveResponse | None = None
+    timeline: TimelineOut | None = None
+
+
+def _span_text(span: couple.Span, name: str, lang: Lang) -> str:
+    shape = (
+        "all"
+        if span.from_before and span.continues
+        else "until"
+        if span.from_before
+        else "from"
+        if span.continues
+        else "between"
+    )
+    table = labels(lang)
+    text: str = table["couple"][f"{name}_{shape}"].format(
+        planet=table["planet"]["saturn"]["name"],
+        **{"from": format_date(span.start.date(), lang), "to": format_date(span.end.date(), lang)},
+    )
+    return text
+
+
+def _span_out(span: couple.Span, name: str, lang: Lang) -> SpanOut:
+    return SpanOut(
+        start=span.start.date(),
+        end=span.end.date(),
+        from_before=span.from_before,
+        continues=span.continues,
+        text=_span_text(span, name, lang),
+    )
+
+
+def _person_timeline(
+    moon: Point,
+    chart: Chart | None,
+    saturn: list[couple.SaturnPeriod],
+    start: dt.datetime,
+    end: dt.datetime,
+    lang: Lang,
+) -> PersonTimelineOut:
+    saturn_out = [
+        SaturnOut(**_span_out(period, period.kind, lang).model_dump(), kind=period.kind)
+        for period in saturn
+    ]
+    if chart is None:
+        return PersonTimelineOut(mode="quick", saturn=saturn_out, dasha=None, dasha_now=None)
+    mains = couple.dasha_periods(moon.longitude, chart.utc, start, end)
+    planet = labels(lang)["planet"]
+    main_now = next((m for m in mains if m.contains(start)), None)
+    sub_now = next((s for s in main_now.children if s.contains(start)), None) if main_now else None
+    dasha_now = None
+    if main_now and sub_now:
+        dasha_now = labels(lang)["couple"]["dasha_now"].format(
+            main=planet[main_now.lord.value]["name"],
+            main_to=format_date(main_now.end.date(), lang),
+            sub=planet[sub_now.lord.value]["name"],
+            sub_to=format_date(sub_now.end.date(), lang),
+        )
+    return PersonTimelineOut(
+        mode="full",
+        saturn=saturn_out,
+        dasha=[
+            DashaMainOut(
+                lord=main.lord,
+                start=main.start.date(),
+                end=main.end.date(),
+                sub=[
+                    DashaSubOut(lord=sub.lord, start=sub.start.date(), end=sub.end.date())
+                    for sub in main.children
+                ],
+            )
+            for main in mains
+        ],
+        dasha_now=dasha_now,
+    )
+
+
+@router.post("/v1/porondam/timeline", response_model=TimelineResponse)
+def porondam_timeline(body: TimelineRequest, db: PlacesDb) -> TimelineResponse:
+    """The next ten years for a couple: Saturn periods from each Moon sign, dasha periods,
+    and where the Saturn periods overlap. Facts only. Dates are UTC."""
+    people = {}
+    for role in ("bride", "groom"):
+        found = _person(getattr(body, role), db, role)
+        if isinstance(found, PorondamResponse):
+            return TimelineResponse(status=found.status, waiting_for=role, time=found.time)
+        people[role] = found
+    today = (body.as_of or dt.datetime.now(dt.UTC)).astimezone(dt.UTC).date()
+    start, end = couple.window(today)
+    stays = couple.saturn_stays(EPHEMERIS, today)
+    saturn = {role: couple.saturn_periods(stays, people[role][0].sign) for role in people}
+    lang = body.lang
+    return TimelineResponse(
+        status="ok",
+        timeline=TimelineOut(
+            rule_set=couple.RULE_SET,
+            provisional=couple.PROVISIONAL,
+            start=start.date(),
+            end=end.date(),
+            bride=_person_timeline(
+                people["bride"][0], people["bride"][1], saturn["bride"], start, end, lang
+            ),
+            groom=_person_timeline(
+                people["groom"][0], people["groom"][1], saturn["groom"], start, end, lang
+            ),
+            overlaps=[
+                _span_out(span, "overlap", lang)
+                for span in couple.overlaps(saturn["bride"], saturn["groom"])
+            ],
+        ),
     )

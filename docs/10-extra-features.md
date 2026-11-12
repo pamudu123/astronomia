@@ -16,7 +16,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 - Which stars match mine (27 star pages). **Built.**
 - All 20 porondam factors. **15 built** (Gothra, Pakshi, Linga and Dina added). Varna, Bhutha, Vruksha, Ayusha and Graha are still missing.
-- Years ahead for the couple: both dasha timelines and Saturn periods, facts only.
+- Years ahead for the couple: both dasha timelines and Saturn periods, facts only. **Built.**
 
 **B. Planet changes and forecasts**
 
@@ -44,7 +44,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 ## 3. Category A in detail
 
-Three pull requests, in this order.
+Planned as three pull requests. All three were built in one (#12).
 
 | # | Feature | Delivers | Check |
 |---|---|---|---|
