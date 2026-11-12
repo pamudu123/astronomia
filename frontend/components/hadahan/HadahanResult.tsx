@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
 import {
   type BirthRequest,
@@ -17,6 +18,7 @@ import type { Locale } from "@/lib/i18n";
 import { RASHI } from "@/lib/rashi";
 
 import { DashaTimeline } from "./DashaTimeline";
+import { Forecast } from "./Forecast";
 import styles from "./HadahanResult.module.css";
 import { Kendara } from "./Kendara";
 
@@ -202,6 +204,8 @@ export function HadahanResult({
 
       {result.dasha && <DashaTimeline dasha={result.dasha} labels={labels} lang={lang} t={t} />}
 
+      <Forecast lang={lang} t={t} labels={labels} request={request} />
+
       <section className={styles.pair}>
         <article className={`rise ${styles.panel} ${kuja.present ? styles.kujaPresent : ""}`} data-card="kuja">
           <div className={styles.panelRow}>
@@ -209,6 +213,7 @@ export function HadahanResult({
             <span className={kuja.present ? styles.badgeCoral : styles.badgeTeal}>{kujaStatus}</span>
           </div>
           {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
+          <KujaDials kuja={kuja} labels={labels} t={t} />
           {kuja.reasons.map((text) => (
             <p key={text}>{text}</p>
           ))}

@@ -16,6 +16,9 @@ async function mockBackend(page: Page, lang: "en" | "si", hadahan = `hadahan-${l
   await page.route("**/api/v1/time/resolve", (route) =>
     route.fulfill({ contentType: "application/json", body: fixture("time-kandy.json") }),
   );
+  await page.route("**/api/v1/forecast", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture(`forecast-${lang}.json`) }),
+  );
   const requests: string[] = [];
   await page.route("**/api/v1/hadahan", (route) => {
     requests.push(route.request().postData() ?? "");
@@ -144,4 +147,45 @@ test("a failed PDF says so", async ({ page }) => {
   await page.getByRole("button", { name: "මගේ හඳහන පෙන්වන්න" }).click();
   await page.getByRole("button", { name: "PDF ලෙස බාගන්න" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "PDF සෑදීමට නොහැකි විය" })).toBeVisible();
+});
+
+test("the result shows this month for you", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+
+  const section = page.locator('[data-card="forecast"]');
+  await expect(section.getByRole("heading", { name: "This month for you" })).toBeVisible();
+  await expect(section).toContainText("December 2026");
+  await expect(section.locator("[data-planet]")).toHaveCount(4);
+  await expect(section.locator('[data-planet="saturn"]')).toContainText("8th house");
+  const rahu = section.locator('[data-planet="rahu"]');
+  await expect(rahu).toContainText("Changes sign");
+  await expect(rahu).toContainText("On 5 December 2026 it moves into Makara, your 6th house.");
+  await expect(section).toContainText("It does not predict events, health or outcomes.");
+});
+
+test("the forecast is in Sinhala on the Sinhala page", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.goto("/si/hadahan");
+  await page.getByLabel("උපන් දිනය").fill("1995-04-19");
+  await page.getByLabel("උපන් වේලාව").fill("14:35");
+  await page.getByRole("combobox").fill("kandy");
+  await page.getByRole("option").first().click();
+  await page.getByRole("button", { name: "මගේ හඳහන පෙන්වන්න" }).click();
+  const section = page.locator('[data-card="forecast"]');
+  await expect(section.getByRole("heading", { name: "මේ මාසය ඔබට" })).toBeVisible();
+  await expect(section).toContainText("2026 දෙසැම්බර්");
+  await expect(section.locator("[data-planet]")).toHaveCount(4);
+});
+
+test("the hadahan still shows when the forecast fails", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.route("**/api/v1/forecast", (route) => route.fulfill({ status: 500, body: "" }));
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.locator('[data-card="kuja"]')).toBeVisible();
+  await expect(page.locator('[data-card="forecast"]')).toHaveCount(0);
 });

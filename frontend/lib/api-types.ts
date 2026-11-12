@@ -149,6 +149,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/forecast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Forecast
+         * @description The current month for one birth chart. Dates are UTC.
+         */
+        post: operations["forecast_v1_forecast_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/reports/pdf": {
         parameters: {
             query?: never;
@@ -245,6 +265,23 @@ export interface components {
             };
             /** Reason */
             reason: string;
+        };
+        /** ForecastOut */
+        ForecastOut: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            month: components["schemas"]["MonthOut"];
+            /** Planets */
+            planets: components["schemas"]["PlanetMonthOut"][];
+        };
+        /** ForecastResponse */
+        ForecastResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            forecast: components["schemas"]["ForecastOut"] | null;
         };
         /** FullPerson */
         FullPerson: {
@@ -362,6 +399,8 @@ export interface components {
             strength: number;
             /** Reduced */
             reduced: boolean;
+            /** Houses */
+            houses: number[];
             /** Points */
             points: components["schemas"]["KujaPointOut"][];
             /** Cancellations */
@@ -431,6 +470,39 @@ export interface components {
             house_system: string;
             /** Ephemeris */
             ephemeris: string;
+        };
+        /** MonthOut */
+        MonthOut: {
+            /** Year */
+            year: number;
+            /** Month */
+            month: number;
+            /** Title */
+            title: string;
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+        };
+        /** MoveOut */
+        MoveOut: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** To Sign */
+            to_sign: string;
+            /** To House */
+            to_house: number;
+            /** Text */
+            text: string;
         };
         /** OffsetOption */
         OffsetOption: {
@@ -521,6 +593,22 @@ export interface components {
             timezone: string;
             /** Population */
             population: number;
+        };
+        /** PlanetMonthOut */
+        PlanetMonthOut: {
+            body: components["schemas"]["Body"];
+            /** Sign */
+            sign: string;
+            /** House */
+            house: number;
+            /** Retrograde */
+            retrograde: boolean;
+            /** Text */
+            text: string;
+            /** Theme */
+            theme: string;
+            /** Moves */
+            moves: components["schemas"]["MoveOut"][];
         };
         /** PlanetOut */
         PlanetOut: {
@@ -941,6 +1029,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PorondamResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    forecast_v1_forecast_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ForecastResponse"];
                 };
             };
             /** @description Validation Error */

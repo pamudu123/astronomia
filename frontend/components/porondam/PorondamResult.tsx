@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ArrowRight } from "@/components/Icons";
+import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -17,6 +18,7 @@ import {
   ringOffset,
 } from "@/lib/porondam";
 
+import { FactorVisual } from "./FactorVisual";
 import styles from "./Porondam.module.css";
 
 const RING = 2 * Math.PI * 84;
@@ -124,6 +126,7 @@ export function PorondamResult({ lang, t, f, labels, result, request, onAgain }:
                 <span className={styles.small}>
                   {t.essential} · {factorName(check).meaning}
                 </span>
+                <FactorVisual factor={check} labels={labels} />
                 <span className={styles.small}>{check.reason}</span>
               </div>
             ))}
@@ -138,6 +141,17 @@ export function PorondamResult({ lang, t, f, labels, result, request, onAgain }:
               {t.factors}
             </h2>
             <p className="soft">{t.factorsLead}</p>
+            <p className={styles.legend}>
+              <span className="visually-hidden">{t.legend}: </span>
+              <span className={styles.legendItem}>
+                <i className={styles.legendBride} />
+                {nameOf(bride, f.bride)}
+              </span>
+              <span className={styles.legendItem}>
+                <i className={styles.legendGroom} />
+                {nameOf(groom, f.groom)}
+              </span>
+            </p>
           </div>
           <div role="group" aria-label={t.filter} className={styles.toggle}>
             {(
@@ -175,6 +189,7 @@ export function PorondamResult({ lang, t, f, labels, result, request, onAgain }:
                 </span>
               </div>
               <span className={styles.meaning}>{factorName(factor).meaning}</span>
+              <FactorVisual factor={factor} labels={labels} />
               <p className={styles.small}>{factor.reason}</p>
             </li>
           ))}
@@ -201,6 +216,7 @@ export function PorondamResult({ lang, t, f, labels, result, request, onAgain }:
                       {kuja.present ? t.present : t.absent}
                     </span>
                   </div>
+                  <KujaDials kuja={kuja} labels={labels} t={t} compact />
                   <span className={styles.small}>{kuja.reasons[0]}</span>
                 </div>
               ))}

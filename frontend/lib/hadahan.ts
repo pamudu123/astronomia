@@ -7,6 +7,8 @@ export type Planet = Chart["planets"][number];
 export type Dasha = NonNullable<Hadahan["dasha"]>;
 export type Period = Dasha["periods"][number];
 export type Kuja = NonNullable<Hadahan["kuja"]>;
+export type ForecastResult = components["schemas"]["ForecastResponse"];
+export type Forecast = NonNullable<ForecastResult["forecast"]>;
 export type Place = components["schemas"]["PlaceOut"];
 export type TimeResult = components["schemas"]["TimeResolveResponse"];
 
@@ -78,6 +80,16 @@ export async function resolveTime(request: BirthRequest, signal?: AbortSignal): 
 export async function fetchHadahan(request: BirthRequest, lang: Locale): Promise<Hadahan> {
   return getJson<Hadahan>(
     await fetch(`${API}/v1/hadahan`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...request, lang }),
+    }),
+  );
+}
+
+export async function fetchForecast(request: BirthRequest, lang: Locale): Promise<ForecastResult> {
+  return getJson<ForecastResult>(
+    await fetch(`${API}/v1/forecast`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ ...request, lang }),
