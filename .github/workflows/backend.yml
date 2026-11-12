@@ -54,3 +54,31 @@ jobs:
         run: |
           uv run python scripts/export_openapi.py
           git diff --exit-code openapi.json
+
+  # The image Render runs: build it, start it, and check a chart and a PDF work inside it.
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image
+        run: docker build -t astronomia-api .
+      - name: Start it
+        run: docker run -d --name api -e PORT=9000 -p 9000:9000 astronomia-api
+      - name: It answers
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:9000/healthz && break
+            sleep 2
+          done
+          curl -sf http://localhost:9000/healthz
+      - name: A chart and a PDF work inside the image
+        run: |
+          body='{"date":"1995-04-19","time":"14:35","place_id":1241622,"lang":"si"}'
+          curl -sf -X POST http://localhost:9000/v1/hadahan -H 'content-type: application/json' -d "$body" | grep -q '"lagna"'
+          curl -sf -X POST http://localhost:9000/v1/reports/pdf -H 'content-type: application/json' \
+            -d "{\"kind\":\"hadahan\",\"name\":\"\",\"birth\":$body}" -o report.pdf
+          head -c 4 report.pdf | grep -q '%PDF'
+      - name: Logs if it failed
+        if: failure()
+        run: docker logs api || true
