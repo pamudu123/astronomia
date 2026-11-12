@@ -83,7 +83,10 @@
     }
   ],
   "footer": {
-    "disclaimer": "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer."
+    "disclaimer": "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "legal": "About this site"
   },
   "soon": {
     "title": "Coming soon",
@@ -289,5 +292,134 @@
     "homeHadahan": "Make a hadahan",
     "homePorondam": "Match two charts",
     "deletedText": "Nobody can open it now. Nothing from it is kept."
+  },
+  "legal": {
+    "draft": "Draft: to be reviewed before the site goes public.",
+    "updated": "Last updated: 12 November 2026",
+    "contactTodo": "A contact address will be added here before launch."
+  },
+  "privacy": {
+    "title": "Privacy",
+    "lead": "Astronomia works out charts without keeping them. This page says exactly what happens to the details you give.",
+    "glance": [
+      {
+        "icon": "account",
+        "title": "No account",
+        "text": "You never sign up or sign in."
+      },
+      {
+        "icon": "nothing",
+        "title": "Nothing kept by default",
+        "text": "A chart or a match is worked out and sent back. Nothing about it is saved."
+      },
+      {
+        "icon": "share",
+        "title": "Sharing is your choice",
+        "text": "Only a share link keeps a copy, for 30 days, and you can delete it sooner."
+      },
+      {
+        "icon": "logs",
+        "title": "No birth details in logs",
+        "text": "Logs hold only the page, the result code and the time taken."
+      }
+    ],
+    "sections": [
+      {
+        "title": "What you give",
+        "body": [
+          "The date, time and place of birth (or a latitude, longitude and time zone), and a name if you want one. For a match, the same for two people, or only their birth stars.",
+          "These are sent in the body of the request, never in the page address, and are used only to work out the result."
+        ]
+      },
+      {
+        "title": "What is kept",
+        "body": [
+          "Nothing, unless you press Create link in the Share dialog.",
+          "Then a copy of that result is kept, in Sinhala and English, with the birth date, time and place line, and the name or names unless you chose to hide them. The link code and its delete code are kept only in a scrambled (hashed) form.",
+          "A share link closes after 30 days and is then deleted. The device that made it can delete it sooner."
+        ]
+      },
+      {
+        "title": "On your device",
+        "body": [
+          "Your last result is kept in this browser tab, so a reload does not lose it. It is cleared when the tab closes.",
+          "When you make a share link, its delete code is kept in this browser so you can delete the link later.",
+          "There are no cookies, no adverts and no tracking or analytics."
+        ]
+      },
+      {
+        "title": "Logs",
+        "body": [
+          "The servers record each request's method, page path, result code and time taken. Share codes are hidden in the path. Logs never hold names, birth details or anything you typed."
+        ]
+      },
+      {
+        "title": "PDF reports",
+        "body": [
+          "A PDF is made on the server when you ask for it and sent straight to you. It is not kept."
+        ]
+      },
+      {
+        "title": "Who runs the site",
+        "body": [
+          "The pages are served by Vercel. The calculations and the share links run on Render, in Singapore. Fonts and pictures come from the site itself, so your browser does not contact other services."
+        ]
+      },
+      {
+        "title": "Questions and deletion",
+        "body": [
+          "To delete a share link, open it on the device that made it and press Delete this link."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of use",
+    "lead": "Please read these short terms before using the site.",
+    "sections": [
+      {
+        "title": "What the site is",
+        "body": [
+          "A tool that works out a Sri Lankan birth chart (hadahan) and a marriage match (porondam) from astronomical calculations and traditional rules, in Sinhala and English."
+        ]
+      },
+      {
+        "title": "For guidance only",
+        "body": [
+          "The results are for guidance and cultural interest. They do not predict events, health or outcomes, and the site never tells anyone whether to marry.",
+          "For important decisions, speak with your family and a practising astrologer."
+        ]
+      },
+      {
+        "title": "Rules can differ",
+        "body": [
+          "Traditions differ, and some rules here are provisional until a practising astrologer confirms them. The pages mark these."
+        ]
+      },
+      {
+        "title": "Accuracy",
+        "body": [
+          "A result is only as good as the birth time and place given. A few minutes' difference can change the lagna, and the page warns when that is likely."
+        ]
+      },
+      {
+        "title": "Sharing",
+        "body": [
+          "You choose what to share. Please do not share another person's birth details without their agreement."
+        ]
+      },
+      {
+        "title": "Fair use",
+        "body": [
+          "Please do not try to break, overload or copy the site in bulk."
+        ]
+      },
+      {
+        "title": "Changes",
+        "body": [
+          "These terms may change. The date at the top shows the latest version."
+        ]
+      }
+    ]
   }
 }

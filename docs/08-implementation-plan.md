@@ -148,6 +148,14 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 
 At the end of stage 1 the site is a complete free product.
 
+**Launch preparation (part of step 21), done ahead of the paid stage, which is parked for later:**
+
+- Share links can live in PostgreSQL (`ASTRONOMIA_DATABASE_URL`), tested in CI against a real PostgreSQL.
+- A private staging gate: the site asks for a password, and the backend needs an access key.
+- `render.yaml`, `frontend/vercel.json` and a `robots.txt` that keeps shared links (and all of staging) out of search.
+- Draft privacy and terms pages in Sinhala and English, linked from the footer.
+- The runbook in `docs/09-launch.md`, with what is left before going public.
+
 ### Stage 2: the paid level
 
 | # | Step | Delivers | Check |

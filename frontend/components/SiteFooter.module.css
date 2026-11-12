@@ -22,3 +22,15 @@
 .disclaimer {
   max-width: 620px;
 }
+
+.links {
+  display: flex;
+  gap: 20px;
+  flex-basis: 100%;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}

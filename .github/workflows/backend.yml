@@ -19,6 +19,23 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # The share store is tested against a real PostgreSQL as well as SQLite.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: astro
+          POSTGRES_PASSWORD: astro
+          POSTGRES_DB: astro_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U astro"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      ASTRONOMIA_TEST_DATABASE_URL: postgresql://astro:astro@localhost:5432/astro_test
     steps:
       - uses: actions/checkout@v4
       - name: System libraries for the PDF reports

@@ -1,0 +1,30 @@
+# Render blueprint for the backend and its database (staging for now).
+# The frontend runs on Vercel. See docs/09-launch.md.
+services:
+  - type: web
+    name: astronomia-api
+    runtime: docker
+    plan: free
+    region: singapore
+    repo: https://github.com/pamudu123/astronomia
+    branch: main
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: ASTRONOMIA_ENVIRONMENT
+        value: staging
+      - key: ASTRONOMIA_DATABASE_URL
+        fromDatabase:
+          name: astronomia-db
+          property: connectionString
+      # Shared with the frontend (BACKEND_ACCESS_KEY). Set in the dashboard, never here.
+      - key: ASTRONOMIA_ACCESS_KEY
+        sync: false
+
+databases:
+  - name: astronomia-db
+    plan: free
+    region: singapore
+    postgresMajorVersion: "16"

@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     # Share links: where snapshots are kept, and for how many days a link stays open.
     shares_db: Path = VAR_DIR / "shares.sqlite"
     share_days: int = 30
+    # PostgreSQL for share links on hosts without a lasting disk. When empty, SQLite is used.
+    database_url: str = ""
+    # When set, every request except /healthz must carry this key in X-Access-Key.
+    # Used to keep a staging backend private. Empty means open, as in local runs.
+    access_key: str = ""
 
 
 @lru_cache
