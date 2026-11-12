@@ -14,7 +14,7 @@ from app.api.timeresolve import TimeResolveResponse
 from app.engine.chart import Chart, Point, compute_chart
 from app.engine.dasha import DashaTimeline, Period, vimshottari
 from app.engine.ephemeris import SwissEphemeris
-from app.engine.kuja import KujaResult, kuja_dosha
+from app.engine.kuja import KujaResult, kuja_dosha, load_rules
 from app.engine.zodiac import NAKSHATRA, RASHI, Body
 from app.explain.labels import Lang, labels, reason
 
@@ -116,6 +116,7 @@ class KujaOut(BaseModel):
     present: bool
     strength: int
     reduced: bool
+    houses: list[int]  # the houses where Mars counts, for drawing
     points: list[KujaPointOut]
     cancellations: list[CancellationOut]
     reasons: list[str]
@@ -227,6 +228,7 @@ def kuja_out(result: KujaResult, lang: Lang) -> KujaOut:
         present=result.present,
         strength=result.strength,
         reduced=result.reduced,
+        houses=list(load_rules()["houses"]),
         points=[KujaPointOut(point=p.point, house=p.house, counts=p.counts) for p in result.points],
         cancellations=cancellations,
         reasons=reasons,

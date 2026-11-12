@@ -1005,6 +1005,13 @@
             "type": "boolean",
             "title": "Reduced"
           },
+          "houses": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Houses"
+          },
           "points": {
             "items": {
               "$ref": "#/components/schemas/KujaPointOut"
@@ -1034,6 +1041,7 @@
           "present",
           "strength",
           "reduced",
+          "houses",
           "points",
           "cancellations",
           "reasons"

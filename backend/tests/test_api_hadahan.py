@@ -27,6 +27,7 @@ def test_hadahan_full_result(client: TestClient) -> None:
     assert [p["lord"] for p in body["dasha"]["current"]] == ["sun", "jupiter", "sun"]
     assert body["kuja"]["present"] is True
     assert body["kuja"]["provisional"] is True
+    assert body["kuja"]["houses"] == [1, 2, 4, 7, 8, 12]
     assert body["kuja"]["reasons"][0] == "Mars is in the 12th house counted from the lagna."
 
 

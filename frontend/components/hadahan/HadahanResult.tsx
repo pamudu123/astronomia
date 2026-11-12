@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
 import {
   type BirthRequest,
@@ -212,6 +213,7 @@ export function HadahanResult({
             <span className={kuja.present ? styles.badgeCoral : styles.badgeTeal}>{kujaStatus}</span>
           </div>
           {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
+          <KujaDials kuja={kuja} labels={labels} t={t} />
           {kuja.reasons.map((text) => (
             <p key={text}>{text}</p>
           ))}

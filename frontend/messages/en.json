@@ -186,7 +186,12 @@
       "forecastProvisional": "The house themes are provisional until a practising astrologer confirms them.",
       "forecastSky": "This month",
       "forecastSkyLabel": "The slow planets this month, in houses counted from your lagna.",
-      "forecastSkyNote": "The four slow planets, placed in your houses. A highlighted planet changes sign this month."
+      "forecastSkyNote": "The four slow planets, placed in your houses. A highlighted planet changes sign this month.",
+      "kujaFrom": "From {point}",
+      "kujaHouse": "{house} house",
+      "kujaCounts": "Counts",
+      "kujaNotCounts": "Does not count",
+      "kujaDialNote": "Each ring shows the 12 houses counted from one point. Outlined houses count for Kuja dosha. The filled one is where Mars sits."
     }
   },
   "porondam": {
@@ -241,7 +246,13 @@
       "lagna": "Lagna {lagna}",
       "download": "Download PDF",
       "preparing": "Preparing the PDF…",
-      "downloadFailed": "The PDF could not be made. Please try again."
+      "downloadFailed": "The PDF could not be made. Please try again.",
+      "kujaFrom": "From {point}",
+      "kujaHouse": "{house} house",
+      "kujaCounts": "Counts",
+      "kujaNotCounts": "Does not count",
+      "kujaDialNote": "Each ring shows the 12 houses counted from one point. Outlined houses count for Kuja dosha. The filled one is where Mars sits.",
+      "legend": "Colours in the pictures"
     }
   }
 }

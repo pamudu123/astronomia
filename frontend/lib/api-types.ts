@@ -399,6 +399,8 @@ export interface components {
             strength: number;
             /** Reduced */
             reduced: boolean;
+            /** Houses */
+            houses: number[];
             /** Points */
             points: components["schemas"]["KujaPointOut"][];
             /** Cancellations */
