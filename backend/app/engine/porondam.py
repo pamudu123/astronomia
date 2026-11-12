@@ -15,7 +15,7 @@ from app.engine.chart import Point
 from app.engine.zodiac import DEGREES_PER_NAKSHATRA, DEGREES_PER_PADA, NAKSHATRA, RASHI, RASHI_LORD
 
 RULES_DIR = Path(__file__).resolve().parents[1] / "data" / "rules"
-DEFAULT_RULES = "porondam_si_v1"
+DEFAULT_RULES = "porondam_si_v2"
 
 
 @dataclass(frozen=True)
@@ -24,6 +24,9 @@ class FactorResult:
     passed: bool
     hard: bool
     facts: dict[str, str | int] = field(default_factory=dict)
+    # False when the factor needs something this match does not have, such as the birth
+    # weekdays in a birth star only match. It is then left out of the count.
+    checked: bool = True
 
 
 @dataclass(frozen=True)
@@ -35,7 +38,12 @@ class MatchResult:
 
     @property
     def scored(self) -> list[FactorResult]:
-        return [f for f in self.factors if not f.hard]
+        """The counted factors: not the essential checks, and only those that were checked."""
+        return [f for f in self.factors if not f.hard and f.checked]
+
+    @property
+    def unchecked(self) -> list[FactorResult]:
+        return [f for f in self.factors if not f.checked]
 
     @property
     def hard_checks(self) -> list[FactorResult]:
@@ -69,6 +77,9 @@ def star_point(nakshatra: str, pada: int) -> Point:
     return Point.at(index * DEGREES_PER_NAKSHATRA + (pada - 0.5) * DEGREES_PER_PADA)
 
 
+WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+
+
 def _group(table: dict[str, list[str]], star: str) -> str:
     return next(group for group, stars in table.items() if star in stars)
 
@@ -78,7 +89,11 @@ def _pair_in(a: str, b: str, pairs: list[list[str]]) -> bool:
 
 
 def _factor(
-    rule: dict[str, Any], rules: dict[str, Any], bride: Point, groom: Point
+    rule: dict[str, Any],
+    rules: dict[str, Any],
+    bride: Point,
+    groom: Point,
+    weekdays: tuple[int, int] | None,
 ) -> FactorResult:
     kind = rule["type"]
     hard = bool(rule.get("hard", False))
@@ -96,13 +111,26 @@ def _factor(
         return result(count in rule["pass"], count=count)
     if kind == "count_above":
         return result(count > rule["threshold"], count=count, threshold=rule["threshold"])
-    if kind in ("group_pairs", "group_avoid", "group_different"):
+    if kind == "weekday_count_avoid":
+        if weekdays is None:
+            return FactorResult(rule["id"], False, hard, {}, checked=False)
+        b_day, g_day = weekdays
+        weekday_count = (g_day - b_day) % 7 + 1
+        return result(
+            weekday_count not in rule["fail"],
+            bride_weekday=WEEKDAYS[b_day],
+            groom_weekday=WEEKDAYS[g_day],
+            count=weekday_count,
+        )
+    if kind in ("group_pairs", "group_pairs_ordered", "group_avoid", "group_different"):
         table = rules["tables"][rule["table"]]
         b_group, g_group = _group(table, b_star), _group(table, g_star)
         name = rule["table"]
         facts: dict[str, str | int] = {f"bride_{name}": b_group, f"groom_{name}": g_group}
         if kind == "group_pairs":
             return result(_pair_in(b_group, g_group, rule["pass"]), **facts)
+        if kind == "group_pairs_ordered":
+            return result([b_group, g_group] in rule["pass"], **facts)
         if kind == "group_avoid":
             return result(not _pair_in(b_group, g_group, rule["fail"]), **facts)
         return result(b_group != g_group, **facts)
@@ -128,12 +156,19 @@ def _factor(
     raise ValueError(f"unknown porondam rule type: {kind}")
 
 
-def match(bride: Point, groom: Point, version: str = DEFAULT_RULES) -> MatchResult:
+def match(
+    bride: Point,
+    groom: Point,
+    version: str = DEFAULT_RULES,
+    weekdays: tuple[int, int] | None = None,
+) -> MatchResult:
+    """Every factor for one couple. Weekdays (0 = Monday) are the bride's and the groom's
+    birth weekdays, when the birth dates are known."""
     rules = load_rules(version)
     return MatchResult(
         rule_set=rules["version"],
         provisional=bool(rules["provisional"]),
-        factors=[_factor(rule, rules, bride, groom) for rule in rules["factors"]],
+        factors=[_factor(rule, rules, bride, groom, weekdays) for rule in rules["factors"]],
         same_star=bride.nakshatra == groom.nakshatra,
     )
 

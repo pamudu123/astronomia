@@ -34,9 +34,10 @@ export async function fetchPorondam(request: PorondamRequest, lang: Locale): Pro
 
 export type FactorFilter = "all" | "agree" | "disagree";
 
+/** A factor that was not counted (it needs the birth dates) shows only under "all". */
 export function filterFactors(factors: Factor[], filter: FactorFilter): Factor[] {
-  if (filter === "agree") return factors.filter((f) => f.passed);
-  if (filter === "disagree") return factors.filter((f) => !f.passed);
+  if (filter === "agree") return factors.filter((f) => f.checked && f.passed);
+  if (filter === "disagree") return factors.filter((f) => f.checked && !f.passed);
   return factors;
 }
 

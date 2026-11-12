@@ -392,6 +392,21 @@
   background: var(--teal);
 }
 
+.pillOff {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.factorOff {
+  border: 1px dashed var(--line);
+}
+
 .pillFail {
   background: var(--coral);
 }
@@ -429,7 +444,8 @@
 }
 
 .factor,
-.factorFail {
+.factorFail,
+.factorOff {
   display: flex;
   flex-direction: column;
   gap: 8px;

@@ -21,23 +21,24 @@
       "name": "Kasun",
       "mode": "full",
       "nakshatra": "hasta",
-      "pada": 3,
+      "pada": 2,
       "rashi": "kanya",
-      "lagna": "kanya",
+      "lagna": "kataka",
       "offset_label": "UTC+05:30"
     },
     "match": {
-      "rule_set": "porondam_si_v1",
+      "rule_set": "porondam_si_v2",
       "provisional": true,
       "score": {
-        "passed": 3,
-        "total": 9
+        "passed": 5,
+        "total": 13
       },
       "hard_checks": [
         {
           "id": "rajju",
           "hard": true,
           "passed": true,
+          "checked": true,
           "facts": {
             "bride_rajju": "pada",
             "groom_rajju": "kantha"
@@ -48,6 +49,7 @@
           "id": "vedha",
           "hard": true,
           "passed": true,
+          "checked": true,
           "facts": {
             "bride_star": "jyeshtha",
             "groom_star": "hasta"
@@ -60,6 +62,7 @@
           "id": "dina",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "count": 23,
             "remainder": 5
@@ -70,6 +73,7 @@
           "id": "gana",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_gana": "rakshasa",
             "groom_gana": "deva"
@@ -80,6 +84,7 @@
           "id": "mahendra",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "count": 23
           },
@@ -89,6 +94,7 @@
           "id": "stree_deergha",
           "hard": false,
           "passed": true,
+          "checked": true,
           "facts": {
             "count": 23,
             "threshold": 13
@@ -99,6 +105,7 @@
           "id": "yoni",
           "hard": false,
           "passed": true,
+          "checked": true,
           "facts": {
             "bride_yoni": "deer",
             "groom_yoni": "buffalo"
@@ -109,6 +116,7 @@
           "id": "rashi",
           "hard": false,
           "passed": true,
+          "checked": true,
           "facts": {
             "count": 11
           },
@@ -118,6 +126,7 @@
           "id": "rashyadhipathi",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_lord": "mars",
             "groom_lord": "mercury"
@@ -128,6 +137,7 @@
           "id": "vashya",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_sign": "vrischika",
             "groom_sign": "kanya"
@@ -135,9 +145,55 @@
           "reason": "වෘශ්චික සහ කන්‍යා යන රාශි දෙකෙන් කිසිවක් අනෙකේ බලපෑමට යටත් නොවේ."
         },
         {
+          "id": "gothra",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "bride_gothra": "pulasthi",
+            "groom_gothra": "angirasa"
+          },
+          "reason": "මනාලියගේ නැකත පුලස්ති ගෝත්‍රයට ද මනාලයාගේ නැකත අංගිරස ගෝත්‍රයට ද අයත් වේ. වෙනස් ගෝත්‍ර යහපත්ය."
+        },
+        {
+          "id": "pakshi",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "bride_pakshi": "cock",
+            "groom_pakshi": "crow"
+          },
+          "reason": "මනාලියගේ නැකතේ පක්ෂියා කුකුළා ද මනාලයාගේ නැකතේ පක්ෂියා කපුටා ද වේ. ඔවුන් සතුරන් නොවේ."
+        },
+        {
+          "id": "linga",
+          "hard": false,
+          "passed": false,
+          "checked": true,
+          "facts": {
+            "bride_linga": "male",
+            "groom_linga": "female"
+          },
+          "reason": "මනාලියගේ නැකත පුරුෂ ලිංග ද මනාලයාගේ නැකත ස්ත්‍රී ලිංග ද වේ. මෙම යුගලය නොගැළපේ."
+        },
+        {
+          "id": "weekday",
+          "hard": false,
+          "passed": false,
+          "checked": true,
+          "facts": {
+            "bride_weekday": "wednesday",
+            "groom_weekday": "monday",
+            "count": 6
+          },
+          "reason": "මනාලිය බදාදා දිනක ද මනාලයා සඳුදා දිනක ද උපන්නේය. මනාලයාගේ දිනය මනාලියගේ දිනයට දින එකකට හෝ දෙකකට පෙර වන බැවින් නොගැළපේ."
+        },
+        {
           "id": "nadi",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_nadi": "aadi",
             "groom_nadi": "aadi"
@@ -240,7 +296,7 @@
         "points": [
           {
             "point": "lagna",
-            "house": 9,
+            "house": 11,
             "counts": false
           },
           {
@@ -257,11 +313,11 @@
         "cancellations": [
           {
             "id": "lagna_kataka_simha",
-            "applies": false,
+            "applies": true,
             "facts": {
-              "sign": "kanya"
+              "sign": "kataka"
             },
-            "reason": "ලග්නය කන්‍යා වේ."
+            "reason": "ලග්නය කටක වන අතර, එහිදී කුජ යහපත් ග්‍රහයෙකු ලෙස සැලකේ."
           },
           {
             "id": "mars_own_or_exalted",
@@ -284,10 +340,10 @@
             "id": "mars_house_sign_exception",
             "applies": false,
             "facts": {
-              "house": 9,
+              "house": 11,
               "sign": "vrishabha"
             },
-            "reason": "මෙම ව්‍යතිරේකය වෘෂභ රාශියේ 9 වැනි භාවයේ කුජට අදාළ නොවේ."
+            "reason": "මෙම ව්‍යතිරේකය වෘෂභ රාශියේ 11 වැනි භාවයේ කුජට අදාළ නොවේ."
           }
         ],
         "reasons": [

@@ -24,6 +24,10 @@ export type Labels = {
   yoni: Record<string, string>;
   nadi: Record<string, string>;
   rajju: Record<string, string>;
+  gothra: Record<string, string>;
+  pakshi: Record<string, string>;
+  linga: Record<string, string>;
+  weekday: Record<string, string>;
   porondam_factor: Record<string, { name: string; meaning: string }>;
 };
 

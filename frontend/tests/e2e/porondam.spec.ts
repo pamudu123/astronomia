@@ -39,10 +39,13 @@ test("a quick match by birth stars", async ({ page }) => {
   await page.getByRole("button", { name: "Match the charts" }).click();
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
-  await expect(page.getByRole("img", { name: "7 of 9 factors agree" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "9 of 12 factors agree" })).toBeVisible();
   await expect(page.locator('[data-check="rajju"]')).toContainText("Pass");
   await expect(page.locator('[data-check="vedha"]')).toContainText("Pass");
-  await expect(page.locator("[data-factor]")).toHaveCount(9);
+  // 12 counted factors, and Dina (the birth weekdays) shown as not counted.
+  await expect(page.locator("[data-factor]")).toHaveCount(13);
+  await expect(page.locator('[data-factor="weekday"]')).toHaveAttribute("data-counted", "false");
+  await expect(page.locator('[data-factor="weekday"]')).toContainText("Not counted");
   await expect(page.getByText("Kuja dosha needs the full birth details of both people.")).toBeVisible();
 
   expect(JSON.parse(requests[0])).toMatchObject({
@@ -58,9 +61,9 @@ test("the factor filter", async ({ page }) => {
   await quickForm(page);
   await page.getByRole("button", { name: "Match the charts" }).click();
   await page.getByRole("button", { name: "Do not agree" }).click();
-  await expect(page.locator("[data-factor]")).toHaveCount(2);
+  await expect(page.locator("[data-factor]")).toHaveCount(3);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
-  await expect(page.locator("[data-factor]")).toHaveCount(7);
+  await expect(page.locator("[data-factor]")).toHaveCount(9);
 });
 
 test("a full match shows Kuja dosha for both", async ({ page }) => {
@@ -74,7 +77,8 @@ test("a full match shows Kuja dosha for both", async ({ page }) => {
     await card.getByRole("option").first().click();
   }
   await page.getByRole("button", { name: "Match the charts" }).click();
-  await expect(page.getByRole("img", { name: "3 of 9 factors agree" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "5 of 13 factors agree" })).toBeVisible();
+  await expect(page.locator('[data-factor="weekday"]')).toHaveAttribute("data-counted", "true");
   await expect(page.getByRole("heading", { name: "Kuja dosha" })).toBeVisible();
   await expect(page.getByText("The bride's chart shows Kuja dosha and the groom's does not.", { exact: false })).toBeVisible();
 });
@@ -90,7 +94,8 @@ test("the Sinhala result uses Sinhala names", async ({ page }) => {
     await card.getByRole("option").first().click();
   }
   await page.getByRole("button", { name: "කේන්දර ගළපන්න" }).click();
-  await expect(page.locator('[data-factor="dina"]')).toContainText("දින");
+  await expect(page.locator('[data-factor="dina"]')).toContainText("නැකත්");
+  await expect(page.locator('[data-factor="weekday"]')).toContainText("දින");
   await expect(page.locator('[data-check="rajju"]')).toContainText("රජ්ජු");
 });
 

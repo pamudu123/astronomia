@@ -102,8 +102,13 @@ yoni:
 nadi: {aadi: ආදි, madhya: මධ්‍ය, antya: අන්ත්‍ය}
 rajju: {pada: පාද, kati: කටි, nabhi: නාභි, kantha: කණ්ඨ, shiro: ශිරෝ}
 
+gothra: {marichi: මරීචි, atri: අත්‍රි, vasishta: වසිෂ්ඨ, angirasa: අංගිරස, pulasthi: පුලස්ති, pulaha: පුලහ, kratu: ක්‍රතු}
+pakshi: {eagle: රාජාලියා, owl: බකමූණා, crow: කපුටා, cock: කුකුළා, peacock: මොණරා}
+linga: {male: පුරුෂ, female: ස්ත්‍රී, neuter: නපුංසක}
+weekday: {monday: සඳුදා, tuesday: අඟහරුවාදා, wednesday: බදාදා, thursday: බ්‍රහස්පතින්දා, friday: සිකුරාදා, saturday: සෙනසුරාදා, sunday: ඉරිදා}
+
 porondam_factor:
-  dina: {name: දින, meaning: සෞඛ්‍යය සහ දීර්ඝායුෂ}
+  dina: {name: නැකත්, meaning: සෞඛ්‍යය සහ දීර්ඝායුෂ}
   gana: {name: ගණ, meaning: ස්වභාවය}
   mahendra: {name: මහේන්ද්‍ර, meaning: පවුලේ වර්ධනය}
   stree_deergha: {name: ස්ත්‍රී දීර්ඝ, meaning: මනාලියගේ යහපත}
@@ -111,6 +116,10 @@ porondam_factor:
   rashi: {name: රාශි, meaning: චිත්තවේගී බැඳීම}
   rashyadhipathi: {name: රාශ්‍යාධිපති, meaning: රාශි දෙකේ අධිපතීන්}
   vashya: {name: වශ්‍ය, meaning: අන්‍යෝන්‍ය ආකර්ෂණය}
+  gothra: {name: ගෝත්‍ර, meaning: පරම්පරාවේ ගැළපීම}
+  pakshi: {name: පක්ෂි, meaning: දෙදෙනා අතර සමඟිය}
+  linga: {name: ලිංග, meaning: ස්ත්‍රී පුරුෂ ස්වභාවය}
+  weekday: {name: දින, meaning: උපන් දිනවල ගැළපීම}
   nadi: {name: නාඩි, meaning: පවුල් පරම්පරාවේ සෞඛ්‍යය}
   rajju: {name: රජ්ජු, meaning: යුවළගේ දීර්ඝායුෂ}
   vedha: {name: වේධ, meaning: එකිනෙකාට පීඩා නොකළ යුතු නැකැත්}
@@ -132,6 +141,15 @@ porondam_reason:
   rashyadhipathi_fail: "මනාලියගේ රාශියේ අධිපති {bride_lord} ද මනාලයාගේ රාශියේ අධිපති {groom_lord} ද වේ. ඔවුන් සතුරන් ලෙස සැලකේ."
   vashya_pass: "{bride_sign} සහ {groom_sign} යන රාශි දෙකෙන් එකක් අනෙකේ බලපෑමට යටත්ය."
   vashya_fail: "{bride_sign} සහ {groom_sign} යන රාශි දෙකෙන් කිසිවක් අනෙකේ බලපෑමට යටත් නොවේ."
+  gothra_pass: "මනාලියගේ නැකත {bride_gothra} ගෝත්‍රයට ද මනාලයාගේ නැකත {groom_gothra} ගෝත්‍රයට ද අයත් වේ. වෙනස් ගෝත්‍ර යහපත්ය."
+  gothra_fail: "නැකැත් දෙකම {bride_gothra} ගෝත්‍රයට අයත් වේ. එකම ගෝත්‍රය යහපත් නොවේ."
+  pakshi_pass: "මනාලියගේ නැකතේ පක්ෂියා {bride_pakshi} ද මනාලයාගේ නැකතේ පක්ෂියා {groom_pakshi} ද වේ. ඔවුන් සතුරන් නොවේ."
+  pakshi_fail: "මනාලියගේ නැකතේ පක්ෂියා {bride_pakshi} ද මනාලයාගේ නැකතේ පක්ෂියා {groom_pakshi} ද වේ. ඔවුන් සතුරන් ලෙස සැලකේ."
+  linga_pass: "මනාලියගේ නැකත {bride_linga} ලිංග ද මනාලයාගේ නැකත {groom_linga} ලිංග ද වේ. මෙම යුගලය ගැළපේ."
+  linga_fail: "මනාලියගේ නැකත {bride_linga} ලිංග ද මනාලයාගේ නැකත {groom_linga} ලිංග ද වේ. මෙම යුගලය නොගැළපේ."
+  weekday_pass: "මනාලිය {bride_weekday} දිනක ද මනාලයා {groom_weekday} දිනක ද උපන්නේය. මෙම දින ගැළපේ."
+  weekday_fail: "මනාලිය {bride_weekday} දිනක ද මනාලයා {groom_weekday} දිනක ද උපන්නේය. මනාලයාගේ දිනය මනාලියගේ දිනයට දින එකකට හෝ දෙකකට පෙර වන බැවින් නොගැළපේ."
+  weekday_unchecked: "මෙයට දෙදෙනාගේම උපන් දින අවශ්‍ය වේ. එබැවින් නැකැත් පමණක් දී ගැළපීමේදී මෙය ගණනට ඇතුළත් නොවේ."
   nadi_pass: "මනාලිය {bride_nadi} නාඩියට ද මනාලයා {groom_nadi} නාඩියට ද අයත් වේ. වෙනස් නාඩි යහපත්ය."
   nadi_fail: "දෙදෙනාම {bride_nadi} නාඩියට අයත් වේ. එකම නාඩිය යහපත් නොවේ."
   rajju_pass: "මනාලියගේ නැකත {bride_rajju} රජ්ජුවේ ද මනාලයාගේ නැකත {groom_rajju} රජ්ජුවේ ද වේ. වෙනස් රජ්ජු අත්‍යවශ්‍යයි."
@@ -202,6 +220,7 @@ report:
   essential: අත්‍යවශ්‍ය පරීක්ෂා
   pass: සමත්
   fail: සමත් නොවේ
+  not_counted: ගණනට නැත
   factors: කරුණෙන් කරුණ
   factor: කරුණ
   reason: හේතුව
@@ -212,7 +231,7 @@ report:
   method_porondam: "ලාහිරි අයනාංශය. ගැළපීම එක් එක් අයගේ චන්ද්‍රයා අනුව කෙරේ. රජ්ජු සහ වේධ ගණනින් වෙන්ව තබා ඇත."
   rule_sets: "නීති මාලා: {rules}."
   provisional: "ප්‍රවීණ ජ්‍යොතිෂවේදියෙකු තහවුරු කරන තුරු පොරොන්දම් සහ කුජ දෝෂ නීති තාවකාලිකය."
-  porondam_provisional: "මෙම වාර්තාව සම්ප්‍රදායික පොරොන්දම් කරුණු 20 න් 11 ක් භාවිත කරයි."
+  porondam_provisional: "මෙම වාර්තාව සම්ප්‍රදායික පොරොන්දම් කරුණු 20 න් 15 ක් භාවිත කරයි."
   kendara_note: "භාව ඉහළ ලග්න කොටුවේ සිට ගණන් කෙරේ. භාවවල දිශාව ජ්‍යොතිෂවේදියෙකු විසින් තහවුරු කිරීමට නියමිතය."
   guide: "මෙය කේන්දර පිළිබඳ මාර්ගෝපදේශයක් මිස තීරණයක් නොවේ. එය ඔබේ පවුල සහ ජ්‍යොතිෂවේදියා සමඟ බෙදා ගන්න."
   disclaimer: "මාර්ගෝපදේශය සහ සංස්කෘතික අවශ්‍යතා සඳහා පමණි. වැදගත් තීරණ සඳහා ඔබේ පවුල සහ ප්‍රවීණ ජ්‍යොතිෂවේදියෙකු සමඟ කතා කරන්න."

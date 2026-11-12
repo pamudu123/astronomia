@@ -15,7 +15,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 **A. Porondam depth**
 
 - Which stars match mine (27 star pages). **Built.**
-- All 20 porondam factors (11 are checked today).
+- All 20 porondam factors. **15 built** (Gothra, Pakshi, Linga and Dina added). Varna, Bhutha, Vruksha, Ayusha and Graha are still missing.
 - Years ahead for the couple: both dasha timelines and Saturn periods, facts only.
 
 **B. Planet changes and forecasts**
@@ -49,19 +49,19 @@ Three pull requests, in this order.
 | # | Feature | Delivers | Check |
 |---|---|---|---|
 | A1 | **Which stars match mine** | `GET /v1/porondam/stars/{star}`, a page for each of the 27 stars in both languages, a list of all stars, a sitemap, and links that open the quick match with both stars filled in. | Open a star, see all 27 ranked. Change who is the bride. Follow a row into the quick match. |
-| A2 | **All 20 factors** | Rule file `porondam_si_v2.yaml` with nine more factors (Vruksha, Ayusha, Pakshi, Bhutha, Gothra, Varna, Linga, Graha, weekday Dina), provisional. A factor that lacks its inputs is shown as not checked. | A test for each factor, pass and fail. A birth star only match leaves the weekday factor out of the total. |
+| A2 | **More porondam factors** | Rule file `porondam_si_v2.yaml` with Gothra, Pakshi, Linga and Dina (the birth weekdays), from the results of a Sri Lankan porondam site. A factor that lacks its inputs is shown as not counted. Varna, Bhutha, Vruksha, Ayusha and Graha still need their rules. | A test for each factor, and a replay of 34 of the site's results. A birth star only match leaves Dina out of the total. |
 | A3 | **Years ahead for the couple** | `POST /v1/porondam/timeline`: ten years of each person's dasha periods and Saturn periods from the Moon sign, and where they overlap. A section on the match result. | Saturn dates match the almanac. The match still shows if the timeline cannot load. |
 
 Decisions made:
 
-- The nine added factors come from public sources and stay provisional until the astrologer confirms them.
+- The added factors come from the published descriptions and the results of a Sri Lankan porondam site.
 - The couple timeline shows facts only. It does not judge a dasha period as good or bad.
 
 ## 4. Needed from the astrologer
 
 Best asked for together, early:
 
-- The nine added porondam factors and their tables (A2).
+- The rules for Varna, Bhutha, Vruksha, Ayusha and Graha, and a check of the four added factors (A2).
 - How to read Saturn and dasha periods for a couple (A3).
 - The nakath rules (category C), the Sinhala name letter table (D) and the wedding rules (C).
 

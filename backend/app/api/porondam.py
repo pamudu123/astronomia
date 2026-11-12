@@ -56,6 +56,9 @@ class FactorOut(BaseModel):
     id: str
     hard: bool
     passed: bool
+    # False when the match lacks what the factor needs (the birth weekdays need full birth
+    # details). It is then not counted, and passed means nothing.
+    checked: bool = True
     facts: dict[str, str | int]
     reason: str
 
@@ -95,11 +98,13 @@ class PorondamResponse(BaseModel):
 
 
 def _factor_out(result: FactorResult, lang: Lang) -> FactorOut:
-    code = f"{result.id}_{'pass' if result.passed else 'fail'}"
+    outcome = "pass" if result.passed else "fail"
+    code = f"{result.id}_{outcome if result.checked else 'unchecked'}"
     return FactorOut(
         id=result.id,
         hard=result.hard,
         passed=result.passed,
+        checked=result.checked,
         facts=result.facts,
         reason=reason(lang, code, result.facts, section="porondam_reason"),
     )
@@ -107,7 +112,10 @@ def _factor_out(result: FactorResult, lang: Lang) -> FactorOut:
 
 def _person(
     person: FullPerson | QuickPerson, db: Path, role: Role
-) -> tuple[Point, Chart | None, PersonOut] | PorondamResponse:
+) -> tuple[Point, Chart | None, PersonOut, int | None] | PorondamResponse:
+    """The Moon, the chart, what the page shows, and the birth weekday (0 = Monday).
+
+    The weekday is the one on the local birth date. A birth star only match has none."""
     if isinstance(person, QuickPerson):
         if person.nakshatra not in NAKSHATRA:
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown nakshatra")
@@ -121,7 +129,7 @@ def _person(
             lagna=None,
             offset_label=None,
         )
-        return moon, None, out
+        return moon, None, out, None
     birth = resolve_birth(person, db)
     if birth.utc is None:
         return PorondamResponse(status=birth.time.status, waiting_for=role, time=birth.time)
@@ -135,7 +143,7 @@ def _person(
         lagna=RASHI[chart.lagna.sign],
         offset_label=birth.time.offset_label,
     )
-    return chart.moon, chart, out
+    return chart.moon, chart, out, person.date.weekday()
 
 
 @dataclass(frozen=True)
@@ -154,16 +162,22 @@ def build_porondam(body: PorondamRequest, db: Path) -> PorondamBuild:
         if isinstance(found, PorondamResponse):
             return PorondamBuild(found, {"bride": None, "groom": None})
         people[role] = found
-    (b_moon, b_chart, b_out), (g_moon, g_chart, g_out) = people["bride"], people["groom"]
+    (b_moon, b_chart, b_out, b_day), (g_moon, g_chart, g_out, g_day) = (
+        people["bride"],
+        people["groom"],
+    )
 
-    result = match(b_moon, g_moon)
+    weekdays = (b_day, g_day) if b_day is not None and g_day is not None else None
+    result = match(b_moon, g_moon, weekdays=weekdays)
     lang = body.lang
     match_out = MatchOut(
         rule_set=result.rule_set,
         provisional=result.provisional,
         score=ScoreOut(passed=result.passed, total=len(result.scored)),
         hard_checks=[_factor_out(f, lang) for f in result.hard_checks],
-        factors=[_factor_out(f, lang) for f in result.scored],
+        # Every factor that is not an essential check, counted or not; the score counts only
+        # the checked ones.
+        factors=[_factor_out(f, lang) for f in result.factors if not f.hard],
         summary=result.summary,
         summary_text=reason(lang, f"summary_{result.summary}", section="porondam_reason"),
         same_star=result.same_star,

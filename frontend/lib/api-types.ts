@@ -332,6 +332,11 @@ export interface components {
             hard: boolean;
             /** Passed */
             passed: boolean;
+            /**
+             * Checked
+             * @default true
+             */
+            checked: boolean;
             /** Facts */
             facts: {
                 [key: string]: string | number;

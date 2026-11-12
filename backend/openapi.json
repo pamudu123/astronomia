@@ -864,6 +864,11 @@
             "type": "boolean",
             "title": "Passed"
           },
+          "checked": {
+            "type": "boolean",
+            "title": "Checked",
+            "default": true
+          },
           "facts": {
             "additionalProperties": {
               "anyOf": [

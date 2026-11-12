@@ -18,8 +18,9 @@ def factor(
     return next(f for f in result.factors if f.id == factor_id)
 
 
-def test_rules_are_provisional_and_have_eleven_factors() -> None:
+def test_rules_are_provisional_and_have_fifteen_factors() -> None:
     rules = load_rules()
+    assert rules["version"] == "porondam_si_v2"
     assert rules["provisional"] is True
     assert [f["id"] for f in rules["factors"]] == [
         "dina",
@@ -30,13 +31,23 @@ def test_rules_are_provisional_and_have_eleven_factors() -> None:
         "rashi",
         "rashyadhipathi",
         "vashya",
+        "gothra",
+        "pakshi",
+        "linga",
+        "weekday",
         "nadi",
         "rajju",
         "vedha",
     ]
 
 
-@pytest.mark.parametrize("table", ["gana", "yoni", "nadi", "rajju"])
+def test_version_one_still_loads() -> None:
+    old = match(star_point("anuradha", 2), star_point("rohini", 1), version="porondam_si_v1")
+    assert old.rule_set == "porondam_si_v1"
+    assert len(old.scored) == 9
+
+
+@pytest.mark.parametrize("table", ["gothra", "pakshi", "linga", "gana", "yoni", "nadi", "rajju"])
 def test_each_table_places_every_star_exactly_once(table: str) -> None:
     groups = load_rules()["tables"][table]
     stars = [star for members in groups.values() for star in members]
@@ -137,9 +148,14 @@ def test_vedha_in_both_directions() -> None:
 
 def test_score_and_summary() -> None:
     result = match(star_point("anuradha", 2), star_point("rohini", 1))
-    assert len(result.scored) == 9
+    # A birth star only match has no weekdays: 12 counted factors, and 13 with them.
+    assert len(result.scored) == 12
+    assert [f.id for f in result.unchecked] == ["weekday"]
     assert len(result.hard_checks) == 2
-    assert result.passed == 7
+    assert result.passed == 9
+    with_days = match(star_point("anuradha", 2), star_point("rohini", 1), weekdays=(0, 1))
+    assert len(with_days.scored) == 13
+    assert with_days.passed == 10
     assert result.summary == "majority_pass"
     failed = match(star_point("ashwini", 1), star_point("jyeshtha", 1))
     assert failed.summary == "essential_fail"
@@ -193,3 +209,63 @@ def test_star_matches_depend_on_the_role() -> None:
 def test_star_matches_reject_an_unknown_star() -> None:
     with pytest.raises(ValueError, match="unknown nakshatra"):
         star_matches("polaris", 1, "bride")
+
+
+def test_gothra_same_sage_does_not_agree() -> None:
+    assert not factor("ashwini", "rohini", "gothra").passed  # both Marichi
+    assert factor("rohini", "mrigashira", "gothra").passed  # Marichi and Atri
+    # Abhijit sits between Uttara Ashadha and Shravana, so the sages' groups of four move.
+    assert not factor("uttara_ashadha", "dhanishta", "gothra").passed  # both Pulaha
+    assert factor("dhanishta", "shatabhisha", "gothra").passed  # Pulaha and Kratu
+    assert not factor("purva_bhadrapada", "uttara_bhadrapada", "gothra").passed  # both Kratu
+    assert factor("revati", "ashwini", "gothra").facts == {
+        "bride_gothra": "kratu",
+        "groom_gothra": "marichi",
+    }
+
+
+def test_pakshi_enemy_birds() -> None:
+    assert factor("ashwini", "bharani", "pakshi").passed  # eagle and eagle
+    assert factor("anuradha", "hasta", "pakshi").passed  # cock and crow
+    assert factor("hasta", "ashwini", "pakshi").passed  # crow and eagle
+    assert not factor("ardra", "hasta", "pakshi").passed  # the owl is everyone's enemy
+    assert not factor("revati", "pushya", "pakshi").passed  # peacock and owl
+    assert not factor("ashwini", "anuradha", "pakshi").passed  # eagle and cock
+    assert not factor("dhanishta", "ashwini", "pakshi").passed  # peacock and eagle
+
+
+def test_linga_depends_on_who_is_the_bride() -> None:
+    assert factor("krittika", "rohini", "linga").passed  # female bride, male groom
+    assert not factor("rohini", "krittika", "linga").passed  # male bride, female groom
+    assert factor("krittika", "hasta", "linga").passed  # both female
+    assert not factor("ashwini", "rohini", "linga").passed  # both male
+    assert factor("krittika", "mula", "linga").passed  # female and neuter, partly
+    assert not factor("mula", "ashwini", "linga").passed  # neuter and male
+
+
+@pytest.mark.parametrize(
+    ("bride", "groom", "passed"),
+    [
+        (0, 0, True),  # the same day
+        (0, 1, True),  # Monday and Tuesday
+        (0, 4, True),
+        (0, 5, False),  # Saturday is two days before Monday
+        (0, 6, False),  # Sunday is one day before Monday
+        (2, 0, False),
+        (4, 0, True),
+        (5, 3, False),
+        (6, 6, True),
+    ],
+)
+def test_weekday(bride: int, groom: int, passed: bool) -> None:
+    result = match(star_point("anuradha", 2), star_point("rohini", 1), weekdays=(bride, groom))
+    weekday = next(f for f in result.factors if f.id == "weekday")
+    assert weekday.checked
+    assert weekday.passed is passed
+    assert weekday.facts["count"] == (groom - bride) % 7 + 1
+
+
+def test_weekday_is_not_checked_without_birth_dates() -> None:
+    weekday = factor("anuradha", "rohini", "weekday")
+    assert not weekday.checked
+    assert weekday.facts == {}

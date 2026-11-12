@@ -49,6 +49,18 @@ def test_every_porondam_factor_has_names_and_both_reasons() -> None:
         for factor_id in ids:
             assert f"{factor_id}_pass" in table["porondam_reason"]
             assert f"{factor_id}_fail" in table["porondam_reason"]
+        # A factor that needs the birth dates says why it was not counted.
+        assert "weekday_unchecked" in table["porondam_reason"]
+
+
+@pytest.mark.parametrize("lang", ["si", "en"])
+def test_every_group_in_the_rules_has_a_name(lang: Lang) -> None:
+    from app.engine.porondam import WEEKDAYS, load_rules
+
+    table = labels(lang)
+    for name, groups in load_rules()["tables"].items():
+        assert set(table[name]) == set(groups), name
+    assert set(table["weekday"]) == set(WEEKDAYS)
 
 
 def test_reason_fills_names_and_ordinals() -> None:

@@ -14,7 +14,12 @@ def test_quick_match(client: TestClient) -> None:
         },
     ).json()
     assert body["status"] == "ok"
-    assert body["match"]["score"] == {"passed": 7, "total": 9}
+    # The birth weekdays are unknown, so that factor is shown but not counted.
+    assert body["match"]["score"] == {"passed": 9, "total": 12}
+    assert body["match"]["rule_set"] == "porondam_si_v2"
+    weekday = next(f for f in body["match"]["factors"] if f["id"] == "weekday")
+    assert weekday["checked"] is False
+    assert weekday["reason"].startswith("This needs the birth dates of both people")
     assert [h["id"] for h in body["match"]["hard_checks"]] == ["rajju", "vedha"]
     assert body["match"]["provisional"] is True
     assert body["kuja"] is None  # needs full birth details
@@ -32,6 +37,13 @@ def test_full_match_with_kuja_for_both(client: TestClient) -> None:
     assert body["kuja"]["bride"]["present"] is True
     assert "කුජ" in body["kuja"]["reason"]
     assert body["match"]["summary_text"]
+    # Both birth dates are known, so the weekdays count: Wednesday and Monday.
+    assert body["match"]["score"]["total"] == 13
+    weekday = next(f for f in body["match"]["factors"] if f["id"] == "weekday")
+    assert weekday["checked"] is True
+    assert weekday["facts"] == {"bride_weekday": "wednesday", "groom_weekday": "monday", "count": 6}
+    assert weekday["passed"] is False
+    assert "බදාදා" in weekday["reason"]
 
 
 def test_mixed_match(client: TestClient) -> None:
@@ -89,7 +101,7 @@ def test_stars_that_match_one_star(client: TestClient) -> None:
     assert len(body["matches"]) == 36
     rohini = next(m for m in body["matches"] if m["nakshatra"] == "rohini")
     # The same pair as the quick match above.
-    assert rohini["score"] == {"passed": 7, "total": 9}
+    assert rohini["score"] == {"passed": 9, "total": 12}
     assert rohini["essential_pass"] is True
     assert [c["id"] for c in rohini["hard_checks"]] == ["rajju", "vedha"]
     assert body["matches"][0]["essential_pass"] is True

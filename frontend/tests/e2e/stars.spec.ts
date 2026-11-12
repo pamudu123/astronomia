@@ -34,7 +34,7 @@ test("the list of stars leads to one star's matches", async ({ page }) => {
   await expect(page.locator("[data-star]")).toHaveCount(36);
   const first = page.locator("[data-star]").first();
   await expect(first).toHaveAttribute("data-star", "shatabhisha");
-  await expect(first.getByRole("img", { name: "8 of 9 factors agree" })).toBeVisible();
+  await expect(first.getByRole("img", { name: "10 of 12 factors agree" })).toBeVisible();
   await expect(first.locator('[data-check="rajju"]')).toContainText("passes");
   await expect(page.getByRole("heading", { name: "An essential check does not pass" })).toBeVisible();
 });
@@ -46,11 +46,11 @@ test("the Moon sign changes the list, and a row opens the quick match", async ({
   await expect(page.locator("[data-star]").nth(2)).toHaveAttribute("data-star", "mula");
 
   await page.getByRole("button", { name: "Vrishabha (pada 2–4)" }).click();
-  await expect(page.locator("[data-star]").nth(2)).toHaveAttribute("data-star", "anuradha");
+  await expect(page.locator("[data-star]").nth(2)).toHaveAttribute("data-star", "hasta");
   expect(asked.at(-1)).toBe("pada=2&role=bride&lang=en");
 
-  await page.locator('[data-star="ashlesha"]').getByRole("link", { name: "See the full match" }).click();
-  await expect(page).toHaveURL(/\/en\/porondam\?bride=krittika\.2&groom=ashlesha\.1$/);
+  await page.locator('[data-star="hasta"]').getByRole("link", { name: "See the full match" }).click();
+  await expect(page).toHaveURL(/\/en\/porondam\?bride=krittika\.2&groom=hasta\.1$/);
   await expect(page.getByRole("button", { name: "Birth stars only" })).toHaveAttribute(
     "aria-pressed",
     "true",
@@ -59,7 +59,7 @@ test("the Moon sign changes the list, and a row opens the quick match", async ({
   await expect(bride.getByLabel("Birth star (nakath)")).toHaveValue("krittika");
   await expect(bride.getByLabel("Pada")).toHaveValue("2");
   await expect(page.getByRole("group", { name: "Groom" }).getByLabel("Birth star (nakath)")).toHaveValue(
-    "ashlesha",
+    "hasta",
   );
 });
 

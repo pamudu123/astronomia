@@ -131,6 +131,22 @@ export function FactorVisual({ factor, labels }: { factor: Factor; labels: Label
       );
       break;
     }
+    case "gothra":
+      picture = <Slots names={labels.gothra} bride={text("bride_gothra")} groom={text("groom_gothra")} />;
+      break;
+    case "linga":
+      picture = <Slots names={labels.linga} bride={text("bride_linga")} groom={text("groom_linga")} />;
+      break;
+    case "pakshi":
+      picture = (
+        <Pair bride={labels.pakshi[text("bride_pakshi")]} groom={labels.pakshi[text("groom_pakshi")]} ok={factor.passed} />
+      );
+      break;
+    case "weekday":
+      picture = (
+        <Pair bride={labels.weekday[text("bride_weekday")]} groom={labels.weekday[text("groom_weekday")]} ok={factor.passed} />
+      );
+      break;
     case "vedha":
       picture = (
         <Pair

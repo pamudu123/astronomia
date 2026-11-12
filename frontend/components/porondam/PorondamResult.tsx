@@ -190,25 +190,33 @@ export function PorondamResult({
           </div>
         </div>
         <ul className={styles.factorGrid}>
-          {filterFactors(match.factors, filter).map((factor, index) => (
+          {filterFactors(match.factors, filter).map((factor, index) => {
+            const counted = factor.checked;
+            return (
             <li
               key={factor.id}
-              className={`rise lift ${factor.passed ? styles.factor : styles.factorFail}`}
+              className={`rise lift ${!counted ? styles.factorOff : factor.passed ? styles.factor : styles.factorFail}`}
               style={{ animationDelay: `${0.04 * index}s` }}
               data-factor={factor.id}
+              data-counted={counted}
             >
               <div className={styles.cardHead}>
                 <h3 className={styles.factorName}>{factorName(factor).name}</h3>
-                <span className={factor.passed ? styles.pillPass : styles.pillFail}>
-                  <Check ok={factor.passed} />
-                  {factor.passed ? t.agrees : t.notAgrees}
-                </span>
+                {counted ? (
+                  <span className={factor.passed ? styles.pillPass : styles.pillFail}>
+                    <Check ok={factor.passed} />
+                    {factor.passed ? t.agrees : t.notAgrees}
+                  </span>
+                ) : (
+                  <span className={styles.pillOff}>{t.notCounted}</span>
+                )}
               </div>
               <span className={styles.meaning}>{factorName(factor).meaning}</span>
-              <FactorVisual factor={factor} labels={labels} />
+              {counted && <FactorVisual factor={factor} labels={labels} />}
               <p className={styles.small}>{factor.reason}</p>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </section>
 

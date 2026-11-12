@@ -69,7 +69,7 @@ def test_share_a_match(client: TestClient) -> None:
     assert body["kind"] == "porondam"
     match = body["porondam"]
     assert (match["bride"]["name"], match["groom"]["name"]) == ("Nimali", "Kasun")
-    assert match["match"]["score"] == {"passed": 3, "total": 9}
+    assert match["match"]["score"] == {"passed": 5, "total": 13}
     assert match["kuja"]["comparison"] == "bride_only"
 
 

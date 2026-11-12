@@ -189,6 +189,15 @@ Planned set by set in `docs/10-extra-features.md`. Category A is porondam depth.
 - **Star names** for page titles live in `frontend/lib/nakshatra.ts`. A test keeps them equal to the backend label files.
 - **Known limit:** the first visit to an unknown star address shows the not found page with status 200. Later visits return 404.
 
+**Done in one pull request with A1:** A2, more porondam factors (15 of the 20).
+
+- **Rules:** `porondam_si_v2.yaml` adds Gothra, Pakshi, Linga and Dina (the birth weekdays). Version 1 is kept. How the tables were found is in `docs/03-porondam-domain-notes.md`.
+- **Engine:** two new rule types (`group_pairs_ordered` for Linga, `weekday_count_avoid` for Dina) and a "not checked" state. Dina needs both birth dates, so a birth star only match shows it as not counted and leaves it out of the total.
+- **Names:** the star count factor is now shown as Nakath, as the Sri Lankan sites call it. Its id is still `dina`. The new weekday factor has the id `weekday` and is shown as Dina.
+- **Pages and PDF:** a picture for each new factor, and a "Not counted" state on the page and in the PDF.
+- **Check:** `backend/tests/test_porondam_observed.py` replays 34 results from a Sri Lankan porondam site. The four added factors agree with all of them.
+- **Still missing:** Varna, Bhutha, Vruksha, Ayusha and Graha.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

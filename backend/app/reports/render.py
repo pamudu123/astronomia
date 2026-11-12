@@ -217,7 +217,14 @@ def _factor(factor: FactorOut, table: dict[str, Any]) -> dict[str, Any]:
         "name": names["name"],
         "meaning": names["meaning"],
         "passed": factor.passed,
-        "result": report["pass"] if factor.passed else report["fail"],
+        "checked": factor.checked,
+        "result": (
+            report["not_counted"]
+            if not factor.checked
+            else report["pass"]
+            if factor.passed
+            else report["fail"]
+        ),
         "reason": factor.reason,
     }
 
