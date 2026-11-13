@@ -1,0 +1,67 @@
+{
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "change": {
+    "id": "saturn-2027-06",
+    "kind": "saturn",
+    "title": "Saturn change",
+    "moment": "2027-06-02T23:58:00Z",
+    "local_date": "2027-06-03",
+    "when": "3 June 2027, 05:28 Sri Lanka time",
+    "moves": [
+      {
+        "body": "saturn",
+        "from_sign": "meena",
+        "to_sign": "mesha",
+        "retrograde": false,
+        "returning": false,
+        "until": "2027-10-20T01:42:00Z",
+        "next_sign": "meena",
+        "text": "Saturn moves from Meena into Mesha.",
+        "until_text": "Saturn stays in Mesha until 20 October 2027, when it moves into Meena.",
+        "note": null
+      }
+    ]
+  },
+  "lagna": {
+    "sign": "vrishabha",
+    "sign_name": "Vrishabha",
+    "moves": [
+      {
+        "body": "saturn",
+        "from_sign": "meena",
+        "to_sign": "mesha",
+        "from_house": 11,
+        "to_house": 12,
+        "text": "Saturn leaves your 11th house and enters your 12th house.",
+        "short": "Saturn: 11th house to 12th house",
+        "from_theme": "The 11th house is about gains and friends.",
+        "to_theme": "The 12th house is about rest, spending and faraway places."
+      }
+    ],
+    "others": [
+      {
+        "body": "jupiter",
+        "sign": "kataka",
+        "house": 3,
+        "text": "Jupiter stays in Kataka, your 3rd house."
+      },
+      {
+        "body": "rahu",
+        "sign": "makara",
+        "house": 9,
+        "text": "Rahu stays in Makara, your 9th house."
+      },
+      {
+        "body": "ketu",
+        "sign": "kataka",
+        "house": 3,
+        "text": "Ketu stays in Kataka, your 3rd house."
+      }
+    ],
+    "notes": []
+  },
+  "moon_notes": [
+    "Erashtaka begins: Saturn enters the 12th, 1st or 2nd sign from the Moon."
+  ]
+}

@@ -8,7 +8,7 @@ import { ChangeSummary } from "@/components/changes/ChangeSummary";
 import styles from "@/components/changes/Changes.module.css";
 import { LagnaGrid } from "@/components/changes/LagnaGrid";
 import { PersonalChange } from "@/components/changes/PersonalChange";
-import { type ChangesText, localDate, moveText } from "@/components/changes/text";
+import { type ChangesText, changeTitle, localDate, moveText } from "@/components/changes/text";
 import { type ChangeLagna, PUBLISHED, changeLagnaPath, findChange, findLagna } from "@/lib/changes";
 import { fill } from "@/lib/hadahan";
 import { type Locale, hasLocale } from "@/lib/i18n";
@@ -32,8 +32,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!hasLocale(lang) || !change || !lagna) return {};
   const t = (await getDictionary(lang)).changes;
   const values = {
-    change: t.kind[change.kind],
-    year: change.local.slice(0, 4),
+    name: changeTitle(t, change, lang),
     lagna: lagna[lang],
     date: localDate(change, lang),
     moves: change.moves.map((move) => moveText(t, move, lang)).join(" "),
@@ -81,7 +80,8 @@ export default async function ChangeLagnaPage({ params }: Params) {
   if (!hasLocale(lang) || !change || !lagna) notFound();
   const dict = await getDictionary(lang);
   const t = dict.changes;
-  const title = fill(t.lagnaTitle, { change: t.kind[change.kind], year: change.local.slice(0, 4), lagna: lagna[lang] });
+  const name = changeTitle(t, change, lang);
+  const title = fill(t.lagnaTitle, { name, lagna: lagna[lang] });
 
   return (
     <main id="main" className={`container ${styles.page}`}>
@@ -89,7 +89,7 @@ export default async function ChangeLagnaPage({ params }: Params) {
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{title}</h1>
         <div className={styles.links}>
-          <Link href={`/${lang}/changes/${change.id}`}>{fill(t.hubLink, { change: t.kind[change.kind] })}</Link>
+          <Link href={`/${lang}/changes/${change.id}`}>{fill(t.hubLink, { name })}</Link>
           <Link href={`/${lang}/changes`}>{t.all}</Link>
         </div>
       </div>

@@ -27,7 +27,9 @@ export function CountedView({ t, change, counted, id, heading }: Props) {
     }),
     ...counted.others.map((other) => ({ body: other.body, house: other.house, navamsha_house: other.house })),
   ];
-  const until = Object.fromEntries(change.moves.map((move) => [move.body, move.until_text]));
+  const until = Object.fromEntries(
+    change.moves.map((move) => [move.body, [move.note, move.until_text].filter(Boolean).join(" ")]),
+  );
 
   return (
     <div className={styles.section} data-counted={id}>
@@ -66,6 +68,14 @@ export function CountedView({ t, change, counted, id, heading }: Props) {
           </li>
         ))}
       </ul>
+
+      {counted.notes.length > 0 && (
+        <ul className={styles.notes}>
+          {counted.notes.map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
+      )}
 
       {counted.others.length > 0 && (
         <ul className={styles.stays} aria-label={t.staying}>

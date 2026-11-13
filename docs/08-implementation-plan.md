@@ -221,6 +221,14 @@ Category B is planet changes and forecasts.
 - **Times** are Sri Lanka time (UTC+05:30), as the almanacs print them. Marked provisional (`changes_v1`).
 - **Known limit:** as with the star pages, an unknown change address shows the not found page. `dynamicParams` cannot be used with Cache Components.
 
+**Done in a second pull request:** B2, the Saturn and Jupiter changes.
+
+- **Pages** for the five Saturn and Jupiter changes in 2027. All six changes now have pages, and the list has no "coming soon" left.
+- **Backward steps and returns:** the engine marks a forward move that goes back into the sign a planet stepped out of (`returning`). A backward step says it is a short stay and when the planet returns. A return says so.
+- **Titles:** Jupiter changes sign three times in 2027, so a change of one planet is named by the sign it enters ("Jupiter change 2027 into Kanya", "Jupiter change 2027 back into Simha"). Each page has its own title.
+- **Saturn from the Moon sign:** the personal version and each lagna page say when Saturn starts or ends Erashtaka (the 12th, 1st and 2nd signs from the Moon) or the 8th sign. These are the same periods as the couple timeline.
+- **Fixtures:** `uv run python scripts/export_change_fixtures.py` in `backend/` saves the answers the frontend tests use.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

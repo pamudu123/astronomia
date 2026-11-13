@@ -394,3 +394,25 @@
     padding: 20px;
   }
 }
+
+/* Saturn periods counted from the Moon sign */
+.notes {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--gold-hover);
+  font-size: 15px;
+}
+
+.moonNotes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 760px;
+  padding: 18px 22px;
+  border: 1px solid var(--gold);
+  border-radius: 18px;
+  background: var(--night-raised);
+}

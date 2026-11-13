@@ -414,6 +414,8 @@ export interface components {
             provisional: boolean;
             change: components["schemas"]["ChangeOut"];
             lagna: components["schemas"]["CountedOut"];
+            /** Moon Notes */
+            moon_notes: string[];
         };
         /** ChangeListResponse */
         ChangeListResponse: {
@@ -494,6 +496,8 @@ export interface components {
             moves: components["schemas"]["HouseMoveOut"][];
             /** Others */
             others: components["schemas"]["OtherOut"][];
+            /** Notes */
+            notes: string[];
         };
         /** DashaMainOut */
         DashaMainOut: {
@@ -970,6 +974,8 @@ export interface components {
             to_sign: string;
             /** Retrograde */
             retrograde: boolean;
+            /** Returning */
+            returning: boolean;
             /**
              * Until
              * Format: date-time
@@ -981,6 +987,8 @@ export interface components {
             text: string;
             /** Until Text */
             until_text: string;
+            /** Note */
+            note: string | null;
         };
         /** PlanetOut */
         PlanetOut: {

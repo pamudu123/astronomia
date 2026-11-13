@@ -14,20 +14,24 @@
         "from_sign": "kumbha",
         "to_sign": "makara",
         "retrograde": false,
+        "returning": false,
         "until": "2028-06-23T20:00:00Z",
         "next_sign": "dhanu",
         "text": "Rahu moves from Kumbha into Makara.",
-        "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu."
+        "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu.",
+        "note": null
       },
       {
         "body": "ketu",
         "from_sign": "simha",
         "to_sign": "kataka",
         "retrograde": false,
+        "returning": false,
         "until": "2028-06-23T20:00:00Z",
         "next_sign": "mithuna",
         "text": "Ketu moves from Simha into Kataka.",
-        "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna."
+        "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna.",
+        "note": null
       }
     ]
   },
@@ -71,6 +75,8 @@
         "house": 8,
         "text": "Jupiter stays in Simha, your 8th house."
       }
-    ]
-  }
+    ],
+    "notes": []
+  },
+  "moon_notes": []
 }

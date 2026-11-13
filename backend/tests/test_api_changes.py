@@ -128,3 +128,32 @@ def test_a_clock_change_time_returns_the_options(client: TestClient) -> None:
     one = client.post("/v1/changes/rahu-ketu-2026-12/personal", json=birth).json()
     assert one["status"] == "ambiguous"
     assert one["lagna"] is None and one["gochara"] is None
+
+
+def test_a_backward_step_and_its_return_are_explained(client: TestClient) -> None:
+    body = client.get("/v1/changes?lang=en").json()
+    moves = {c["id"]: c["moves"][0] for c in body["changes"]}
+    assert moves["jupiter-2027-01"]["note"] == (
+        "Jupiter is moving backwards (retrograde), so this is a short stay. "
+        "It returns to Simha on 26 June 2027."
+    )
+    assert moves["jupiter-2027-06"]["returning"] is True
+    assert moves["jupiter-2027-06"]["note"] == "Jupiter returns to Simha after its backward step."
+    assert moves["saturn-2027-06"]["note"] is None
+    assert body["changes"][0]["moves"][0]["note"] is None  # Rahu
+
+
+def test_saturn_periods_for_a_moon_sign(client: TestClient) -> None:
+    body = client.get("/v1/changes/saturn-2027-06/vrishabha?lang=en").json()
+    assert body["moon_notes"] == [
+        "Erashtaka begins: Saturn enters the 12th, 1st or 2nd sign from the Moon."
+    ]
+    assert body["lagna"]["notes"] == []  # counted from the lagna, no Saturn periods
+
+
+def test_gochara_carries_the_saturn_periods(client: TestClient) -> None:
+    # Vrischika Moon: Saturn moves from the 5th to the 6th, so no period starts or ends.
+    body = client.post("/v1/changes/saturn-2027-06/personal", json={**BIRTH, "lang": "si"}).json()
+    assert body["gochara"]["notes"] == []
+    assert body["lagna"]["notes"] == []
+    assert [(m["from_house"], m["to_house"]) for m in body["gochara"]["moves"]] == [(5, 6)]

@@ -20,7 +20,8 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 **B. Planet changes and forecasts**
 
-- Rahu and Ketu change for your lagna (5 December 2026). **Built.** Then each Saturn and Jupiter change.
+- Rahu and Ketu change for your lagna (5 December 2026). **Built.**
+- Each Saturn and Jupiter change. **Built.**
 - Yearly forecast by lagna.
 
 **C. Nakath (auspicious times)**
@@ -64,7 +65,7 @@ Planned as three pull requests, so the Rahu and Ketu pages are live before 5 Dec
 | # | Feature | Delivers | Check |
 |---|---|---|---|
 | B1 | **Rahu and Ketu change** | The change engine and endpoints for every Saturn, Jupiter, Rahu and Ketu change. A list of changes, a page for the Rahu and Ketu change, and a page for each of the 12 lagnas, in both languages. "Your own version" from the birth details, counted from the lagna and the Moon sign (gochara). "Planet changes for you" on the hadahan. **Built.** | The times match the almanac. The houses match a table worked out by hand for all 12 lagnas. The pages carry a title and description as served. Birth details never reach the address. |
-| B2 | **Saturn and Jupiter changes** | Pages for the five Saturn and Jupiter changes in 2027, with the backward steps and returns explained. | Each page shows the right return date. |
+| B2 | **Saturn and Jupiter changes** | Pages for the five Saturn and Jupiter changes in 2027, with the backward steps and returns explained, and Saturn's Erashtaka and 8th sign periods counted from the Moon. **Built.** | Each page shows the right return date. Every change has its own title. |
 | B3 | **Yearly forecast 2027** | A page for each lagna, and a personal version. Paid later (see file 07). | The year's changes and houses match the change pages. |
 
 Decisions made:

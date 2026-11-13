@@ -15,20 +15,24 @@
           "from_sign": "kumbha",
           "to_sign": "makara",
           "retrograde": false,
+          "returning": false,
           "until": "2028-06-23T20:00:00Z",
           "next_sign": "dhanu",
           "text": "Rahu moves from Kumbha into Makara.",
-          "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu."
+          "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu.",
+          "note": null
         },
         {
           "body": "ketu",
           "from_sign": "simha",
           "to_sign": "kataka",
           "retrograde": false,
+          "returning": false,
           "until": "2028-06-23T20:00:00Z",
           "next_sign": "mithuna",
           "text": "Ketu moves from Simha into Kataka.",
-          "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna."
+          "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna.",
+          "note": null
         }
       ]
     },
@@ -45,10 +49,12 @@
           "from_sign": "simha",
           "to_sign": "kataka",
           "retrograde": true,
+          "returning": false,
           "until": "2027-06-25T23:49:00Z",
           "next_sign": "simha",
           "text": "Jupiter steps back (retrograde) from Simha into Kataka.",
-          "until_text": "Jupiter stays in Kataka until 26 June 2027, when it moves into Simha."
+          "until_text": "Jupiter stays in Kataka until 26 June 2027, when it moves into Simha.",
+          "note": "Jupiter is moving backwards (retrograde), so this is a short stay. It returns to Simha on 26 June 2027."
         }
       ]
     },
@@ -65,10 +71,12 @@
           "from_sign": "meena",
           "to_sign": "mesha",
           "retrograde": false,
+          "returning": false,
           "until": "2027-10-20T01:42:00Z",
           "next_sign": "meena",
           "text": "Saturn moves from Meena into Mesha.",
-          "until_text": "Saturn stays in Mesha until 20 October 2027, when it moves into Meena."
+          "until_text": "Saturn stays in Mesha until 20 October 2027, when it moves into Meena.",
+          "note": null
         }
       ]
     },
@@ -85,10 +93,12 @@
           "from_sign": "kataka",
           "to_sign": "simha",
           "retrograde": false,
+          "returning": true,
           "until": "2027-11-26T13:15:00Z",
           "next_sign": "kanya",
           "text": "Jupiter moves from Kataka into Simha.",
-          "until_text": "Jupiter stays in Simha until 26 November 2027, when it moves into Kanya."
+          "until_text": "Jupiter stays in Simha until 26 November 2027, when it moves into Kanya.",
+          "note": "Jupiter returns to Simha after its backward step."
         }
       ]
     },
@@ -105,10 +115,12 @@
           "from_sign": "mesha",
           "to_sign": "meena",
           "retrograde": true,
+          "returning": false,
           "until": "2028-02-23T13:54:00Z",
           "next_sign": "mesha",
           "text": "Saturn steps back (retrograde) from Mesha into Meena.",
-          "until_text": "Saturn stays in Meena until 23 February 2028, when it moves into Mesha."
+          "until_text": "Saturn stays in Meena until 23 February 2028, when it moves into Mesha.",
+          "note": "Saturn is moving backwards (retrograde), so this is a short stay. It returns to Mesha on 23 February 2028."
         }
       ]
     },
@@ -125,10 +137,12 @@
           "from_sign": "simha",
           "to_sign": "kanya",
           "retrograde": false,
+          "returning": false,
           "until": "2028-02-28T13:47:00Z",
           "next_sign": "simha",
           "text": "Jupiter moves from Simha into Kanya.",
-          "until_text": "Jupiter stays in Kanya until 28 February 2028, when it moves into Simha."
+          "until_text": "Jupiter stays in Kanya until 28 February 2028, when it moves into Simha.",
+          "note": null
         }
       ]
     }

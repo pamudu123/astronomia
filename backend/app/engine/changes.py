@@ -32,6 +32,7 @@ class PlanetMove:
     from_sign: int
     to_sign: int
     retrograde: bool  # a backward step; never set for the nodes, which always move backwards
+    returning: bool  # a forward move back into the sign it stepped back out of
     until: datetime | None  # when it next changes sign
     next_sign: int | None  # the sign it moves into then
 
@@ -103,6 +104,20 @@ def _work_out(ephemeris: Ephemeris) -> tuple[Change, ...]:
         next((c for c in found[index + 1 :] if c.body is change.body), change)
         for index, change in enumerate(found)
     ]
+    backward = [
+        change.body not in NODES and retrograde_at(ephemeris, change.moment)[change.body]
+        for change in found
+    ]
+    # For each change, whether it undoes the same planet's last change, a backward step.
+    returning = []
+    for index, change in enumerate(found):
+        before = next((i for i in range(index - 1, -1, -1) if found[i].body is change.body), None)
+        returning.append(
+            before is not None
+            and backward[before]
+            and not backward[index]
+            and found[before].from_sign == change.to_sign
+        )
 
     changes: list[Change] = []
     index = 0
@@ -110,19 +125,19 @@ def _work_out(ephemeris: Ephemeris) -> tuple[Change, ...]:
         moves = []
         for change in group:
             after = following[index]
-            index += 1
             has_next = after is not change
             moves.append(
                 PlanetMove(
                     body=change.body,
                     from_sign=change.from_sign,
                     to_sign=change.to_sign,
-                    retrograde=change.body not in NODES
-                    and retrograde_at(ephemeris, moment)[change.body],
+                    retrograde=backward[index],
+                    returning=returning[index],
                     until=after.moment if has_next else None,
                     next_sign=after.to_sign if has_next else None,
                 )
             )
+            index += 1
         # Rahu first, then Ketu.
         moves.sort(key=lambda move: SLOW_BODIES.index(move.body))
         signs = signs_at(ephemeris, moment)
@@ -157,3 +172,28 @@ def count_from(change: Change, sign: int) -> ChangeForSign:
         ),
         others=tuple((body, other, whole_sign_house(other, sign)) for body, other in change.others),
     )
+
+
+# Saturn counted from the Moon sign: the 12th, 1st and 2nd are Erashtaka, the 8th ashtama.
+ERASHTAKA = frozenset({12, 1, 2})
+ASHTAMA = 8
+
+
+def saturn_notes(counted: ChangeForSign) -> list[str]:
+    """Codes for the Saturn periods a move starts or ends, when counted from the Moon sign."""
+    notes: list[str] = []
+    for item in counted.moves:
+        if item.move.body is not Body.SATURN:
+            continue
+        was, now = item.from_house in ERASHTAKA, item.to_house in ERASHTAKA
+        if was and now:
+            notes.append("erashtaka_continues")
+        elif now:
+            notes.append("erashtaka_starts")
+        elif was:
+            notes.append("erashtaka_ends")
+        if item.to_house == ASHTAMA:
+            notes.append("ashtama_starts")
+        elif item.from_house == ASHTAMA:
+            notes.append("ashtama_ends")
+    return notes
