@@ -167,6 +167,7 @@ function PorondamForm({
         share={dict.share}
         request={view.saved.request}
         timeline={t.timeline}
+        wedding={t.wedding}
         onAgain={() => {
           saveSession(PORONDAM_KEY, null);
           setView({ kind: "form" });

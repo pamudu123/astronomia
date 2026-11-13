@@ -15,6 +15,7 @@ from app.api import (
     reports,
     shares,
     timeresolve,
+    wedding,
     yearly,
 )
 from app.config import get_settings
@@ -44,6 +45,7 @@ def create_app() -> FastAPI:
     app.include_router(yearly.router)
     app.include_router(panchanga.router)
     app.include_router(avurudu.router)
+    app.include_router(wedding.router)
     app.include_router(reports.router)
     app.include_router(shares.router)
     return app

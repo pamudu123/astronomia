@@ -1,4 +1,4 @@
-"""Save the nakath answers the frontend tests use, in frontend/tests/e2e/fixtures.
+"""Save the nakath and wedding finder answers the frontend tests use (tests/e2e/fixtures).
 
 Run after changing the nakath engine or its labels:
     uv run python scripts/export_nakath_fixtures.py
@@ -44,6 +44,16 @@ def main() -> None:
         "/v1/panchanga", params={"date": "2027-04-14", "place_id": 2643743, "lang": "en"}
     )
     save("panchanga-2027-04-14-london-en.json", body.json())
+    # The wedding finder for the couple the porondam tests use (birth stars only).
+    couple = {
+        "bride": {"nakshatra": "anuradha", "pada": 2, "name": "Nimali"},
+        "groom": {"nakshatra": "rohini", "pada": 1, "name": "Kasun"},
+        "months": 6,
+        "as_of": "2027-01-01",
+    }
+    for lang in ("en", "si"):
+        body = client.post("/v1/wedding-nakath", json={**couple, "lang": lang})
+        save(f"wedding-quick-{lang}.json", body.json())
     print(f"wrote fixtures to {FIXTURES}")
 
 

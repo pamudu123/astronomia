@@ -316,6 +316,38 @@
       "noOverlap": "Their Saturn periods do not overlap in these ten years.",
       "dashaQuick": "Dasha periods need the full birth details.",
       "note": "These are dates only. How to read them for a marriage is waiting for an astrologer's confirmation. Dates are in UTC."
+    },
+    "wedding": {
+      "title": "Wedding nakath for this couple",
+      "lead": "Dates and times that pass the nakath rules for the engagement, the poruwa ceremony and the homecoming, from both birth stars. Each one says why.",
+      "range": "How far ahead",
+      "months": {
+        "3": "3 months",
+        "6": "6 months",
+        "12": "1 year",
+        "24": "2 years"
+      },
+      "ceremonies": "Ceremonies",
+      "place": "Where the ceremonies take place",
+      "placeHint": "Its sunrise and lagna are used. Colombo when left empty.",
+      "noPlaces": "No places found",
+      "find": "Find dates",
+      "working": "Searching. Two years can take a few seconds.",
+      "pickOne": "Choose at least one ceremony.",
+      "time": "{start} to {end}",
+      "zone": "Times are in {zone} ({offset}).",
+      "facts": "{nakatha} · {thithi} · {lagna} lagna",
+      "why": "Why this date",
+      "cautions": "Weaker points",
+      "range_text": "Searched {first} to {last}.",
+      "failed": "We could not search. Please try again.",
+      "clock": "A birth time here happened twice because of a clock change. Please check the birth details first.",
+      "provisional": "The rules are provisional until a practising astrologer confirms them.",
+      "ceremony": {
+        "engagement": "Engagement",
+        "poruwa": "Poruwa ceremony",
+        "homecoming": "Homecoming"
+      }
     }
   },
   "share": {

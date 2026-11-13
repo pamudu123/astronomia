@@ -1,0 +1,146 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.panel h2 {
+  font-size: 26px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.option,
+.optionOn {
+  min-height: 40px;
+  padding: 6px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--night-raised);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.optionOn {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+}
+
+.submit {
+  align-self: flex-start;
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.error {
+  color: var(--coral);
+}
+
+.ceremony {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ceremony h3 {
+  font-size: 20px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 14px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--night-raised);
+  font-size: 15px;
+}
+
+.card p {
+  margin: 0;
+}
+
+.date {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.time {
+  color: var(--gold);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.card details summary {
+  color: var(--gold);
+  cursor: pointer;
+}
+
+.reasons {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cautions {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--coral);
+}
+
+@media (max-width: 520px) {
+  .panel {
+    padding: 20px;
+  }
+}

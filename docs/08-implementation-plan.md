@@ -258,6 +258,15 @@ Category C is nakath (auspicious times). Rules and sources are in `docs/11-nakat
 - **Checked:** our dawn matches the official lists 2022 to 2027 within a minute, punya kalaya fits every list exactly, and the Australian list's dawn and punya kalaya match the same moments in Sydney.
 - **Fixtures:** `uv run python scripts/export_nakath_fixtures.py` in `backend/`.
 
+**Done in a third pull request:** C3, the wedding nakath finder. A paid feature, open to everyone for now (file 07, section 4.7).
+
+- **Rules** in `rules/wedding_si_v1.yaml`: the nakathas for each ceremony, thithis and karana to avoid, weekdays, tara bala and chandra bala for both people, Rahu kalaya, daylight only, Venus and Jupiter not combust, and for the poruwa no malefic in the 7th house from the lagna. Weaker points (some sources only) are shown as cautions, not hidden.
+- **Engine** (`backend/app/engine/wedding.py`): days that cannot pass are dropped by cheap checks first, then daylight is scanned in 5 minute steps and each window's edges are found to the minute. The best day in each week is kept, then the best 8. Two years for all three ceremonies take about 3 seconds.
+- **Endpoint:** `POST /v1/wedding-nakath` with both people (full birth details or a birth star, as in porondam), the place, 3, 6, 12 or 24 months, and the ceremonies wanted. It depends on `wedding_access()`.
+- **Page:** "Wedding nakath for this couple" on the porondam result. It searches only when asked. Each date shows its time window, nakatha, thithi and lagna, any weaker points, and every rule it passes in plain words.
+- **Kept apart:** `engine/wedding.py`, `api/wedding.py`, `lib/wedding.ts` and `components/wedding/`. The frontend lock goes in `WeddingGate`.
+- **Checked:** every suggestion is checked again at its start, middle and end against each rule, worked out separately from the sky.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

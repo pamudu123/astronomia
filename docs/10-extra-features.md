@@ -28,7 +28,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 - Nakath engine: thithi, yoga, karana, Rahu kalaya, sunrise. **Built.**
 - Avurudu and daily nakath in your own time zone. **Built.**
-- Wedding nakath finder: engagement, poruwa, homecoming.
+- Wedding nakath finder: engagement, poruwa, homecoming. **Built**, open for now, paid later.
 
 **D. Baby and child**
 
@@ -84,7 +84,7 @@ Planned as three pull requests. Rules and their sources are in file 11.
 |---|---|---|---|
 | C1 | **Nakath engine** | Sunrise and sunset for any place. The weekday from sunrise, thithi, nakatha, yoga and karana with their start and end times, and Rahu kalaya. `GET /v1/panchanga`. **Built.** | Matches porondam.lk for 40 made-up moments and 10 change times, and two Sri Lankan sites for Rahu kalaya. |
 | C2 | **Avurudu and daily nakath** (free) | The new year moment and punya kalaya, the official lists, past years next to our times, in the visitor's own time zone. A daily page for any place. **Built.** | The new year moment matches the official lists 2022 to 2027 within a minute. |
-| C3 | **Wedding nakath finder** (paid, open for now) | Good dates and times for the engagement, the poruwa and the homecoming after a porondam match, with reasons. | Each suggestion passes the rules it lists. |
+| C3 | **Wedding nakath finder** (paid, open for now) | Good dates and times for the engagement, the poruwa and the homecoming after a porondam match, with reasons. **Built.** Paid by decision but open to everyone for now. Its code is kept apart, so the lock goes in `wedding_access()` and `WeddingGate` (see file 07, section 4.7). | Each suggestion passes the rules it lists. |
 
 Decisions made:
 

@@ -19,6 +19,8 @@ import {
   ringOffset,
 } from "@/lib/porondam";
 
+import { WeddingFinder } from "@/components/wedding/WeddingFinder";
+
 import { CoupleTimeline } from "./CoupleTimeline";
 import { FactorVisual } from "./FactorVisual";
 import styles from "./Porondam.module.css";
@@ -37,6 +39,8 @@ type Props = {
   request?: PorondamRequest;
   /** Text for "Years ahead for the couple". That section needs the request too. */
   timeline?: Dictionary["porondam"]["timeline"];
+  /** Text for the wedding nakath finder. Needs the request too. */
+  wedding?: Dictionary["porondam"]["wedding"];
   onAgain?: () => void;
   /** Shown where the actions are when the result is read only. */
   readOnlyAction?: React.ReactNode;
@@ -63,6 +67,7 @@ export function PorondamResult({
   share,
   request,
   timeline,
+  wedding,
   onAgain,
   readOnlyAction,
 }: Props) {
@@ -266,6 +271,8 @@ export function PorondamResult({
           groomName={nameOf(groom, f.groom)}
         />
       )}
+
+      {request && wedding && <WeddingFinder lang={lang} t={wedding} request={request} />}
 
       <section className={styles.footRow}>
         <div className={styles.footText}>

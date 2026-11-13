@@ -59,7 +59,7 @@ The engine lives in `backend/app/engine/panchanga.py`, the rules in `panchanga_v
 
 The official lists are data in `backend/app/data/rules/avurudu_v1.yaml`, with the source of each year. Past years are shown with our calculated dawn and punya kalaya beside the official ones, and the difference in minutes.
 
-## 4. Wedding nakath (first findings, used in the finder)
+## 4. Wedding nakath (used in the finder, rules in `wedding_si_v1.yaml`)
 
 | Rule | Sources | Agreement | Used |
 |---|---|---|---|
@@ -75,11 +75,41 @@ The official lists are data in `backend/app/data/rules/avurudu_v1.yaml`, with th
 | The 7th house from the ceremony lagna free of malefics | S9 | Agreed in general, details differ | Yes |
 | Avoid Rahu kalaya | Sri Lankan practice (S2, S3 present it as the time to avoid for any good work) | Agreed | Yes |
 | Which ceremonies get nakath: engagement, the poruwa, homecoming and more | S10 | One source | Engagement, poruwa, homecoming |
+| Venus 10 degrees (8 when retrograde) and Jupiter 11 degrees from the Sun count as combust | Parashara's orbs, as quoted by several sites | Agreed on the orbs; tools differ at the edges | Yes |
+| The day's star being a person's own birth star (janma tara) | Muhurtha sites treat it as weaker | Mixed | A caution, not a rejection |
+| Yogas Vyatipata and Vaidhriti | Muhurtha sites list them as unfavourable for good work | Several sites | A caution |
+| Engagement: the marriage nakathas, plus Pushya and Shravana; the bright half preferred | One source each (kundligpt.com, grahaguru.in) | Thin | Yes, the bright half as a caution only |
+| Homecoming: Rohini, Mrigashira, Uttara Phalguni, Chitra, Anuradha, Uttara Ashadha, Uttara Bhadrapada, Revati | Griha pravesha lists (several property and astrology sites); none for the Sri Lankan homecoming itself | Mostly agreed, not Sri Lankan | Yes |
+| Months to avoid for weddings in Sri Lanka | No source found | None | Not used |
+| Daylight only | The ceremonies the sources describe are held in the day | Practice | Yes |
 
-## 5. Questions for the astrologer
+## 5. How well each rule is supported
+
+**Well supported** (several sources agree, or checked against observed answers):
+- Sunrise, thithi, nakatha, yoga, karana and the weekday from sunrise (40 of 40 moments on porondam.lk, drikpanchang.com within minutes).
+- Rahu kalaya parts by weekday, and the whole minute rule (two Sri Lankan sites, exact).
+- The Avurudu dawn as the Sun entering Mesha, and punya kalaya as 6 hours 24 minutes either side (every official list 2022 to 2027).
+- The 11 marriage nakathas, the rikta thithis and the new moon, Vishti karana, Venus and Jupiter combust, tara bala and chandra bala.
+
+**Resting on one source:**
+- Times printed at the first whole minute a change holds (porondam.lk).
+- The Magha, Mula and Revati padas to avoid (Daily Mirror). Another site avoids Mula padas 1 to 3.
+- The engagement additions (Pushya, Shravana, the bright half).
+- The weekday rule's Sunday (sources disagree with Monday).
+
+**Not Sri Lankan, used for now:**
+- The homecoming nakathas come from griha pravesha lists.
+- The 7th house rule for the poruwa lagna comes from Indian muhurtha texts.
+
+## 6. Questions for the astrologer
 
 - Sunrise: upper edge with refraction (as Sri Lankan sites print it) or the disc centre?
 - Rahu kalaya in whole minutes, as the sites do, or split exactly?
 - The night Rahu kalaya rule, if it should be shown.
 - The wedding thithis and weekdays where the texts disagree, and the Mula padas.
 - Whether a Sri Lankan almanac (Epa or Thirasara panchanga litha) can be used to check change times.
+- The homecoming nakathas, and whether a Sri Lankan homecoming follows the griha pravesha rules.
+- Whether the poruwa lagna rule (no Sun, Mars, Saturn, Rahu or Ketu in the 7th house) is the one used in Sri Lanka, and whether other lagna rules apply.
+- Whether janma tara should exclude a date rather than only be a caution.
+- Any months or seasons Sri Lankan astrologers avoid for weddings.
+- How astrologers abroad set the local Avurudu times for their city.
