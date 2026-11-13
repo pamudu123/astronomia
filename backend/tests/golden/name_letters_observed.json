@@ -1,0 +1,1201 @@
+{
+ "source": "Sinhala name letter tables observed on 2026-11-13. lankahandahana.com's name finder was asked about 108 made-up births in Colombo (one per star and pada, no real person). laksara.com and Lankadeepa tables were read from their articles.",
+ "urls": {
+  "lankahandahana": "https://lankahandahana.com/sinhala-baby-names",
+  "laksara": "https://www.laksara.com/naming-a-newborn-child/378/",
+  "lankadeepa": "https://www.lankadeepa.lk/sunday/rasawitha/57-526035"
+ },
+ "lankahandahana_births": [
+  {
+   "star": "ashwini",
+   "pada": 1,
+   "local": "2024-01-18T05:50",
+   "site_star": "අස්විද",
+   "site_pada": 1,
+   "letter": "චූ"
+  },
+  {
+   "star": "ashwini",
+   "pada": 2,
+   "local": "2024-01-18T11:50",
+   "site_star": "අස්විද",
+   "site_pada": 2,
+   "letter": "චෙ"
+  },
+  {
+   "star": "ashwini",
+   "pada": 3,
+   "local": "2024-01-18T17:30",
+   "site_star": "අස්විද",
+   "site_pada": 3,
+   "letter": "චො"
+  },
+  {
+   "star": "ashwini",
+   "pada": 4,
+   "local": "2024-01-18T23:30",
+   "site_star": "අස්විද",
+   "site_pada": 4,
+   "letter": "ල"
+  },
+  {
+   "star": "bharani",
+   "pada": 1,
+   "local": "2024-01-19T05:30",
+   "site_star": "බෙරණ",
+   "site_pada": 1,
+   "letter": "ලි"
+  },
+  {
+   "star": "bharani",
+   "pada": 2,
+   "local": "2024-01-19T11:10",
+   "site_star": "බෙරණ",
+   "site_pada": 2,
+   "letter": "ලු"
+  },
+  {
+   "star": "bharani",
+   "pada": 3,
+   "local": "2024-01-19T17:10",
+   "site_star": "බෙරණ",
+   "site_pada": 3,
+   "letter": "ලෙ"
+  },
+  {
+   "star": "bharani",
+   "pada": 4,
+   "local": "2024-01-19T23:10",
+   "site_star": "බෙරණ",
+   "site_pada": 4,
+   "letter": "ලො"
+  },
+  {
+   "star": "krittika",
+   "pada": 1,
+   "local": "2024-01-20T05:10",
+   "site_star": "කැති",
+   "site_pada": 1,
+   "letter": "අ"
+  },
+  {
+   "star": "krittika",
+   "pada": 2,
+   "local": "2024-01-20T11:30",
+   "site_star": "කැති",
+   "site_pada": 2,
+   "letter": "ඉ"
+  },
+  {
+   "star": "krittika",
+   "pada": 3,
+   "local": "2024-01-20T17:30",
+   "site_star": "කැති",
+   "site_pada": 3,
+   "letter": "උ"
+  },
+  {
+   "star": "krittika",
+   "pada": 4,
+   "local": "2024-01-20T23:30",
+   "site_star": "කැති",
+   "site_pada": 4,
+   "letter": "එ"
+  },
+  {
+   "star": "rohini",
+   "pada": 1,
+   "local": "2024-01-21T05:30",
+   "site_star": "රෙහෙන",
+   "site_pada": 1,
+   "letter": "ඔ"
+  },
+  {
+   "star": "rohini",
+   "pada": 2,
+   "local": "2024-01-21T11:50",
+   "site_star": "රෙහෙන",
+   "site_pada": 2,
+   "letter": "ව"
+  },
+  {
+   "star": "rohini",
+   "pada": 3,
+   "local": "2024-01-21T17:50",
+   "site_star": "රෙහෙන",
+   "site_pada": 3,
+   "letter": "වි"
+  },
+  {
+   "star": "rohini",
+   "pada": 4,
+   "local": "2024-01-22T00:10",
+   "site_star": "රෙහෙන",
+   "site_pada": 4,
+   "letter": "වු"
+  },
+  {
+   "star": "mrigashira",
+   "pada": 1,
+   "local": "2024-01-22T06:30",
+   "site_star": "මුවසිරස",
+   "site_pada": 1,
+   "letter": "වෙ"
+  },
+  {
+   "star": "mrigashira",
+   "pada": 2,
+   "local": "2024-01-22T12:30",
+   "site_star": "මුවසිරස",
+   "site_pada": 2,
+   "letter": "වො"
+  },
+  {
+   "star": "mrigashira",
+   "pada": 3,
+   "local": "2024-01-22T18:50",
+   "site_star": "මුවසිරස",
+   "site_pada": 3,
+   "letter": "ක"
+  },
+  {
+   "star": "mrigashira",
+   "pada": 4,
+   "local": "2024-01-23T01:10",
+   "site_star": "මුවසිරස",
+   "site_pada": 4,
+   "letter": "කි"
+  },
+  {
+   "star": "ardra",
+   "pada": 1,
+   "local": "2024-01-23T07:30",
+   "site_star": "අද",
+   "site_pada": 1,
+   "letter": "කු"
+  },
+  {
+   "star": "ardra",
+   "pada": 2,
+   "local": "2024-01-23T13:50",
+   "site_star": "අද",
+   "site_pada": 2,
+   "letter": "ඝ"
+  },
+  {
+   "star": "ardra",
+   "pada": 3,
+   "local": "2024-01-23T20:10",
+   "site_star": "අද",
+   "site_pada": 3,
+   "letter": "ඞ"
+  },
+  {
+   "star": "ardra",
+   "pada": 4,
+   "local": "2024-01-24T02:30",
+   "site_star": "අද",
+   "site_pada": 4,
+   "letter": "ච"
+  },
+  {
+   "star": "punarvasu",
+   "pada": 1,
+   "local": "2024-01-24T09:10",
+   "site_star": "පුනාවස",
+   "site_pada": 1,
+   "letter": "කෙ"
+  },
+  {
+   "star": "punarvasu",
+   "pada": 2,
+   "local": "2024-01-24T15:30",
+   "site_star": "පුනාවස",
+   "site_pada": 2,
+   "letter": "කො"
+  },
+  {
+   "star": "punarvasu",
+   "pada": 3,
+   "local": "2024-01-24T21:50",
+   "site_star": "පුනාවස",
+   "site_pada": 3,
+   "letter": "හ"
+  },
+  {
+   "star": "punarvasu",
+   "pada": 4,
+   "local": "2024-01-25T04:30",
+   "site_star": "පුනාවස",
+   "site_pada": 4,
+   "letter": "හි"
+  },
+  {
+   "star": "pushya",
+   "pada": 1,
+   "local": "2024-01-25T10:50",
+   "site_star": "පුෂ",
+   "site_pada": 1,
+   "letter": "හු"
+  },
+  {
+   "star": "pushya",
+   "pada": 2,
+   "local": "2024-01-25T17:30",
+   "site_star": "පුෂ",
+   "site_pada": 2,
+   "letter": "හෙ"
+  },
+  {
+   "star": "pushya",
+   "pada": 3,
+   "local": "2024-01-25T23:50",
+   "site_star": "පුෂ",
+   "site_pada": 3,
+   "letter": "හො"
+  },
+  {
+   "star": "pushya",
+   "pada": 4,
+   "local": "2024-01-26T06:30",
+   "site_star": "පුෂ",
+   "site_pada": 4,
+   "letter": "ඩ"
+  },
+  {
+   "star": "ashlesha",
+   "pada": 1,
+   "local": "2024-01-26T13:10",
+   "site_star": "අස්ලිස",
+   "site_pada": 1,
+   "letter": "ඩි"
+  },
+  {
+   "star": "ashlesha",
+   "pada": 2,
+   "local": "2024-01-26T19:50",
+   "site_star": "අස්ලිස",
+   "site_pada": 2,
+   "letter": "ඩු"
+  },
+  {
+   "star": "ashlesha",
+   "pada": 3,
+   "local": "2024-01-27T02:30",
+   "site_star": "අස්ලිස",
+   "site_pada": 3,
+   "letter": "ඩෙ"
+  },
+  {
+   "star": "ashlesha",
+   "pada": 4,
+   "local": "2024-01-27T09:10",
+   "site_star": "අස්ලිස",
+   "site_pada": 4,
+   "letter": "ඩො"
+  },
+  {
+   "star": "magha",
+   "pada": 1,
+   "local": "2024-01-27T15:50",
+   "site_star": "මා",
+   "site_pada": 1,
+   "letter": "ම"
+  },
+  {
+   "star": "magha",
+   "pada": 2,
+   "local": "2024-01-27T22:30",
+   "site_star": "මා",
+   "site_pada": 2,
+   "letter": "මි"
+  },
+  {
+   "star": "magha",
+   "pada": 3,
+   "local": "2024-01-28T05:10",
+   "site_star": "මා",
+   "site_pada": 3,
+   "letter": "මු"
+  },
+  {
+   "star": "magha",
+   "pada": 4,
+   "local": "2024-01-01T05:30",
+   "site_star": "මා",
+   "site_pada": 4,
+   "letter": "මෙ"
+  },
+  {
+   "star": "purva_phalguni",
+   "pada": 1,
+   "local": "2024-01-01T11:30",
+   "site_star": "පුවපල්",
+   "site_pada": 1,
+   "letter": "මො"
+  },
+  {
+   "star": "purva_phalguni",
+   "pada": 2,
+   "local": "2024-01-01T18:10",
+   "site_star": "පුවපල්",
+   "site_pada": 2,
+   "letter": "ට"
+  },
+  {
+   "star": "purva_phalguni",
+   "pada": 3,
+   "local": "2024-01-02T00:50",
+   "site_star": "පුවපල්",
+   "site_pada": 3,
+   "letter": "ටි"
+  },
+  {
+   "star": "purva_phalguni",
+   "pada": 4,
+   "local": "2024-01-02T07:30",
+   "site_star": "පුවපල්",
+   "site_pada": 4,
+   "letter": "ටු"
+  },
+  {
+   "star": "uttara_phalguni",
+   "pada": 1,
+   "local": "2024-01-02T14:30",
+   "site_star": "උත්‍රපල්",
+   "site_pada": 1,
+   "letter": "ටෙ"
+  },
+  {
+   "star": "uttara_phalguni",
+   "pada": 2,
+   "local": "2024-01-02T21:10",
+   "site_star": "උත්‍රපල්",
+   "site_pada": 2,
+   "letter": "ටො"
+  },
+  {
+   "star": "uttara_phalguni",
+   "pada": 3,
+   "local": "2024-01-03T03:50",
+   "site_star": "උත්‍රපල්",
+   "site_pada": 3,
+   "letter": "ප"
+  },
+  {
+   "star": "uttara_phalguni",
+   "pada": 4,
+   "local": "2024-01-03T10:50",
+   "site_star": "උත්‍රපල්",
+   "site_pada": 4,
+   "letter": "පි"
+  },
+  {
+   "star": "hasta",
+   "pada": 1,
+   "local": "2024-01-03T17:30",
+   "site_star": "හත",
+   "site_pada": 1,
+   "letter": "පු"
+  },
+  {
+   "star": "hasta",
+   "pada": 2,
+   "local": "2024-01-04T00:10",
+   "site_star": "හත",
+   "site_pada": 2,
+   "letter": "ෂ"
+  },
+  {
+   "star": "hasta",
+   "pada": 3,
+   "local": "2024-01-04T06:50",
+   "site_star": "හත",
+   "site_pada": 3,
+   "letter": "ණ"
+  },
+  {
+   "star": "hasta",
+   "pada": 4,
+   "local": "2024-01-04T13:30",
+   "site_star": "හත",
+   "site_pada": 4,
+   "letter": "ඨ"
+  },
+  {
+   "star": "chitra",
+   "pada": 1,
+   "local": "2024-01-04T20:10",
+   "site_star": "සිත",
+   "site_pada": 1,
+   "letter": "පෙ"
+  },
+  {
+   "star": "chitra",
+   "pada": 2,
+   "local": "2024-01-05T02:50",
+   "site_star": "සිත",
+   "site_pada": 2,
+   "letter": "පො"
+  },
+  {
+   "star": "chitra",
+   "pada": 3,
+   "local": "2024-01-05T09:30",
+   "site_star": "සිත",
+   "site_pada": 3,
+   "letter": "ර"
+  },
+  {
+   "star": "chitra",
+   "pada": 4,
+   "local": "2024-01-05T15:50",
+   "site_star": "සිත",
+   "site_pada": 4,
+   "letter": "රි"
+  },
+  {
+   "star": "swati",
+   "pada": 1,
+   "local": "2024-01-05T22:30",
+   "site_star": "සා",
+   "site_pada": 1,
+   "letter": "රු"
+  },
+  {
+   "star": "swati",
+   "pada": 2,
+   "local": "2024-01-06T04:50",
+   "site_star": "සා",
+   "site_pada": 2,
+   "letter": "රෙ"
+  },
+  {
+   "star": "swati",
+   "pada": 3,
+   "local": "2024-01-06T11:10",
+   "site_star": "සා",
+   "site_pada": 3,
+   "letter": "රො"
+  },
+  {
+   "star": "swati",
+   "pada": 4,
+   "local": "2024-01-06T17:30",
+   "site_star": "සා",
+   "site_pada": 4,
+   "letter": "ත"
+  },
+  {
+   "star": "vishakha",
+   "pada": 1,
+   "local": "2024-01-06T23:50",
+   "site_star": "විසා",
+   "site_pada": 1,
+   "letter": "ති"
+  },
+  {
+   "star": "vishakha",
+   "pada": 2,
+   "local": "2024-01-07T06:10",
+   "site_star": "විසා",
+   "site_pada": 2,
+   "letter": "තු"
+  },
+  {
+   "star": "vishakha",
+   "pada": 3,
+   "local": "2024-01-07T12:30",
+   "site_star": "විසා",
+   "site_pada": 3,
+   "letter": "තෙ"
+  },
+  {
+   "star": "vishakha",
+   "pada": 4,
+   "local": "2024-01-07T18:30",
+   "site_star": "විසා",
+   "site_pada": 4,
+   "letter": "තො"
+  },
+  {
+   "star": "anuradha",
+   "pada": 1,
+   "local": "2024-01-08T00:30",
+   "site_star": "අනුර",
+   "site_pada": 1,
+   "letter": "න"
+  },
+  {
+   "star": "anuradha",
+   "pada": 2,
+   "local": "2024-01-08T06:30",
+   "site_star": "අනුර",
+   "site_pada": 2,
+   "letter": "නි"
+  },
+  {
+   "star": "anuradha",
+   "pada": 3,
+   "local": "2024-01-08T12:30",
+   "site_star": "අනුර",
+   "site_pada": 3,
+   "letter": "නු"
+  },
+  {
+   "star": "anuradha",
+   "pada": 4,
+   "local": "2024-01-08T18:30",
+   "site_star": "අනුර",
+   "site_pada": 4,
+   "letter": "නෙ"
+  },
+  {
+   "star": "jyeshtha",
+   "pada": 1,
+   "local": "2024-01-09T00:30",
+   "site_star": "දෙට",
+   "site_pada": 1,
+   "letter": "නො"
+  },
+  {
+   "star": "jyeshtha",
+   "pada": 2,
+   "local": "2024-01-09T06:10",
+   "site_star": "දෙට",
+   "site_pada": 2,
+   "letter": "ය"
+  },
+  {
+   "star": "jyeshtha",
+   "pada": 3,
+   "local": "2024-01-09T12:10",
+   "site_star": "දෙට",
+   "site_pada": 3,
+   "letter": "යි"
+  },
+  {
+   "star": "jyeshtha",
+   "pada": 4,
+   "local": "2024-01-09T17:50",
+   "site_star": "දෙට",
+   "site_pada": 4,
+   "letter": "යු"
+  },
+  {
+   "star": "mula",
+   "pada": 1,
+   "local": "2024-01-09T23:30",
+   "site_star": "මුල",
+   "site_pada": 1,
+   "letter": "යෙ"
+  },
+  {
+   "star": "mula",
+   "pada": 2,
+   "local": "2024-01-10T05:10",
+   "site_star": "මුල",
+   "site_pada": 2,
+   "letter": "යො"
+  },
+  {
+   "star": "mula",
+   "pada": 3,
+   "local": "2024-01-10T10:50",
+   "site_star": "මුල",
+   "site_pada": 3,
+   "letter": "බ"
+  },
+  {
+   "star": "mula",
+   "pada": 4,
+   "local": "2024-01-10T16:30",
+   "site_star": "මුල",
+   "site_pada": 4,
+   "letter": "බි"
+  },
+  {
+   "star": "purva_ashadha",
+   "pada": 1,
+   "local": "2024-01-10T21:50",
+   "site_star": "පුවසල",
+   "site_pada": 1,
+   "letter": "බු"
+  },
+  {
+   "star": "purva_ashadha",
+   "pada": 2,
+   "local": "2024-01-11T03:30",
+   "site_star": "පුවසල",
+   "site_pada": 2,
+   "letter": "ධ"
+  },
+  {
+   "star": "purva_ashadha",
+   "pada": 3,
+   "local": "2024-01-11T08:50",
+   "site_star": "පුවසල",
+   "site_pada": 3,
+   "letter": "භ"
+  },
+  {
+   "star": "purva_ashadha",
+   "pada": 4,
+   "local": "2024-01-11T14:30",
+   "site_star": "පුවසල",
+   "site_pada": 4,
+   "letter": "ඪ"
+  },
+  {
+   "star": "uttara_ashadha",
+   "pada": 1,
+   "local": "2024-01-11T19:50",
+   "site_star": "උත්‍රසල",
+   "site_pada": 1,
+   "letter": "බෙ"
+  },
+  {
+   "star": "uttara_ashadha",
+   "pada": 2,
+   "local": "2024-01-12T01:10",
+   "site_star": "උත්‍රසල",
+   "site_pada": 2,
+   "letter": "බො"
+  },
+  {
+   "star": "uttara_ashadha",
+   "pada": 3,
+   "local": "2024-01-12T06:50",
+   "site_star": "උත්‍රසල",
+   "site_pada": 3,
+   "letter": "ජ"
+  },
+  {
+   "star": "uttara_ashadha",
+   "pada": 4,
+   "local": "2024-01-12T12:10",
+   "site_star": "උත්‍රසල",
+   "site_pada": 4,
+   "letter": "ජි"
+  },
+  {
+   "star": "shravana",
+   "pada": 1,
+   "local": "2024-01-12T17:30",
+   "site_star": "සුවන",
+   "site_pada": 1,
+   "letter": "ජු"
+  },
+  {
+   "star": "shravana",
+   "pada": 2,
+   "local": "2024-01-12T22:50",
+   "site_star": "සුවන",
+   "site_pada": 2,
+   "letter": "ජෙ"
+  },
+  {
+   "star": "shravana",
+   "pada": 3,
+   "local": "2024-01-13T04:10",
+   "site_star": "සුවන",
+   "site_pada": 3,
+   "letter": "ජො"
+  },
+  {
+   "star": "shravana",
+   "pada": 4,
+   "local": "2024-01-13T09:30",
+   "site_star": "සුවන",
+   "site_pada": 4,
+   "letter": "ඛ"
+  },
+  {
+   "star": "dhanishta",
+   "pada": 1,
+   "local": "2024-01-13T15:10",
+   "site_star": "දෙනට",
+   "site_pada": 1,
+   "letter": "ග"
+  },
+  {
+   "star": "dhanishta",
+   "pada": 2,
+   "local": "2024-01-13T20:30",
+   "site_star": "දෙනට",
+   "site_pada": 2,
+   "letter": "ගි"
+  },
+  {
+   "star": "dhanishta",
+   "pada": 3,
+   "local": "2024-01-14T01:50",
+   "site_star": "දෙනට",
+   "site_pada": 3,
+   "letter": "ගු"
+  },
+  {
+   "star": "dhanishta",
+   "pada": 4,
+   "local": "2024-01-14T07:10",
+   "site_star": "දෙනට",
+   "site_pada": 4,
+   "letter": "ගෙ"
+  },
+  {
+   "star": "shatabhisha",
+   "pada": 1,
+   "local": "2024-01-14T12:30",
+   "site_star": "සියාවස",
+   "site_pada": 1,
+   "letter": "ගො"
+  },
+  {
+   "star": "shatabhisha",
+   "pada": 2,
+   "local": "2024-01-14T18:10",
+   "site_star": "සියාවස",
+   "site_pada": 2,
+   "letter": "ස"
+  },
+  {
+   "star": "shatabhisha",
+   "pada": 3,
+   "local": "2024-01-14T23:30",
+   "site_star": "සියාවස",
+   "site_pada": 3,
+   "letter": "සි"
+  },
+  {
+   "star": "shatabhisha",
+   "pada": 4,
+   "local": "2024-01-15T04:50",
+   "site_star": "සියාවස",
+   "site_pada": 4,
+   "letter": "සු"
+  },
+  {
+   "star": "purva_bhadrapada",
+   "pada": 1,
+   "local": "2024-01-15T10:30",
+   "site_star": "පුවපුටුප",
+   "site_pada": 1,
+   "letter": "සෙ"
+  },
+  {
+   "star": "purva_bhadrapada",
+   "pada": 2,
+   "local": "2024-01-15T15:50",
+   "site_star": "පුවපුටුප",
+   "site_pada": 2,
+   "letter": "සො"
+  },
+  {
+   "star": "purva_bhadrapada",
+   "pada": 3,
+   "local": "2024-01-15T21:30",
+   "site_star": "පුවපුටුප",
+   "site_pada": 3,
+   "letter": "ද"
+  },
+  {
+   "star": "purva_bhadrapada",
+   "pada": 4,
+   "local": "2024-01-16T02:50",
+   "site_star": "පුවපුටුප",
+   "site_pada": 4,
+   "letter": "දි"
+  },
+  {
+   "star": "uttara_bhadrapada",
+   "pada": 1,
+   "local": "2024-01-16T08:30",
+   "site_star": "උත්‍රපුටුප",
+   "site_pada": 1,
+   "letter": "දු"
+  },
+  {
+   "star": "uttara_bhadrapada",
+   "pada": 2,
+   "local": "2024-01-16T14:10",
+   "site_star": "උත්‍රපුටුප",
+   "site_pada": 2,
+   "letter": "ථ"
+  },
+  {
+   "star": "uttara_bhadrapada",
+   "pada": 3,
+   "local": "2024-01-16T19:30",
+   "site_star": "උත්‍රපුටුප",
+   "site_pada": 3,
+   "letter": "ඣ"
+  },
+  {
+   "star": "uttara_bhadrapada",
+   "pada": 4,
+   "local": "2024-01-17T01:10",
+   "site_star": "උත්‍රපුටුප",
+   "site_pada": 4,
+   "letter": "ඤ"
+  },
+  {
+   "star": "revati",
+   "pada": 1,
+   "local": "2024-01-17T06:50",
+   "site_star": "රේවතී",
+   "site_pada": 1,
+   "letter": "දෙ"
+  },
+  {
+   "star": "revati",
+   "pada": 2,
+   "local": "2024-01-17T12:30",
+   "site_star": "රේවතී",
+   "site_pada": 2,
+   "letter": "දො"
+  },
+  {
+   "star": "revati",
+   "pada": 3,
+   "local": "2024-01-17T18:30",
+   "site_star": "රේවතී",
+   "site_pada": 3,
+   "letter": "ච"
+  },
+  {
+   "star": "revati",
+   "pada": 4,
+   "local": "2024-01-18T00:10",
+   "site_star": "රේවතී",
+   "site_pada": 4,
+   "letter": "චි"
+  }
+ ],
+ "laksara": {
+  "ashwini": [
+   "චු",
+   "චෙ",
+   "චො",
+   "ල"
+  ],
+  "bharani": [
+   "ලි",
+   "ලු",
+   "ලෙ",
+   "ලො"
+  ],
+  "krittika": [
+   "අ",
+   "ඉ",
+   "උ",
+   "එ"
+  ],
+  "rohini": [
+   "ඔ",
+   "ව",
+   "වි",
+   "වු"
+  ],
+  "mrigashira": [
+   "වෙ",
+   "වො",
+   "ක",
+   "කි"
+  ],
+  "ardra": [
+   "කු",
+   "ඝ",
+   "ඞ",
+   "ඡ"
+  ],
+  "punarvasu": [
+   "කෙ",
+   "කො",
+   "හ",
+   "හි"
+  ],
+  "pushya": [
+   "හු",
+   "හෙ",
+   "හො",
+   "ඩ"
+  ],
+  "ashlesha": [
+   "ඩි",
+   "ඩු",
+   "ඩෙ",
+   "ඩො"
+  ],
+  "magha": [
+   "ම",
+   "මි",
+   "මු",
+   "මෙ"
+  ],
+  "purva_phalguni": [
+   "මො",
+   "ට",
+   "ටි",
+   "ටු"
+  ],
+  "uttara_phalguni": [
+   "ටෙ",
+   "ටො",
+   "ප",
+   "පි"
+  ],
+  "hasta": [
+   "පු",
+   "ෂ",
+   "ණ",
+   "ඨ"
+  ],
+  "chitra": [
+   "පෙ",
+   "පො",
+   "ර",
+   "රි"
+  ],
+  "swati": [
+   "රු",
+   "රෙ",
+   "රො",
+   "ත"
+  ],
+  "vishakha": [
+   "ති",
+   "තු",
+   "තෙ",
+   "තො"
+  ],
+  "anuradha": [
+   "න",
+   "නි",
+   "නු",
+   "නෙ"
+  ],
+  "jyeshtha": [
+   "නො",
+   "ය",
+   "යි",
+   "යු"
+  ],
+  "mula": [
+   "යෙ",
+   "යො",
+   "බ",
+   "බි"
+  ],
+  "purva_ashadha": [
+   "බු",
+   "ධ",
+   "එ",
+   "ඪ"
+  ],
+  "uttara_ashadha": [
+   "බෙ",
+   "බො",
+   "ජ",
+   "ජි"
+  ],
+  "shravana": [
+   "ජු",
+   "ජෙ",
+   "ජො",
+   "ෂ"
+  ],
+  "dhanishta": [
+   "ග",
+   "ගි",
+   "ගු",
+   "ගෙ"
+  ],
+  "shatabhisha": [
+   "ගො",
+   "ස",
+   "සි",
+   "සු"
+  ],
+  "purva_bhadrapada": [
+   "සෙ",
+   "සො",
+   "ද",
+   "දි"
+  ],
+  "uttara_bhadrapada": [
+   "දු",
+   "ථ",
+   "ඣ",
+   "ඤ"
+  ],
+  "revati": [
+   "දෙ",
+   "දො",
+   "ච",
+   "චි"
+  ]
+ },
+ "lankadeepa": {
+  "ashwini": [
+   "චූ",
+   "චෙ",
+   "චො",
+   "ල"
+  ],
+  "bharani": [
+   "ලි",
+   "ලු",
+   "ලෙ",
+   "ලො"
+  ],
+  "krittika": [
+   "අ",
+   "ඉ",
+   "උ",
+   "එ"
+  ],
+  "rohini": [
+   "ඔ",
+   "ච",
+   "චි",
+   "චු"
+  ],
+  "mrigashira": [
+   "චෙ",
+   "චො",
+   "ක",
+   "කි"
+  ],
+  "ardra": [
+   "කු",
+   "ස",
+   "ධ",
+   "ජ"
+  ],
+  "punarvasu": [
+   "කෙ",
+   "කො",
+   "හ",
+   "හි"
+  ],
+  "pushya": [
+   "හූ",
+   "හෙ",
+   "හො",
+   "ඩ"
+  ],
+  "ashlesha": [
+   "ඩි",
+   "ඩු",
+   "ඩෙ",
+   "ඩො"
+  ],
+  "magha": [
+   "ම",
+   "මී",
+   "මූ",
+   "මෙ"
+  ],
+  "purva_phalguni": [
+   "මො",
+   "ම",
+   "ටි",
+   "ටු"
+  ],
+  "uttara_phalguni": [
+   "ටෙ",
+   "ටො",
+   "ප",
+   "කි"
+  ],
+  "hasta": [
+   "පු",
+   "ස",
+   "ණ",
+   "ධි"
+  ],
+  "chitra": [
+   "පෙ",
+   "පො",
+   "ර",
+   "රි"
+  ],
+  "swati": [
+   "රු",
+   "රෙ",
+   "රො",
+   "ත"
+  ],
+  "vishakha": [
+   "ති",
+   "තු",
+   "තෙ",
+   "තො"
+  ],
+  "anuradha": [
+   "න",
+   "නි",
+   "නු",
+   "නෙ"
+  ],
+  "jyeshtha": [
+   "නො",
+   "ය",
+   "යි",
+   "යු"
+  ],
+  "mula": [
+   "යෙ",
+   "යො",
+   "ඔ",
+   "ඕ"
+  ],
+  "purva_ashadha": [
+   "බු",
+   "ධ",
+   "එ",
+   "ඵ"
+  ],
+  "uttara_ashadha": [
+   "බෙ",
+   "බො",
+   "ජ",
+   "පි"
+  ],
+  "shravana": [
+   "ජු",
+   "ජෙ",
+   "ජො",
+   "ප"
+  ],
+  "dhanishta": [
+   "ගැ",
+   "ගි",
+   "ගු",
+   "ගෙ"
+  ],
+  "shatabhisha": [
+   "ගො",
+   "ස",
+   "සි",
+   "සු"
+  ],
+  "purva_bhadrapada": [
+   "සෙ",
+   "සො",
+   "ද",
+   "දි"
+  ],
+  "uttara_bhadrapada": [
+   "දු",
+   "ථි",
+   "ඤ"
+  ],
+  "revati": [
+   "දෙ",
+   "දො",
+   "ච",
+   "චි"
+  ]
+ }
+}
