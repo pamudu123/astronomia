@@ -113,3 +113,63 @@ The official lists are data in `backend/app/data/rules/avurudu_v1.yaml`, with th
 - Whether janma tara should exclude a date rather than only be a caution.
 - Any months or seasons Sri Lankan astrologers avoid for weddings.
 - How astrologers abroad set the local Avurudu times for their city.
+
+## 7. First letters ceremony (akuru kiyaweema)
+
+Used in the first letters finder (set D, file 10). Rules in `first_letters_si_v1.yaml`. Free for now. Research done on 2026-11-13.
+
+### Sources
+
+| # | Source | What it is | Used for |
+|---|---|---|---|
+| A1 | porondam.lk, "අකුරු කියවීම" | Sri Lankan astrology site, a full guide to the ceremony | Nakathas, weekdays, tara from the birth star, dual lagna, empty 8th house, local sunrise, age |
+| A2 | Divaina, "සතියේ සුබ නැකැත්", published 2026-07-11 | Sri Lankan newspaper's weekly nakath column | Two first letters times (15 and 16 July 2026) and the birth stars each suits |
+| A3 | Divaina, "සතියේ සුබ නැකැත්", published 2026-03-22 | The same column | A Monday time (23 March 2026) and the stars it suits |
+| A4 | Lankadeepa, Rasawitha column (2018) | Sri Lankan newspaper column | A Monday time (1 October 2018), the stars it does not suit, and the age |
+| A5 | kaladasava.com, "සුබ නැකතට වැඩ අරඹමු නිසි වයසේ" | Sri Lankan article on the right age for each ceremony | Age, quoting Muhurta Chintamani and a Sinhala verse |
+| A6 | drikpanchang.com, Vidyarambha muhurat | Indian panchanga site | Cross-check: nakshatras, thithis, weekdays, fixed lagnas, 8th house |
+| A7 | dekhopanchang.com, module 17-4 | Indian muhurta course | Cross-check: nakshatras, weekdays, thithis, yogas, karana, Rahu kalaya |
+| A8 | astromedha.in, Vidyarambh muhurat | Indian muhurta site | Cross-check: nakshatras, weekdays, thithis |
+
+Not reachable: silumina.lk and lakpura.com refuse automated requests, and womanly.lk did not answer, even after their hosts were allowed. panchangbodh.com was read but adds nothing beyond A6 to A8.
+
+### Rules
+
+| Rule | Sources | Agreement | Used |
+|---|---|---|---|
+| Nakatha | A1: Ashwini, Rohini, Mrigashira, Punarvasu, Pushya, Hasta, Chitra, Swati, Anuradha, Shravana, Shatabhisha, Revati. A2 used Pushya and Ashlesha, A4 Mrigashira. A6 to A8 agree on most of A1's list, add Dhanishta, and A6 allows many more | A1 is the only Sri Lankan list. A7 avoids Ashlesha, which A2 used | A1's twelve. Other options: Dhanishta (A6 to A8), Ashlesha (A2) |
+| Tara from the child's birth star | A1 (with two worked examples), A2, A3, A4 | The columns' lists of stars match tara bala exactly: they leave out 1 Janma, 3 Vipat, 5 Pratyari and 7 Vadha | Taras 1, 3, 5 and 7 are avoided |
+| Weekday | A1: Wednesday, Thursday, Friday. A7, A8: Wednesday and Thursday best, Monday (and A8 Friday) close behind. A6: any day but Monday, Tuesday, Saturday. A2 to A4 used a Wednesday, a Thursday and two Mondays with special yogas | All avoid Tuesday and Saturday | Wednesday, Thursday and Friday. Monday and Sunday allowed with a caution |
+| Lagna | A1: a dual (ubhaya) lagna. A2: Mithuna is "the lagna for letters". A4: Kanya. A6: avoid the fixed lagnas. A3 used Vrishabha with a special yoga | Three Sri Lankan sources point to the dual lagnas | Mithuna, Kanya, Dhanu or Meena |
+| 8th house from the lagna empty | A1, A6 | Agree | No planet, the Moon included |
+| Thithi | A6: 2, 3, 5, 6, 10, 11, 12 of either half. A7: Nanda and Bhadra (1, 6, 11, 2, 7, 12); avoid the rikta thithis. A8: avoid rikta and the new moon. The bright half preferred by all three | Agree on the rikta thithis and the new moon | Avoid 4, 9, 14 of each half and the new moon. 8, 13, 15, 23 and 28 (in neither good list) and the dark half are cautions |
+| Karana and yoga | A7: avoid Vishti, Vyatipata and Vaidhriti. A2 and A4 speak of panchanga purity | Vishti is avoided for all good work (file 11, section 4) | Vishti avoided. Vyatipata and Vaidhriti are cautions |
+| Rahu kalaya | A7, A8, Sri Lankan practice | Agree | Avoided |
+| Time of day | A2, A3, A4 all give early morning times. A8 also suggests midday | | Daylight only. Morning windows rank first |
+| Local sunrise | A1: the time changes from place to place | | The ceremony place's own sunrise and lagna, in its time zone |
+| Age | A1: before the 5th birthday. A4: between 2 and 3. A5: the classical texts say the 5th year. A7: 3 to 5 | Disagree | Shown as a note when the range falls outside 2 to 5. Never used to hide a date |
+| Hora (planetary hour) | A1, A4 and A7 favour a good hora (A7: Mercury or Jupiter; A4 used the Moon's) | Sources disagree on which hora, and on how the hora is counted | Not used. A question for the astrologer |
+| Direction to face | A2: north, then east. A3: east. A4: south | No rule found | Not shown |
+
+### Checked against the columns
+
+Saved in `backend/tests/golden/first_letters_observed.json` and tested:
+
+- **15 July 2026, 06:02, Colombo (A2):** our engine gives Pushya and Mithuna lagna, as the column says. Its 15 stars are exactly those with a good tara, and the moment passes every rule for each of them and fails for the rest. The finder offers that day, at a longer Kanya window later in the morning, because the Mithuna lagna lasts only a few minutes after sunrise.
+- **16 July 2026, 06:22 (A2):** Ashlesha, and the column's stars match its tara exactly. Ashlesha is not in A1's list, so we do not offer it. The column says Mithuna lagna; with the Lahiri ayanamsa the lagna is Kataka by then.
+- **23 March 2026, 07:02 (A3):** the Moon is exalted in Vrishabha, as the column says, in Krittika. The column's list of stars fits Mrigashira's tara, not Krittika's, so it is not used as a check.
+- **1 October 2018, 06:22 (A4):** our engine gives Mrigashira, the Moon in Vrishabha and Kanya lagna, as the column says, and the stars it does not suit are exactly the avoided taras. Our rules reject the moment because the karana is Vishti and the yoga Vyatipata. The column itself says the panchanga is not pure that day and relies on the planets' strength.
+
+### Well supported, and resting on one source
+
+- **Well supported:** tara from the birth star (four Sri Lankan sources and the columns' own lists), avoiding Tuesday and Saturday, the rikta thithis and the new moon, Vishti karana, Rahu kalaya, a dual lagna (three Sri Lankan sources), early morning times.
+- **One Sri Lankan source:** the twelve nakathas (A1), Friday (A1, with A6 and A8), the empty 8th house (A1, with A6).
+
+### Questions for the astrologer
+
+- Is A1's list of twelve nakathas the one to use? Should Ashlesha (used by A2) or Dhanishta be added?
+- Should Monday count fully, as A2 to A4 used it?
+- Should a dual lagna be required, or is avoiding the fixed lagnas enough?
+- Which hora, and how is it counted in Sri Lanka?
+- Which direction should the child face, and how is it chosen?
+- The right age, and whether the ceremony is avoided in some months.

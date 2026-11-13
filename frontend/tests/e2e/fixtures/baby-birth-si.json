@@ -1,0 +1,117 @@
+{
+  "status": "ok",
+  "time": {
+    "status": "ok",
+    "timezone": "Asia/Colombo",
+    "local": "1995-04-19T14:35:00",
+    "utc": "1995-04-19T09:05:00Z",
+    "offset_seconds": 19800,
+    "offset_label": "UTC+05:30",
+    "abbreviation": "+0530",
+    "clock_change": null,
+    "options": []
+  },
+  "rule_set": "name_letters_si_v1",
+  "provisional": true,
+  "chart": {
+    "star": "jyeshtha",
+    "star_name": "දෙට",
+    "star_number": 18,
+    "pada": 4,
+    "rashi": "vrischika",
+    "rashi_name": "වෘශ්චික",
+    "lagna": "simha",
+    "lagna_name": "සිංහ",
+    "weekday": "wednesday",
+    "weekday_name": "බදාදා",
+    "day_note": "හිරු උදාවෙන් පසු උපන් බැවින් දිනය බදාදා වේ.",
+    "timezone": "Asia/Colombo",
+    "offset": "UTC+05:30",
+    "time_check": {
+      "stable": true,
+      "lagna_changes_within": null,
+      "nakshatra_changes_within": null,
+      "pada_changes_within": null,
+      "reason": "උපන් වේලාව විනාඩි 15 කින් වෙනස් වුවත් ලග්නය සහ නැකත එලෙසම පවතී."
+    }
+  },
+  "letter": {
+    "pada": 4,
+    "letter": "යු",
+    "latin": "Yu",
+    "others": [],
+    "rashi": "vrischika",
+    "rashi_name": "වෘශ්චික",
+    "from_degree": 26.666667,
+    "to_degree": 30.0
+  },
+  "star_letters": {
+    "star": "jyeshtha",
+    "star_name": "දෙට",
+    "star_number": 18,
+    "padas": [
+      {
+        "pada": 1,
+        "letter": "නො",
+        "latin": "No",
+        "others": [],
+        "rashi": "vrischika",
+        "rashi_name": "වෘශ්චික",
+        "from_degree": 16.666667,
+        "to_degree": 20.0
+      },
+      {
+        "pada": 2,
+        "letter": "ය",
+        "latin": "Ya",
+        "others": [],
+        "rashi": "vrischika",
+        "rashi_name": "වෘශ්චික",
+        "from_degree": 20.0,
+        "to_degree": 23.333333
+      },
+      {
+        "pada": 3,
+        "letter": "යි",
+        "latin": "Yi",
+        "others": [],
+        "rashi": "vrischika",
+        "rashi_name": "වෘශ්චික",
+        "from_degree": 23.333333,
+        "to_degree": 26.666667
+      },
+      {
+        "pada": 4,
+        "letter": "යු",
+        "latin": "Yu",
+        "others": [],
+        "rashi": "vrischika",
+        "rashi_name": "වෘශ්චික",
+        "from_degree": 26.666667,
+        "to_degree": 30.0
+      }
+    ]
+  },
+  "nearby": [],
+  "lagna_letters": {
+    "key": "simha",
+    "name": "සිංහ",
+    "letters": [
+      "ඓ",
+      "ඔ",
+      "ඖ",
+      "ළ"
+    ]
+  },
+  "weekday_letters": {
+    "key": "wednesday",
+    "name": "බදාදා",
+    "letters": [
+      "ට",
+      "ඨ",
+      "ඩ",
+      "ඪ",
+      "ණ"
+    ]
+  }
+}

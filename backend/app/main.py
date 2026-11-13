@@ -5,8 +5,10 @@ from fastapi import FastAPI
 from app import __version__
 from app.api import (
     avurudu,
+    baby,
     changes,
     charts,
+    first_letters,
     forecast,
     kendara,
     meta,
@@ -47,6 +49,8 @@ def create_app() -> FastAPI:
     app.include_router(panchanga.router)
     app.include_router(avurudu.router)
     app.include_router(wedding.router)
+    app.include_router(baby.router)
+    app.include_router(first_letters.router)
     app.include_router(kendara.router)
     app.include_router(reports.router)
     app.include_router(shares.router)

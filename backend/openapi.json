@@ -1111,6 +1111,291 @@
         }
       }
     },
+    "/v1/baby/letters": {
+      "get": {
+        "tags": [
+          "baby"
+        ],
+        "summary": "All Letters",
+        "description": "The starting letters for every star and pada.",
+        "operationId": "all_letters_v1_baby_letters_get",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllLettersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "baby"
+        ],
+        "summary": "Letters For Birth",
+        "description": "The birth star, pada, Moon sign, lagna and weekday, and the letters they give.",
+        "operationId": "letters_for_birth_v1_baby_letters_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BabyLettersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/baby/letters/{star}": {
+      "get": {
+        "tags": [
+          "baby"
+        ],
+        "summary": "Letters For Star",
+        "description": "The four padas of one birth star, each with its starting letter and Moon sign.",
+        "operationId": "letters_for_star_v1_baby_letters__star__get",
+        "parameters": [
+          {
+            "name": "star",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Star"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StarLettersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/baby/names": {
+      "get": {
+        "tags": [
+          "baby"
+        ],
+        "summary": "Names For Letters",
+        "description": "Names that start with the given letters, filtered by gender and length.",
+        "operationId": "names_for_letters_v1_baby_names_get",
+        "parameters": [
+          {
+            "name": "letters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "maxItems": 16,
+              "title": "Letters"
+            }
+          },
+          {
+            "name": "gender",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "boy",
+                "girl",
+                "any"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Gender"
+            }
+          },
+          {
+            "name": "length",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "short",
+                    "medium",
+                    "long"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Length"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/first-letters": {
+      "post": {
+        "tags": [
+          "first letters"
+        ],
+        "summary": "First Letters",
+        "description": "Good dates and times for a child's first letters, from the child's birth star.",
+        "operationId": "first_letters_v1_first_letters_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FirstLettersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FirstLettersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/kendara/search": {
       "post": {
         "tags": [
@@ -1369,6 +1654,32 @@
   },
   "components": {
     "schemas": {
+      "AllLettersResponse": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "stars": {
+            "items": {
+              "$ref": "#/components/schemas/StarLettersOut"
+            },
+            "type": "array",
+            "title": "Stars"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "stars"
+        ],
+        "title": "AllLettersResponse"
+      },
       "AvuruduItemOut": {
         "properties": {
           "key": {
@@ -1555,6 +1866,173 @@
           "notes"
         ],
         "title": "AvuruduResponse"
+      },
+      "BabyChartOut": {
+        "properties": {
+          "star": {
+            "type": "string",
+            "title": "Star"
+          },
+          "star_name": {
+            "type": "string",
+            "title": "Star Name"
+          },
+          "star_number": {
+            "type": "integer",
+            "title": "Star Number"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "rashi_name": {
+            "type": "string",
+            "title": "Rashi Name"
+          },
+          "lagna": {
+            "type": "string",
+            "title": "Lagna"
+          },
+          "lagna_name": {
+            "type": "string",
+            "title": "Lagna Name"
+          },
+          "weekday": {
+            "type": "string",
+            "title": "Weekday"
+          },
+          "weekday_name": {
+            "type": "string",
+            "title": "Weekday Name"
+          },
+          "day_note": {
+            "type": "string",
+            "title": "Day Note"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "offset": {
+            "type": "string",
+            "title": "Offset"
+          },
+          "time_check": {
+            "$ref": "#/components/schemas/TimeCheckOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "star",
+          "star_name",
+          "star_number",
+          "pada",
+          "rashi",
+          "rashi_name",
+          "lagna",
+          "lagna_name",
+          "weekday",
+          "weekday_name",
+          "day_note",
+          "timezone",
+          "offset",
+          "time_check"
+        ],
+        "title": "BabyChartOut"
+      },
+      "BabyLettersResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "chart": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BabyChartOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "letter": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PadaLetterOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "star_letters": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StarLettersOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nearby": {
+            "items": {
+              "$ref": "#/components/schemas/NearbyLetterOut"
+            },
+            "type": "array",
+            "title": "Nearby"
+          },
+          "lagna_letters": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SignLettersOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "weekday_letters": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SignLettersOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "rule_set",
+          "provisional",
+          "chart",
+          "letter",
+          "star_letters",
+          "nearby",
+          "lagna_letters",
+          "weekday_letters"
+        ],
+        "title": "BabyLettersResponse"
       },
       "Body": {
         "type": "string",
@@ -1944,6 +2422,29 @@
         ],
         "title": "CheckOut"
       },
+      "ChildOut": {
+        "properties": {
+          "star": {
+            "type": "string",
+            "title": "Star"
+          },
+          "star_name": {
+            "type": "string",
+            "title": "Star Name"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "star",
+          "star_name",
+          "mode"
+        ],
+        "title": "ChildOut"
+      },
       "CountedOut": {
         "properties": {
           "sign": {
@@ -2150,6 +2651,332 @@
           "reason"
         ],
         "title": "FactorOut"
+      },
+      "FirstLettersRequest": {
+        "properties": {
+          "child": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Child"
+          },
+          "birth_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Date"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "months": {
+            "type": "integer",
+            "enum": [
+              1,
+              3,
+              6
+            ],
+            "title": "Months",
+            "default": 3
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          }
+        },
+        "type": "object",
+        "required": [
+          "child"
+        ],
+        "title": "FirstLettersRequest"
+      },
+      "FirstLettersResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeResolveResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rule_set": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provisional"
+          },
+          "first": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First"
+          },
+          "last": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WeddingPlaceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "child": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChildOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "suggestions": {
+            "items": {
+              "$ref": "#/components/schemas/FirstLettersSuggestionOut"
+            },
+            "type": "array",
+            "title": "Suggestions",
+            "default": []
+          },
+          "none_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "None Text"
+          },
+          "age_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age Note"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "FirstLettersResponse"
+      },
+      "FirstLettersSuggestionOut": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "date_text": {
+            "type": "string",
+            "title": "Date Text"
+          },
+          "weekday": {
+            "type": "string",
+            "title": "Weekday"
+          },
+          "start": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "end": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "nakatha": {
+            "type": "string",
+            "title": "Nakatha"
+          },
+          "thithi": {
+            "type": "string",
+            "title": "Thithi"
+          },
+          "lagna": {
+            "type": "string",
+            "title": "Lagna"
+          },
+          "tara": {
+            "type": "string",
+            "title": "Tara"
+          },
+          "passes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Passes"
+          },
+          "cautions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cautions"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "date_text",
+          "weekday",
+          "start",
+          "end",
+          "nakatha",
+          "thithi",
+          "lagna",
+          "tara",
+          "passes",
+          "cautions",
+          "age",
+          "score"
+        ],
+        "title": "FirstLettersSuggestionOut"
       },
       "ForecastOut": {
         "properties": {
@@ -3015,6 +3842,24 @@
         ],
         "title": "KujaPointOut"
       },
+      "LetterCountOut": {
+        "properties": {
+          "letter": {
+            "type": "string",
+            "title": "Letter"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "letter",
+          "count"
+        ],
+        "title": "LetterCountOut"
+      },
       "LocalRangeOut": {
         "properties": {
           "start": {
@@ -3250,6 +4095,199 @@
         ],
         "title": "MoveOut"
       },
+      "NameOut": {
+        "properties": {
+          "en": {
+            "type": "string",
+            "title": "En"
+          },
+          "si": {
+            "type": "string",
+            "title": "Si"
+          },
+          "gender": {
+            "type": "string",
+            "title": "Gender"
+          },
+          "meaning": {
+            "type": "string",
+            "title": "Meaning"
+          },
+          "meaning_en": {
+            "type": "string",
+            "title": "Meaning En"
+          },
+          "meaning_si": {
+            "type": "string",
+            "title": "Meaning Si"
+          },
+          "meaning_from": {
+            "type": "string",
+            "title": "Meaning From"
+          },
+          "letter": {
+            "type": "string",
+            "title": "Letter"
+          },
+          "syllables": {
+            "type": "integer",
+            "title": "Syllables"
+          },
+          "length": {
+            "type": "string",
+            "title": "Length"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "en",
+          "si",
+          "gender",
+          "meaning",
+          "meaning_en",
+          "meaning_si",
+          "meaning_from",
+          "letter",
+          "syllables",
+          "length",
+          "source",
+          "url"
+        ],
+        "title": "NameOut"
+      },
+      "NameSourceOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "licence": {
+            "type": "string",
+            "title": "Licence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "url",
+          "licence"
+        ],
+        "title": "NameSourceOut"
+      },
+      "NamesResponse": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "letters": {
+            "items": {
+              "$ref": "#/components/schemas/LetterCountOut"
+            },
+            "type": "array",
+            "title": "Letters"
+          },
+          "names": {
+            "items": {
+              "$ref": "#/components/schemas/NameOut"
+            },
+            "type": "array",
+            "title": "Names"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/NameSourceOut"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "provisional",
+          "letters",
+          "names",
+          "sources"
+        ],
+        "title": "NamesResponse"
+      },
+      "NearbyLetterOut": {
+        "properties": {
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "direction": {
+            "type": "string",
+            "title": "Direction"
+          },
+          "star": {
+            "type": "string",
+            "title": "Star"
+          },
+          "star_name": {
+            "type": "string",
+            "title": "Star Name"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "letter": {
+            "type": "string",
+            "title": "Letter"
+          },
+          "latin": {
+            "type": "string",
+            "title": "Latin"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "minutes",
+          "direction",
+          "star",
+          "star_name",
+          "pada",
+          "letter",
+          "latin",
+          "text"
+        ],
+        "title": "NearbyLetterOut"
+      },
       "OffsetOption": {
         "properties": {
           "fold": {
@@ -3314,6 +4352,57 @@
           "text"
         ],
         "title": "OtherOut"
+      },
+      "PadaLetterOut": {
+        "properties": {
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "letter": {
+            "type": "string",
+            "title": "Letter"
+          },
+          "latin": {
+            "type": "string",
+            "title": "Latin"
+          },
+          "others": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Others"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "rashi_name": {
+            "type": "string",
+            "title": "Rashi Name"
+          },
+          "from_degree": {
+            "type": "number",
+            "title": "From Degree"
+          },
+          "to_degree": {
+            "type": "number",
+            "title": "To Degree"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pada",
+          "letter",
+          "latin",
+          "others",
+          "rashi",
+          "rashi_name",
+          "from_degree",
+          "to_degree"
+        ],
+        "title": "PadaLetterOut"
       },
       "PanchangaPartOut": {
         "properties": {
@@ -4481,6 +5570,32 @@
         ],
         "title": "SharedHadahan"
       },
+      "SignLettersOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "letters": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Letters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "letters"
+        ],
+        "title": "SignLettersOut"
+      },
       "SpanOut": {
         "properties": {
           "start": {
@@ -4515,6 +5630,78 @@
           "text"
         ],
         "title": "SpanOut"
+      },
+      "StarLettersOut": {
+        "properties": {
+          "star": {
+            "type": "string",
+            "title": "Star"
+          },
+          "star_name": {
+            "type": "string",
+            "title": "Star Name"
+          },
+          "star_number": {
+            "type": "integer",
+            "title": "Star Number"
+          },
+          "padas": {
+            "items": {
+              "$ref": "#/components/schemas/PadaLetterOut"
+            },
+            "type": "array",
+            "title": "Padas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "star",
+          "star_name",
+          "star_number",
+          "padas"
+        ],
+        "title": "StarLettersOut"
+      },
+      "StarLettersResponse": {
+        "properties": {
+          "star": {
+            "type": "string",
+            "title": "Star"
+          },
+          "star_name": {
+            "type": "string",
+            "title": "Star Name"
+          },
+          "star_number": {
+            "type": "integer",
+            "title": "Star Number"
+          },
+          "padas": {
+            "items": {
+              "$ref": "#/components/schemas/PadaLetterOut"
+            },
+            "type": "array",
+            "title": "Padas"
+          },
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          }
+        },
+        "type": "object",
+        "required": [
+          "star",
+          "star_name",
+          "star_number",
+          "padas",
+          "rule_set",
+          "provisional"
+        ],
+        "title": "StarLettersResponse"
       },
       "StarMatchOut": {
         "properties": {

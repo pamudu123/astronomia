@@ -33,7 +33,17 @@ def test_every_name_exists(lang: Lang) -> None:
 @pytest.mark.parametrize("lang", ["si", "en"])
 @pytest.mark.parametrize(
     "section",
-    ["reason", "porondam_reason", "report", "forecast", "couple", "changes", "yearly", "panchanga"],
+    [
+        "reason",
+        "porondam_reason",
+        "report",
+        "forecast",
+        "couple",
+        "changes",
+        "yearly",
+        "panchanga",
+        "baby",
+    ],
 )
 def test_templates_use_the_same_placeholders(lang: Lang, section: str) -> None:
     en, other = labels("en")[section], labels(lang)[section]
@@ -86,6 +96,7 @@ def test_sinhala_text_has_no_stray_latin_words() -> None:
         **table["thithi"],
         **table["yoga"],
         **table["karana"],
+        **table["baby"],
     }.items():
         cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
         assert not re.search(r"[A-Za-z]", cleaned), code
@@ -164,3 +175,32 @@ def test_every_wedding_caution_has_a_text() -> None:
     codes = {"weekday_weak", "thithi_weak", "yoga_weak", "dark_half", "tara_janma"}
     assert codes <= set(labels("en")["wedding"]) and codes <= set(labels("si")["wedding"])
     assert set(labels("en")["wedding"]["tara"]) == set(TARA_NAMES)
+
+
+def _first_letters_texts(lang: Lang) -> dict[str, str]:
+    section = labels(lang)["first_letters"]
+    texts = {k: v for k, v in section.items() if isinstance(v, str)}
+    for unit in ("years", "months"):
+        texts.update({f"{unit}.{k}": v for k, v in section[unit].items()})
+    return texts
+
+
+def test_first_letters_texts_use_the_same_placeholders() -> None:
+    en, si = _first_letters_texts("en"), _first_letters_texts("si")
+    assert set(en) == set(si)
+    for code, text in en.items():
+        fields = {f for _, f, _, _ in string.Formatter().parse(text) if f}
+        assert fields == {f for _, f, _, _ in string.Formatter().parse(si[code]) if f}, code
+
+
+def test_first_letters_sinhala_has_no_latin_letters() -> None:
+    for code, text in _first_letters_texts("si").items():
+        cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
+        assert not re.search(r"[A-Za-z]", cleaned), code
+
+
+def test_every_first_letters_caution_has_a_text() -> None:
+    codes = {"weekday_weak", "thithi_weak", "yoga_weak", "dark_half"}
+    assert codes <= set(labels("en")["first_letters"]) and codes <= set(
+        labels("si")["first_letters"]
+    )

@@ -13,7 +13,9 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [07-free-and-paid-features.md](07-free-and-paid-features.md) | What every user gets and what paid users get on top, the five added features in detail, what paid features need, later services, and a market check |
 | [08-implementation-plan.md](08-implementation-plan.md) | How the first release gets built: repository layout, how the parts fit, 21 build steps with checks, working rules, and what is needed from the owner |
 | [09-launch.md](09-launch.md) | The launch runbook: hosting, the private staging site, and what is left before going public |
-| [10-extra-features.md](10-extra-features.md) | Features after the first release: what other sites offer, the categories and sets, and category A (porondam depth) in detail |
+| [10-extra-features.md](10-extra-features.md) | Features after the first release: what other sites offer, the categories and sets, and each set in detail |
+| [11-nakath-rules.md](11-nakath-rules.md) | The nakath rules (set C), their sources and where the sources disagree |
+| [12-baby-rules.md](12-baby-rules.md) | The baby name letter table and child rules (set D), their sources and where the sources disagree |
 | [13-old-horoscopes.md](13-old-horoscopes.md) | Set E: finding the birth from an old paper kendara. How the search works, the edge margins and why, privacy and limits |
 
 ## Read this first

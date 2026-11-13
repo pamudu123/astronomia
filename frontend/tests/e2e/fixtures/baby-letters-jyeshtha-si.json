@@ -1,0 +1,49 @@
+{
+  "star": "jyeshtha",
+  "star_name": "දෙට",
+  "star_number": 18,
+  "padas": [
+    {
+      "pada": 1,
+      "letter": "නො",
+      "latin": "No",
+      "others": [],
+      "rashi": "vrischika",
+      "rashi_name": "වෘශ්චික",
+      "from_degree": 16.666667,
+      "to_degree": 20.0
+    },
+    {
+      "pada": 2,
+      "letter": "ය",
+      "latin": "Ya",
+      "others": [],
+      "rashi": "vrischika",
+      "rashi_name": "වෘශ්චික",
+      "from_degree": 20.0,
+      "to_degree": 23.333333
+    },
+    {
+      "pada": 3,
+      "letter": "යි",
+      "latin": "Yi",
+      "others": [],
+      "rashi": "vrischika",
+      "rashi_name": "වෘශ්චික",
+      "from_degree": 23.333333,
+      "to_degree": 26.666667
+    },
+    {
+      "pada": 4,
+      "letter": "යු",
+      "latin": "Yu",
+      "others": [],
+      "rashi": "vrischika",
+      "rashi_name": "වෘශ්චික",
+      "from_degree": 26.666667,
+      "to_degree": 30.0
+    }
+  ],
+  "rule_set": "name_letters_si_v1",
+  "provisional": true
+}

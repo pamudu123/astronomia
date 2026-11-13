@@ -107,16 +107,24 @@ class WeddingResponse(BaseModel):
     note: str | None = None
 
 
-def _place(body: WeddingRequest, db: Any, lang: Lang) -> tuple[Place, int | None, str | None]:
-    if body.latitude is not None and body.longitude is not None and body.timezone is not None:
+def resolve_place(
+    place_id: int | None,
+    latitude: float | None,
+    longitude: float | None,
+    timezone: str | None,
+    db: Any,
+    lang: Lang,
+) -> tuple[Place, int | None, str | None]:
+    """Where a ceremony takes place: coordinates and a time zone, a place id, or Colombo."""
+    if latitude is not None and longitude is not None and timezone is not None:
         try:
-            zoneinfo.ZoneInfo(body.timezone)
+            zoneinfo.ZoneInfo(timezone)
         except (zoneinfo.ZoneInfoNotFoundError, ValueError) as error:
             raise HTTPException(
                 status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown time zone"
             ) from error
-        return Place(body.latitude, body.longitude, body.timezone), None, None
-    found = get_place(db, body.place_id if body.place_id is not None else COLOMBO)
+        return Place(latitude, longitude, timezone), None, None
+    found = get_place(db, place_id if place_id is not None else COLOMBO)
     if found is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "unknown place")
     name = found.name_si if lang == "si" and found.name_si else found.name
@@ -191,7 +199,9 @@ def wedding_nakath(body: WeddingRequest, db: PlacesDb, _: Access) -> WeddingResp
             return WeddingResponse(status=found.status, waiting_for=role, time=found.time)
         moon = found[0]
         people[role] = Person(star=moon.nakshatra, moon_sign=moon.sign)
-    place, place_id, name = _place(body, db, body.lang)
+    place, place_id, name = resolve_place(
+        body.place_id, body.latitude, body.longitude, body.timezone, db, body.lang
+    )
     zone = zoneinfo.ZoneInfo(place.timezone)
     first = body.as_of or dt.datetime.now(zone).date()
     last = _add_months(first, body.months) - dt.timedelta(days=1)

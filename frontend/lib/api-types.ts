@@ -411,6 +411,90 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/baby/letters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * All Letters
+         * @description The starting letters for every star and pada.
+         */
+        get: operations["all_letters_v1_baby_letters_get"];
+        put?: never;
+        /**
+         * Letters For Birth
+         * @description The birth star, pada, Moon sign, lagna and weekday, and the letters they give.
+         */
+        post: operations["letters_for_birth_v1_baby_letters_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/baby/letters/{star}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Letters For Star
+         * @description The four padas of one birth star, each with its starting letter and Moon sign.
+         */
+        get: operations["letters_for_star_v1_baby_letters__star__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/baby/names": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Names For Letters
+         * @description Names that start with the given letters, filtered by gender and length.
+         */
+        get: operations["names_for_letters_v1_baby_names_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/first-letters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * First Letters
+         * @description Good dates and times for a child's first letters, from the child's birth star.
+         */
+        post: operations["first_letters_v1_first_letters_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/kendara/search": {
         parameters: {
             query?: never;
@@ -500,6 +584,15 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AllLettersResponse */
+        AllLettersResponse: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Stars */
+            stars: components["schemas"]["StarLettersOut"][];
+        };
         /** AvuruduItemOut */
         AvuruduItemOut: {
             /** Key */
@@ -543,6 +636,53 @@ export interface components {
             items: components["schemas"]["AvuruduItemOut"][];
             /** Notes */
             notes: string[];
+        };
+        /** BabyChartOut */
+        BabyChartOut: {
+            /** Star */
+            star: string;
+            /** Star Name */
+            star_name: string;
+            /** Star Number */
+            star_number: number;
+            /** Pada */
+            pada: number;
+            /** Rashi */
+            rashi: string;
+            /** Rashi Name */
+            rashi_name: string;
+            /** Lagna */
+            lagna: string;
+            /** Lagna Name */
+            lagna_name: string;
+            /** Weekday */
+            weekday: string;
+            /** Weekday Name */
+            weekday_name: string;
+            /** Day Note */
+            day_note: string;
+            /** Timezone */
+            timezone: string;
+            /** Offset */
+            offset: string;
+            time_check: components["schemas"]["TimeCheckOut"];
+        };
+        /** BabyLettersResponse */
+        BabyLettersResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            chart: components["schemas"]["BabyChartOut"] | null;
+            letter: components["schemas"]["PadaLetterOut"] | null;
+            star_letters: components["schemas"]["StarLettersOut"] | null;
+            /** Nearby */
+            nearby: components["schemas"]["NearbyLetterOut"][];
+            lagna_letters: components["schemas"]["SignLettersOut"] | null;
+            weekday_letters: components["schemas"]["SignLettersOut"] | null;
         };
         /**
          * Body
@@ -675,6 +815,15 @@ export interface components {
             /** Passed */
             passed: boolean;
         };
+        /** ChildOut */
+        ChildOut: {
+            /** Star */
+            star: string;
+            /** Star Name */
+            star_name: string;
+            /** Mode */
+            mode: string;
+        };
         /**
          * CountedOut
          * @description A change counted from one sign: the lagna, or the Moon sign for gochara.
@@ -768,6 +917,92 @@ export interface components {
             };
             /** Reason */
             reason: string;
+        };
+        /** FirstLettersRequest */
+        FirstLettersRequest: {
+            /** Child */
+            child: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /** Birth Date */
+            birth_date?: string | null;
+            /** Place Id */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /** Timezone */
+            timezone?: string | null;
+            /**
+             * Months
+             * @default 3
+             * @enum {integer}
+             */
+            months: 1 | 3 | 6;
+            /** As Of */
+            as_of?: string | null;
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+        };
+        /** FirstLettersResponse */
+        FirstLettersResponse: {
+            /** Status */
+            status: string;
+            time?: components["schemas"]["TimeResolveResponse"] | null;
+            /** Rule Set */
+            rule_set?: string | null;
+            /** Provisional */
+            provisional?: boolean | null;
+            /** First */
+            first?: string | null;
+            /** Last */
+            last?: string | null;
+            place?: components["schemas"]["WeddingPlaceOut"] | null;
+            child?: components["schemas"]["ChildOut"] | null;
+            /**
+             * Suggestions
+             * @default []
+             */
+            suggestions: components["schemas"]["FirstLettersSuggestionOut"][];
+            /** None Text */
+            none_text?: string | null;
+            /** Age Note */
+            age_note?: string | null;
+            /** Note */
+            note?: string | null;
+        };
+        /** FirstLettersSuggestionOut */
+        FirstLettersSuggestionOut: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Date Text */
+            date_text: string;
+            /** Weekday */
+            weekday: string;
+            start: components["schemas"]["LocalTimeOut"];
+            end: components["schemas"]["LocalTimeOut"];
+            /** Nakatha */
+            nakatha: string;
+            /** Thithi */
+            thithi: string;
+            /** Lagna */
+            lagna: string;
+            /** Tara */
+            tara: string;
+            /** Passes */
+            passes: string[];
+            /** Cautions */
+            cautions: string[];
+            /** Age */
+            age: string | null;
+            /** Score */
+            score: number;
         };
         /** ForecastOut */
         ForecastOut: {
@@ -1057,6 +1292,13 @@ export interface components {
             /** Counts */
             counts: boolean;
         };
+        /** LetterCountOut */
+        LetterCountOut: {
+            /** Letter */
+            letter: string;
+            /** Count */
+            count: number;
+        };
         /** LocalRangeOut */
         LocalRangeOut: {
             start: components["schemas"]["LocalTimeOut"];
@@ -1157,6 +1399,76 @@ export interface components {
             /** Text */
             text: string;
         };
+        /** NameOut */
+        NameOut: {
+            /** En */
+            en: string;
+            /** Si */
+            si: string;
+            /** Gender */
+            gender: string;
+            /** Meaning */
+            meaning: string;
+            /** Meaning En */
+            meaning_en: string;
+            /** Meaning Si */
+            meaning_si: string;
+            /** Meaning From */
+            meaning_from: string;
+            /** Letter */
+            letter: string;
+            /** Syllables */
+            syllables: number;
+            /** Length */
+            length: string;
+            /** Source */
+            source: string;
+            /** Url */
+            url: string;
+        };
+        /** NameSourceOut */
+        NameSourceOut: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Url */
+            url: string | null;
+            /** Licence */
+            licence: string;
+        };
+        /** NamesResponse */
+        NamesResponse: {
+            /** Version */
+            version: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Letters */
+            letters: components["schemas"]["LetterCountOut"][];
+            /** Names */
+            names: components["schemas"]["NameOut"][];
+            /** Sources */
+            sources: components["schemas"]["NameSourceOut"][];
+        };
+        /** NearbyLetterOut */
+        NearbyLetterOut: {
+            /** Minutes */
+            minutes: number;
+            /** Direction */
+            direction: string;
+            /** Star */
+            star: string;
+            /** Star Name */
+            star_name: string;
+            /** Pada */
+            pada: number;
+            /** Letter */
+            letter: string;
+            /** Latin */
+            latin: string;
+            /** Text */
+            text: string;
+        };
         /** OffsetOption */
         OffsetOption: {
             /**
@@ -1185,6 +1497,25 @@ export interface components {
             house: number;
             /** Text */
             text: string;
+        };
+        /** PadaLetterOut */
+        PadaLetterOut: {
+            /** Pada */
+            pada: number;
+            /** Letter */
+            letter: string;
+            /** Latin */
+            latin: string;
+            /** Others */
+            others: string[];
+            /** Rashi */
+            rashi: string;
+            /** Rashi Name */
+            rashi_name: string;
+            /** From Degree */
+            from_degree: number;
+            /** To Degree */
+            to_degree: number;
         };
         /** PanchangaPartOut */
         PanchangaPartOut: {
@@ -1597,6 +1928,15 @@ export interface components {
             place: string;
             result: components["schemas"]["HadahanResponse"];
         };
+        /** SignLettersOut */
+        SignLettersOut: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Letters */
+            letters: string[];
+        };
         /** SpanOut */
         SpanOut: {
             /**
@@ -1615,6 +1955,32 @@ export interface components {
             continues: boolean;
             /** Text */
             text: string;
+        };
+        /** StarLettersOut */
+        StarLettersOut: {
+            /** Star */
+            star: string;
+            /** Star Name */
+            star_name: string;
+            /** Star Number */
+            star_number: number;
+            /** Padas */
+            padas: components["schemas"]["PadaLetterOut"][];
+        };
+        /** StarLettersResponse */
+        StarLettersResponse: {
+            /** Star */
+            star: string;
+            /** Star Name */
+            star_name: string;
+            /** Star Number */
+            star_number: number;
+            /** Padas */
+            padas: components["schemas"]["PadaLetterOut"][];
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
         };
         /** StarMatchOut */
         StarMatchOut: {
@@ -2654,6 +3020,170 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WeddingResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    all_letters_v1_baby_letters_get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AllLettersResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    letters_for_birth_v1_baby_letters_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BabyLettersResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    letters_for_star_v1_baby_letters__star__get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                star: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StarLettersResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    names_for_letters_v1_baby_names_get: {
+        parameters: {
+            query: {
+                letters: string[];
+                gender?: "boy" | "girl" | "any";
+                length?: ("short" | "medium" | "long") | null;
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NamesResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    first_letters_v1_first_letters_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FirstLettersRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FirstLettersResponse"];
                 };
             };
             /** @description Validation Error */

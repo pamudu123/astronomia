@@ -18,6 +18,8 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           <Link href={`/${lang}/forecast/${YEARS[0]}`}>{fill(dict.yearly.footer, { year: YEARS[0] })}</Link>
           <Link href={`/${lang}/avurudu`}>{dict.avurudu.footer}</Link>
           <Link href={`/${lang}/nakath`}>{dict.nakath.footer}</Link>
+          <Link href={`/${lang}/baby-names`}>{dict.babyNames.footer}</Link>
+          <Link href={`/${lang}/first-letters`}>{dict.firstLetters.footer}</Link>
           <Link href={`/${lang}/privacy`}>{dict.footer.privacy}</Link>
           <Link href={`/${lang}/terms`}>{dict.footer.terms}</Link>
         </nav>

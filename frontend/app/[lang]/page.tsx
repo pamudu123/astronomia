@@ -128,6 +128,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           {dict.nakath.homeLink}
           <ArrowRight />
         </Link>
+        <Link href={`/${lang}/baby-names`} className={styles.toolMore} data-link="baby-names">
+          {dict.babyNames.homeLink}
+          <ArrowRight />
+        </Link>
+        <Link href={`/${lang}/first-letters`} className={styles.toolMore} data-link="first-letters">
+          {dict.firstLetters.link}
+          <ArrowRight />
+        </Link>
       </section>
 
       <section className={`container ${styles.sectionTight}`} aria-labelledby="rashi-title">

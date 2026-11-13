@@ -275,6 +275,33 @@ Category C is nakath (auspicious times). Rules and sources are in `docs/11-nakat
 - **Kept apart:** `engine/wedding.py`, `api/wedding.py`, `lib/wedding.ts` and `components/wedding/`. The frontend lock goes in `WeddingGate`.
 - **Checked:** every suggestion is checked again at its start, middle and end against each rule, worked out separately from the sky.
 
+Category D is baby and child. Tables and sources are in `docs/12-baby-rules.md`.
+
+**Done in one pull request:** D1, baby name letters (free).
+
+- **Rules** in `rules/name_letters_si_v1.yaml`: the letter for each of the 108 padas, with what the other sources give, and the lagna and weekday letters. Transliterations are quoted, because YAML reads a bare `No` as false.
+- **Engine** (`backend/app/engine/names.py`): the letter for a star and pada, and any pada change within 15 minutes of the birth time.
+- **Endpoints:** `GET /v1/baby/letters` and `GET /v1/baby/letters/{star}` (cached for an hour). `POST /v1/baby/letters` takes the birth details in the body and returns the star, pada, Moon sign, lagna, the weekday counted from sunrise, the hadahan time check and the letters.
+- **Pages:** `/{lang}/baby-names` (the birth form and the 27 stars with their letters) and `/{lang}/baby-names/{star}` (the four padas, rendered on the server). The letters for page titles are kept in `frontend/lib/babynames.ts`, and a test keeps them equal to the rule file.
+- **Checked:** each letter is the majority of four sources (`tests/golden/name_letters_observed.json`), and a Sri Lankan site's star and pada agree with ours for 108 made-up births.
+- **Fixtures:** `uv run python scripts/export_baby_fixtures.py` in `backend/`.
+
+**Done in a second pull request:** D2, name suggestions (free).
+
+- **Data:** `backend/app/data/names/names_si_v1.yaml`, 246 names, each with its source and link. Sources and what was left out are in file 12, section 7.
+- **Engine** (`backend/app/engine/babynames.py`): splits a Sinhala name into syllables, finds the letter it starts with (long and short vowels count as one), and filters by letter, gender and length.
+- **Endpoint:** `GET /v1/baby/names?letters=&gender=&length=&lang=` (cached for an hour). Letters must be from the letter table.
+- **Pages:** the list with its filters is on each star page (in the page as served) and under the letters for a birth.
+- **Checked:** every name starts with a letter from the table, every name has a source and a link, and every field is text.
+
+**Done in a third pull request:** D3, the first letters ceremony finder (free for now, file 07, section 4.8).
+
+- **Rules** in `rules/first_letters_si_v1.yaml`: twelve nakathas, a good tara from the child's birth star, Wednesday to Friday (Monday and Sunday as cautions), a dual lagna with an empty 8th house, no rikta thithi, new moon or Vishti karana, outside Rahu kalaya, in daylight. Sources and conflicts are in file 11, section 7.
+- **Engine** (`backend/app/engine/first_letters.py`): the same scan as the wedding finder, reusing its moment and tara. Six months take about two seconds.
+- **Endpoint:** `POST /v1/first-letters` with the child's birth details or birth star (and birth date for the age), the place, and 1, 3 or 6 months. It depends on `first_letters_access()`. The place lookup is shared with the wedding finder.
+- **Page:** `/{lang}/first-letters`, linked from the baby names pages, the home page and the footer.
+- **Checked:** every suggestion passes every rule again at its start, middle and end, worked out separately from the sky. Three Sri Lankan newspaper columns agree with the engine's nakatha, lagna and tara lists (`tests/golden/first_letters_observed.json`).
+
 **Done in one pull request:** set E, part 1: enter an old kendara and find the births.
 
 - **Planet table:** `backend/app/kendara/table.py` stores all nine bodies at 00:00 UTC each day, 1900 to 2035. It is built in the Docker image and on first use (about 10 seconds, 750 KB, not committed).
