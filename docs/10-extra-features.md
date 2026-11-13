@@ -34,7 +34,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 - Baby name letters from the birth star. **Built.**
 - Name suggestions for the letters. **Built.**
-- First letters ceremony nakath (akuru kiyaweema).
+- First letters ceremony nakath (akuru kiyaweema). **Built**, free for now.
 
 **E. Old horoscopes**
 
@@ -101,7 +101,7 @@ Planned as three pull requests. The tables and their sources are in file 12. Eve
 |---|---|---|---|
 | D1 | **Baby name letters** (free) | The birth star, pada, Moon sign, lagna and weekday from the birth details, the starting letter for the pada, the birth time check, and the letter of a pada that starts or ends within 15 minutes. A page for each of the 27 stars with its four padas, no birth details needed. **Built.** | Each letter is the majority of four Sri Lankan sources. A Sri Lankan site's star and pada agree with ours for 108 made-up births. |
 | D2 | **Name suggestions** (free) | 246 names that start with the chosen letters, with meanings in Sinhala and English, and boy, girl or both. Filters for letter, gender and length, on each star page and with the letters for a birth. **Built.** | Every name starts with a letter from the table, and every name links its source. |
-| D3 | **First letters ceremony nakath** (free for now) | Good dates and times for akuru kiyaweema, found with the set C engine, for 1, 3 or 6 months and a place. | Each suggestion passes the rules it lists. |
+| D3 | **First letters ceremony nakath** (free for now) | Good dates and times for akuru kiyaweema, from the child's birth details or birth star, found with the set C engine, for 1, 3 or 6 months and a place, in its time zone. Each time lists the rules it passes, its weaker points and the child's age. **Built.** Its code is kept apart, so a paid check goes in `first_letters_access()` and `FirstLettersGate` (see file 07, section 4.8). | Every suggestion passes every rule again at its start, middle and end, worked out separately. Three Sri Lankan newspaper columns agree with our nakatha, lagna and tara lists. |
 
 Decisions made:
 
@@ -117,6 +117,7 @@ Best asked for together, early:
 - What each house means when Saturn, Jupiter, Rahu or Ketu moves through it, for the change pages (B).
 - The nakath rules (category C): see the questions at the end of file 11.
 - The Sinhala name letter table (D): see the questions at the end of file 12, section 6. The name spellings and meanings need a native speaker (file 12, section 7).
+- The first letters ceremony rules (D): see the questions at the end of file 11, section 7.
 
 ## Sources
 

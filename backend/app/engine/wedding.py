@@ -109,7 +109,7 @@ class _Day:
     malefic_signs: frozenset[int]
 
 
-def _moment(ephemeris: Ephemeris, when: datetime, place: Place) -> Moment:
+def moment_at(ephemeris: Ephemeris, when: datetime, place: Place) -> Moment:
     jd = julian_day(when)
     sun, moon = ephemeris.sun_moon(jd)
     return Moment(
@@ -218,7 +218,7 @@ def _edge(
     """The first (or last) whole minute inside the window, between a step in and one out."""
 
     def holds(when: datetime) -> bool:
-        moment = _moment(ephemeris, when, place)
+        moment = moment_at(ephemeris, when, place)
         cautions = _check(ceremony, moment, when, day, *people)
         return cautions is not None and _key(moment, cautions) == key
 
@@ -346,7 +346,7 @@ def find_dates(
         steps = []
         when = day.sunrise
         while when < day.sunset:
-            steps.append((when, _moment(ephemeris, when, place)))
+            steps.append((when, moment_at(ephemeris, when, place)))
             when += step
         for ceremony in chosen:
             best = _best_window(ephemeris, place, ceremony, day, bride, groom, steps)
