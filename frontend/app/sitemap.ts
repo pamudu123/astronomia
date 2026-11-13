@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { locales } from "@/lib/i18n";
+import { AVURUDU_YEARS, CITIES, FEATURED_YEAR } from "@/lib/nakath";
 import { NAKSHATRA } from "@/lib/nakshatra";
 
 const SITE = (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
@@ -14,6 +15,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/porondam",
     "/porondam/stars",
     ...NAKSHATRA.map((star) => `/porondam/stars/${star.key}`),
+    "/avurudu",
+    ...AVURUDU_YEARS.map((year) => `/avurudu/${year}`),
+    ...CITIES.map((city) => `/avurudu/${FEATURED_YEAR}/${city.key}`),
+    "/nakath",
     "/privacy",
     "/terms",
   ];

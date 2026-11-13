@@ -21,6 +21,7 @@ Research done on 2026-11-13. Sources were read online. Where a site works nakath
 | S9 | Muhurta Chintamani and B. V. Raman's Muhurtha, as quoted by several sites (dekhopanchang.com, astromedha.in, drikpanchang.com) | Classical muhurtha texts | Wedding thithis, weekdays, Venus and Jupiter combustion, Vishti karana, the 7th house |
 | S10 | poruwa.lk blog | Sri Lankan wedding site | Which ceremonies get nakath |
 | S11 | Swiss Ephemeris (Lahiri, mean node) | Our engine | The sky |
+| S12 | ozlanka.com, "New Year Auspicious Times Australia 2025", prepared by a community astrologer in Sydney | Avurudu times for Australian cities | How the times are used abroad |
 
 Not reachable: meteo.gov.lk (the Department of Meteorology sunrise tables) resets every connection, so the official sunrise table could not be read. Sunrise is checked against S1, S3 and S4 instead.
 
@@ -54,7 +55,9 @@ The engine lives in `backend/app/engine/panchanga.py`, the rules in `panchanga_v
 | The other items (moon viewing, bathing for the old year, cooking, starting work and eating, anointing oil, leaving for work, planting) | Chosen by the national nakath committee each year, with colours and directions | No formula | Official values only, never calculated |
 | The official times are standard Sri Lanka clock time and hold everywhere in Sri Lanka | S6 says so in its last line | One source, official | Times abroad are the same moments in local time |
 
-The official lists are data in `backend/app/data/rules/avurudu_v1.yaml`, with the source of each year.
+| Times abroad | S12 gives the dawn and punya kalaya as the same moments on Australian clocks (03:21 in Sri Lanka is 07:51 in Sydney). But it gives its own cooking, work and oil times for each city, and other colours. Those times keep neither the Sri Lankan clock time nor the same lagna, and Perth does not follow the other cities, so we could not find their rule | Conflict | The official moments on the visitor's clock, with a note that some astrologers abroad prepare their own local times, which can differ |
+
+The official lists are data in `backend/app/data/rules/avurudu_v1.yaml`, with the source of each year. Past years are shown with our calculated dawn and punya kalaya beside the official ones, and the difference in minutes.
 
 ## 4. Wedding nakath (first findings, used in the finder)
 

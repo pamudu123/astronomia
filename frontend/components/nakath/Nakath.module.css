@@ -1,0 +1,265 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-block: 24px 96px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 15px;
+}
+
+.badge,
+.badgeGold {
+  align-self: flex-start;
+  padding: 3px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.badgeGold {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sectionTitle {
+  font-size: clamp(22px, 2.6vw, 28px);
+}
+
+/* Choosing a place or time zone */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px 24px;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--night-raised);
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.input {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--night);
+  color: var(--ink);
+  font: inherit;
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* The nakath list */
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 14px;
+}
+
+.item,
+.itemKey {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--night-raised);
+  font-size: 15px;
+}
+
+.itemKey {
+  border-color: var(--gold);
+}
+
+.item p,
+.itemKey p {
+  margin: 0;
+}
+
+.itemName {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.times {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  gap: 8px 16px;
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timeLabel {
+  color: var(--ink-soft);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.clock {
+  color: var(--gold);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.clockDate {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+/* Our calculation beside the official list */
+.compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 14px;
+}
+
+.note {
+  max-width: 760px;
+  padding: 16px 20px;
+  border-left: 3px solid var(--teal);
+  border-radius: 0 12px 12px 0;
+  background: var(--night-raised);
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.note p {
+  margin: 0;
+}
+
+.note p + p {
+  margin-top: 8px;
+}
+
+.years,
+.cities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip,
+.chipCurrent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--night-raised);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.chipCurrent {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* The daily panchanga */
+.day {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 14px;
+}
+
+.parts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.parts li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 520px) {
+  .controls,
+  .item,
+  .itemKey {
+    padding: 16px;
+  }
+}

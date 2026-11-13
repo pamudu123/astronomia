@@ -1,0 +1,286 @@
+{
+  "rule_set": "avurudu_v1",
+  "provisional": true,
+  "year": 2027,
+  "official": true,
+  "source": "Department of Cultural Affairs, Sinhala Avurudu nakath list 2027, released by the Department of Government Information on 25 August 2026",
+  "url": "https://adaderana.lk/news/cmt8cz3ok0004356q09kc6avw",
+  "timezone": "Australia/Melbourne",
+  "offset": "UTC+10:00",
+  "calculated": {
+    "dawn": {
+      "sri_lanka": {
+        "utc": "2027-04-14T09:59:00Z",
+        "local": "2027-04-14T15:29:00+05:30",
+        "clock": "15:29",
+        "date": "2027-04-14"
+      },
+      "local": {
+        "utc": "2027-04-14T09:59:00Z",
+        "local": "2027-04-14T19:59:00+10:00",
+        "clock": "19:59",
+        "date": "2027-04-14"
+      }
+    },
+    "punya_start": {
+      "sri_lanka": {
+        "utc": "2027-04-14T03:35:00Z",
+        "local": "2027-04-14T09:05:00+05:30",
+        "clock": "09:05",
+        "date": "2027-04-14"
+      },
+      "local": {
+        "utc": "2027-04-14T03:35:00Z",
+        "local": "2027-04-14T13:35:00+10:00",
+        "clock": "13:35",
+        "date": "2027-04-14"
+      }
+    },
+    "punya_end": {
+      "sri_lanka": {
+        "utc": "2027-04-14T16:23:00Z",
+        "local": "2027-04-14T21:53:00+05:30",
+        "clock": "21:53",
+        "date": "2027-04-14"
+      },
+      "local": {
+        "utc": "2027-04-14T16:23:00Z",
+        "local": "2027-04-15T02:23:00+10:00",
+        "clock": "02:23",
+        "date": "2027-04-15"
+      }
+    },
+    "dawn_difference": 0,
+    "punya_difference": 0
+  },
+  "items": [
+    {
+      "key": "moon_lunar",
+      "name": "Viewing the new moon (lunar year)",
+      "text": "View the new moon for the new lunar year.",
+      "at": null,
+      "start": null,
+      "end": null,
+      "date": "2027-04-09",
+      "date_text": "9 April 2027",
+      "colour": null,
+      "direction": null
+    },
+    {
+      "key": "moon_solar",
+      "name": "Viewing the new moon (solar year)",
+      "text": "View the new moon for the new solar year.",
+      "at": null,
+      "start": null,
+      "end": null,
+      "date": "2027-05-07",
+      "date_text": "7 May 2027",
+      "colour": null,
+      "direction": null
+    },
+    {
+      "key": "bath_old_year",
+      "name": "Bathing for the old year",
+      "text": "Bathe with herbal water and spend the day in religious observance.",
+      "at": null,
+      "start": null,
+      "end": null,
+      "date": "2027-04-12",
+      "date_text": "12 April 2027",
+      "colour": null,
+      "direction": null
+    },
+    {
+      "key": "dawn",
+      "name": "Dawn of the new year",
+      "text": "The Sun enters Mesha and the new year begins.",
+      "at": {
+        "sri_lanka": {
+          "utc": "2027-04-14T09:59:00Z",
+          "local": "2027-04-14T15:29:00+05:30",
+          "clock": "15:29",
+          "date": "2027-04-14"
+        },
+        "local": {
+          "utc": "2027-04-14T09:59:00Z",
+          "local": "2027-04-14T19:59:00+10:00",
+          "clock": "19:59",
+          "date": "2027-04-14"
+        }
+      },
+      "start": null,
+      "end": null,
+      "date": null,
+      "date_text": null,
+      "colour": null,
+      "direction": null
+    },
+    {
+      "key": "punya_kalaya",
+      "name": "Punya kalaya (nonagathaya)",
+      "text": "Leave all work and spend the time in religious observance. The nakath for cooking, work and meals fall in the later part, after the new year dawns.",
+      "at": null,
+      "start": {
+        "sri_lanka": {
+          "utc": "2027-04-14T03:35:00Z",
+          "local": "2027-04-14T09:05:00+05:30",
+          "clock": "09:05",
+          "date": "2027-04-14"
+        },
+        "local": {
+          "utc": "2027-04-14T03:35:00Z",
+          "local": "2027-04-14T13:35:00+10:00",
+          "clock": "13:35",
+          "date": "2027-04-14"
+        }
+      },
+      "end": {
+        "sri_lanka": {
+          "utc": "2027-04-14T16:23:00Z",
+          "local": "2027-04-14T21:53:00+05:30",
+          "clock": "21:53",
+          "date": "2027-04-14"
+        },
+        "local": {
+          "utc": "2027-04-14T16:23:00Z",
+          "local": "2027-04-15T02:23:00+10:00",
+          "clock": "02:23",
+          "date": "2027-04-15"
+        }
+      },
+      "date": null,
+      "date_text": null,
+      "colour": null,
+      "direction": null
+    },
+    {
+      "key": "cooking",
+      "name": "Preparing meals",
+      "text": "Light the hearth and prepare milk rice and sweets. Dress in green and face north.",
+      "at": {
+        "sri_lanka": {
+          "utc": "2027-04-14T12:48:00Z",
+          "local": "2027-04-14T18:18:00+05:30",
+          "clock": "18:18",
+          "date": "2027-04-14"
+        },
+        "local": {
+          "utc": "2027-04-14T12:48:00Z",
+          "local": "2027-04-14T22:48:00+10:00",
+          "clock": "22:48",
+          "date": "2027-04-14"
+        }
+      },
+      "start": null,
+      "end": null,
+      "date": null,
+      "date_text": null,
+      "colour": "green",
+      "direction": "north"
+    },
+    {
+      "key": "work_meals",
+      "name": "Starting work, transactions and eating",
+      "text": "Start work, make a first transaction and eat the first meal. Dress in green and face north.",
+      "at": {
+        "sri_lanka": {
+          "utc": "2027-04-14T14:48:00Z",
+          "local": "2027-04-14T20:18:00+05:30",
+          "clock": "20:18",
+          "date": "2027-04-14"
+        },
+        "local": {
+          "utc": "2027-04-14T14:48:00Z",
+          "local": "2027-04-15T00:48:00+10:00",
+          "clock": "00:48",
+          "date": "2027-04-15"
+        }
+      },
+      "start": null,
+      "end": null,
+      "date": null,
+      "date_text": null,
+      "colour": "green",
+      "direction": "north"
+    },
+    {
+      "key": "anointing_oil",
+      "name": "Anointing oil",
+      "text": "Anoint the head with oil and bathe. Dress in blue and face north.",
+      "at": {
+        "sri_lanka": {
+          "utc": "2027-04-17T01:34:00Z",
+          "local": "2027-04-17T07:04:00+05:30",
+          "clock": "07:04",
+          "date": "2027-04-17"
+        },
+        "local": {
+          "utc": "2027-04-17T01:34:00Z",
+          "local": "2027-04-17T11:34:00+10:00",
+          "clock": "11:34",
+          "date": "2027-04-17"
+        }
+      },
+      "start": null,
+      "end": null,
+      "date": null,
+      "date_text": null,
+      "colour": "blue",
+      "direction": "north"
+    },
+    {
+      "key": "leaving_for_work",
+      "name": "Leaving for work",
+      "text": "Eat milk rice and leave home for work. Dress in green and face south.",
+      "at": {
+        "sri_lanka": {
+          "utc": "2027-04-21T00:45:00Z",
+          "local": "2027-04-21T06:15:00+05:30",
+          "clock": "06:15",
+          "date": "2027-04-21"
+        },
+        "local": {
+          "utc": "2027-04-21T00:45:00Z",
+          "local": "2027-04-21T10:45:00+10:00",
+          "clock": "10:45",
+          "date": "2027-04-21"
+        }
+      },
+      "start": null,
+      "end": null,
+      "date": null,
+      "date_text": null,
+      "colour": "green",
+      "direction": "south"
+    },
+    {
+      "key": "planting",
+      "name": "Planting trees",
+      "text": "Plant a tree sapling. Dress in yellow or gold and face north.",
+      "at": {
+        "sri_lanka": {
+          "utc": "2027-04-22T06:08:00Z",
+          "local": "2027-04-22T11:38:00+05:30",
+          "clock": "11:38",
+          "date": "2027-04-22"
+        },
+        "local": {
+          "utc": "2027-04-22T06:08:00Z",
+          "local": "2027-04-22T16:08:00+10:00",
+          "clock": "16:08",
+          "date": "2027-04-22"
+        }
+      },
+      "start": null,
+      "end": null,
+      "date": null,
+      "date_text": null,
+      "colour": "yellow or gold",
+      "direction": "north"
+    }
+  ],
+  "notes": [
+    "The official times are Sri Lanka time. Abroad, they are the same moments on your own clock.",
+    "The list is the official one from the national nakath committee."
+  ]
+}

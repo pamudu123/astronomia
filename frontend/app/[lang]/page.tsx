@@ -5,7 +5,9 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Eye, Globe, Lock } from "@/components/Icons";
 import { Starfield } from "@/components/Starfield";
 import { ZodiacWheel } from "@/components/ZodiacWheel";
+import { fill } from "@/lib/hadahan";
 import { hasLocale } from "@/lib/i18n";
+import { FEATURED_YEAR } from "@/lib/nakath";
 import { RASHI } from "@/lib/rashi";
 
 import { getDictionary } from "./dictionaries";
@@ -103,6 +105,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
         <Link href={`/${lang}/porondam/stars`} className={styles.toolMore}>
           {dict.porondam.stars.homeLink}
+          <ArrowRight />
+        </Link>
+        <Link href={`/${lang}/avurudu/${FEATURED_YEAR}`} className={styles.toolMore} data-link="avurudu">
+          {fill(dict.avurudu.homeLink, { year: FEATURED_YEAR })}
+          <ArrowRight />
+        </Link>
+        <Link href={`/${lang}/nakath`} className={styles.toolMore} data-link="nakath">
+          {dict.nakath.homeLink}
           <ArrowRight />
         </Link>
       </section>

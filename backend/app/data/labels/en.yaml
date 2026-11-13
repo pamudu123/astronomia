@@ -352,3 +352,40 @@ karana:
   kimstughna: Kimstughna
 panchanga:
   timezone: "Times are in {timezone} ({offset})."
+direction: {north: north, south: south, east: east, west: west, north_east: north east, north_west: north west, south_east: south east, south_west: south west}
+
+# Sinhala and Tamil New Year (Avurudu).
+avurudu:
+  dress: "Dress in {colour} and face {direction}."
+  note_moment: "The official times are Sri Lanka time. Abroad, they are the same moments on your own clock."
+  note_official: "The list is the official one from the national nakath committee."
+  note_calculated: "There is no official list for this year yet. Only the new year moment and punya kalaya are shown, worked out by us. They are not official."
+  item:
+    moon_lunar: {name: "Viewing the new moon (lunar year)", text: "View the new moon for the new lunar year."}
+    moon_solar: {name: "Viewing the new moon (solar year)", text: "View the new moon for the new solar year."}
+    bath_old_year: {name: "Bathing for the old year", text: "Bathe with herbal water and spend the day in religious observance."}
+    dawn: {name: "Dawn of the new year", text: "The Sun enters Mesha and the new year begins."}
+    punya_kalaya: {name: "Punya kalaya (nonagathaya)", text: "Leave all work and spend the time in religious observance. The nakath for cooking, work and meals fall in the later part, after the new year dawns."}
+    cooking: {name: "Preparing meals", text: "Light the hearth and prepare milk rice and sweets."}
+    work_meals: {name: "Starting work, transactions and eating", text: "Start work, make a first transaction and eat the first meal."}
+    anointing_oil: {name: "Anointing oil", text: "Anoint the head with oil and bathe."}
+    urgent_duty: {name: "Leaving for urgent duty", text: "For those who must report for duty before the main day."}
+    leaving_for_work: {name: "Leaving for work", text: "Eat milk rice and leave home for work."}
+    planting: {name: "Planting trees", text: "Plant a tree sapling."}
+  colour:
+    light_gold: light gold
+    red_and_yellow: red and yellow
+    white: white
+    mixed: mixed colours
+    gold: gold
+    blue: blue
+    green: green
+    copper: copper
+    pearl_white: pearl white
+    bright: bright colours
+    reddish: reddish colours
+    red_mixed: colours mixed with red
+    pink_or_gold: pink or gold
+    pearl_or_white: pearl or white
+    gold_or_yellow: gold or yellow
+    yellow_or_gold: yellow or gold

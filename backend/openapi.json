@@ -611,6 +611,74 @@
         }
       }
     },
+    "/v1/avurudu/{year}": {
+      "get": {
+        "tags": [
+          "nakath"
+        ],
+        "summary": "Get Avurudu",
+        "description": "The new year moment, punya kalaya and the official list, in Sri Lanka time and in\nthe given time zone.",
+        "operationId": "get_avurudu_v1_avurudu__year__get",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Year"
+            }
+          },
+          {
+            "name": "timezone",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "default": "Asia/Colombo",
+              "title": "Timezone"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvuruduResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/reports/pdf": {
       "post": {
         "tags": [
@@ -827,6 +895,193 @@
   },
   "components": {
     "schemas": {
+      "AvuruduItemOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "at": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BothTimes"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "start": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BothTimes"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "end": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BothTimes"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "date_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Text"
+          },
+          "colour": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Colour"
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direction"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "text",
+          "at",
+          "start",
+          "end",
+          "date",
+          "date_text",
+          "colour",
+          "direction"
+        ],
+        "title": "AvuruduItemOut"
+      },
+      "AvuruduResponse": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "official": {
+            "type": "boolean",
+            "title": "Official"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "offset": {
+            "type": "string",
+            "title": "Offset"
+          },
+          "calculated": {
+            "$ref": "#/components/schemas/CalculatedOut"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AvuruduItemOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "year",
+          "official",
+          "source",
+          "url",
+          "timezone",
+          "offset",
+          "calculated",
+          "items",
+          "notes"
+        ],
+        "title": "AvuruduResponse"
+      },
       "Body": {
         "type": "string",
         "enum": [
@@ -841,6 +1096,66 @@
           "ketu"
         ],
         "title": "Body"
+      },
+      "BothTimes": {
+        "properties": {
+          "sri_lanka": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "local": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sri_lanka",
+          "local"
+        ],
+        "title": "BothTimes"
+      },
+      "CalculatedOut": {
+        "properties": {
+          "dawn": {
+            "$ref": "#/components/schemas/BothTimes"
+          },
+          "punya_start": {
+            "$ref": "#/components/schemas/BothTimes"
+          },
+          "punya_end": {
+            "$ref": "#/components/schemas/BothTimes"
+          },
+          "dawn_difference": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dawn Difference"
+          },
+          "punya_difference": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Punya Difference"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dawn",
+          "punya_start",
+          "punya_end",
+          "dawn_difference",
+          "punya_difference"
+        ],
+        "title": "CalculatedOut"
       },
       "CancellationOut": {
         "properties": {

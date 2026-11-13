@@ -106,3 +106,28 @@ def test_every_panchanga_part_has_a_name(lang: Lang) -> None:
     assert set(table["thithi"]) == set(THITHI_KEYS)
     assert set(table["yoga"]) == set(YOGA_KEYS)
     assert set(table["karana"]) == {karana_key(i) for i in range(60)}
+
+
+def _avurudu_texts(lang: Lang) -> dict[str, str]:
+    section = labels(lang)["avurudu"]
+    texts = {k: v for k, v in section.items() if isinstance(v, str)}
+    for key, item in section["item"].items():
+        texts[f"item.{key}.name"] = item["name"]
+        texts[f"item.{key}.text"] = item["text"]
+    texts.update({f"colour.{k}": v for k, v in section["colour"].items()})
+    texts.update({f"direction.{k}": v for k, v in labels(lang)["direction"].items()})
+    return texts
+
+
+def test_avurudu_texts_use_the_same_placeholders() -> None:
+    en, si = _avurudu_texts("en"), _avurudu_texts("si")
+    assert set(en) == set(si)
+    for code, text in en.items():
+        fields = {f for _, f, _, _ in string.Formatter().parse(text) if f}
+        assert fields == {f for _, f, _, _ in string.Formatter().parse(si[code]) if f}, code
+
+
+def test_avurudu_sinhala_has_no_latin_letters() -> None:
+    for code, text in _avurudu_texts("si").items():
+        cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
+        assert not re.search(r"[A-Za-z]", cleaned), code

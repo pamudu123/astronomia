@@ -1,0 +1,94 @@
+# Sinhala and Tamil New Year (Avurudu). PROVISIONAL. Sources in docs/11-nakath-rules.md.
+#
+# Only two things are calculated: the dawn of the new year (the Sun entering Mesha) and the
+# punya kalaya around it. Every other nakath is chosen each year by the national nakath
+# committee, so it is published only from the official list below, never calculated.
+version: avurudu_v1
+provisional: true
+
+# Punya kalaya: this many minutes either side of the dawn (6 hours 24 minutes).
+# Every official list from 2022 to 2027 fits this exactly.
+punya_kalaya_minutes: 384
+
+# Official times are standard Sri Lanka clock time and hold everywhere in Sri Lanka.
+timezone: Asia/Colombo
+
+# Official lists. Times are Sri Lanka time. `date` alone means the item has no time.
+# colour and direction are keys with names in the label files.
+years:
+  2022:
+    source: "Department of Cultural Affairs list, as reported by Ada Derana on 13 April 2022"
+    url: "https://www.adaderana.lk/news/81800"
+    items:
+      - {key: dawn, at: "2022-04-14 08:41"}
+      - {key: punya_kalaya, start: "2022-04-14 02:17", end: "2022-04-14 15:05"}
+      - {key: cooking, at: "2022-04-14 09:05", colour: light_gold, direction: east}
+      - {key: work_meals, at: "2022-04-14 10:17", colour: light_gold, direction: east}
+      - {key: anointing_oil, at: "2022-04-17 07:04", colour: red_and_yellow, direction: south}
+      - {key: leaving_for_work, at: "2022-04-18 06:51", colour: white, direction: east}
+      - {key: planting, at: "2022-04-18 11:16", colour: white, direction: east}
+  2023:
+    source: "Department of Cultural Affairs list, as reported by Ada Derana on 13 April 2023"
+    url: "https://www.adaderana.lk/news/89753"
+    items:
+      - {key: dawn, at: "2023-04-14 14:59"}
+      - {key: punya_kalaya, start: "2023-04-14 08:35", end: "2023-04-14 21:23"}
+      - {key: cooking, at: "2023-04-14 15:29", colour: mixed, direction: south}
+      - {key: work_meals, at: "2023-04-14 17:05", colour: mixed, direction: east}
+      - {key: anointing_oil, at: "2023-04-16 09:41", colour: red_and_yellow, direction: south}
+      - {key: leaving_for_work, at: "2023-04-17 06:28", colour: white, direction: south}
+      - {key: planting, at: "2023-04-20 06:38", colour: gold, direction: east}
+  2024:
+    source: "State Astrologers' Committee list, as reported by Ada Derana on 13 April 2024"
+    url: "https://www.adaderana.lk/news/98609"
+    items:
+      - {key: dawn, at: "2024-04-13 21:05"}
+      - {key: punya_kalaya, start: "2024-04-13 14:41", end: "2024-04-14 03:29"}
+      - {key: cooking, at: "2024-04-13 23:06", colour: blue, direction: south}
+      - {key: work_meals, at: "2024-04-14 00:06", colour: blue, direction: south}
+      - {key: anointing_oil, at: "2024-04-15 10:17", colour: white, direction: south}
+      - {key: leaving_for_work, at: "2024-04-17 06:52", colour: green, direction: north}
+      - {key: planting, at: "2024-04-18 10:16", colour: gold, direction: east}
+  2025:
+    source: "Department of Cultural Affairs list, as reported by Ada Derana on 13 April 2025"
+    url: "https://www.adaderana.lk/news/107424"
+    items:
+      - {key: moon_solar, date: "2025-05-01"}
+      - {key: bath_old_year, date: "2025-04-13"}
+      - {key: dawn, at: "2025-04-14 03:21"}
+      - {key: punya_kalaya, start: "2025-04-13 20:57", end: "2025-04-14 09:45"}
+      - {key: cooking, at: "2025-04-14 04:04", colour: copper, direction: south}
+      - {key: work_meals, at: "2025-04-14 06:44", colour: pearl_white, direction: south}
+      - {key: anointing_oil, at: "2025-04-16 09:04", colour: green, direction: north}
+      - {key: leaving_for_work, at: "2025-04-17 09:03", colour: gold, direction: north}
+      - {key: planting, at: "2025-04-18 10:16", colour: bright, direction: east}
+  2026:
+    source: "Ministry of Buddhasasana, Religious and Cultural Affairs list (Sinhala text on porondam.lk, English on Ada Derana, March 2026)"
+    url: "https://www.adaderana.lk/news/119855"
+    items:
+      - {key: moon_lunar, date: "2026-03-20"}
+      - {key: moon_solar, date: "2026-04-19"}
+      - {key: bath_old_year, date: "2026-04-13"}
+      - {key: dawn, at: "2026-04-14 09:32"}
+      - {key: punya_kalaya, start: "2026-04-14 03:08", end: "2026-04-14 15:56"}
+      - {key: cooking, at: "2026-04-14 10:51", colour: reddish, direction: south}
+      - {key: work_meals, at: "2026-04-14 12:06", colour: red_mixed, direction: south}
+      - {key: anointing_oil, at: "2026-04-15 06:55", colour: green, direction: east}
+      - {key: urgent_duty, at: "2026-04-17 05:38", colour: pink_or_gold, direction: north}
+      - {key: leaving_for_work, at: "2026-04-20 06:27", colour: white, direction: south}
+      - {key: leaving_for_work, at: "2026-04-20 06:50", colour: pearl_or_white, direction: east}
+      - {key: planting, at: "2026-04-23 09:01", colour: gold_or_yellow, direction: east}
+  2027:
+    source: "Department of Cultural Affairs, Sinhala Avurudu nakath list 2027, released by the Department of Government Information on 25 August 2026"
+    url: "https://adaderana.lk/news/cmt8cz3ok0004356q09kc6avw"
+    items:
+      - {key: moon_lunar, date: "2027-04-09"}
+      - {key: moon_solar, date: "2027-05-07"}
+      - {key: bath_old_year, date: "2027-04-12"}
+      - {key: dawn, at: "2027-04-14 15:29"}
+      - {key: punya_kalaya, start: "2027-04-14 09:05", end: "2027-04-14 21:53"}
+      - {key: cooking, at: "2027-04-14 18:18", colour: green, direction: north}
+      - {key: work_meals, at: "2027-04-14 20:18", colour: green, direction: north}
+      - {key: anointing_oil, at: "2027-04-17 07:04", colour: blue, direction: north}
+      - {key: leaving_for_work, at: "2027-04-21 06:15", colour: green, direction: south}
+      - {key: planting, at: "2027-04-22 11:38", colour: yellow_or_gold, direction: north}
