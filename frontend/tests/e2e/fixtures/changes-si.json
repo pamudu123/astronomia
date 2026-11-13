@@ -1,0 +1,150 @@
+{
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "changes": [
+    {
+      "id": "rahu-ketu-2026-12",
+      "kind": "rahu-ketu",
+      "title": "රාහු කේතු මාරුව",
+      "moment": "2026-12-05T17:02:00Z",
+      "local_date": "2026-12-05",
+      "when": "2026 දෙසැම්බර් 5, ශ්‍රී ලංකා වේලාවෙන් 22:32",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "retrograde": false,
+          "returning": false,
+          "until": "2028-06-23T20:00:00Z",
+          "next_sign": "dhanu",
+          "text": "රාහු කුම්භ රාශියේ සිට මකර රාශියට මාරු වේ.",
+          "until_text": "රාහු 2028 ජූනි 24 දින ධනු රාශියට මාරු වන තුරු මකර රාශියේ රැඳේ.",
+          "note": null
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "retrograde": false,
+          "returning": false,
+          "until": "2028-06-23T20:00:00Z",
+          "next_sign": "mithuna",
+          "text": "කේතු සිංහ රාශියේ සිට කටක රාශියට මාරු වේ.",
+          "until_text": "කේතු 2028 ජූනි 24 දින මිථුන රාශියට මාරු වන තුරු කටක රාශියේ රැඳේ.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "jupiter-2027-01",
+      "kind": "jupiter",
+      "title": "ගුරු මාරුව",
+      "moment": "2027-01-24T20:02:00Z",
+      "local_date": "2027-01-25",
+      "when": "2027 ජනවාරි 25, ශ්‍රී ලංකා වේලාවෙන් 01:32",
+      "moves": [
+        {
+          "body": "jupiter",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "retrograde": true,
+          "returning": false,
+          "until": "2027-06-25T23:49:00Z",
+          "next_sign": "simha",
+          "text": "ගුරු වක්‍රව සිංහ රාශියේ සිට කටක රාශියට ආපසු පැමිණේ.",
+          "until_text": "ගුරු 2027 ජූනි 26 දින සිංහ රාශියට මාරු වන තුරු කටක රාශියේ රැඳේ.",
+          "note": "ගුරු වක්‍රව (ආපස්සට) ගමන් කරන බැවින් මෙය කෙටි කාලයකි. 2027 ජූනි 26 දින එය නැවත සිංහ රාශියට පැමිණේ."
+        }
+      ]
+    },
+    {
+      "id": "saturn-2027-06",
+      "kind": "saturn",
+      "title": "ශනි මාරුව",
+      "moment": "2027-06-02T23:58:00Z",
+      "local_date": "2027-06-03",
+      "when": "2027 ජූනි 3, ශ්‍රී ලංකා වේලාවෙන් 05:28",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "retrograde": false,
+          "returning": false,
+          "until": "2027-10-20T01:42:00Z",
+          "next_sign": "meena",
+          "text": "ශනි මීන රාශියේ සිට මේෂ රාශියට මාරු වේ.",
+          "until_text": "ශනි 2027 ඔක්තෝබර් 20 දින මීන රාශියට මාරු වන තුරු මේෂ රාශියේ රැඳේ.",
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "jupiter-2027-06",
+      "kind": "jupiter",
+      "title": "ගුරු මාරුව",
+      "moment": "2027-06-25T23:49:00Z",
+      "local_date": "2027-06-26",
+      "when": "2027 ජූනි 26, ශ්‍රී ලංකා වේලාවෙන් 05:19",
+      "moves": [
+        {
+          "body": "jupiter",
+          "from_sign": "kataka",
+          "to_sign": "simha",
+          "retrograde": false,
+          "returning": true,
+          "until": "2027-11-26T13:15:00Z",
+          "next_sign": "kanya",
+          "text": "ගුරු කටක රාශියේ සිට සිංහ රාශියට මාරු වේ.",
+          "until_text": "ගුරු 2027 නොවැම්බර් 26 දින කන්‍යා රාශියට මාරු වන තුරු සිංහ රාශියේ රැඳේ.",
+          "note": "වක්‍ර ගමනෙන් පසු ගුරු නැවත සිංහ රාශියට පැමිණේ."
+        }
+      ]
+    },
+    {
+      "id": "saturn-2027-10",
+      "kind": "saturn",
+      "title": "ශනි මාරුව",
+      "moment": "2027-10-20T01:42:00Z",
+      "local_date": "2027-10-20",
+      "when": "2027 ඔක්තෝබර් 20, ශ්‍රී ලංකා වේලාවෙන් 07:12",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "mesha",
+          "to_sign": "meena",
+          "retrograde": true,
+          "returning": false,
+          "until": "2028-02-23T13:54:00Z",
+          "next_sign": "mesha",
+          "text": "ශනි වක්‍රව මේෂ රාශියේ සිට මීන රාශියට ආපසු පැමිණේ.",
+          "until_text": "ශනි 2028 පෙබරවාරි 23 දින මේෂ රාශියට මාරු වන තුරු මීන රාශියේ රැඳේ.",
+          "note": "ශනි වක්‍රව (ආපස්සට) ගමන් කරන බැවින් මෙය කෙටි කාලයකි. 2028 පෙබරවාරි 23 දින එය නැවත මේෂ රාශියට පැමිණේ."
+        }
+      ]
+    },
+    {
+      "id": "jupiter-2027-11",
+      "kind": "jupiter",
+      "title": "ගුරු මාරුව",
+      "moment": "2027-11-26T13:15:00Z",
+      "local_date": "2027-11-26",
+      "when": "2027 නොවැම්බර් 26, ශ්‍රී ලංකා වේලාවෙන් 18:45",
+      "moves": [
+        {
+          "body": "jupiter",
+          "from_sign": "simha",
+          "to_sign": "kanya",
+          "retrograde": false,
+          "returning": false,
+          "until": "2028-02-28T13:47:00Z",
+          "next_sign": "simha",
+          "text": "ගුරු සිංහ රාශියේ සිට කන්‍යා රාශියට මාරු වේ.",
+          "until_text": "ගුරු 2028 පෙබරවාරි 28 දින සිංහ රාශියට මාරු වන තුරු කන්‍යා රාශියේ රැඳේ.",
+          "note": null
+        }
+      ]
+    }
+  ]
+}

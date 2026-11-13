@@ -210,6 +210,146 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Changes
+         * @description Every change shown on the list page, in time order.
+         */
+        get: operations["list_changes_v1_changes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/changes/{change_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Change Hub
+         * @description One change, counted from each of the twelve lagnas.
+         */
+        get: operations["change_hub_v1_changes__change_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/changes/{change_id}/{lagna}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Change Lagna
+         * @description One change for one lagna. The same houses hold for that Moon sign (gochara).
+         */
+        get: operations["change_lagna_v1_changes__change_id___lagna__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/changes/personal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upcoming Changes
+         * @description The changes in the next twelve months, counted from this chart's lagna and Moon sign.
+         */
+        post: operations["upcoming_changes_v1_changes_personal_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/changes/{change_id}/personal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Personal Change
+         * @description One change for one birth chart: from the lagna, and from the Moon sign (gochara).
+         */
+        post: operations["personal_change_v1_changes__change_id__personal_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/yearly/{year}/{lagna}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Yearly
+         * @description The year for one lagna. The same houses hold for that Moon sign (gochara).
+         */
+        get: operations["yearly_v1_yearly__year___lagna__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/yearly/{year}/personal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Personal Yearly
+         * @description The year for one birth chart: from the lagna, and from the Moon sign (gochara).
+         */
+        post: operations["personal_yearly_v1_yearly__year__personal_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/panchanga": {
         parameters: {
             query?: never;
@@ -427,6 +567,59 @@ export interface components {
             /** None Text */
             none_text: string | null;
         };
+        /** ChangeHubResponse */
+        ChangeHubResponse: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            change: components["schemas"]["ChangeOut"];
+            /** Lagnas */
+            lagnas: components["schemas"]["CountedOut"][];
+        };
+        /** ChangeLagnaResponse */
+        ChangeLagnaResponse: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            change: components["schemas"]["ChangeOut"];
+            lagna: components["schemas"]["CountedOut"];
+            /** Moon Notes */
+            moon_notes: string[];
+        };
+        /** ChangeListResponse */
+        ChangeListResponse: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Changes */
+            changes: components["schemas"]["ChangeOut"][];
+        };
+        /** ChangeOut */
+        ChangeOut: {
+            /** Id */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Title */
+            title: string;
+            /**
+             * Moment
+             * Format: date-time
+             */
+            moment: string;
+            /**
+             * Local Date
+             * Format: date
+             */
+            local_date: string;
+            /** When */
+            when: string;
+            /** Moves */
+            moves: components["schemas"]["PlanetMoveOut"][];
+        };
         /** ChartOut */
         ChartOut: {
             /**
@@ -460,6 +653,22 @@ export interface components {
             name: string;
             /** Passed */
             passed: boolean;
+        };
+        /**
+         * CountedOut
+         * @description A change counted from one sign: the lagna, or the Moon sign for gochara.
+         */
+        CountedOut: {
+            /** Sign */
+            sign: string;
+            /** Sign Name */
+            sign_name: string;
+            /** Moves */
+            moves: components["schemas"]["HouseMoveOut"][];
+            /** Others */
+            others: components["schemas"]["OtherOut"][];
+            /** Notes */
+            notes: string[];
         };
         /** DashaMainOut */
         DashaMainOut: {
@@ -647,6 +856,31 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** HouseMoveOut */
+        HouseMoveOut: {
+            body: components["schemas"]["Body"];
+            /** From Sign */
+            from_sign: string;
+            /** To Sign */
+            to_sign: string;
+            /** From House */
+            from_house: number;
+            /** To House */
+            to_house: number;
+            /** Text */
+            text: string;
+            /** Short */
+            short: string;
+            /** From Theme */
+            from_theme: string;
+            /** To Theme */
+            to_theme: string;
+        };
+        /** KeyDateOut */
+        KeyDateOut: {
+            change: components["schemas"]["ChangeOut"];
+            counted: components["schemas"]["CountedOut"];
+        };
         /** KujaOut */
         KujaOut: {
             /** Rule Set */
@@ -808,6 +1042,16 @@ export interface components {
             /** Abbreviation */
             abbreviation: string;
         };
+        /** OtherOut */
+        OtherOut: {
+            body: components["schemas"]["Body"];
+            /** Sign */
+            sign: string;
+            /** House */
+            house: number;
+            /** Text */
+            text: string;
+        };
         /** PanchangaPartOut */
         PanchangaPartOut: {
             /** Key */
@@ -918,6 +1162,27 @@ export interface components {
             /** Dasha Now */
             dasha_now: string | null;
         };
+        /** PersonalChangeResponse */
+        PersonalChangeResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            change: components["schemas"]["ChangeOut"];
+            lagna: components["schemas"]["CountedOut"] | null;
+            gochara: components["schemas"]["CountedOut"] | null;
+        };
+        /** PersonalYearResponse */
+        PersonalYearResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            lagna: components["schemas"]["YearOut"] | null;
+            gochara: components["schemas"]["YearOut"] | null;
+        };
         /** PlaceList */
         PlaceList: {
             /** Places */
@@ -965,6 +1230,31 @@ export interface components {
             theme: string;
             /** Moves */
             moves: components["schemas"]["MoveOut"][];
+        };
+        /** PlanetMoveOut */
+        PlanetMoveOut: {
+            body: components["schemas"]["Body"];
+            /** From Sign */
+            from_sign: string;
+            /** To Sign */
+            to_sign: string;
+            /** Retrograde */
+            retrograde: boolean;
+            /** Returning */
+            returning: boolean;
+            /**
+             * Until
+             * Format: date-time
+             */
+            until: string;
+            /** Next Sign */
+            next_sign: string;
+            /** Text */
+            text: string;
+            /** Until Text */
+            until_text: string;
+            /** Note */
+            note: string | null;
         };
         /** PlanetOut */
         PlanetOut: {
@@ -1238,6 +1528,31 @@ export interface components {
             /** Matches */
             matches: components["schemas"]["StarMatchOut"][];
         };
+        /** StayOut */
+        StayOut: {
+            /** Sign */
+            sign: string;
+            /** House */
+            house: number;
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /** From Before */
+            from_before: boolean;
+            /** Past End */
+            past_end: boolean;
+            /** Text */
+            text: string;
+            /** Theme */
+            theme: string;
+        };
         /** SuggestionOut */
         SuggestionOut: {
             /**
@@ -1380,6 +1695,28 @@ export interface components {
             time?: components["schemas"]["TimeResolveResponse"] | null;
             timeline?: components["schemas"]["TimelineOut"] | null;
         };
+        /** UpcomingChange */
+        UpcomingChange: {
+            change: components["schemas"]["ChangeOut"];
+            lagna: components["schemas"]["CountedOut"];
+            gochara: components["schemas"]["CountedOut"];
+        };
+        /** UpcomingResponse */
+        UpcomingResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Lagna */
+            lagna: string | null;
+            /** Moon Sign */
+            moon_sign: string | null;
+            /** Changes */
+            changes: components["schemas"]["UpcomingChange"][];
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -1458,6 +1795,46 @@ export interface components {
             ceremonies: components["schemas"]["CeremonyOut"][];
             /** Note */
             note?: string | null;
+        };
+        /** YearMonthOut */
+        YearMonthOut: {
+            /** Month */
+            month: number;
+            /** Name */
+            name: string;
+            /** Houses */
+            houses: {
+                [key: string]: number;
+            };
+            /** Changes */
+            changes: string[];
+        };
+        /** YearOut */
+        YearOut: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Year */
+            year: number;
+            /** Sign */
+            sign: string;
+            /** Sign Name */
+            sign_name: string;
+            /** Planets */
+            planets: components["schemas"]["YearPlanetOut"][];
+            /** Months */
+            months: components["schemas"]["YearMonthOut"][];
+            /** Key Dates */
+            key_dates: components["schemas"]["KeyDateOut"][];
+        };
+        /** YearPlanetOut */
+        YearPlanetOut: {
+            body: components["schemas"]["Body"];
+            /** Stays */
+            stays: components["schemas"]["StayOut"][];
+            /** Quiet */
+            quiet: string | null;
         };
     };
     responses: never;
@@ -1794,6 +2171,241 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ForecastResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_changes_v1_changes_get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_hub_v1_changes__change_id__get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                change_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeHubResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_lagna_v1_changes__change_id___lagna__get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                change_id: string;
+                lagna: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeLagnaResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upcoming_changes_v1_changes_personal_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpcomingResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    personal_change_v1_changes__change_id__personal_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                change_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalChangeResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    yearly_v1_yearly__year___lagna__get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                year: number;
+                lagna: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["YearOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    personal_yearly_v1_yearly__year__personal_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                year: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalYearResponse"];
                 };
             };
             /** @description Validation Error */

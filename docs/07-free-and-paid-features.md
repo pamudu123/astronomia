@@ -32,7 +32,7 @@ This file records the product decisions made after the first release plan (file 
 | Porondam | Score, every factor with pass or fail and a one line reason, Rajju and Vedha shown separately, quick match by birth star | Detailed explanation of each factor (rule based and AI) |
 | Kuja dosha | Present or not, from which point (lagna, Moon, Venus), which house, one line reason | Every cancellation rule checked, strength, couple comparison, explanation |
 | Dasha | Main periods with dates, current main and sub period | All sub periods, third level for the current period, what each period means for this chart |
-| Forecast | This month's overview for your lagna | Twelve month personal forecast, key dates, alerts |
+| Forecast | This month's overview for your lagna. Planet change pages (Rahu, Ketu, Saturn, Jupiter) for every lagna | Twelve month personal forecast, yearly forecast by lagna, key dates, alerts |
 | Share | Link and WhatsApp share of the free result | Link shows the full paid result to whoever opens it |
 | PDF | Facts, drawings and one line reasons, in Sinhala or English | Full explanations, all paid sections, both languages in one file |
 | AI | None | "Explain this" on any result, and questions about the chart |
@@ -108,6 +108,20 @@ Notes:
 Notes:
 - The PDF must render Sinhala correctly. This needs testing early, because many PDF tools break Sinhala letters.
 - The last page always carries the disclaimer and the method used (ayanamsa, rule set version).
+
+### 4.6 Planet changes and the yearly forecast (2026-11-13)
+
+| | Free | Paid |
+|---|---|---|
+| Planet change pages | Every Rahu, Ketu, Saturn and Jupiter change, for each lagna, and for your own lagna and Moon sign | Same |
+| Yearly forecast by lagna | **Open to everyone for now** | The yearly forecast is a paid feature |
+
+Notes:
+- The planet change pages stay free. They bring search traffic.
+- The yearly forecast is paid by decision, but built open until payments exist. Its code is kept apart so the lock goes in one place on each side:
+  - Backend: `yearly_access()` in `backend/app/api/yearly.py`. Every yearly endpoint depends on it. A test proves that locking it locks every yearly endpoint and leaves the change pages open.
+  - Frontend: `YearlyGate` in `frontend/components/yearly/YearlyGate.tsx`. Every yearly page and the "Your 2027" link on the hadahan go through it.
+- The 12 general yearly pages stay public for now, for search. When the lock comes, the choice is to keep them public and lock only the personal version, or lock both.
 
 ### 4.7 Nakath (2026-11-13)
 

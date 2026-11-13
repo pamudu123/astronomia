@@ -86,7 +86,8 @@
     "disclaimer": "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer.",
     "privacy": "Privacy",
     "terms": "Terms",
-    "legal": "About this site"
+    "legal": "About this site",
+    "changes": "Planet changes"
   },
   "soon": {
     "title": "Coming soon",
@@ -194,7 +195,13 @@
       "kujaHouse": "{house} house",
       "kujaCounts": "Counts",
       "kujaNotCounts": "Does not count",
-      "kujaDialNote": "Each ring shows the 12 houses counted from one point. Outlined houses count for Kuja dosha. The filled one is where Mars sits."
+      "kujaDialNote": "Each ring shows the 12 houses counted from one point. Outlined houses count for Kuja dosha. The filled one is where Mars sits.",
+      "changesTitle": "Planet changes for you",
+      "changesLead": "The slow planets that move into a new sign in the next twelve months, counted from your lagna and from your Moon sign (gochara).",
+      "changesLagna": "From your lagna",
+      "changesMoon": "From your Moon sign (gochara)",
+      "changesOpen": "Read about this change",
+      "changesNote": "Times are Sri Lanka time. House meanings are provisional."
     }
   },
   "porondam": {
@@ -506,6 +513,151 @@
         ]
       }
     ]
+  },
+  "changes": {
+    "eyebrow": "ග්‍රහ මාරු",
+    "indexTitle": "Planet changes",
+    "indexLead": "Each time Saturn, Jupiter, Rahu or Ketu moves into a new sign, with the date and time, and what it means for each lagna.",
+    "metaIndexTitle": "Planet changes 2026 and 2027: Rahu, Ketu, Saturn and Jupiter · Astronomia",
+    "metaIndexDescription": "Dates and times of every Rahu, Ketu, Saturn and Jupiter sign change in 2026 and 2027, in Sri Lanka time, and what each one means for your lagna.",
+    "kind": {
+      "rahu-ketu": "Rahu and Ketu change",
+      "saturn": "Saturn change",
+      "jupiter": "Jupiter change"
+    },
+    "hubTitle": "{change} {year}",
+    "nameInto": "{change} {year} into {to}",
+    "nameBack": "{change} {year} back into {to}",
+    "hubLead": "What it means for each of the 12 lagnas. Choose yours.",
+    "metaHubTitle": "{name}: what it means for each lagna · Astronomia",
+    "metaHubDescription": "{date}: {moves} See which houses it touches for all 12 lagnas.",
+    "lagnaTitle": "{name} for {lagna} lagna",
+    "metaLagnaTitle": "{name} for {lagna} lagna · Astronomia",
+    "metaLagnaDescription": "{date}: {moves} What it means for {lagna} lagna, house by house.",
+    "move": "{planet} moves from {from} into {to}.",
+    "moveBack": "{planet} steps back (retrograde) from {from} into {to}.",
+    "until": "Stays until {date}, then moves into {next}.",
+    "backNote": "{planet} is moving backwards (retrograde), so this is a short stay. It returns to {next} on {date}.",
+    "returnNote": "{planet} returns to {to} after its backward step.",
+    "moonNotes": "If {lagna} is your Moon sign (gochara)",
+    "when": "{date}, {time} Sri Lanka time",
+    "shift": "{from} house to {to} house",
+    "planet": {
+      "saturn": {
+        "name": "Saturn",
+        "short": "Sa"
+      },
+      "jupiter": {
+        "name": "Jupiter",
+        "short": "Ju"
+      },
+      "rahu": {
+        "name": "Rahu",
+        "short": "Ra"
+      },
+      "ketu": {
+        "name": "Ketu",
+        "short": "Ke"
+      }
+    },
+    "house": [
+      "1st",
+      "2nd",
+      "3rd",
+      "4th",
+      "5th",
+      "6th",
+      "7th",
+      "8th",
+      "9th",
+      "10th",
+      "11th",
+      "12th"
+    ],
+    "before": "Before",
+    "after": "After",
+    "skyLabel": "The slow planets counted from the lagna.",
+    "lagnaMark": "Lagna",
+    "moving": "What moves",
+    "staying": "What stays",
+    "rashiNote": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so the same houses apply to {lagna} as a Moon sign.",
+    "rashiNoteAll": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so choose your Moon sign above instead of your lagna.",
+    "provisional": "The house meanings are provisional until a practising astrologer confirms them. This page shows where the planets move. It does not predict events.",
+    "method": "Lahiri ayanamsa, mean node. Times are Sri Lanka time (UTC+05:30).",
+    "chooseLagna": "Choose your lagna",
+    "otherLagnas": "The same change for the other lagnas",
+    "hubLink": "{name}: all 12 lagnas",
+    "all": "All planet changes",
+    "open": "Open",
+    "soon": "Page coming soon",
+    "loading": "Working out the houses",
+    "failed": "We could not load this. Please try again.",
+    "retry": "Try again",
+    "personal": {
+      "title": "Your own version",
+      "lead": "Use your birth details to count this change from your own lagna and Moon sign. Your details are used to work it out and are not saved.",
+      "useSaved": "Use my hadahan",
+      "useSavedNamed": "Use the hadahan for {name}",
+      "other": "Enter birth details",
+      "submit": "Show my version",
+      "working": "Working it out",
+      "yourLagna": "Your lagna: {lagna}",
+      "yourMoon": "Your Moon sign: {sign}",
+      "fromLagna": "Counted from your lagna ({lagna})",
+      "fromMoon": "Counted from your Moon sign, gochara ({sign})",
+      "lagnaPage": "Open the {lagna} lagna page",
+      "again": "Use other birth details",
+      "clock": "This time happens twice on that day because of a clock change. Please make your hadahan first and choose the right one."
+    },
+    "homeLink": "{change} on {date}: what it means for your lagna"
+  },
+  "yearly": {
+    "eyebrow": "වාර්ෂික පලාපල",
+    "indexTitle": "{year} forecast by lagna",
+    "indexLead": "Where Saturn, Jupiter, Rahu and Ketu stay through {year}, month by month, for each of the 12 lagnas. Choose yours.",
+    "metaIndexTitle": "{year} forecast for each lagna · Astronomia",
+    "metaIndexDescription": "Where Saturn, Jupiter, Rahu and Ketu stay through {year} for each of the 12 lagnas, month by month, with every sign change in Sri Lanka time.",
+    "title": "{year} forecast for {lagna} lagna",
+    "metaTitle": "{year} forecast for {lagna} lagna · Astronomia",
+    "metaDescription": "Where Saturn, Jupiter, Rahu and Ketu stay through {year} for {lagna} lagna, month by month, with the date of every sign change.",
+    "lead": "Where the slow planets stay through {year}, counted from {lagna} lagna.",
+    "planetsTitle": "The year for each planet",
+    "barLabel": "{planet} through the year",
+    "monthsTitle": "Month by month",
+    "monthsLead": "The house each planet is in as the month begins. A dot marks a month with a sign change.",
+    "month": "Month",
+    "changeMark": "A sign change this month",
+    "keyTitle": "Key dates",
+    "open": "Read about this change",
+    "rashiNote": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so the same houses apply to {lagna} as a Moon sign.",
+    "rashiNoteAll": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so choose your Moon sign instead of your lagna.",
+    "provisional": "The house meanings are provisional until a practising astrologer confirms them. This page shows where the planets stay. It does not predict events.",
+    "method": "Lahiri ayanamsa, mean node. Dates are Sri Lanka time (UTC+05:30).",
+    "otherLagnas": "The same year for the other lagnas",
+    "all": "All 12 lagnas",
+    "changesLink": "All planet changes",
+    "loading": "Working out the year",
+    "failed": "We could not load this. Please try again.",
+    "retry": "Try again",
+    "personal": {
+      "title": "Your own {year}",
+      "lead": "Use your birth details to see the year counted from your own lagna and Moon sign. Your details are used to work it out and are not saved.",
+      "useSaved": "Use my hadahan",
+      "useSavedNamed": "Use the hadahan for {name}",
+      "other": "Enter birth details",
+      "submit": "Show my year",
+      "working": "Working it out",
+      "yourLagna": "Your lagna: {lagna}",
+      "yourMoon": "Your Moon sign: {sign}",
+      "fromLagna": "Counted from your lagna ({lagna})",
+      "fromMoon": "Counted from your Moon sign, gochara ({sign})",
+      "again": "Use other birth details",
+      "clock": "This time happens twice on that day because of a clock change. Please make your hadahan first and choose the right one."
+    },
+    "hadahanTitle": "Your {year}",
+    "hadahanLead": "Where the slow planets stay through {year} for {lagna} lagna, month by month, with every key date.",
+    "hadahanOpen": "See your {year}",
+    "footer": "{year} forecast"
   },
   "avurudu": {
     "eyebrow": "අලුත් අවුරුදු නැකත්",

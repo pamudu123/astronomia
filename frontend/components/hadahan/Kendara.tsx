@@ -32,7 +32,8 @@ export type Placed = Pick<Planet, "body" | "house" | "navamsha_house">;
 
 type Props = {
   planets: Placed[];
-  labels: Labels;
+  /** Only the planet and house names are used. */
+  labels: Pick<Labels, "planet" | "house">;
   mode: "rashi" | "navamsha";
   title: string;
   ariaLabel: string;

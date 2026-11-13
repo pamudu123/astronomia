@@ -19,6 +19,9 @@ async function mockBackend(page: Page, lang: "en" | "si", hadahan = `hadahan-${l
   await page.route("**/api/v1/forecast", (route) =>
     route.fulfill({ contentType: "application/json", body: fixture(`forecast-${lang}.json`) }),
   );
+  await page.route("**/api/v1/changes/personal", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture(`changes-personal-${lang}.json`) }),
+  );
   const requests: string[] = [];
   await page.route("**/api/v1/hadahan", (route) => {
     requests.push(route.request().postData() ?? "");
@@ -188,4 +191,57 @@ test("the hadahan still shows when the forecast fails", async ({ page }) => {
   await page.getByRole("button", { name: "Show my hadahan" }).click();
   await expect(page.locator('[data-card="kuja"]')).toBeVisible();
   await expect(page.locator('[data-card="forecast"]')).toHaveCount(0);
+});
+
+test("the result shows the planet changes for you", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+
+  const section = page.locator('[data-card="changes"]');
+  await expect(section.getByRole("heading", { name: "Planet changes for you" })).toBeVisible();
+  const rahu = section.locator('[data-change="rahu-ketu-2026-12"]');
+  await expect(rahu).toContainText("5 December 2026, 22:32 Sri Lanka time");
+  await expect(rahu).toContainText("Rahu: 7th house to 6th house");
+  await expect(rahu).toContainText("Rahu: 4th house to 3rd house");
+  await expect(section.locator("[data-change]")).toHaveCount(5);
+  await expect(section.getByRole("link", { name: "Read about this change" })).toHaveCount(5);
+  const personal: string[] = [];
+  await page.route("**/api/v1/changes/rahu-ketu-2026-12/personal", (route) => {
+    personal.push(route.request().postData() ?? "");
+    return route.fulfill({
+      contentType: "application/json",
+      body: fixture("changes-rahu-ketu-2026-12-personal-en.json"),
+    });
+  });
+  await rahu.getByRole("link", { name: "Read about this change" }).click();
+  await expect(page).toHaveURL(/\/en\/changes\/rahu-ketu-2026-12\/simha$/);
+
+  // The hadahan made in this tab is offered, so nothing is typed again.
+  const panel = page.getByRole("main").locator('[data-card="personal"]');
+  await panel.getByRole("button", { name: "Use the hadahan for Nimali" }).click();
+  await expect(panel).toContainText("Your Moon sign: Vrischika");
+  expect(JSON.parse(personal[0])).toMatchObject({ date: "1995-04-19", time: "14:35" });
+  expect(page.url()).not.toContain("1995");
+});
+
+test("the result links to the year for this lagna", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  const card = page.locator('[data-card="yearly"]');
+  await expect(card.getByRole("heading", { name: "Your 2027" })).toBeVisible();
+  await expect(card.getByRole("link", { name: "See your 2027" })).toHaveAttribute("href", "/en/forecast/2027/simha");
+});
+
+test("the hadahan still shows when the planet changes fail", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.route("**/api/v1/changes/personal", (route) => route.fulfill({ status: 500, body: "" }));
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.locator('[data-card="forecast"]')).toBeVisible();
+  await expect(page.locator('[data-card="changes"]')).toHaveCount(0);
 });
