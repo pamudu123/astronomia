@@ -248,6 +248,16 @@ Category C is nakath (auspicious times). Rules and sources are in `docs/11-nakat
 - **Checked against** porondam.lk for 40 made-up moments (thithi, nakatha, yoga, karana and weekday all 40 of 40; sunrise 39 of 40) and 10 change times (all within a minute), Rahu kalaya from two Sri Lankan sites, and drikpanchang.com (within 3 minutes).
 - **Not built:** the night Rahu kalaya (no single rule found) and horawa (no rule needs it yet).
 
+**Done in a second pull request:** C2, Avurudu and daily nakath (free).
+
+- **Avurudu engine** (`backend/app/engine/avurudu.py`): the moment the Sun enters Mesha and punya kalaya (6 hours 24 minutes either side). The official lists for 2022 to 2027 are data in `rules/avurudu_v1.yaml`, with the source of each year. No other Avurudu time is calculated.
+- **Endpoint:** `GET /v1/avurudu/{year}?timezone=`, every time in Sri Lanka time and in the chosen time zone, with our calculated times beside the official ones and the difference in minutes.
+- **Pages:** `/{lang}/avurudu` (years and cities), `/{lang}/avurudu/{year}` for 2022 to 2028, and `/{lang}/avurudu/2027/{city}` for 18 cities with many Sri Lankans. The year page adds the visitor's own time from the browser, and any place can be chosen. A year without an official list (2028) shows only our times, marked as not official.
+- **Daily nakath:** `/{lang}/nakath` (today in Colombo, worked out at request time) and `/{lang}/nakath/{date}`, with sunrise, Rahu kalaya, thithi, nakatha, yoga and karana, any place, and the next and previous day.
+- **Search:** every Avurudu page and the daily page are in the sitemap, with titles and descriptions in both languages. Links from the home page and the footer.
+- **Checked:** our dawn matches the official lists 2022 to 2027 within a minute, punya kalaya fits every list exactly, and the Australian list's dawn and punya kalaya match the same moments in Sydney.
+- **Fixtures:** `uv run python scripts/export_nakath_fixtures.py` in `backend/`.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

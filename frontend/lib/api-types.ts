@@ -370,6 +370,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/avurudu/{year}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Avurudu
+         * @description The new year moment, punya kalaya and the official list, in Sri Lanka time and in
+         *     the given time zone.
+         */
+        get: operations["get_avurudu_v1_avurudu__year__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/reports/pdf": {
         parameters: {
             query?: never;
@@ -438,11 +459,70 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AvuruduItemOut */
+        AvuruduItemOut: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Text */
+            text: string;
+            at: components["schemas"]["BothTimes"] | null;
+            start: components["schemas"]["BothTimes"] | null;
+            end: components["schemas"]["BothTimes"] | null;
+            /** Date */
+            date: string | null;
+            /** Date Text */
+            date_text: string | null;
+            /** Colour */
+            colour: string | null;
+            /** Direction */
+            direction: string | null;
+        };
+        /** AvuruduResponse */
+        AvuruduResponse: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Year */
+            year: number;
+            /** Official */
+            official: boolean;
+            /** Source */
+            source: string | null;
+            /** Url */
+            url: string | null;
+            /** Timezone */
+            timezone: string;
+            /** Offset */
+            offset: string;
+            calculated: components["schemas"]["CalculatedOut"];
+            /** Items */
+            items: components["schemas"]["AvuruduItemOut"][];
+            /** Notes */
+            notes: string[];
+        };
         /**
          * Body
          * @enum {string}
          */
         Body: "sun" | "moon" | "mars" | "mercury" | "jupiter" | "venus" | "saturn" | "rahu" | "ketu";
+        /** BothTimes */
+        BothTimes: {
+            sri_lanka: components["schemas"]["LocalTimeOut"];
+            local: components["schemas"]["LocalTimeOut"];
+        };
+        /** CalculatedOut */
+        CalculatedOut: {
+            dawn: components["schemas"]["BothTimes"];
+            punya_start: components["schemas"]["BothTimes"];
+            punya_end: components["schemas"]["BothTimes"];
+            /** Dawn Difference */
+            dawn_difference: number | null;
+            /** Punya Difference */
+            punya_difference: number | null;
+        };
         /** CancellationOut */
         CancellationOut: {
             /** Id */
@@ -2239,6 +2319,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PanchangaResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_avurudu_v1_avurudu__year__get: {
+        parameters: {
+            query?: {
+                timezone?: string;
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                year: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvuruduResponse"];
                 };
             };
             /** @description Validation Error */

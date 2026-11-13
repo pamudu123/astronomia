@@ -9,6 +9,7 @@ import { localDate } from "@/components/changes/text";
 import { FEATURED, findChange } from "@/lib/changes";
 import { fill } from "@/lib/hadahan";
 import { hasLocale } from "@/lib/i18n";
+import { FEATURED_YEAR } from "@/lib/nakath";
 import { RASHI } from "@/lib/rashi";
 
 import { getDictionary } from "./dictionaries";
@@ -119,6 +120,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <ArrowRight />
           </Link>
         )}
+        <Link href={`/${lang}/avurudu/${FEATURED_YEAR}`} className={styles.toolMore} data-link="avurudu">
+          {fill(dict.avurudu.homeLink, { year: FEATURED_YEAR })}
+          <ArrowRight />
+        </Link>
+        <Link href={`/${lang}/nakath`} className={styles.toolMore} data-link="nakath">
+          {dict.nakath.homeLink}
+          <ArrowRight />
+        </Link>
       </section>
 
       <section className={`container ${styles.sectionTight}`} aria-labelledby="rashi-title">

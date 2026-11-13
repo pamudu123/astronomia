@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { PUBLISHED } from "@/lib/changes";
 import { locales } from "@/lib/i18n";
+import { AVURUDU_YEARS, CITIES, FEATURED_YEAR } from "@/lib/nakath";
 import { NAKSHATRA } from "@/lib/nakshatra";
 import { RASHI } from "@/lib/rashi";
 import { YEARS } from "@/lib/yearly";
@@ -23,6 +24,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ...RASHI.map((rashi) => `/changes/${change.id}/${rashi.key}`),
     ]),
     ...YEARS.flatMap((year) => [`/forecast/${year}`, ...RASHI.map((rashi) => `/forecast/${year}/${rashi.key}`)]),
+    "/avurudu",
+    ...AVURUDU_YEARS.map((year) => `/avurudu/${year}`),
+    ...CITIES.map((city) => `/avurudu/${FEATURED_YEAR}/${city.key}`),
+    "/nakath",
     "/privacy",
     "/terms",
   ];

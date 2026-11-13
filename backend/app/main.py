@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app import __version__
 from app.api import (
+    avurudu,
     changes,
     charts,
     forecast,
@@ -42,6 +43,7 @@ def create_app() -> FastAPI:
     app.include_router(changes.router)
     app.include_router(yearly.router)
     app.include_router(panchanga.router)
+    app.include_router(avurudu.router)
     app.include_router(reports.router)
     app.include_router(shares.router)
     return app
