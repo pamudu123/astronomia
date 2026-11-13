@@ -1,0 +1,76 @@
+{
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "change": {
+    "id": "rahu-ketu-2026-12",
+    "kind": "rahu-ketu",
+    "title": "රාහු කේතු මාරුව",
+    "moment": "2026-12-05T17:02:00Z",
+    "local_date": "2026-12-05",
+    "when": "2026 දෙසැම්බර් 5, ශ්‍රී ලංකා වේලාවෙන් 22:32",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "retrograde": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "dhanu",
+        "text": "රාහු කුම්භ රාශියේ සිට මකර රාශියට මාරු වේ.",
+        "until_text": "රාහු 2028 ජූනි 24 දින ධනු රාශියට මාරු වන තුරු මකර රාශියේ රැඳේ."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "retrograde": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "mithuna",
+        "text": "කේතු සිංහ රාශියේ සිට කටක රාශියට මාරු වේ.",
+        "until_text": "කේතු 2028 ජූනි 24 දින මිථුන රාශියට මාරු වන තුරු කටක රාශියේ රැඳේ."
+      }
+    ]
+  },
+  "lagna": {
+    "sign": "makara",
+    "sign_name": "මකර",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "from_house": 2,
+        "to_house": 1,
+        "text": "රාහු ඔබේ 2 වැනි භාවයෙන් ඉවත්ව 1 වැනි භාවයට පැමිණේ.",
+        "short": "රාහු: 2 වැනි භාවයේ සිට 1 වැනි භාවයට",
+        "from_theme": "2 වැනි භාවයෙන් පවුල, කථනය සහ ඉතිරිකිරීම් දැක්වේ.",
+        "to_theme": "1 වැනි භාවයෙන් ඔබ සහ ඔබ යමක් ආරම්භ කරන ආකාරය දැක්වේ."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "from_house": 8,
+        "to_house": 7,
+        "text": "කේතු ඔබේ 8 වැනි භාවයෙන් ඉවත්ව 7 වැනි භාවයට පැමිණේ.",
+        "short": "කේතු: 8 වැනි භාවයේ සිට 7 වැනි භාවයට",
+        "from_theme": "8 වැනි භාවයෙන් වෙනස්වීම් සහ අන් අය සමඟ බෙදාගන්නා දේ දැක්වේ.",
+        "to_theme": "7 වැනි භාවයෙන් හවුල්කාරිත්වය සහ විවාහය දැක්වේ."
+      }
+    ],
+    "others": [
+      {
+        "body": "saturn",
+        "sign": "meena",
+        "house": 3,
+        "text": "ශනි මීන රාශියේ, ඔබේ 3 වැනි භාවයේ රැඳේ."
+      },
+      {
+        "body": "jupiter",
+        "sign": "simha",
+        "house": 8,
+        "text": "ගුරු සිංහ රාශියේ, ඔබේ 8 වැනි භාවයේ රැඳේ."
+      }
+    ]
+  }
+}

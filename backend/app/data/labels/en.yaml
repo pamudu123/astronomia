@@ -277,3 +277,17 @@ couple:
   overlap_from: "Both are in one of these {planet} periods from {from}, and past {to}."
   overlap_all: "Both are in one of these {planet} periods for all of these years, from {from} to {to}."
   dasha_now: "{main} main period until {main_to}. {sub} sub period until {sub_to}."
+
+# Planet changes: Saturn, Jupiter, Rahu and Ketu moving into a new sign.
+changes:
+  title_rahu_ketu: "Rahu and Ketu change"
+  title_saturn: "Saturn change"
+  title_jupiter: "Jupiter change"
+  when: "{date}, {time} Sri Lanka time"
+  move: "{planet} moves from {from_sign} into {to_sign}."
+  move_back: "{planet} steps back (retrograde) from {from_sign} into {to_sign}."
+  until: "{planet} stays in {to_sign} until {date}, when it moves into {next_sign}."
+  house_move: "{planet} leaves your {from_house} house and enters your {to_house} house."
+  house_short: "{planet}: {from_house} house to {to_house} house"
+  other: "{planet} stays in {sign}, your {house} house."
+  theme: "The {house} house is about {theme}."

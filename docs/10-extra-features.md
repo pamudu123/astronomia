@@ -20,7 +20,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 **B. Planet changes and forecasts**
 
-- Rahu and Ketu change for your lagna (5 December 2026), then each Saturn and Jupiter change.
+- Rahu and Ketu change for your lagna (5 December 2026). **Built.** Then each Saturn and Jupiter change.
 - Yearly forecast by lagna.
 
 **C. Nakath (auspicious times)**
@@ -57,12 +57,30 @@ Decisions made:
 - The added factors come from the published descriptions and the results of a Sri Lankan porondam site.
 - The couple timeline shows facts only. It does not judge a dasha period as good or bad.
 
-## 4. Needed from the astrologer
+## 4. Category B in detail
+
+Planned as three pull requests, so the Rahu and Ketu pages are live before 5 December 2026.
+
+| # | Feature | Delivers | Check |
+|---|---|---|---|
+| B1 | **Rahu and Ketu change** | The change engine and endpoints for every Saturn, Jupiter, Rahu and Ketu change. A list of changes, a page for the Rahu and Ketu change, and a page for each of the 12 lagnas, in both languages. "Your own version" from the birth details, counted from the lagna and the Moon sign (gochara). "Planet changes for you" on the hadahan. **Built.** | The times match the almanac. The houses match a table worked out by hand for all 12 lagnas. The pages carry a title and description as served. Birth details never reach the address. |
+| B2 | **Saturn and Jupiter changes** | Pages for the five Saturn and Jupiter changes in 2027, with the backward steps and returns explained. | Each page shows the right return date. |
+| B3 | **Yearly forecast 2027** | A page for each lagna, and a personal version. Paid later (see file 07). | The year's changes and houses match the change pages. |
+
+Decisions made:
+
+- One page per change, plus one page per change and lagna. The change page serves broad searches. The lagna pages serve lagna searches.
+- The personal version counts from the lagna and also from the Moon sign (gochara).
+- Planet change pages are free.
+- Times are Sri Lanka time, as the almanacs print them.
+
+## 5. Needed from the astrologer
 
 Best asked for together, early:
 
 - The rules for Varna, Bhutha, Vruksha, Ayusha and Graha, and a check of the four added factors (A2).
 - How to read Saturn and dasha periods for a couple (A3).
+- What each house means when Saturn, Jupiter, Rahu or Ketu moves through it, for the change pages (B).
 - The nakath rules (category C), the Sinhala name letter table (D) and the wedding rules (C).
 
 ## Sources
