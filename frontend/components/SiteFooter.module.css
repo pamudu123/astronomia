@@ -25,7 +25,8 @@
 
 .links {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 0 20px;
   flex-basis: 100%;
 }
 

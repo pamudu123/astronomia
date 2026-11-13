@@ -489,6 +489,396 @@
         }
       }
     },
+    "/v1/changes": {
+      "get": {
+        "tags": [
+          "changes"
+        ],
+        "summary": "List Changes",
+        "description": "Every change shown on the list page, in time order.",
+        "operationId": "list_changes_v1_changes_get",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/changes/{change_id}": {
+      "get": {
+        "tags": [
+          "changes"
+        ],
+        "summary": "Change Hub",
+        "description": "One change, counted from each of the twelve lagnas.",
+        "operationId": "change_hub_v1_changes__change_id__get",
+        "parameters": [
+          {
+            "name": "change_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 40,
+              "title": "Change Id"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeHubResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/changes/{change_id}/{lagna}": {
+      "get": {
+        "tags": [
+          "changes"
+        ],
+        "summary": "Change Lagna",
+        "description": "One change for one lagna. The same houses hold for that Moon sign (gochara).",
+        "operationId": "change_lagna_v1_changes__change_id___lagna__get",
+        "parameters": [
+          {
+            "name": "change_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 40,
+              "title": "Change Id"
+            }
+          },
+          {
+            "name": "lagna",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 20,
+              "title": "Lagna"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeLagnaResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/changes/personal": {
+      "post": {
+        "tags": [
+          "changes"
+        ],
+        "summary": "Upcoming Changes",
+        "description": "The changes in the next twelve months, counted from this chart's lagna and Moon sign.",
+        "operationId": "upcoming_changes_v1_changes_personal_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpcomingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/changes/{change_id}/personal": {
+      "post": {
+        "tags": [
+          "changes"
+        ],
+        "summary": "Personal Change",
+        "description": "One change for one birth chart: from the lagna, and from the Moon sign (gochara).",
+        "operationId": "personal_change_v1_changes__change_id__personal_post",
+        "parameters": [
+          {
+            "name": "change_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 40,
+              "title": "Change Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalChangeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/yearly/{year}/{lagna}": {
+      "get": {
+        "tags": [
+          "yearly"
+        ],
+        "summary": "Yearly",
+        "description": "The year for one lagna. The same houses hold for that Moon sign (gochara).",
+        "operationId": "yearly_v1_yearly__year___lagna__get",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Year"
+            }
+          },
+          {
+            "name": "lagna",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 20,
+              "title": "Lagna"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YearOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/yearly/{year}/personal": {
+      "post": {
+        "tags": [
+          "yearly"
+        ],
+        "summary": "Personal Yearly",
+        "description": "The year for one birth chart: from the lagna, and from the Moon sign (gochara).",
+        "operationId": "personal_yearly_v1_yearly__year__personal_post",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Year"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalYearResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/panchanga": {
       "get": {
         "tags": [
@@ -1195,6 +1585,144 @@
         ],
         "title": "CancellationOut"
       },
+      "ChangeHubResponse": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "change": {
+            "$ref": "#/components/schemas/ChangeOut"
+          },
+          "lagnas": {
+            "items": {
+              "$ref": "#/components/schemas/CountedOut"
+            },
+            "type": "array",
+            "title": "Lagnas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "change",
+          "lagnas"
+        ],
+        "title": "ChangeHubResponse"
+      },
+      "ChangeLagnaResponse": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "change": {
+            "$ref": "#/components/schemas/ChangeOut"
+          },
+          "lagna": {
+            "$ref": "#/components/schemas/CountedOut"
+          },
+          "moon_notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Moon Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "change",
+          "lagna",
+          "moon_notes"
+        ],
+        "title": "ChangeLagnaResponse"
+      },
+      "ChangeListResponse": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeOut"
+            },
+            "type": "array",
+            "title": "Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "changes"
+        ],
+        "title": "ChangeListResponse"
+      },
+      "ChangeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "moment": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Moment"
+          },
+          "local_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Local Date"
+          },
+          "when": {
+            "type": "string",
+            "title": "When"
+          },
+          "moves": {
+            "items": {
+              "$ref": "#/components/schemas/PlanetMoveOut"
+            },
+            "type": "array",
+            "title": "Moves"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "moment",
+          "local_date",
+          "when",
+          "moves"
+        ],
+        "title": "ChangeOut"
+      },
       "ChartOut": {
         "properties": {
           "utc": {
@@ -1293,6 +1821,49 @@
           "passed"
         ],
         "title": "CheckOut"
+      },
+      "CountedOut": {
+        "properties": {
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "sign_name": {
+            "type": "string",
+            "title": "Sign Name"
+          },
+          "moves": {
+            "items": {
+              "$ref": "#/components/schemas/HouseMoveOut"
+            },
+            "type": "array",
+            "title": "Moves"
+          },
+          "others": {
+            "items": {
+              "$ref": "#/components/schemas/OtherOut"
+            },
+            "type": "array",
+            "title": "Others"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sign",
+          "sign_name",
+          "moves",
+          "others",
+          "notes"
+        ],
+        "title": "CountedOut",
+        "description": "A change counted from one sign: the lagna, or the Moon sign for gochara."
       },
       "DashaMainOut": {
         "properties": {
@@ -1789,6 +2360,74 @@
         ],
         "title": "Health"
       },
+      "HouseMoveOut": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "from_sign": {
+            "type": "string",
+            "title": "From Sign"
+          },
+          "to_sign": {
+            "type": "string",
+            "title": "To Sign"
+          },
+          "from_house": {
+            "type": "integer",
+            "title": "From House"
+          },
+          "to_house": {
+            "type": "integer",
+            "title": "To House"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "short": {
+            "type": "string",
+            "title": "Short"
+          },
+          "from_theme": {
+            "type": "string",
+            "title": "From Theme"
+          },
+          "to_theme": {
+            "type": "string",
+            "title": "To Theme"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body",
+          "from_sign",
+          "to_sign",
+          "from_house",
+          "to_house",
+          "text",
+          "short",
+          "from_theme",
+          "to_theme"
+        ],
+        "title": "HouseMoveOut"
+      },
+      "KeyDateOut": {
+        "properties": {
+          "change": {
+            "$ref": "#/components/schemas/ChangeOut"
+          },
+          "counted": {
+            "$ref": "#/components/schemas/CountedOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "change",
+          "counted"
+        ],
+        "title": "KeyDateOut"
+      },
       "KujaOut": {
         "properties": {
           "rule_set": {
@@ -2182,6 +2821,33 @@
         ],
         "title": "OffsetOption"
       },
+      "OtherOut": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body",
+          "sign",
+          "house",
+          "text"
+        ],
+        "title": "OtherOut"
+      },
       "PanchangaPartOut": {
         "properties": {
           "key": {
@@ -2529,6 +3195,98 @@
         ],
         "title": "PersonTimelineOut"
       },
+      "PersonalChangeResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "change": {
+            "$ref": "#/components/schemas/ChangeOut"
+          },
+          "lagna": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CountedOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gochara": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CountedOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "rule_set",
+          "provisional",
+          "change",
+          "lagna",
+          "gochara"
+        ],
+        "title": "PersonalChangeResponse"
+      },
+      "PersonalYearResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "lagna": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/YearOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gochara": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/YearOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "lagna",
+          "gochara"
+        ],
+        "title": "PersonalYearResponse"
+      },
       "PlaceList": {
         "properties": {
           "places": {
@@ -2685,6 +3443,71 @@
           "moves"
         ],
         "title": "PlanetMonthOut"
+      },
+      "PlanetMoveOut": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "from_sign": {
+            "type": "string",
+            "title": "From Sign"
+          },
+          "to_sign": {
+            "type": "string",
+            "title": "To Sign"
+          },
+          "retrograde": {
+            "type": "boolean",
+            "title": "Retrograde"
+          },
+          "returning": {
+            "type": "boolean",
+            "title": "Returning"
+          },
+          "until": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Until"
+          },
+          "next_sign": {
+            "type": "string",
+            "title": "Next Sign"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "until_text": {
+            "type": "string",
+            "title": "Until Text"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body",
+          "from_sign",
+          "to_sign",
+          "retrograde",
+          "returning",
+          "until",
+          "next_sign",
+          "text",
+          "until_text",
+          "note"
+        ],
+        "title": "PlanetMoveOut"
       },
       "PlanetOut": {
         "properties": {
@@ -3349,6 +4172,56 @@
         ],
         "title": "StarMatchesResponse"
       },
+      "StayOut": {
+        "properties": {
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "from_before": {
+            "type": "boolean",
+            "title": "From Before"
+          },
+          "past_end": {
+            "type": "boolean",
+            "title": "Past End"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "theme": {
+            "type": "string",
+            "title": "Theme"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sign",
+          "house",
+          "start",
+          "end",
+          "from_before",
+          "past_end",
+          "text",
+          "theme"
+        ],
+        "title": "StayOut"
+      },
       "TimeCheckOut": {
         "properties": {
           "stable": {
@@ -3711,6 +4584,85 @@
         ],
         "title": "TimelineResponse"
       },
+      "UpcomingChange": {
+        "properties": {
+          "change": {
+            "$ref": "#/components/schemas/ChangeOut"
+          },
+          "lagna": {
+            "$ref": "#/components/schemas/CountedOut"
+          },
+          "gochara": {
+            "$ref": "#/components/schemas/CountedOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "change",
+          "lagna",
+          "gochara"
+        ],
+        "title": "UpcomingChange"
+      },
+      "UpcomingResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "lagna": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lagna"
+          },
+          "moon_sign": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Moon Sign"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/UpcomingChange"
+            },
+            "type": "array",
+            "title": "Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "rule_set",
+          "provisional",
+          "lagna",
+          "moon_sign",
+          "changes"
+        ],
+        "title": "UpcomingResponse"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -3750,6 +4702,129 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "YearMonthOut": {
+        "properties": {
+          "month": {
+            "type": "integer",
+            "title": "Month"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "houses": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Houses"
+          },
+          "changes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "name",
+          "houses",
+          "changes"
+        ],
+        "title": "YearMonthOut"
+      },
+      "YearOut": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "sign_name": {
+            "type": "string",
+            "title": "Sign Name"
+          },
+          "planets": {
+            "items": {
+              "$ref": "#/components/schemas/YearPlanetOut"
+            },
+            "type": "array",
+            "title": "Planets"
+          },
+          "months": {
+            "items": {
+              "$ref": "#/components/schemas/YearMonthOut"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "key_dates": {
+            "items": {
+              "$ref": "#/components/schemas/KeyDateOut"
+            },
+            "type": "array",
+            "title": "Key Dates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "year",
+          "sign",
+          "sign_name",
+          "planets",
+          "months",
+          "key_dates"
+        ],
+        "title": "YearOut"
+      },
+      "YearPlanetOut": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "stays": {
+            "items": {
+              "$ref": "#/components/schemas/StayOut"
+            },
+            "type": "array",
+            "title": "Stays"
+          },
+          "quiet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quiet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body",
+          "stays",
+          "quiet"
+        ],
+        "title": "YearPlanetOut"
       }
     }
   }

@@ -1,0 +1,136 @@
+{
+  "status": "ok",
+  "time": {
+    "status": "ok",
+    "timezone": "Asia/Colombo",
+    "local": "1995-04-19T14:35:00",
+    "utc": "1995-04-19T09:05:00Z",
+    "offset_seconds": 19800,
+    "offset_label": "UTC+05:30",
+    "abbreviation": "+0530",
+    "clock_change": null,
+    "options": []
+  },
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "change": {
+    "id": "rahu-ketu-2026-12",
+    "kind": "rahu-ketu",
+    "title": "Rahu and Ketu change",
+    "moment": "2026-12-05T17:02:00Z",
+    "local_date": "2026-12-05",
+    "when": "5 December 2026, 22:32 Sri Lanka time",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "retrograde": false,
+        "returning": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "dhanu",
+        "text": "Rahu moves from Kumbha into Makara.",
+        "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu.",
+        "note": null
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "retrograde": false,
+        "returning": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "mithuna",
+        "text": "Ketu moves from Simha into Kataka.",
+        "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna.",
+        "note": null
+      }
+    ]
+  },
+  "lagna": {
+    "sign": "simha",
+    "sign_name": "Simha",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "from_house": 7,
+        "to_house": 6,
+        "text": "Rahu leaves your 7th house and enters your 6th house.",
+        "short": "Rahu: 7th house to 6th house",
+        "from_theme": "The 7th house is about partnership and marriage.",
+        "to_theme": "The 6th house is about daily work and challenges to get through."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "from_house": 1,
+        "to_house": 12,
+        "text": "Ketu leaves your 1st house and enters your 12th house.",
+        "short": "Ketu: 1st house to 12th house",
+        "from_theme": "The 1st house is about yourself and how you begin things.",
+        "to_theme": "The 12th house is about rest, spending and faraway places."
+      }
+    ],
+    "others": [
+      {
+        "body": "saturn",
+        "sign": "meena",
+        "house": 8,
+        "text": "Saturn stays in Meena, your 8th house."
+      },
+      {
+        "body": "jupiter",
+        "sign": "simha",
+        "house": 1,
+        "text": "Jupiter stays in Simha, your 1st house."
+      }
+    ],
+    "notes": []
+  },
+  "gochara": {
+    "sign": "vrischika",
+    "sign_name": "Vrischika",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "from_house": 4,
+        "to_house": 3,
+        "text": "Rahu leaves your 4th house and enters your 3rd house.",
+        "short": "Rahu: 4th house to 3rd house",
+        "from_theme": "The 4th house is about home and peace of mind.",
+        "to_theme": "The 3rd house is about effort, courage and siblings."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "from_house": 10,
+        "to_house": 9,
+        "text": "Ketu leaves your 10th house and enters your 9th house.",
+        "short": "Ketu: 10th house to 9th house",
+        "from_theme": "The 10th house is about career and standing.",
+        "to_theme": "The 9th house is about fortune, teachers and beliefs."
+      }
+    ],
+    "others": [
+      {
+        "body": "saturn",
+        "sign": "meena",
+        "house": 5,
+        "text": "Saturn stays in Meena, your 5th house."
+      },
+      {
+        "body": "jupiter",
+        "sign": "simha",
+        "house": 10,
+        "text": "Jupiter stays in Simha, your 10th house."
+      }
+    ],
+    "notes": []
+  }
+}
