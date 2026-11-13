@@ -25,10 +25,14 @@ describe("baby name letters", () => {
 
   it("has every text in both languages with the same placeholders", () => {
     const placeholders = (text: string) => [...text.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
-    expect(Object.keys(si.babyNames)).toEqual(Object.keys(en.babyNames));
-    for (const [key, text] of Object.entries(en.babyNames)) {
-      expect(placeholders(si.babyNames[key as keyof typeof si.babyNames]), key).toEqual(placeholders(text));
-    }
+    const flat = (value: object, prefix = ""): [string, string][] =>
+      Object.entries(value).flatMap(([key, inner]) =>
+        typeof inner === "object" ? flat(inner, `${prefix}${key}.`) : [[`${prefix}${key}`, String(inner)]],
+      );
+    const english = flat(en.babyNames);
+    const sinhala = new Map(flat(si.babyNames));
+    expect([...sinhala.keys()]).toEqual(english.map(([key]) => key));
+    for (const [key, text] of english) expect(placeholders(sinhala.get(key) ?? ""), key).toEqual(placeholders(text));
   });
 
   it("writes degrees inside a sign", () => {

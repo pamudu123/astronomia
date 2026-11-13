@@ -11,6 +11,7 @@ import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 
 import styles from "./BabyNames.module.css";
+import { NameSuggestions } from "./NameSuggestions";
 import { PadaCards } from "./PadaCards";
 
 type Props = {
@@ -50,6 +51,7 @@ export function BabyLettersApp({ t, hadahan, lang }: Props) {
     const check = chart.time_check;
     const warn = !check.stable || result.nearby.length > 0;
     return (
+      <>
       <section className={styles.panel} aria-labelledby="baby-result-title" data-card="baby-result">
         <h2 id="baby-result-title" className={`display ${styles.sectionTitle}`}>
           {t.letter}
@@ -139,6 +141,13 @@ export function BabyLettersApp({ t, hadahan, lang }: Props) {
           </button>
         </div>
       </section>
+      <NameSuggestions
+        t={t}
+        lang={lang}
+        letters={result.star_letters.padas.map((pada) => pada.letter)}
+        selected={[result.letter.letter]}
+      />
+      </>
     );
   }
 

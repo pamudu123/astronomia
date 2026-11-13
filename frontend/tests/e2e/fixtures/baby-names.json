@@ -1,0 +1,1165 @@
+{
+  "අ,ඉ,උ,එ|any|any|en": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "අ",
+        "count": 18
+      },
+      {
+        "letter": "ඉ",
+        "count": 1
+      },
+      {
+        "letter": "උ",
+        "count": 7
+      },
+      {
+        "letter": "එ",
+        "count": 0
+      }
+    ],
+    "names": [
+      {
+        "en": "Abhaya",
+        "si": "අභය",
+        "gender": "boy",
+        "meaning": "Fearless",
+        "meaning_en": "Fearless",
+        "meaning_si": "බිය නැති",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Abhaya_of_Tambapanni"
+      },
+      {
+        "en": "Adeesha",
+        "si": "ආදීශ",
+        "gender": "boy",
+        "meaning": "Lord, ruler",
+        "meaning_en": "Lord, ruler",
+        "meaning_si": "අධිපති",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Adeesha"
+      },
+      {
+        "en": "Ajith",
+        "si": "අජිත්",
+        "gender": "boy",
+        "meaning": "Unconquered",
+        "meaning_en": "Unconquered",
+        "meaning_si": "පරාජය නොවූ",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Ajit_(given_name)"
+      },
+      {
+        "en": "Akalanka",
+        "si": "අකලංක",
+        "gender": "boy",
+        "meaning": "Without stain",
+        "meaning_en": "Without stain",
+        "meaning_si": "කැළැල් නැති",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 4,
+        "length": "long",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Akalanka_(given_name)"
+      },
+      {
+        "en": "Akila",
+        "si": "අකිල",
+        "gender": "boy",
+        "meaning": "Whole, complete",
+        "meaning_en": "Whole, complete",
+        "meaning_si": "සම්පූර්ණ",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Akila_Dananjaya"
+      },
+      {
+        "en": "Aloka",
+        "si": "ආලෝක",
+        "gender": "both",
+        "meaning": "Light",
+        "meaning_en": "Light",
+        "meaning_si": "ආලෝකය",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Sachith_Aloka"
+      },
+      {
+        "en": "Amarasiri",
+        "si": "අමරසිරි",
+        "gender": "boy",
+        "meaning": "Lasting glory",
+        "meaning_en": "Lasting glory",
+        "meaning_si": "නොනැසෙන සිරිය",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 5,
+        "length": "long",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Amarasiri"
+      },
+      {
+        "en": "Anjali",
+        "si": "අංජලී",
+        "gender": "girl",
+        "meaning": "Offering with joined hands",
+        "meaning_en": "Offering with joined hands",
+        "meaning_si": "ඇඳිලි බැඳීම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anjali_Watson"
+      },
+      {
+        "en": "Anoma",
+        "si": "අනෝමා",
+        "gender": "girl",
+        "meaning": "Peerless",
+        "meaning_en": "Peerless",
+        "meaning_si": "අසමසම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anoma_Gamage"
+      },
+      {
+        "en": "Anula",
+        "si": "අනුලා",
+        "gender": "girl",
+        "meaning": "Name of an ancient queen",
+        "meaning_en": "Name of an ancient queen",
+        "meaning_si": "පැරණි රැජිනකගේ නම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anula_of_Anuradhapura"
+      },
+      {
+        "en": "Anura",
+        "si": "අනුර",
+        "gender": "boy",
+        "meaning": "From Anuradha, a birth star",
+        "meaning_en": "From Anuradha, a birth star",
+        "meaning_si": "අනුර නැකතෙන්",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anura_Tennekoon"
+      },
+      {
+        "en": "Anurudda",
+        "si": "අනුරුද්ධ",
+        "gender": "boy",
+        "meaning": "Unobstructed; name of a disciple of the Buddha",
+        "meaning_en": "Unobstructed; name of a disciple of the Buddha",
+        "meaning_si": "බාධා නොවූ; බුදුරදුන්ගේ ශ්‍රාවකයෙකුගේ නම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 4,
+        "length": "long",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Anurudda"
+      },
+      {
+        "en": "Anusha",
+        "si": "අනූෂා",
+        "gender": "girl",
+        "meaning": "A birth star (Anuradha)",
+        "meaning_en": "A birth star (Anuradha)",
+        "meaning_si": "අනුර නැකත",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anusha_Attanayaka"
+      },
+      {
+        "en": "Aruna",
+        "si": "අරුණ",
+        "gender": "boy",
+        "meaning": "Dawn",
+        "meaning_en": "Dawn",
+        "meaning_si": "අරුණෝදය",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Aruna_(given_name)"
+      },
+      {
+        "en": "Asanga",
+        "si": "අසංග",
+        "gender": "boy",
+        "meaning": "Unattached",
+        "meaning_en": "Unattached",
+        "meaning_si": "ඇලීම් නැති",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Asanga_Seneviratne"
+      },
+      {
+        "en": "Ashok",
+        "si": "අශෝක්",
+        "gender": "boy",
+        "meaning": "Without sorrow",
+        "meaning_en": "Without sorrow",
+        "meaning_si": "ශෝකයක් නැති",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Ashok"
+      },
+      {
+        "en": "Asitha",
+        "si": "අසිත",
+        "gender": "boy",
+        "meaning": "Name of the sage Asita",
+        "meaning_en": "Name of the sage Asita",
+        "meaning_si": "අසිත සෘෂිගේ නම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Asitha"
+      },
+      {
+        "en": "Avani",
+        "si": "අවනි",
+        "gender": "both",
+        "meaning": "The earth",
+        "meaning_en": "The earth",
+        "meaning_si": "පොළොව",
+        "meaning_from": "wikipedia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Avani_(given_name)"
+      },
+      {
+        "en": "Indunil",
+        "si": "ඉඳුනිල්",
+        "gender": "boy",
+        "meaning": "Sapphire",
+        "meaning_en": "Sapphire",
+        "meaning_si": "ඉඳුනිල් මැණික",
+        "meaning_from": "astronomia",
+        "letter": "ඉ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Indunil"
+      },
+      {
+        "en": "Udara",
+        "si": "උදාර",
+        "gender": "boy",
+        "meaning": "Noble, generous",
+        "meaning_en": "Noble, generous",
+        "meaning_si": "උතුම්",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Udara_(name)"
+      },
+      {
+        "en": "Udaya",
+        "si": "උදය",
+        "gender": "boy",
+        "meaning": "Dawn, rising",
+        "meaning_en": "Dawn, rising",
+        "meaning_si": "උදය, නැගීම",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Udaya_II"
+      },
+      {
+        "en": "Udayakantha",
+        "si": "උදයකාන්ත",
+        "gender": "boy",
+        "meaning": "Lovely as the dawn",
+        "meaning_en": "Lovely as the dawn",
+        "meaning_si": "උදය සේ ලස්සන",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 5,
+        "length": "long",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Udayakantha"
+      },
+      {
+        "en": "Udayanga",
+        "si": "උදයංග",
+        "gender": "boy",
+        "meaning": "Part of the dawn",
+        "meaning_en": "Part of the dawn",
+        "meaning_si": "උදයේ අංගය",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 4,
+        "length": "long",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Udayanga_Weeratunga"
+      },
+      {
+        "en": "Upali",
+        "si": "උපාලි",
+        "gender": "boy",
+        "meaning": "Name of a disciple of the Buddha",
+        "meaning_en": "Name of a disciple of the Buddha",
+        "meaning_si": "බුදුරදුන්ගේ ශ්‍රාවකයෙකුගේ නම",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Upali_(given_name)"
+      },
+      {
+        "en": "Upeksha",
+        "si": "උපේක්ෂා",
+        "gender": "girl",
+        "meaning": "Equanimity",
+        "meaning_en": "Equanimity",
+        "meaning_si": "උපේක්ෂාව",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Upeksha_Swarnamali"
+      },
+      {
+        "en": "Upul",
+        "si": "උපුල්",
+        "gender": "boy",
+        "meaning": "Blue water lily",
+        "meaning_en": "Blue water lily",
+        "meaning_si": "නිල් මානෙල්",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Upul"
+      }
+    ],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "අ,ඉ,උ,එ|girl|any|en": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "අ",
+        "count": 6
+      },
+      {
+        "letter": "ඉ",
+        "count": 0
+      },
+      {
+        "letter": "උ",
+        "count": 1
+      },
+      {
+        "letter": "එ",
+        "count": 0
+      }
+    ],
+    "names": [
+      {
+        "en": "Aloka",
+        "si": "ආලෝක",
+        "gender": "both",
+        "meaning": "Light",
+        "meaning_en": "Light",
+        "meaning_si": "ආලෝකය",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Sachith_Aloka"
+      },
+      {
+        "en": "Anjali",
+        "si": "අංජලී",
+        "gender": "girl",
+        "meaning": "Offering with joined hands",
+        "meaning_en": "Offering with joined hands",
+        "meaning_si": "ඇඳිලි බැඳීම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anjali_Watson"
+      },
+      {
+        "en": "Anoma",
+        "si": "අනෝමා",
+        "gender": "girl",
+        "meaning": "Peerless",
+        "meaning_en": "Peerless",
+        "meaning_si": "අසමසම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anoma_Gamage"
+      },
+      {
+        "en": "Anula",
+        "si": "අනුලා",
+        "gender": "girl",
+        "meaning": "Name of an ancient queen",
+        "meaning_en": "Name of an ancient queen",
+        "meaning_si": "පැරණි රැජිනකගේ නම",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anula_of_Anuradhapura"
+      },
+      {
+        "en": "Anusha",
+        "si": "අනූෂා",
+        "gender": "girl",
+        "meaning": "A birth star (Anuradha)",
+        "meaning_en": "A birth star (Anuradha)",
+        "meaning_si": "අනුර නැකත",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Anusha_Attanayaka"
+      },
+      {
+        "en": "Avani",
+        "si": "අවනි",
+        "gender": "both",
+        "meaning": "The earth",
+        "meaning_en": "The earth",
+        "meaning_si": "පොළොව",
+        "meaning_from": "wikipedia",
+        "letter": "අ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Avani_(given_name)"
+      },
+      {
+        "en": "Upeksha",
+        "si": "උපේක්ෂා",
+        "gender": "girl",
+        "meaning": "Equanimity",
+        "meaning_en": "Equanimity",
+        "meaning_si": "උපේක්ෂාව",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Upeksha_Swarnamali"
+      }
+    ],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "අ,ඉ,උ,එ|boy|short|en": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "අ",
+        "count": 2
+      },
+      {
+        "letter": "ඉ",
+        "count": 0
+      },
+      {
+        "letter": "උ",
+        "count": 1
+      },
+      {
+        "letter": "එ",
+        "count": 0
+      }
+    ],
+    "names": [
+      {
+        "en": "Ajith",
+        "si": "අජිත්",
+        "gender": "boy",
+        "meaning": "Unconquered",
+        "meaning_en": "Unconquered",
+        "meaning_si": "පරාජය නොවූ",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Ajit_(given_name)"
+      },
+      {
+        "en": "Ashok",
+        "si": "අශෝක්",
+        "gender": "boy",
+        "meaning": "Without sorrow",
+        "meaning_en": "Without sorrow",
+        "meaning_si": "ශෝකයක් නැති",
+        "meaning_from": "astronomia",
+        "letter": "අ",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Ashok"
+      },
+      {
+        "en": "Upul",
+        "si": "උපුල්",
+        "gender": "boy",
+        "meaning": "Blue water lily",
+        "meaning_en": "Blue water lily",
+        "meaning_si": "නිල් මානෙල්",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Upul"
+      }
+    ],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "ඉ,උ,එ|any|any|en": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "ඉ",
+        "count": 1
+      },
+      {
+        "letter": "උ",
+        "count": 7
+      },
+      {
+        "letter": "එ",
+        "count": 0
+      }
+    ],
+    "names": [
+      {
+        "en": "Indunil",
+        "si": "ඉඳුනිල්",
+        "gender": "boy",
+        "meaning": "Sapphire",
+        "meaning_en": "Sapphire",
+        "meaning_si": "ඉඳුනිල් මැණික",
+        "meaning_from": "astronomia",
+        "letter": "ඉ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Indunil"
+      },
+      {
+        "en": "Udara",
+        "si": "උදාර",
+        "gender": "boy",
+        "meaning": "Noble, generous",
+        "meaning_en": "Noble, generous",
+        "meaning_si": "උතුම්",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Udara_(name)"
+      },
+      {
+        "en": "Udaya",
+        "si": "උදය",
+        "gender": "boy",
+        "meaning": "Dawn, rising",
+        "meaning_en": "Dawn, rising",
+        "meaning_si": "උදය, නැගීම",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Udaya_II"
+      },
+      {
+        "en": "Udayakantha",
+        "si": "උදයකාන්ත",
+        "gender": "boy",
+        "meaning": "Lovely as the dawn",
+        "meaning_en": "Lovely as the dawn",
+        "meaning_si": "උදය සේ ලස්සන",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 5,
+        "length": "long",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Udayakantha"
+      },
+      {
+        "en": "Udayanga",
+        "si": "උදයංග",
+        "gender": "boy",
+        "meaning": "Part of the dawn",
+        "meaning_en": "Part of the dawn",
+        "meaning_si": "උදයේ අංගය",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 4,
+        "length": "long",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Udayanga_Weeratunga"
+      },
+      {
+        "en": "Upali",
+        "si": "උපාලි",
+        "gender": "boy",
+        "meaning": "Name of a disciple of the Buddha",
+        "meaning_en": "Name of a disciple of the Buddha",
+        "meaning_si": "බුදුරදුන්ගේ ශ්‍රාවකයෙකුගේ නම",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Upali_(given_name)"
+      },
+      {
+        "en": "Upeksha",
+        "si": "උපේක්ෂා",
+        "gender": "girl",
+        "meaning": "Equanimity",
+        "meaning_en": "Equanimity",
+        "meaning_si": "උපේක්ෂාව",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Upeksha_Swarnamali"
+      },
+      {
+        "en": "Upul",
+        "si": "උපුල්",
+        "gender": "boy",
+        "meaning": "Blue water lily",
+        "meaning_en": "Blue water lily",
+        "meaning_si": "නිල් මානෙල්",
+        "meaning_from": "astronomia",
+        "letter": "උ",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Upul"
+      }
+    ],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "කු,ඝ,ඞ,ඡ|any|any|si": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "කු",
+        "count": 5
+      },
+      {
+        "letter": "ඝ",
+        "count": 0
+      },
+      {
+        "letter": "ඞ",
+        "count": 0
+      },
+      {
+        "letter": "ඡ",
+        "count": 0
+      }
+    ],
+    "names": [
+      {
+        "en": "Kumarasiri",
+        "si": "කුමාරසිරි",
+        "gender": "boy",
+        "meaning": "කුමරුගේ සිරිය",
+        "meaning_en": "Glory of a prince",
+        "meaning_si": "කුමරුගේ සිරිය",
+        "meaning_from": "astronomia",
+        "letter": "කු",
+        "syllables": 5,
+        "length": "long",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Kumarasiri"
+      },
+      {
+        "en": "Kumari",
+        "si": "කුමාරි",
+        "gender": "girl",
+        "meaning": "කුමරිය",
+        "meaning_en": "Princess, young woman",
+        "meaning_si": "කුමරිය",
+        "meaning_from": "astronomia",
+        "letter": "කු",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Kumari_Dilrukshi"
+      },
+      {
+        "en": "Kumudu",
+        "si": "කුමුදු",
+        "gender": "both",
+        "meaning": "මානෙල්",
+        "meaning_en": "Water lily",
+        "meaning_si": "මානෙල්",
+        "meaning_from": "astronomia",
+        "letter": "කු",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Kumudu_Priyanka"
+      },
+      {
+        "en": "Kusal",
+        "si": "කුසල්",
+        "gender": "boy",
+        "meaning": "කුසලය, පින",
+        "meaning_en": "Merit, wholesome deeds",
+        "meaning_si": "කුසලය, පින",
+        "meaning_from": "astronomia",
+        "letter": "කු",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Kusal_Mendis"
+      },
+      {
+        "en": "Kusum",
+        "si": "කුසුම්",
+        "gender": "girl",
+        "meaning": "මල",
+        "meaning_en": "Flower",
+        "meaning_si": "මල",
+        "meaning_from": "astronomia",
+        "letter": "කු",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Kusum_Renu"
+      }
+    ],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "යු|any|any|en": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "යු",
+        "count": 0
+      }
+    ],
+    "names": [],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "ය,යු|any|any|en": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "ය",
+        "count": 3
+      },
+      {
+        "letter": "යු",
+        "count": 0
+      }
+    ],
+    "names": [
+      {
+        "en": "Yamuna",
+        "si": "යමුනා",
+        "gender": "girl",
+        "meaning": "Name of a river",
+        "meaning_en": "Name of a river",
+        "meaning_si": "ගඟක නම",
+        "meaning_from": "astronomia",
+        "letter": "ය",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Yamuna_Sangarasivam"
+      },
+      {
+        "en": "Yasas",
+        "si": "යසස්",
+        "gender": "boy",
+        "meaning": "Fame",
+        "meaning_en": "Fame",
+        "meaning_si": "කීර්තිය",
+        "meaning_from": "astronomia",
+        "letter": "ය",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Yasas"
+      },
+      {
+        "en": "Yashan",
+        "si": "යශාන්",
+        "gender": "boy",
+        "meaning": "Fame",
+        "meaning_en": "Fame",
+        "meaning_si": "කීර්තිය",
+        "meaning_from": "astronomia",
+        "letter": "ය",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Yashan_(name)"
+      }
+    ],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "නො,ය,යි,යු|any|any|en": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "නො",
+        "count": 0
+      },
+      {
+        "letter": "ය",
+        "count": 3
+      },
+      {
+        "letter": "යි",
+        "count": 0
+      },
+      {
+        "letter": "යු",
+        "count": 0
+      }
+    ],
+    "names": [
+      {
+        "en": "Yamuna",
+        "si": "යමුනා",
+        "gender": "girl",
+        "meaning": "Name of a river",
+        "meaning_en": "Name of a river",
+        "meaning_si": "ගඟක නම",
+        "meaning_from": "astronomia",
+        "letter": "ය",
+        "syllables": 3,
+        "length": "medium",
+        "source": "wikipedia_person",
+        "url": "https://en.wikipedia.org/wiki/Yamuna_Sangarasivam"
+      },
+      {
+        "en": "Yasas",
+        "si": "යසස්",
+        "gender": "boy",
+        "meaning": "Fame",
+        "meaning_en": "Fame",
+        "meaning_si": "කීර්තිය",
+        "meaning_from": "astronomia",
+        "letter": "ය",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Yasas"
+      },
+      {
+        "en": "Yashan",
+        "si": "යශාන්",
+        "gender": "boy",
+        "meaning": "Fame",
+        "meaning_en": "Fame",
+        "meaning_si": "කීර්තිය",
+        "meaning_from": "astronomia",
+        "letter": "ය",
+        "syllables": 2,
+        "length": "short",
+        "source": "wikipedia_name",
+        "url": "https://en.wikipedia.org/wiki/Yashan_(name)"
+      }
+    ],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "චෙ|any|any|si": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "චෙ",
+        "count": 0
+      }
+    ],
+    "names": [],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  },
+  "චෙ,චො|any|any|si": {
+    "version": "names_si_v1",
+    "provisional": true,
+    "letters": [
+      {
+        "letter": "චෙ",
+        "count": 0
+      },
+      {
+        "letter": "චො",
+        "count": 0
+      }
+    ],
+    "names": [],
+    "sources": [
+      {
+        "key": "wikipedia_name",
+        "name": "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)",
+        "url": "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names",
+        "licence": "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+      },
+      {
+        "key": "wikipedia_person",
+        "name": "Wikipedia articles about Sri Lankan people",
+        "url": "https://en.wikipedia.org/",
+        "licence": "Only the fact that the name is in use is taken. Each name links the article."
+      },
+      {
+        "key": "astronomia",
+        "name": "Astronomia editors",
+        "url": null,
+        "licence": "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+      }
+    ]
+  }
+}

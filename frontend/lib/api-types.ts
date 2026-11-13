@@ -455,6 +455,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/baby/names": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Names For Letters
+         * @description Names that start with the given letters, filtered by gender and length.
+         */
+        get: operations["names_for_letters_v1_baby_names_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/kendara/search": {
         parameters: {
             query?: never;
@@ -1157,6 +1177,13 @@ export interface components {
             /** Counts */
             counts: boolean;
         };
+        /** LetterCountOut */
+        LetterCountOut: {
+            /** Letter */
+            letter: string;
+            /** Count */
+            count: number;
+        };
         /** LocalRangeOut */
         LocalRangeOut: {
             start: components["schemas"]["LocalTimeOut"];
@@ -1256,6 +1283,57 @@ export interface components {
             to_house: number;
             /** Text */
             text: string;
+        };
+        /** NameOut */
+        NameOut: {
+            /** En */
+            en: string;
+            /** Si */
+            si: string;
+            /** Gender */
+            gender: string;
+            /** Meaning */
+            meaning: string;
+            /** Meaning En */
+            meaning_en: string;
+            /** Meaning Si */
+            meaning_si: string;
+            /** Meaning From */
+            meaning_from: string;
+            /** Letter */
+            letter: string;
+            /** Syllables */
+            syllables: number;
+            /** Length */
+            length: string;
+            /** Source */
+            source: string;
+            /** Url */
+            url: string;
+        };
+        /** NameSourceOut */
+        NameSourceOut: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Url */
+            url: string | null;
+            /** Licence */
+            licence: string;
+        };
+        /** NamesResponse */
+        NamesResponse: {
+            /** Version */
+            version: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Letters */
+            letters: components["schemas"]["LetterCountOut"][];
+            /** Names */
+            names: components["schemas"]["NameOut"][];
+            /** Sources */
+            sources: components["schemas"]["NameSourceOut"][];
         };
         /** NearbyLetterOut */
         NearbyLetterOut: {
@@ -2924,6 +3002,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StarLettersResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    names_for_letters_v1_baby_names_get: {
+        parameters: {
+            query: {
+                letters: string[];
+                gender?: "boy" | "girl" | "any";
+                length?: ("short" | "medium" | "long") | null;
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NamesResponse"];
                 };
             };
             /** @description Validation Error */

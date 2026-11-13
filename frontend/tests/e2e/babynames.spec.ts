@@ -6,7 +6,24 @@ import { type Page, expect, test } from "@playwright/test";
 /** The backend is not running in these tests: its answers are saved real responses. */
 const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
 
+const NAMES = JSON.parse(fixture("baby-names.json")) as Record<string, unknown>;
+
 async function mockBackend(page: Page, lang: "en" | "si", birth = "baby-birth") {
+  const nameQueries: string[] = [];
+  await page.route("**/api/v1/baby/names?*", (route) => {
+    const url = new URL(route.request().url());
+    const key = [
+      url.searchParams.getAll("letters").join(","),
+      url.searchParams.get("gender") ?? "any",
+      url.searchParams.get("length") ?? "any",
+      url.searchParams.get("lang"),
+    ].join("|");
+    nameQueries.push(key);
+    const body = NAMES[key];
+    return body
+      ? route.fulfill({ contentType: "application/json", body: JSON.stringify(body) })
+      : route.fulfill({ status: 500, body: `no fixture for ${key}` });
+  });
   await page.route("**/api/v1/baby/letters/*?*", (route) => {
     const star = new URL(route.request().url()).pathname.split("/").at(-1);
     return route.fulfill({ contentType: "application/json", body: fixture(`baby-letters-${star}-${lang}.json`) });
@@ -22,7 +39,7 @@ async function mockBackend(page: Page, lang: "en" | "si", birth = "baby-birth") 
   await page.route("**/api/v1/time/resolve", (route) =>
     route.fulfill({ contentType: "application/json", body: fixture("time-kandy.json") }),
   );
-  return posted;
+  return Object.assign(posted, { nameQueries });
 }
 
 async function noSidewaysScroll(page: Page) {
@@ -121,4 +138,57 @@ test("the star pages are rendered on the server for search engines", async ({ re
 test("an unknown star is not found", async ({ page }) => {
   await page.goto("/en/baby-names/pluto");
   await expect(page.getByText("This page could not be found.")).toBeVisible();
+});
+
+test("names for a star, filtered by letter, gender and length", async ({ page }) => {
+  const asked = await mockBackend(page, "en");
+  await page.goto("/en/baby-names/krittika");
+  const names = page.locator('[data-card="names"]');
+  await expect(names.getByRole("heading", { name: "Names for these letters" })).toBeVisible();
+  await expect(names.locator("[data-name]")).toHaveCount(26);
+  await expect(names.locator('[data-name="Ajith"]')).toContainText("අජිත්");
+  await expect(names.locator('[data-name="Ajith"]')).toContainText("Unconquered");
+  await expect(names.locator('[data-name="Ajith"]').getByRole("link")).toHaveAttribute(
+    "href",
+    "https://en.wikipedia.org/wiki/Ajit_(given_name)",
+  );
+  await noSidewaysScroll(page);
+
+  await names.getByRole("button", { name: "Girl", exact: true }).click();
+  await expect(names.locator("[data-name]")).toHaveCount(7);
+  await expect(names).toContainText("7 names");
+  await names.getByRole("button", { name: "Boy", exact: true }).click();
+  await names.getByRole("button", { name: "Short (1 or 2 syllables)" }).click();
+  await expect(names.locator("[data-name]")).toHaveCount(3);
+  await names.getByRole("button", { name: "All", exact: true }).click();
+  await names.getByRole("button", { name: "Any", exact: true }).click();
+  await names.locator('[data-letter-chip="අ"]').click();
+  await expect(names.locator('[data-letter-chip="අ"]')).toHaveAttribute("aria-pressed", "false");
+  await expect(names.locator("[data-name]")).toHaveCount(8);
+  expect(asked.nameQueries).toContain("ඉ,උ,එ|any|any|en");
+  await noSidewaysScroll(page);
+});
+
+test("the names for a birth start with its letter, and other letters can be added", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/baby-names");
+  await enterBirth(page, "1995-04-19", "14:35", "Find the letters");
+  const names = page.locator('[data-card="names"]');
+  await expect(names.locator('[data-letter-chip="යු"]')).toHaveAttribute("aria-pressed", "true");
+  await expect(names).toContainText("No names in our list start with these letters yet.");
+  await names.locator('[data-letter-chip="ය"]').click();
+  await expect(names.locator("[data-name]")).toHaveCount(3);
+  await expect(names.locator('[data-name="Yamuna"]')).toContainText("Girl");
+  await noSidewaysScroll(page);
+});
+
+test("names in Sinhala", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.goto("/si/baby-names/ardra");
+  const names = page.locator('[data-card="names"]');
+  await expect(names.getByRole("heading", { name: "මෙම අකුරුවලින් ඇරඹෙන නම්" })).toBeVisible();
+  await expect(names.locator("[data-name]")).toHaveCount(5);
+  await expect(names.locator('[data-name="Kusal"]')).toContainText("කුසලය, පින");
+  await expect(names.locator('[data-name="Kusal"]')).toContainText("Merit, wholesome deeds");
+  await noSidewaysScroll(page);
 });
