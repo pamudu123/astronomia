@@ -1,0 +1,130 @@
+{
+  "status": "ok",
+  "time": {
+    "status": "ok",
+    "timezone": "Asia/Colombo",
+    "local": "2024-01-18T15:10:00",
+    "utc": "2024-01-18T09:40:00Z",
+    "offset_seconds": 19800,
+    "offset_label": "UTC+05:30",
+    "abbreviation": "+0530",
+    "clock_change": null,
+    "options": []
+  },
+  "rule_set": "name_letters_si_v1",
+  "provisional": true,
+  "chart": {
+    "star": "ashwini",
+    "star_name": "අස්විද",
+    "star_number": 1,
+    "pada": 2,
+    "rashi": "mesha",
+    "rashi_name": "මේෂ",
+    "lagna": "vrishabha",
+    "lagna_name": "වෘෂභ",
+    "weekday": "thursday",
+    "weekday_name": "බ්‍රහස්පතින්දා",
+    "day_note": "හිරු උදාවෙන් පසු උපන් බැවින් දිනය බ්‍රහස්පතින්දා වේ.",
+    "timezone": "Asia/Colombo",
+    "offset": "UTC+05:30",
+    "time_check": {
+      "stable": true,
+      "lagna_changes_within": null,
+      "nakshatra_changes_within": null,
+      "pada_changes_within": 5,
+      "reason": "උපන් වේලාව විනාඩි 15 කින් වෙනස් වුවත් ලග්නය සහ නැකත එලෙසම පවතී."
+    }
+  },
+  "letter": {
+    "pada": 2,
+    "letter": "චෙ",
+    "latin": "Che",
+    "others": [],
+    "rashi": "mesha",
+    "rashi_name": "මේෂ",
+    "from_degree": 3.333333,
+    "to_degree": 6.666667
+  },
+  "star_letters": {
+    "star": "ashwini",
+    "star_name": "අස්විද",
+    "star_number": 1,
+    "padas": [
+      {
+        "pada": 1,
+        "letter": "චු",
+        "latin": "Chu",
+        "others": [
+          "චූ"
+        ],
+        "rashi": "mesha",
+        "rashi_name": "මේෂ",
+        "from_degree": 0.0,
+        "to_degree": 3.333333
+      },
+      {
+        "pada": 2,
+        "letter": "චෙ",
+        "latin": "Che",
+        "others": [],
+        "rashi": "mesha",
+        "rashi_name": "මේෂ",
+        "from_degree": 3.333333,
+        "to_degree": 6.666667
+      },
+      {
+        "pada": 3,
+        "letter": "චො",
+        "latin": "Cho",
+        "others": [],
+        "rashi": "mesha",
+        "rashi_name": "මේෂ",
+        "from_degree": 6.666667,
+        "to_degree": 10.0
+      },
+      {
+        "pada": 4,
+        "letter": "ල",
+        "latin": "La",
+        "others": [],
+        "rashi": "mesha",
+        "rashi_name": "මේෂ",
+        "from_degree": 10.0,
+        "to_degree": 13.333333
+      }
+    ]
+  },
+  "nearby": [
+    {
+      "minutes": 3,
+      "direction": "after",
+      "star": "ashwini",
+      "star_name": "අස්විද",
+      "pada": 3,
+      "letter": "චො",
+      "latin": "Cho",
+      "text": "මිනිත්තු 3කට පසු සඳු අස්විද නැකතේ 3 වන පාදයට යයි. එයින් ලැබෙන අකුර චො වේ."
+    }
+  ],
+  "lagna_letters": {
+    "key": "vrishabha",
+    "name": "වෘෂභ",
+    "letters": [
+      "ඉ",
+      "ඊ",
+      "උ",
+      "ෂ"
+    ]
+  },
+  "weekday_letters": {
+    "key": "thursday",
+    "name": "බ්‍රහස්පතින්දා",
+    "letters": [
+      "ත",
+      "ථ",
+      "ද",
+      "ධ",
+      "න"
+    ]
+  }
+}

@@ -1,9 +1,11 @@
 {
- "source": "Sinhala name letter tables observed on 2026-11-13. lankahandahana.com's name finder was asked about 108 made-up births in Colombo (one per star and pada, no real person). laksara.com and Lankadeepa tables were read from their articles.",
+ "source": "Sinhala name letter tables observed on 2026-11-13. lankahandahana.com's name finder was asked about 108 made-up births in Colombo (one per star and pada, no real person). laksara.com and Lankadeepa tables were read from their articles. The almanac table (Lanka Panchanga Grahasphuta Litha 2019-2020, page 53) was read from a blog post that quotes it.",
  "urls": {
   "lankahandahana": "https://lankahandahana.com/sinhala-baby-names",
   "laksara": "https://www.laksara.com/naming-a-newborn-child/378/",
-  "lankadeepa": "https://www.lankadeepa.lk/sunday/rasawitha/57-526035"
+  "lankadeepa": "https://www.lankadeepa.lk/sunday/rasawitha/57-526035",
+  "almanac": "https://priyankaramanjusawa.blogspot.com/ (post of 12 May 2020, quoting Lanka Panchanga Grahasphuta Litha 2019-2020, page 53)",
+  "udendras": "udendras blogspot, 2016 (same table as laksara.com letter for letter, so not counted separately)"
  },
  "lankahandahana_births": [
   {
@@ -1201,5 +1203,169 @@
  },
  "notes": {
   "lankadeepa_uttara_bhadrapada": "The article lists three letters for this star (දු ථි ඤ). ඤ is read as pada 4, as in the other two sources, and pada 3 as missing."
+ },
+ "almanac": {
+  "ashwini": [
+   "චු",
+   "චෙ",
+   "චො",
+   "ල"
+  ],
+  "swati": [
+   "රු",
+   "රෙ",
+   "රො",
+   "ත"
+  ],
+  "bharani": [
+   "ලී",
+   "ලු",
+   "ලෙ",
+   "ලො"
+  ],
+  "vishakha": [
+   "ති",
+   "තු",
+   "තෙ",
+   "තො"
+  ],
+  "krittika": [
+   "අ",
+   "ඉ",
+   "උ",
+   "එ"
+  ],
+  "anuradha": [
+   "න",
+   "නි",
+   "නු",
+   "නෙ"
+  ],
+  "rohini": [
+   "ඔ",
+   "ව",
+   "වි",
+   "වු"
+  ],
+  "jyeshtha": [
+   "නො",
+   "ය",
+   "යි",
+   "යු"
+  ],
+  "mrigashira": [
+   "වෙ",
+   "වො",
+   "ක",
+   "කි"
+  ],
+  "mula": [
+   "යෙ",
+   "යො",
+   "බ",
+   "බි"
+  ],
+  "ardra": [
+   "කු",
+   "ඝ",
+   "ඩ",
+   "ඡ"
+  ],
+  "purva_ashadha": [
+   "බු",
+   "ධ",
+   "එ",
+   "ඪ"
+  ],
+  "punarvasu": [
+   "කෙ",
+   "කො",
+   "හ",
+   "හි"
+  ],
+  "uttara_ashadha": [
+   "බෙ",
+   "බො",
+   "ජ",
+   "ජි"
+  ],
+  "pushya": [
+   "හු",
+   "හෙ",
+   "හො",
+   "ඩ"
+  ],
+  "shravana": [
+   "ජු",
+   "ජේ",
+   "ජො",
+   "ෂ"
+  ],
+  "ashlesha": [
+   "ඩි",
+   "ඩු",
+   "ඩෙ",
+   "ඩො"
+  ],
+  "dhanishta": [
+   "ග",
+   "ගි",
+   "ගු",
+   "ගෙ"
+  ],
+  "magha": [
+   "ම",
+   "මි",
+   "මු",
+   "මෙ"
+  ],
+  "shatabhisha": [
+   "ගො",
+   "ස",
+   "සි",
+   "සු"
+  ],
+  "purva_phalguni": [
+   "මො",
+   "ට",
+   "ටි",
+   "ටු"
+  ],
+  "purva_bhadrapada": [
+   "සෙ",
+   "සො",
+   "ද",
+   "දි"
+  ],
+  "uttara_phalguni": [
+   "ටෙ",
+   "ටො",
+   "ප",
+   "පි"
+  ],
+  "uttara_bhadrapada": [
+   "දු",
+   "ථ",
+   "ඣ",
+   "ඤ"
+  ],
+  "hasta": [
+   "පු",
+   "ෂ",
+   "ණ",
+   "ඨ"
+  ],
+  "revati": [
+   "දෙ",
+   "දො",
+   "ව",
+   "වී"
+  ],
+  "chitra": [
+   "පෙ",
+   "පො",
+   "ර",
+   "රි"
+  ]
  }
 }

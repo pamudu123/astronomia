@@ -137,6 +137,18 @@ Notes:
   - Backend: `wedding_access()` in `backend/app/api/wedding.py`. The finder endpoint depends on it. A test proves that locking it locks the finder and leaves the daily and Avurudu nakath open.
   - Frontend: `WeddingGate` in `frontend/components/wedding/WeddingGate.tsx`. The finder on the porondam result goes through it.
 
+### 4.8 Baby and child (2026-11-13)
+
+| | Free | Paid |
+|---|---|---|
+| Baby name letters from the birth star | Everything | |
+| Name suggestions | Everything | |
+| First letters ceremony nakath | **Open to everyone for now** | May become paid later |
+
+Notes:
+- The letters and names are free. They bring search traffic.
+- The ceremony finder keeps its own files, components and endpoint, so a paid check can be added in one place later if wanted.
+
 ## 5. What paid features need
 
 Paid tiers change the first plan in three ways.

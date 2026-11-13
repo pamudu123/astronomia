@@ -1,152 +1,150 @@
 # Starting letters (akuru) for a name, from the birth star (nakatha) and its pada.
 # PROVISIONAL until a practising astrologer confirms it. Sources and choices: docs/12-baby-rules.md.
 #
-# Each pada has one letter, chosen by the majority of three Sri Lankan sources: lankahandahana.com
-# (read back from 108 made-up births), laksara.com and Lankadeepa. Where all three differ, the classical
-# Indian table breaks the tie. `others` lists what the other sources give, for the astrologer.
+# Each pada has one letter, chosen by the majority of four Sri Lankan sources: the almanac
+# Lanka Panchanga Grahasphuta Litha 2019-2020 (page 53, as quoted online), lankahandahana.com
+# (read back from 108 made-up births), laksara.com and Lankadeepa. A tie goes to the almanac.
+# The classical Indian table is a cross-check only. `others` lists what the other sources give.
 version: name_letters_si_v1
 provisional: true
 
 stars:
   ashwini:
-    - {letter: "චූ", latin: Choo, others: ["චු"]}
-    - {letter: "චෙ", latin: Che, others: []}
-    - {letter: "චො", latin: Cho, others: []}
-    - {letter: "ල", latin: La, others: []}
+    - {letter: "චු", latin: "Chu", others: ["චූ"]}
+    - {letter: "චෙ", latin: "Che", others: []}
+    - {letter: "චො", latin: "Cho", others: []}
+    - {letter: "ල", latin: "La", others: []}
   bharani:
-    - {letter: "ලි", latin: Li, others: []}
-    - {letter: "ලු", latin: Lu, others: []}
-    - {letter: "ලෙ", latin: Le, others: []}
-    - {letter: "ලො", latin: Lo, others: []}
+    - {letter: "ලි", latin: "Li", others: ["ලී"]}
+    - {letter: "ලු", latin: "Lu", others: []}
+    - {letter: "ලෙ", latin: "Le", others: []}
+    - {letter: "ලො", latin: "Lo", others: []}
   krittika:
-    - {letter: "අ", latin: A, others: []}
-    - {letter: "ඉ", latin: I, others: []}
-    - {letter: "උ", latin: U, others: []}
-    - {letter: "එ", latin: E, others: []}
+    - {letter: "අ", latin: "A", others: []}
+    - {letter: "ඉ", latin: "I", others: []}
+    - {letter: "උ", latin: "U", others: []}
+    - {letter: "එ", latin: "E", others: []}
   rohini:
-    - {letter: "ඔ", latin: O, others: []}
-    - {letter: "ව", latin: Va, others: ["ච"]}
-    - {letter: "වි", latin: Vi, others: ["චි"]}
-    - {letter: "වු", latin: Vu, others: ["චු"]}
+    - {letter: "ඔ", latin: "O", others: []}
+    - {letter: "ව", latin: "Va", others: ["ච"]}
+    - {letter: "වි", latin: "Vi", others: ["චි"]}
+    - {letter: "වු", latin: "Vu", others: ["චු"]}
   mrigashira:
-    - {letter: "වෙ", latin: Ve, others: ["චෙ"]}
-    - {letter: "වො", latin: Vo, others: ["චො"]}
-    - {letter: "ක", latin: Ka, others: []}
-    - {letter: "කි", latin: Ki, others: []}
+    - {letter: "වෙ", latin: "Ve", others: ["චෙ"]}
+    - {letter: "වො", latin: "Vo", others: ["චො"]}
+    - {letter: "ක", latin: "Ka", others: []}
+    - {letter: "කි", latin: "Ki", others: []}
   ardra:
-    - {letter: "කු", latin: Ku, others: []}
-    - {letter: "ඝ", latin: Gha, others: ["ස"]}
-    - {letter: "ඞ", latin: Nga, others: ["ධ"]}
-    - {letter: "ඡ", latin: Chha, others: ["ච", "ජ"]}
+    - {letter: "කු", latin: "Ku", others: []}
+    - {letter: "ඝ", latin: "Gha", others: ["ස"]}
+    - {letter: "ඞ", latin: "Nga", others: ["ධ", "ඩ"]}
+    - {letter: "ඡ", latin: "Chha", others: ["ච", "ජ"]}
   punarvasu:
-    - {letter: "කෙ", latin: Ke, others: []}
-    - {letter: "කො", latin: Ko, others: []}
-    - {letter: "හ", latin: Ha, others: []}
-    - {letter: "හි", latin: Hi, others: []}
+    - {letter: "කෙ", latin: "Ke", others: []}
+    - {letter: "කො", latin: "Ko", others: []}
+    - {letter: "හ", latin: "Ha", others: []}
+    - {letter: "හි", latin: "Hi", others: []}
   pushya:
-    - {letter: "හු", latin: Hu, others: ["හූ"]}
-    - {letter: "හෙ", latin: He, others: []}
-    - {letter: "හො", latin: Ho, others: []}
-    - {letter: "ඩ", latin: Da, others: []}
+    - {letter: "හු", latin: "Hu", others: ["හූ"]}
+    - {letter: "හෙ", latin: "He", others: []}
+    - {letter: "හො", latin: "Ho", others: []}
+    - {letter: "ඩ", latin: "Da", others: []}
   ashlesha:
-    - {letter: "ඩි", latin: Di, others: []}
-    - {letter: "ඩු", latin: Du, others: []}
-    - {letter: "ඩෙ", latin: De, others: []}
-    - {letter: "ඩො", latin: Do, others: []}
+    - {letter: "ඩි", latin: "Di", others: []}
+    - {letter: "ඩු", latin: "Du", others: []}
+    - {letter: "ඩෙ", latin: "De", others: []}
+    - {letter: "ඩො", latin: "Do", others: []}
   magha:
-    - {letter: "ම", latin: Ma, others: []}
-    - {letter: "මි", latin: Mi, others: ["මී"]}
-    - {letter: "මු", latin: Mu, others: ["මූ"]}
-    - {letter: "මෙ", latin: Me, others: []}
+    - {letter: "ම", latin: "Ma", others: []}
+    - {letter: "මි", latin: "Mi", others: ["මී"]}
+    - {letter: "මු", latin: "Mu", others: ["මූ"]}
+    - {letter: "මෙ", latin: "Me", others: []}
   purva_phalguni:
-    - {letter: "මො", latin: Mo, others: []}
-    - {letter: "ට", latin: Ta, others: ["ම"]}
-    - {letter: "ටි", latin: Ti, others: []}
-    - {letter: "ටු", latin: Tu, others: []}
+    - {letter: "මො", latin: "Mo", others: []}
+    - {letter: "ට", latin: "Ta", others: ["ම"]}
+    - {letter: "ටි", latin: "Ti", others: []}
+    - {letter: "ටු", latin: "Tu", others: []}
   uttara_phalguni:
-    - {letter: "ටෙ", latin: Te, others: []}
-    - {letter: "ටො", latin: To, others: []}
-    - {letter: "ප", latin: Pa, others: []}
-    - {letter: "පි", latin: Pi, others: ["කි"]}
+    - {letter: "ටෙ", latin: "Te", others: []}
+    - {letter: "ටො", latin: "To", others: []}
+    - {letter: "ප", latin: "Pa", others: []}
+    - {letter: "පි", latin: "Pi", others: ["කි"]}
   hasta:
-    - {letter: "පු", latin: Pu, others: []}
-    - {letter: "ෂ", latin: Sha, others: ["ස"]}
-    - {letter: "ණ", latin: Na, others: []}
-    - {letter: "ඨ", latin: Tha, others: ["ධි"]}
+    - {letter: "පු", latin: "Pu", others: []}
+    - {letter: "ෂ", latin: "Sha", others: ["ස"]}
+    - {letter: "ණ", latin: "Na", others: []}
+    - {letter: "ඨ", latin: "Tha", others: ["ධි"]}
   chitra:
-    - {letter: "පෙ", latin: Pe, others: []}
-    - {letter: "පො", latin: Po, others: []}
-    - {letter: "ර", latin: Ra, others: []}
-    - {letter: "රි", latin: Ri, others: []}
+    - {letter: "පෙ", latin: "Pe", others: []}
+    - {letter: "පො", latin: "Po", others: []}
+    - {letter: "ර", latin: "Ra", others: []}
+    - {letter: "රි", latin: "Ri", others: []}
   swati:
-    - {letter: "රු", latin: Ru, others: []}
-    - {letter: "රෙ", latin: Re, others: []}
-    - {letter: "රො", latin: Ro, others: []}
-    - {letter: "ත", latin: Ta, others: []}
+    - {letter: "රු", latin: "Ru", others: []}
+    - {letter: "රෙ", latin: "Re", others: []}
+    - {letter: "රො", latin: "Ro", others: []}
+    - {letter: "ත", latin: "Ta", others: []}
   vishakha:
-    - {letter: "ති", latin: Ti, others: []}
-    - {letter: "තු", latin: Tu, others: []}
-    - {letter: "තෙ", latin: Te, others: []}
-    - {letter: "තො", latin: To, others: []}
+    - {letter: "ති", latin: "Ti", others: []}
+    - {letter: "තු", latin: "Tu", others: []}
+    - {letter: "තෙ", latin: "Te", others: []}
+    - {letter: "තො", latin: "To", others: []}
   anuradha:
-    - {letter: "න", latin: Na, others: []}
-    - {letter: "නි", latin: Ni, others: []}
-    - {letter: "නු", latin: Nu, others: []}
-    - {letter: "නෙ", latin: Ne, others: []}
+    - {letter: "න", latin: "Na", others: []}
+    - {letter: "නි", latin: "Ni", others: []}
+    - {letter: "නු", latin: "Nu", others: []}
+    - {letter: "නෙ", latin: "Ne", others: []}
   jyeshtha:
-    - {letter: "නො", latin: No, others: []}
-    - {letter: "ය", latin: Ya, others: []}
-    - {letter: "යි", latin: Yi, others: []}
-    - {letter: "යු", latin: Yu, others: []}
+    - {letter: "නො", latin: "No", others: []}
+    - {letter: "ය", latin: "Ya", others: []}
+    - {letter: "යි", latin: "Yi", others: []}
+    - {letter: "යු", latin: "Yu", others: []}
   mula:
-    - {letter: "යෙ", latin: Ye, others: []}
-    - {letter: "යො", latin: Yo, others: []}
-    - {letter: "බ", latin: Ba, others: ["ඔ"]}
-    - {letter: "බි", latin: Bi, others: ["ඕ"]}
+    - {letter: "යෙ", latin: "Ye", others: []}
+    - {letter: "යො", latin: "Yo", others: []}
+    - {letter: "බ", latin: "Ba", others: ["ඔ"]}
+    - {letter: "බි", latin: "Bi", others: ["ඕ"]}
   purva_ashadha:
-    - {letter: "බු", latin: Bu, others: []}
-    - {letter: "ධ", latin: Dha, others: []}
-    - {letter: "එ", latin: E, others: ["භ"]}
-    - {letter: "ඪ", latin: Dha, others: ["ඵ"]}
+    - {letter: "බු", latin: "Bu", others: []}
+    - {letter: "ධ", latin: "Dha", others: []}
+    - {letter: "එ", latin: "E", others: ["භ"]}
+    - {letter: "ඪ", latin: "Dha", others: ["ඵ"]}
   uttara_ashadha:
-    - {letter: "බෙ", latin: Be, others: []}
-    - {letter: "බො", latin: Bo, others: []}
-    - {letter: "ජ", latin: Ja, others: []}
-    - {letter: "ජි", latin: Ji, others: ["පි"]}
+    - {letter: "බෙ", latin: "Be", others: []}
+    - {letter: "බො", latin: "Bo", others: []}
+    - {letter: "ජ", latin: "Ja", others: []}
+    - {letter: "ජි", latin: "Ji", others: ["පි"]}
   shravana:
-    - {letter: "ජු", latin: Ju, others: []}
-    - {letter: "ජෙ", latin: Je, others: []}
-    - {letter: "ජො", latin: Jo, others: []}
-    - {letter: "ඛ", latin: Kha, others: ["ප", "ෂ"]}
+    - {letter: "ජු", latin: "Ju", others: []}
+    - {letter: "ජෙ", latin: "Je", others: ["ජේ"]}
+    - {letter: "ජො", latin: "Jo", others: []}
+    - {letter: "ෂ", latin: "Sha", others: ["ඛ", "ප"]}
   dhanishta:
-    - {letter: "ග", latin: Ga, others: ["ගැ"]}
-    - {letter: "ගි", latin: Gi, others: []}
-    - {letter: "ගු", latin: Gu, others: []}
-    - {letter: "ගෙ", latin: Ge, others: []}
+    - {letter: "ග", latin: "Ga", others: ["ගැ"]}
+    - {letter: "ගි", latin: "Gi", others: []}
+    - {letter: "ගු", latin: "Gu", others: []}
+    - {letter: "ගෙ", latin: "Ge", others: []}
   shatabhisha:
-    - {letter: "ගො", latin: Go, others: []}
-    - {letter: "ස", latin: Sa, others: []}
-    - {letter: "සි", latin: Si, others: []}
-    - {letter: "සු", latin: Su, others: []}
+    - {letter: "ගො", latin: "Go", others: []}
+    - {letter: "ස", latin: "Sa", others: []}
+    - {letter: "සි", latin: "Si", others: []}
+    - {letter: "සු", latin: "Su", others: []}
   purva_bhadrapada:
-    - {letter: "සෙ", latin: Se, others: []}
-    - {letter: "සො", latin: So, others: []}
-    - {letter: "ද", latin: Da, others: []}
-    - {letter: "දි", latin: Di, others: []}
+    - {letter: "සෙ", latin: "Se", others: []}
+    - {letter: "සො", latin: "So", others: []}
+    - {letter: "ද", latin: "Da", others: []}
+    - {letter: "දි", latin: "Di", others: []}
   uttara_bhadrapada:
-    - {letter: "දු", latin: Du, others: []}
-    - {letter: "ථ", latin: Tha, others: ["ථි"]}
-    - {letter: "ඣ", latin: Jha, others: []}  # Lankadeepa lists no letter for this pada
-    - {letter: "ඤ", latin: Nya, others: []}
+    - {letter: "දු", latin: "Du", others: []}
+    - {letter: "ථ", latin: "Tha", others: ["ථි"]}
+    - {letter: "ඣ", latin: "Jha", others: []}  # Lankadeepa lists no letter for this pada
+    - {letter: "ඤ", latin: "Nya", others: []}
   revati:
-    - {letter: "දෙ", latin: De, others: []}
-    - {letter: "දො", latin: Do, others: []}
-    - {letter: "ච", latin: Cha, others: []}
-    - {letter: "චි", latin: Chi, others: []}
+    - {letter: "දෙ", latin: "De", others: []}
+    - {letter: "දො", latin: "Do", others: []}
+    - {letter: "ච", latin: "Cha", others: ["ව"]}
+    - {letter: "චි", latin: "Chi", others: ["වී"]}
 
-# Letters some families also use: by the birth lagna and by the birth weekday (counted from sunrise).
-# From laksara.com, which follows the classical consonant groups. Lankadeepa gives the same groups
-# with a few misprints (docs/12).
 lagna:
   mesha: ["අ", "ආ", "ශ"]
   vrishabha: ["ඉ", "ඊ", "උ", "ෂ"]

@@ -35,6 +35,7 @@ def test_all_stars(client: TestClient) -> None:
     body = client.get("/v1/baby/letters").json()
     assert len(body["stars"]) == 27
     assert body["stars"][26]["padas"][3]["letter"] == "චි"
+    assert body["stars"][17]["padas"][0]["latin"] == "No"
 
 
 def test_letters_for_a_birth(client: TestClient) -> None:

@@ -267,6 +267,17 @@ Category C is nakath (auspicious times). Rules and sources are in `docs/11-nakat
 - **Kept apart:** `engine/wedding.py`, `api/wedding.py`, `lib/wedding.ts` and `components/wedding/`. The frontend lock goes in `WeddingGate`.
 - **Checked:** every suggestion is checked again at its start, middle and end against each rule, worked out separately from the sky.
 
+Category D is baby and child. Tables and sources are in `docs/12-baby-rules.md`.
+
+**Done in one pull request:** D1, baby name letters (free).
+
+- **Rules** in `rules/name_letters_si_v1.yaml`: the letter for each of the 108 padas, with what the other sources give, and the lagna and weekday letters. Transliterations are quoted, because YAML reads a bare `No` as false.
+- **Engine** (`backend/app/engine/names.py`): the letter for a star and pada, and any pada change within 15 minutes of the birth time.
+- **Endpoints:** `GET /v1/baby/letters` and `GET /v1/baby/letters/{star}` (cached for an hour). `POST /v1/baby/letters` takes the birth details in the body and returns the star, pada, Moon sign, lagna, the weekday counted from sunrise, the hadahan time check and the letters.
+- **Pages:** `/{lang}/baby-names` (the birth form and the 27 stars with their letters) and `/{lang}/baby-names/{star}` (the four padas, rendered on the server). The letters for page titles are kept in `frontend/lib/babynames.ts`, and a test keeps them equal to the rule file.
+- **Checked:** each letter is the majority of four sources (`tests/golden/name_letters_observed.json`), and a Sri Lankan site's star and pada agree with ours for 108 made-up births.
+- **Fixtures:** `uv run python scripts/export_baby_fixtures.py` in `backend/`.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

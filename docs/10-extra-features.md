@@ -32,7 +32,8 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 **D. Baby and child**
 
-- Baby name letters from the birth star.
+- Baby name letters from the birth star. **Built.**
+- Name suggestions for the letters.
 - First letters ceremony nakath (akuru kiyaweema).
 
 **E. Old horoscopes**
@@ -92,7 +93,22 @@ Decisions made:
 - The rules are checked against several sources and kept in versioned rule files, marked provisional.
 - An Avurudu nakath time is published only when it comes from the official list or matches it. Times we calculate are marked as calculated.
 
-## 6. Needed from the astrologer
+## 6. Category D in detail
+
+Planned as three pull requests. The tables and their sources are in file 12. Everything in category D is free.
+
+| # | Feature | Delivers | Check |
+|---|---|---|---|
+| D1 | **Baby name letters** (free) | The birth star, pada, Moon sign, lagna and weekday from the birth details, the starting letter for the pada, the birth time check, and the letter of a pada that starts or ends within 15 minutes. A page for each of the 27 stars with its four padas, no birth details needed. **Built.** | Each letter is the majority of four Sri Lankan sources. A Sri Lankan site's star and pada agree with ours for 108 made-up births. |
+| D2 | **Name suggestions** (free) | Names that start with the chosen letters, with meanings in Sinhala and English, and boy, girl or both. | Every name starts with a letter from the table. |
+| D3 | **First letters ceremony nakath** (free for now) | Good dates and times for akuru kiyaweema, found with the set C engine, for 1, 3 or 6 months and a place. | Each suggestion passes the rules it lists. |
+
+Decisions made:
+
+- All three are free. The ceremony finder keeps its own files and endpoint, so a paid check can go in one place later.
+- The letter table and names are data files, not code. Each name keeps its source.
+
+## 7. Needed from the astrologer
 
 Best asked for together, early:
 
@@ -100,7 +116,7 @@ Best asked for together, early:
 - How to read Saturn and dasha periods for a couple (A3).
 - What each house means when Saturn, Jupiter, Rahu or Ketu moves through it, for the change pages (B).
 - The nakath rules (category C): see the questions at the end of file 11.
-- The nakath rules (category C), the Sinhala name letter table (D) and the wedding rules (C).
+- The Sinhala name letter table (D): see the questions at the end of file 12.
 
 ## Sources
 
