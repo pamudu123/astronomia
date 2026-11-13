@@ -18,6 +18,8 @@ COPY app ./app
 RUN uv sync --frozen --no-dev
 # Build the place search index into the image, so the first request is fast.
 RUN /srv/.venv/bin/python -m app.geo.build
+# And the daily planet table for the old horoscope search.
+RUN /srv/.venv/bin/python -m app.kendara.table
 
 
 FROM python:3.13-slim

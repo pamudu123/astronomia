@@ -109,7 +109,7 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 - **Pages:** the birth details form (place search, time zone shown for the date, coordinates option, clock change choice) and the result page (key cards, kendara in rashi and navamsha, planets table, dasha timeline, Kuja card, birth time check).
 - **Endpoints:** `POST /v1/charts`, `POST /v1/hadahan`, `GET /v1/labels/{lang}`.
 - **Golden charts:** 6 charts in `backend/tests/golden/charts.json`, marked `"checked": false` until confirmed.
-- **Provisional until confirmed:** the kendara house direction (anticlockwise from the top box).
+- **Confirmed:** the kendara house direction (anticlockwise from the top box). The owner checked it against a paper horoscope on 2026-11-13.
 
 
 **Done together in one pull request:** steps 6 and 8, and the porondam part of step 9.
@@ -197,6 +197,14 @@ Planned set by set in `docs/10-extra-features.md`. Category A is porondam depth.
 - **Pages and PDF:** a picture for each new factor, and a "Not counted" state on the page and in the PDF.
 - **Check:** `backend/tests/test_porondam_observed.py` replays 34 results from a Sri Lankan porondam site. The four added factors agree with all of them.
 - **Still missing:** Varna, Bhutha, Vruksha, Ayusha and Graha.
+
+**Done in a later pull request:** the last five factors (all 20 of the 20).
+
+- **Rules:** `porondam_si_v3.yaml` adds Varna, Bhutha, Vruksha, Ayusha and Graha. Versions 1 and 2 are kept. Sources and method in `docs/03-porondam-domain-notes.md`.
+- **Engine:** three new rule types: `sign_rank_at_least` (Varna by Moon sign), `distance28_avoid` (Ayusha in the 28 star count) and `lagna_and_moon_lords` (Graha). Graha needs both lagnas, so it is "Not counted" in a birth star only match, like Dina.
+- **Counts:** a birth star only match counts 16 factors, a full match 18. Rajju and Vedha stay apart.
+- **Check:** the replay test now has 74 of the site's results. Bhutha, Vruksha and Ayusha agree with all of them. Varna and Graha follow published methods, because the site's could not be worked out.
+- **PDF:** the porondam report is now 3 pages.
 
 **Done in the same pull request:** A3, years ahead for the couple.
 
@@ -293,6 +301,21 @@ Category D is baby and child. Tables and sources are in `docs/12-baby-rules.md`.
 - **Endpoint:** `POST /v1/first-letters` with the child's birth details or birth star (and birth date for the age), the place, and 1, 3 or 6 months. It depends on `first_letters_access()`. The place lookup is shared with the wedding finder.
 - **Page:** `/{lang}/first-letters`, linked from the baby names pages, the home page and the footer.
 - **Checked:** every suggestion passes every rule again at its start, middle and end, worked out separately from the sky. Three Sri Lankan newspaper columns agree with the engine's nakatha, lagna and tara lists (`tests/golden/first_letters_observed.json`).
+
+**Done in one pull request:** set E, part 1: enter an old kendara and find the births.
+
+- **Planet table:** `backend/app/kendara/table.py` stores all nine bodies at 00:00 UTC each day, 1900 to 2035. It is built in the Docker image and on first use (about 10 seconds, 750 KB, not committed).
+- **Search:** `backend/app/kendara/search.py`.
+  - Days from the table first, then 5 minute steps with the ephemeris at the birth place. Window edges are found to the minute.
+  - Windows are graded "exact" or "near", using the edge margins in `backend/app/data/rules/kendara_v1.yaml`.
+  - A full 1900 to today search takes well under a second.
+- **Endpoint:** `POST /v1/kendara/search`, free for now behind `kendara_access()`. Narrowing by year range, known date and birth star. The place defaults to Colombo.
+- **Page:** `/{lang}/kendara`.
+  - Choose the lagna sign, tap a planet and tap its box, with an optional navamsha kendara.
+  - Results show each window, its birth star and pada, and its grade.
+  - Linked from the hadahan and porondam forms.
+- **Check:** for 13 known births from 1902 to 2019, our own drawings searched backwards find the true birth, with and without the navamsha.
+- **Details:** `docs/13-old-horoscopes.md`.
 
 ## 5. Working rules
 

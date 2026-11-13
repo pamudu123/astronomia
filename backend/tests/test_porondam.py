@@ -3,6 +3,7 @@ import pytest
 from app.engine.porondam import (
     FactorResult,
     Role,
+    distance28,
     load_rules,
     match,
     star_matches,
@@ -18,9 +19,9 @@ def factor(
     return next(f for f in result.factors if f.id == factor_id)
 
 
-def test_rules_are_provisional_and_have_fifteen_factors() -> None:
+def test_rules_are_provisional_and_have_all_twenty_factors() -> None:
     rules = load_rules()
-    assert rules["version"] == "porondam_si_v2"
+    assert rules["version"] == "porondam_si_v3"
     assert rules["provisional"] is True
     assert [f["id"] for f in rules["factors"]] == [
         "dina",
@@ -35,6 +36,11 @@ def test_rules_are_provisional_and_have_fifteen_factors() -> None:
         "pakshi",
         "linga",
         "weekday",
+        "varna",
+        "bhuta",
+        "vruksha",
+        "ayusha",
+        "graha",
         "nadi",
         "rajju",
         "vedha",
@@ -45,9 +51,13 @@ def test_version_one_still_loads() -> None:
     old = match(star_point("anuradha", 2), star_point("rohini", 1), version="porondam_si_v1")
     assert old.rule_set == "porondam_si_v1"
     assert len(old.scored) == 9
+    two = match(star_point("anuradha", 2), star_point("rohini", 1), version="porondam_si_v2")
+    assert len(two.scored) == 12
 
 
-@pytest.mark.parametrize("table", ["gothra", "pakshi", "linga", "gana", "yoni", "nadi", "rajju"])
+@pytest.mark.parametrize(
+    "table", ["bhuta", "vruksha", "gothra", "pakshi", "linga", "gana", "yoni", "nadi", "rajju"]
+)
 def test_each_table_places_every_star_exactly_once(table: str) -> None:
     groups = load_rules()["tables"][table]
     stars = [star for members in groups.values() for star in members]
@@ -148,14 +158,14 @@ def test_vedha_in_both_directions() -> None:
 
 def test_score_and_summary() -> None:
     result = match(star_point("anuradha", 2), star_point("rohini", 1))
-    # A birth star only match has no weekdays: 12 counted factors, and 13 with them.
-    assert len(result.scored) == 12
-    assert [f.id for f in result.unchecked] == ["weekday"]
+    # A birth star only match has no weekdays or lagnas: 16 counted factors, and 18 with them.
+    assert len(result.scored) == 16
+    assert [f.id for f in result.unchecked] == ["weekday", "graha"]
     assert len(result.hard_checks) == 2
-    assert result.passed == 9
-    with_days = match(star_point("anuradha", 2), star_point("rohini", 1), weekdays=(0, 1))
-    assert len(with_days.scored) == 13
-    assert with_days.passed == 10
+    assert result.passed == 11
+    full = match(star_point("anuradha", 2), star_point("rohini", 1), weekdays=(0, 1), lagnas=(0, 4))
+    assert len(full.scored) == 18
+    assert full.unchecked == []
     assert result.summary == "majority_pass"
     failed = match(star_point("ashwini", 1), star_point("jyeshtha", 1))
     assert failed.summary == "essential_fail"
@@ -269,3 +279,88 @@ def test_weekday_is_not_checked_without_birth_dates() -> None:
     weekday = factor("anuradha", "rohini", "weekday")
     assert not weekday.checked
     assert weekday.facts == {}
+
+
+def test_varna_by_moon_sign_groom_equal_or_higher() -> None:
+    # Moon signs: Kataka is Brahmana, Simha Kshatriya, Vrishabha Vaishya, Mithuna Shudra.
+    assert factor("pushya", "magha", "varna").passed is False  # Brahmana bride, Kshatriya groom
+    assert factor("magha", "pushya", "varna").passed  # Kshatriya bride, Brahmana groom
+    assert factor("rohini", "rohini", "varna").passed  # the same varna
+    assert factor("rohini", "pushya", "varna").facts == {
+        "bride_varna": "vaishya",
+        "groom_varna": "brahmana",
+    }
+    # The pada fixes the sign: Krittika pada 1 is Mesha, pada 2 is Vrishabha.
+    assert factor("ashwini", "krittika", "varna", groom_pada=2).passed is False
+
+
+def test_bhuta_water_and_fire_do_not_agree() -> None:
+    assert factor("ashwini", "rohini", "bhuta").passed  # earth and earth
+    assert factor("ashwini", "hasta", "bhuta").passed  # earth and fire, partly
+    assert not factor("magha", "hasta", "bhuta").passed  # water and fire
+    assert not factor("hasta", "magha", "bhuta").passed  # fire and water
+    assert factor("ardra", "uttara_phalguni", "bhuta").facts == {
+        "bride_bhuta": "apo",
+        "groom_bhuta": "tejo",
+    }
+
+
+def test_vruksha_depends_on_the_bride() -> None:
+    assert factor("pushya", "ashwini", "vruksha").passed  # milk bride, hard groom
+    assert factor("ashwini", "pushya", "vruksha").passed  # hard bride, milk groom, partly
+    assert not factor("ashwini", "bharani", "vruksha").passed  # both hard
+    assert factor("revati", "mula", "vruksha").passed  # both milk
+
+
+@pytest.mark.parametrize(
+    ("bride", "groom", "distance"),
+    [
+        ("ashwini", "ashwini", 1),
+        ("ashwini", "bharani", 2),
+        ("bharani", "ashwini", 2),
+        ("ashwini", "mrigashira", 5),
+        ("ashwini", "swati", 15),
+        # Abhijit sits between Uttara Ashadha and Shravana in the 28 star count.
+        ("uttara_ashadha", "shravana", 3),
+        ("ashwini", "revati", 2),  # Revati is just before Ashwini
+    ],
+)
+def test_distance28(bride: str, groom: str, distance: int) -> None:
+    assert distance28(NAKSHATRA.index(bride), NAKSHATRA.index(groom)) == distance
+
+
+def test_ayusha_bands() -> None:
+    assert factor("ashwini", "bharani", "ayusha").passed  # 2 apart
+    assert not factor("ashwini", "rohini", "ayusha").passed  # 4 apart
+    assert not factor("ashwini", "mrigashira", "ayusha").passed  # 5 apart
+    assert factor("ashwini", "punarvasu", "ayusha").passed  # 7 apart, partly
+    assert factor("ashwini", "swati", "ayusha").facts == {"distance": 15}
+
+
+def graha(bride_lagna: str, groom_lagna: str, bride: str = "ashwini", groom: str = "ashwini"):  # type: ignore[no-untyped-def]
+    result = match(
+        star_point(bride, 1),
+        star_point(groom, 1),
+        lagnas=(RASHI.index(bride_lagna), RASHI.index(groom_lagna)),
+    )
+    return next(f for f in result.factors if f.id == "graha")
+
+
+def test_graha_counts_four_lord_checks() -> None:
+    # Mesha lagnas and Mesha Moons: Mars four times, all the same planet.
+    assert graha("mesha", "mesha").facts["positive"] == 4
+    # Lagna lords Sun and Saturn see each other as enemies. Moon sign lords are both Mars.
+    two = graha("simha", "makara")
+    assert two.facts["positive"] == 2
+    assert two.passed
+    # Lagna lords Sun and Saturn, Moon sign lords Mars (Mesha) and Mercury (Mithuna):
+    # Mars counts Mercury as an enemy; Mercury sees Mars as neutral.
+    one = graha("simha", "makara", groom="ardra")
+    assert one.facts["positive"] == 1
+    assert not one.passed
+    assert one.facts["bride_lagna_lord"] == "sun"
+
+
+def test_graha_is_not_checked_without_lagnas() -> None:
+    graha_factor = factor("anuradha", "rohini", "graha")
+    assert not graha_factor.checked

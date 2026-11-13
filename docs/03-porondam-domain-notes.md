@@ -64,7 +64,7 @@ Birth details plus marriage intent are sensitive. Prefer no storage by default, 
 
 ## What the site uses now (provisional)
 
-The engine applies 15 factors from `backend/app/data/rules/porondam_si_v2.yaml` (version 1, with 11, is kept). "Count" means the groom's star counted from the bride's, both included.
+The engine applies all 20 factors from `backend/app/data/rules/porondam_si_v3.yaml` (versions 1 and 2, with 11 and 15, are kept). "Count" means the groom's star counted from the bride's, both included.
 
 | Factor | Rule used |
 |---|---|
@@ -80,6 +80,11 @@ The engine applies 15 factors from `backend/app/data/rules/porondam_si_v2.yaml` 
 | Pakshi | The two birds are not enemies (table below) |
 | Linga | Bride and groom, in that order: female and male, female and female, or one neuter star with a female one |
 | Dina (id `weekday`) | The groom's birth weekday, counted from the bride's, is not 6th or 7th. Needs both birth dates, so a birth star only match leaves it out of the count |
+| Varna | The groom's varna is the same as or higher than the bride's, by Moon sign: Kataka, Vrischika, Meena Brahmana; Mesha, Simha, Dhanu Kshatriya; Vrishabha, Kanya, Makara Vaishya; Mithuna, Tula, Kumbha Shudra |
+| Bhutha | The two stars' elements are not water and fire (table below) |
+| Vruksha | Not two hard trees (table below) |
+| Ayusha | The two stars are not 3, 4 or 5 apart in the 28 star count |
+| Graha | At least 2 of 4 checks between the lagna lords and the Moon sign lords are friendly or neutral. Needs both lagnas, so a birth star only match leaves it out of the count |
 | Nadi | Different nadi |
 | Rajju (essential) | Different rajju |
 | Vedha (essential) | Not an afflicting star pair |
@@ -112,22 +117,58 @@ The site's picture lists the gothra by the 27 star count (it puts Shatabhisha wi
 
 **Dina.** Every weekday pair we saw fits one rule: it does not agree when the groom was born on the weekday one or two days before the bride's. We used births between 08:00 and 20:00, so this does not show whether the day starts at midnight or at sunrise. We use the calendar date.
 
-**Not added yet.**
+## The last five factors (2026-11-13)
 
-- **Varna, Bhutha, Vruksha, Ayusha:** the site gave the same result for the same two stars at different birth times, so they depend only on the stars. But they do not follow from the values it shows. Each star's varna, element and tree are known, but the rules that compare them are not.
-- **Graha:** changes with the birth time, so it uses more of the chart.
+We read lankahandahana.com's article on each factor, searched Sinhala and English sources, and sent purahada.lk 40 more made-up couples: 74 results in all, 61 different star pairs. The data is in `backend/tests/golden/porondam_observed.json`.
 
-The values seen, for the astrologer:
+**Bhutha.** It agrees with the site on all 61 pairs.
 
-- **Varna:** a cycle of six from Ashwini: Brahmana, Kshatriya, Vaishya, Shudra, Panchama, Sankara.
-- **Bhutha:** Pathavi from Ashwini to Ardra, Apo from Punarvasu to Uttara Phalguni, Thejo from Hasta to Anuradha, Vayo from Jyeshtha to Dhanishta, and Akasha from Shatabhisha to Revati.
-- **Vruksha:** one tree for each star.
+- **Table** (lankahandahana.com, Sinhala Wikipedia):
+  - Pathavi: Ashwini to Mrigashira.
+  - Apo: Ardra to Purva Phalguni.
+  - Thejo: Uttara Phalguni to Vishakha.
+  - Vayo: Anuradha to Shravana.
+  - Akasha: Dhanishta to Revati.
+- **Rule:** the same element is good, and water with fire is bad, either way round. Any other pair partly agrees. The Prabhashwara astrology blog states the same rule.
+- **The site's picture** shows a table one star off, as it does for Gothra.
 
-**Where the site and our existing factors differ.** Over the same 34 couples, the site agrees with our Yoni, Nadi and Vedha every time. It often differs on Vashya (4 of 34 agree), Rashyadhipathi (19), Rajju (22), Mahendra (26), Nakath (27), Stree Deergha (30) and Gana (31). For its Rashi and Rajju rows, the site's picture shows the lagna signs, not the Moon signs, so it may use the lagna for some of these. These are questions for the astrologer. We have not changed the existing factors.
+**Vruksha.** It agrees with the site on all 61 pairs.
+
+- **Milk trees:** Pushya, Ashlesha, Magha, Purva Phalguni, Uttara Phalguni, Jyeshtha, Mula, Uttara Ashadha, Shravana, Purva Bhadrapada and Revati. The other 16 are hard trees.
+- **Sources for the list:** the Dinamina newspaper names the first ten and says there are 11 milk and 16 hard. nonshout.com adds Revati.
+- **Rule, bride first:**
+  - A milk tree bride agrees.
+  - A hard tree bride with a milk tree groom partly agrees.
+  - Two hard trees do not agree.
+- **Points:** this matches lankahandahana.com's 5, 3, 1 and 0 out of 5.
+- **Purva Ashadha** is hard in every source, but the site's results cannot tell it apart.
+
+**Ayusha.** It agrees with the site on all 61 pairs.
+
+- **Count:** in the 28 star count, take how far apart the two stars are the nearer way round, both ends included (1 to 15).
+- **Results:** 1 to 2 apart is good, 3 to 5 is bad, 6 to 10 partly agrees, and 11 to 15 is good.
+- **The published method** (lankahandahana.com, a Lankadeepa column, and purahada.lk's own text): count both ways, take each remainder after dividing by 28, and the larger remainder belongs to the person who lives longer. No version of that formula gives the site's results, so the bands above are used.
+
+**Varna.** The site's results depend on both the Moon star and the lagna in a way 74 couples could not pin down.
+
+- **What we use:** the Moon sign table with the rule most sources give: the groom's varna the same as or higher than the bride's (induwara.lk, kendra.lk, and most Indian sources).
+- **Star table:** lankahandahana.com and the site also show one, a cycle of six from Ashwini: Brahmana, Kshatriya, Vaishya, Shudra, Panchama, Sankara. No source says how to compare it.
+
+**Graha.** The site says "bad" for 59 of the 74 couples and changes with the birth time. No rule we tried does better than always "bad".
+
+- **What we use:** lankahandahana.com's method.
+  - Four checks, each with the same planet, a friend or a neutral counting: each lagna lord towards the other, and each Moon sign lord towards the other.
+  - It agrees with 2 or more of the 4.
+  - Their own points: 4 gives 5, 3 gives 4, 2 gives 3, 1 gives 1, 0 gives 0.
+- **Sinhala Wikipedia** describes another method: malefics in the 7th or 8th house of the bride's chart. It is close to the Kuja dosha check, so it was not used.
+
+**Vedha.** On the first 34 couples the site agreed with our Vedha every time. The new couples show three more pairs the site counts as afflicting: Ashwini with Mrigashira, Magha with Dhanishta, and Hasta with Dhanishta. Our table is unchanged.
+
+**Where the site and our existing factors differ.** Over the first 34 couples, the site agreed with our Yoni, Nadi and Vedha every time (Yoni and Nadi still agree on all 74). It often differs on Vashya (4 of 34 agree), Rashyadhipathi (19), Rajju (22), Mahendra (26), Nakath (27), Stree Deergha (30) and Gana (31). For its Rashi and Rajju rows, the site's picture shows the lagna signs, not the Moon signs, so it may use the lagna for some of these. These are questions for the astrologer. We have not changed the existing factors.
 
 ## Questions for the astrologer
 
-1. The rules for Varna, Bhutha, Vruksha, Ayusha and Graha, and a check of the tables above.
+1. A check of all the tables above, and of the methods chosen for Varna (Moon sign) and Graha (lagna and Moon sign lords).
 2. Is the Stree Deergha threshold 13, or another number (some sources use 9 or 15)?
 3. Which Rashi distances fail: 2/12 and 6/8 only, or also 5/9?
 4. Is Yoni an essential check, like Rajju and Vedha?
@@ -140,3 +181,5 @@ The values seen, for the astrologer:
 10. Should Vashya, Rashyadhipathi and Rajju use the Moon sign or the lagna?
 11. Years ahead for the couple shows Saturn in the 12th, 1st and 2nd sign from the Moon (Erashtaka) and in the 8th. Are these the right periods to show, and should any others be added (for example Saturn in the 4th)?
 12. How should a couple read these Saturn periods and their dasha periods together? Until this is answered the page shows dates only.
+13. Ayusha: is the site's distance table right, or the published remainder method? How should the remainder method be read?
+14. Vedha: are Ashwini with Mrigashira, Magha with Dhanishta, and Hasta with Dhanishta afflicting pairs?

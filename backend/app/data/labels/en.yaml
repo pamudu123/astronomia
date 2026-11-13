@@ -107,6 +107,10 @@ pakshi: {eagle: eagle, owl: owl, crow: crow, cock: cock, peacock: peacock}
 linga: {male: male, female: female, neuter: neuter}
 weekday: {monday: Monday, tuesday: Tuesday, wednesday: Wednesday, thursday: Thursday, friday: Friday, saturday: Saturday, sunday: Sunday}
 
+varna: {brahmana: Brahmana, kshatriya: Kshatriya, vaishya: Vaishya, shudra: Shudra}
+bhuta: {pathavi: earth (Pathavi), apo: water (Apo), tejo: fire (Thejo), vayo: air (Vayo), akasha: space (Akasha)}
+vruksha: {kiri: milk, hara: hard}
+
 porondam_factor:
   dina: {name: Nakath, meaning: Health and long life}
   gana: {name: Gana, meaning: Temperament}
@@ -120,6 +124,11 @@ porondam_factor:
   pakshi: {name: Pakshi, meaning: Harmony between the two}
   linga: {name: Linga, meaning: Masculine and feminine nature}
   weekday: {name: Dina, meaning: The days of birth}
+  varna: {name: Varna, meaning: Temperament and outlook}
+  bhuta: {name: Bhutha, meaning: The five elements}
+  vruksha: {name: Vruksha, meaning: Family growth through children}
+  ayusha: {name: Ayusha, meaning: Long life}
+  graha: {name: Graha, meaning: The ruling planets of both charts}
   nadi: {name: Nadi, meaning: Health of the family line}
   rajju: {name: Rajju, meaning: Long life of the couple}
   vedha: {name: Vedha, meaning: Stars that must not afflict each other}
@@ -150,6 +159,17 @@ porondam_reason:
   weekday_pass: "The bride was born on a {bride_weekday} and the groom on a {groom_weekday}. These days agree."
   weekday_fail: "The bride was born on a {bride_weekday} and the groom on a {groom_weekday}. The groom's day is one or two days before the bride's, which does not agree."
   weekday_unchecked: "This needs the birth dates of both people, so it is not counted when matching by birth stars only."
+  varna_pass: "The bride's Moon sign is of the {bride_varna} varna and the groom's of the {groom_varna} varna. The groom's is the same or higher, which agrees."
+  varna_fail: "The bride's Moon sign is of the {bride_varna} varna and the groom's of the {groom_varna} varna. The groom's is lower, which does not agree."
+  bhuta_pass: "The bride's star is of {bride_bhuta} and the groom's of {groom_bhuta}. These elements are not opposed."
+  bhuta_fail: "The bride's star is of {bride_bhuta} and the groom's of {groom_bhuta}. Water and fire are opposed, which does not agree."
+  vruksha_pass: "The tree of the bride's star is a {bride_vruksha} tree and of the groom's a {groom_vruksha} tree. This pair agrees."
+  vruksha_fail: "Both stars have hard trees. This pair does not agree."
+  ayusha_pass: "The two stars are {distance} apart in the count of 28 stars, which agrees."
+  ayusha_fail: "The two stars are {distance} apart in the count of 28 stars. Three to five apart does not agree."
+  graha_pass: "{positive} of the 4 checks between the lagna lords ({bride_lagna_lord} and {groom_lagna_lord}) and the Moon sign lords ({bride_moon_lord} and {groom_moon_lord}) are friendly or neutral, which agrees."
+  graha_fail: "Only {positive} of the 4 checks between the lagna lords ({bride_lagna_lord} and {groom_lagna_lord}) and the Moon sign lords ({bride_moon_lord} and {groom_moon_lord}) are friendly or neutral. At least 2 are needed."
+  graha_unchecked: "This needs the birth details of both people, so it is not counted when matching by birth stars only."
   nadi_pass: "The bride is {bride_nadi} nadi and the groom is {groom_nadi} nadi. Different nadi is favourable."
   nadi_fail: "Both are {bride_nadi} nadi. The same nadi is not favourable."
   rajju_pass: "The bride's star is in the {bride_rajju} rajju and the groom's in the {groom_rajju} rajju. Different rajju is essential."
@@ -231,7 +251,7 @@ report:
   method_porondam: "Lahiri ayanamsa. Matching uses the Moon of each person. Rajju and Vedha are kept apart from the count."
   rule_sets: "Rule sets: {rules}."
   provisional: "The porondam and Kuja dosha rules are provisional until a practising astrologer confirms them."
-  porondam_provisional: "This report uses 15 of the 20 traditional porondam factors."
+  porondam_provisional: "This report uses all 20 traditional porondam factors."
   kendara_note: "Houses run from the lagna box at the top. The direction of the houses is waiting for an astrologer's confirmation."
   guide: "This is a guide to the charts, not a decision. Share it with your family and your astrologer."
   disclaimer: "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer."
@@ -464,3 +484,18 @@ first_letters:
   age_outside: "Most sources give an age between 2 and 5 for the first letters."
   none: "No time in this range passes every rule. Try a longer range."
   note: "Each time is for the chosen place and passes every rule listed. Ask a practising astrologer to confirm it before the ceremony."
+
+# Old horoscopes: from a kendara drawn on paper to the births that fit it.
+kendara:
+  window_day: "{date}, {start} to {end}"
+  window_days: "{start_date} {start} to {end_date} {end}"
+  lagna: the lagna
+  near: "{names} only fit near the edge of the box drawn. An older horoscope may use another method of calculation."
+  none: "No birth from 1900 to now fits this drawing. Please check each planet's box, or allow a wider range."
+  cut_off: "There are more matches than the {count} shown. Give a year range or the birth star to narrow them."
+  empty_range: "The dates given are outside 1900 to now."
+  problem:
+    nodes_not_opposite: "Rahu and Ketu are always in opposite boxes. Please check where they are drawn."
+    mercury_far_from_sun: "Mercury is never more than one box from the Sun. Please check where they are drawn."
+    venus_far_from_sun: "Venus is never more than two boxes from the Sun. Please check where they are drawn."
+    navamsha_nodes_not_opposite: "In the navamsha too, Rahu and Ketu are always in opposite boxes. Please check the navamsha."
