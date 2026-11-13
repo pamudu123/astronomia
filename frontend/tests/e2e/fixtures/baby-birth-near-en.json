@@ -1,0 +1,130 @@
+{
+  "status": "ok",
+  "time": {
+    "status": "ok",
+    "timezone": "Asia/Colombo",
+    "local": "2024-01-18T15:10:00",
+    "utc": "2024-01-18T09:40:00Z",
+    "offset_seconds": 19800,
+    "offset_label": "UTC+05:30",
+    "abbreviation": "+0530",
+    "clock_change": null,
+    "options": []
+  },
+  "rule_set": "name_letters_si_v1",
+  "provisional": true,
+  "chart": {
+    "star": "ashwini",
+    "star_name": "Ashwini",
+    "star_number": 1,
+    "pada": 2,
+    "rashi": "mesha",
+    "rashi_name": "Mesha",
+    "lagna": "vrishabha",
+    "lagna_name": "Vrishabha",
+    "weekday": "thursday",
+    "weekday_name": "Thursday",
+    "day_note": "Born after sunrise, so the day is Thursday.",
+    "timezone": "Asia/Colombo",
+    "offset": "UTC+05:30",
+    "time_check": {
+      "stable": true,
+      "lagna_changes_within": null,
+      "nakshatra_changes_within": null,
+      "pada_changes_within": 5,
+      "reason": "The lagna and birth star stay the same even if the time is off by 15 minutes."
+    }
+  },
+  "letter": {
+    "pada": 2,
+    "letter": "චෙ",
+    "latin": "Che",
+    "others": [],
+    "rashi": "mesha",
+    "rashi_name": "Mesha",
+    "from_degree": 3.333333,
+    "to_degree": 6.666667
+  },
+  "star_letters": {
+    "star": "ashwini",
+    "star_name": "Ashwini",
+    "star_number": 1,
+    "padas": [
+      {
+        "pada": 1,
+        "letter": "චු",
+        "latin": "Chu",
+        "others": [
+          "චූ"
+        ],
+        "rashi": "mesha",
+        "rashi_name": "Mesha",
+        "from_degree": 0.0,
+        "to_degree": 3.333333
+      },
+      {
+        "pada": 2,
+        "letter": "චෙ",
+        "latin": "Che",
+        "others": [],
+        "rashi": "mesha",
+        "rashi_name": "Mesha",
+        "from_degree": 3.333333,
+        "to_degree": 6.666667
+      },
+      {
+        "pada": 3,
+        "letter": "චො",
+        "latin": "Cho",
+        "others": [],
+        "rashi": "mesha",
+        "rashi_name": "Mesha",
+        "from_degree": 6.666667,
+        "to_degree": 10.0
+      },
+      {
+        "pada": 4,
+        "letter": "ල",
+        "latin": "La",
+        "others": [],
+        "rashi": "mesha",
+        "rashi_name": "Mesha",
+        "from_degree": 10.0,
+        "to_degree": 13.333333
+      }
+    ]
+  },
+  "nearby": [
+    {
+      "minutes": 3,
+      "direction": "after",
+      "star": "ashwini",
+      "star_name": "Ashwini",
+      "pada": 3,
+      "letter": "චො",
+      "latin": "Cho",
+      "text": "3 minutes later the Moon is in Ashwini pada 3, which gives the letter චො."
+    }
+  ],
+  "lagna_letters": {
+    "key": "vrishabha",
+    "name": "Vrishabha",
+    "letters": [
+      "ඉ",
+      "ඊ",
+      "උ",
+      "ෂ"
+    ]
+  },
+  "weekday_letters": {
+    "key": "thursday",
+    "name": "Thursday",
+    "letters": [
+      "ත",
+      "ථ",
+      "ද",
+      "ධ",
+      "න"
+    ]
+  }
+}

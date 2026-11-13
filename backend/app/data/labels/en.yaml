@@ -460,6 +460,12 @@ wedding:
   note: "These dates follow general rules and your birth stars. Please confirm the date and time with your astrologer before you plan."
   none: "No date in this range passes every rule. Try a longer range."
 
+baby:
+  day_after_sunrise: "Born after sunrise, so the day is {weekday}."
+  day_before_sunrise: "Born before sunrise, so the Sinhala day is still {weekday}, the day before."
+  nearby_before: "{minutes} minutes earlier the Moon was in {star} pada {pada}, which gives the letter {letter}."
+  nearby_after: "{minutes} minutes later the Moon is in {star} pada {pada}, which gives the letter {letter}."
+
 # Old horoscopes: from a kendara drawn on paper to the births that fit it.
 kendara:
   window_day: "{date}, {start} to {end}"

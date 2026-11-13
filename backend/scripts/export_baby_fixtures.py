@@ -1,0 +1,43 @@
+"""Save the baby name answers the frontend tests use (tests/e2e/fixtures).
+
+Every birth here is made up. Run after changing the letter table, the engine or its labels:
+    uv run python scripts/export_baby_fixtures.py
+"""
+
+import json
+import sys
+from pathlib import Path
+
+from fastapi.testclient import TestClient
+
+BACKEND = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BACKEND))
+
+from app.main import create_app  # noqa: E402
+
+FIXTURES = BACKEND.parent / "frontend" / "tests" / "e2e" / "fixtures"
+KANDY = 1241622
+
+
+def save(name: str, body: object) -> None:
+    text = json.dumps(body, ensure_ascii=False, indent=2) + "\n"
+    (FIXTURES / name).write_text(text, encoding="utf-8")
+
+
+def main() -> None:
+    client = TestClient(create_app())
+    for lang in ("en", "si"):
+        for star in ("ardra", "krittika", "jyeshtha"):
+            body = client.get(f"/v1/baby/letters/{star}", params={"lang": lang})
+            save(f"baby-letters-{star}-{lang}.json", body.json())
+        # The made-up birth the other personal tests use.
+        birth = {"date": "1995-04-19", "time": "14:35", "place_id": KANDY, "lang": lang}
+        save(f"baby-birth-{lang}.json", client.post("/v1/baby/letters", json=birth).json())
+        # Three minutes before the Moon moves into the next pada.
+        near = {"date": "2024-01-18", "time": "15:10", "place_id": KANDY, "lang": lang}
+        save(f"baby-birth-near-{lang}.json", client.post("/v1/baby/letters", json=near).json())
+    print(f"wrote fixtures to {FIXTURES}")
+
+
+if __name__ == "__main__":
+    main()

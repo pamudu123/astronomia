@@ -139,6 +139,18 @@ Notes:
   - Frontend: `WeddingGate` in `frontend/components/wedding/WeddingGate.tsx`. The finder on the porondam result goes through it.
 - The old horoscope search is free for now. It is kept apart so a paid check can go in one place: `kendara_access()` in `backend/app/api/kendara.py`, and the page in `frontend/components/kendara/`.
 
+### 4.8 Baby and child (2026-11-13)
+
+| | Free | Paid |
+|---|---|---|
+| Baby name letters from the birth star | Everything | |
+| Name suggestions | Everything | |
+| First letters ceremony nakath | **Open to everyone for now** | May become paid later |
+
+Notes:
+- The letters and names are free. They bring search traffic.
+- The ceremony finder keeps its own files, components and endpoint, so a paid check can be added in one place later if wanted.
+
 ## 5. What paid features need
 
 Paid tiers change the first plan in three ways.

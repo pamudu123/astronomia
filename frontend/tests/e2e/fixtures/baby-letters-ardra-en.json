@@ -1,0 +1,57 @@
+{
+  "star": "ardra",
+  "star_name": "Ardra",
+  "star_number": 6,
+  "padas": [
+    {
+      "pada": 1,
+      "letter": "කු",
+      "latin": "Ku",
+      "others": [],
+      "rashi": "mithuna",
+      "rashi_name": "Mithuna",
+      "from_degree": 6.666667,
+      "to_degree": 10.0
+    },
+    {
+      "pada": 2,
+      "letter": "ඝ",
+      "latin": "Gha",
+      "others": [
+        "ස"
+      ],
+      "rashi": "mithuna",
+      "rashi_name": "Mithuna",
+      "from_degree": 10.0,
+      "to_degree": 13.333333
+    },
+    {
+      "pada": 3,
+      "letter": "ඞ",
+      "latin": "Nga",
+      "others": [
+        "ධ",
+        "ඩ"
+      ],
+      "rashi": "mithuna",
+      "rashi_name": "Mithuna",
+      "from_degree": 13.333333,
+      "to_degree": 16.666667
+    },
+    {
+      "pada": 4,
+      "letter": "ඡ",
+      "latin": "Chha",
+      "others": [
+        "ච",
+        "ජ"
+      ],
+      "rashi": "mithuna",
+      "rashi_name": "Mithuna",
+      "from_degree": 16.666667,
+      "to_degree": 20.0
+    }
+  ],
+  "rule_set": "name_letters_si_v1",
+  "provisional": true
+}

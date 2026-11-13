@@ -1,0 +1,49 @@
+{
+  "star": "krittika",
+  "star_name": "කැති",
+  "star_number": 3,
+  "padas": [
+    {
+      "pada": 1,
+      "letter": "අ",
+      "latin": "A",
+      "others": [],
+      "rashi": "mesha",
+      "rashi_name": "මේෂ",
+      "from_degree": 26.666667,
+      "to_degree": 30.0
+    },
+    {
+      "pada": 2,
+      "letter": "ඉ",
+      "latin": "I",
+      "others": [],
+      "rashi": "vrishabha",
+      "rashi_name": "වෘෂභ",
+      "from_degree": 0.0,
+      "to_degree": 3.333333
+    },
+    {
+      "pada": 3,
+      "letter": "උ",
+      "latin": "U",
+      "others": [],
+      "rashi": "vrishabha",
+      "rashi_name": "වෘෂභ",
+      "from_degree": 3.333333,
+      "to_degree": 6.666667
+    },
+    {
+      "pada": 4,
+      "letter": "එ",
+      "latin": "E",
+      "others": [],
+      "rashi": "vrishabha",
+      "rashi_name": "වෘෂභ",
+      "from_degree": 6.666667,
+      "to_degree": 10.0
+    }
+  ],
+  "rule_set": "name_letters_si_v1",
+  "provisional": true
+}
