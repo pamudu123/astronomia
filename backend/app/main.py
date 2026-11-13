@@ -9,6 +9,7 @@ from app.api import (
     changes,
     charts,
     forecast,
+    kendara,
     meta,
     panchanga,
     places,
@@ -48,6 +49,7 @@ def create_app() -> FastAPI:
     app.include_router(avurudu.router)
     app.include_router(wedding.router)
     app.include_router(baby.router)
+    app.include_router(kendara.router)
     app.include_router(reports.router)
     app.include_router(shares.router)
     return app

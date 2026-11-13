@@ -39,11 +39,12 @@ test("a quick match by birth stars", async ({ page }) => {
   await page.getByRole("button", { name: "Match the charts" }).click();
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
-  await expect(page.getByRole("img", { name: "9 of 12 factors agree" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "11 of 16 factors agree" })).toBeVisible();
   await expect(page.locator('[data-check="rajju"]')).toContainText("Pass");
   await expect(page.locator('[data-check="vedha"]')).toContainText("Pass");
-  // 12 counted factors, and Dina (the birth weekdays) shown as not counted.
-  await expect(page.locator("[data-factor]")).toHaveCount(13);
+  // 16 counted factors, and Dina and Graha shown as not counted (they need the birth details).
+  await expect(page.locator("[data-factor]")).toHaveCount(18);
+  await expect(page.locator('[data-factor="graha"]')).toHaveAttribute("data-counted", "false");
   await expect(page.locator('[data-factor="weekday"]')).toHaveAttribute("data-counted", "false");
   await expect(page.locator('[data-factor="weekday"]')).toContainText("Not counted");
   await expect(page.getByText("Kuja dosha needs the full birth details of both people.")).toBeVisible();
@@ -61,9 +62,9 @@ test("the factor filter", async ({ page }) => {
   await quickForm(page);
   await page.getByRole("button", { name: "Match the charts" }).click();
   await page.getByRole("button", { name: "Do not agree" }).click();
-  await expect(page.locator("[data-factor]")).toHaveCount(3);
+  await expect(page.locator("[data-factor]")).toHaveCount(5);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
-  await expect(page.locator("[data-factor]")).toHaveCount(9);
+  await expect(page.locator("[data-factor]")).toHaveCount(11);
 });
 
 test("a full match shows Kuja dosha for both", async ({ page }) => {
@@ -77,7 +78,8 @@ test("a full match shows Kuja dosha for both", async ({ page }) => {
     await card.getByRole("option").first().click();
   }
   await page.getByRole("button", { name: "Match the charts" }).click();
-  await expect(page.getByRole("img", { name: "5 of 13 factors agree" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "9 of 18 factors agree" })).toBeVisible();
+  await expect(page.locator('[data-factor="graha"]')).toHaveAttribute("data-counted", "true");
   await expect(page.locator('[data-factor="weekday"]')).toHaveAttribute("data-counted", "true");
   await expect(page.getByRole("heading", { name: "Kuja dosha" })).toBeVisible();
   await expect(page.getByText("The bride's chart shows Kuja dosha and the groom's does not.", { exact: false })).toBeVisible();
@@ -185,7 +187,7 @@ test("the match still shows when the years ahead cannot load", async ({ page }) 
   await page.getByRole("button", { name: "Match the charts" }).click();
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
-  await expect(page.locator("[data-factor]")).toHaveCount(13);
+  await expect(page.locator("[data-factor]")).toHaveCount(18);
   await expect(page.locator('[data-card="timeline"]')).toHaveCount(0);
 });
 
@@ -245,5 +247,5 @@ test("the wedding finder asks for at least one ceremony, and survives a failure"
   await section.getByLabel("Poruwa ceremony").check();
   await section.getByRole("button", { name: "Find dates" }).click();
   await expect(section.getByRole("alert")).toHaveText("We could not search. Please try again.");
-  await expect(page.getByRole("img", { name: "9 of 12 factors agree" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "11 of 16 factors agree" })).toBeVisible();
 });

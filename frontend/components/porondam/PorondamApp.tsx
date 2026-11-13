@@ -320,6 +320,10 @@ function PorondamForm({
           {t.stars.formLink}
           <ArrowRight />
         </Link>
+        <Link href={`/${lang}/kendara`} className={styles.starsLink}>
+          {dict.kendara.linkAction}
+          <ArrowRight />
+        </Link>
       </section>
     </main>
   );

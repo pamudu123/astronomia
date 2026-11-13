@@ -15,7 +15,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 **A. Porondam depth**
 
 - Which stars match mine (27 star pages). **Built.**
-- All 20 porondam factors. **15 built** (Gothra, Pakshi, Linga and Dina added). Varna, Bhutha, Vruksha, Ayusha and Graha are still missing.
+- All 20 porondam factors. **Built.** Gothra, Pakshi, Linga and Dina came first, then Varna, Bhutha, Vruksha, Ayusha and Graha.
 - Years ahead for the couple: both dasha timelines and Saturn periods, facts only. **Built.**
 
 **B. Planet changes and forecasts**
@@ -38,7 +38,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 **E. Old horoscopes**
 
-- Rebuild a hadahan from an old paper kendara.
+- Rebuild a hadahan from an old paper kendara. **Form and search built**, free for now (`docs/13-old-horoscopes.md`). Using a result on the hadahan and porondam pages comes next. Reading a photo of the paper is a later step.
 
 **Built separately, not part of these sets:** compare several proposals.
 
@@ -112,7 +112,7 @@ Decisions made:
 
 Best asked for together, early:
 
-- The rules for Varna, Bhutha, Vruksha, Ayusha and Graha, and a check of the four added factors (A2).
+- A check of all nine added porondam factors and the methods chosen for Varna and Graha (A2).
 - How to read Saturn and dasha periods for a couple (A3).
 - What each house means when Saturn, Jupiter, Rahu or Ketu moves through it, for the change pages (B).
 - The nakath rules (category C): see the questions at the end of file 11.

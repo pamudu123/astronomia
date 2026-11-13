@@ -16,6 +16,7 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [10-extra-features.md](10-extra-features.md) | Features after the first release: what other sites offer, the categories and sets, and each set in detail |
 | [11-nakath-rules.md](11-nakath-rules.md) | The nakath rules (set C), their sources and where the sources disagree |
 | [12-baby-rules.md](12-baby-rules.md) | The baby name letter table and child rules (set D), their sources and where the sources disagree |
+| [13-old-horoscopes.md](13-old-horoscopes.md) | Set E: finding the birth from an old paper kendara. How the search works, the edge margins and why, privacy and limits |
 
 ## Read this first
 
