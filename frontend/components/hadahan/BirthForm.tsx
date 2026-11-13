@@ -50,6 +50,8 @@ type Props = {
     values: FormValues,
     placeText: string,
   ) => void;
+  /** Shown inside another page: no page wrapper or side panel, and its own heading. */
+  embedded?: { title: string; lead: string; submit: string; working: string };
 };
 
 export function toRequest(values: FormValues): BirthRequest | null {
@@ -72,7 +74,15 @@ export function toRequest(values: FormValues): BirthRequest | null {
   return { date: values.date, time: values.time, place_id: values.place.id };
 }
 
-export function BirthForm({ lang, t, initial, busy, error, onSubmit }: Props) {
+export function BirthForm({
+  lang,
+  t,
+  initial,
+  busy,
+  error,
+  onSubmit,
+  embedded,
+}: Props) {
   const hydrated = useHydrated();
   const [values, setValues] = useState<FormValues>(initial);
   const [unknownTime, setUnknownTime] = useState(false);
@@ -111,165 +121,178 @@ export function BirthForm({ lang, t, initial, busy, error, onSubmit }: Props) {
     onSubmit(ready, values, placeText);
   }
 
-  return (
-    <main id="main" className={`container ${styles.page}`}>
-      <form className={`rise ${styles.card}`} onSubmit={submit} noValidate>
-        <fieldset className="form-lock" disabled={!hydrated}>
-          <div className={styles.head}>
+  const Heading = embedded ? "h2" : "h1";
+  const form = (
+    <form className={`rise ${styles.card}`} onSubmit={submit} noValidate>
+      <fieldset className="form-lock" disabled={!hydrated}>
+        <div className={styles.head}>
+          {!embedded && (
             <span className={`sinhala ${styles.eyebrow}`}>{f.eyebrow}</span>
-            <h1 className={`display ${styles.title}`}>{f.title}</h1>
-            <p className="soft">{f.lead}</p>
-          </div>
+          )}
+          <Heading className={`display ${styles.title}`}>
+            {embedded?.title ?? f.title}
+          </Heading>
+          <p className="soft">{embedded?.lead ?? f.lead}</p>
+        </div>
 
+        <div className={styles.field}>
+          <label htmlFor="birth-name" className={styles.label}>
+            {f.name}
+          </label>
+          <input
+            id="birth-name"
+            className={styles.input}
+            type="text"
+            autoComplete="off"
+            maxLength={60}
+            value={values.name}
+            onChange={(e) => set("name", e.target.value)}
+          />
+        </div>
+
+        <div className={styles.pair}>
           <div className={styles.field}>
-            <label htmlFor="birth-name" className={styles.label}>
-              {f.name}
+            <label htmlFor="birth-date" className={styles.label}>
+              {f.date}
             </label>
             <input
-              id="birth-name"
+              id="birth-date"
               className={styles.input}
-              type="text"
-              autoComplete="off"
-              maxLength={60}
-              value={values.name}
-              onChange={(e) => set("name", e.target.value)}
+              type="date"
+              min="1800-01-01"
+              max="2200-12-31"
+              required
+              value={values.date}
+              onChange={(e) => set("date", e.target.value)}
             />
           </div>
-
-          <div className={styles.pair}>
-            <div className={styles.field}>
-              <label htmlFor="birth-date" className={styles.label}>
-                {f.date}
-              </label>
-              <input
-                id="birth-date"
-                className={styles.input}
-                type="date"
-                min="1800-01-01"
-                max="2200-12-31"
-                required
-                value={values.date}
-                onChange={(e) => set("date", e.target.value)}
-              />
-            </div>
-            <div className={styles.field}>
-              <label htmlFor="birth-time" className={styles.label}>
-                {f.time}
-              </label>
-              <input
-                id="birth-time"
-                className={styles.input}
-                type="time"
-                required
-                disabled={unknownTime}
-                value={values.time}
-                onChange={(e) => set("time", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <label className={styles.check}>
+          <div className={styles.field}>
+            <label htmlFor="birth-time" className={styles.label}>
+              {f.time}
+            </label>
             <input
-              type="checkbox"
-              checked={unknownTime}
-              onChange={(e) => setUnknownTime(e.target.checked)}
+              id="birth-time"
+              className={styles.input}
+              type="time"
+              required
+              disabled={unknownTime}
+              value={values.time}
+              onChange={(e) => set("time", e.target.value)}
             />
-            {f.unknownTime}
-          </label>
-          {unknownTime && (
-            <p className={styles.note} role="status">
-              {f.unknownTimeNote}
-            </p>
-          )}
+          </div>
+        </div>
 
-          {values.manual ? (
-            <div className={styles.manual}>
-              <div className={styles.pair}>
-                <div className={styles.field}>
-                  <label htmlFor="birth-lat" className={styles.label}>
-                    {f.latitude}
-                  </label>
-                  <input
-                    id="birth-lat"
-                    className={styles.input}
-                    inputMode="decimal"
-                    placeholder="7.2906"
-                    value={values.latitude}
-                    onChange={(e) => set("latitude", e.target.value)}
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label htmlFor="birth-lon" className={styles.label}>
-                    {f.longitude}
-                  </label>
-                  <input
-                    id="birth-lon"
-                    className={styles.input}
-                    inputMode="decimal"
-                    placeholder="80.6336"
-                    value={values.longitude}
-                    onChange={(e) => set("longitude", e.target.value)}
-                  />
-                </div>
-              </div>
+        <label className={styles.check}>
+          <input
+            type="checkbox"
+            checked={unknownTime}
+            onChange={(e) => setUnknownTime(e.target.checked)}
+          />
+          {f.unknownTime}
+        </label>
+        {unknownTime && (
+          <p className={styles.note} role="status">
+            {f.unknownTimeNote}
+          </p>
+        )}
+
+        {values.manual ? (
+          <div className={styles.manual}>
+            <div className={styles.pair}>
               <div className={styles.field}>
-                <label htmlFor="birth-tz" className={styles.label}>
-                  {f.timezone}
+                <label htmlFor="birth-lat" className={styles.label}>
+                  {f.latitude}
                 </label>
                 <input
-                  id="birth-tz"
+                  id="birth-lat"
                   className={styles.input}
-                  autoComplete="off"
-                  placeholder="Asia/Colombo"
-                  aria-describedby="birth-tz-hint"
-                  value={values.timezone}
-                  onChange={(e) => set("timezone", e.target.value)}
+                  inputMode="decimal"
+                  placeholder="7.2906"
+                  value={values.latitude}
+                  onChange={(e) => set("latitude", e.target.value)}
                 />
-                <p id="birth-tz-hint" className={styles.hint}>
-                  {f.timezoneHint}
-                </p>
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="birth-lon" className={styles.label}>
+                  {f.longitude}
+                </label>
+                <input
+                  id="birth-lon"
+                  className={styles.input}
+                  inputMode="decimal"
+                  placeholder="80.6336"
+                  value={values.longitude}
+                  onChange={(e) => set("longitude", e.target.value)}
+                />
               </div>
             </div>
-          ) : (
-            <PlaceSearch
-              lang={lang}
-              label={f.place}
-              hint={f.placeHint}
-              empty={f.noPlaces}
-              value={values.place}
-              onChange={(place) => set("place", place)}
-            />
-          )}
-
-          <div className={styles.placeFooter}>
-            <span className="soft" aria-live="polite">
-              {request && offset ? fill(f.timezoneOnDate, { offset }) : ""}
-            </span>
-            <button
-              type="button"
-              className={styles.linkButton}
-              onClick={() => set("manual", !values.manual)}
-            >
-              {values.manual ? f.usePlace : f.coordinates}
-            </button>
+            <div className={styles.field}>
+              <label htmlFor="birth-tz" className={styles.label}>
+                {f.timezone}
+              </label>
+              <input
+                id="birth-tz"
+                className={styles.input}
+                autoComplete="off"
+                placeholder="Asia/Colombo"
+                aria-describedby="birth-tz-hint"
+                value={values.timezone}
+                onChange={(e) => set("timezone", e.target.value)}
+              />
+              <p id="birth-tz-hint" className={styles.hint}>
+                {f.timezoneHint}
+              </p>
+            </div>
           </div>
+        ) : (
+          <PlaceSearch
+            lang={lang}
+            label={f.place}
+            hint={f.placeHint}
+            empty={f.noPlaces}
+            value={values.place}
+            onChange={(place) => set("place", place)}
+          />
+        )}
 
-          {(missing || error) && (
-            <p className={styles.error} role="alert">
-              {missing ? t.errors.missing : error}
-            </p>
-          )}
-
+        <div className={styles.placeFooter}>
+          <span className="soft" aria-live="polite">
+            {request && offset ? fill(f.timezoneOnDate, { offset }) : ""}
+          </span>
           <button
-            type="submit"
-            className={`btn btn-primary lift ${styles.submit}`}
-            disabled={busy || unknownTime}
+            type="button"
+            className={styles.linkButton}
+            onClick={() => set("manual", !values.manual)}
           >
-            {busy ? f.working : f.submit}
-            {!busy && <ArrowRight />}
+            {values.manual ? f.usePlace : f.coordinates}
           </button>
-        </fieldset>
-      </form>
+        </div>
+
+        {(missing || error) && (
+          <p className={styles.error} role="alert">
+            {missing ? t.errors.missing : error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          className={`btn btn-primary lift ${styles.submit}`}
+          disabled={busy || unknownTime}
+        >
+          {busy
+            ? (embedded?.working ?? f.working)
+            : (embedded?.submit ?? f.submit)}
+          {!busy && <ArrowRight />}
+        </button>
+      </fieldset>
+    </form>
+  );
+
+  if (embedded) return form;
+
+  return (
+    <main id="main" className={`container ${styles.page}`}>
+      {form}
 
       <aside
         className={`rise ${styles.aside}`}

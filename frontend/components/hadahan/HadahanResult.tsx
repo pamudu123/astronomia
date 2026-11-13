@@ -7,6 +7,8 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
 import { ShareButton } from "@/components/ShareButton";
+import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
+import { YearlyLink } from "@/components/yearly/YearlyLink";
 import {
   type BirthRequest,
   type Hadahan,
@@ -37,6 +39,8 @@ type Props = {
   /** The birth details. Left out on a shared page: then the result is read only. */
   request?: BirthRequest;
   onEdit?: () => void;
+  /** The yearly forecast link. Left out on shared pages. */
+  yearly?: Dictionary["yearly"];
 };
 
 function rashiImage(key: string): string {
@@ -55,6 +59,7 @@ export function HadahanResult({
   share,
   request,
   onEdit,
+  yearly,
 }: Props) {
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
   const chart = result.chart!;
@@ -229,6 +234,12 @@ export function HadahanResult({
       {result.dasha && <DashaTimeline dasha={result.dasha} labels={labels} lang={lang} t={t} />}
 
       {request && <Forecast lang={lang} t={t} labels={labels} request={request} />}
+
+      {request && <UpcomingChanges lang={lang} t={t} request={request} />}
+
+      {request && yearly && (
+        <YearlyLink t={yearly} lang={lang} lagna={lagna.sign} lagnaName={sign(lagna.sign).name} />
+      )}
 
       <section className={styles.pair}>
         <article className={`rise ${styles.panel} ${kuja.present ? styles.kujaPresent : ""}`} data-card="kuja">

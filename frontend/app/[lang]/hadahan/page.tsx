@@ -9,5 +9,5 @@ export default async function HadahanPage({ params }: PageProps<"/[lang]/hadahan
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
-  return <HadahanApp lang={lang} t={dict.hadahan} share={dict.share} />;
+  return <HadahanApp lang={lang} t={dict.hadahan} share={dict.share} yearly={dict.yearly} />;
 }

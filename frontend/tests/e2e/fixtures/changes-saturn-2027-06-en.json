@@ -1,0 +1,484 @@
+{
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "change": {
+    "id": "saturn-2027-06",
+    "kind": "saturn",
+    "title": "Saturn change",
+    "moment": "2027-06-02T23:58:00Z",
+    "local_date": "2027-06-03",
+    "when": "3 June 2027, 05:28 Sri Lanka time",
+    "moves": [
+      {
+        "body": "saturn",
+        "from_sign": "meena",
+        "to_sign": "mesha",
+        "retrograde": false,
+        "returning": false,
+        "until": "2027-10-20T01:42:00Z",
+        "next_sign": "meena",
+        "text": "Saturn moves from Meena into Mesha.",
+        "until_text": "Saturn stays in Mesha until 20 October 2027, when it moves into Meena.",
+        "note": null
+      }
+    ]
+  },
+  "lagnas": [
+    {
+      "sign": "mesha",
+      "sign_name": "Mesha",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 12,
+          "to_house": 1,
+          "text": "Saturn leaves your 12th house and enters your 1st house.",
+          "short": "Saturn: 12th house to 1st house",
+          "from_theme": "The 12th house is about rest, spending and faraway places.",
+          "to_theme": "The 1st house is about yourself and how you begin things."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 4,
+          "text": "Jupiter stays in Kataka, your 4th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 10,
+          "text": "Rahu stays in Makara, your 10th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 4,
+          "text": "Ketu stays in Kataka, your 4th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "vrishabha",
+      "sign_name": "Vrishabha",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 11,
+          "to_house": 12,
+          "text": "Saturn leaves your 11th house and enters your 12th house.",
+          "short": "Saturn: 11th house to 12th house",
+          "from_theme": "The 11th house is about gains and friends.",
+          "to_theme": "The 12th house is about rest, spending and faraway places."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 3,
+          "text": "Jupiter stays in Kataka, your 3rd house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 9,
+          "text": "Rahu stays in Makara, your 9th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 3,
+          "text": "Ketu stays in Kataka, your 3rd house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "mithuna",
+      "sign_name": "Mithuna",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 10,
+          "to_house": 11,
+          "text": "Saturn leaves your 10th house and enters your 11th house.",
+          "short": "Saturn: 10th house to 11th house",
+          "from_theme": "The 10th house is about career and standing.",
+          "to_theme": "The 11th house is about gains and friends."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 2,
+          "text": "Jupiter stays in Kataka, your 2nd house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 8,
+          "text": "Rahu stays in Makara, your 8th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 2,
+          "text": "Ketu stays in Kataka, your 2nd house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "kataka",
+      "sign_name": "Kataka",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 9,
+          "to_house": 10,
+          "text": "Saturn leaves your 9th house and enters your 10th house.",
+          "short": "Saturn: 9th house to 10th house",
+          "from_theme": "The 9th house is about fortune, teachers and beliefs.",
+          "to_theme": "The 10th house is about career and standing."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 1,
+          "text": "Jupiter stays in Kataka, your 1st house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 7,
+          "text": "Rahu stays in Makara, your 7th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 1,
+          "text": "Ketu stays in Kataka, your 1st house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "simha",
+      "sign_name": "Simha",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 8,
+          "to_house": 9,
+          "text": "Saturn leaves your 8th house and enters your 9th house.",
+          "short": "Saturn: 8th house to 9th house",
+          "from_theme": "The 8th house is about change and things shared with others.",
+          "to_theme": "The 9th house is about fortune, teachers and beliefs."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 12,
+          "text": "Jupiter stays in Kataka, your 12th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 6,
+          "text": "Rahu stays in Makara, your 6th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 12,
+          "text": "Ketu stays in Kataka, your 12th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "kanya",
+      "sign_name": "Kanya",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 7,
+          "to_house": 8,
+          "text": "Saturn leaves your 7th house and enters your 8th house.",
+          "short": "Saturn: 7th house to 8th house",
+          "from_theme": "The 7th house is about partnership and marriage.",
+          "to_theme": "The 8th house is about change and things shared with others."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 11,
+          "text": "Jupiter stays in Kataka, your 11th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 5,
+          "text": "Rahu stays in Makara, your 5th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 11,
+          "text": "Ketu stays in Kataka, your 11th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "tula",
+      "sign_name": "Tula",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 6,
+          "to_house": 7,
+          "text": "Saturn leaves your 6th house and enters your 7th house.",
+          "short": "Saturn: 6th house to 7th house",
+          "from_theme": "The 6th house is about daily work and challenges to get through.",
+          "to_theme": "The 7th house is about partnership and marriage."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 10,
+          "text": "Jupiter stays in Kataka, your 10th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 4,
+          "text": "Rahu stays in Makara, your 4th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 10,
+          "text": "Ketu stays in Kataka, your 10th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "vrischika",
+      "sign_name": "Vrischika",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 5,
+          "to_house": 6,
+          "text": "Saturn leaves your 5th house and enters your 6th house.",
+          "short": "Saturn: 5th house to 6th house",
+          "from_theme": "The 5th house is about learning, children and creativity.",
+          "to_theme": "The 6th house is about daily work and challenges to get through."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 9,
+          "text": "Jupiter stays in Kataka, your 9th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 3,
+          "text": "Rahu stays in Makara, your 3rd house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 9,
+          "text": "Ketu stays in Kataka, your 9th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "dhanu",
+      "sign_name": "Dhanu",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 4,
+          "to_house": 5,
+          "text": "Saturn leaves your 4th house and enters your 5th house.",
+          "short": "Saturn: 4th house to 5th house",
+          "from_theme": "The 4th house is about home and peace of mind.",
+          "to_theme": "The 5th house is about learning, children and creativity."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 8,
+          "text": "Jupiter stays in Kataka, your 8th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 2,
+          "text": "Rahu stays in Makara, your 2nd house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 8,
+          "text": "Ketu stays in Kataka, your 8th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "makara",
+      "sign_name": "Makara",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 3,
+          "to_house": 4,
+          "text": "Saturn leaves your 3rd house and enters your 4th house.",
+          "short": "Saturn: 3rd house to 4th house",
+          "from_theme": "The 3rd house is about effort, courage and siblings.",
+          "to_theme": "The 4th house is about home and peace of mind."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 7,
+          "text": "Jupiter stays in Kataka, your 7th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 1,
+          "text": "Rahu stays in Makara, your 1st house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 7,
+          "text": "Ketu stays in Kataka, your 7th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "kumbha",
+      "sign_name": "Kumbha",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 2,
+          "to_house": 3,
+          "text": "Saturn leaves your 2nd house and enters your 3rd house.",
+          "short": "Saturn: 2nd house to 3rd house",
+          "from_theme": "The 2nd house is about family, speech and savings.",
+          "to_theme": "The 3rd house is about effort, courage and siblings."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 6,
+          "text": "Jupiter stays in Kataka, your 6th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 12,
+          "text": "Rahu stays in Makara, your 12th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 6,
+          "text": "Ketu stays in Kataka, your 6th house."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "sign": "meena",
+      "sign_name": "Meena",
+      "moves": [
+        {
+          "body": "saturn",
+          "from_sign": "meena",
+          "to_sign": "mesha",
+          "from_house": 1,
+          "to_house": 2,
+          "text": "Saturn leaves your 1st house and enters your 2nd house.",
+          "short": "Saturn: 1st house to 2nd house",
+          "from_theme": "The 1st house is about yourself and how you begin things.",
+          "to_theme": "The 2nd house is about family, speech and savings."
+        }
+      ],
+      "others": [
+        {
+          "body": "jupiter",
+          "sign": "kataka",
+          "house": 5,
+          "text": "Jupiter stays in Kataka, your 5th house."
+        },
+        {
+          "body": "rahu",
+          "sign": "makara",
+          "house": 11,
+          "text": "Rahu stays in Makara, your 11th house."
+        },
+        {
+          "body": "ketu",
+          "sign": "kataka",
+          "house": 5,
+          "text": "Ketu stays in Kataka, your 5th house."
+        }
+      ],
+      "notes": []
+    }
+  ]
+}

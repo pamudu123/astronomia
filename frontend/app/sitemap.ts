@@ -1,7 +1,10 @@
 import type { MetadataRoute } from "next";
 
+import { PUBLISHED } from "@/lib/changes";
 import { locales } from "@/lib/i18n";
 import { NAKSHATRA } from "@/lib/nakshatra";
+import { RASHI } from "@/lib/rashi";
+import { YEARS } from "@/lib/yearly";
 
 const SITE = (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
@@ -14,6 +17,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/porondam",
     "/porondam/stars",
     ...NAKSHATRA.map((star) => `/porondam/stars/${star.key}`),
+    "/changes",
+    ...PUBLISHED.flatMap((change) => [
+      `/changes/${change.id}`,
+      ...RASHI.map((rashi) => `/changes/${change.id}/${rashi.key}`),
+    ]),
+    ...YEARS.flatMap((year) => [`/forecast/${year}`, ...RASHI.map((rashi) => `/forecast/${year}/${rashi.key}`)]),
     "/privacy",
     "/terms",
   ];

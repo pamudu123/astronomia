@@ -1,0 +1,82 @@
+{
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "change": {
+    "id": "rahu-ketu-2026-12",
+    "kind": "rahu-ketu",
+    "title": "Rahu and Ketu change",
+    "moment": "2026-12-05T17:02:00Z",
+    "local_date": "2026-12-05",
+    "when": "5 December 2026, 22:32 Sri Lanka time",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "retrograde": false,
+        "returning": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "dhanu",
+        "text": "Rahu moves from Kumbha into Makara.",
+        "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu.",
+        "note": null
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "retrograde": false,
+        "returning": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "mithuna",
+        "text": "Ketu moves from Simha into Kataka.",
+        "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna.",
+        "note": null
+      }
+    ]
+  },
+  "lagna": {
+    "sign": "makara",
+    "sign_name": "Makara",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "from_house": 2,
+        "to_house": 1,
+        "text": "Rahu leaves your 2nd house and enters your 1st house.",
+        "short": "Rahu: 2nd house to 1st house",
+        "from_theme": "The 2nd house is about family, speech and savings.",
+        "to_theme": "The 1st house is about yourself and how you begin things."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "from_house": 8,
+        "to_house": 7,
+        "text": "Ketu leaves your 8th house and enters your 7th house.",
+        "short": "Ketu: 8th house to 7th house",
+        "from_theme": "The 8th house is about change and things shared with others.",
+        "to_theme": "The 7th house is about partnership and marriage."
+      }
+    ],
+    "others": [
+      {
+        "body": "saturn",
+        "sign": "meena",
+        "house": 3,
+        "text": "Saturn stays in Meena, your 3rd house."
+      },
+      {
+        "body": "jupiter",
+        "sign": "simha",
+        "house": 8,
+        "text": "Jupiter stays in Simha, your 8th house."
+      }
+    ],
+    "notes": []
+  },
+  "moon_notes": []
+}

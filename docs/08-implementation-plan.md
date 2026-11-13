@@ -206,6 +206,37 @@ Planned set by set in `docs/10-extra-features.md`. Category A is porondam depth.
 - **Page:** "Years ahead for the couple" on the match result: one ten year line with a Saturn row and a dasha row for each person and a row for the overlaps, then the same facts in words. It loads on its own, so the match still shows if it fails. It is not on shared pages or in the PDF.
 - **Facts only:** dates, planets and houses. Nothing is judged good or bad. Marked provisional (`couple_v1`). Dates are UTC.
 
+Category B is planet changes and forecasts.
+
+**Done in one pull request:** B1, the Rahu and Ketu change (5 December 2026).
+
+- **Engine** (`backend/app/engine/changes.py`): every sign change of Saturn, Jupiter, Rahu and Ketu from 1 November 2026, from `sign_changes()`. Rahu and Ketu are one change. Each change has a fixed id such as `rahu-ketu-2026-12`, the minute it happens, the signs it leaves and enters, whether it is a backward step, and when the planet moves on again. The list is the same for everyone, so it is worked out once and kept. `count_from()` gives the houses counted from any sign.
+- **Endpoints:** `GET /v1/changes`, `GET /v1/changes/{change}` (all 12 lagnas) and `GET /v1/changes/{change}/{lagna}`. They need no personal data, so they are GET and may be cached for an hour. `POST /v1/changes/{change}/personal` counts one change from the chart's lagna and from its Moon sign (gochara). `POST /v1/changes/personal` gives every change in the next twelve months for a chart.
+- **Pages:** `/{lang}/changes` lists all changes. `/{lang}/changes/{change}` shows one change for all 12 lagnas. `/{lang}/changes/{change}/{lagna}` shows one lagna with drawings before and after, each planet's houses and their themes, and what stays. Each page has a title, a description and links between the two languages. The list and the change page need no backend. The lagna page asks the backend on the server and streams it in, and the browser asks again if that failed.
+- **Your own version:** a panel on each change page. It offers the hadahan made earlier in the same tab, or the birth form. It sends a POST and shows the change counted from the lagna and from the Moon sign. Nothing goes in the address.
+- **On the hadahan:** "Planet changes for you", after "This month for you". It loads on its own, so the hadahan still shows if it fails.
+- **Why one page per change and lagna:** a broad search ("Rahu Ketu change 2026") finds the change page. A lagna search ("Rahu Ketu 2026 Makara lagna") finds that lagna's page. Each lagna page has its own houses and themes, so the pages are not copies.
+- **Search:** the sitemap lists every published change page in both languages. The home page and the footer link to the changes.
+- **Published so far:** only the Rahu and Ketu change. The Saturn and Jupiter changes are on the list as "coming soon". `PUBLISHED` in `frontend/lib/changes.ts` says which have pages. A test keeps that list equal to the backend.
+- **Times** are Sri Lanka time (UTC+05:30), as the almanacs print them. Marked provisional (`changes_v1`).
+- **Known limit:** as with the star pages, an unknown change address shows the not found page. `dynamicParams` cannot be used with Cache Components.
+
+**Done in a second pull request:** B2, the Saturn and Jupiter changes.
+
+- **Pages** for the five Saturn and Jupiter changes in 2027. All six changes now have pages, and the list has no "coming soon" left.
+- **Backward steps and returns:** the engine marks a forward move that goes back into the sign a planet stepped out of (`returning`). A backward step says it is a short stay and when the planet returns. A return says so.
+- **Titles:** Jupiter changes sign three times in 2027, so a change of one planet is named by the sign it enters ("Jupiter change 2027 into Kanya", "Jupiter change 2027 back into Simha"). Each page has its own title.
+- **Saturn from the Moon sign:** the personal version and each lagna page say when Saturn starts or ends Erashtaka (the 12th, 1st and 2nd signs from the Moon) or the 8th sign. These are the same periods as the couple timeline.
+- **Fixtures:** `uv run python scripts/export_change_fixtures.py` in `backend/` saves the answers the frontend tests use.
+
+**Done in a third pull request:** B3, the yearly forecast for 2027. A paid feature, open to everyone for now (file 07, section 4.6).
+
+- **Engine** (`backend/app/engine/yearly.py`): for one year in Sri Lanka time, each slow planet's stays with their houses, from the change list. `YEARS` says which years have a forecast.
+- **Endpoints:** `GET /v1/yearly/{year}/{lagna}` (cached) and `POST /v1/yearly/{year}/personal` (from the lagna and from the Moon sign). Both depend on `yearly_access()`, the one place for the paid check.
+- **Pages:** `/{lang}/forecast/2027` lists the 12 lagnas. `/{lang}/forecast/2027/{lagna}` shows a bar for each planet across the year, the house each planet is in at the start of each month, and the key dates with links to the change pages. It is served with a title and description and is in the sitemap. "Your own 2027" on the same page uses the birth form or the hadahan from this tab.
+- **On the hadahan:** "Your 2027", a link to the year for that lagna.
+- **Kept apart:** `backend/app/engine/yearly.py`, `backend/app/api/yearly.py`, `frontend/lib/yearly.ts`, `frontend/components/yearly/` and `frontend/app/[lang]/forecast/`. The frontend lock goes in `YearlyGate`.
+
 Category C is nakath (auspicious times). Rules and sources are in `docs/11-nakath-rules.md`.
 
 **Done in one pull request:** C1, the nakath engine.

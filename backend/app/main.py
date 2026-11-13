@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app import __version__
 from app.api import (
+    changes,
     charts,
     forecast,
     meta,
@@ -13,6 +14,7 @@ from app.api import (
     reports,
     shares,
     timeresolve,
+    yearly,
 )
 from app.config import get_settings
 from app.logging import AccessLogMiddleware, configure_logging
@@ -37,6 +39,8 @@ def create_app() -> FastAPI:
     app.include_router(charts.router)
     app.include_router(porondam.router)
     app.include_router(forecast.router)
+    app.include_router(changes.router)
+    app.include_router(yearly.router)
     app.include_router(panchanga.router)
     app.include_router(reports.router)
     app.include_router(shares.router)
