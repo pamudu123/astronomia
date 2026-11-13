@@ -1073,6 +1073,13 @@
           },
           "lagna": {
             "$ref": "#/components/schemas/CountedOut"
+          },
+          "moon_notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Moon Notes"
           }
         },
         "type": "object",
@@ -1080,7 +1087,8 @@
           "rule_set",
           "provisional",
           "change",
-          "lagna"
+          "lagna",
+          "moon_notes"
         ],
         "title": "ChangeLagnaResponse"
       },
@@ -1280,6 +1288,13 @@
             },
             "type": "array",
             "title": "Others"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notes"
           }
         },
         "type": "object",
@@ -1287,7 +1302,8 @@
           "sign",
           "sign_name",
           "moves",
-          "others"
+          "others",
+          "notes"
         ],
         "title": "CountedOut",
         "description": "A change counted from one sign: the lagna, or the Moon sign for gochara."
@@ -2584,6 +2600,10 @@
             "type": "boolean",
             "title": "Retrograde"
           },
+          "returning": {
+            "type": "boolean",
+            "title": "Returning"
+          },
           "until": {
             "type": "string",
             "format": "date-time",
@@ -2600,6 +2620,17 @@
           "until_text": {
             "type": "string",
             "title": "Until Text"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
           }
         },
         "type": "object",
@@ -2608,10 +2639,12 @@
           "from_sign",
           "to_sign",
           "retrograde",
+          "returning",
           "until",
           "next_sign",
           "text",
-          "until_text"
+          "until_text",
+          "note"
         ],
         "title": "PlanetMoveOut"
       },

@@ -14,20 +14,24 @@
         "from_sign": "kumbha",
         "to_sign": "makara",
         "retrograde": false,
+        "returning": false,
         "until": "2028-06-23T20:00:00Z",
         "next_sign": "dhanu",
         "text": "Rahu moves from Kumbha into Makara.",
-        "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu."
+        "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu.",
+        "note": null
       },
       {
         "body": "ketu",
         "from_sign": "simha",
         "to_sign": "kataka",
         "retrograde": false,
+        "returning": false,
         "until": "2028-06-23T20:00:00Z",
         "next_sign": "mithuna",
         "text": "Ketu moves from Simha into Kataka.",
-        "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna."
+        "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna.",
+        "note": null
       }
     ]
   },
@@ -72,7 +76,8 @@
           "house": 5,
           "text": "Jupiter stays in Simha, your 5th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "vrishabha",
@@ -114,7 +119,8 @@
           "house": 4,
           "text": "Jupiter stays in Simha, your 4th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "mithuna",
@@ -156,7 +162,8 @@
           "house": 3,
           "text": "Jupiter stays in Simha, your 3rd house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "kataka",
@@ -198,7 +205,8 @@
           "house": 2,
           "text": "Jupiter stays in Simha, your 2nd house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "simha",
@@ -240,7 +248,8 @@
           "house": 1,
           "text": "Jupiter stays in Simha, your 1st house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "kanya",
@@ -282,7 +291,8 @@
           "house": 12,
           "text": "Jupiter stays in Simha, your 12th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "tula",
@@ -324,7 +334,8 @@
           "house": 11,
           "text": "Jupiter stays in Simha, your 11th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "vrischika",
@@ -366,7 +377,8 @@
           "house": 10,
           "text": "Jupiter stays in Simha, your 10th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "dhanu",
@@ -408,7 +420,8 @@
           "house": 9,
           "text": "Jupiter stays in Simha, your 9th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "makara",
@@ -450,7 +463,8 @@
           "house": 8,
           "text": "Jupiter stays in Simha, your 8th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "kumbha",
@@ -492,7 +506,8 @@
           "house": 7,
           "text": "Jupiter stays in Simha, your 7th house."
         }
-      ]
+      ],
+      "notes": []
     },
     {
       "sign": "meena",
@@ -534,7 +549,8 @@
           "house": 6,
           "text": "Jupiter stays in Simha, your 6th house."
         }
-      ]
+      ],
+      "notes": []
     }
   ]
 }

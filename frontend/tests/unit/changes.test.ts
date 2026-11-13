@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import sitemap from "@/app/sitemap";
 import { CHANGES, FEATURED, PUBLISHED, findChange, houseFrom } from "@/lib/changes";
+import { changeTitle } from "@/components/changes/text";
 import { RASHI } from "@/lib/rashi";
 import en from "@/messages/en.json";
 import si from "@/messages/si.json";
@@ -12,7 +13,15 @@ import si from "@/messages/si.json";
 const fixture = <T,>(name: string) =>
   JSON.parse(readFileSync(join(__dirname, "..", "e2e", "fixtures", name), "utf-8")) as T;
 
-type Move = { body: string; from_sign: string; to_sign: string; retrograde: boolean; until: string; next_sign: string };
+type Move = {
+  body: string;
+  from_sign: string;
+  to_sign: string;
+  retrograde: boolean;
+  returning: boolean;
+  until: string;
+  next_sign: string;
+};
 type Change = { id: string; kind: string; moment: string; moves: Move[] };
 type Hub = { lagnas: { sign: string; moves: { body: string; from_house: number; to_house: number }[] }[] };
 type Labels = { planet: Record<string, { name: string; short: string }>; house: string[] };
@@ -36,6 +45,7 @@ describe("CHANGES", () => {
           from: move.from_sign,
           to: move.to_sign,
           retrograde: move.retrograde,
+          returning: move.returning,
           until: sriLanka(move.until).slice(0, 10),
           next: move.next_sign,
         })),
@@ -43,10 +53,11 @@ describe("CHANGES", () => {
     );
   });
 
-  it("publishes the Rahu and Ketu change first", () => {
-    expect(PUBLISHED.map((change) => change.id)).toEqual(["rahu-ketu-2026-12"]);
+  it("publishes every change on the list", () => {
+    expect(PUBLISHED).toHaveLength(6);
     expect(findChange(FEATURED)?.local).toBe("2026-12-05T22:32");
-    expect(findChange("saturn-2027-06")).toBeUndefined();
+    expect(findChange("saturn-2027-06")?.local).toBe("2027-06-03T05:28");
+    expect(findChange("saturn-2099-01")).toBeUndefined();
   });
 });
 
@@ -95,6 +106,24 @@ describe("sitemap", () => {
     expect(urls).toContain("http://localhost:3000/si/changes/rahu-ketu-2026-12");
     expect(urls).toContain("http://localhost:3000/en/changes/rahu-ketu-2026-12/makara");
     expect(urls.filter((url) => url.includes("/changes/rahu-ketu-2026-12/"))).toHaveLength(24);
-    expect(urls.some((url) => url.includes("saturn-2027-06"))).toBe(false);
+    expect(urls).toContain("http://localhost:3000/si/changes/saturn-2027-06/vrishabha");
+    expect(urls.filter((url) => /\/changes\/[a-z-]+-\d{4}-\d{2}\/[a-z]+$/.test(url))).toHaveLength(6 * 12 * 2);
+  });
+});
+
+describe("changeTitle", () => {
+  const find = (id: string) => CHANGES.find((change) => change.id === id)!;
+
+  it("names a single planet change by the sign it enters", () => {
+    expect(changeTitle(en.changes, find("rahu-ketu-2026-12"), "en")).toBe("Rahu and Ketu change 2026");
+    expect(changeTitle(en.changes, find("jupiter-2027-01"), "en")).toBe("Jupiter change 2027 back into Kataka");
+    expect(changeTitle(en.changes, find("jupiter-2027-06"), "en")).toBe("Jupiter change 2027 back into Simha");
+    expect(changeTitle(en.changes, find("jupiter-2027-11"), "en")).toBe("Jupiter change 2027 into Kanya");
+    expect(changeTitle(si.changes, find("saturn-2027-06"), "si")).toBe("2027 ශනි මාරුව: මේෂ රාශියට");
+  });
+
+  it("gives every change its own title", () => {
+    const titles = CHANGES.map((change) => changeTitle(en.changes, change, "en"));
+    expect(new Set(titles).size).toBe(CHANGES.length);
   });
 });

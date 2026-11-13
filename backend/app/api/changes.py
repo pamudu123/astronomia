@@ -26,6 +26,7 @@ from app.engine.changes import (
     changes_between,
     count_from,
     find_change,
+    saturn_notes,
 )
 from app.engine.chart import compute_chart
 from app.engine.zodiac import RASHI, Body
@@ -47,10 +48,12 @@ class PlanetMoveOut(BaseModel):
     from_sign: str
     to_sign: str
     retrograde: bool
+    returning: bool  # back into the sign it stepped back out of
     until: dt.datetime  # UTC
     next_sign: str
     text: str  # "Rahu moves from Kumbha into Makara."
     until_text: str  # "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu."
+    note: str | None  # for a backward step or a return
 
 
 class ChangeOut(BaseModel):
@@ -89,6 +92,7 @@ class CountedOut(BaseModel):
     sign_name: str
     moves: list[HouseMoveOut]
     others: list[OtherOut]
+    notes: list[str]  # Saturn periods counted from the Moon sign; only for gochara
 
 
 class ChangeListResponse(BaseModel):
@@ -109,6 +113,7 @@ class ChangeLagnaResponse(BaseModel):
     provisional: bool
     change: ChangeOut
     lagna: CountedOut
+    moon_notes: list[str]  # the Saturn periods, for a reader whose Moon sign this is
 
 
 class PersonalChangeResponse(BaseModel):
@@ -156,11 +161,19 @@ def _move(move: PlanetMove, lang: Lang) -> PlanetMoveOut:
     assert move.until is not None and move.next_sign is not None
     planet = table["planet"][move.body.value]["name"]
     to_sign = rashi[RASHI[move.to_sign]]["name"]
+    until = format_date(_local(move.until).date(), lang)
+    next_sign = rashi[RASHI[move.next_sign]]["name"]
+    note = None
+    if move.retrograde:
+        note = text["back_note"].format(planet=planet, next_sign=next_sign, date=until)
+    elif move.returning:
+        note = text["return_note"].format(planet=planet, to_sign=to_sign)
     return PlanetMoveOut(
         body=move.body,
         from_sign=RASHI[move.from_sign],
         to_sign=RASHI[move.to_sign],
         retrograde=move.retrograde,
+        returning=move.returning,
         until=move.until,
         next_sign=RASHI[move.next_sign],
         text=text["move_back" if move.retrograde else "move"].format(
@@ -169,9 +182,10 @@ def _move(move: PlanetMove, lang: Lang) -> PlanetMoveOut:
         until_text=text["until"].format(
             planet=planet,
             to_sign=to_sign,
-            date=format_date(_local(move.until).date(), lang),
-            next_sign=rashi[RASHI[move.next_sign]]["name"],
+            date=until,
+            next_sign=next_sign,
         ),
+        note=note,
     )
 
 
@@ -191,7 +205,12 @@ def change_out(change: Change, lang: Lang) -> ChangeOut:
     )
 
 
-def counted_out(counted: ChangeForSign, lang: Lang) -> CountedOut:
+def moon_notes(counted: ChangeForSign, lang: Lang) -> list[str]:
+    text = labels(lang)["changes"]
+    return [str(text[code]) for code in saturn_notes(counted)]
+
+
+def counted_out(counted: ChangeForSign, lang: Lang, *, moon: bool = False) -> CountedOut:
     table, text, rashi, house = _names(lang)
     themes = table["house_theme"]
 
@@ -236,6 +255,7 @@ def counted_out(counted: ChangeForSign, lang: Lang) -> CountedOut:
         sign_name=rashi[RASHI[counted.sign]]["name"],
         moves=moves,
         others=others,
+        notes=moon_notes(counted, lang) if moon else [],
     )
 
 
@@ -298,6 +318,7 @@ def change_lagna(
         provisional=PROVISIONAL,
         change=change_out(change, lang),
         lagna=counted_out(count_from(change, sign), lang),
+        moon_notes=moon_notes(count_from(change, sign), lang),
     )
 
 
@@ -329,7 +350,7 @@ def upcoming_changes(body: HadahanRequest, db: PlacesDb) -> UpcomingResponse:
             UpcomingChange(
                 change=change_out(change, body.lang),
                 lagna=counted_out(count_from(change, lagna), body.lang),
-                gochara=counted_out(count_from(change, moon), body.lang),
+                gochara=counted_out(count_from(change, moon), body.lang, moon=True),
             )
             for change in all_changes(EPHEMERIS)
             if now <= change.moment < now + AHEAD
@@ -363,5 +384,5 @@ def personal_change(
         provisional=PROVISIONAL,
         change=out,
         lagna=counted_out(count_from(change, chart.lagna.sign), body.lang),
-        gochara=counted_out(count_from(change, chart.moon.sign), body.lang),
+        gochara=counted_out(count_from(change, chart.moon.sign), body.lang, moon=True),
     )

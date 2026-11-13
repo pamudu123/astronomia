@@ -44,9 +44,9 @@ export default async function ChangesPage({ params }: PageProps<"/[lang]/changes
             <div className={styles.eventBody}>
               <h2 className="display">
                 {change.published ? (
-                  <Link href={`/${lang}/changes/${change.id}`}>{changeTitle(t, change)}</Link>
+                  <Link href={`/${lang}/changes/${change.id}`}>{changeTitle(t, change, lang)}</Link>
                 ) : (
-                  changeTitle(t, change)
+                  changeTitle(t, change, lang)
                 )}
               </h2>
               <p className={styles.when}>

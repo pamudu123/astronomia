@@ -25,8 +25,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!hasLocale(lang) || !change) return {};
   const t = (await getDictionary(lang)).changes;
   const values = {
-    change: t.kind[change.kind],
-    year: change.local.slice(0, 4),
+    name: changeTitle(t, change, lang),
     date: localDate(change, lang),
     moves: change.moves.map((move) => moveText(t, move, lang)).join(" "),
   };
@@ -59,7 +58,7 @@ export default async function ChangeHubPage({ params }: Params) {
     <main id="main" className={`container ${styles.page}`}>
       <div className={`rise ${styles.head}`}>
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
-        <h1 className={`display ${styles.title}`}>{changeTitle(t, change)}</h1>
+        <h1 className={`display ${styles.title}`}>{changeTitle(t, change, lang)}</h1>
         <p className="soft">{t.hubLead}</p>
         <div className={styles.links}>
           <Link href={`/${lang}/changes`}>{t.all}</Link>

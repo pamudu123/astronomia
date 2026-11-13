@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { type ChangeLagna, fetchChangeLagna } from "@/lib/changes";
+import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
 import styles from "./Changes.module.css";
@@ -57,5 +58,19 @@ export function ChangeDetail({ t, lang, changeId, lagna, initial }: Props) {
       </div>
     );
   }
-  return <CountedView t={t} change={data.change} counted={data.lagna} id="lagna" />;
+  return (
+    <>
+      <CountedView t={t} change={data.change} counted={data.lagna} id="lagna" />
+      {data.moon_notes.length > 0 && (
+        <section className={styles.moonNotes} data-card="moon-notes">
+          <h2 className={styles.planet}>{fill(t.moonNotes, { lagna: data.lagna.sign_name })}</h2>
+          <ul className={styles.notes}>
+            {data.moon_notes.map((note) => (
+              <li key={note}>{note}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </>
+  );
 }

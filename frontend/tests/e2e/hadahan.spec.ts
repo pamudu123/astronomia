@@ -206,8 +206,7 @@ test("the result shows the planet changes for you", async ({ page }) => {
   await expect(rahu).toContainText("Rahu: 7th house to 6th house");
   await expect(rahu).toContainText("Rahu: 4th house to 3rd house");
   await expect(section.locator("[data-change]")).toHaveCount(5);
-  // Only changes with their own pages link out.
-  await expect(section.getByRole("link", { name: "Read about this change" })).toHaveCount(1);
+  await expect(section.getByRole("link", { name: "Read about this change" })).toHaveCount(5);
   const personal: string[] = [];
   await page.route("**/api/v1/changes/rahu-ketu-2026-12/personal", (route) => {
     personal.push(route.request().postData() ?? "");

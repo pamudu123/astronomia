@@ -26,20 +26,24 @@
         "from_sign": "kumbha",
         "to_sign": "makara",
         "retrograde": false,
+        "returning": false,
         "until": "2028-06-23T20:00:00Z",
         "next_sign": "dhanu",
         "text": "රාහු කුම්භ රාශියේ සිට මකර රාශියට මාරු වේ.",
-        "until_text": "රාහු 2028 ජූනි 24 දින ධනු රාශියට මාරු වන තුරු මකර රාශියේ රැඳේ."
+        "until_text": "රාහු 2028 ජූනි 24 දින ධනු රාශියට මාරු වන තුරු මකර රාශියේ රැඳේ.",
+        "note": null
       },
       {
         "body": "ketu",
         "from_sign": "simha",
         "to_sign": "kataka",
         "retrograde": false,
+        "returning": false,
         "until": "2028-06-23T20:00:00Z",
         "next_sign": "mithuna",
         "text": "කේතු සිංහ රාශියේ සිට කටක රාශියට මාරු වේ.",
-        "until_text": "කේතු 2028 ජූනි 24 දින මිථුන රාශියට මාරු වන තුරු කටක රාශියේ රැඳේ."
+        "until_text": "කේතු 2028 ජූනි 24 දින මිථුන රාශියට මාරු වන තුරු කටක රාශියේ රැඳේ.",
+        "note": null
       }
     ]
   },
@@ -83,7 +87,8 @@
         "house": 1,
         "text": "ගුරු සිංහ රාශියේ, ඔබේ 1 වැනි භාවයේ රැඳේ."
       }
-    ]
+    ],
+    "notes": []
   },
   "gochara": {
     "sign": "vrischika",
@@ -125,6 +130,7 @@
         "house": 10,
         "text": "ගුරු සිංහ රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ."
       }
-    ]
+    ],
+    "notes": []
   }
 }

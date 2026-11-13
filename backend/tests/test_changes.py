@@ -10,6 +10,7 @@ from app.engine.changes import (
     changes_between,
     count_from,
     find_change,
+    saturn_notes,
 )
 from app.engine.ephemeris import SwissEphemeris
 from app.engine.zodiac import RASHI, Body
@@ -103,3 +104,33 @@ def test_houses_for_every_lagna(lagna: str) -> None:
     assert tuple((m.from_house, m.to_house) for m in counted.moves) == BY_HAND[lagna]
     assert {body for body, _, _ in counted.others} == {Body.SATURN, Body.JUPITER}
     assert counted.provisional is True
+
+
+def test_a_return_after_a_backward_step_is_marked() -> None:
+    flags = {c.id: [(m.retrograde, m.returning) for m in c.moves] for c in all_changes(EPHEMERIS)}
+    assert flags["jupiter-2027-01"] == [(True, False)]
+    assert flags["jupiter-2027-06"] == [(False, True)]
+    assert flags["saturn-2027-06"] == [(False, False)]  # its first move into Mesha
+    assert flags["saturn-2027-10"] == [(True, False)]
+    assert flags["saturn-2028-02"] == [(False, True)]
+    assert flags["jupiter-2027-11"] == [(False, False)]
+
+
+@pytest.mark.parametrize(
+    ("change_id", "moon", "notes"),
+    [
+        ("saturn-2027-06", "mesha", ["erashtaka_continues"]),  # 12th to 1st
+        ("saturn-2027-06", "meena", ["erashtaka_continues"]),  # 1st to 2nd
+        ("saturn-2027-06", "vrishabha", ["erashtaka_starts"]),  # 11th to 12th
+        ("saturn-2027-06", "kumbha", ["erashtaka_ends"]),  # 2nd to 3rd
+        ("saturn-2027-06", "kanya", ["ashtama_starts"]),  # 7th to 8th
+        ("saturn-2027-06", "simha", ["ashtama_ends"]),  # 8th to 9th
+        ("saturn-2027-06", "tula", []),  # 6th to 7th
+        ("saturn-2027-10", "vrishabha", ["erashtaka_ends"]),  # back from 12th to 11th
+        ("rahu-ketu-2026-12", "mesha", []),  # only Saturn counts
+    ],
+)
+def test_saturn_periods_from_the_moon(change_id: str, moon: str, notes: list[str]) -> None:
+    change = find_change(EPHEMERIS, change_id)
+    assert change is not None
+    assert saturn_notes(count_from(change, RASHI.index(moon))) == notes

@@ -19,6 +19,8 @@ export type ChangeMove = {
   to: string;
   /** A backward step. Never set for Rahu and Ketu, which always move backwards. */
   retrograde: boolean;
+  /** A forward move back into the sign it stepped back out of. */
+  returning: boolean;
   /** The Sri Lanka date it next changes sign, and the sign it enters then. */
   until: string;
   next: string;
@@ -47,8 +49,24 @@ export const CHANGES: PlanetChange[] = [
     moment: "2026-12-05T17:02:00Z",
     local: "2026-12-05T22:32",
     moves: [
-      { body: "rahu", from: "kumbha", to: "makara", retrograde: false, until: "2028-06-24", next: "dhanu" },
-      { body: "ketu", from: "simha", to: "kataka", retrograde: false, until: "2028-06-24", next: "mithuna" },
+      {
+        body: "rahu",
+        from: "kumbha",
+        to: "makara",
+        retrograde: false,
+        returning: false,
+        until: "2028-06-24",
+        next: "dhanu",
+      },
+      {
+        body: "ketu",
+        from: "simha",
+        to: "kataka",
+        retrograde: false,
+        returning: false,
+        until: "2028-06-24",
+        next: "mithuna",
+      },
     ],
     published: true,
   },
@@ -58,9 +76,17 @@ export const CHANGES: PlanetChange[] = [
     moment: "2027-01-24T20:02:00Z",
     local: "2027-01-25T01:32",
     moves: [
-      { body: "jupiter", from: "simha", to: "kataka", retrograde: true, until: "2027-06-26", next: "simha" },
+      {
+        body: "jupiter",
+        from: "simha",
+        to: "kataka",
+        retrograde: true,
+        returning: false,
+        until: "2027-06-26",
+        next: "simha",
+      },
     ],
-    published: false,
+    published: true,
   },
   {
     id: "saturn-2027-06",
@@ -68,9 +94,17 @@ export const CHANGES: PlanetChange[] = [
     moment: "2027-06-02T23:58:00Z",
     local: "2027-06-03T05:28",
     moves: [
-      { body: "saturn", from: "meena", to: "mesha", retrograde: false, until: "2027-10-20", next: "meena" },
+      {
+        body: "saturn",
+        from: "meena",
+        to: "mesha",
+        retrograde: false,
+        returning: false,
+        until: "2027-10-20",
+        next: "meena",
+      },
     ],
-    published: false,
+    published: true,
   },
   {
     id: "jupiter-2027-06",
@@ -78,9 +112,17 @@ export const CHANGES: PlanetChange[] = [
     moment: "2027-06-25T23:49:00Z",
     local: "2027-06-26T05:19",
     moves: [
-      { body: "jupiter", from: "kataka", to: "simha", retrograde: false, until: "2027-11-26", next: "kanya" },
+      {
+        body: "jupiter",
+        from: "kataka",
+        to: "simha",
+        retrograde: false,
+        returning: true,
+        until: "2027-11-26",
+        next: "kanya",
+      },
     ],
-    published: false,
+    published: true,
   },
   {
     id: "saturn-2027-10",
@@ -88,9 +130,17 @@ export const CHANGES: PlanetChange[] = [
     moment: "2027-10-20T01:42:00Z",
     local: "2027-10-20T07:12",
     moves: [
-      { body: "saturn", from: "mesha", to: "meena", retrograde: true, until: "2028-02-23", next: "mesha" },
+      {
+        body: "saturn",
+        from: "mesha",
+        to: "meena",
+        retrograde: true,
+        returning: false,
+        until: "2028-02-23",
+        next: "mesha",
+      },
     ],
-    published: false,
+    published: true,
   },
   {
     id: "jupiter-2027-11",
@@ -98,9 +148,17 @@ export const CHANGES: PlanetChange[] = [
     moment: "2027-11-26T13:15:00Z",
     local: "2027-11-26T18:45",
     moves: [
-      { body: "jupiter", from: "simha", to: "kanya", retrograde: false, until: "2028-02-28", next: "simha" },
+      {
+        body: "jupiter",
+        from: "simha",
+        to: "kanya",
+        retrograde: false,
+        returning: false,
+        until: "2028-02-28",
+        next: "simha",
+      },
     ],
-    published: false,
+    published: true,
   },
 ];
 

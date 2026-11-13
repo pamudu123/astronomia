@@ -8,6 +8,12 @@ const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name)
 
 const CHANGE = "rahu-ketu-2026-12";
 
+async function mockSaturn(page: Page, lang: "en" | "si") {
+  await page.route("**/api/v1/changes/saturn-2027-06/vrishabha?*", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture(`changes-saturn-2027-06-vrishabha-${lang}.json`) }),
+  );
+}
+
 async function mockBackend(page: Page, lang: "en" | "si") {
   // Only Makara is saved. The other lagnas are covered by the backend tests.
   await page.route(`**/api/v1/changes/${CHANGE}/makara?*`, (route) =>
@@ -39,7 +45,10 @@ test("the list leads to the change and then to one lagna", async ({ page }) => {
   await page.goto("/en/changes");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Planet changes");
   await expect(page.locator("[data-change]")).toHaveCount(6);
-  await expect(page.locator('[data-change="saturn-2027-06"]')).toContainText("Page coming soon");
+  await expect(page.getByText("Page coming soon")).toHaveCount(0);
+  await expect(page.locator('[data-change="jupiter-2027-01"]')).toContainText(
+    "Jupiter steps back (retrograde) from Simha into Kataka.",
+  );
   await noSidewaysScroll(page);
 
   await page.getByRole("link", { name: "Rahu and Ketu change 2026" }).click();
@@ -125,8 +134,32 @@ test("the houses still load when the server could not fetch them", async ({ page
   await expect(page.locator('[data-counted="lagna"]')).toBeVisible();
 });
 
+test("a Saturn change shows the Moon sign periods", async ({ page }) => {
+  await mockSaturn(page, "en");
+  await page.goto("/en/changes/saturn-2027-06/vrishabha");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Saturn change 2027 into Mesha for Vrishabha lagna");
+  await expect(page).toHaveTitle("Saturn change 2027 into Mesha for Vrishabha lagna · Astronomia");
+  const summary = page.getByRole("region", { name: "3 June 2027, 05:28 Sri Lanka time" });
+  await expect(summary).toContainText("Saturn moves from Meena into Mesha.");
+  await expect(summary).toContainText("Stays until 20 October 2027, then moves into Meena.");
+  await expect(page.locator('[data-counted="lagna"] [data-planet="saturn"]')).toContainText(
+    "11th house to 12th house",
+  );
+  const moon = page.locator('[data-card="moon-notes"]');
+  await expect(moon).toContainText("If Vrishabha is your Moon sign (gochara)");
+  await expect(moon).toContainText("Erashtaka begins");
+  await noSidewaysScroll(page);
+});
+
+test("a backward step says when it returns", async ({ page }) => {
+  await page.goto("/si/changes/jupiter-2027-01");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("2027 ගුරු මාරුව: නැවත කටක රාශියට");
+  await expect(page.getByRole("main")).toContainText("2027 ජූනි 26 දින එය නැවත සිංහ රාශියට පැමිණේ.");
+  await noSidewaysScroll(page);
+});
+
 test("an unknown change or lagna is not found", async ({ page }) => {
-  await page.goto("/en/changes/saturn-2027-06");
+  await page.goto("/en/changes/saturn-2099-01");
   await expect(page.getByText("This page could not be found.")).toBeVisible();
   await page.goto(`/en/changes/${CHANGE}/leo`);
   await expect(page.getByText("This page could not be found.")).toBeVisible();
