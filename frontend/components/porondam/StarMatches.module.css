@@ -1,0 +1,251 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-block: 24px 96px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 720px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.title {
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.15;
+}
+
+.back {
+  align-self: flex-start;
+  font-size: 15px;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 40px;
+  padding: 24px 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--night-raised);
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1 1 280px;
+}
+
+.controlLabel {
+  font-weight: 600;
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--ink-soft);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.groupTitle {
+  font-size: clamp(22px, 2.6vw, 28px);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1.2fr) minmax(0, 1.4fr) auto;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+}
+
+.ring {
+  width: 56px;
+  height: 56px;
+}
+
+.track,
+.fill,
+.fillPoor {
+  fill: none;
+  stroke-width: 5;
+}
+
+.track {
+  stroke: var(--line);
+}
+
+.fill {
+  stroke: var(--gold);
+  stroke-linecap: round;
+}
+
+.fillPoor {
+  stroke: var(--ink-soft);
+  stroke-linecap: round;
+}
+
+.ringNumber {
+  fill: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkPass,
+.checkFail {
+  padding: 3px 12px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.checkPass {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.checkFail {
+  border-color: var(--coral);
+  color: var(--coral);
+}
+
+.checkPass span,
+.checkFail span {
+  font-weight: 400;
+}
+
+.open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.note {
+  max-width: 760px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+/* The list of all 27 stars. */
+
+.starGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.starCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.starCard:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+.starNumber {
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.starName {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .controls {
+    padding: 20px;
+  }
+
+  .row {
+    grid-template-columns: 56px minmax(0, 1fr);
+    padding: 14px 16px;
+  }
+
+  .checks,
+  .open {
+    grid-column: 1 / -1;
+  }
+
+  .starGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

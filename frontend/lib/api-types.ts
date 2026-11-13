@@ -149,6 +149,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/porondam/stars/{nakshatra}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Porondam Stars
+         * @description All 27 birth stars as partners for one star, best first. No birth details needed.
+         */
+        get: operations["porondam_stars_v1_porondam_stars__nakshatra__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/porondam/timeline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Porondam Timeline
+         * @description The next ten years for a couple: Saturn periods from each Moon sign, dasha periods,
+         *     and where the Saturn periods overlap. Facts only. Dates are UTC.
+         */
+        post: operations["porondam_timeline_v1_porondam_timeline_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/forecast": {
         parameters: {
             query?: never;
@@ -280,6 +321,31 @@ export interface components {
             time: components["schemas"]["TimeResolveResponse"];
             chart: components["schemas"]["ChartOut"] | null;
         };
+        /** CheckOut */
+        CheckOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Passed */
+            passed: boolean;
+        };
+        /** DashaMainOut */
+        DashaMainOut: {
+            lord: components["schemas"]["Body"];
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /** Sub */
+            sub: components["schemas"]["DashaSubOut"][];
+        };
         /** DashaOut */
         DashaOut: {
             /**
@@ -295,6 +361,20 @@ export interface components {
             /** Current */
             current: components["schemas"]["PeriodOut"][];
         };
+        /** DashaSubOut */
+        DashaSubOut: {
+            lord: components["schemas"]["Body"];
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+        };
         /** FactorOut */
         FactorOut: {
             /** Id */
@@ -303,6 +383,11 @@ export interface components {
             hard: boolean;
             /** Passed */
             passed: boolean;
+            /**
+             * Checked
+             * @default true
+             */
+            checked: boolean;
             /** Facts */
             facts: {
                 [key: string]: string | number;
@@ -606,6 +691,20 @@ export interface components {
             /** Offset Label */
             offset_label: string | null;
         };
+        /** PersonTimelineOut */
+        PersonTimelineOut: {
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "full" | "quick";
+            /** Saturn */
+            saturn: components["schemas"]["SaturnOut"][];
+            /** Dasha */
+            dasha: components["schemas"]["DashaMainOut"][] | null;
+            /** Dasha Now */
+            dasha_now: string | null;
+        };
         /** PlaceList */
         PlaceList: {
             /** Places */
@@ -748,6 +847,30 @@ export interface components {
             /** Pada */
             pada: number;
         };
+        /** SaturnOut */
+        SaturnOut: {
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /** From Before */
+            from_before: boolean;
+            /** Continues */
+            continues: boolean;
+            /** Text */
+            text: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "erashtaka" | "ashtama";
+        };
         /** ScoreOut */
         ScoreOut: {
             /** Passed */
@@ -837,6 +960,71 @@ export interface components {
             place: string;
             result: components["schemas"]["HadahanResponse"];
         };
+        /** SpanOut */
+        SpanOut: {
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /** From Before */
+            from_before: boolean;
+            /** Continues */
+            continues: boolean;
+            /** Text */
+            text: string;
+        };
+        /** StarMatchOut */
+        StarMatchOut: {
+            /** Nakshatra */
+            nakshatra: string;
+            /** Name */
+            name: string;
+            /** Rashi */
+            rashi: string;
+            /** Rashi Name */
+            rashi_name: string;
+            /** Padas */
+            padas: number[];
+            score: components["schemas"]["ScoreOut"];
+            /** Essential Pass */
+            essential_pass: boolean;
+            /** Hard Checks */
+            hard_checks: components["schemas"]["CheckOut"][];
+            /** Summary */
+            summary: string;
+            /** Same Star */
+            same_star: boolean;
+        };
+        /** StarMatchesResponse */
+        StarMatchesResponse: {
+            /** Nakshatra */
+            nakshatra: string;
+            /** Name */
+            name: string;
+            /** Pada */
+            pada: number;
+            /** Rashi */
+            rashi: string;
+            /** Rashi Name */
+            rashi_name: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "bride" | "groom";
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Matches */
+            matches: components["schemas"]["StarMatchOut"][];
+        };
         /** TimeCheckOut */
         TimeCheckOut: {
             /** Stable */
@@ -908,6 +1096,51 @@ export interface components {
          * @enum {string}
          */
         TimeStatus: "ok" | "ambiguous" | "nonexistent";
+        /** TimelineOut */
+        TimelineOut: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            bride: components["schemas"]["PersonTimelineOut"];
+            groom: components["schemas"]["PersonTimelineOut"];
+            /** Overlaps */
+            overlaps: components["schemas"]["SpanOut"][];
+        };
+        /** TimelineRequest */
+        TimelineRequest: {
+            /** Bride */
+            bride: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /** Groom */
+            groom: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+            /** As Of */
+            as_of?: string | null;
+        };
+        /** TimelineResponse */
+        TimelineResponse: {
+            /** Status */
+            status: string;
+            /** Waiting For */
+            waiting_for?: ("bride" | "groom") | null;
+            time?: components["schemas"]["TimeResolveResponse"] | null;
+            timeline?: components["schemas"]["TimelineOut"] | null;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -1155,6 +1388,74 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PorondamResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    porondam_stars_v1_porondam_stars__nakshatra__get: {
+        parameters: {
+            query?: {
+                pada?: number;
+                role?: "bride" | "groom";
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                nakshatra: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StarMatchesResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    porondam_timeline_v1_porondam_timeline_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TimelineRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TimelineResponse"];
                 };
             };
             /** @description Validation Error */

@@ -322,6 +322,131 @@
         }
       }
     },
+    "/v1/porondam/stars/{nakshatra}": {
+      "get": {
+        "tags": [
+          "porondam"
+        ],
+        "summary": "Porondam Stars",
+        "description": "All 27 birth stars as partners for one star, best first. No birth details needed.",
+        "operationId": "porondam_stars_v1_porondam_stars__nakshatra__get",
+        "parameters": [
+          {
+            "name": "nakshatra",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Nakshatra"
+            }
+          },
+          {
+            "name": "pada",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 4,
+              "minimum": 1,
+              "default": 1,
+              "title": "Pada"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "bride",
+                "groom"
+              ],
+              "type": "string",
+              "default": "bride",
+              "title": "Role"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StarMatchesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/porondam/timeline": {
+      "post": {
+        "tags": [
+          "porondam"
+        ],
+        "summary": "Porondam Timeline",
+        "description": "The next ten years for a couple: Saturn periods from each Moon sign, dasha periods,\nand where the Saturn periods overlap. Facts only. Dates are UTC.",
+        "operationId": "porondam_timeline_v1_porondam_timeline_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TimelineRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimelineResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/forecast": {
       "post": {
         "tags": [
@@ -709,6 +834,61 @@
         ],
         "title": "ChartResponse"
       },
+      "CheckOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "passed"
+        ],
+        "title": "CheckOut"
+      },
+      "DashaMainOut": {
+        "properties": {
+          "lord": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "sub": {
+            "items": {
+              "$ref": "#/components/schemas/DashaSubOut"
+            },
+            "type": "array",
+            "title": "Sub"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lord",
+          "start",
+          "end",
+          "sub"
+        ],
+        "title": "DashaMainOut"
+      },
       "DashaOut": {
         "properties": {
           "system": {
@@ -744,6 +924,30 @@
         ],
         "title": "DashaOut"
       },
+      "DashaSubOut": {
+        "properties": {
+          "lord": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lord",
+          "start",
+          "end"
+        ],
+        "title": "DashaSubOut"
+      },
       "FactorOut": {
         "properties": {
           "id": {
@@ -757,6 +961,11 @@
           "passed": {
             "type": "boolean",
             "title": "Passed"
+          },
+          "checked": {
+            "type": "boolean",
+            "title": "Checked",
+            "default": true
           },
           "facts": {
             "additionalProperties": {
@@ -1582,6 +1791,58 @@
         ],
         "title": "PersonOut"
       },
+      "PersonTimelineOut": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "full",
+              "quick"
+            ],
+            "title": "Mode"
+          },
+          "saturn": {
+            "items": {
+              "$ref": "#/components/schemas/SaturnOut"
+            },
+            "type": "array",
+            "title": "Saturn"
+          },
+          "dasha": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/DashaMainOut"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dasha"
+          },
+          "dasha_now": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dasha Now"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "saturn",
+          "dasha",
+          "dasha_now"
+        ],
+        "title": "PersonTimelineOut"
+      },
       "PlaceList": {
         "properties": {
           "places": {
@@ -2019,6 +2280,50 @@
         "title": "QuickPerson",
         "description": "Birth star only: the pada fixes the Moon sign. Lagna based checks are not possible."
       },
+      "SaturnOut": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "from_before": {
+            "type": "boolean",
+            "title": "From Before"
+          },
+          "continues": {
+            "type": "boolean",
+            "title": "Continues"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "erashtaka",
+              "ashtama"
+            ],
+            "title": "Kind"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "from_before",
+          "continues",
+          "text",
+          "kind"
+        ],
+        "title": "SaturnOut"
+      },
       "ScoreOut": {
         "properties": {
           "passed": {
@@ -2199,6 +2504,164 @@
           "result"
         ],
         "title": "SharedHadahan"
+      },
+      "SpanOut": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "from_before": {
+            "type": "boolean",
+            "title": "From Before"
+          },
+          "continues": {
+            "type": "boolean",
+            "title": "Continues"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "from_before",
+          "continues",
+          "text"
+        ],
+        "title": "SpanOut"
+      },
+      "StarMatchOut": {
+        "properties": {
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "rashi_name": {
+            "type": "string",
+            "title": "Rashi Name"
+          },
+          "padas": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Padas"
+          },
+          "score": {
+            "$ref": "#/components/schemas/ScoreOut"
+          },
+          "essential_pass": {
+            "type": "boolean",
+            "title": "Essential Pass"
+          },
+          "hard_checks": {
+            "items": {
+              "$ref": "#/components/schemas/CheckOut"
+            },
+            "type": "array",
+            "title": "Hard Checks"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "same_star": {
+            "type": "boolean",
+            "title": "Same Star"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nakshatra",
+          "name",
+          "rashi",
+          "rashi_name",
+          "padas",
+          "score",
+          "essential_pass",
+          "hard_checks",
+          "summary",
+          "same_star"
+        ],
+        "title": "StarMatchOut"
+      },
+      "StarMatchesResponse": {
+        "properties": {
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "rashi_name": {
+            "type": "string",
+            "title": "Rashi Name"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "bride",
+              "groom"
+            ],
+            "title": "Role"
+          },
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/StarMatchOut"
+            },
+            "type": "array",
+            "title": "Matches"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nakshatra",
+          "name",
+          "pada",
+          "rashi",
+          "rashi_name",
+          "role",
+          "rule_set",
+          "provisional",
+          "matches"
+        ],
+        "title": "StarMatchesResponse"
       },
       "TimeCheckOut": {
         "properties": {
@@ -2414,6 +2877,153 @@
           "nonexistent"
         ],
         "title": "TimeStatus"
+      },
+      "TimelineOut": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "bride": {
+            "$ref": "#/components/schemas/PersonTimelineOut"
+          },
+          "groom": {
+            "$ref": "#/components/schemas/PersonTimelineOut"
+          },
+          "overlaps": {
+            "items": {
+              "$ref": "#/components/schemas/SpanOut"
+            },
+            "type": "array",
+            "title": "Overlaps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "start",
+          "end",
+          "bride",
+          "groom",
+          "overlaps"
+        ],
+        "title": "TimelineOut"
+      },
+      "TimelineRequest": {
+        "properties": {
+          "bride": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Bride"
+          },
+          "groom": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Groom"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bride",
+          "groom"
+        ],
+        "title": "TimelineRequest"
+      },
+      "TimelineResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "waiting_for": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bride",
+                  "groom"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waiting For"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeResolveResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timeline": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimelineOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "TimelineResponse"
       },
       "ValidationError": {
         "properties": {

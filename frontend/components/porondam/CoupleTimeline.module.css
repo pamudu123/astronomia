@@ -1,0 +1,264 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 720px;
+}
+
+.title {
+  font-size: 30px;
+}
+
+/* The picture: a label column and a ten year line. */
+
+.chart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row,
+.grid {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.axis {
+  position: relative;
+  height: 20px;
+}
+
+.year {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.nameBride,
+.nameGroom,
+.nameBoth {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.nameBride {
+  color: var(--teal);
+}
+
+.nameGroom {
+  color: var(--gold);
+}
+
+.nameBoth {
+  color: var(--coral);
+}
+
+.rowLabel {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.track,
+.trackEmpty {
+  position: relative;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--night);
+  overflow: hidden;
+}
+
+.trackEmpty {
+  background: repeating-linear-gradient(-45deg, var(--night), var(--night) 6px, var(--panel) 6px, var(--panel) 12px);
+}
+
+.bandErashtaka,
+.bandAshtama,
+.bandOverlap,
+.dashaEven,
+.dashaOdd {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.person[data-role="bride"] .bandErashtaka {
+  background: var(--teal);
+}
+
+.person[data-role="bride"] .bandAshtama {
+  background: repeating-linear-gradient(90deg, var(--teal), var(--teal) 3px, transparent 3px, transparent 6px);
+}
+
+.person[data-role="groom"] .bandErashtaka {
+  background: var(--gold);
+}
+
+.person[data-role="groom"] .bandAshtama {
+  background: repeating-linear-gradient(90deg, var(--gold), var(--gold) 3px, transparent 3px, transparent 6px);
+}
+
+.bandOverlap {
+  background: var(--coral);
+}
+
+.dashaEven,
+.dashaOdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.dashaEven {
+  background: var(--panel-raised);
+}
+
+.dashaOdd {
+  background: var(--line);
+}
+
+.subTick {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 6px;
+  background: var(--ink-soft);
+  opacity: 0.6;
+}
+
+/* Faint year lines behind every row. */
+.grid {
+  position: absolute;
+  inset: 20px 0 0;
+  pointer-events: none;
+}
+
+.gridLines {
+  position: relative;
+  height: 100%;
+}
+
+.gridLines i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--ink-soft);
+  opacity: 0.14;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.keyErashtaka,
+.keyAshtama,
+.keyOverlap {
+  flex: none;
+  width: 22px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.keyErashtaka {
+  background: var(--ink-soft);
+}
+
+.keyAshtama {
+  background: repeating-linear-gradient(90deg, var(--ink-soft), var(--ink-soft) 3px, transparent 3px, transparent 6px);
+}
+
+.keyOverlap {
+  background: var(--coral);
+}
+
+/* The same facts in words. */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 16px;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--night-raised);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  font-size: 15px;
+}
+
+.small,
+.note {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 20px;
+  }
+
+  .row,
+  .grid {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .rowLabel {
+    font-size: 12px;
+  }
+
+  .year:nth-child(even) {
+    display: none;
+  }
+}

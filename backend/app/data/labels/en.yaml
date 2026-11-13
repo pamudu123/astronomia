@@ -102,8 +102,13 @@ yoni:
 nadi: {aadi: Aadi, madhya: Madhya, antya: Antya}
 rajju: {pada: Pada (feet), kati: Kati (waist), nabhi: Nabhi (navel), kantha: Kantha (neck), shiro: Shiro (head)}
 
+gothra: {marichi: Marichi, atri: Atri, vasishta: Vasishta, angirasa: Angirasa, pulasthi: Pulasthi, pulaha: Pulaha, kratu: Kratu}
+pakshi: {eagle: eagle, owl: owl, crow: crow, cock: cock, peacock: peacock}
+linga: {male: male, female: female, neuter: neuter}
+weekday: {monday: Monday, tuesday: Tuesday, wednesday: Wednesday, thursday: Thursday, friday: Friday, saturday: Saturday, sunday: Sunday}
+
 porondam_factor:
-  dina: {name: Dina, meaning: Health and long life}
+  dina: {name: Nakath, meaning: Health and long life}
   gana: {name: Gana, meaning: Temperament}
   mahendra: {name: Mahendra, meaning: Family growth}
   stree_deergha: {name: Stree Deergha, meaning: Wellbeing of the bride}
@@ -111,6 +116,10 @@ porondam_factor:
   rashi: {name: Rashi, meaning: Emotional bond}
   rashyadhipathi: {name: Rashyadhipathi, meaning: Rulers of the two signs}
   vashya: {name: Vashya, meaning: Mutual attraction}
+  gothra: {name: Gothra, meaning: Family lineage}
+  pakshi: {name: Pakshi, meaning: Harmony between the two}
+  linga: {name: Linga, meaning: Masculine and feminine nature}
+  weekday: {name: Dina, meaning: The days of birth}
   nadi: {name: Nadi, meaning: Health of the family line}
   rajju: {name: Rajju, meaning: Long life of the couple}
   vedha: {name: Vedha, meaning: Stars that must not afflict each other}
@@ -132,6 +141,15 @@ porondam_reason:
   rashyadhipathi_fail: "{bride_lord} rules the bride's sign and {groom_lord} the groom's. They are counted as enemies."
   vashya_pass: "One of the two signs, {bride_sign} and {groom_sign}, is under the influence of the other."
   vashya_fail: "Neither sign, {bride_sign} or {groom_sign}, is under the influence of the other."
+  gothra_pass: "The bride's star is of the {bride_gothra} gothra and the groom's of the {groom_gothra} gothra. A different gothra is favourable."
+  gothra_fail: "Both stars are of the {bride_gothra} gothra. The same gothra is not favourable."
+  pakshi_pass: "The bird of the bride's star is the {bride_pakshi} and of the groom's the {groom_pakshi}. They are not enemies."
+  pakshi_fail: "The bird of the bride's star is the {bride_pakshi} and of the groom's the {groom_pakshi}. They are counted as enemies."
+  linga_pass: "The bride's star is {bride_linga} and the groom's is {groom_linga}. This pair agrees."
+  linga_fail: "The bride's star is {bride_linga} and the groom's is {groom_linga}. This pair does not agree."
+  weekday_pass: "The bride was born on a {bride_weekday} and the groom on a {groom_weekday}. These days agree."
+  weekday_fail: "The bride was born on a {bride_weekday} and the groom on a {groom_weekday}. The groom's day is one or two days before the bride's, which does not agree."
+  weekday_unchecked: "This needs the birth dates of both people, so it is not counted when matching by birth stars only."
   nadi_pass: "The bride is {bride_nadi} nadi and the groom is {groom_nadi} nadi. Different nadi is favourable."
   nadi_fail: "Both are {bride_nadi} nadi. The same nadi is not favourable."
   rajju_pass: "The bride's star is in the {bride_rajju} rajju and the groom's in the {groom_rajju} rajju. Different rajju is essential."
@@ -202,6 +220,7 @@ report:
   essential: Essential checks
   pass: Pass
   fail: Does not pass
+  not_counted: Not counted
   factors: Factor by factor
   factor: Factor
   reason: Why
@@ -212,7 +231,7 @@ report:
   method_porondam: "Lahiri ayanamsa. Matching uses the Moon of each person. Rajju and Vedha are kept apart from the count."
   rule_sets: "Rule sets: {rules}."
   provisional: "The porondam and Kuja dosha rules are provisional until a practising astrologer confirms them."
-  porondam_provisional: "This report uses 11 of the 20 traditional porondam factors."
+  porondam_provisional: "This report uses 15 of the 20 traditional porondam factors."
   kendara_note: "Houses run from the lagna box at the top. The direction of the houses is waiting for an astrologer's confirmation."
   guide: "This is a guide to the charts, not a decision. Share it with your family and your astrologer."
   disclaimer: "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer."
@@ -242,3 +261,19 @@ forecast:
   moves: "On {date} it moves into {to_sign}, your {to_house} house."
   theme: "The {house} house is about {theme}."
   retrograde: "It is moving backwards (retrograde) as the month begins."
+
+# Years ahead for the couple: Saturn periods counted from each Moon sign, and dasha periods.
+couple:
+  erashtaka_between: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) from {from} to {to}."
+  erashtaka_until: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) now, until {to}."
+  erashtaka_from: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) from {from}, and stays past {to}."
+  erashtaka_all: "{planet} is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) for all of these years, from {from} to {to}."
+  ashtama_between: "{planet} is in the 8th sign from the Moon from {from} to {to}."
+  ashtama_until: "{planet} is in the 8th sign from the Moon now, until {to}."
+  ashtama_from: "{planet} is in the 8th sign from the Moon from {from}, and stays past {to}."
+  ashtama_all: "{planet} is in the 8th sign from the Moon for all of these years, from {from} to {to}."
+  overlap_between: "Both are in one of these {planet} periods from {from} to {to}."
+  overlap_until: "Both are in one of these {planet} periods now, until {to}."
+  overlap_from: "Both are in one of these {planet} periods from {from}, and past {to}."
+  overlap_all: "Both are in one of these {planet} periods for all of these years, from {from} to {to}."
+  dasha_now: "{main} main period until {main_to}. {sub} sub period until {sub_to}."

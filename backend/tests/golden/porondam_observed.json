@@ -1,0 +1,1229 @@
+{
+ "about": "Results of purahada.lk's 20 porondam check for made-up test births in Colombo (2026-11-12). Each row is one couple: the Moon star and pada of each, the birth weekdays (0 = Monday), and the site's result for each factor (good, medium or bad). tests/test_porondam_observed.py checks our factors against them.",
+ "rows": [
+  {
+   "bride": [
+    "jyeshtha",
+    4
+   ],
+   "groom": [
+    "hasta",
+    2
+   ],
+   "weekdays": [
+    2,
+    0
+   ],
+   "results": {
+    "nakath": "medium",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "medium",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "medium",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "bad",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "ashwini",
+    2
+   ],
+   "groom": [
+    "bharani",
+    2
+   ],
+   "weekdays": [
+    0,
+    2
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "medium",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "medium",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "krittika",
+    2
+   ],
+   "groom": [
+    "rohini",
+    2
+   ],
+   "weekdays": [
+    1,
+    5
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "bad",
+    "rashyadhipathi": "bad",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "mrigashira",
+    2
+   ],
+   "groom": [
+    "ardra",
+    2
+   ],
+   "weekdays": [
+    2,
+    1
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "medium",
+    "mahendra": "good",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "bad",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "punarvasu",
+    2
+   ],
+   "groom": [
+    "pushya",
+    2
+   ],
+   "weekdays": [
+    3,
+    4
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "medium",
+    "rashi": "bad",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "ashlesha",
+    2
+   ],
+   "groom": [
+    "magha",
+    2
+   ],
+   "weekdays": [
+    4,
+    0
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "bad",
+    "yoni": "bad",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "medium"
+   }
+  },
+  {
+   "bride": [
+    "purva_phalguni",
+    2
+   ],
+   "groom": [
+    "uttara_phalguni",
+    2
+   ],
+   "weekdays": [
+    5,
+    3
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "bad",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "bad",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "good",
+    "nadi": "good",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "hasta",
+    2
+   ],
+   "groom": [
+    "chitra",
+    2
+   ],
+   "weekdays": [
+    6,
+    6
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "bad",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "good",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "swati",
+    2
+   ],
+   "groom": [
+    "vishakha",
+    2
+   ],
+   "weekdays": [
+    0,
+    2
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "good",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "good"
+   }
+  },
+  {
+   "bride": [
+    "anuradha",
+    2
+   ],
+   "groom": [
+    "jyeshtha",
+    2
+   ],
+   "weekdays": [
+    1,
+    5
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "mula",
+    2
+   ],
+   "groom": [
+    "purva_ashadha",
+    2
+   ],
+   "weekdays": [
+    2,
+    1
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "medium",
+    "nadi": "good",
+    "dina": "bad",
+    "graha": "good"
+   }
+  },
+  {
+   "bride": [
+    "uttara_ashadha",
+    2
+   ],
+   "groom": [
+    "shravana",
+    2
+   ],
+   "weekdays": [
+    3,
+    4
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "medium",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "bad",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "dhanishta",
+    2
+   ],
+   "groom": [
+    "shatabhisha",
+    2
+   ],
+   "weekdays": [
+    4,
+    0
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "medium",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "purva_bhadrapada",
+    2
+   ],
+   "groom": [
+    "uttara_bhadrapada",
+    2
+   ],
+   "weekdays": [
+    5,
+    3
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "medium",
+    "rashi": "bad",
+    "rashyadhipathi": "bad",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "bad",
+    "graha": "good"
+   }
+  },
+  {
+   "bride": [
+    "revati",
+    3
+   ],
+   "groom": [
+    "ashwini",
+    2
+   ],
+   "weekdays": [
+    6,
+    6
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "medium"
+   }
+  },
+  {
+   "bride": [
+    "ashwini",
+    2
+   ],
+   "groom": [
+    "hasta",
+    2
+   ],
+   "weekdays": [
+    0,
+    0
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "medium",
+    "yoni": "bad",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "medium",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "krittika",
+    2
+   ],
+   "groom": [
+    "uttara_ashadha",
+    2
+   ],
+   "weekdays": [
+    0,
+    1
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "mrigashira",
+    2
+   ],
+   "groom": [
+    "purva_bhadrapada",
+    2
+   ],
+   "weekdays": [
+    0,
+    3
+   ],
+   "results": {
+    "nakath": "medium",
+    "gana": "medium",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "medium",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "ardra",
+    2
+   ],
+   "groom": [
+    "ashwini",
+    2
+   ],
+   "weekdays": [
+    0,
+    4
+   ],
+   "results": {
+    "nakath": "medium",
+    "gana": "medium",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "medium",
+    "rashi": "medium",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "medium",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "pushya",
+    2
+   ],
+   "groom": [
+    "jyeshtha",
+    2
+   ],
+   "weekdays": [
+    0,
+    5
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "good",
+    "stree_deergha": "medium",
+    "yoni": "medium",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "magha",
+    2
+   ],
+   "groom": [
+    "shatabhisha",
+    2
+   ],
+   "weekdays": [
+    0,
+    6
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "bad",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "bad",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "chitra",
+    2
+   ],
+   "groom": [
+    "mrigashira",
+    2
+   ],
+   "weekdays": [
+    1,
+    0
+   ],
+   "results": {
+    "nakath": "bad",
+    "gana": "bad",
+    "mahendra": "good",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "medium",
+    "vashya": "bad",
+    "rajju": "good",
+    "vedha": "bad",
+    "wruksha": "bad",
+    "ayusha": "medium",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "bad",
+    "linga": "bad",
+    "nadi": "bad",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "vishakha",
+    2
+   ],
+   "groom": [
+    "magha",
+    2
+   ],
+   "weekdays": [
+    1,
+    1
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "medium",
+    "pakshi": "bad",
+    "bhuta": "bad",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "hasta",
+    2
+   ],
+   "groom": [
+    "jyeshtha",
+    2
+   ],
+   "weekdays": [
+    1,
+    2
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "good",
+    "mahendra": "good",
+    "stree_deergha": "bad",
+    "yoni": "medium",
+    "rashi": "good",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "medium",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "swati",
+    2
+   ],
+   "groom": [
+    "uttara_bhadrapada",
+    2
+   ],
+   "weekdays": [
+    1,
+    3
+   ],
+   "results": {
+    "nakath": "medium",
+    "gana": "medium",
+    "mahendra": "bad",
+    "stree_deergha": "medium",
+    "yoni": "medium",
+    "rashi": "medium",
+    "rashyadhipathi": "bad",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "mula",
+    2
+   ],
+   "groom": [
+    "bharani",
+    2
+   ],
+   "weekdays": [
+    1,
+    4
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "medium",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "bad",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "uttara_ashadha",
+    2
+   ],
+   "groom": [
+    "magha",
+    2
+   ],
+   "weekdays": [
+    1,
+    6
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "bad",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "anuradha",
+    2
+   ],
+   "groom": [
+    "purva_bhadrapada",
+    2
+   ],
+   "weekdays": [
+    2,
+    2
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "medium",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "medium",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "shatabhisha",
+    2
+   ],
+   "groom": [
+    "magha",
+    2
+   ],
+   "weekdays": [
+    2,
+    3
+   ],
+   "results": {
+    "nakath": "medium",
+    "gana": "good",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "good",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "good",
+    "pakshi": "bad",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "uttara_bhadrapada",
+    3
+   ],
+   "groom": [
+    "swati",
+    2
+   ],
+   "weekdays": [
+    2,
+    4
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "medium",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "medium",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "bad",
+    "linga": "bad",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "dhanishta",
+    2
+   ],
+   "groom": [
+    "uttara_ashadha",
+    2
+   ],
+   "weekdays": [
+    2,
+    5
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "medium",
+    "vedha": "good",
+    "wruksha": "medium",
+    "ayusha": "bad",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "bad",
+    "varna": "good",
+    "linga": "good",
+    "nadi": "good",
+    "dina": "good",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "krittika",
+    2
+   ],
+   "groom": [
+    "rohini",
+    2
+   ],
+   "weekdays": [
+    0,
+    4
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "medium",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "good",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "good"
+   }
+  },
+  {
+   "bride": [
+    "krittika",
+    2
+   ],
+   "groom": [
+    "rohini",
+    2
+   ],
+   "weekdays": [
+    3,
+    1
+   ],
+   "results": {
+    "nakath": "good",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "bad",
+    "yoni": "good",
+    "rashi": "bad",
+    "rashyadhipathi": "medium",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "bad",
+    "ayusha": "good",
+    "pakshi": "good",
+    "bhuta": "good",
+    "gothra": "bad",
+    "varna": "bad",
+    "linga": "good",
+    "nadi": "bad",
+    "dina": "bad",
+    "graha": "bad"
+   }
+  },
+  {
+   "bride": [
+    "jyeshtha",
+    2
+   ],
+   "groom": [
+    "hasta",
+    2
+   ],
+   "weekdays": [
+    5,
+    2
+   ],
+   "results": {
+    "nakath": "medium",
+    "gana": "bad",
+    "mahendra": "bad",
+    "stree_deergha": "good",
+    "yoni": "medium",
+    "rashi": "bad",
+    "rashyadhipathi": "good",
+    "vashya": "good",
+    "rajju": "bad",
+    "vedha": "good",
+    "wruksha": "good",
+    "ayusha": "medium",
+    "pakshi": "good",
+    "bhuta": "medium",
+    "gothra": "good",
+    "varna": "good",
+    "linga": "bad",
+    "nadi": "bad",
+    "dina": "good",
+    "graha": "bad"
+   }
+  }
+ ]
+}

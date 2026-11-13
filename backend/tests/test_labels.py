@@ -31,7 +31,7 @@ def test_every_name_exists(lang: Lang) -> None:
 
 
 @pytest.mark.parametrize("lang", ["si", "en"])
-@pytest.mark.parametrize("section", ["reason", "porondam_reason", "report", "forecast"])
+@pytest.mark.parametrize("section", ["reason", "porondam_reason", "report", "forecast", "couple"])
 def test_templates_use_the_same_placeholders(lang: Lang, section: str) -> None:
     en, other = labels("en")[section], labels(lang)[section]
     for code, text in en.items():
@@ -49,6 +49,18 @@ def test_every_porondam_factor_has_names_and_both_reasons() -> None:
         for factor_id in ids:
             assert f"{factor_id}_pass" in table["porondam_reason"]
             assert f"{factor_id}_fail" in table["porondam_reason"]
+        # A factor that needs the birth dates says why it was not counted.
+        assert "weekday_unchecked" in table["porondam_reason"]
+
+
+@pytest.mark.parametrize("lang", ["si", "en"])
+def test_every_group_in_the_rules_has_a_name(lang: Lang) -> None:
+    from app.engine.porondam import WEEKDAYS, load_rules
+
+    table = labels(lang)
+    for name, groups in load_rules()["tables"].items():
+        assert set(table[name]) == set(groups), name
+    assert set(table["weekday"]) == set(WEEKDAYS)
 
 
 def test_reason_fills_names_and_ordinals() -> None:
@@ -65,6 +77,7 @@ def test_sinhala_text_has_no_stray_latin_words() -> None:
         **table["porondam_reason"],
         **table["report"],
         **table["forecast"],
+        **table["couple"],
     }.items():
         cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
         assert not re.search(r"[A-Za-z]", cleaned), code

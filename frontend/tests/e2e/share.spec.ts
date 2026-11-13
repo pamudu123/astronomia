@@ -124,7 +124,7 @@ test("a match can be shared", async ({ page }) => {
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.locator("[data-share-preview]")).toContainText("Nimali and Kasun");
-  await expect(dialog.locator("[data-share-preview]")).toContainText("7 of 9 factors agree");
+  await expect(dialog.locator("[data-share-preview]")).toContainText("9 of 12 factors agree");
   await dialog.getByRole("button", { name: "Create link" }).click();
   await expect(dialog.getByLabel("Link")).toHaveValue(new RegExp(`/en/s/${CODE}$`));
   expect(JSON.parse(created[0])).toMatchObject({
@@ -157,7 +157,7 @@ test("the shared match opens in Sinhala", async ({ page }) => {
   await page.route(`**/api/v1/shares/${CODE}?lang=si`, (route) => route.fulfill(json("share-porondam-si.json")));
   await page.goto(`/si/s/${CODE}`);
   await expect(page.locator("[data-share-banner]")).toContainText("බෙදාගත් ප්‍රතිඵලය");
-  await expect(page.locator('[data-factor="dina"]')).toContainText("දින");
+  await expect(page.locator('[data-factor="dina"]')).toContainText("නැකත්");
   await expect(page.getByRole("link", { name: "ඔබේම ගැළපීමක් කරන්න" }).first()).toBeVisible();
 });
 

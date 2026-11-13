@@ -48,7 +48,7 @@
     {% for row in factors %}
     <tr>
       <td class="row-name" style="width: 24%">{{ row.name }}<br><span class="small soft" style="font-weight: 400">{{ row.meaning }}</span></td>
-      <td class="nowrap {{ 'pass' if row.passed else 'fail' }}" style="width: 16%">{{ row.result }}</td>
+      <td class="nowrap {{ 'soft' if not row.checked else 'pass' if row.passed else 'fail' }}" style="width: 16%">{{ row.result }}</td>
       <td>{{ row.reason }}</td>
     </tr>
     {% endfor %}

@@ -298,6 +298,10 @@ def get_labels(lang: Annotated[Lang, Path()]) -> dict[str, Any]:
         "yoni",
         "nadi",
         "rajju",
+        "gothra",
+        "pakshi",
+        "linga",
+        "weekday",
         "porondam_factor",
     )
     return {key: table[key] for key in keys}

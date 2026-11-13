@@ -21,23 +21,24 @@
       "name": "Kasun",
       "mode": "full",
       "nakshatra": "hasta",
-      "pada": 3,
+      "pada": 2,
       "rashi": "kanya",
-      "lagna": "kanya",
+      "lagna": "kataka",
       "offset_label": "UTC+05:30"
     },
     "match": {
-      "rule_set": "porondam_si_v1",
+      "rule_set": "porondam_si_v2",
       "provisional": true,
       "score": {
-        "passed": 3,
-        "total": 9
+        "passed": 5,
+        "total": 13
       },
       "hard_checks": [
         {
           "id": "rajju",
           "hard": true,
           "passed": true,
+          "checked": true,
           "facts": {
             "bride_rajju": "pada",
             "groom_rajju": "kantha"
@@ -48,6 +49,7 @@
           "id": "vedha",
           "hard": true,
           "passed": true,
+          "checked": true,
           "facts": {
             "bride_star": "jyeshtha",
             "groom_star": "hasta"
@@ -60,6 +62,7 @@
           "id": "dina",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "count": 23,
             "remainder": 5
@@ -70,6 +73,7 @@
           "id": "gana",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_gana": "rakshasa",
             "groom_gana": "deva"
@@ -80,6 +84,7 @@
           "id": "mahendra",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "count": 23
           },
@@ -89,6 +94,7 @@
           "id": "stree_deergha",
           "hard": false,
           "passed": true,
+          "checked": true,
           "facts": {
             "count": 23,
             "threshold": 13
@@ -99,6 +105,7 @@
           "id": "yoni",
           "hard": false,
           "passed": true,
+          "checked": true,
           "facts": {
             "bride_yoni": "deer",
             "groom_yoni": "buffalo"
@@ -109,6 +116,7 @@
           "id": "rashi",
           "hard": false,
           "passed": true,
+          "checked": true,
           "facts": {
             "count": 11
           },
@@ -118,6 +126,7 @@
           "id": "rashyadhipathi",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_lord": "mars",
             "groom_lord": "mercury"
@@ -128,6 +137,7 @@
           "id": "vashya",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_sign": "vrischika",
             "groom_sign": "kanya"
@@ -135,9 +145,55 @@
           "reason": "Neither sign, Vrischika or Kanya, is under the influence of the other."
         },
         {
+          "id": "gothra",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "bride_gothra": "pulasthi",
+            "groom_gothra": "angirasa"
+          },
+          "reason": "The bride's star is of the Pulasthi gothra and the groom's of the Angirasa gothra. A different gothra is favourable."
+        },
+        {
+          "id": "pakshi",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "bride_pakshi": "cock",
+            "groom_pakshi": "crow"
+          },
+          "reason": "The bird of the bride's star is the cock and of the groom's the crow. They are not enemies."
+        },
+        {
+          "id": "linga",
+          "hard": false,
+          "passed": false,
+          "checked": true,
+          "facts": {
+            "bride_linga": "male",
+            "groom_linga": "female"
+          },
+          "reason": "The bride's star is male and the groom's is female. This pair does not agree."
+        },
+        {
+          "id": "weekday",
+          "hard": false,
+          "passed": false,
+          "checked": true,
+          "facts": {
+            "bride_weekday": "wednesday",
+            "groom_weekday": "monday",
+            "count": 6
+          },
+          "reason": "The bride was born on a Wednesday and the groom on a Monday. The groom's day is one or two days before the bride's, which does not agree."
+        },
+        {
           "id": "nadi",
           "hard": false,
           "passed": false,
+          "checked": true,
           "facts": {
             "bride_nadi": "aadi",
             "groom_nadi": "aadi"
@@ -240,7 +296,7 @@
         "points": [
           {
             "point": "lagna",
-            "house": 9,
+            "house": 11,
             "counts": false
           },
           {
@@ -257,11 +313,11 @@
         "cancellations": [
           {
             "id": "lagna_kataka_simha",
-            "applies": false,
+            "applies": true,
             "facts": {
-              "sign": "kanya"
+              "sign": "kataka"
             },
-            "reason": "The lagna is Kanya."
+            "reason": "The lagna is Kataka, where Mars is counted as helpful."
           },
           {
             "id": "mars_own_or_exalted",
@@ -284,10 +340,10 @@
             "id": "mars_house_sign_exception",
             "applies": false,
             "facts": {
-              "house": 9,
+              "house": 11,
               "sign": "vrishabha"
             },
-            "reason": "This exception does not cover Mars in the 9th house in Vrishabha."
+            "reason": "This exception does not cover Mars in the 11th house in Vrishabha."
           }
         ],
         "reasons": [
