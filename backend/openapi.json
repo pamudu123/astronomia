@@ -489,6 +489,128 @@
         }
       }
     },
+    "/v1/panchanga": {
+      "get": {
+        "tags": [
+          "nakath"
+        ],
+        "summary": "Panchanga",
+        "description": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for the day beginning at sunrise.",
+        "operationId": "panchanga_v1_panchanga_get",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Date"
+            }
+          },
+          {
+            "name": "place_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Place Id"
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Latitude"
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Longitude"
+            }
+          },
+          {
+            "name": "timezone",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Timezone"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanchangaResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/reports/pdf": {
       "post": {
         "tags": [
@@ -1472,6 +1594,53 @@
         ],
         "title": "KujaPointOut"
       },
+      "LocalRangeOut": {
+        "properties": {
+          "start": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "end": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "LocalRangeOut"
+      },
+      "LocalTimeOut": {
+        "properties": {
+          "utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Utc"
+          },
+          "local": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Local"
+          },
+          "clock": {
+            "type": "string",
+            "title": "Clock"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "utc",
+          "local",
+          "clock",
+          "date"
+        ],
+        "title": "LocalTimeOut"
+      },
       "MatchOut": {
         "properties": {
           "rule_set": {
@@ -1697,6 +1866,208 @@
           "abbreviation"
         ],
         "title": "OffsetOption"
+      },
+      "PanchangaPartOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "start": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "end": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "number",
+          "name",
+          "start",
+          "end"
+        ],
+        "title": "PanchangaPartOut"
+      },
+      "PanchangaPlaceOut": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "latitude": {
+            "type": "number",
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "latitude",
+          "longitude",
+          "timezone"
+        ],
+        "title": "PanchangaPlaceOut"
+      },
+      "PanchangaResponse": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "place": {
+            "$ref": "#/components/schemas/PanchangaPlaceOut"
+          },
+          "offset": {
+            "type": "string",
+            "title": "Offset"
+          },
+          "timezone_note": {
+            "type": "string",
+            "title": "Timezone Note"
+          },
+          "weekday": {
+            "type": "string",
+            "title": "Weekday"
+          },
+          "weekday_name": {
+            "type": "string",
+            "title": "Weekday Name"
+          },
+          "sunrise": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalTimeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sunset": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalTimeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "next_sunrise": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalTimeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rahu_kalaya": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalRangeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "thithi": {
+            "items": {
+              "$ref": "#/components/schemas/PanchangaPartOut"
+            },
+            "type": "array",
+            "title": "Thithi"
+          },
+          "nakatha": {
+            "items": {
+              "$ref": "#/components/schemas/PanchangaPartOut"
+            },
+            "type": "array",
+            "title": "Nakatha"
+          },
+          "yoga": {
+            "items": {
+              "$ref": "#/components/schemas/PanchangaPartOut"
+            },
+            "type": "array",
+            "title": "Yoga"
+          },
+          "karana": {
+            "items": {
+              "$ref": "#/components/schemas/PanchangaPartOut"
+            },
+            "type": "array",
+            "title": "Karana"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "date",
+          "place",
+          "offset",
+          "timezone_note",
+          "weekday",
+          "weekday_name",
+          "sunrise",
+          "sunset",
+          "next_sunrise",
+          "rahu_kalaya",
+          "thithi",
+          "nakatha",
+          "yoga",
+          "karana"
+        ],
+        "title": "PanchangaResponse"
       },
       "PeriodOut": {
         "properties": {

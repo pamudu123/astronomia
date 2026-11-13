@@ -31,7 +31,9 @@ def test_every_name_exists(lang: Lang) -> None:
 
 
 @pytest.mark.parametrize("lang", ["si", "en"])
-@pytest.mark.parametrize("section", ["reason", "porondam_reason", "report", "forecast", "couple"])
+@pytest.mark.parametrize(
+    "section", ["reason", "porondam_reason", "report", "forecast", "couple", "panchanga"]
+)
 def test_templates_use_the_same_placeholders(lang: Lang, section: str) -> None:
     en, other = labels("en")[section], labels(lang)[section]
     for code, text in en.items():
@@ -78,6 +80,9 @@ def test_sinhala_text_has_no_stray_latin_words() -> None:
         **table["report"],
         **table["forecast"],
         **table["couple"],
+        **table["thithi"],
+        **table["yoga"],
+        **table["karana"],
     }.items():
         cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
         assert not re.search(r"[A-Za-z]", cleaned), code
@@ -91,3 +96,13 @@ def test_twelve_month_names(lang: Lang) -> None:
 @pytest.mark.parametrize("lang", ["si", "en"])
 def test_twelve_house_themes(lang: Lang) -> None:
     assert len(labels(lang)["house_theme"]) == 12
+
+
+@pytest.mark.parametrize("lang", ["si", "en"])
+def test_every_panchanga_part_has_a_name(lang: Lang) -> None:
+    from app.engine.panchanga import THITHI_KEYS, YOGA_KEYS, karana_key
+
+    table = labels(lang)
+    assert set(table["thithi"]) == set(THITHI_KEYS)
+    assert set(table["yoga"]) == set(YOGA_KEYS)
+    assert set(table["karana"]) == {karana_key(i) for i in range(60)}

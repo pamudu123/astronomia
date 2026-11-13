@@ -1,0 +1,45 @@
+# The Sinhala panchanga: the five parts of the day, sunrise and Rahu kalaya.
+# PROVISIONAL until a practising astrologer confirms it. Sources and conflicts are in
+# docs/11-nakath-rules.md. Names live in the label files; this file holds the rules.
+version: panchanga_v1
+provisional: true
+
+# The day starts at sunrise, not at midnight. A moment before sunrise belongs to the day before.
+day_starts: sunrise
+
+# Upper edge of the Sun on the horizon, with standard refraction.
+# Other option: the centre of the disc without refraction (about 4 minutes later in Colombo).
+sunrise: upper_limb_refracted
+# Times to the minute: sunrise and sunset drop the seconds; a thithi, nakatha, yoga or karana
+# changes at the first whole minute after the exact moment. Both as porondam.lk prints them.
+
+# Thithi: each 12 degrees of the Moon ahead of the Sun. 30 in a lunar month.
+# 1 to 15 are the bright half (pura), 16 to 30 the dark half (ava). 15 is the full moon
+# (pasalosvaka), 30 the new moon (amavaka).
+thithi_degrees: 12
+
+# Yoga: the sum of the Sun and Moon longitudes (sidereal), in 27 parts of 13 degrees 20 minutes.
+yoga_parts: 27
+
+# Karana: half a thithi (6 degrees). 60 in a lunar month.
+# The first is fixed (kimstughna), then the seven moving karanas repeat eight times,
+# then three fixed ones end the month.
+karana_degrees: 6
+karana_first: kimstughna
+karana_moving: [bava, balava, kaulava, taitila, gara, vanija, vishti]
+karana_last: [shakuni, chatushpada, naga]
+
+# Rahu kalaya: daylight (sunrise to sunset) in eight equal parts. The part for each weekday.
+# Agreed by porondam.lk, lankahandahana.com and the Indian tables (docs/11).
+rahu_kalaya_parts: 8
+# "whole": each part is the daylight minutes / 8, cut down to a whole minute, from the
+# sunrise minute. porondam.lk and lankahandahana.com both do this. "exact" splits to the second.
+rahu_kalaya_minutes: whole
+rahu_kalaya_part:
+  sunday: 8
+  monday: 2
+  tuesday: 7
+  wednesday: 5
+  thursday: 6
+  friday: 4
+  saturday: 3

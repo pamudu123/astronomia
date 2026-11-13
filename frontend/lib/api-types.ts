@@ -210,6 +210,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/panchanga": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Panchanga
+         * @description Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for the day beginning at sunrise.
+         */
+        get: operations["panchanga_v1_panchanga_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/reports/pdf": {
         parameters: {
             query?: never;
@@ -558,6 +578,31 @@ export interface components {
             /** Counts */
             counts: boolean;
         };
+        /** LocalRangeOut */
+        LocalRangeOut: {
+            start: components["schemas"]["LocalTimeOut"];
+            end: components["schemas"]["LocalTimeOut"];
+        };
+        /** LocalTimeOut */
+        LocalTimeOut: {
+            /**
+             * Utc
+             * Format: date-time
+             */
+            utc: string;
+            /**
+             * Local
+             * Format: date-time
+             */
+            local: string;
+            /** Clock */
+            clock: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+        };
         /** MatchOut */
         MatchOut: {
             /** Rule Set */
@@ -651,6 +696,63 @@ export interface components {
             offset_label: string;
             /** Abbreviation */
             abbreviation: string;
+        };
+        /** PanchangaPartOut */
+        PanchangaPartOut: {
+            /** Key */
+            key: string;
+            /** Number */
+            number: number;
+            /** Name */
+            name: string;
+            start: components["schemas"]["LocalTimeOut"];
+            end: components["schemas"]["LocalTimeOut"];
+        };
+        /** PanchangaPlaceOut */
+        PanchangaPlaceOut: {
+            /** Id */
+            id: number | null;
+            /** Name */
+            name: string | null;
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+            /** Timezone */
+            timezone: string;
+        };
+        /** PanchangaResponse */
+        PanchangaResponse: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            place: components["schemas"]["PanchangaPlaceOut"];
+            /** Offset */
+            offset: string;
+            /** Timezone Note */
+            timezone_note: string;
+            /** Weekday */
+            weekday: string;
+            /** Weekday Name */
+            weekday_name: string;
+            sunrise: components["schemas"]["LocalTimeOut"] | null;
+            sunset: components["schemas"]["LocalTimeOut"] | null;
+            next_sunrise: components["schemas"]["LocalTimeOut"] | null;
+            rahu_kalaya: components["schemas"]["LocalRangeOut"] | null;
+            /** Thithi */
+            thithi: components["schemas"]["PanchangaPartOut"][];
+            /** Nakatha */
+            nakatha: components["schemas"]["PanchangaPartOut"][];
+            /** Yoga */
+            yoga: components["schemas"]["PanchangaPartOut"][];
+            /** Karana */
+            karana: components["schemas"]["PanchangaPartOut"][];
         };
         /** PeriodOut */
         PeriodOut: {
@@ -1489,6 +1591,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ForecastResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    panchanga_v1_panchanga_get: {
+        parameters: {
+            query: {
+                date: string;
+                place_id?: number | null;
+                latitude?: number | null;
+                longitude?: number | null;
+                timezone?: string | null;
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanchangaResponse"];
                 };
             };
             /** @description Validation Error */
