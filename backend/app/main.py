@@ -14,6 +14,7 @@ from app.api import (
     reports,
     shares,
     timeresolve,
+    wedding,
 )
 from app.config import get_settings
 from app.logging import AccessLogMiddleware, configure_logging
@@ -40,6 +41,7 @@ def create_app() -> FastAPI:
     app.include_router(forecast.router)
     app.include_router(panchanga.router)
     app.include_router(avurudu.router)
+    app.include_router(wedding.router)
     app.include_router(reports.router)
     app.include_router(shares.router)
     return app

@@ -188,3 +188,62 @@ test("the match still shows when the years ahead cannot load", async ({ page }) 
   await expect(page.locator("[data-factor]")).toHaveCount(13);
   await expect(page.locator('[data-card="timeline"]')).toHaveCount(0);
 });
+
+test("wedding nakath for the couple, from the match", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await timeline(page, "timeline-quick-en.json");
+  const asked: string[] = [];
+  await page.route("**/api/v1/wedding-nakath", (route) => {
+    asked.push(route.request().postData() ?? "");
+    return route.fulfill({ contentType: "application/json", body: fixture("wedding-quick-en.json") });
+  });
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const section = page.locator('[data-card="wedding"]');
+  await expect(section.getByRole("heading", { name: "Wedding nakath for this couple" })).toBeVisible();
+  await section.getByRole("button", { name: "1 year" }).click();
+  await section.getByLabel("Homecoming").uncheck();
+  await section.getByRole("button", { name: "Find dates" }).click();
+
+  const poruwa = section.locator('[data-ceremony="poruwa"]');
+  await expect(poruwa.getByRole("heading", { name: "Poruwa ceremony" })).toBeVisible();
+  const first = poruwa.locator("[data-date]").first();
+  await expect(first).toContainText("15 January 2027");
+  await expect(first).toContainText("12:18 to 13:51");
+  await first.getByText("Why this date").click();
+  await expect(first).toContainText("one of the nakathas for this ceremony");
+  await expect(first).toContainText("Rahu kalaya");
+  await expect(section).toContainText("Times are in Colombo (UTC+05:30).");
+  await expect(section).toContainText("confirm the date and time with your astrologer");
+
+  // The couple's details went in the body of a POST, with the choices made.
+  expect(JSON.parse(asked[0])).toMatchObject({
+    bride: { nakshatra: "anuradha", pada: 2 },
+    groom: { nakshatra: "rohini", pada: 1 },
+    months: 12,
+    ceremonies: ["engagement", "poruwa"],
+    lang: "en",
+  });
+  expect(page.url()).not.toContain("anuradha");
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
+test("the wedding finder asks for at least one ceremony, and survives a failure", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await timeline(page, "timeline-quick-en.json");
+  await page.route("**/api/v1/wedding-nakath", (route) => route.fulfill({ status: 500, body: "" }));
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+  const section = page.locator('[data-card="wedding"]');
+  for (const name of ["Engagement", "Poruwa ceremony", "Homecoming"]) await section.getByLabel(name).uncheck();
+  await section.getByRole("button", { name: "Find dates" }).click();
+  await expect(section.getByRole("alert")).toHaveText("Choose at least one ceremony.");
+  await section.getByLabel("Poruwa ceremony").check();
+  await section.getByRole("button", { name: "Find dates" }).click();
+  await expect(section.getByRole("alert")).toHaveText("We could not search. Please try again.");
+  await expect(page.getByRole("img", { name: "9 of 12 factors agree" })).toBeVisible();
+});

@@ -1,0 +1,801 @@
+{
+  "status": "ok",
+  "waiting_for": null,
+  "time": null,
+  "rule_set": "wedding_si_v1",
+  "provisional": true,
+  "first": "2027-01-01",
+  "last": "2027-06-30",
+  "place": {
+    "id": 1248991,
+    "name": "Colombo",
+    "timezone": "Asia/Colombo",
+    "offset": "UTC+05:30"
+  },
+  "ceremonies": [
+    {
+      "key": "engagement",
+      "name": "Engagement",
+      "suggestions": [
+        {
+          "date": "2027-01-09",
+          "date_text": "9 January 2027",
+          "weekday": "Saturday",
+          "start": {
+            "utc": "2027-01-09T08:44:00Z",
+            "local": "2027-01-09T14:14:00+05:30",
+            "clock": "14:14",
+            "date": "2027-01-09"
+          },
+          "end": {
+            "utc": "2027-01-09T10:49:00Z",
+            "local": "2027-01-09T16:19:00+05:30",
+            "clock": "16:19",
+            "date": "2027-01-09"
+          },
+          "nakatha": "Shravana",
+          "thithi": "Bright 2 (Dwitiya)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Shravana, one of the nakathas for this ceremony.",
+            "Bright 2 (Dwitiya) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "The karana is Balava, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Makara: the 3rd sign from the bride's Moon sign and the 9th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (09:21 to 10:49)."
+          ],
+          "cautions": [
+            "Saturday is accepted by some sources only.",
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 8.0
+        },
+        {
+          "date": "2027-01-15",
+          "date_text": "15 January 2027",
+          "weekday": "Friday",
+          "start": {
+            "utc": "2027-01-15T00:59:00Z",
+            "local": "2027-01-15T06:29:00+05:30",
+            "clock": "06:29",
+            "date": "2027-01-15"
+          },
+          "end": {
+            "utc": "2027-01-15T02:57:00Z",
+            "local": "2027-01-15T08:27:00+05:30",
+            "clock": "08:27",
+            "date": "2027-01-15"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 7 (Saptami)",
+          "lagna": "Makara",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 7 (Saptami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Friday is a good day for it.",
+            "The karana is Vanija, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (10:50 to 12:18)."
+          ],
+          "cautions": [],
+          "score": 11.97
+        },
+        {
+          "date": "2027-02-11",
+          "date_text": "11 February 2027",
+          "weekday": "Thursday",
+          "start": {
+            "utc": "2027-02-11T06:35:00Z",
+            "local": "2027-02-11T12:05:00+05:30",
+            "clock": "12:05",
+            "date": "2027-02-11"
+          },
+          "end": {
+            "utc": "2027-02-11T08:23:00Z",
+            "local": "2027-02-11T13:53:00+05:30",
+            "clock": "13:53",
+            "date": "2027-02-11"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 5 (Panchami)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 5 (Panchami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Thursday is a good day for it.",
+            "The karana is Bava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (13:53 to 15:22)."
+          ],
+          "cautions": [],
+          "score": 11.8
+        },
+        {
+          "date": "2027-03-10",
+          "date_text": "10 March 2027",
+          "weekday": "Wednesday",
+          "start": {
+            "utc": "2027-03-10T05:23:00Z",
+            "local": "2027-03-10T10:53:00+05:30",
+            "clock": "10:53",
+            "date": "2027-03-10"
+          },
+          "end": {
+            "utc": "2027-03-10T06:49:00Z",
+            "local": "2027-03-10T12:19:00+05:30",
+            "clock": "12:19",
+            "date": "2027-03-10"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 2 (Dwitiya)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 2 (Dwitiya) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Wednesday is a good day for it.",
+            "The karana is Kaulava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (12:19 to 13:49)."
+          ],
+          "cautions": [],
+          "score": 11.43
+        },
+        {
+          "date": "2027-03-15",
+          "date_text": "15 March 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-03-15T00:51:00Z",
+            "local": "2027-03-15T06:21:00+05:30",
+            "clock": "06:21",
+            "date": "2027-03-15"
+          },
+          "end": {
+            "utc": "2027-03-15T02:17:00Z",
+            "local": "2027-03-15T07:47:00+05:30",
+            "clock": "07:47",
+            "date": "2027-03-15"
+          },
+          "nakatha": "Rohini",
+          "thithi": "Bright 7 (Saptami)",
+          "lagna": "Meena",
+          "passes": [
+            "The Moon is in Rohini, one of the nakathas for this ceremony.",
+            "Bright 7 (Saptami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Vanija, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Vrishabha: the 7th sign from the bride's Moon sign and the 1st from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:47 to 09:17)."
+          ],
+          "cautions": [
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 9.43
+        },
+        {
+          "date": "2027-04-07",
+          "date_text": "7 April 2027",
+          "weekday": "Wednesday",
+          "start": {
+            "utc": "2027-04-07T01:06:00Z",
+            "local": "2027-04-07T06:36:00+05:30",
+            "clock": "06:36",
+            "date": "2027-04-07"
+          },
+          "end": {
+            "utc": "2027-04-07T01:57:00Z",
+            "local": "2027-04-07T07:27:00+05:30",
+            "clock": "07:27",
+            "date": "2027-04-07"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 1 (Pratipada)",
+          "lagna": "Mesha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 1 (Pratipada) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Wednesday is a good day for it.",
+            "The karana is Kimstughna, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (12:10 to 13:41)."
+          ],
+          "cautions": [],
+          "score": 10.85
+        },
+        {
+          "date": "2027-05-17",
+          "date_text": "17 May 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-05-17T00:23:00Z",
+            "local": "2027-05-17T05:53:00+05:30",
+            "clock": "05:53",
+            "date": "2027-05-17"
+          },
+          "end": {
+            "utc": "2027-05-17T01:56:00Z",
+            "local": "2027-05-17T07:26:00+05:30",
+            "clock": "07:26",
+            "date": "2027-05-17"
+          },
+          "nakatha": "Hasta",
+          "thithi": "Bright 12 (Dwadashi)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Hasta, one of the nakathas for this ceremony.",
+            "Bright 12 (Dwadashi) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Balava, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Kanya: the 11th sign from the bride's Moon sign and the 5th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:26 to 08:59)."
+          ],
+          "cautions": [
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 9.55
+        },
+        {
+          "date": "2027-05-31",
+          "date_text": "31 May 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-05-31T09:41:00Z",
+            "local": "2027-05-31T15:11:00+05:30",
+            "clock": "15:11",
+            "date": "2027-05-31"
+          },
+          "end": {
+            "utc": "2027-05-31T11:43:00Z",
+            "local": "2027-05-31T17:13:00+05:30",
+            "clock": "17:13",
+            "date": "2027-05-31"
+          },
+          "nakatha": "Revati",
+          "thithi": "Dark 11 (Ekadashi)",
+          "lagna": "Tula",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Dark 11 (Ekadashi) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Bava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:26 to 08:59)."
+          ],
+          "cautions": [
+            "The Moon is waning (dark half). Some prefer the bright half for an engagement."
+          ],
+          "score": 10.0
+        }
+      ],
+      "none_text": null
+    },
+    {
+      "key": "poruwa",
+      "name": "Poruwa ceremony",
+      "suggestions": [
+        {
+          "date": "2027-01-15",
+          "date_text": "15 January 2027",
+          "weekday": "Friday",
+          "start": {
+            "utc": "2027-01-15T06:48:00Z",
+            "local": "2027-01-15T12:18:00+05:30",
+            "clock": "12:18",
+            "date": "2027-01-15"
+          },
+          "end": {
+            "utc": "2027-01-15T08:21:00Z",
+            "local": "2027-01-15T13:51:00+05:30",
+            "clock": "13:51",
+            "date": "2027-01-15"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 7 (Saptami)",
+          "lagna": "Mesha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 7 (Saptami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Friday is a good day for it.",
+            "The karana is Vanija, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (10:50 to 12:18).",
+            "The lagna is Mesha, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [],
+          "score": 11.55
+        },
+        {
+          "date": "2027-01-27",
+          "date_text": "27 January 2027",
+          "weekday": "Wednesday",
+          "start": {
+            "utc": "2027-01-27T09:38:00Z",
+            "local": "2027-01-27T15:08:00+05:30",
+            "clock": "15:08",
+            "date": "2027-01-27"
+          },
+          "end": {
+            "utc": "2027-01-27T11:49:00Z",
+            "local": "2027-01-27T17:19:00+05:30",
+            "clock": "17:19",
+            "date": "2027-01-27"
+          },
+          "nakatha": "Hasta",
+          "thithi": "Dark 6 (Shashthi)",
+          "lagna": "Mithuna",
+          "passes": [
+            "The Moon is in Hasta, one of the nakathas for this ceremony.",
+            "Dark 6 (Shashthi) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Wednesday is a good day for it.",
+            "The karana is Gara, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Kanya: the 11th sign from the bride's Moon sign and the 5th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (12:21 to 13:49).",
+            "The lagna is Mithuna, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 10.0
+        },
+        {
+          "date": "2027-02-11",
+          "date_text": "11 February 2027",
+          "weekday": "Thursday",
+          "start": {
+            "utc": "2027-02-11T06:35:00Z",
+            "local": "2027-02-11T12:05:00+05:30",
+            "clock": "12:05",
+            "date": "2027-02-11"
+          },
+          "end": {
+            "utc": "2027-02-11T08:23:00Z",
+            "local": "2027-02-11T13:53:00+05:30",
+            "clock": "13:53",
+            "date": "2027-02-11"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 5 (Panchami)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 5 (Panchami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Thursday is a good day for it.",
+            "The karana is Bava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (13:53 to 15:22).",
+            "The lagna is Vrishabha, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [],
+          "score": 11.8
+        },
+        {
+          "date": "2027-03-10",
+          "date_text": "10 March 2027",
+          "weekday": "Wednesday",
+          "start": {
+            "utc": "2027-03-10T05:23:00Z",
+            "local": "2027-03-10T10:53:00+05:30",
+            "clock": "10:53",
+            "date": "2027-03-10"
+          },
+          "end": {
+            "utc": "2027-03-10T06:49:00Z",
+            "local": "2027-03-10T12:19:00+05:30",
+            "clock": "12:19",
+            "date": "2027-03-10"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 2 (Dwitiya)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 2 (Dwitiya) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Wednesday is a good day for it.",
+            "The karana is Kaulava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (12:19 to 13:49).",
+            "The lagna is Vrishabha, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [],
+          "score": 11.43
+        },
+        {
+          "date": "2027-03-15",
+          "date_text": "15 March 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-03-15T00:51:00Z",
+            "local": "2027-03-15T06:21:00+05:30",
+            "clock": "06:21",
+            "date": "2027-03-15"
+          },
+          "end": {
+            "utc": "2027-03-15T02:17:00Z",
+            "local": "2027-03-15T07:47:00+05:30",
+            "clock": "07:47",
+            "date": "2027-03-15"
+          },
+          "nakatha": "Rohini",
+          "thithi": "Bright 7 (Saptami)",
+          "lagna": "Meena",
+          "passes": [
+            "The Moon is in Rohini, one of the nakathas for this ceremony.",
+            "Bright 7 (Saptami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Vanija, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Vrishabha: the 7th sign from the bride's Moon sign and the 1st from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:47 to 09:17).",
+            "The lagna is Meena, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 9.43
+        },
+        {
+          "date": "2027-04-07",
+          "date_text": "7 April 2027",
+          "weekday": "Wednesday",
+          "start": {
+            "utc": "2027-04-07T01:06:00Z",
+            "local": "2027-04-07T06:36:00+05:30",
+            "clock": "06:36",
+            "date": "2027-04-07"
+          },
+          "end": {
+            "utc": "2027-04-07T01:57:00Z",
+            "local": "2027-04-07T07:27:00+05:30",
+            "clock": "07:27",
+            "date": "2027-04-07"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 1 (Pratipada)",
+          "lagna": "Mesha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 1 (Pratipada) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Wednesday is a good day for it.",
+            "The karana is Kimstughna, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (12:10 to 13:41).",
+            "The lagna is Mesha, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [],
+          "score": 10.85
+        },
+        {
+          "date": "2027-05-17",
+          "date_text": "17 May 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-05-17T00:23:00Z",
+            "local": "2027-05-17T05:53:00+05:30",
+            "clock": "05:53",
+            "date": "2027-05-17"
+          },
+          "end": {
+            "utc": "2027-05-17T01:56:00Z",
+            "local": "2027-05-17T07:26:00+05:30",
+            "clock": "07:26",
+            "date": "2027-05-17"
+          },
+          "nakatha": "Hasta",
+          "thithi": "Bright 12 (Dwadashi)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Hasta, one of the nakathas for this ceremony.",
+            "Bright 12 (Dwadashi) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Balava, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Kanya: the 11th sign from the bride's Moon sign and the 5th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:26 to 08:59).",
+            "The lagna is Vrishabha, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 9.55
+        },
+        {
+          "date": "2027-05-31",
+          "date_text": "31 May 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-05-31T09:41:00Z",
+            "local": "2027-05-31T15:11:00+05:30",
+            "clock": "15:11",
+            "date": "2027-05-31"
+          },
+          "end": {
+            "utc": "2027-05-31T11:43:00Z",
+            "local": "2027-05-31T17:13:00+05:30",
+            "clock": "17:13",
+            "date": "2027-05-31"
+          },
+          "nakatha": "Revati",
+          "thithi": "Dark 11 (Ekadashi)",
+          "lagna": "Tula",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Dark 11 (Ekadashi) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Bava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:26 to 08:59).",
+            "The lagna is Tula, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+          ],
+          "cautions": [],
+          "score": 12.0
+        }
+      ],
+      "none_text": null
+    },
+    {
+      "key": "homecoming",
+      "name": "Homecoming",
+      "suggestions": [
+        {
+          "date": "2027-01-15",
+          "date_text": "15 January 2027",
+          "weekday": "Friday",
+          "start": {
+            "utc": "2027-01-15T00:59:00Z",
+            "local": "2027-01-15T06:29:00+05:30",
+            "clock": "06:29",
+            "date": "2027-01-15"
+          },
+          "end": {
+            "utc": "2027-01-15T02:57:00Z",
+            "local": "2027-01-15T08:27:00+05:30",
+            "clock": "08:27",
+            "date": "2027-01-15"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 7 (Saptami)",
+          "lagna": "Makara",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 7 (Saptami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Friday is a good day for it.",
+            "The karana is Vanija, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (10:50 to 12:18)."
+          ],
+          "cautions": [],
+          "score": 11.97
+        },
+        {
+          "date": "2027-02-11",
+          "date_text": "11 February 2027",
+          "weekday": "Thursday",
+          "start": {
+            "utc": "2027-02-11T06:35:00Z",
+            "local": "2027-02-11T12:05:00+05:30",
+            "clock": "12:05",
+            "date": "2027-02-11"
+          },
+          "end": {
+            "utc": "2027-02-11T08:23:00Z",
+            "local": "2027-02-11T13:53:00+05:30",
+            "clock": "13:53",
+            "date": "2027-02-11"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 5 (Panchami)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 5 (Panchami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Thursday is a good day for it.",
+            "The karana is Bava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (13:53 to 15:22)."
+          ],
+          "cautions": [],
+          "score": 11.8
+        },
+        {
+          "date": "2027-03-11",
+          "date_text": "11 March 2027",
+          "weekday": "Thursday",
+          "start": {
+            "utc": "2027-03-11T02:52:00Z",
+            "local": "2027-03-11T08:22:00+05:30",
+            "clock": "08:22",
+            "date": "2027-03-11"
+          },
+          "end": {
+            "utc": "2027-03-11T04:45:00Z",
+            "local": "2027-03-11T10:15:00+05:30",
+            "clock": "10:15",
+            "date": "2027-03-11"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 3 (Tritiya)",
+          "lagna": "Mesha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 3 (Tritiya) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Thursday is a good day for it.",
+            "The karana is Gara, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (13:49 to 15:19)."
+          ],
+          "cautions": [],
+          "score": 11.88
+        },
+        {
+          "date": "2027-03-15",
+          "date_text": "15 March 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-03-15T00:51:00Z",
+            "local": "2027-03-15T06:21:00+05:30",
+            "clock": "06:21",
+            "date": "2027-03-15"
+          },
+          "end": {
+            "utc": "2027-03-15T02:17:00Z",
+            "local": "2027-03-15T07:47:00+05:30",
+            "clock": "07:47",
+            "date": "2027-03-15"
+          },
+          "nakatha": "Rohini",
+          "thithi": "Bright 7 (Saptami)",
+          "lagna": "Meena",
+          "passes": [
+            "The Moon is in Rohini, one of the nakathas for this ceremony.",
+            "Bright 7 (Saptami) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Vanija, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Vrishabha: the 7th sign from the bride's Moon sign and the 1st from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:47 to 09:17)."
+          ],
+          "cautions": [
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 9.43
+        },
+        {
+          "date": "2027-04-07",
+          "date_text": "7 April 2027",
+          "weekday": "Wednesday",
+          "start": {
+            "utc": "2027-04-07T01:06:00Z",
+            "local": "2027-04-07T06:36:00+05:30",
+            "clock": "06:36",
+            "date": "2027-04-07"
+          },
+          "end": {
+            "utc": "2027-04-07T01:57:00Z",
+            "local": "2027-04-07T07:27:00+05:30",
+            "clock": "07:27",
+            "date": "2027-04-07"
+          },
+          "nakatha": "Revati",
+          "thithi": "Bright 1 (Pratipada)",
+          "lagna": "Mesha",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Bright 1 (Pratipada) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Wednesday is a good day for it.",
+            "The karana is Kimstughna, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (12:10 to 13:41)."
+          ],
+          "cautions": [],
+          "score": 10.85
+        },
+        {
+          "date": "2027-05-08",
+          "date_text": "8 May 2027",
+          "weekday": "Saturday",
+          "start": {
+            "utc": "2027-05-08T00:57:00Z",
+            "local": "2027-05-08T06:27:00+05:30",
+            "clock": "06:27",
+            "date": "2027-05-08"
+          },
+          "end": {
+            "utc": "2027-05-08T03:01:00Z",
+            "local": "2027-05-08T08:31:00+05:30",
+            "clock": "08:31",
+            "date": "2027-05-08"
+          },
+          "nakatha": "Rohini",
+          "thithi": "Bright 2 (Dwitiya)",
+          "lagna": "Vrishabha",
+          "passes": [
+            "The Moon is in Rohini, one of the nakathas for this ceremony.",
+            "Bright 2 (Dwitiya) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "The karana is Kaulava, not Vishti.",
+            "Tara bala: Sadhaka for the bride and Janma for the groom. Neither is avoided.",
+            "The Moon is in Vrishabha: the 7th sign from the bride's Moon sign and the 1st from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (09:01 to 10:34)."
+          ],
+          "cautions": [
+            "Saturday is accepted by some sources only.",
+            "The day's star is the birth star of one of you (janma tara), which some avoid."
+          ],
+          "score": 8.0
+        },
+        {
+          "date": "2027-05-31",
+          "date_text": "31 May 2027",
+          "weekday": "Monday",
+          "start": {
+            "utc": "2027-05-31T09:41:00Z",
+            "local": "2027-05-31T15:11:00+05:30",
+            "clock": "15:11",
+            "date": "2027-05-31"
+          },
+          "end": {
+            "utc": "2027-05-31T11:43:00Z",
+            "local": "2027-05-31T17:13:00+05:30",
+            "clock": "17:13",
+            "date": "2027-05-31"
+          },
+          "nakatha": "Revati",
+          "thithi": "Dark 11 (Ekadashi)",
+          "lagna": "Tula",
+          "passes": [
+            "The Moon is in Revati, one of the nakathas for this ceremony.",
+            "Dark 11 (Ekadashi) is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon).",
+            "Monday is a good day for it.",
+            "The karana is Bava, not Vishti.",
+            "Tara bala: Sampat for the bride and Sadhaka for the groom. Neither is avoided.",
+            "The Moon is in Meena: the 5th sign from the bride's Moon sign and the 11th from the groom's. Neither is the 6th, 8th or 12th.",
+            "Venus and Jupiter are clear of the Sun (not combust).",
+            "It is outside Rahu kalaya (07:26 to 08:59)."
+          ],
+          "cautions": [],
+          "score": 12.0
+        }
+      ],
+      "none_text": null
+    }
+  ],
+  "note": "These dates follow general rules and your birth stars. Please confirm the date and time with your astrologer before you plan."
+}

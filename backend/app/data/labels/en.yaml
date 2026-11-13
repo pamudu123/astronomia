@@ -389,3 +389,24 @@ avurudu:
     pearl_or_white: pearl or white
     gold_or_yellow: gold or yellow
     yellow_or_gold: yellow or gold
+
+# Wedding nakath finder: why each date passes, and its weaker points.
+wedding:
+  ceremony: {engagement: Engagement, poruwa: Poruwa ceremony, homecoming: Homecoming}
+  tara: {janma: Janma, sampat: Sampat, vipat: Vipat, kshema: Kshema, pratyari: Pratyari, sadhaka: Sadhaka, naidhana: Naidhana, mitra: Mitra, parama_mitra: Parama mitra}
+  pass_nakatha: "The Moon is in {nakatha}, one of the nakathas for this ceremony."
+  pass_thithi: "{thithi} is not one of the thithis to avoid (4, 9 and 14 of each half, and the new moon)."
+  pass_weekday: "{weekday} is a good day for it."
+  pass_karana: "The karana is {karana}, not Vishti."
+  pass_rahu: "It is outside Rahu kalaya ({start} to {end})."
+  pass_tara: "Tara bala: {bride_tara} for the bride and {groom_tara} for the groom. Neither is avoided."
+  pass_chandra: "The Moon is in {moon_sign}: the {bride_house} sign from the bride's Moon sign and the {groom_house} from the groom's. Neither is the 6th, 8th or 12th."
+  pass_lagna: "The lagna is {lagna}, with no Sun, Mars, Saturn, Rahu or Ketu in the 7th house from it."
+  pass_planets: "Venus and Jupiter are clear of the Sun (not combust)."
+  weekday_weak: "{weekday} is accepted by some sources only."
+  thithi_weak: "{thithi} is avoided by some sources."
+  yoga_weak: "The yoga is {yoga}, which some sources treat as unfavourable."
+  dark_half: "The Moon is waning (dark half). Some prefer the bright half for an engagement."
+  tara_janma: "The day's star is the birth star of one of you (janma tara), which some avoid."
+  note: "These dates follow general rules and your birth stars. Please confirm the date and time with your astrologer before you plan."
+  none: "No date in this range passes every rule. Try a longer range."

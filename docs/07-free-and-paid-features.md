@@ -109,6 +109,20 @@ Notes:
 - The PDF must render Sinhala correctly. This needs testing early, because many PDF tools break Sinhala letters.
 - The last page always carries the disclaimer and the method used (ayanamsa, rule set version).
 
+### 4.7 Nakath (2026-11-13)
+
+| | Free | Paid |
+|---|---|---|
+| Daily nakath (sunrise, Rahu kalaya, thithi, nakatha, yoga, karana) | Any place, any date | Same |
+| Avurudu nakath | The official list and our times, in any time zone | Same |
+| Wedding nakath finder | **Open to everyone for now** | Paid feature |
+
+Notes:
+- Daily nakath and Avurudu stay free. They bring search traffic.
+- The wedding nakath finder is paid by decision, but built open until payments exist. Its code is kept apart so the lock goes in one place on each side:
+  - Backend: `wedding_access()` in `backend/app/api/wedding.py`. The finder endpoint depends on it. A test proves that locking it locks the finder and leaves the daily and Avurudu nakath open.
+  - Frontend: `WeddingGate` in `frontend/components/wedding/WeddingGate.tsx`. The finder on the porondam result goes through it.
+
 ## 5. What paid features need
 
 Paid tiers change the first plan in three ways.

@@ -1,0 +1,74 @@
+# Wedding nakath finder: rules for the engagement, the poruwa ceremony and the homecoming.
+# PROVISIONAL until a practising astrologer confirms it. Sources and conflicts are in
+# docs/11-nakath-rules.md (section 4). S8 is the Sri Lankan Daily Mirror column, S9 the
+# classical texts (Muhurta Chintamani, Raman's Muhurtha) as quoted by several sites.
+version: wedding_si_v1
+provisional: true
+
+# How far ahead the person may search, in months. The most is two years.
+search_months: [3, 6, 12, 24]
+# Suggestions per ceremony: the best day in each week, then the best of those.
+suggestions: 8
+# Shortest time window worth suggesting, in minutes.
+min_window_minutes: 20
+# Steps when scanning a day, in minutes. Window edges are then found to the minute.
+step_minutes: 5
+
+# Thithi numbers count 1 to 30: 1 to 15 bright half (15 full moon), 16 to 30 dark half
+# (30 new moon).
+common:
+  # S9: the rikta thithis (4, 9, 14 of each half) and the new moon.
+  avoid_thithi: [4, 9, 14, 19, 24, 29, 30]
+  # S9 sources disagree: some also avoid the 8th of each half and the full moon.
+  weak_thithi: [8, 15, 23]
+  avoid_karana: [vishti]  # S9
+  # S9 sites list these two yogas as unfavourable for good work.
+  weak_yoga: [vyatipata, vaidhriti]
+  avoid_rahu_kalaya: true  # Sri Lankan practice (S2, S3)
+  daylight_only: true
+  # Tara bala (S9): count from each person's birth star to the day's star, in nines.
+  # 3 Vipat, 5 Pratyari, 7 Naidhana are avoided.
+  avoid_tara: [3, 5, 7]
+  # The day's star being a person's own birth star (1, janma) is treated as weaker.
+  weak_tara: [1]
+  # Chandra bala (S9): the Moon's sign counted from each person's Moon sign.
+  avoid_moon_house: [6, 8, 12]
+  # Venus or Jupiter too close to the Sun (combust): no marriage (S9). Parashara's orbs.
+  combust_degrees: {venus: 10, venus_retrograde: 8, jupiter: 11}
+
+ceremonies:
+  engagement:
+    # The marriage nakathas, plus Pushya and Shravana (one source allows them for an engagement).
+    nakatha: [rohini, mrigashira, magha, uttara_phalguni, hasta, swati, anuradha, mula,
+              uttara_ashadha, uttara_bhadrapada, revati, pushya, shravana]
+    avoid_padas: {magha: [1], mula: [1], revati: [4]}
+    good_weekday: [monday, wednesday, thursday, friday]
+    weak_weekday: [sunday, saturday]
+    avoid_weekday: [tuesday]
+    prefer_bright_half: true
+    seventh_house_free: false
+  poruwa:
+    # The 11 marriage nakathas (S8, S9).
+    nakatha: [rohini, mrigashira, magha, uttara_phalguni, hasta, swati, anuradha, mula,
+              uttara_ashadha, uttara_bhadrapada, revati]
+    # S8. Another site avoids Mula padas 1 to 3.
+    avoid_padas: {magha: [1], mula: [1], revati: [4]}
+    good_weekday: [monday, wednesday, thursday, friday]
+    # S9 sources disagree on Sunday; Saturday is weaker.
+    weak_weekday: [sunday, saturday]
+    avoid_weekday: [tuesday]
+    prefer_bright_half: false
+    # No Sun, Mars, Saturn, Rahu or Ketu in the 7th house from the ceremony lagna (S9).
+    seventh_house_free: true
+  homecoming:
+    # Entering the new home: the nakathas most griha pravesha lists agree on.
+    nakatha: [rohini, mrigashira, uttara_phalguni, chitra, anuradha, uttara_ashadha,
+              uttara_bhadrapada, revati]
+    avoid_padas: {}
+    good_weekday: [monday, wednesday, thursday, friday]
+    weak_weekday: [sunday, saturday]
+    avoid_weekday: [tuesday]
+    prefer_bright_half: false
+    seventh_house_free: false
+
+malefics: [sun, mars, saturn, rahu, ketu]
