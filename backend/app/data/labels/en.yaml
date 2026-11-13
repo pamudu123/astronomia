@@ -445,3 +445,22 @@ baby:
   day_before_sunrise: "Born before sunrise, so the Sinhala day is still {weekday}, the day before."
   nearby_before: "{minutes} minutes earlier the Moon was in {star} pada {pada}, which gives the letter {letter}."
   nearby_after: "{minutes} minutes later the Moon is in {star} pada {pada}, which gives the letter {letter}."
+
+first_letters:
+  pass_nakatha: "{nakatha} is one of the nakathas for first letters."
+  pass_weekday: "{weekday} is a good day to begin learning."
+  pass_thithi: "The thithi, {thithi}, is not one to avoid."
+  pass_karana: "The karana, {karana}, is not Vishti."
+  pass_tara: "Counted from the child's birth star, the day's star gives {tara}, a good tara."
+  pass_lagna: "{lagna} lagna is a dual sign, and no planet is in the 8th house from it."
+  pass_rahu: "Outside Rahu kalaya ({start} to {end})."
+  weekday_weak: "Only some sources allow {weekday}. Wednesday, Thursday and Friday come first."
+  thithi_weak: "Some sources do not list {thithi} as good for learning."
+  yoga_weak: "The yoga is {yoga}, which some sources avoid."
+  dark_half: "The Moon is waning. The bright half is preferred."
+  age: "The child will be {years} and {months} old."
+  years: {one: "1 year", many: "{n} years"}
+  months: {one: "1 month", many: "{n} months"}
+  age_outside: "Most sources give an age between 2 and 5 for the first letters."
+  none: "No time in this range passes every rule. Try a longer range."
+  note: "Each time is for the chosen place and passes every rule listed. Ask a practising astrologer to confirm it before the ceremony."

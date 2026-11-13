@@ -1,0 +1,48 @@
+{
+ "source": "Sinhala newspaper columns that give a first letters (akuru kiyaweema) time in Colombo and the birth stars it suits. Read on 2026-11-13. The years come from each page's published date, or for Lankadeepa from the only matching year.",
+ "columns": [
+  {
+   "id": "A2",
+   "source": "Divaina, Sathiye subha nakath, published 2026-07-11",
+   "url": "https://www.divaina.lk/nakatha/88807",
+   "local": "2026-07-15T06:02",
+   "weekday": "wednesday",
+   "nakatha": "pushya",
+   "lagna": "mithuna",
+   "suits": ["ashlesha", "jyeshtha", "revati", "ashwini", "magha", "mula", "punarvasu", "vishakha", "purva_bhadrapada", "mrigashira", "chitra", "dhanishta", "krittika", "uttara_phalguni", "uttara_ashadha"]
+  },
+  {
+   "id": "A2",
+   "source": "Divaina, Sathiye subha nakath, published 2026-07-11",
+   "url": "https://www.divaina.lk/nakatha/88807",
+   "local": "2026-07-16T06:22",
+   "weekday": "thursday",
+   "nakatha": "ashlesha",
+   "lagna": "mithuna",
+   "suits": ["ashwini", "magha", "mula", "bharani", "purva_phalguni", "purva_ashadha", "pushya", "anuradha", "uttara_bhadrapada", "rohini", "hasta", "shravana", "ardra", "swati", "shatabhisha"]
+  },
+  {
+   "id": "A3",
+   "source": "Divaina, Sathiye subha nakath, published 2026-03-22",
+   "url": "https://www.divaina.lk/nakatha/68214",
+   "local": "2026-03-23T07:02",
+   "weekday": "monday",
+   "nakatha": null,
+   "moon_sign": "vrishabha",
+   "lagna": null,
+   "suits": ["rohini", "hasta", "shravana", "ardra", "swati", "shatabhisha", "bharani", "purva_phalguni", "purva_ashadha", "punarvasu", "vishakha", "purva_bhadrapada", "ashlesha", "jyeshtha", "revati"]
+  },
+  {
+   "id": "A4",
+   "source": "Lankadeepa, Rasawitha (2018)",
+   "url": "https://www.lankadeepa.lk/Rasawitha/57-536087",
+   "local": "2018-10-01T06:22",
+   "weekday": "monday",
+   "nakatha": "mrigashira",
+   "moon_sign": "vrishabha",
+   "lagna": "kanya",
+   "panchanga_pure": false,
+   "does_not_suit": ["krittika", "uttara_phalguni", "uttara_ashadha", "ashwini", "magha", "mula", "pushya", "anuradha", "uttara_bhadrapada", "chitra", "dhanishta", "mrigashira"]
+  }
+ ]
+}
