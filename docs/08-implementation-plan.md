@@ -198,6 +198,14 @@ Planned set by set in `docs/10-extra-features.md`. Category A is porondam depth.
 - **Check:** `backend/tests/test_porondam_observed.py` replays 34 results from a Sri Lankan porondam site. The four added factors agree with all of them.
 - **Still missing:** Varna, Bhutha, Vruksha, Ayusha and Graha.
 
+**Done in a later pull request:** the last five factors (all 20 of the 20).
+
+- **Rules:** `porondam_si_v3.yaml` adds Varna, Bhutha, Vruksha, Ayusha and Graha. Versions 1 and 2 are kept. Sources and method in `docs/03-porondam-domain-notes.md`.
+- **Engine:** three new rule types: `sign_rank_at_least` (Varna by Moon sign), `distance28_avoid` (Ayusha in the 28 star count) and `lagna_and_moon_lords` (Graha). Graha needs both lagnas, so it is "Not counted" in a birth star only match, like Dina.
+- **Counts:** a birth star only match counts 16 factors, a full match 18. Rajju and Vedha stay apart.
+- **Check:** the replay test now has 74 of the site's results. Bhutha, Vruksha and Ayusha agree with all of them. Varna and Graha follow published methods, because the site's could not be worked out.
+- **PDF:** the porondam report is now 3 pages.
+
 **Done in the same pull request:** A3, years ahead for the couple.
 
 - **Engine** (`backend/app/engine/couple.py`): for the ten years from today, Saturn's stays in each sign (worked out once a day and kept), each person's Saturn periods counted from the Moon sign, where the two people's periods overlap, and the dasha periods that touch the window.

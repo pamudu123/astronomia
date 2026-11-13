@@ -171,7 +171,8 @@ def build_porondam(body: PorondamRequest, db: Path) -> PorondamBuild:
     )
 
     weekdays = (b_day, g_day) if b_day is not None and g_day is not None else None
-    result = match(b_moon, g_moon, weekdays=weekdays)
+    lagnas = (b_chart.lagna.sign, g_chart.lagna.sign) if b_chart and g_chart else None
+    result = match(b_moon, g_moon, weekdays=weekdays, lagnas=lagnas)
     lang = body.lang
     match_out = MatchOut(
         rule_set=result.rule_set,

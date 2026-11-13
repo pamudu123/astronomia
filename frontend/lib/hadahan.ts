@@ -28,6 +28,9 @@ export type Labels = {
   pakshi: Record<string, string>;
   linga: Record<string, string>;
   weekday: Record<string, string>;
+  varna: Record<string, string>;
+  bhuta: Record<string, string>;
+  vruksha: Record<string, string>;
   porondam_factor: Record<string, { name: string; meaning: string }>;
 };
 
