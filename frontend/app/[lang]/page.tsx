@@ -5,11 +5,16 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Eye, Globe, Lock } from "@/components/Icons";
 import { Starfield } from "@/components/Starfield";
 import { ZodiacWheel } from "@/components/ZodiacWheel";
+import { localDate } from "@/components/changes/text";
+import { FEATURED, findChange } from "@/lib/changes";
+import { fill } from "@/lib/hadahan";
 import { hasLocale } from "@/lib/i18n";
 import { RASHI } from "@/lib/rashi";
 
 import { getDictionary } from "./dictionaries";
 import styles from "./home.module.css";
+
+const featured = findChange(FEATURED);
 
 const TRUST_ICONS = [<Eye key="eye" />, <Lock key="lock" size={28} color="var(--gold)" />, <Globe key="globe" />];
 
@@ -105,6 +110,15 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           {dict.porondam.stars.homeLink}
           <ArrowRight />
         </Link>
+        {featured && (
+          <Link href={`/${lang}/changes/${featured.id}`} className={styles.toolMore} data-link="changes">
+            {fill(dict.changes.homeLink, {
+              change: dict.changes.kind[featured.kind],
+              date: localDate(featured, lang),
+            })}
+            <ArrowRight />
+          </Link>
+        )}
       </section>
 
       <section className={`container ${styles.sectionTight}`} aria-labelledby="rashi-title">

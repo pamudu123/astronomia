@@ -277,3 +277,17 @@ couple:
   overlap_from: "{from} සිට දෙදෙනාම මෙම {planet} කාලවල සිටිති. එය {to} න් පසුවද පවතී."
   overlap_all: "{from} සිට {to} දක්වා මුළු කාලය පුරා දෙදෙනාම මෙම {planet} කාලවල සිටිති."
   dasha_now: "{main} මහ දශාව {main_to} දක්වා. {sub} අතුරු දශාව {sub_to} දක්වා."
+
+# ග්‍රහ මාරු: ශනි, ගුරු, රාහු සහ කේතු නව රාශියකට මාරු වීම.
+changes:
+  title_rahu_ketu: "රාහු කේතු මාරුව"
+  title_saturn: "ශනි මාරුව"
+  title_jupiter: "ගුරු මාරුව"
+  when: "{date}, ශ්‍රී ලංකා වේලාවෙන් {time}"
+  move: "{planet} {from_sign} රාශියේ සිට {to_sign} රාශියට මාරු වේ."
+  move_back: "{planet} වක්‍රව {from_sign} රාශියේ සිට {to_sign} රාශියට ආපසු පැමිණේ."
+  until: "{planet} {date} දින {next_sign} රාශියට මාරු වන තුරු {to_sign} රාශියේ රැඳේ."
+  house_move: "{planet} ඔබේ {from_house} භාවයෙන් ඉවත්ව {to_house} භාවයට පැමිණේ."
+  house_short: "{planet}: {from_house} භාවයේ සිට {to_house} භාවයට"
+  other: "{planet} {sign} රාශියේ, ඔබේ {house} භාවයේ රැඳේ."
+  theme: "{house} භාවයෙන් {theme} දැක්වේ."

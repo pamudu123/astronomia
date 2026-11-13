@@ -1,0 +1,540 @@
+{
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "change": {
+    "id": "rahu-ketu-2026-12",
+    "kind": "rahu-ketu",
+    "title": "Rahu and Ketu change",
+    "moment": "2026-12-05T17:02:00Z",
+    "local_date": "2026-12-05",
+    "when": "5 December 2026, 22:32 Sri Lanka time",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "retrograde": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "dhanu",
+        "text": "Rahu moves from Kumbha into Makara.",
+        "until_text": "Rahu stays in Makara until 24 June 2028, when it moves into Dhanu."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "retrograde": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "mithuna",
+        "text": "Ketu moves from Simha into Kataka.",
+        "until_text": "Ketu stays in Kataka until 24 June 2028, when it moves into Mithuna."
+      }
+    ]
+  },
+  "lagnas": [
+    {
+      "sign": "mesha",
+      "sign_name": "Mesha",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 11,
+          "to_house": 10,
+          "text": "Rahu leaves your 11th house and enters your 10th house.",
+          "short": "Rahu: 11th house to 10th house",
+          "from_theme": "The 11th house is about gains and friends.",
+          "to_theme": "The 10th house is about career and standing."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 5,
+          "to_house": 4,
+          "text": "Ketu leaves your 5th house and enters your 4th house.",
+          "short": "Ketu: 5th house to 4th house",
+          "from_theme": "The 5th house is about learning, children and creativity.",
+          "to_theme": "The 4th house is about home and peace of mind."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 12,
+          "text": "Saturn stays in Meena, your 12th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 5,
+          "text": "Jupiter stays in Simha, your 5th house."
+        }
+      ]
+    },
+    {
+      "sign": "vrishabha",
+      "sign_name": "Vrishabha",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 10,
+          "to_house": 9,
+          "text": "Rahu leaves your 10th house and enters your 9th house.",
+          "short": "Rahu: 10th house to 9th house",
+          "from_theme": "The 10th house is about career and standing.",
+          "to_theme": "The 9th house is about fortune, teachers and beliefs."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 4,
+          "to_house": 3,
+          "text": "Ketu leaves your 4th house and enters your 3rd house.",
+          "short": "Ketu: 4th house to 3rd house",
+          "from_theme": "The 4th house is about home and peace of mind.",
+          "to_theme": "The 3rd house is about effort, courage and siblings."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 11,
+          "text": "Saturn stays in Meena, your 11th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 4,
+          "text": "Jupiter stays in Simha, your 4th house."
+        }
+      ]
+    },
+    {
+      "sign": "mithuna",
+      "sign_name": "Mithuna",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 9,
+          "to_house": 8,
+          "text": "Rahu leaves your 9th house and enters your 8th house.",
+          "short": "Rahu: 9th house to 8th house",
+          "from_theme": "The 9th house is about fortune, teachers and beliefs.",
+          "to_theme": "The 8th house is about change and things shared with others."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 3,
+          "to_house": 2,
+          "text": "Ketu leaves your 3rd house and enters your 2nd house.",
+          "short": "Ketu: 3rd house to 2nd house",
+          "from_theme": "The 3rd house is about effort, courage and siblings.",
+          "to_theme": "The 2nd house is about family, speech and savings."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 10,
+          "text": "Saturn stays in Meena, your 10th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 3,
+          "text": "Jupiter stays in Simha, your 3rd house."
+        }
+      ]
+    },
+    {
+      "sign": "kataka",
+      "sign_name": "Kataka",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 8,
+          "to_house": 7,
+          "text": "Rahu leaves your 8th house and enters your 7th house.",
+          "short": "Rahu: 8th house to 7th house",
+          "from_theme": "The 8th house is about change and things shared with others.",
+          "to_theme": "The 7th house is about partnership and marriage."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 2,
+          "to_house": 1,
+          "text": "Ketu leaves your 2nd house and enters your 1st house.",
+          "short": "Ketu: 2nd house to 1st house",
+          "from_theme": "The 2nd house is about family, speech and savings.",
+          "to_theme": "The 1st house is about yourself and how you begin things."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 9,
+          "text": "Saturn stays in Meena, your 9th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 2,
+          "text": "Jupiter stays in Simha, your 2nd house."
+        }
+      ]
+    },
+    {
+      "sign": "simha",
+      "sign_name": "Simha",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 7,
+          "to_house": 6,
+          "text": "Rahu leaves your 7th house and enters your 6th house.",
+          "short": "Rahu: 7th house to 6th house",
+          "from_theme": "The 7th house is about partnership and marriage.",
+          "to_theme": "The 6th house is about daily work and challenges to get through."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 1,
+          "to_house": 12,
+          "text": "Ketu leaves your 1st house and enters your 12th house.",
+          "short": "Ketu: 1st house to 12th house",
+          "from_theme": "The 1st house is about yourself and how you begin things.",
+          "to_theme": "The 12th house is about rest, spending and faraway places."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 8,
+          "text": "Saturn stays in Meena, your 8th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 1,
+          "text": "Jupiter stays in Simha, your 1st house."
+        }
+      ]
+    },
+    {
+      "sign": "kanya",
+      "sign_name": "Kanya",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 6,
+          "to_house": 5,
+          "text": "Rahu leaves your 6th house and enters your 5th house.",
+          "short": "Rahu: 6th house to 5th house",
+          "from_theme": "The 6th house is about daily work and challenges to get through.",
+          "to_theme": "The 5th house is about learning, children and creativity."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 12,
+          "to_house": 11,
+          "text": "Ketu leaves your 12th house and enters your 11th house.",
+          "short": "Ketu: 12th house to 11th house",
+          "from_theme": "The 12th house is about rest, spending and faraway places.",
+          "to_theme": "The 11th house is about gains and friends."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 7,
+          "text": "Saturn stays in Meena, your 7th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 12,
+          "text": "Jupiter stays in Simha, your 12th house."
+        }
+      ]
+    },
+    {
+      "sign": "tula",
+      "sign_name": "Tula",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 5,
+          "to_house": 4,
+          "text": "Rahu leaves your 5th house and enters your 4th house.",
+          "short": "Rahu: 5th house to 4th house",
+          "from_theme": "The 5th house is about learning, children and creativity.",
+          "to_theme": "The 4th house is about home and peace of mind."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 11,
+          "to_house": 10,
+          "text": "Ketu leaves your 11th house and enters your 10th house.",
+          "short": "Ketu: 11th house to 10th house",
+          "from_theme": "The 11th house is about gains and friends.",
+          "to_theme": "The 10th house is about career and standing."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 6,
+          "text": "Saturn stays in Meena, your 6th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 11,
+          "text": "Jupiter stays in Simha, your 11th house."
+        }
+      ]
+    },
+    {
+      "sign": "vrischika",
+      "sign_name": "Vrischika",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 4,
+          "to_house": 3,
+          "text": "Rahu leaves your 4th house and enters your 3rd house.",
+          "short": "Rahu: 4th house to 3rd house",
+          "from_theme": "The 4th house is about home and peace of mind.",
+          "to_theme": "The 3rd house is about effort, courage and siblings."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 10,
+          "to_house": 9,
+          "text": "Ketu leaves your 10th house and enters your 9th house.",
+          "short": "Ketu: 10th house to 9th house",
+          "from_theme": "The 10th house is about career and standing.",
+          "to_theme": "The 9th house is about fortune, teachers and beliefs."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 5,
+          "text": "Saturn stays in Meena, your 5th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 10,
+          "text": "Jupiter stays in Simha, your 10th house."
+        }
+      ]
+    },
+    {
+      "sign": "dhanu",
+      "sign_name": "Dhanu",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 3,
+          "to_house": 2,
+          "text": "Rahu leaves your 3rd house and enters your 2nd house.",
+          "short": "Rahu: 3rd house to 2nd house",
+          "from_theme": "The 3rd house is about effort, courage and siblings.",
+          "to_theme": "The 2nd house is about family, speech and savings."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 9,
+          "to_house": 8,
+          "text": "Ketu leaves your 9th house and enters your 8th house.",
+          "short": "Ketu: 9th house to 8th house",
+          "from_theme": "The 9th house is about fortune, teachers and beliefs.",
+          "to_theme": "The 8th house is about change and things shared with others."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 4,
+          "text": "Saturn stays in Meena, your 4th house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 9,
+          "text": "Jupiter stays in Simha, your 9th house."
+        }
+      ]
+    },
+    {
+      "sign": "makara",
+      "sign_name": "Makara",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 2,
+          "to_house": 1,
+          "text": "Rahu leaves your 2nd house and enters your 1st house.",
+          "short": "Rahu: 2nd house to 1st house",
+          "from_theme": "The 2nd house is about family, speech and savings.",
+          "to_theme": "The 1st house is about yourself and how you begin things."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 8,
+          "to_house": 7,
+          "text": "Ketu leaves your 8th house and enters your 7th house.",
+          "short": "Ketu: 8th house to 7th house",
+          "from_theme": "The 8th house is about change and things shared with others.",
+          "to_theme": "The 7th house is about partnership and marriage."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 3,
+          "text": "Saturn stays in Meena, your 3rd house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 8,
+          "text": "Jupiter stays in Simha, your 8th house."
+        }
+      ]
+    },
+    {
+      "sign": "kumbha",
+      "sign_name": "Kumbha",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 1,
+          "to_house": 12,
+          "text": "Rahu leaves your 1st house and enters your 12th house.",
+          "short": "Rahu: 1st house to 12th house",
+          "from_theme": "The 1st house is about yourself and how you begin things.",
+          "to_theme": "The 12th house is about rest, spending and faraway places."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 7,
+          "to_house": 6,
+          "text": "Ketu leaves your 7th house and enters your 6th house.",
+          "short": "Ketu: 7th house to 6th house",
+          "from_theme": "The 7th house is about partnership and marriage.",
+          "to_theme": "The 6th house is about daily work and challenges to get through."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 2,
+          "text": "Saturn stays in Meena, your 2nd house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 7,
+          "text": "Jupiter stays in Simha, your 7th house."
+        }
+      ]
+    },
+    {
+      "sign": "meena",
+      "sign_name": "Meena",
+      "moves": [
+        {
+          "body": "rahu",
+          "from_sign": "kumbha",
+          "to_sign": "makara",
+          "from_house": 12,
+          "to_house": 11,
+          "text": "Rahu leaves your 12th house and enters your 11th house.",
+          "short": "Rahu: 12th house to 11th house",
+          "from_theme": "The 12th house is about rest, spending and faraway places.",
+          "to_theme": "The 11th house is about gains and friends."
+        },
+        {
+          "body": "ketu",
+          "from_sign": "simha",
+          "to_sign": "kataka",
+          "from_house": 6,
+          "to_house": 5,
+          "text": "Ketu leaves your 6th house and enters your 5th house.",
+          "short": "Ketu: 6th house to 5th house",
+          "from_theme": "The 6th house is about daily work and challenges to get through.",
+          "to_theme": "The 5th house is about learning, children and creativity."
+        }
+      ],
+      "others": [
+        {
+          "body": "saturn",
+          "sign": "meena",
+          "house": 1,
+          "text": "Saturn stays in Meena, your 1st house."
+        },
+        {
+          "body": "jupiter",
+          "sign": "simha",
+          "house": 6,
+          "text": "Jupiter stays in Simha, your 6th house."
+        }
+      ]
+    }
+  ]
+}

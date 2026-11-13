@@ -1,0 +1,130 @@
+{
+  "status": "ok",
+  "time": {
+    "status": "ok",
+    "timezone": "Asia/Colombo",
+    "local": "1995-04-19T14:35:00",
+    "utc": "1995-04-19T09:05:00Z",
+    "offset_seconds": 19800,
+    "offset_label": "UTC+05:30",
+    "abbreviation": "+0530",
+    "clock_change": null,
+    "options": []
+  },
+  "rule_set": "changes_v1",
+  "provisional": true,
+  "change": {
+    "id": "rahu-ketu-2026-12",
+    "kind": "rahu-ketu",
+    "title": "රාහු කේතු මාරුව",
+    "moment": "2026-12-05T17:02:00Z",
+    "local_date": "2026-12-05",
+    "when": "2026 දෙසැම්බර් 5, ශ්‍රී ලංකා වේලාවෙන් 22:32",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "retrograde": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "dhanu",
+        "text": "රාහු කුම්භ රාශියේ සිට මකර රාශියට මාරු වේ.",
+        "until_text": "රාහු 2028 ජූනි 24 දින ධනු රාශියට මාරු වන තුරු මකර රාශියේ රැඳේ."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "retrograde": false,
+        "until": "2028-06-23T20:00:00Z",
+        "next_sign": "mithuna",
+        "text": "කේතු සිංහ රාශියේ සිට කටක රාශියට මාරු වේ.",
+        "until_text": "කේතු 2028 ජූනි 24 දින මිථුන රාශියට මාරු වන තුරු කටක රාශියේ රැඳේ."
+      }
+    ]
+  },
+  "lagna": {
+    "sign": "simha",
+    "sign_name": "සිංහ",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "from_house": 7,
+        "to_house": 6,
+        "text": "රාහු ඔබේ 7 වැනි භාවයෙන් ඉවත්ව 6 වැනි භාවයට පැමිණේ.",
+        "short": "රාහු: 7 වැනි භාවයේ සිට 6 වැනි භාවයට",
+        "from_theme": "7 වැනි භාවයෙන් හවුල්කාරිත්වය සහ විවාහය දැක්වේ.",
+        "to_theme": "6 වැනි භාවයෙන් දෛනික වැඩ සහ ජයගත යුතු අභියෝග දැක්වේ."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "from_house": 1,
+        "to_house": 12,
+        "text": "කේතු ඔබේ 1 වැනි භාවයෙන් ඉවත්ව 12 වැනි භාවයට පැමිණේ.",
+        "short": "කේතු: 1 වැනි භාවයේ සිට 12 වැනි භාවයට",
+        "from_theme": "1 වැනි භාවයෙන් ඔබ සහ ඔබ යමක් ආරම්භ කරන ආකාරය දැක්වේ.",
+        "to_theme": "12 වැනි භාවයෙන් විවේකය, වියදම් සහ දුර බැහැර ස්ථාන දැක්වේ."
+      }
+    ],
+    "others": [
+      {
+        "body": "saturn",
+        "sign": "meena",
+        "house": 8,
+        "text": "ශනි මීන රාශියේ, ඔබේ 8 වැනි භාවයේ රැඳේ."
+      },
+      {
+        "body": "jupiter",
+        "sign": "simha",
+        "house": 1,
+        "text": "ගුරු සිංහ රාශියේ, ඔබේ 1 වැනි භාවයේ රැඳේ."
+      }
+    ]
+  },
+  "gochara": {
+    "sign": "vrischika",
+    "sign_name": "වෘශ්චික",
+    "moves": [
+      {
+        "body": "rahu",
+        "from_sign": "kumbha",
+        "to_sign": "makara",
+        "from_house": 4,
+        "to_house": 3,
+        "text": "රාහු ඔබේ 4 වැනි භාවයෙන් ඉවත්ව 3 වැනි භාවයට පැමිණේ.",
+        "short": "රාහු: 4 වැනි භාවයේ සිට 3 වැනි භාවයට",
+        "from_theme": "4 වැනි භාවයෙන් නිවස සහ සිතේ සැනසීම දැක්වේ.",
+        "to_theme": "3 වැනි භාවයෙන් උත්සාහය, ධෛර්යය සහ සහෝදරයන් දැක්වේ."
+      },
+      {
+        "body": "ketu",
+        "from_sign": "simha",
+        "to_sign": "kataka",
+        "from_house": 10,
+        "to_house": 9,
+        "text": "කේතු ඔබේ 10 වැනි භාවයෙන් ඉවත්ව 9 වැනි භාවයට පැමිණේ.",
+        "short": "කේතු: 10 වැනි භාවයේ සිට 9 වැනි භාවයට",
+        "from_theme": "10 වැනි භාවයෙන් වෘත්තිය සහ සමාජ තත්ත්වය දැක්වේ.",
+        "to_theme": "9 වැනි භාවයෙන් වාසනාව, ගුරුවරුන් සහ විශ්වාසයන් දැක්වේ."
+      }
+    ],
+    "others": [
+      {
+        "body": "saturn",
+        "sign": "meena",
+        "house": 5,
+        "text": "ශනි මීන රාශියේ, ඔබේ 5 වැනි භාවයේ රැඳේ."
+      },
+      {
+        "body": "jupiter",
+        "sign": "simha",
+        "house": 10,
+        "text": "ගුරු සිංහ රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ."
+      }
+    ]
+  }
+}

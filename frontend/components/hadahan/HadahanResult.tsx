@@ -7,6 +7,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
 import { ShareButton } from "@/components/ShareButton";
+import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
 import {
   type BirthRequest,
   type Hadahan,
@@ -229,6 +230,8 @@ export function HadahanResult({
       {result.dasha && <DashaTimeline dasha={result.dasha} labels={labels} lang={lang} t={t} />}
 
       {request && <Forecast lang={lang} t={t} labels={labels} request={request} />}
+
+      {request && <UpcomingChanges lang={lang} t={t} request={request} />}
 
       <section className={styles.pair}>
         <article className={`rise ${styles.panel} ${kuja.present ? styles.kujaPresent : ""}`} data-card="kuja">
