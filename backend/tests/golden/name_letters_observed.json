@@ -1189,6 +1189,7 @@
   "uttara_bhadrapada": [
    "දු",
    "ථි",
+   null,
    "ඤ"
   ],
   "revati": [
@@ -1197,5 +1198,8 @@
    "ච",
    "චි"
   ]
+ },
+ "notes": {
+  "lankadeepa_uttara_bhadrapada": "The article lists three letters for this star (දු ථි ඤ). ඤ is read as pada 4, as in the other two sources, and pada 3 as missing."
  }
 }

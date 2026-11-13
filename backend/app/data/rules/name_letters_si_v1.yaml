@@ -136,7 +136,7 @@ stars:
   uttara_bhadrapada:
     - {letter: "දු", latin: Du, others: []}
     - {letter: "ථ", latin: Tha, others: ["ථි"]}
-    - {letter: "ඣ", latin: Jha, others: ["ඤ"]}
+    - {letter: "ඣ", latin: Jha, others: []}  # Lankadeepa lists no letter for this pada
     - {letter: "ඤ", latin: Nya, others: []}
   revati:
     - {letter: "දෙ", latin: De, others: []}
