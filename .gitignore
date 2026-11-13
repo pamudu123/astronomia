@@ -18,6 +18,9 @@ node_modules/
 # Place search index, built from app/data/places_lk.csv and geonamescache
 backend/app/data/places.sqlite
 backend/app/data/places.tmp
+# Daily planet positions for the old horoscope search, built by app/kendara/table.py
+backend/app/data/planets.bin.gz
+backend/app/data/planets.bin.tmp
 
 # Stored share links (local runs)
 backend/var/

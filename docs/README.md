@@ -14,6 +14,7 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [08-implementation-plan.md](08-implementation-plan.md) | How the first release gets built: repository layout, how the parts fit, 21 build steps with checks, working rules, and what is needed from the owner |
 | [09-launch.md](09-launch.md) | The launch runbook: hosting, the private staging site, and what is left before going public |
 | [10-extra-features.md](10-extra-features.md) | Features after the first release: what other sites offer, the categories and sets, and category A (porondam depth) in detail |
+| [13-old-horoscopes.md](13-old-horoscopes.md) | Set E: finding the birth from an old paper kendara. How the search works, the edge margins and why, privacy and limits |
 
 ## Read this first
 

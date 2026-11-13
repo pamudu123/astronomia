@@ -1,0 +1,20 @@
+# Old horoscope search, version 1.
+#
+# PROVISIONAL: the margins allow for older horoscopes drawn with another ayanamsa (Raman,
+# Thirukanitam or one based on the Surya Siddhanta) or the true node instead of the mean node.
+# These differ from ours (Lahiri, mean node) by up to about 2 degrees. See docs/13-old-horoscopes.md.
+
+version: kendara_v1
+provisional: true
+
+# A planet or the lagna this close to the edge of the sign drawn still counts, graded "near".
+sign_margin: 2.0
+# The same for a navamsha box, which is only 3 degrees 20 minutes wide.
+navamsha_margin: 1.0
+
+# How finely the minutes pass steps through each candidate day.
+step_minutes: 5
+# At most this many matches are returned; more means the person should give a year range.
+max_matches: 50
+# A search stops after this long and says it was cut off.
+time_limit_seconds: 20

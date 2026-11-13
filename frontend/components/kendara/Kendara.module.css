@@ -1,0 +1,297 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-block: 24px 96px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 720px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.title {
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.15;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  gap: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  margin: 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.legend {
+  padding: 0 8px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input,
+.select {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--night);
+  color: var(--ink);
+  font: inherit;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: 14px;
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.chip,
+.chipOn,
+.chipDone {
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--night);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chipOn {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--night);
+}
+
+.chipDone {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.hint {
+  min-height: 1.6em;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.board {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  align-self: center;
+  touch-action: manipulation;
+}
+
+.box,
+.boxLagna {
+  fill: var(--night);
+  stroke: none;
+  cursor: pointer;
+}
+
+.boxLagna {
+  fill: color-mix(in srgb, var(--gold) 10%, var(--night));
+}
+
+.box:hover,
+.boxLagna:hover,
+.box:focus-visible,
+.boxLagna:focus-visible {
+  fill: var(--panel-raised);
+  outline: none;
+}
+
+.lines {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.4;
+  pointer-events: none;
+}
+
+.lagnaMark,
+.centre {
+  fill: var(--gold);
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.centre {
+  fill: var(--ink-soft);
+  font-size: 15px;
+}
+
+.planet {
+  fill: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.row,
+.submitRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.linkButton {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  cursor: pointer;
+}
+
+.error {
+  color: var(--coral);
+}
+
+.problems {
+  margin: 0;
+  padding: 18px 22px 18px 40px;
+  border: 1px solid var(--coral);
+  border-radius: 16px;
+  color: var(--ink);
+}
+
+.note {
+  max-width: 760px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.matches {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.match {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+}
+
+.matchHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.when {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pillExact,
+.pillNear {
+  padding: 3px 12px;
+  border-radius: 999px;
+  color: var(--night);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pillExact {
+  background: var(--teal);
+}
+
+.pillNear {
+  background: var(--gold);
+}
+
+.stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+.nearText {
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.again {
+  align-self: flex-start;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 16px;
+  }
+
+  .chips {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
