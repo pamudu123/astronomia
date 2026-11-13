@@ -759,6 +759,126 @@
         }
       }
     },
+    "/v1/yearly/{year}/{lagna}": {
+      "get": {
+        "tags": [
+          "yearly"
+        ],
+        "summary": "Yearly",
+        "description": "The year for one lagna. The same houses hold for that Moon sign (gochara).",
+        "operationId": "yearly_v1_yearly__year___lagna__get",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Year"
+            }
+          },
+          {
+            "name": "lagna",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 20,
+              "title": "Lagna"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YearOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/yearly/{year}/personal": {
+      "post": {
+        "tags": [
+          "yearly"
+        ],
+        "summary": "Personal Yearly",
+        "description": "The year for one birth chart: from the lagna, and from the Moon sign (gochara).",
+        "operationId": "personal_yearly_v1_yearly__year__personal_post",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Year"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalYearResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/reports/pdf": {
       "post": {
         "tags": [
@@ -1855,6 +1975,22 @@
         ],
         "title": "HouseMoveOut"
       },
+      "KeyDateOut": {
+        "properties": {
+          "change": {
+            "$ref": "#/components/schemas/ChangeOut"
+          },
+          "counted": {
+            "$ref": "#/components/schemas/CountedOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "change",
+          "counted"
+        ],
+        "title": "KeyDateOut"
+      },
       "KujaOut": {
         "properties": {
           "rule_set": {
@@ -2425,6 +2561,45 @@
           "gochara"
         ],
         "title": "PersonalChangeResponse"
+      },
+      "PersonalYearResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "lagna": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/YearOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gochara": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/YearOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "lagna",
+          "gochara"
+        ],
+        "title": "PersonalYearResponse"
       },
       "PlaceList": {
         "properties": {
@@ -3311,6 +3486,56 @@
         ],
         "title": "StarMatchesResponse"
       },
+      "StayOut": {
+        "properties": {
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "from_before": {
+            "type": "boolean",
+            "title": "From Before"
+          },
+          "past_end": {
+            "type": "boolean",
+            "title": "Past End"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "theme": {
+            "type": "string",
+            "title": "Theme"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sign",
+          "house",
+          "start",
+          "end",
+          "from_before",
+          "past_end",
+          "text",
+          "theme"
+        ],
+        "title": "StayOut"
+      },
       "TimeCheckOut": {
         "properties": {
           "stable": {
@@ -3791,6 +4016,129 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "YearMonthOut": {
+        "properties": {
+          "month": {
+            "type": "integer",
+            "title": "Month"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "houses": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Houses"
+          },
+          "changes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "name",
+          "houses",
+          "changes"
+        ],
+        "title": "YearMonthOut"
+      },
+      "YearOut": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "sign_name": {
+            "type": "string",
+            "title": "Sign Name"
+          },
+          "planets": {
+            "items": {
+              "$ref": "#/components/schemas/YearPlanetOut"
+            },
+            "type": "array",
+            "title": "Planets"
+          },
+          "months": {
+            "items": {
+              "$ref": "#/components/schemas/YearMonthOut"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "key_dates": {
+            "items": {
+              "$ref": "#/components/schemas/KeyDateOut"
+            },
+            "type": "array",
+            "title": "Key Dates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "year",
+          "sign",
+          "sign_name",
+          "planets",
+          "months",
+          "key_dates"
+        ],
+        "title": "YearOut"
+      },
+      "YearPlanetOut": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "stays": {
+            "items": {
+              "$ref": "#/components/schemas/StayOut"
+            },
+            "type": "array",
+            "title": "Stays"
+          },
+          "quiet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quiet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body",
+          "stays",
+          "quiet"
+        ],
+        "title": "YearPlanetOut"
       }
     }
   }

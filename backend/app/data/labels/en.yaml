@@ -298,3 +298,11 @@ changes:
   erashtaka_ends: "Erashtaka ends: Saturn leaves the 12th, 1st and 2nd signs from the Moon."
   ashtama_starts: "Saturn enters the 8th sign from the Moon (ashtama)."
   ashtama_ends: "Saturn leaves the 8th sign from the Moon (ashtama)."
+
+# The yearly forecast: where the slow planets stay over one year.
+yearly:
+  all_year: "{planet} is in {sign}, your {house} house, all year."
+  until: "{planet} is in {sign}, your {house} house, until {to}."
+  between: "{planet} is in {sign}, your {house} house, from {from} to {to}."
+  from: "{planet} is in {sign}, your {house} house, from {from} to the end of the year."
+  quiet: "{planet} does not change sign this year."

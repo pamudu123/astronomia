@@ -22,7 +22,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 - Rahu and Ketu change for your lagna (5 December 2026). **Built.**
 - Each Saturn and Jupiter change. **Built.**
-- Yearly forecast by lagna.
+- Yearly forecast by lagna for 2027. **Built**, open for now, paid later.
 
 **C. Nakath (auspicious times)**
 
@@ -66,13 +66,14 @@ Planned as three pull requests, so the Rahu and Ketu pages are live before 5 Dec
 |---|---|---|---|
 | B1 | **Rahu and Ketu change** | The change engine and endpoints for every Saturn, Jupiter, Rahu and Ketu change. A list of changes, a page for the Rahu and Ketu change, and a page for each of the 12 lagnas, in both languages. "Your own version" from the birth details, counted from the lagna and the Moon sign (gochara). "Planet changes for you" on the hadahan. **Built.** | The times match the almanac. The houses match a table worked out by hand for all 12 lagnas. The pages carry a title and description as served. Birth details never reach the address. |
 | B2 | **Saturn and Jupiter changes** | Pages for the five Saturn and Jupiter changes in 2027, with the backward steps and returns explained, and Saturn's Erashtaka and 8th sign periods counted from the Moon. **Built.** | Each page shows the right return date. Every change has its own title. |
-| B3 | **Yearly forecast 2027** | A page for each lagna, and a personal version. Paid later (see file 07). | The year's changes and houses match the change pages. |
+| B3 | **Yearly forecast 2027** | A page for each lagna, and a personal version. **Built.** Paid by decision but open to everyone for now. Its code is kept apart, so the lock goes in `yearly_access()` and `YearlyGate` (see file 07, section 4.6). | The year's changes and houses match the change pages. |
 
 Decisions made:
 
 - One page per change, plus one page per change and lagna. The change page serves broad searches. The lagna pages serve lagna searches.
 - The personal version counts from the lagna and also from the Moon sign (gochara).
 - Planet change pages are free.
+- The yearly forecast is paid, built open for now. The 12 general yearly pages stay public for now.
 - Times are Sri Lanka time, as the almanacs print them.
 
 ## 5. Needed from the astrologer

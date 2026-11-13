@@ -29,10 +29,12 @@ export function HadahanApp({
   lang,
   t,
   share,
+  yearly,
 }: {
   lang: Locale;
   t: Dictionary["hadahan"];
   share: Dictionary["share"];
+  yearly?: Dictionary["yearly"];
 }) {
   const [labels, setLabels] = useState<Labels | null>(null);
   const [view, setView] = useState<View>({ kind: "form" });
@@ -92,6 +94,7 @@ export function HadahanApp({
         placeText={saved.placeLabel}
         share={share}
         request={saved.request}
+        yearly={yearly}
         onEdit={() => {
           saveResult(null);
           setView({ kind: "form" });

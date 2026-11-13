@@ -1,4 +1,4 @@
-"""Save the planet change answers the frontend tests use, in tests/e2e/fixtures.
+"""Save the planet change and yearly forecast answers the frontend tests use, in tests/e2e/fixtures.
 
 Run after changing the change engine or its labels:
     uv run python scripts/export_change_fixtures.py
@@ -45,6 +45,15 @@ def main() -> None:
             save(f"changes-{change}-{lagna}-{lang}.json", page)
             mine = client.post(f"/v1/changes/{change}/personal", json=birth).json()
             save(f"changes-{change}-personal-{lang}.json", mine)
+        # The yearly forecast for one lagna, and for the sample birth.
+        save(
+            f"yearly-2027-makara-{lang}.json",
+            client.get(f"/v1/yearly/2027/makara?lang={lang}").json(),
+        )
+        save(
+            f"yearly-2027-personal-{lang}.json",
+            client.post("/v1/yearly/2027/personal", json=birth).json(),
+        )
     print(f"wrote fixtures to {FIXTURES}")
 
 
