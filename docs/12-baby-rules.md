@@ -1,6 +1,6 @@
 # Baby and Child Rules
 
-The rules behind set D (baby and child, see file 10): the starting letters for a baby's name, the names list, and the first letters ceremony. For each rule: which sources say it, where they disagree, and what the site uses.
+The rules behind set D (baby and child, see file 10): the starting letters for a baby's name and the names list. The first letters ceremony rules are with the other nakath rules, in file 11, section 7. For each rule: which sources say it, where they disagree, and what the site uses.
 
 Everything here is provisional until a practising astrologer confirms it. The tables live in versioned files in `backend/app/data/rules/`, so they can be corrected without code changes.
 

@@ -59,6 +59,24 @@ def main() -> None:
         key = f"{','.join(letters)}|{gender}|{length}|{lang}"
         lists[key] = client.get("/v1/baby/names", params=params).json()
     save("baby-names.json", lists)
+    # The first letters finder for a made-up child, and for a birth star only.
+    child = {"date": "2023-05-10", "time": "08:15", "place_id": KANDY}
+    body = client.post(
+        "/v1/first-letters",
+        json={"child": child, "months": 3, "as_of": "2026-12-01", "lang": "en"},
+    )
+    save("first-letters-full-en.json", body.json())
+    body = client.post(
+        "/v1/first-letters",
+        json={
+            "child": {"nakshatra": "ashwini", "pada": 1},
+            "birth_date": "2023-05-10",
+            "months": 3,
+            "as_of": "2026-12-01",
+            "lang": "si",
+        },
+    )
+    save("first-letters-star-si.json", body.json())
     print(f"wrote fixtures to {FIXTURES}")
 
 

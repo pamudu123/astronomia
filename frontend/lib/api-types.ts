@@ -475,6 +475,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/first-letters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * First Letters
+         * @description Good dates and times for a child's first letters, from the child's birth star.
+         */
+        post: operations["first_letters_v1_first_letters_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/reports/pdf": {
         parameters: {
             query?: never;
@@ -774,6 +794,15 @@ export interface components {
             /** Passed */
             passed: boolean;
         };
+        /** ChildOut */
+        ChildOut: {
+            /** Star */
+            star: string;
+            /** Star Name */
+            star_name: string;
+            /** Mode */
+            mode: string;
+        };
         /**
          * CountedOut
          * @description A change counted from one sign: the lagna, or the Moon sign for gochara.
@@ -854,6 +883,92 @@ export interface components {
             };
             /** Reason */
             reason: string;
+        };
+        /** FirstLettersRequest */
+        FirstLettersRequest: {
+            /** Child */
+            child: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /** Birth Date */
+            birth_date?: string | null;
+            /** Place Id */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /** Timezone */
+            timezone?: string | null;
+            /**
+             * Months
+             * @default 3
+             * @enum {integer}
+             */
+            months: 1 | 3 | 6;
+            /** As Of */
+            as_of?: string | null;
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+        };
+        /** FirstLettersResponse */
+        FirstLettersResponse: {
+            /** Status */
+            status: string;
+            time?: components["schemas"]["TimeResolveResponse"] | null;
+            /** Rule Set */
+            rule_set?: string | null;
+            /** Provisional */
+            provisional?: boolean | null;
+            /** First */
+            first?: string | null;
+            /** Last */
+            last?: string | null;
+            place?: components["schemas"]["WeddingPlaceOut"] | null;
+            child?: components["schemas"]["ChildOut"] | null;
+            /**
+             * Suggestions
+             * @default []
+             */
+            suggestions: components["schemas"]["FirstLettersSuggestionOut"][];
+            /** None Text */
+            none_text?: string | null;
+            /** Age Note */
+            age_note?: string | null;
+            /** Note */
+            note?: string | null;
+        };
+        /** FirstLettersSuggestionOut */
+        FirstLettersSuggestionOut: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Date Text */
+            date_text: string;
+            /** Weekday */
+            weekday: string;
+            start: components["schemas"]["LocalTimeOut"];
+            end: components["schemas"]["LocalTimeOut"];
+            /** Nakatha */
+            nakatha: string;
+            /** Thithi */
+            thithi: string;
+            /** Lagna */
+            lagna: string;
+            /** Tara */
+            tara: string;
+            /** Passes */
+            passes: string[];
+            /** Cautions */
+            cautions: string[];
+            /** Age */
+            age: string | null;
+            /** Score */
+            score: number;
         };
         /** ForecastOut */
         ForecastOut: {
@@ -2891,6 +3006,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NamesResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    first_letters_v1_first_letters_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FirstLettersRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FirstLettersResponse"];
                 };
             };
             /** @description Validation Error */

@@ -8,7 +8,7 @@ when every rule holds for the child's birth star. Steps that pass with the same 
 and lagna make a window, whose edges are then found to the minute. Each day gives at most one
 window: the best one.
 
-The rules are in rules/first_letters_si_v1.yaml and are provisional (docs/11, section 5).
+The rules are in rules/first_letters_si_v1.yaml and are provisional (docs/11, section 7).
 """
 
 import zoneinfo

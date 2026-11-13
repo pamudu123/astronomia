@@ -68,6 +68,9 @@ export default async function BabyNamesPage({ params }: PageProps<"/[lang]/baby-
         <p className="soft">{t.indexLead}</p>
       </section>
       <StarGrid lang={lang} />
+      <Link href={`/${lang}/first-letters`} className="btn btn-outline lift" style={{ alignSelf: "flex-start" }}>
+        {dict.firstLetters.link}
+      </Link>
       <p className={styles.small}>{t.provisional}</p>
     </main>
   );

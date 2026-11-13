@@ -286,6 +286,14 @@ Category D is baby and child. Tables and sources are in `docs/12-baby-rules.md`.
 - **Pages:** the list with its filters is on each star page (in the page as served) and under the letters for a birth.
 - **Checked:** every name starts with a letter from the table, every name has a source and a link, and every field is text.
 
+**Done in a third pull request:** D3, the first letters ceremony finder (free for now, file 07, section 4.8).
+
+- **Rules** in `rules/first_letters_si_v1.yaml`: twelve nakathas, a good tara from the child's birth star, Wednesday to Friday (Monday and Sunday as cautions), a dual lagna with an empty 8th house, no rikta thithi, new moon or Vishti karana, outside Rahu kalaya, in daylight. Sources and conflicts are in file 11, section 7.
+- **Engine** (`backend/app/engine/first_letters.py`): the same scan as the wedding finder, reusing its moment and tara. Six months take about two seconds.
+- **Endpoint:** `POST /v1/first-letters` with the child's birth details or birth star (and birth date for the age), the place, and 1, 3 or 6 months. It depends on `first_letters_access()`. The place lookup is shared with the wedding finder.
+- **Page:** `/{lang}/first-letters`, linked from the baby names pages, the home page and the footer.
+- **Checked:** every suggestion passes every rule again at its start, middle and end, worked out separately from the sky. Three Sri Lankan newspaper columns agree with the engine's nakatha, lagna and tara lists (`tests/golden/first_letters_observed.json`).
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

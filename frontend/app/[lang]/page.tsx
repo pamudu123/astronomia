@@ -132,6 +132,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           {dict.babyNames.homeLink}
           <ArrowRight />
         </Link>
+        <Link href={`/${lang}/first-letters`} className={styles.toolMore} data-link="first-letters">
+          {dict.firstLetters.link}
+          <ArrowRight />
+        </Link>
       </section>
 
       <section className={`container ${styles.sectionTight}`} aria-labelledby="rashi-title">

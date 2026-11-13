@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/nakath",
     "/baby-names",
     ...NAKSHATRA.map((star) => `/baby-names/${star.key}`),
+    "/first-letters",
     "/privacy",
     "/terms",
   ];

@@ -1354,6 +1354,48 @@
         }
       }
     },
+    "/v1/first-letters": {
+      "post": {
+        "tags": [
+          "first letters"
+        ],
+        "summary": "First Letters",
+        "description": "Good dates and times for a child's first letters, from the child's birth star.",
+        "operationId": "first_letters_v1_first_letters_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FirstLettersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FirstLettersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/reports/pdf": {
       "post": {
         "tags": [
@@ -2338,6 +2380,29 @@
         ],
         "title": "CheckOut"
       },
+      "ChildOut": {
+        "properties": {
+          "star": {
+            "type": "string",
+            "title": "Star"
+          },
+          "star_name": {
+            "type": "string",
+            "title": "Star Name"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "star",
+          "star_name",
+          "mode"
+        ],
+        "title": "ChildOut"
+      },
       "CountedOut": {
         "properties": {
           "sign": {
@@ -2519,6 +2584,332 @@
           "reason"
         ],
         "title": "FactorOut"
+      },
+      "FirstLettersRequest": {
+        "properties": {
+          "child": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Child"
+          },
+          "birth_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Date"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "months": {
+            "type": "integer",
+            "enum": [
+              1,
+              3,
+              6
+            ],
+            "title": "Months",
+            "default": 3
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          }
+        },
+        "type": "object",
+        "required": [
+          "child"
+        ],
+        "title": "FirstLettersRequest"
+      },
+      "FirstLettersResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeResolveResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rule_set": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provisional"
+          },
+          "first": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First"
+          },
+          "last": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WeddingPlaceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "child": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChildOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "suggestions": {
+            "items": {
+              "$ref": "#/components/schemas/FirstLettersSuggestionOut"
+            },
+            "type": "array",
+            "title": "Suggestions",
+            "default": []
+          },
+          "none_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "None Text"
+          },
+          "age_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age Note"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "FirstLettersResponse"
+      },
+      "FirstLettersSuggestionOut": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "date_text": {
+            "type": "string",
+            "title": "Date Text"
+          },
+          "weekday": {
+            "type": "string",
+            "title": "Weekday"
+          },
+          "start": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "end": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "nakatha": {
+            "type": "string",
+            "title": "Nakatha"
+          },
+          "thithi": {
+            "type": "string",
+            "title": "Thithi"
+          },
+          "lagna": {
+            "type": "string",
+            "title": "Lagna"
+          },
+          "tara": {
+            "type": "string",
+            "title": "Tara"
+          },
+          "passes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Passes"
+          },
+          "cautions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cautions"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "date_text",
+          "weekday",
+          "start",
+          "end",
+          "nakatha",
+          "thithi",
+          "lagna",
+          "tara",
+          "passes",
+          "cautions",
+          "age",
+          "score"
+        ],
+        "title": "FirstLettersSuggestionOut"
       },
       "ForecastOut": {
         "properties": {
