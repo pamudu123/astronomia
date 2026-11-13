@@ -36,6 +36,29 @@ def main() -> None:
         # Three minutes before the Moon moves into the next pada.
         near = {"date": "2024-01-18", "time": "15:10", "place_id": KANDY, "lang": lang}
         save(f"baby-birth-near-{lang}.json", client.post("/v1/baby/letters", json=near).json())
+    # Name lists the tests ask for, keyed as the test looks them up.
+    queries = [
+        (["අ", "ඉ", "උ", "එ"], "any", "any", "en"),
+        (["අ", "ඉ", "උ", "එ"], "girl", "any", "en"),
+        (["අ", "ඉ", "උ", "එ"], "boy", "short", "en"),
+        (["ඉ", "උ", "එ"], "any", "any", "en"),
+        (["කු", "ඝ", "ඞ", "ඡ"], "any", "any", "si"),
+        (["යු"], "any", "any", "en"),
+        (["ය", "යු"], "any", "any", "en"),
+        (["නො", "ය", "යි", "යු"], "any", "any", "en"),
+        (["චෙ"], "any", "any", "si"),
+        (["චෙ", "චො"], "any", "any", "si"),
+    ]
+    lists = {}
+    for letters, gender, length, lang in queries:
+        params: list[tuple[str, str | int | float | bool | None]] = [
+            ("letters", letter) for letter in letters
+        ]
+        params += [(k, v) for k, v in (("gender", gender), ("length", length)) if v != "any"]
+        params.append(("lang", lang))
+        key = f"{','.join(letters)}|{gender}|{length}|{lang}"
+        lists[key] = client.get("/v1/baby/names", params=params).json()
+    save("baby-names.json", lists)
     print(f"wrote fixtures to {FIXTURES}")
 
 

@@ -74,3 +74,30 @@ export function degrees(value: number): string {
   const minutes = Math.round((value - whole) * 60);
   return minutes === 60 ? `${whole + 1}°00′` : `${whole}°${String(minutes).padStart(2, "0")}′`;
 }
+
+export type Names = components["schemas"]["NamesResponse"];
+export type NameItem = components["schemas"]["NameOut"];
+export type GenderFilter = "any" | "boy" | "girl";
+export type LengthFilter = "any" | "short" | "medium" | "long";
+
+/** Letters, gender and length are not birth details, so this is a GET that may be cached. */
+export function namesPath(letters: string[], gender: GenderFilter, length: LengthFilter, lang: Locale): string {
+  const query = new URLSearchParams();
+  for (const letter of letters) query.append("letters", letter);
+  if (gender !== "any") query.set("gender", gender);
+  if (length !== "any") query.set("length", length);
+  query.set("lang", lang);
+  return `/v1/baby/names?${query.toString()}`;
+}
+
+export async function fetchNames(
+  letters: string[],
+  gender: GenderFilter,
+  length: LengthFilter,
+  lang: Locale,
+  signal?: AbortSignal,
+): Promise<Names> {
+  const response = await fetch(`/api${namesPath(letters, gender, length, lang)}`, { signal });
+  if (!response.ok) throw new Error(`request failed: ${response.status}`);
+  return (await response.json()) as Names;
+}

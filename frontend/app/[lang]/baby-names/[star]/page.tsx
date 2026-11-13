@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import styles from "@/components/babynames/BabyNames.module.css";
+import { NameSuggestions } from "@/components/babynames/NameSuggestions";
 import { StarLetters } from "@/components/babynames/StarLetters";
-import { STAR_LETTERS, type StarLettersResponse, starLettersPath } from "@/lib/babynames";
+import { type Names, STAR_LETTERS, type StarLettersResponse, namesPath, starLettersPath } from "@/lib/babynames";
 import { backendJson } from "@/lib/backend";
 import { fill } from "@/lib/hadahan";
 import { type Locale, hasLocale } from "@/lib/i18n";
@@ -43,8 +44,17 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 async function Loaded({ lang, t, star }: { lang: Locale; t: Dictionary["babyNames"]; star: string }) {
-  const initial = await backendJson<StarLettersResponse>(starLettersPath(star, lang));
-  return <StarLetters t={t} lang={lang} star={star} initial={initial} />;
+  const letters = STAR_LETTERS[star];
+  const [initial, names] = await Promise.all([
+    backendJson<StarLettersResponse>(starLettersPath(star, lang)),
+    backendJson<Names>(namesPath(letters, "any", "any", lang)),
+  ]);
+  return (
+    <>
+      <StarLetters t={t} lang={lang} star={star} initial={initial} />
+      <NameSuggestions t={t} lang={lang} letters={letters} selected={letters} initial={names} />
+    </>
+  );
 }
 
 export default async function StarLettersPage({ params }: Params) {

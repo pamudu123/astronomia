@@ -793,6 +793,31 @@
     "provisional": "This letter table is provisional until a practising astrologer confirms it. Where Sri Lankan sources differ, we use the letter most of them give and show the others.",
     "method": "Table {rules}",
     "footer": "Baby name letters",
-    "homeLink": "Baby name letters from the birth star"
+    "homeLink": "Baby name letters from the birth star",
+    "names": {
+      "title": "Names for these letters",
+      "lead": "Real names that start with the letters, with what they mean. Pick the letters, boy or girl, and the length.",
+      "letters": "Letters",
+      "gender": "Boy or girl",
+      "genders": {
+        "any": "All",
+        "boy": "Boy",
+        "girl": "Girl"
+      },
+      "both": "Boy or girl",
+      "length": "Length",
+      "lengths": {
+        "any": "Any",
+        "short": "Short (1 or 2 syllables)",
+        "medium": "3 syllables",
+        "long": "4 or more"
+      },
+      "count": "{count} names",
+      "none": "No names in our list start with these letters yet. Some letters are rare at the start of a name.",
+      "pickLetter": "Pick at least one letter.",
+      "sourceName": "Wikipedia name page",
+      "sourcePerson": "A person with this name (Wikipedia)",
+      "note": "Names come from Wikipedia's Sinhalese given names, or were added by us with a person on Wikipedia who has the name. The spellings and meanings are provisional until a native speaker checks them. A long and a short vowel count as the same letter."
+    }
   }
 }

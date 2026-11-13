@@ -84,3 +84,48 @@ The letter follows the pada, and a pada lasts about six hours. If the Moon chang
 4. Ashwini pada 1 and the other vowel length rows: does the length matter for the name?
 5. Is the lagna or weekday letter used when the star letter does not suit the family? Which comes first?
 6. When the birth time is near a pada change, which letter should the family use?
+
+## 7. The names list
+
+The names are in `backend/app/data/names/names_si_v1.yaml`, one row per name, each with its source. It holds 246 names: 171 for boys, 66 for girls and 9 for both.
+
+### Sources used
+
+| Source | What we take | Licence | Names |
+|---|---|---|---|
+| Wikipedia, Category:Sinhalese given names and its masculine, feminine and unisex categories | The name, whether it is a boy's or girl's name, and for six names the meaning the page gives. Each row links its page | CC BY-SA 4.0. Attributed by the link on each name | 152 |
+| Wikipedia articles about Sri Lankan people | Only the fact that the name is in use. Each row links the article of a person with that name | Facts are not copyrighted. We copy no text | 94 |
+| Astronomia editors (our own work) | The Sinhala spellings of the names we added, and the short meanings marked `meaning_from: astronomia`, written from the Sanskrit, Pali or Sinhala root words | Ours | All but six meanings |
+
+Every name we added ourselves needs an article on Wikipedia about a Sri Lankan person with that name. 16 names had no such article and were left out (for example Padmini, Madhavi and Lumbini). Three weak matches were also dropped: Kalyani matched an organisation, Champa matched Chamari, and Vasana matched only Wasana. Pathum, Sripal and Sriyani were left out because they start with a letter that is in no table (පැ and ශ්‍රී).
+
+### Sources left out
+
+| Source | Why |
+|---|---|
+| lankahandahana.com name lists | No licence for reuse. Its letter answers were used only as facts for the letter table, not its names or meanings |
+| porondam.lk | No licence for reuse |
+| Behind the Name | Its terms do not allow copying its data |
+| Indian baby name sites (for example the large Hindu name lists) | No licence for reuse, and their spellings and meanings are not Sinhala |
+| Wikidata Sinhala labels | Open (CC0), but only 7 of the names have a Sinhala label, so it adds almost nothing. Its spellings agree with ours where present |
+
+No open data set of Sinhala names with meanings was found.
+
+### How a name is matched to a letter
+
+- The first letter of a name is its first consonant or vowel, with the vowel of the first syllable. ප්‍රියා starts with පි. ස්වර්ණා starts with ස.
+- A long and a short vowel count as the same letter (ආ as අ, චූ as චු), since the letter sources themselves differ on vowel length.
+- Length is counted in spoken syllables: නිමල් has 2, චන්ද්‍රසේන has 4. Short is 1 or 2, medium 3, long 4 or more.
+- A test checks that every name starts with a letter from the table (the padas, the lagnas or the weekdays).
+
+### Limits
+
+- Of the 106 different pada letters, 55 have at least one name. Many letters are rare at the start of a Sinhala name (ට, ඩ, ඨ, ඪ, ණ, ඞ, ඣ, ඤ and most of their vowel forms).
+- There are fewer girls' names, because the Wikipedia categories hold more boys' names.
+- The spellings and meanings need a check by a native speaker.
+
+### Questions for a native speaker
+
+1. Are the Sinhala spellings right, especially for names we added (`source: wikipedia_person`)?
+2. Are the short meanings right?
+3. Should a name such as ප්‍රියා count under පි (as now) or under ප?

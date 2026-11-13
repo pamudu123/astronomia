@@ -122,3 +122,42 @@ def test_a_time_that_does_not_exist(client: TestClient) -> None:
 def test_birth_details_are_not_accepted_in_the_address(client: TestClient) -> None:
     response = client.get("/v1/baby/letters", params={"date": "2024-01-18", "time": "11:50"})
     assert "chart" not in response.json()
+
+
+def test_names_for_letters(client: TestClient) -> None:
+    response = client.get(
+        "/v1/baby/names",
+        params=[("letters", "නි"), ("letters", "නූ"), ("gender", "girl"), ("lang", "si")],
+    )
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "public, max-age=3600"
+    body = response.json()
+    assert (body["version"], body["provisional"]) == ("names_si_v1", True)
+    assert [c["letter"] for c in body["letters"]] == ["නි", "නු"]
+    nimali = next(n for n in body["names"] if n["en"] == "Nimali")
+    assert (nimali["si"], nimali["meaning"], nimali["letter"]) == ("නිමාලි", "නිර්මල", "නි")
+    assert nimali["source"] == "wikipedia_name"
+    assert all(n["gender"] in ("girl", "both") for n in body["names"])
+    assert {s["key"] for s in body["sources"]} == {
+        "wikipedia_name",
+        "wikipedia_person",
+        "astronomia",
+    }
+
+
+def test_names_in_english_with_a_length(client: TestClient) -> None:
+    body = client.get(
+        "/v1/baby/names", params={"letters": "ච", "length": "long", "lang": "en"}
+    ).json()
+    chandrasena = next(n for n in body["names"] if n["en"] == "Chandrasena")
+    assert (chandrasena["meaning"], chandrasena["length"], chandrasena["syllables"]) == (
+        "Army of the moon",
+        "long",
+        4,
+    )
+
+
+def test_names_need_a_letter_from_the_table(client: TestClient) -> None:
+    assert client.get("/v1/baby/names").status_code == 422
+    assert client.get("/v1/baby/names", params={"letters": "x"}).status_code == 422
+    assert client.get("/v1/baby/names", params={"letters": "ඖඖ"}).status_code == 422

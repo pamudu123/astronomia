@@ -6,7 +6,7 @@ The table is provisional: see docs/12-baby-rules.md.
 """
 
 import zoneinfo
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, HTTPException, Path, Query, Response, status
 from pydantic import BaseModel
@@ -16,7 +16,7 @@ from app.api.charts import EPHEMERIS, HadahanRequest, TimeCheckOut, chart_out
 from app.api.deps import PlacesDb
 from app.api.panchanga import CACHE, offset_label
 from app.api.timeresolve import TimeResolveResponse
-from app.engine import names
+from app.engine import babynames, names
 from app.engine.chart import compute_chart
 from app.engine.panchanga import WEEKDAYS, Place, sinhala_day
 from app.engine.porondam import star_point
@@ -246,4 +246,106 @@ def letters_for_birth(body: HadahanRequest, db: PlacesDb) -> BabyLettersResponse
             name=table["weekday"][weekday],
             letters=list(names.weekday_letters(weekday)),
         ),
+    )
+
+
+# ---------- names for the letters ----------
+
+
+class NameOut(BaseModel):
+    en: str
+    si: str
+    gender: str  # boy, girl or both
+    meaning: str  # in the asked language
+    meaning_en: str
+    meaning_si: str
+    meaning_from: str  # wikipedia, or astronomia for our own
+    letter: str  # the letter it starts with
+    syllables: int
+    length: str  # short (1 or 2 syllables), medium (3) or long (4 or more)
+    source: str
+    url: str
+
+
+class NameSourceOut(BaseModel):
+    key: str
+    name: str
+    url: str | None
+    licence: str
+
+
+class LetterCountOut(BaseModel):
+    letter: str
+    count: int
+
+
+class NamesResponse(BaseModel):
+    version: str
+    provisional: bool
+    letters: list[LetterCountOut]  # each asked letter and how many names match the filters
+    names: list[NameOut]
+    sources: list[NameSourceOut]
+
+
+MAX_LETTERS = 16
+
+
+def table_letters() -> set[str]:
+    """Every letter in the letter table: the 108 padas, the lagnas and the weekdays."""
+    rules = names.load_rules()
+    found = {row["letter"] for rows in rules["stars"].values() for row in rows}
+    for section in ("lagna", "weekday"):
+        found |= {letter for letters in rules[section].values() for letter in letters}
+    return {babynames.fold(letter) for letter in found}
+
+
+@router.get("/v1/baby/names", response_model=NamesResponse)
+def names_for_letters(
+    response: Response,
+    letters: Annotated[list[str], Query(min_length=1, max_length=MAX_LETTERS)],
+    gender: Annotated[Literal["boy", "girl", "any"], Query()] = "any",
+    length: Annotated[babynames.Length | None, Query()] = None,
+    lang: Annotated[Lang, Query()] = "en",
+) -> NamesResponse:
+    """Names that start with the given letters, filtered by gender and length."""
+    folded = list(dict.fromkeys(babynames.fold(letter.strip()) for letter in letters))
+    known = table_letters()
+    if any(letter not in known for letter in folded):
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "not a letter from the table")
+    found = babynames.names_for(folded, gender, length)
+    data = babynames.load_names()
+    response.headers.update(CACHE)
+    return NamesResponse(
+        version=str(data["version"]),
+        provisional=bool(data["provisional"]),
+        letters=[
+            LetterCountOut(letter=letter, count=sum(1 for n in found if n.letter == letter))
+            for letter in folded
+        ],
+        names=[
+            NameOut(
+                en=n.en,
+                si=n.si,
+                gender=n.gender,
+                meaning=n.meaning_si if lang == "si" else n.meaning_en,
+                meaning_en=n.meaning_en,
+                meaning_si=n.meaning_si,
+                meaning_from=n.meaning_from,
+                letter=n.letter,
+                syllables=n.syllables,
+                length=n.length,
+                source=n.source,
+                url=n.url,
+            )
+            for n in found
+        ],
+        sources=[
+            NameSourceOut(
+                key=key,
+                name=str(source["name"]),
+                url=source.get("url"),
+                licence=str(source["licence"]),
+            )
+            for key, source in data["sources"].items()
+        ],
     )

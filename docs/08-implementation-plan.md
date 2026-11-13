@@ -278,6 +278,14 @@ Category D is baby and child. Tables and sources are in `docs/12-baby-rules.md`.
 - **Checked:** each letter is the majority of four sources (`tests/golden/name_letters_observed.json`), and a Sri Lankan site's star and pada agree with ours for 108 made-up births.
 - **Fixtures:** `uv run python scripts/export_baby_fixtures.py` in `backend/`.
 
+**Done in a second pull request:** D2, name suggestions (free).
+
+- **Data:** `backend/app/data/names/names_si_v1.yaml`, 246 names, each with its source and link. Sources and what was left out are in file 12, section 7.
+- **Engine** (`backend/app/engine/babynames.py`): splits a Sinhala name into syllables, finds the letter it starts with (long and short vowels count as one), and filters by letter, gender and length.
+- **Endpoint:** `GET /v1/baby/names?letters=&gender=&length=&lang=` (cached for an hour). Letters must be from the letter table.
+- **Pages:** the list with its filters is on each star page (in the page as served) and under the letters for a birth.
+- **Checked:** every name starts with a letter from the table, every name has a source and a link, and every field is text.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

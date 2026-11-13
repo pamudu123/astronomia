@@ -1,0 +1,273 @@
+# Names for the starting letters. PROVISIONAL: the Sinhala spellings and meanings need a check
+# by a native speaker. Sources and licences: docs/12-baby-rules.md, section 7.
+#
+# Each name says where it came from:
+#   source wikipedia_name: the name has its own page in Wikipedia's Sinhalese given names categories.
+#   source wikipedia_person: added by us; the url is a Wikipedia article about a Sri Lankan person
+#     with this name, to show it is a name in real use.
+#   meaning_from wikipedia: the meaning is the one the Wikipedia name page gives (CC BY-SA 4.0).
+#   meaning_from astronomia: our own short meaning, from the Sanskrit, Pali or Sinhala root words.
+# Every string is quoted, so YAML never reads a name such as No as true or false.
+version: names_si_v1
+provisional: true
+sources:
+  wikipedia_name:
+    name: "Wikipedia, Category:Sinhalese given names (and its masculine, feminine and unisex categories)"
+    url: "https://en.wikipedia.org/wiki/Category:Sinhalese_given_names"
+    licence: "CC BY-SA 4.0. We take the name, its gender category and, for six names, the stated meaning, and link each page."
+    read: "2026-11-13"
+  wikipedia_person:
+    name: "Wikipedia articles about Sri Lankan people"
+    url: "https://en.wikipedia.org/"
+    licence: "Only the fact that the name is in use is taken. Each name links the article."
+    read: "2026-11-13"
+  astronomia:
+    name: "Astronomia editors"
+    licence: "Our own work: the Sinhala spellings of names added by us, and the meanings marked astronomia."
+names:
+  - {en: "Ashok", si: "අශෝක්", gender: boy, meaning_en: "Without sorrow", meaning_si: "ශෝකයක් නැති", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Ashok"}
+  - {en: "Ajith", si: "අජිත්", gender: boy, meaning_en: "Unconquered", meaning_si: "පරාජය නොවූ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Ajit_(given_name)"}
+  - {en: "Amarasiri", si: "අමරසිරි", gender: boy, meaning_en: "Lasting glory", meaning_si: "නොනැසෙන සිරිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Amarasiri"}
+  - {en: "Aruna", si: "අරුණ", gender: boy, meaning_en: "Dawn", meaning_si: "අරුණෝදය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Aruna_(given_name)"}
+  - {en: "Adeesha", si: "ආදීශ", gender: boy, meaning_en: "Lord, ruler", meaning_si: "අධිපති", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Adeesha"}
+  - {en: "Bhanuka", si: "භානුක", gender: boy, meaning_en: "Radiant like the sun", meaning_si: "හිරු මෙන් දීප්තිමත්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Bhanuka"}
+  - {en: "Asitha", si: "අසිත", gender: boy, meaning_en: "Name of the sage Asita", meaning_si: "අසිත සෘෂිගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Asitha"}
+  - {en: "Akalanka", si: "අකලංක", gender: boy, meaning_en: "Without stain", meaning_si: "කැළැල් නැති", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Akalanka_(given_name)"}
+  - {en: "Anurudda", si: "අනුරුද්ධ", gender: boy, meaning_en: "Unobstructed; name of a disciple of the Buddha", meaning_si: "බාධා නොවූ; බුදුරදුන්ගේ ශ්‍රාවකයෙකුගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Anurudda"}
+  - {en: "Bandula", si: "බන්දුල", gender: boy, meaning_en: "Kinsman, bond", meaning_si: "ඥාතියා, බැඳීම", meaning_from: wikipedia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Bandula_(name)"}
+  - {en: "Chandrasena", si: "චන්ද්‍රසේන", gender: boy, meaning_en: "Army of the moon", meaning_si: "සඳේ සේනාව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chandrasena"}
+  - {en: "Chamara", si: "චාමර", gender: boy, meaning_en: "Royal fan", meaning_si: "රාජකීය චාමරය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chamara"}
+  - {en: "Chandrasiri", si: "චන්ද්‍රසිරි", gender: boy, meaning_en: "Glory of the moon", meaning_si: "සඳේ සිරිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chandrasiri"}
+  - {en: "Chandimal", si: "චන්දිමාල්", gender: boy, meaning_en: "Moonlit flower", meaning_si: "සඳ එළිය වැනි මල", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chandimal"}
+  - {en: "Chathura", si: "චතුර", gender: boy, meaning_en: "Clever, skilful", meaning_si: "දක්ෂ, චතුර", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chathura"}
+  - {en: "Champika", si: "චම්පික", gender: boy, meaning_en: "Champak flower", meaning_si: "සපු මල", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Champika"}
+  - {en: "Buddhadasa", si: "බුද්ධදාස", gender: boy, meaning_en: "Servant of the Buddha", meaning_si: "බුදුන්ගේ දාසයා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Buddhadasa_(name)"}
+  - {en: "Charitha", si: "චරිත", gender: boy, meaning_en: "Good conduct", meaning_si: "යහපැවැත්ම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Charitha"}
+  - {en: "Chinthaka", si: "චින්තක", gender: boy, meaning_en: "Thinker", meaning_si: "සිතන්නා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chinthaka"}
+  - {en: "Damitha", si: "දමිත", gender: boy, meaning_en: "Self-controlled", meaning_si: "දමනය වූ, සංවර", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Damitha"}
+  - {en: "Damith", si: "දමිත්", gender: boy, meaning_en: "Self-controlled", meaning_si: "සංවර", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Damith"}
+  - {en: "Charith", si: "චරිත්", gender: boy, meaning_en: "Good conduct", meaning_si: "යහපැවැත්ම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Charith"}
+  - {en: "Charuka", si: "චාරුක", gender: boy, meaning_en: "Beautiful", meaning_si: "සුන්දර", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Charuka"}
+  - {en: "Dammika", si: "ධම්මික", gender: boy, meaning_en: "Righteous, follower of the Dhamma", meaning_si: "දහමට අනුව යන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dammika"}
+  - {en: "Dilum", si: "දිලුම්", gender: boy, meaning_en: "Shining", meaning_si: "දිලෙන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dilum"}
+  - {en: "Dasun", si: "දසුන්", gender: boy, meaning_en: "Sight, vision", meaning_si: "දර්ශනය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dasun"}
+  - {en: "Dhanapala", si: "ධනපාල", gender: boy, meaning_en: "Guardian of wealth", meaning_si: "ධනය රකින්නා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dhanapala"}
+  - {en: "Dhanushka", si: "ධනුෂ්ක", gender: boy, meaning_en: "Archer", meaning_si: "දුනුවායා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dhanushka"}
+  - {en: "Denuwan", si: "දෙනුවන්", gender: boy, meaning_en: "Two eyes", meaning_si: "නුවන් දෙක", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Denuwan"}
+  - {en: "Dharshan", si: "දර්ශන්", gender: boy, meaning_en: "Vision", meaning_si: "දර්ශනය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dharshan"}
+  - {en: "Dharmapriya", si: "ධර්මප්‍රිය", gender: boy, meaning_en: "Lover of the Dhamma", meaning_si: "දහමට ප්‍රිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dharmapriya"}
+  - {en: "Dayan", si: "දයාන්", gender: boy, meaning_en: "Compassionate", meaning_si: "දයාවන්ත", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dayan_(given_name)"}
+  - {en: "Gotabhaya", si: "ගෝඨාභය", gender: boy, meaning_en: "Name of an ancient king", meaning_si: "පැරණි රජෙකුගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Gotabhaya"}
+  - {en: "Dushantha", si: "දුෂාන්ත", gender: boy, meaning_en: "Name of the king in the Shakuntala story", meaning_si: "ශකුන්තලා කතාවේ රජුගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dushantha"}
+  - {en: "Geeth", si: "ගීත්", gender: boy, meaning_en: "Song", meaning_si: "ගීතය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Geeth"}
+  - {en: "Ganganath", si: "ගංගානාත්", gender: boy, meaning_en: "Lord of the river", meaning_si: "ගඟේ නාථයා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Ganganath"}
+  - {en: "Dushmantha", si: "දුෂ්මන්ත", gender: boy, meaning_en: "Name of the king in the Shakuntala story", meaning_si: "ශකුන්තලා කතාවේ රජුගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Dushmantha"}
+  - {en: "Himesh", si: "හිමේෂ්", gender: boy, meaning_en: "Lord of the snow mountains", meaning_si: "හිම කඳුවල අධිපති", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Himesh"}
+  - {en: "Jagath", si: "ජගත්", gender: boy, meaning_en: "The world", meaning_si: "ලෝකය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Jagath"}
+  - {en: "Janith", si: "ජනිත්", gender: boy, meaning_en: "Born", meaning_si: "උපන්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Janith"}
+  - {en: "Indunil", si: "ඉඳුනිල්", gender: boy, meaning_en: "Sapphire", meaning_si: "ඉඳුනිල් මැණික", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Indunil"}
+  - {en: "Hasitha", si: "හසිත", gender: boy, meaning_en: "Smiling", meaning_si: "සිනාසෙන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Hasitha"}
+  - {en: "Harshana", si: "හර්ෂණ", gender: boy, meaning_en: "Joyful", meaning_si: "සතුට ගෙන දෙන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Harshana"}
+  - {en: "Harshika", si: "හර්ෂිකා", gender: girl, meaning_en: "Joyful", meaning_si: "සතුටින් පිරි", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Harshika"}
+  - {en: "Jayalath", si: "ජයලත්", gender: boy, meaning_en: "One who has won", meaning_si: "ජය ලද", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Jayalath"}
+  - {en: "Gunapala", si: "ගුණපාල", gender: boy, meaning_en: "Protector of virtue", meaning_si: "ගුණ රකින්නා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Gunapala"}
+  - {en: "Hemachandra", si: "හේමචන්ද්‍ර", gender: boy, meaning_en: "Golden moon", meaning_si: "රන්වන් සඳ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Hemachandra_(name)"}
+  - {en: "Lakshan", si: "ලක්ෂාන්", gender: boy, meaning_en: "Good sign", meaning_si: "සුබ ලක්ෂණය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Lakshan"}
+  - {en: "Kavinda", si: "කවින්ද", gender: boy, meaning_en: "Lord of poets", meaning_si: "කවීන්ගේ ප්‍රධානියා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Kavinda"}
+  - {en: "Lahiru", si: "ලහිරු", gender: boy, meaning_en: "Young sun", meaning_si: "ළා හිරු", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Lahiru"}
+  - {en: "Kalhara", si: "කල්හාර", gender: boy, meaning_en: "White water lily", meaning_si: "සුදු මානෙල් මල", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Kalhara"}
+  - {en: "Kasun", si: "කසුන්", gender: boy, meaning_en: "Gold", meaning_si: "රන්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Kasun_(Sri_Lankan_name)"}
+  - {en: "Kumarasiri", si: "කුමාරසිරි", gender: boy, meaning_en: "Glory of a prince", meaning_si: "කුමරුගේ සිරිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Kumarasiri"}
+  - {en: "Kavindu", si: "කවිඳු", gender: boy, meaning_en: "Lord of poets", meaning_si: "කවීන්ගේ ප්‍රධානියා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Kavindu"}
+  - {en: "Jayanath", si: "ජයනාත්", gender: boy, meaning_en: "Lord of victory", meaning_si: "ජයයේ නාථයා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Jayanath"}
+  - {en: "Karunasena", si: "කරුණාසේන", gender: boy, meaning_en: "Army of compassion", meaning_si: "කරුණාවේ සේනාව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Karunasena"}
+  - {en: "Jayananda", si: "ජයානන්ද", gender: boy, meaning_en: "Joy of victory", meaning_si: "ජයග්‍රහණයේ සතුට", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Jayananda"}
+  - {en: "Jayasena", si: "ජයසේන", gender: boy, meaning_en: "Victorious army", meaning_si: "ජයග්‍රාහී සේනාව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Jayasena"}
+  - {en: "Jeewaka", si: "ජීවක", gender: boy, meaning_en: "Life-giving; name of the Buddha's physician", meaning_si: "ජීවය දෙන; බුදුරදුන්ගේ වෛද්‍යවරයාගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Jeewaka"}
+  - {en: "Manjula", si: "මංජුල", gender: boy, meaning_en: "Charming, melodious", meaning_si: "මනහර, මිහිරි", meaning_from: wikipedia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Manjula"}
+  - {en: "Nalin", si: "නලින්", gender: boy, meaning_en: "Lotus", meaning_si: "නෙළුම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nalin"}
+  - {en: "Mohan", si: "මෝහන්", gender: boy, meaning_en: "Charming", meaning_si: "සිත් ඇදගන්නා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Mohan_(name)"}
+  - {en: "Nandasena", si: "නන්දසේන", gender: boy, meaning_en: "Army of joy", meaning_si: "සතුටේ සේනාව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nandasena"}
+  - {en: "Nalinda", si: "නලින්ද", gender: boy, meaning_en: "Lord of lotuses", meaning_si: "නෙළුම්වල අධිපති", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nalinda"}
+  - {en: "Nissanka", si: "නිශ්ශංක", gender: boy, meaning_en: "Without fear or doubt", meaning_si: "සැකයක් නැති, නිර්භීත", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nissanka"}
+  - {en: "Nishantha", si: "නිශාන්ත", gender: boy, meaning_en: "Dawn, the end of night", meaning_si: "රාත්‍රියේ අවසානය, අලුයම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nishantha"}
+  - {en: "Nuwan", si: "නුවන්", gender: boy, meaning_en: "Eyes, wisdom", meaning_si: "ඇස්, නුවණ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nuwan"}
+  - {en: "Prabath", si: "ප්‍රභාත්", gender: boy, meaning_en: "Dawn, morning", meaning_si: "අලුයම, උදෑසන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Prabath"}
+  - {en: "Pradeepa", si: "ප්‍රදීප", gender: boy, meaning_en: "Lamp, light", meaning_si: "පහන, ආලෝකය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Pradeepa"}
+  - {en: "Nipuna", si: "නිපුණ", gender: boy, meaning_en: "Skilful", meaning_si: "දක්ෂ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nipuna"}
+  - {en: "Nimesh", si: "නිමේෂ්", gender: boy, meaning_en: "A moment, the blink of an eye", meaning_si: "ඇසිල්ල", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nimesh"}
+  - {en: "Pasindu", si: "පසිඳු", gender: boy, meaning_en: "Famous", meaning_si: "ප්‍රසිද්ධ, කීර්තිමත්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Pasindu"}
+  - {en: "Parakrama", si: "පරාක්‍රම", gender: boy, meaning_en: "Valour, strength", meaning_si: "වීර්යය, ශක්තිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Parakrama"}
+  - {en: "Prageeth", si: "ප්‍රගීත්", gender: boy, meaning_en: "Sung, a song", meaning_si: "ගැයූ ගීතය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Prageeth"}
+  - {en: "Piyasiri", si: "පියසිරි", gender: boy, meaning_en: "Lovely glory", meaning_si: "ප්‍රිය සිරිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Piyasiri"}
+  - {en: "Piyal", si: "පියල්", gender: boy, meaning_en: "Beloved", meaning_si: "ප්‍රිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Piyal"}
+  - {en: "Rohan", si: "රොහාන්", gender: boy, meaning_en: "Rising", meaning_si: "නැගෙන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Rohan_(name)"}
+  - {en: "Ravindu", si: "රවිඳු", gender: boy, meaning_en: "Sun and moon", meaning_si: "හිරු සහ සඳ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Ravindu"}
+  - {en: "Raveen", si: "රවීන්", gender: boy, meaning_en: "The sun", meaning_si: "හිරු", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Raveen"}
+  - {en: "Rajitha", si: "රජිත", gender: boy, meaning_en: "Silver, shining", meaning_si: "රිදී, දිලෙන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Rajitha_(name)"}
+  - {en: "Pubudu", si: "පුබුදු", gender: boy, meaning_en: "Awakened, blossomed", meaning_si: "පිබිදුණු", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Pubudu"}
+  - {en: "Premasiri", si: "ප්‍රේමසිරි", gender: boy, meaning_en: "Glory of love", meaning_si: "ආදරයේ සිරිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Premasiri"}
+  - {en: "Rangana", si: "රංගන", gender: boy, meaning_en: "Dance, performance", meaning_si: "රංගනය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Rangana"}
+  - {en: "Promod", si: "ප්‍රමෝද්", gender: boy, meaning_en: "Joy, delight", meaning_si: "ප්‍රමෝදය, සතුට", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Promod_(given_name)"}
+  - {en: "Priyankara", si: "ප්‍රියංකර", gender: boy, meaning_en: "One who brings joy", meaning_si: "ප්‍රිය කරවන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Priyankara"}
+  - {en: "Samantha", si: "සමන්ත", gender: boy, meaning_en: "Universal, complete", meaning_si: "සියල්ල පුරා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Samantha"}
+  - {en: "Sanath", si: "සනත්", gender: boy, meaning_en: "Eternal", meaning_si: "සදාකාලික", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sanath"}
+  - {en: "Sachith", si: "සචිත්", gender: boy, meaning_en: "Pure thought", meaning_si: "පිරිසිදු සිත", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sachith"}
+  - {en: "Sanjeeva", si: "සංජීව", gender: boy, meaning_en: "Life-giving, reviving", meaning_si: "ජීවය දෙන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sanjeeva"}
+  - {en: "Saliya", si: "සාලිය", gender: boy, meaning_en: "Name of King Dutugemunu's son", meaning_si: "දුටුගැමුණු රජුගේ පුතාගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Saliya_(name)"}
+  - {en: "Saddha", si: "සද්ධා", gender: boy, meaning_en: "Faith", meaning_si: "ශ්‍රද්ධාව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Saddha_(given_name)"}
+  - {en: "Sangeeth", si: "සංගීත්", gender: boy, meaning_en: "Music", meaning_si: "සංගීතය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sangeeth"}
+  - {en: "Sandun", si: "සඳුන්", gender: boy, meaning_en: "Sandalwood", meaning_si: "සඳුන්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sandun"}
+  - {en: "Ruchira", si: "රුචිර", gender: boy, meaning_en: "Beautiful, radiant", meaning_si: "රුචිර, සුන්දර", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Ruchira"}
+  - {en: "Rohitha", si: "රෝහිත", gender: boy, meaning_en: "Red", meaning_si: "රතු", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Rohitha"}
+  - {en: "Sachithra", si: "සචිත්‍ර", gender: boy, meaning_en: "Bright, with pictures", meaning_si: "චිත්‍ර සහිත", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sachithra"}
+  - {en: "Shantha", si: "ශාන්ත", gender: boy, meaning_en: "Calm, peaceful", meaning_si: "සන්සුන්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Shantha"}
+  - {en: "Sujith", si: "සුජිත්", gender: boy, meaning_en: "Well won", meaning_si: "මනාව ජය ගත්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sujith"}
+  - {en: "Supun", si: "සුපුන්", gender: boy, meaning_en: "Complete, full", meaning_si: "සම්පූර්ණ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Supun"}
+  - {en: "Sisira", si: "සිසිර", gender: boy, meaning_en: "The cool season", meaning_si: "සීත සෘතුව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sisira"}
+  - {en: "Sujeewa", si: "සුජීව", gender: boy, meaning_en: "Good life", meaning_si: "යහපත් ජීවිතය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sujeewa"}
+  - {en: "Sugath", si: "සුගත්", gender: boy, meaning_en: "Well gone; a name of the Buddha", meaning_si: "සුගත; බුදුරදුන්ගේ නමක්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sugath"}
+  - {en: "Santhush", si: "සන්තුෂ්", gender: boy, meaning_en: "Content", meaning_si: "සතුටු වූ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Santhush"}
+  - {en: "Shashin", si: "ශෂින්", gender: boy, meaning_en: "The moon", meaning_si: "සඳ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Shashin"}
+  - {en: "Sarathchandra", si: "සරත්චන්ද්‍ර", gender: boy, meaning_en: "Autumn moon", meaning_si: "සරත් සෘතුවේ සඳ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sarathchandra"}
+  - {en: "Somapala", si: "සෝමපාල", gender: boy, meaning_en: "Protector of the moon", meaning_si: "සඳ රකින්නා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Somapala"}
+  - {en: "Somaweera", si: "සෝමවීර", gender: boy, meaning_en: "Gentle hero", meaning_si: "සෞම්‍ය වීරයා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Somaweera"}
+  - {en: "Sarana", si: "සරණ", gender: boy, meaning_en: "Refuge", meaning_si: "සරණ, පිහිට", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sarana_(given_name)"}
+  - {en: "Tharindu", si: "තරිඳු", gender: boy, meaning_en: "The moon", meaning_si: "සඳ", meaning_from: wikipedia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Tharindu"}
+  - {en: "Thushara", si: "තුෂාර", gender: boy, meaning_en: "Dew, mist", meaning_si: "පිනි, මීදුම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Thushara"}
+  - {en: "Thamara", si: "තාමරා", gender: both, meaning_en: "Lotus", meaning_si: "නෙළුම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Thamara"}
+  - {en: "Theekshana", si: "තීක්ෂණ", gender: boy, meaning_en: "Sharp, keen", meaning_si: "තියුණු", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Theekshana"}
+  - {en: "Thisara", si: "තිසර", gender: boy, meaning_en: "Swan", meaning_si: "හංසයා", meaning_from: wikipedia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Thisara"}
+  - {en: "Udara", si: "උදාර", gender: boy, meaning_en: "Noble, generous", meaning_si: "උතුම්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Udara_(name)"}
+  - {en: "Tilak", si: "තිලක්", gender: boy, meaning_en: "Mark on the forehead, ornament", meaning_si: "තිලකය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Tilak_(name)"}
+  - {en: "Vimukthi", si: "විමුක්ති", gender: boy, meaning_en: "Liberation", meaning_si: "නිදහස, විමුක්තිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Vimukthi"}
+  - {en: "Wimal", si: "විමල්", gender: boy, meaning_en: "Pure, spotless", meaning_si: "නිර්මල", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Wimal"}
+  - {en: "Vijitha", si: "විජිත", gender: boy, meaning_en: "Victorious", meaning_si: "ජය ගත්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Vijitha"}
+  - {en: "Vidura", si: "විදුර", gender: boy, meaning_en: "Wise", meaning_si: "ප්‍රාඥ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Vidura_(name)"}
+  - {en: "Upul", si: "උපුල්", gender: boy, meaning_en: "Blue water lily", meaning_si: "නිල් මානෙල්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Upul"}
+  - {en: "Upali", si: "උපාලි", gender: boy, meaning_en: "Name of a disciple of the Buddha", meaning_si: "බුදුරදුන්ගේ ශ්‍රාවකයෙකුගේ නම", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Upali_(given_name)"}
+  - {en: "Wickrama", si: "වික්‍රම", gender: boy, meaning_en: "Valour", meaning_si: "වික්‍රමය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Wickrama"}
+  - {en: "Vikum", si: "විකුම්", gender: boy, meaning_en: "Valour", meaning_si: "වීරත්වය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Vikum"}
+  - {en: "Wimalasiri", si: "විමලසිරි", gender: boy, meaning_en: "Pure glory", meaning_si: "නිර්මල සිරිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Wimalasiri"}
+  - {en: "Yasas", si: "යසස්", gender: boy, meaning_en: "Fame", meaning_si: "කීර්තිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Yasas"}
+  - {en: "Yashan", si: "යශාන්", gender: boy, meaning_en: "Fame", meaning_si: "කීර්තිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Yashan_(name)"}
+  - {en: "Leelavathi", si: "ලීලාවතී", gender: girl, meaning_en: "Playful, graceful", meaning_si: "ලීලා සහිත", meaning_from: wikipedia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Leelavathi"}
+  - {en: "Rashmika", si: "රශ්මිකා", gender: girl, meaning_en: "Ray of light", meaning_si: "ආලෝක කිරණ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Rashmika"}
+  - {en: "Sachi", si: "සචී", gender: girl, meaning_en: "Grace; wife of Indra", meaning_si: "ඉන්ද්‍රගේ බිසව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sachi_(name)"}
+  - {en: "Chandrani", si: "චන්ද්‍රානි", gender: girl, meaning_en: "Like the moon", meaning_si: "සඳ වැනි", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chandrani"}
+  - {en: "Darshika", si: "දර්ශිකා", gender: girl, meaning_en: "One who sees, a guide", meaning_si: "දකින්නී", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Darshika"}
+  - {en: "Priyani", si: "ප්‍රියානි", gender: girl, meaning_en: "Beloved", meaning_si: "ප්‍රිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Priyani"}
+  - {en: "Chamikara", si: "චාමිකර", gender: both, meaning_en: "Gold", meaning_si: "රන්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chamikara"}
+  - {en: "Nimali", si: "නිමාලි", gender: girl, meaning_en: "Pure", meaning_si: "නිර්මල", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nimali"}
+  - {en: "Nilmini", si: "නිල්මිණි", gender: girl, meaning_en: "Sapphire, blue gem", meaning_si: "නිල් මැණික", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nilmini"}
+  - {en: "Nadeesha", si: "නදීෂා", gender: girl, meaning_en: "Lord of rivers, the ocean", meaning_si: "සාගරය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Nadeesha"}
+  - {en: "Lakmali", si: "ලක්මාලි", gender: girl, meaning_en: "Flower of Lanka", meaning_si: "ලංකාවේ මල", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Lakmali"}
+  - {en: "Kanchana", si: "කාංචනා", gender: girl, meaning_en: "Gold", meaning_si: "රන්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Kanchana_(name)"}
+  - {en: "Avani", si: "අවනි", gender: both, meaning_en: "The earth", meaning_si: "පොළොව", meaning_from: wikipedia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Avani_(given_name)"}
+  - {en: "Shashikala", si: "ශෂිකලා", gender: girl, meaning_en: "Phase of the moon", meaning_si: "සඳ කලාව", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Shashikala_(given_name)"}
+  - {en: "Sumudu", si: "සුමුදු", gender: both, meaning_en: "Gentle, soft", meaning_si: "මෘදු", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sumudu"}
+  - {en: "Susila", si: "සුසිලා", gender: girl, meaning_en: "Of good conduct", meaning_si: "සුසිල්වත්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Susila"}
+  - {en: "Sugathapala", si: "සුගතපාල", gender: boy, meaning_en: "Protector of the Buddha's teaching", meaning_si: "බුදු සසුන රකින්නා", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sugathapala"}
+  - {en: "Sudarshana", si: "සුදර්ශන", gender: boy, meaning_en: "Good to look at", meaning_si: "දැකුම්කලු", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sudarshana_(name)"}
+  - {en: "Chandima", si: "චන්දිමා", gender: both, meaning_en: "Moonlight", meaning_si: "සඳ එළිය", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Chandima"}
+  - {en: "Sandaruwan", si: "සඳරුවන්", gender: boy, meaning_en: "Moon gem", meaning_si: "සඳ මැණික", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Sandaruwan"}
+  - {en: "Buddika", si: "බුද්ධික", gender: boy, meaning_en: "Wise", meaning_si: "බුද්ධිමත්", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Buddika"}
+  - {en: "Lakshitha", si: "ලක්ෂිත", gender: boy, meaning_en: "Distinguished", meaning_si: "විශේෂ, ලකුණු කළ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Lakshitha"}
+  - {en: "Tharanga", si: "තරංග", gender: boy, meaning_en: "Wave", meaning_si: "රළ", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Tharanga"}
+  - {en: "Rohana", si: "රෝහණ", gender: boy, meaning_en: "Rising; name of the old southern kingdom", meaning_si: "නැගීම; රුහුණු රට", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Rohana_(name)"}
+  - {en: "Jayantha", si: "ජයන්ත", gender: boy, meaning_en: "Victorious", meaning_si: "ජයග්‍රාහී", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Jayantha"}
+  - {en: "Udayakantha", si: "උදයකාන්ත", gender: boy, meaning_en: "Lovely as the dawn", meaning_si: "උදය සේ ලස්සන", meaning_from: astronomia, source: wikipedia_name, url: "https://en.wikipedia.org/wiki/Udayakantha"}
+  - {en: "Anura", si: "අනුර", gender: boy, meaning_en: "From Anuradha, a birth star", meaning_si: "අනුර නැකතෙන්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Anura_Tennekoon"}
+  - {en: "Abhaya", si: "අභය", gender: boy, meaning_en: "Fearless", meaning_si: "බිය නැති", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Abhaya_of_Tambapanni"}
+  - {en: "Asanga", si: "අසංග", gender: boy, meaning_en: "Unattached", meaning_si: "ඇලීම් නැති", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Asanga_Seneviratne"}
+  - {en: "Akila", si: "අකිල", gender: boy, meaning_en: "Whole, complete", meaning_si: "සම්පූර්ණ", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Akila_Dananjaya"}
+  - {en: "Aloka", si: "ආලෝක", gender: both, meaning_en: "Light", meaning_si: "ආලෝකය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sachith_Aloka"}
+  - {en: "Dharmadasa", si: "ධර්මදාස", gender: boy, meaning_en: "Servant of the Dhamma", meaning_si: "දහමේ දාසයා", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Dharmadasa_Banda"}
+  - {en: "Gamini", si: "ගාමිණී", gender: boy, meaning_en: "Leader; name of King Dutugemunu", meaning_si: "නායකයා; දුටුගැමුණු රජුගේ නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Gamini_Dissanayake"}
+  - {en: "Janaka", si: "ජනක", gender: boy, meaning_en: "Father, creator; name of a king", meaning_si: "පියා, උපදවන්නා", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Janaka_Priyantha_Bandara"}
+  - {en: "Hemantha", si: "හේමන්ත", gender: boy, meaning_en: "The winter season", meaning_si: "හේමන්ත සෘතුව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Hemantha_Devapriya"}
+  - {en: "Kusal", si: "කුසල්", gender: boy, meaning_en: "Merit, wholesome deeds", meaning_si: "කුසලය, පින", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kusal_Mendis"}
+  - {en: "Kanishka", si: "කනිෂ්ක", gender: boy, meaning_en: "Name of an ancient king", meaning_si: "පැරණි රජෙකුගේ නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kanishka_Madhushanka"}
+  - {en: "Lakmal", si: "ලක්මාල්", gender: boy, meaning_en: "Flower of Lanka", meaning_si: "ලංකාවේ මල", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Hasitha_Lakmal_de_Silva"}
+  - {en: "Jinadasa", si: "ජිනදාස", gender: boy, meaning_en: "Servant of the Buddha", meaning_si: "ජිනයන්ගේ දාසයා", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Jinadasa_Kitulagoda"}
+  - {en: "Lalith", si: "ලලිත්", gender: boy, meaning_en: "Graceful, charming", meaning_si: "මනහර", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Lalith_Ellawala"}
+  - {en: "Nalaka", si: "නාලක", gender: boy, meaning_en: "Name of a monk in the suttas", meaning_si: "සූත්‍රවල එන භික්ෂුවකගේ නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nalaka_Kolonne"}
+  - {en: "Mangala", si: "මංගල", gender: boy, meaning_en: "Auspicious", meaning_si: "සුබ", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Mangala_Moonesinghe"}
+  - {en: "Nandana", si: "නන්දන", gender: boy, meaning_en: "Delightful; a heavenly garden", meaning_si: "සතුට දෙන; නන්දන උයන", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nandana_Gunathilake"}
+  - {en: "Nimal", si: "නිමල්", gender: boy, meaning_en: "Pure, spotless", meaning_si: "නිර්මල", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nimal_Gamini_Amaratunga"}
+  - {en: "Palitha", si: "පාලිත", gender: boy, meaning_en: "Protected", meaning_si: "රැකුණු", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Palitha_Fernando"}
+  - {en: "Piyadasa", si: "පියදාස", gender: boy, meaning_en: "Dear servant", meaning_si: "ප්‍රිය දාසයා", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Piyadasa_Wijekoon"}
+  - {en: "Ranjith", si: "රංජිත්", gender: boy, meaning_en: "Delighted", meaning_si: "සතුටු වූ", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Ranjith_Premasiri_Madalana"}
+  - {en: "Priyantha", si: "ප්‍රියන්ත", gender: boy, meaning_en: "Beloved", meaning_si: "ප්‍රිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Priyantha_Jayawardena"}
+  - {en: "Prasanna", si: "ප්‍රසන්න", gender: boy, meaning_en: "Clear, pleased", meaning_si: "පැහැදුණු", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Prasanna_Gunasena"}
+  - {en: "Ruwan", si: "රුවන්", gender: boy, meaning_en: "Gem, jewel", meaning_si: "මැණික", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Ruwan_Ranatunga"}
+  - {en: "Suhada", si: "සුහද", gender: boy, meaning_en: "Kind-hearted", meaning_si: "කරුණාවන්ත", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Suhada_Gamlath"}
+  - {en: "Tissa", si: "තිස්ස", gender: boy, meaning_en: "Name of ancient kings", meaning_si: "පැරණි රජවරුන්ගේ නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Tissa_Wijesurendra"}
+  - {en: "Udayanga", si: "උදයංග", gender: boy, meaning_en: "Part of the dawn", meaning_si: "උදයේ අංගය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Udayanga_Weeratunga"}
+  - {en: "Udaya", si: "උදය", gender: boy, meaning_en: "Dawn, rising", meaning_si: "උදය, නැගීම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Udaya_II"}
+  - {en: "Wasantha", si: "වසන්ත", gender: boy, meaning_en: "The spring season", meaning_si: "වසන්ත සෘතුව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Wasantha_Yapa_Bandara"}
+  - {en: "Vishva", si: "විශ්ව", gender: boy, meaning_en: "The universe", meaning_si: "විශ්වය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Vishva_Wijeratne"}
+  - {en: "Anoma", si: "අනෝමා", gender: girl, meaning_en: "Peerless", meaning_si: "අසමසම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Anoma_Gamage"}
+  - {en: "Anula", si: "අනුලා", gender: girl, meaning_en: "Name of an ancient queen", meaning_si: "පැරණි රැජිනකගේ නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Anula_of_Anuradhapura"}
+  - {en: "Malani", si: "මාලනී", gender: girl, meaning_en: "Wearing a garland", meaning_si: "මල් මාලා පැළඳි", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Malani"}
+  - {en: "Sagarika", si: "සාගරිකා", gender: girl, meaning_en: "Of the ocean", meaning_si: "සාගරයට අයත්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sagarika_Gomes"}
+  - {en: "Pavithra", si: "පවිත්‍රා", gender: girl, meaning_en: "Pure, holy", meaning_si: "පවිත්‍ර", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Pavithra_Wanniarachchi"}
+  - {en: "Vajira", si: "වජිරා", gender: girl, meaning_en: "Diamond", meaning_si: "දියමන්තිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Vajira_Chitrasena"}
+  - {en: "Sivali", si: "සීවලී", gender: both, meaning_en: "Name of a disciple of the Buddha", meaning_si: "බුදුරදුන්ගේ ශ්‍රාවකයෙකුගේ නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sivali_Central_College"}
+  - {en: "Nadeeka", si: "නදීකා", gender: girl, meaning_en: "River", meaning_si: "ගංගාව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nadeeka_Gunasekara"}
+  - {en: "Nirosha", si: "නිරෝෂා", gender: girl, meaning_en: "Without anger", meaning_si: "කෝපය නැති", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nirosha_Virajini"}
+  - {en: "Dilini", si: "දිලිනි", gender: girl, meaning_en: "Shining", meaning_si: "දිලෙන", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Dilini_Kanchana"}
+  - {en: "Chathurika", si: "චතුරිකා", gender: girl, meaning_en: "Clever", meaning_si: "දක්ෂ", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Chathurika_Peiris"}
+  - {en: "Kumari", si: "කුමාරි", gender: girl, meaning_en: "Princess, young woman", meaning_si: "කුමරිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kumari_Dilrukshi"}
+  - {en: "Kamala", si: "කමලා", gender: girl, meaning_en: "Lotus", meaning_si: "නෙළුම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kamala_Ranathunga"}
+  - {en: "Anusha", si: "අනූෂා", gender: girl, meaning_en: "A birth star (Anuradha)", meaning_si: "අනුර නැකත", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Anusha_Attanayaka"}
+  - {en: "Hiruni", si: "හිරුනි", gender: girl, meaning_en: "Like the sun", meaning_si: "හිරු වැනි", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Hiruni_Wijayaratne"}
+  - {en: "Jayani", si: "ජයනි", gender: girl, meaning_en: "Victorious", meaning_si: "ජයග්‍රාහී", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Jayani_Senanayake"}
+  - {en: "Kavisha", si: "කවිෂා", gender: girl, meaning_en: "Lady of poetry", meaning_si: "කවියේ අධිපතිනිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kavisha_Dilhari"}
+  - {en: "Mallika", si: "මල්ලිකා", gender: girl, meaning_en: "Jasmine", meaning_si: "පිච්ච මල", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Vijitha_Mallika"}
+  - {en: "Nayana", si: "නයනා", gender: girl, meaning_en: "Eye", meaning_si: "ඇස", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nayana_Jayaneththi"}
+  - {en: "Nirmala", si: "නිර්මලා", gender: girl, meaning_en: "Pure", meaning_si: "නිර්මල", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nirmala_Kothalawala"}
+  - {en: "Piumi", si: "පියුමි", gender: girl, meaning_en: "Lotus", meaning_si: "පියුම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Piumi_Wathsala"}
+  - {en: "Prabha", si: "ප්‍රභා", gender: girl, meaning_en: "Light, radiance", meaning_si: "ආලෝකය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Prabha_Ranatunge"}
+  - {en: "Rasika", si: "රසිකා", gender: girl, meaning_en: "Lover of the arts", meaning_si: "කලා රසිකාව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Rasika_Fernando"}
+  - {en: "Renuka", si: "රේණුකා", gender: girl, meaning_en: "Pollen", meaning_si: "පරාග", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Renuka_Herath"}
+  - {en: "Rupa", si: "රූපා", gender: girl, meaning_en: "Beauty, form", meaning_si: "රූපය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Rupa_Karunathilake"}
+  - {en: "Sandya", si: "සන්ධ්‍යා", gender: girl, meaning_en: "Twilight", meaning_si: "සැන්දෑව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sandya_Eknelygoda"}
+  - {en: "Sanduni", si: "සඳුනි", gender: girl, meaning_en: "Sandalwood", meaning_si: "සඳුන්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sanduni_Abeywickrema"}
+  - {en: "Sewwandi", si: "සෙව්වන්දි", gender: girl, meaning_en: "Chrysanthemum flower", meaning_si: "සෙව්වන්දි මල", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sewwandi"}
+  - {en: "Sunethra", si: "සුනේත්‍රා", gender: girl, meaning_en: "Beautiful eyes", meaning_si: "ලස්සන ඇස් ඇති", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sunethra_Ranasinghe"}
+  - {en: "Swarna", si: "ස්වර්ණා", gender: girl, meaning_en: "Gold", meaning_si: "රන්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Swarna_Mallawarachchi"}
+  - {en: "Upeksha", si: "උපේක්ෂා", gender: girl, meaning_en: "Equanimity", meaning_si: "උපේක්ෂාව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Upeksha_Swarnamali"}
+  - {en: "Hansika", si: "හංසිකා", gender: girl, meaning_en: "Swan", meaning_si: "හංසිනිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nipuni_Hansika"}
+  - {en: "Anjali", si: "අංජලී", gender: girl, meaning_en: "Offering with joined hands", meaning_si: "ඇඳිලි බැඳීම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Anjali_Watson"}
+  - {en: "Ruwani", si: "රුවනි", gender: girl, meaning_en: "Gem", meaning_si: "මැණික", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Ruwani_Abeymanne"}
+  - {en: "Wasanthi", si: "වසන්ති", gender: girl, meaning_en: "Of the spring", meaning_si: "වසන්තයේ", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Parami_Wasanthi_Maristela"}
+  - {en: "Chandrika", si: "චන්ද්‍රිකා", gender: girl, meaning_en: "Moonlight", meaning_si: "සඳ එළිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Chandrika_Kumaratunga"}
+  - {en: "Damayanthi", si: "දමයන්ති", gender: girl, meaning_en: "Heroine of the story of Nala", meaning_si: "නල කතාවේ කුමරිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Anusha_Damayanthi"}
+  - {en: "Kusum", si: "කුසුම්", gender: girl, meaning_en: "Flower", meaning_si: "මල", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kusum_Renu"}
+  - {en: "Kumudu", si: "කුමුදු", gender: both, meaning_en: "Water lily", meaning_si: "මානෙල්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kumudu_Priyanka"}
+  - {en: "Bhagya", si: "භාග්‍යා", gender: girl, meaning_en: "Good fortune", meaning_si: "භාග්‍යය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Bhagya_Abeyratne"}
+  - {en: "Lakshmi", si: "ලක්ෂ්මී", gender: girl, meaning_en: "Fortune; goddess of wealth", meaning_si: "සෞභාග්‍යය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Lakshmi_de_Silva"}
+  - {en: "Madhu", si: "මධු", gender: both, meaning_en: "Honey", meaning_si: "මී පැණි", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Madhu_church_shelling"}
+  - {en: "Nanda", si: "නන්දා", gender: girl, meaning_en: "Joy", meaning_si: "සතුට", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nanda_Malini"}
+  - {en: "Nalini", si: "නලිනී", gender: girl, meaning_en: "Lotus", meaning_si: "නෙළුම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nalini_Weerawanni"}
+  - {en: "Rohini", si: "රෝහිණී", gender: girl, meaning_en: "Name of a birth star", meaning_si: "රෙහෙණ නැකත", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Rohini_Marasinghe"}
+  - {en: "Sita", si: "සීතා", gender: girl, meaning_en: "Heroine of the Ramayana", meaning_si: "රාමායණයේ සීතා", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Seetha_Kumari"}
+  - {en: "Visakha", si: "විශාඛා", gender: girl, meaning_en: "A birth star; a great lay follower of the Buddha", meaning_si: "විසා නැකත; විශාඛා උපාසිකාව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Visakha_Vidyalaya"}
+  - {en: "Yamuna", si: "යමුනා", gender: girl, meaning_en: "Name of a river", meaning_si: "ගඟක නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Yamuna_Sangarasivam"}
+  - {en: "Kosala", si: "කෝසල", gender: boy, meaning_en: "Name of an ancient kingdom", meaning_si: "කෝසල රාජ්‍යය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Kosala_Kulasekara"}
+  - {en: "Hemali", si: "හේමාලි", gender: girl, meaning_en: "Golden", meaning_si: "රන්වන්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Hemali_Weerasekara"}
+  - {en: "Devika", si: "දේවිකා", gender: girl, meaning_en: "Little goddess", meaning_si: "දිව්‍යාංගනාව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Devika_Mihirani"}
+  - {en: "Chithra", si: "චිත්‍රා", gender: girl, meaning_en: "Picture; a birth star", meaning_si: "චිත්‍රය; සිත නැකත", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Chitra_Wakishta"}
+  - {en: "Tharaka", si: "තාරක", gender: boy, meaning_en: "Star", meaning_si: "තරුව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Tharaka_Balasuriya"}
+  - {en: "Nirmal", si: "නිර්මල්", gender: boy, meaning_en: "Pure", meaning_si: "නිර්මල", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nirmal_Ranjith_Dewasiri"}
+  - {en: "Senaka", si: "සේනක", gender: boy, meaning_en: "A wise man in the Jataka stories", meaning_si: "ජාතක කතාවල එන පඬිවරයෙක්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Senaka_Angulugaha"}
+  - {en: "Sobhitha", si: "සෝභිත", gender: boy, meaning_en: "Beautiful, radiant", meaning_si: "ශෝභන", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sobhitha_Rajakaruna"}
+  - {en: "Sujatha", si: "සුජාතා", gender: girl, meaning_en: "Well born", meaning_si: "මනා කුලයක උපන්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Sujatha_Paramanathan"}
+  - {en: "Geetha", si: "ගීතා", gender: girl, meaning_en: "Song", meaning_si: "ගීතය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Geetha_Kumarasinghe"}
+  - {en: "Harsha", si: "හර්ෂ", gender: boy, meaning_en: "Joy", meaning_si: "සතුට", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Harsha_Rajapaksha"}
+  - {en: "Milinda", si: "මිලින්ද", gender: boy, meaning_en: "Name of the king in the Milinda Panha", meaning_si: "මිලින්ද ප්‍රශ්නයේ රජුගේ නම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Milinda_Moragoda"}
+  - {en: "Muditha", si: "මුදිත", gender: boy, meaning_en: "Joyful", meaning_si: "මුදිතාව", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Muditha_Lakshan"}
+  - {en: "Menaka", si: "මේනකා", gender: girl, meaning_en: "A heavenly nymph", meaning_si: "දිව්‍යාංගනාවක්", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Menaka_Wijesundara"}
+  - {en: "Nelum", si: "නෙළුම්", gender: girl, meaning_en: "Lotus", meaning_si: "නෙළුම", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Nelum_Kumara"}
+  - {en: "Kithsiri", si: "කිත්සිරි", gender: boy, meaning_en: "Glory of fame", meaning_si: "කීර්ති සිරිය", meaning_from: astronomia, source: wikipedia_person, url: "https://en.wikipedia.org/wiki/Upul_Kithsiri"}

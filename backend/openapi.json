@@ -1256,6 +1256,104 @@
         }
       }
     },
+    "/v1/baby/names": {
+      "get": {
+        "tags": [
+          "baby"
+        ],
+        "summary": "Names For Letters",
+        "description": "Names that start with the given letters, filtered by gender and length.",
+        "operationId": "names_for_letters_v1_baby_names_get",
+        "parameters": [
+          {
+            "name": "letters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "maxItems": 16,
+              "title": "Letters"
+            }
+          },
+          {
+            "name": "gender",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "boy",
+                "girl",
+                "any"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Gender"
+            }
+          },
+          {
+            "name": "length",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "short",
+                    "medium",
+                    "long"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Length"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/reports/pdf": {
       "post": {
         "tags": [
@@ -2966,6 +3064,24 @@
         ],
         "title": "KujaPointOut"
       },
+      "LetterCountOut": {
+        "properties": {
+          "letter": {
+            "type": "string",
+            "title": "Letter"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "letter",
+          "count"
+        ],
+        "title": "LetterCountOut"
+      },
       "LocalRangeOut": {
         "properties": {
           "start": {
@@ -3200,6 +3316,151 @@
           "text"
         ],
         "title": "MoveOut"
+      },
+      "NameOut": {
+        "properties": {
+          "en": {
+            "type": "string",
+            "title": "En"
+          },
+          "si": {
+            "type": "string",
+            "title": "Si"
+          },
+          "gender": {
+            "type": "string",
+            "title": "Gender"
+          },
+          "meaning": {
+            "type": "string",
+            "title": "Meaning"
+          },
+          "meaning_en": {
+            "type": "string",
+            "title": "Meaning En"
+          },
+          "meaning_si": {
+            "type": "string",
+            "title": "Meaning Si"
+          },
+          "meaning_from": {
+            "type": "string",
+            "title": "Meaning From"
+          },
+          "letter": {
+            "type": "string",
+            "title": "Letter"
+          },
+          "syllables": {
+            "type": "integer",
+            "title": "Syllables"
+          },
+          "length": {
+            "type": "string",
+            "title": "Length"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "en",
+          "si",
+          "gender",
+          "meaning",
+          "meaning_en",
+          "meaning_si",
+          "meaning_from",
+          "letter",
+          "syllables",
+          "length",
+          "source",
+          "url"
+        ],
+        "title": "NameOut"
+      },
+      "NameSourceOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "licence": {
+            "type": "string",
+            "title": "Licence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "url",
+          "licence"
+        ],
+        "title": "NameSourceOut"
+      },
+      "NamesResponse": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "letters": {
+            "items": {
+              "$ref": "#/components/schemas/LetterCountOut"
+            },
+            "type": "array",
+            "title": "Letters"
+          },
+          "names": {
+            "items": {
+              "$ref": "#/components/schemas/NameOut"
+            },
+            "type": "array",
+            "title": "Names"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/NameSourceOut"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "provisional",
+          "letters",
+          "names",
+          "sources"
+        ],
+        "title": "NamesResponse"
       },
       "NearbyLetterOut": {
         "properties": {
