@@ -37,7 +37,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 **E. Old horoscopes**
 
-- Rebuild a hadahan from an old paper kendara. **Form and search built**, free for now (`docs/13-old-horoscopes.md`). Using a result on the hadahan and porondam pages comes next. Reading a photo of the paper is a later step.
+- Rebuild a hadahan from an old paper kendara. **Built**, free for now (`docs/13-old-horoscopes.md`): the form, the search, and using a result on the hadahan and porondam pages. Reading a photo of the paper is a later step.
 
 **Built separately, not part of these sets:** compare several proposals.
 

@@ -50,9 +50,26 @@ Sources:
 - [MyStar on lankawebsites.com](https://lankawebsites.com/blog/careers/mystar-is-live-sri-lankas-own-vedic-astrology-platform-is-finally-here)
 - [Ayanamsa explained](https://vedika.io/blog/ayanamsa-explained-lahiri-raman-kp)
 
+## Using a result
+
+Each window in the results has three buttons:
+
+- **Open as a hadahan:** opens the hadahan form with the date, time and place filled in.
+- **Use as the bride** and **Use as the groom:** open the porondam form in full birth details mode, with that person filled in. The other person stays empty.
+
+How it works:
+
+- **The time:** the middle of the window, in the place's own UTC offset (`middleOf()` in `frontend/lib/kendara.ts`). A window longer than half an hour says so, and points to the hadahan's birth time check, which shows what may change inside the window.
+- **The place:** the place given on the kendara form, or Colombo when none was given, the same default as the search.
+- **Nothing is sent yet:** the form opens filled in, with a line saying where the values came from. The person checks them and presses the button.
+- **Handing over:** the details go through session storage, never the URL. The form reads them once and removes them, so a reload shows an empty form. A saved earlier result does not override them.
+
+When every window has the same single birth star and pada, a box above the list says so. It links to the birth star porondam match (`/{lang}/porondam?bride=star.pada` or `?groom=star.pada`). A star and pada alone are not birth details; the star pages use the same links.
+
 ## Privacy
 
 - **Birth data:** a kendara is birth data. It travels in the body of a POST (`/v1/kendara/search`), never in the URL.
+- **Handing a result to a form:** through session storage, used once, never the URL.
 - **Nothing kept:** the drawing is not stored or logged.
 
 ## Free for now
