@@ -459,3 +459,18 @@ wedding:
   tara_janma: "The day's star is the birth star of one of you (janma tara), which some avoid."
   note: "These dates follow general rules and your birth stars. Please confirm the date and time with your astrologer before you plan."
   none: "No date in this range passes every rule. Try a longer range."
+
+# Old horoscopes: from a kendara drawn on paper to the births that fit it.
+kendara:
+  window_day: "{date}, {start} to {end}"
+  window_days: "{start_date} {start} to {end_date} {end}"
+  lagna: the lagna
+  near: "{names} only fit near the edge of the box drawn. An older horoscope may use another method of calculation."
+  none: "No birth from 1900 to now fits this drawing. Please check each planet's box, or allow a wider range."
+  cut_off: "There are more matches than the {count} shown. Give a year range or the birth star to narrow them."
+  empty_range: "The dates given are outside 1900 to now."
+  problem:
+    nodes_not_opposite: "Rahu and Ketu are always in opposite boxes. Please check where they are drawn."
+    mercury_far_from_sun: "Mercury is never more than one box from the Sun. Please check where they are drawn."
+    venus_far_from_sun: "Venus is never more than two boxes from the Sun. Please check where they are drawn."
+    navamsha_nodes_not_opposite: "In the navamsha too, Rahu and Ketu are always in opposite boxes. Please check the navamsha."

@@ -5,11 +5,11 @@ import styles from "./Kendara.module.css";
 /**
  * The Sri Lankan square kendara. House 1 (the lagna) is the box at the top centre, and
  * houses run anticlockwise: 2 and 3 in the top left corner, 4 on the left, and so on.
- * PROVISIONAL: the direction is waiting for an astrologer's confirmation (docs/08).
+ * Confirmed against a paper horoscope by the owner (docs/08).
  *
  * Each entry is the centre of a house, in a 300 x 300 drawing.
  */
-const HOUSE_CENTRES: Record<number, [number, number]> = {
+export const HOUSE_CENTRES: Record<number, [number, number]> = {
   1: [150, 56],
   2: [68, 30],
   3: [30, 68],
@@ -23,8 +23,8 @@ const HOUSE_CENTRES: Record<number, [number, number]> = {
   11: [270, 68],
   12: [232, 30],
 };
-const TRIANGLES = new Set([2, 3, 5, 6, 8, 9, 11, 12]);
-const LINES =
+export const TRIANGLES = new Set([2, 3, 5, 6, 8, 9, 11, 12]);
+export const LINES =
   "M0 0H300V300H0ZM100 0V300M200 0V300M0 100H300M0 200H300M0 0L100 100M300 0L200 100M0 300L100 200M300 300L200 200";
 
 /** What the drawing needs to place a planet. */

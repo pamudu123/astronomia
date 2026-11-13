@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...AVURUDU_YEARS.map((year) => `/avurudu/${year}`),
     ...CITIES.map((city) => `/avurudu/${FEATURED_YEAR}/${city.key}`),
     "/nakath",
+    "/kendara",
     "/privacy",
     "/terms",
   ];

@@ -30,11 +30,14 @@ export function HadahanApp({
   t,
   share,
   yearly,
+  kendara,
 }: {
   lang: Locale;
   t: Dictionary["hadahan"];
   share: Dictionary["share"];
   yearly?: Dictionary["yearly"];
+  /** Text for the link to the old horoscope search. */
+  kendara?: Dictionary["kendara"];
 }) {
   const [labels, setLabels] = useState<Labels | null>(null);
   const [view, setView] = useState<View>({ kind: "form" });
@@ -143,6 +146,7 @@ export function HadahanApp({
       initial={form}
       busy={busy || !labels}
       error={error}
+      kendara={kendara}
       onSubmit={(request, values, placeText) => {
         setForm(values);
         void run(request, { name: values.name.trim(), placeLabel: placeText, request });

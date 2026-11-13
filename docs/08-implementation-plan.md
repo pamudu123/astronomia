@@ -109,7 +109,7 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 - **Pages:** the birth details form (place search, time zone shown for the date, coordinates option, clock change choice) and the result page (key cards, kendara in rashi and navamsha, planets table, dasha timeline, Kuja card, birth time check).
 - **Endpoints:** `POST /v1/charts`, `POST /v1/hadahan`, `GET /v1/labels/{lang}`.
 - **Golden charts:** 6 charts in `backend/tests/golden/charts.json`, marked `"checked": false` until confirmed.
-- **Provisional until confirmed:** the kendara house direction (anticlockwise from the top box).
+- **Confirmed:** the kendara house direction (anticlockwise from the top box). The owner checked it against a paper horoscope on 2026-11-13.
 
 
 **Done together in one pull request:** steps 6 and 8, and the porondam part of step 9.
@@ -274,6 +274,21 @@ Category C is nakath (auspicious times). Rules and sources are in `docs/11-nakat
 - **Page:** "Wedding nakath for this couple" on the porondam result. It searches only when asked. Each date shows its time window, nakatha, thithi and lagna, any weaker points, and every rule it passes in plain words.
 - **Kept apart:** `engine/wedding.py`, `api/wedding.py`, `lib/wedding.ts` and `components/wedding/`. The frontend lock goes in `WeddingGate`.
 - **Checked:** every suggestion is checked again at its start, middle and end against each rule, worked out separately from the sky.
+
+**Done in one pull request:** set E, part 1: enter an old kendara and find the births.
+
+- **Planet table:** `backend/app/kendara/table.py` stores all nine bodies at 00:00 UTC each day, 1900 to 2035. It is built in the Docker image and on first use (about 10 seconds, 750 KB, not committed).
+- **Search:** `backend/app/kendara/search.py`.
+  - Days from the table first, then 5 minute steps with the ephemeris at the birth place. Window edges are found to the minute.
+  - Windows are graded "exact" or "near", using the edge margins in `backend/app/data/rules/kendara_v1.yaml`.
+  - A full 1900 to today search takes well under a second.
+- **Endpoint:** `POST /v1/kendara/search`, free for now behind `kendara_access()`. Narrowing by year range, known date and birth star. The place defaults to Colombo.
+- **Page:** `/{lang}/kendara`.
+  - Choose the lagna sign, tap a planet and tap its box, with an optional navamsha kendara.
+  - Results show each window, its birth star and pada, and its grade.
+  - Linked from the hadahan and porondam forms.
+- **Check:** for 13 known births from 1902 to 2019, our own drawings searched backwards find the true birth, with and without the navamsha.
+- **Details:** `docs/13-old-horoscopes.md`.
 
 ## 5. Working rules
 

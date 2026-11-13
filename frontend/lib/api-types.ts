@@ -411,6 +411,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/kendara/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kendara Search
+         * @description The births between 1900 and now that fit a kendara drawn on paper. The drawing travels
+         *     in the body and is not stored.
+         */
+        post: operations["kendara_search_v1_kendara_search_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/reports/pdf": {
         parameters: {
             query?: never;
@@ -715,6 +736,19 @@ export interface components {
              */
             end: string;
         };
+        /**
+         * DrawingIn
+         * @description One kendara as drawn: the lagna sign, and the house (1 = the lagna box) of each planet.
+         *     A planet left out is not checked.
+         */
+        DrawingIn: {
+            /** Lagna */
+            lagna: string;
+            /** Houses */
+            houses: {
+                [key: string]: number;
+            };
+        };
         /** FactorOut */
         FactorOut: {
             /** Id */
@@ -875,6 +909,106 @@ export interface components {
             from_theme: string;
             /** To Theme */
             to_theme: string;
+        };
+        /** KendaraMatchOut */
+        KendaraMatchOut: {
+            start: components["schemas"]["LocalTimeOut"];
+            end: components["schemas"]["LocalTimeOut"];
+            /** Minutes */
+            minutes: number;
+            /**
+             * Grade
+             * @enum {string}
+             */
+            grade: "exact" | "near";
+            /** Near */
+            near: string[];
+            /** Near Text */
+            near_text: string | null;
+            /** Stars */
+            stars: components["schemas"]["StarOut"][];
+            /** Text */
+            text: string;
+        };
+        /** KendaraPlaceOut */
+        KendaraPlaceOut: {
+            /** Id */
+            id: number | null;
+            /** Name */
+            name: string | null;
+            /** Timezone */
+            timezone: string;
+            /** Offset */
+            offset: string;
+        };
+        /** KendaraRequest */
+        KendaraRequest: {
+            rashi: components["schemas"]["DrawingIn"];
+            navamsha?: components["schemas"]["DrawingIn"] | null;
+            /** Year From */
+            year_from?: number | null;
+            /** Year To */
+            year_to?: number | null;
+            /** Date */
+            date?: string | null;
+            /** Nakshatra */
+            nakshatra?: string | null;
+            /** Place Id */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /** Timezone */
+            timezone?: string | null;
+            /** As Of */
+            as_of?: string | null;
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+        };
+        /** KendaraResponse */
+        KendaraResponse: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "impossible";
+            /**
+             * Problems
+             * @default []
+             */
+            problems: string[];
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            place: components["schemas"]["KendaraPlaceOut"];
+            /**
+             * First
+             * Format: date
+             */
+            first: string;
+            /**
+             * Last
+             * Format: date
+             */
+            last: string;
+            /**
+             * Matches
+             * @default []
+             */
+            matches: components["schemas"]["KendaraMatchOut"][];
+            /**
+             * Cut Off
+             * @default false
+             */
+            cut_off: boolean;
+            /** Note */
+            note?: string | null;
         };
         /** KeyDateOut */
         KeyDateOut: {
@@ -1527,6 +1661,17 @@ export interface components {
             provisional: boolean;
             /** Matches */
             matches: components["schemas"]["StarMatchOut"][];
+        };
+        /** StarOut */
+        StarOut: {
+            /** Nakshatra */
+            nakshatra: string;
+            /** Name */
+            name: string;
+            /** Pada */
+            pada: number;
+            start: components["schemas"]["LocalTimeOut"];
+            end: components["schemas"]["LocalTimeOut"];
         };
         /** StayOut */
         StayOut: {
@@ -2509,6 +2654,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WeddingResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    kendara_search_v1_kendara_search_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KendaraRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KendaraResponse"];
                 };
             };
             /** @description Validation Error */
