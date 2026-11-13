@@ -923,9 +923,21 @@
       "star": "Birth star {star}, pada {pada}",
       "starUntil": "{star}, pada {pada}, until {until}",
       "provisional": "The search is provisional until an astrologer confirms it. A birth near the edge of a window may fall just outside it.",
-      "again": "Change the drawing"
+      "again": "Change the drawing",
+      "openHadahan": "Open as a hadahan",
+      "asBride": "Use as the bride",
+      "asGroom": "Use as the groom",
+      "middle": "The forms use the middle of this window, {time}. The hadahan's birth time check shows what may change inside it.",
+      "sharedStar": "Every match has the birth star {star}, pada {pada}. That is enough for a birth star porondam match.",
+      "starAsBride": "Match this star as the bride",
+      "starAsGroom": "Match this star as the groom"
     },
     "link": "Only have an old paper horoscope?",
-    "linkAction": "Find the birth from the kendara"
+    "linkAction": "Find the birth from the kendara",
+    "handoff": {
+      "notice": "Filled from your old horoscope. The time is the middle of the window.",
+      "bride": "The bride's details are filled from your old horoscope. The time is the middle of the window.",
+      "groom": "The groom's details are filled from your old horoscope. The time is the middle of the window."
+    }
   }
 }

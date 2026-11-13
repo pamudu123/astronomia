@@ -317,6 +317,14 @@ Category D is baby and child. Tables and sources are in `docs/12-baby-rules.md`.
 - **Check:** for 13 known births from 1902 to 2019, our own drawings searched backwards find the true birth, with and without the navamsha.
 - **Details:** `docs/13-old-horoscopes.md`.
 
+**Done in one pull request:** set E, part 2: use a result.
+
+- **Actions on each window:** "Open as a hadahan", "Use as the bride" and "Use as the groom". Each fills the form with the date, the middle of the window and the place, but does not send it.
+- **Handing over:** through session storage, read once, never in the URL. The hadahan and porondam pages remount their form with the values, and show a line saying where they came from.
+- **Shared birth star:** when every window has the same star and pada, a link to the birth star porondam match.
+- **Place:** the place given, or Colombo, looked up while the search runs.
+- **Check:** unit tests for the middle time (across midnight and west of Greenwich), the shared star and the one time handoff. Browser tests for the hadahan, the groom, the star link, and no birth details in any address.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

@@ -26,6 +26,9 @@ async function mockBackend(page: Page, lang: "en" | "si", answer: string) {
   await page.route("**/api/v1/labels/*", (route) =>
     route.fulfill({ contentType: "application/json", body: fixture(`labels-${lang}.json`) }),
   );
+  await page.route("**/api/v1/places?*", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture("places-colombo.json") }),
+  );
   const sent: string[] = [];
   await page.route("**/api/v1/kendara/search", (route) => {
     sent.push(route.request().postData() ?? "");
@@ -112,4 +115,72 @@ test("the hadahan and porondam forms link to it", async ({ page }) => {
   );
   await page.goto("/en/porondam");
   await expect(page.getByRole("link", { name: "Find the birth from the kendara" })).toHaveAttribute("href", "/en/kendara");
+});
+
+/** The kendara search, with Colombo found for the forms and the time check answered. */
+async function mockForUse(page: Page, answer = fixture("kendara-en.json")) {
+  await mockBackend(page, "en", "kendara-en.json");
+  await page.route("**/api/v1/kendara/search", (route) =>
+    route.fulfill({ contentType: "application/json", body: answer }),
+  );
+  await page.route("**/api/v1/time/resolve", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture("time-kandy.json") }),
+  );
+  await drawNimali(page, "en");
+  await page.getByRole("button", { name: "Find the births" }).click();
+  await expect(page.locator("[data-match]")).toHaveCount(3);
+}
+
+test("a match opens as a hadahan, filled in but not sent", async ({ page }) => {
+  await mockForUse(page);
+  // The first window runs 14:00 to 16:13, so the middle is 15:06.
+  const first = page.locator("[data-match]").first();
+  await expect(first).toContainText("The forms use the middle of this window, 15:06.");
+  await first.getByRole("button", { name: "Open as a hadahan" }).click();
+
+  await expect(page).toHaveURL(/\/en\/hadahan$/);
+  await expect(page.locator("[data-notice]")).toHaveText(/Filled from your old horoscope/);
+  await expect(page.getByLabel("Date of birth")).toHaveValue("1995-04-17");
+  await expect(page.getByLabel("Time of birth")).toHaveValue("15:06");
+  await expect(page.getByRole("combobox")).toHaveValue(/Colombo/);
+
+  // A reload does not fill the form again: the details were kept for one use.
+  await page.reload();
+  await expect(page.getByLabel("Date of birth")).toHaveValue("");
+  await expect(page.locator("[data-notice]")).toHaveCount(0);
+});
+
+test("a match is used as the groom, with the bride left empty", async ({ page }) => {
+  const urls: string[] = [];
+  page.on("framenavigated", (frame) => urls.push(frame.url()));
+  await mockForUse(page);
+  await page.locator("[data-match]").last().getByRole("button", { name: "Use as the groom" }).click();
+
+  await expect(page).toHaveURL(/\/en\/porondam$/);
+  await expect(page.locator("[data-notice]")).toHaveText(/The groom's details are filled/);
+  const groom = page.getByRole("group", { name: "Groom" });
+  await expect(groom.getByLabel("Date of birth")).toHaveValue("1995-04-19");
+  await expect(groom.getByRole("combobox")).toHaveValue(/Colombo/);
+  const bride = page.getByRole("group", { name: "Bride" });
+  await expect(bride.getByLabel("Date of birth")).toHaveValue("");
+
+  // No birth details ever appear in an address.
+  expect(urls.join(" ")).not.toMatch(/1995|simha|Colombo|1248991/);
+});
+
+test("when every match shares a birth star, it links to the birth star match", async ({ page }) => {
+  const result = JSON.parse(fixture("kendara-en.json"));
+  for (const match of result.matches) match.stars = result.matches[0].stars;
+  await mockForUse(page, JSON.stringify(result));
+
+  const box = page.locator("[data-shared-star]");
+  await expect(box).toContainText("Every match has the birth star Vishakha, pada 3.");
+  await box.getByRole("link", { name: "Match this star as the bride" }).click();
+  await expect(page).toHaveURL(/\/en\/porondam\?bride=vishakha\.3$/);
+  await expect(page.getByRole("group", { name: "Bride" }).getByLabel("Birth star (nakath)")).toHaveValue("vishakha");
+});
+
+test("with no shared star, there is no star box", async ({ page }) => {
+  await mockForUse(page);
+  await expect(page.locator("[data-shared-star]")).toHaveCount(0);
 });

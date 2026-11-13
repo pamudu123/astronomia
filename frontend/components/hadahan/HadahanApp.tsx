@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import {
@@ -15,6 +15,7 @@ import {
   saveResult,
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
+import { clearHandoff, handoffSnapshot, parseHandoff } from "@/lib/kendara";
 
 import { BirthForm, EMPTY_FORM, type FormValues } from "./BirthForm";
 import styles from "./BirthForm.module.css";
@@ -25,23 +26,41 @@ type View =
   | { kind: "choice"; pending: Omit<SavedResult, "result">; result: Hadahan }
   | { kind: "result"; saved: SavedResult };
 
-export function HadahanApp({
+type Props = {
+  lang: Locale;
+  t: Dictionary["hadahan"];
+  share: Dictionary["share"];
+  yearly?: Dictionary["yearly"];
+  /** Text for the link to the old horoscope search, and for a form filled from it. */
+  kendara?: Dictionary["kendara"];
+};
+
+const noop = () => () => {};
+
+/**
+ * The hadahan page. A birth sent from the old horoscope search is read once the page is live,
+ * and the form is remounted with it filled in.
+ */
+export function HadahanApp(props: Props) {
+  const raw = useSyncExternalStore(noop, handoffSnapshot, () => "");
+  const handoff = parseHandoff(raw, "hadahan");
+  return <HadahanPage key={handoff ? raw : ""} {...props} handoff={handoff} />;
+}
+
+function HadahanPage({
   lang,
   t,
   share,
   yearly,
   kendara,
-}: {
-  lang: Locale;
-  t: Dictionary["hadahan"];
-  share: Dictionary["share"];
-  yearly?: Dictionary["yearly"];
-  /** Text for the link to the old horoscope search. */
-  kendara?: Dictionary["kendara"];
-}) {
+  handoff,
+}: Props & { handoff: ReturnType<typeof parseHandoff> }) {
   const [labels, setLabels] = useState<Labels | null>(null);
   const [view, setView] = useState<View>({ kind: "form" });
-  const [form, setForm] = useState<FormValues>(EMPTY_FORM);
+  const [form, setForm] = useState<FormValues>(
+    handoff ? { ...EMPTY_FORM, date: handoff.date, time: handoff.time, place: handoff.place } : EMPTY_FORM,
+  );
+  const [filled, setFilled] = useState(Boolean(handoff));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,6 +72,7 @@ export function HadahanApp({
 
   // Bring back the last result in this tab, in the current language.
   useEffect(() => {
+    if (handoff) return; // a birth just sent here wins over an older result
     const saved = loadResult();
     if (!saved) return;
     fetchHadahan(saved.request, lang)
@@ -60,7 +80,7 @@ export function HadahanApp({
         if (result.status === "ok") setView({ kind: "result", saved: { ...saved, result } });
       })
       .catch(() => saveResult(null));
-  }, [lang]);
+  }, [lang, handoff]);
 
   async function run(request: BirthRequest, pending: Omit<SavedResult, "result">) {
     setBusy(true);
@@ -147,7 +167,10 @@ export function HadahanApp({
       busy={busy || !labels}
       error={error}
       kendara={kendara}
+      notice={filled ? kendara?.handoff.notice : undefined}
       onSubmit={(request, values, placeText) => {
+        clearHandoff();
+        setFilled(false);
         setForm(values);
         void run(request, { name: values.name.trim(), placeLabel: placeText, request });
       }}

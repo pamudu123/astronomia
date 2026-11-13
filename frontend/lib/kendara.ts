@@ -1,4 +1,5 @@
 import type { components } from "./api-types";
+import type { Place } from "./hadahan";
 import type { Locale } from "./i18n";
 
 /** The request without its language, which fetchKendara adds. */
@@ -75,3 +76,83 @@ export function windowLength(minutes: number): { unit: "minutes" | "hours"; valu
   if (minutes < 90) return { unit: "minutes", value: Math.max(1, Math.round(minutes)) };
   return { unit: "hours", value: Math.round((minutes / 60) * 2) / 2 };
 }
+
+// ---------- using a match on the hadahan and porondam pages ----------
+
+
+export type Role = "bride" | "groom";
+
+/** What a match hands to the hadahan or porondam form: never put in a URL. */
+export type Handoff = {
+  target: "hadahan" | "porondam";
+  role?: Role;
+  date: string; // local, YYYY-MM-DD
+  time: string; // local, HH:MM
+  place: Place;
+};
+
+const HANDOFF_KEY = "astronomia.kendara.handoff";
+let held: string | null = null;
+
+export function saveHandoff(handoff: Handoff): void {
+  held = null;
+  try {
+    sessionStorage.setItem(HANDOFF_KEY, JSON.stringify(handoff));
+  } catch {
+    held = JSON.stringify(handoff); // without storage, keep it for this page view
+  }
+}
+
+/**
+ * The handoff waiting for a form, as text ("" when none). On first read it moves from session
+ * storage into memory, so it is used once but stays steady while the page renders.
+ */
+export function handoffSnapshot(): string {
+  try {
+    const raw = sessionStorage.getItem(HANDOFF_KEY);
+    if (raw) {
+      held = raw;
+      sessionStorage.removeItem(HANDOFF_KEY);
+    }
+  } catch {
+    // Storage can be unavailable (private mode).
+  }
+  return held ?? "";
+}
+
+/** Forget the handoff once the form has been sent. */
+export function clearHandoff(): void {
+  held = null;
+}
+
+export function parseHandoff(raw: string, target: Handoff["target"]): Handoff | null {
+  if (!raw) return null;
+  try {
+    const value = JSON.parse(raw) as Handoff;
+    return value.target === target && value.date && value.time && value.place ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The local date and time at the middle of a window, in the window's own UTC offset. */
+export function middleOf(match: Pick<KendaraMatch, "start" | "end">): { date: string; time: string } {
+  const offset = /([+-])(\d{2}):(\d{2})$/.exec(match.start.local);
+  const minutes = offset ? (offset[1] === "-" ? -1 : 1) * (Number(offset[2]) * 60 + Number(offset[3])) : 0;
+  const middle = (Date.parse(match.start.utc) + Date.parse(match.end.utc)) / 2;
+  const local = new Date(middle + minutes * 60_000).toISOString();
+  return { date: local.slice(0, 10), time: local.slice(11, 16) };
+}
+
+/** The birth star and pada, when every match has that one star and pada and no other. */
+export function sharedStar(result: KendaraResult): { nakshatra: string; pada: number; name: string } | null {
+  const stars = result.matches.map((match) => match.stars);
+  if (stars.length === 0 || stars.some((list) => list.length !== 1)) return null;
+  const [first] = stars[0];
+  return stars.every(([star]) => star.nakshatra === first.nakshatra && star.pada === first.pada)
+    ? { nakshatra: first.nakshatra, pada: first.pada, name: first.name }
+    : null;
+}
+
+/** Colombo's place id in the place index, the search's default place. */
+export const COLOMBO_ID = 1248991;

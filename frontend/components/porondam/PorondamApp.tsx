@@ -29,6 +29,7 @@ import {
   type SavedMatch,
   fetchPorondam,
 } from "@/lib/porondam";
+import { type Handoff, clearHandoff, handoffSnapshot, parseHandoff } from "@/lib/kendara";
 import { parseStarParam } from "@/lib/starmatch";
 
 import { NAKSHATRA_ORDER, PersonCard } from "./PersonCard";
@@ -65,26 +66,40 @@ export function PorondamApp(props: { lang: Locale; dict: Dictionary }) {
     if (!bride && !groom) return null;
     return { ...(bride && { bride }), ...(groom && { groom }) };
   }, [search]);
-  return <PorondamForm key={search} {...props} linked={linked} />;
+  // A birth sent from the old horoscope search, for the bride or the groom.
+  const raw = useSyncExternalStore(noChanges, handoffSnapshot, () => "");
+  const handoff = linked ? null : parseHandoff(raw, "porondam");
+  return (
+    <PorondamForm key={`${search}|${handoff ? raw : ""}`} {...props} linked={linked} handoff={handoff} />
+  );
+}
+
+function filledFrom(handoff: Handoff | null, role: Role): FormValues {
+  return handoff?.role === role
+    ? { ...EMPTY_FORM, date: handoff.date, time: handoff.time, place: handoff.place }
+    : EMPTY_FORM;
 }
 
 function PorondamForm({
   lang,
   dict,
   linked,
+  handoff,
 }: {
   lang: Locale;
   dict: Dictionary;
   linked: Linked | null;
+  handoff: Handoff | null;
 }) {
   const t = dict.porondam;
   const hydrated = useHydrated();
   const [labels, setLabels] = useState<Labels | null>(null);
   const [mode, setMode] = useState<"full" | "quick">(linked ? "quick" : "full");
   const [full, setFull] = useState<Record<Role, FormValues>>({
-    bride: EMPTY_FORM,
-    groom: EMPTY_FORM,
+    bride: filledFrom(handoff, "bride"),
+    groom: filledFrom(handoff, "groom"),
   });
+  const [filled, setFilled] = useState<Role | null>(handoff?.role ?? null);
   const [quick, setQuick] = useState<Record<Role, QuickInput>>({
     bride: { ...EMPTY_QUICK, ...linked?.bride },
     groom: { ...EMPTY_QUICK, ...linked?.groom },
@@ -101,8 +116,9 @@ function PorondamForm({
 
   // Bring back the last match in this tab, in the current language. A link from the star
   // pages asks for a new match, so it wins.
+  const fresh = Boolean(linked || handoff);
   useEffect(() => {
-    if (linked) return;
+    if (fresh) return;
     const saved = loadSession<SavedMatch>(PORONDAM_KEY);
     if (!saved) return;
     fetchPorondam(saved.request, lang)
@@ -111,7 +127,7 @@ function PorondamForm({
           setView({ kind: "result", saved: { ...saved, result } });
       })
       .catch(() => saveSession(PORONDAM_KEY, null));
-  }, [lang, linked]);
+  }, [lang, fresh]);
 
   function person(role: Role): PersonInput | null {
     if (mode === "quick") {
@@ -153,6 +169,8 @@ function PorondamForm({
       setError(t.errors.missing);
       return;
     }
+    clearHandoff();
+    setFilled(null);
     void run({ bride, groom });
   }
 
@@ -258,6 +276,11 @@ function PorondamForm({
 
       <form onSubmit={submit} noValidate className={styles.form}>
         <fieldset className="form-lock" disabled={!hydrated}>
+          {filled && mode === "full" && (
+            <p className={formStyles.note} data-notice>
+              {filled === "bride" ? dict.kendara.handoff.bride : dict.kendara.handoff.groom}
+            </p>
+          )}
           <div className={styles.people}>
             {(["bride", "groom"] as const).map((role, index) => (
               <div

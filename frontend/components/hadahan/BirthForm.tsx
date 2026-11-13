@@ -55,6 +55,8 @@ type Props = {
   embedded?: { title: string; lead: string; submit: string; working: string };
   /** Text for the link to the old horoscope search, shown in the side panel. */
   kendara?: Dictionary["kendara"];
+  /** A line above the fields, such as where the values came from. */
+  notice?: string;
 };
 
 export function toRequest(values: FormValues): BirthRequest | null {
@@ -86,6 +88,7 @@ export function BirthForm({
   onSubmit,
   embedded,
   kendara,
+  notice,
 }: Props) {
   const hydrated = useHydrated();
   const [values, setValues] = useState<FormValues>(initial);
@@ -138,6 +141,11 @@ export function BirthForm({
           </Heading>
           <p className="soft">{embedded?.lead ?? f.lead}</p>
         </div>
+        {notice && (
+          <p className={styles.note} data-notice>
+            {notice}
+          </p>
+        )}
 
         <div className={styles.field}>
           <label htmlFor="birth-name" className={styles.label}>

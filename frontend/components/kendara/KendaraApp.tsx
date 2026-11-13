@@ -1,19 +1,26 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ArrowRight, Lock } from "@/components/Icons";
 import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
-import { type Labels, type Place, fetchLabels, fill } from "@/lib/hadahan";
+import { type Labels, type Place, fetchLabels, fill, searchPlaces } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
+  COLOMBO_ID,
   type DrawingState,
   EMPTY_DRAWING,
+  type Role,
   type KendaraMatch,
   type KendaraRequest,
   type KendaraResult,
   fetchKendara,
+  middleOf,
+  saveHandoff,
+  sharedStar,
   toDrawing,
   windowLength,
 } from "@/lib/kendara";
@@ -39,7 +46,7 @@ export function KendaraApp({ lang, dict }: Props) {
   const [facts, setFacts] = useState<Facts>(NO_FACTS);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<KendaraResult | null>(null);
+  const [result, setResult] = useState<{ found: KendaraResult; place: Place | null } | null>(null);
 
   useEffect(() => {
     fetchLabels(lang)
@@ -70,7 +77,12 @@ export function KendaraApp({ lang, dict }: Props) {
     setBusy(true);
     setError(null);
     try {
-      setResult(await fetchKendara(request, lang));
+      // The forms need a place: the one chosen, or Colombo, the search's default.
+      const [found, place] = await Promise.all([
+        fetchKendara(request, lang),
+        facts.place ?? colombo(),
+      ]);
+      setResult({ found, place });
       window.scrollTo({ top: 0 });
     } catch {
       setError(t.errors.failed);
@@ -80,7 +92,15 @@ export function KendaraApp({ lang, dict }: Props) {
   }
 
   if (result && labels) {
-    return <KendaraResults t={t} result={result} onAgain={() => setResult(null)} />;
+    return (
+      <KendaraResults
+        lang={lang}
+        t={t}
+        result={result.found}
+        place={result.place}
+        onAgain={() => setResult(null)}
+      />
+    );
   }
 
   const f = t.form;
@@ -228,16 +248,38 @@ export function KendaraApp({ lang, dict }: Props) {
   );
 }
 
+/** Colombo from the place index, or null if it cannot be found. */
+async function colombo(): Promise<Place | null> {
+  try {
+    const places = await searchPlaces("Colombo");
+    return places.find((place) => place.id === COLOMBO_ID) ?? places[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function KendaraResults({
+  lang,
   t,
   result,
+  place,
   onAgain,
 }: {
+  lang: Locale;
   t: Dictionary["kendara"];
   result: KendaraResult;
+  place: Place | null;
   onAgain: () => void;
 }) {
   const r = t.results;
+  const router = useRouter();
+  const shared = sharedStar(result);
+
+  function use(match: KendaraMatch, target: "hadahan" | "porondam", role?: Role) {
+    if (!place) return;
+    saveHandoff({ target, role, ...middleOf(match), place });
+    router.push(`/${lang}/${target}`);
+  }
   const length = (match: KendaraMatch) => {
     const { unit, value } = windowLength(match.minutes);
     return fill(unit === "minutes" ? r.minutes : r.hours, { value });
@@ -270,6 +312,23 @@ function KendaraResults({
       )}
       {result.note && <p className={styles.note}>{result.note}</p>}
 
+      {shared && (
+        <section className={styles.shared} data-shared-star={shared.nakshatra}>
+          <p>{fill(r.sharedStar, { star: shared.name, pada: shared.pada })}</p>
+          <div className={styles.actions}>
+            {(["bride", "groom"] as const).map((role) => (
+              <Link
+                key={role}
+                className="btn btn-outline lift"
+                href={`/${lang}/porondam?${role}=${shared.nakshatra}.${shared.pada}`}
+              >
+                {role === "bride" ? r.starAsBride : r.starAsGroom}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       <ol className={styles.matches}>
         {result.matches.map((match) => (
           <li key={match.start.utc} className={styles.match} data-match={match.grade}>
@@ -292,6 +351,22 @@ function KendaraResults({
               ))}
             </ul>
             {match.near_text && <p className={styles.nearText}>{match.near_text}</p>}
+            {match.minutes > 30 && (
+              <p className={styles.small}>{fill(r.middle, { time: middleOf(match).time })}</p>
+            )}
+            {place && (
+              <div className={styles.actions}>
+                <button type="button" className={styles.action} onClick={() => use(match, "hadahan")}>
+                  {r.openHadahan}
+                </button>
+                <button type="button" className={styles.action} onClick={() => use(match, "porondam", "bride")}>
+                  {r.asBride}
+                </button>
+                <button type="button" className={styles.action} onClick={() => use(match, "porondam", "groom")}>
+                  {r.asGroom}
+                </button>
+              </div>
+            )}
           </li>
         ))}
       </ol>

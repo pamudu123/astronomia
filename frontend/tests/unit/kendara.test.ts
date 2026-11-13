@@ -1,7 +1,22 @@
 import { describe, expect, it } from "vitest";
 
 import { HOUSE_CENTRES } from "@/components/hadahan/Kendara";
-import { BODIES, HOUSE_SHAPES, nextUnplaced, placedCount, toDrawing, windowLength } from "@/lib/kendara";
+import {
+  BODIES,
+  HOUSE_SHAPES,
+  type KendaraMatch,
+  type KendaraResult,
+  clearHandoff,
+  handoffSnapshot,
+  middleOf,
+  nextUnplaced,
+  parseHandoff,
+  placedCount,
+  saveHandoff,
+  sharedStar,
+  toDrawing,
+  windowLength,
+} from "@/lib/kendara";
 
 /** Whether a point is inside a polygon given as "x,y x,y ..." (ray casting). */
 function inside([x, y]: [number, number], points: string): boolean {
@@ -49,5 +64,108 @@ describe("drawing helpers", () => {
     expect(windowLength(13)).toEqual({ unit: "minutes", value: 13 });
     expect(windowLength(118)).toEqual({ unit: "hours", value: 2 });
     expect(windowLength(155)).toEqual({ unit: "hours", value: 2.5 });
+  });
+});
+
+const at = (utc: string, local: string) => ({ utc, local, clock: local.slice(11, 16), date: local.slice(0, 10) });
+
+function match(start: [string, string], end: [string, string], stars: [string, number][] = []): KendaraMatch {
+  return {
+    start: at(...start),
+    end: at(...end),
+    minutes: 0,
+    grade: "exact",
+    near: [],
+    near_text: null,
+    text: "",
+    stars: stars.map(([nakshatra, pada]) => ({
+      nakshatra,
+      name: nakshatra,
+      pada,
+      start: at(...start),
+      end: at(...end),
+    })),
+  };
+}
+
+describe("middleOf", () => {
+  it("gives the local middle of a window", () => {
+    const window = match(
+      ["1995-04-17T08:30:00Z", "1995-04-17T14:00:00+05:30"],
+      ["1995-04-17T10:44:00Z", "1995-04-17T16:14:00+05:30"],
+    );
+    expect(middleOf(window)).toEqual({ date: "1995-04-17", time: "15:07" });
+  });
+
+  it("crosses midnight in the local day, not the UTC day", () => {
+    const window = match(
+      ["1995-04-17T18:00:00Z", "1995-04-17T23:30:00+05:30"],
+      ["1995-04-17T19:00:00Z", "1995-04-18T00:30:00+05:30"],
+    );
+    expect(middleOf(window)).toEqual({ date: "1995-04-18", time: "00:00" });
+  });
+
+  it("works west of Greenwich", () => {
+    const window = match(
+      ["2000-01-01T03:00:00Z", "1999-12-31T22:00:00-05:00"],
+      ["2000-01-01T07:00:00Z", "2000-01-01T02:00:00-05:00"],
+    );
+    expect(middleOf(window)).toEqual({ date: "2000-01-01", time: "00:00" });
+  });
+});
+
+describe("sharedStar", () => {
+  const start: [string, string] = ["1995-04-17T08:30:00Z", "1995-04-17T14:00:00+05:30"];
+  const end: [string, string] = ["1995-04-17T10:44:00Z", "1995-04-17T16:14:00+05:30"];
+  const result = (stars: [string, number][][]) => ({ matches: stars.map((s) => match(start, end, s)) }) as KendaraResult;
+
+  it("finds one star and pada shared by every match", () => {
+    expect(sharedStar(result([[["rohini", 2]], [["rohini", 2]]]))).toEqual({ nakshatra: "rohini", pada: 2, name: "rohini" });
+  });
+
+  it("gives nothing for two stars, two padas, a window across two, or no matches", () => {
+    expect(sharedStar(result([[["rohini", 2]], [["hasta", 2]]]))).toBeNull();
+    expect(sharedStar(result([[["rohini", 2]], [["rohini", 3]]]))).toBeNull();
+    expect(sharedStar(result([[["rohini", 2], ["rohini", 3]]]))).toBeNull();
+    expect(sharedStar(result([]))).toBeNull();
+  });
+});
+
+describe("parseHandoff", () => {
+  const place = { id: 1248991, name: "Colombo" };
+  const raw = JSON.stringify({ target: "porondam", role: "groom", date: "1995-04-17", time: "15:07", place });
+
+  it("reads a handoff for its own page only", () => {
+    expect(parseHandoff(raw, "porondam")).toMatchObject({ role: "groom", time: "15:07" });
+    expect(parseHandoff(raw, "hadahan")).toBeNull();
+  });
+
+  it("ignores nothing, broken text and missing parts", () => {
+    expect(parseHandoff("", "porondam")).toBeNull();
+    expect(parseHandoff("{", "porondam")).toBeNull();
+    expect(parseHandoff(JSON.stringify({ target: "porondam", date: "1995-04-17" }), "porondam")).toBeNull();
+  });
+});
+
+describe("the handoff", () => {
+  const store = new Map<string, string>();
+  const storage = {
+    getItem: (key: string) => store.get(key) ?? null,
+    setItem: (key: string, value: string) => void store.set(key, value),
+    removeItem: (key: string) => void store.delete(key),
+  };
+
+  it("moves out of session storage on first read, stays steady, then clears", () => {
+    (globalThis as { sessionStorage?: unknown }).sessionStorage = storage;
+    const place = { id: 1248991, name: "Colombo" } as Parameters<typeof saveHandoff>[0]["place"];
+    saveHandoff({ target: "hadahan", date: "1995-04-17", time: "15:07", place });
+    expect(store.size).toBe(1);
+    const first = handoffSnapshot();
+    expect(parseHandoff(first, "hadahan")).toMatchObject({ time: "15:07" });
+    expect(store.size).toBe(0); // a reload will not fill the form again
+    expect(handoffSnapshot()).toBe(first); // the same text while the page renders
+    clearHandoff();
+    expect(handoffSnapshot()).toBe("");
+    delete (globalThis as { sessionStorage?: unknown }).sessionStorage;
   });
 });
