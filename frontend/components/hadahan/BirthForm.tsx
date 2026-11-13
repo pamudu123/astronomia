@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -52,6 +53,8 @@ type Props = {
   ) => void;
   /** Shown inside another page: no page wrapper or side panel, and its own heading. */
   embedded?: { title: string; lead: string; submit: string; working: string };
+  /** Text for the link to the old horoscope search, shown in the side panel. */
+  kendara?: Dictionary["kendara"];
 };
 
 export function toRequest(values: FormValues): BirthRequest | null {
@@ -82,6 +85,7 @@ export function BirthForm({
   error,
   onSubmit,
   embedded,
+  kendara,
 }: Props) {
   const hydrated = useHydrated();
   const [values, setValues] = useState<FormValues>(initial);
@@ -335,6 +339,12 @@ export function BirthForm({
             <Lock size={16} /> <strong>{f.tipPrivacyTitle}</strong>{" "}
             {f.tipPrivacy}
           </li>
+          {kendara && (
+            <li>
+              <strong>{kendara.link}</strong>{" "}
+              <Link href={`/${lang}/kendara`}>{kendara.linkAction}</Link>
+            </li>
+          )}
         </ul>
       </aside>
     </main>

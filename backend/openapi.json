@@ -1354,6 +1354,48 @@
         }
       }
     },
+    "/v1/kendara/search": {
+      "post": {
+        "tags": [
+          "kendara"
+        ],
+        "summary": "Kendara Search",
+        "description": "The births between 1900 and now that fit a kendara drawn on paper. The drawing travels\nin the body and is not stored.",
+        "operationId": "kendara_search_v1_kendara_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KendaraRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KendaraResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/reports/pdf": {
       "post": {
         "tags": [
@@ -2472,6 +2514,31 @@
         ],
         "title": "DashaSubOut"
       },
+      "DrawingIn": {
+        "properties": {
+          "lagna": {
+            "type": "string",
+            "title": "Lagna"
+          },
+          "houses": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/Body"
+            },
+            "type": "object",
+            "title": "Houses"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lagna",
+          "houses"
+        ],
+        "title": "DrawingIn",
+        "description": "One kendara as drawn: the lagna sign, and the house (1 = the lagna box) of each planet.\nA planet left out is not checked."
+      },
       "FactorOut": {
         "properties": {
           "id": {
@@ -2927,6 +2994,326 @@
           "to_theme"
         ],
         "title": "HouseMoveOut"
+      },
+      "KendaraMatchOut": {
+        "properties": {
+          "start": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "end": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "grade": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "near"
+            ],
+            "title": "Grade"
+          },
+          "near": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Near"
+          },
+          "near_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Near Text"
+          },
+          "stars": {
+            "items": {
+              "$ref": "#/components/schemas/StarOut"
+            },
+            "type": "array",
+            "title": "Stars"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "minutes",
+          "grade",
+          "near",
+          "near_text",
+          "stars",
+          "text"
+        ],
+        "title": "KendaraMatchOut"
+      },
+      "KendaraPlaceOut": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "offset": {
+            "type": "string",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "timezone",
+          "offset"
+        ],
+        "title": "KendaraPlaceOut"
+      },
+      "KendaraRequest": {
+        "properties": {
+          "rashi": {
+            "$ref": "#/components/schemas/DrawingIn"
+          },
+          "navamsha": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DrawingIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "year_from": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2100.0,
+                "minimum": 1900.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year From"
+          },
+          "year_to": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2100.0,
+                "minimum": 1900.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year To"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "nakshatra": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nakshatra"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rashi"
+        ],
+        "title": "KendaraRequest"
+      },
+      "KendaraResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "impossible"
+            ],
+            "title": "Status"
+          },
+          "problems": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Problems",
+            "default": []
+          },
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "place": {
+            "$ref": "#/components/schemas/KendaraPlaceOut"
+          },
+          "first": {
+            "type": "string",
+            "format": "date",
+            "title": "First"
+          },
+          "last": {
+            "type": "string",
+            "format": "date",
+            "title": "Last"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/KendaraMatchOut"
+            },
+            "type": "array",
+            "title": "Matches",
+            "default": []
+          },
+          "cut_off": {
+            "type": "boolean",
+            "title": "Cut Off",
+            "default": false
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "rule_set",
+          "provisional",
+          "place",
+          "first",
+          "last"
+        ],
+        "title": "KendaraResponse"
       },
       "KeyDateOut": {
         "properties": {
@@ -5047,6 +5434,37 @@
           "matches"
         ],
         "title": "StarMatchesResponse"
+      },
+      "StarOut": {
+        "properties": {
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "pada": {
+            "type": "integer",
+            "title": "Pada"
+          },
+          "start": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          },
+          "end": {
+            "$ref": "#/components/schemas/LocalTimeOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nakshatra",
+          "name",
+          "pada",
+          "start",
+          "end"
+        ],
+        "title": "StarOut"
       },
       "StayOut": {
         "properties": {

@@ -125,7 +125,7 @@ def test_full_porondam_report(client: TestClient) -> None:
     content = text(reader)
     for expected in (
         "Nimali and Kasun",
-        "5 of 13 factors agree",
+        "9 of 18 factors agree",
         "Essential checks",
         "Rajju",
         "Vedha",
@@ -134,7 +134,7 @@ def test_full_porondam_report(client: TestClient) -> None:
         "Nimali: Present, reduced",
         "Kasun: Not present",
         "Rashi charts",
-        "porondam_si_v2, kuja_v1",
+        "porondam_si_v3, kuja_v1",
         "not a decision",
     ):
         assert expected in content, expected

@@ -15,7 +15,7 @@ from app.engine.chart import Point
 from app.engine.zodiac import DEGREES_PER_NAKSHATRA, DEGREES_PER_PADA, NAKSHATRA, RASHI, RASHI_LORD
 
 RULES_DIR = Path(__file__).resolve().parents[1] / "data" / "rules"
-DEFAULT_RULES = "porondam_si_v2"
+DEFAULT_RULES = "porondam_si_v3"
 
 
 @dataclass(frozen=True)
@@ -88,12 +88,25 @@ def _pair_in(a: str, b: str, pairs: list[list[str]]) -> bool:
     return any({a, b} == set(pair) for pair in pairs)
 
 
+def _index28(nakshatra: int) -> int:
+    """A star's place in the 28 star count, where Abhijit follows Uttara Ashadha."""
+    return nakshatra + 1 if nakshatra > NAKSHATRA.index("uttara_ashadha") else nakshatra
+
+
+def distance28(bride: int, groom: int) -> int:
+    """How far apart two stars are in the 28 star count, the nearer way round: 1 (the same
+    star) to 15. Counting both ends, as the tradition does."""
+    count = (_index28(groom) - _index28(bride)) % 28 + 1
+    return 1 if count == 1 else min(count, 30 - count)
+
+
 def _factor(
     rule: dict[str, Any],
     rules: dict[str, Any],
     bride: Point,
     groom: Point,
     weekdays: tuple[int, int] | None,
+    lagnas: tuple[int, int] | None,
 ) -> FactorResult:
     kind = rule["type"]
     hard = bool(rule.get("hard", False))
@@ -134,6 +147,36 @@ def _factor(
         if kind == "group_avoid":
             return result(not _pair_in(b_group, g_group, rule["fail"]), **facts)
         return result(b_group != g_group, **facts)
+    if kind == "sign_rank_at_least":
+        # The table lists its groups from highest to lowest.
+        groups = list(rules[rule["table"]])
+        b_group = _group(rules[rule["table"]], RASHI[bride.sign])
+        g_group = _group(rules[rule["table"]], RASHI[groom.sign])
+        return result(
+            groups.index(g_group) <= groups.index(b_group),
+            bride_varna=b_group,
+            groom_varna=g_group,
+        )
+    if kind == "distance28_avoid":
+        distance = distance28(bride.nakshatra, groom.nakshatra)
+        return result(distance not in rule["fail"], distance=distance)
+    if kind == "lagna_and_moon_lords":
+        if lagnas is None:
+            return FactorResult(rule["id"], False, hard, {}, checked=False)
+        enemies = rules["enemies"]
+        b_lagna, g_lagna = RASHI_LORD[lagnas[0]].value, RASHI_LORD[lagnas[1]].value
+        b_moon, g_moon = RASHI_LORD[bride.sign].value, RASHI_LORD[groom.sign].value
+        # How each lord sees the other: the same planet, a friend or a neutral counts.
+        checks = [(g_lagna, b_lagna), (b_lagna, g_lagna), (g_moon, b_moon), (b_moon, g_moon)]
+        positive = sum(other not in enemies[lord] for lord, other in checks)
+        return result(
+            positive >= rule["min_positive"],
+            bride_lagna_lord=b_lagna,
+            groom_lagna_lord=g_lagna,
+            bride_moon_lord=b_moon,
+            groom_moon_lord=g_moon,
+            positive=positive,
+        )
     if kind == "sign_count_avoid":
         return result(sign_count not in rule["fail"], count=sign_count)
     if kind == "lords_friendly":
@@ -161,14 +204,16 @@ def match(
     groom: Point,
     version: str = DEFAULT_RULES,
     weekdays: tuple[int, int] | None = None,
+    lagnas: tuple[int, int] | None = None,
 ) -> MatchResult:
     """Every factor for one couple. Weekdays (0 = Monday) are the bride's and the groom's
-    birth weekdays, when the birth dates are known."""
+    birth weekdays, and lagnas their lagna signs (0 = Mesha), when the birth details are known.
+    A factor that needs one of them is left unchecked without it."""
     rules = load_rules(version)
     return MatchResult(
         rule_set=rules["version"],
         provisional=bool(rules["provisional"]),
-        factors=[_factor(rule, rules, bride, groom, weekdays) for rule in rules["factors"]],
+        factors=[_factor(rule, rules, bride, groom, weekdays, lagnas) for rule in rules["factors"]],
         same_star=bride.nakshatra == groom.nakshatra,
     )
 
