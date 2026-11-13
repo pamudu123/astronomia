@@ -226,6 +226,16 @@ test("the result shows the planet changes for you", async ({ page }) => {
   expect(page.url()).not.toContain("1995");
 });
 
+test("the result links to the year for this lagna", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  const card = page.locator('[data-card="yearly"]');
+  await expect(card.getByRole("heading", { name: "Your 2027" })).toBeVisible();
+  await expect(card.getByRole("link", { name: "See your 2027" })).toHaveAttribute("href", "/en/forecast/2027/simha");
+});
+
 test("the hadahan still shows when the planet changes fail", async ({ page }) => {
   await mockBackend(page, "en");
   await page.route("**/api/v1/changes/personal", (route) => route.fulfill({ status: 500, body: "" }));

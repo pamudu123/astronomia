@@ -1,0 +1,578 @@
+{
+  "rule_set": "yearly_v1",
+  "provisional": true,
+  "year": 2027,
+  "sign": "makara",
+  "sign_name": "Makara",
+  "planets": [
+    {
+      "body": "saturn",
+      "stays": [
+        {
+          "sign": "meena",
+          "house": 3,
+          "start": "2027-01-01",
+          "end": "2027-06-03",
+          "from_before": true,
+          "past_end": false,
+          "text": "Saturn is in Meena, your 3rd house, until 3 June 2027.",
+          "theme": "The 3rd house is about effort, courage and siblings."
+        },
+        {
+          "sign": "mesha",
+          "house": 4,
+          "start": "2027-06-03",
+          "end": "2027-10-20",
+          "from_before": false,
+          "past_end": false,
+          "text": "Saturn is in Mesha, your 4th house, from 3 June 2027 to 20 October 2027.",
+          "theme": "The 4th house is about home and peace of mind."
+        },
+        {
+          "sign": "meena",
+          "house": 3,
+          "start": "2027-10-20",
+          "end": "2027-12-31",
+          "from_before": false,
+          "past_end": true,
+          "text": "Saturn is in Meena, your 3rd house, from 20 October 2027 to the end of the year.",
+          "theme": "The 3rd house is about effort, courage and siblings."
+        }
+      ],
+      "quiet": null
+    },
+    {
+      "body": "jupiter",
+      "stays": [
+        {
+          "sign": "simha",
+          "house": 8,
+          "start": "2027-01-01",
+          "end": "2027-01-25",
+          "from_before": true,
+          "past_end": false,
+          "text": "Jupiter is in Simha, your 8th house, until 25 January 2027.",
+          "theme": "The 8th house is about change and things shared with others."
+        },
+        {
+          "sign": "kataka",
+          "house": 7,
+          "start": "2027-01-25",
+          "end": "2027-06-26",
+          "from_before": false,
+          "past_end": false,
+          "text": "Jupiter is in Kataka, your 7th house, from 25 January 2027 to 26 June 2027.",
+          "theme": "The 7th house is about partnership and marriage."
+        },
+        {
+          "sign": "simha",
+          "house": 8,
+          "start": "2027-06-26",
+          "end": "2027-11-26",
+          "from_before": false,
+          "past_end": false,
+          "text": "Jupiter is in Simha, your 8th house, from 26 June 2027 to 26 November 2027.",
+          "theme": "The 8th house is about change and things shared with others."
+        },
+        {
+          "sign": "kanya",
+          "house": 9,
+          "start": "2027-11-26",
+          "end": "2027-12-31",
+          "from_before": false,
+          "past_end": true,
+          "text": "Jupiter is in Kanya, your 9th house, from 26 November 2027 to the end of the year.",
+          "theme": "The 9th house is about fortune, teachers and beliefs."
+        }
+      ],
+      "quiet": null
+    },
+    {
+      "body": "rahu",
+      "stays": [
+        {
+          "sign": "makara",
+          "house": 1,
+          "start": "2027-01-01",
+          "end": "2027-12-31",
+          "from_before": true,
+          "past_end": true,
+          "text": "Rahu is in Makara, your 1st house, all year.",
+          "theme": "The 1st house is about yourself and how you begin things."
+        }
+      ],
+      "quiet": "Rahu does not change sign this year."
+    },
+    {
+      "body": "ketu",
+      "stays": [
+        {
+          "sign": "kataka",
+          "house": 7,
+          "start": "2027-01-01",
+          "end": "2027-12-31",
+          "from_before": true,
+          "past_end": true,
+          "text": "Ketu is in Kataka, your 7th house, all year.",
+          "theme": "The 7th house is about partnership and marriage."
+        }
+      ],
+      "quiet": "Ketu does not change sign this year."
+    }
+  ],
+  "months": [
+    {
+      "month": 1,
+      "name": "January",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 8,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": [
+        "jupiter-2027-01"
+      ]
+    },
+    {
+      "month": 2,
+      "name": "February",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 7,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    },
+    {
+      "month": 3,
+      "name": "March",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 7,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    },
+    {
+      "month": 4,
+      "name": "April",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 7,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    },
+    {
+      "month": 5,
+      "name": "May",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 7,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    },
+    {
+      "month": 6,
+      "name": "June",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 7,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": [
+        "saturn-2027-06",
+        "jupiter-2027-06"
+      ]
+    },
+    {
+      "month": 7,
+      "name": "July",
+      "houses": {
+        "saturn": 4,
+        "jupiter": 8,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    },
+    {
+      "month": 8,
+      "name": "August",
+      "houses": {
+        "saturn": 4,
+        "jupiter": 8,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    },
+    {
+      "month": 9,
+      "name": "September",
+      "houses": {
+        "saturn": 4,
+        "jupiter": 8,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    },
+    {
+      "month": 10,
+      "name": "October",
+      "houses": {
+        "saturn": 4,
+        "jupiter": 8,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": [
+        "saturn-2027-10"
+      ]
+    },
+    {
+      "month": 11,
+      "name": "November",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 8,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": [
+        "jupiter-2027-11"
+      ]
+    },
+    {
+      "month": 12,
+      "name": "December",
+      "houses": {
+        "saturn": 3,
+        "jupiter": 9,
+        "rahu": 1,
+        "ketu": 7
+      },
+      "changes": []
+    }
+  ],
+  "key_dates": [
+    {
+      "change": {
+        "id": "jupiter-2027-01",
+        "kind": "jupiter",
+        "title": "Jupiter change",
+        "moment": "2027-01-24T20:02:00Z",
+        "local_date": "2027-01-25",
+        "when": "25 January 2027, 01:32 Sri Lanka time",
+        "moves": [
+          {
+            "body": "jupiter",
+            "from_sign": "simha",
+            "to_sign": "kataka",
+            "retrograde": true,
+            "returning": false,
+            "until": "2027-06-25T23:49:00Z",
+            "next_sign": "simha",
+            "text": "Jupiter steps back (retrograde) from Simha into Kataka.",
+            "until_text": "Jupiter stays in Kataka until 26 June 2027, when it moves into Simha.",
+            "note": "Jupiter is moving backwards (retrograde), so this is a short stay. It returns to Simha on 26 June 2027."
+          }
+        ]
+      },
+      "counted": {
+        "sign": "makara",
+        "sign_name": "Makara",
+        "moves": [
+          {
+            "body": "jupiter",
+            "from_sign": "simha",
+            "to_sign": "kataka",
+            "from_house": 8,
+            "to_house": 7,
+            "text": "Jupiter leaves your 8th house and enters your 7th house.",
+            "short": "Jupiter: 8th house to 7th house",
+            "from_theme": "The 8th house is about change and things shared with others.",
+            "to_theme": "The 7th house is about partnership and marriage."
+          }
+        ],
+        "others": [
+          {
+            "body": "saturn",
+            "sign": "meena",
+            "house": 3,
+            "text": "Saturn stays in Meena, your 3rd house."
+          },
+          {
+            "body": "rahu",
+            "sign": "makara",
+            "house": 1,
+            "text": "Rahu stays in Makara, your 1st house."
+          },
+          {
+            "body": "ketu",
+            "sign": "kataka",
+            "house": 7,
+            "text": "Ketu stays in Kataka, your 7th house."
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "change": {
+        "id": "saturn-2027-06",
+        "kind": "saturn",
+        "title": "Saturn change",
+        "moment": "2027-06-02T23:58:00Z",
+        "local_date": "2027-06-03",
+        "when": "3 June 2027, 05:28 Sri Lanka time",
+        "moves": [
+          {
+            "body": "saturn",
+            "from_sign": "meena",
+            "to_sign": "mesha",
+            "retrograde": false,
+            "returning": false,
+            "until": "2027-10-20T01:42:00Z",
+            "next_sign": "meena",
+            "text": "Saturn moves from Meena into Mesha.",
+            "until_text": "Saturn stays in Mesha until 20 October 2027, when it moves into Meena.",
+            "note": null
+          }
+        ]
+      },
+      "counted": {
+        "sign": "makara",
+        "sign_name": "Makara",
+        "moves": [
+          {
+            "body": "saturn",
+            "from_sign": "meena",
+            "to_sign": "mesha",
+            "from_house": 3,
+            "to_house": 4,
+            "text": "Saturn leaves your 3rd house and enters your 4th house.",
+            "short": "Saturn: 3rd house to 4th house",
+            "from_theme": "The 3rd house is about effort, courage and siblings.",
+            "to_theme": "The 4th house is about home and peace of mind."
+          }
+        ],
+        "others": [
+          {
+            "body": "jupiter",
+            "sign": "kataka",
+            "house": 7,
+            "text": "Jupiter stays in Kataka, your 7th house."
+          },
+          {
+            "body": "rahu",
+            "sign": "makara",
+            "house": 1,
+            "text": "Rahu stays in Makara, your 1st house."
+          },
+          {
+            "body": "ketu",
+            "sign": "kataka",
+            "house": 7,
+            "text": "Ketu stays in Kataka, your 7th house."
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "change": {
+        "id": "jupiter-2027-06",
+        "kind": "jupiter",
+        "title": "Jupiter change",
+        "moment": "2027-06-25T23:49:00Z",
+        "local_date": "2027-06-26",
+        "when": "26 June 2027, 05:19 Sri Lanka time",
+        "moves": [
+          {
+            "body": "jupiter",
+            "from_sign": "kataka",
+            "to_sign": "simha",
+            "retrograde": false,
+            "returning": true,
+            "until": "2027-11-26T13:15:00Z",
+            "next_sign": "kanya",
+            "text": "Jupiter moves from Kataka into Simha.",
+            "until_text": "Jupiter stays in Simha until 26 November 2027, when it moves into Kanya.",
+            "note": "Jupiter returns to Simha after its backward step."
+          }
+        ]
+      },
+      "counted": {
+        "sign": "makara",
+        "sign_name": "Makara",
+        "moves": [
+          {
+            "body": "jupiter",
+            "from_sign": "kataka",
+            "to_sign": "simha",
+            "from_house": 7,
+            "to_house": 8,
+            "text": "Jupiter leaves your 7th house and enters your 8th house.",
+            "short": "Jupiter: 7th house to 8th house",
+            "from_theme": "The 7th house is about partnership and marriage.",
+            "to_theme": "The 8th house is about change and things shared with others."
+          }
+        ],
+        "others": [
+          {
+            "body": "saturn",
+            "sign": "mesha",
+            "house": 4,
+            "text": "Saturn stays in Mesha, your 4th house."
+          },
+          {
+            "body": "rahu",
+            "sign": "makara",
+            "house": 1,
+            "text": "Rahu stays in Makara, your 1st house."
+          },
+          {
+            "body": "ketu",
+            "sign": "kataka",
+            "house": 7,
+            "text": "Ketu stays in Kataka, your 7th house."
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "change": {
+        "id": "saturn-2027-10",
+        "kind": "saturn",
+        "title": "Saturn change",
+        "moment": "2027-10-20T01:42:00Z",
+        "local_date": "2027-10-20",
+        "when": "20 October 2027, 07:12 Sri Lanka time",
+        "moves": [
+          {
+            "body": "saturn",
+            "from_sign": "mesha",
+            "to_sign": "meena",
+            "retrograde": true,
+            "returning": false,
+            "until": "2028-02-23T13:54:00Z",
+            "next_sign": "mesha",
+            "text": "Saturn steps back (retrograde) from Mesha into Meena.",
+            "until_text": "Saturn stays in Meena until 23 February 2028, when it moves into Mesha.",
+            "note": "Saturn is moving backwards (retrograde), so this is a short stay. It returns to Mesha on 23 February 2028."
+          }
+        ]
+      },
+      "counted": {
+        "sign": "makara",
+        "sign_name": "Makara",
+        "moves": [
+          {
+            "body": "saturn",
+            "from_sign": "mesha",
+            "to_sign": "meena",
+            "from_house": 4,
+            "to_house": 3,
+            "text": "Saturn leaves your 4th house and enters your 3rd house.",
+            "short": "Saturn: 4th house to 3rd house",
+            "from_theme": "The 4th house is about home and peace of mind.",
+            "to_theme": "The 3rd house is about effort, courage and siblings."
+          }
+        ],
+        "others": [
+          {
+            "body": "jupiter",
+            "sign": "simha",
+            "house": 8,
+            "text": "Jupiter stays in Simha, your 8th house."
+          },
+          {
+            "body": "rahu",
+            "sign": "makara",
+            "house": 1,
+            "text": "Rahu stays in Makara, your 1st house."
+          },
+          {
+            "body": "ketu",
+            "sign": "kataka",
+            "house": 7,
+            "text": "Ketu stays in Kataka, your 7th house."
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "change": {
+        "id": "jupiter-2027-11",
+        "kind": "jupiter",
+        "title": "Jupiter change",
+        "moment": "2027-11-26T13:15:00Z",
+        "local_date": "2027-11-26",
+        "when": "26 November 2027, 18:45 Sri Lanka time",
+        "moves": [
+          {
+            "body": "jupiter",
+            "from_sign": "simha",
+            "to_sign": "kanya",
+            "retrograde": false,
+            "returning": false,
+            "until": "2028-02-28T13:47:00Z",
+            "next_sign": "simha",
+            "text": "Jupiter moves from Simha into Kanya.",
+            "until_text": "Jupiter stays in Kanya until 28 February 2028, when it moves into Simha.",
+            "note": null
+          }
+        ]
+      },
+      "counted": {
+        "sign": "makara",
+        "sign_name": "Makara",
+        "moves": [
+          {
+            "body": "jupiter",
+            "from_sign": "simha",
+            "to_sign": "kanya",
+            "from_house": 8,
+            "to_house": 9,
+            "text": "Jupiter leaves your 8th house and enters your 9th house.",
+            "short": "Jupiter: 8th house to 9th house",
+            "from_theme": "The 8th house is about change and things shared with others.",
+            "to_theme": "The 9th house is about fortune, teachers and beliefs."
+          }
+        ],
+        "others": [
+          {
+            "body": "saturn",
+            "sign": "meena",
+            "house": 3,
+            "text": "Saturn stays in Meena, your 3rd house."
+          },
+          {
+            "body": "rahu",
+            "sign": "makara",
+            "house": 1,
+            "text": "Rahu stays in Makara, your 1st house."
+          },
+          {
+            "body": "ketu",
+            "sign": "kataka",
+            "house": 7,
+            "text": "Ketu stays in Kataka, your 7th house."
+          }
+        ],
+        "notes": []
+      }
+    }
+  ]
+}

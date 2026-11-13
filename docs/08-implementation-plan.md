@@ -229,6 +229,14 @@ Category B is planet changes and forecasts.
 - **Saturn from the Moon sign:** the personal version and each lagna page say when Saturn starts or ends Erashtaka (the 12th, 1st and 2nd signs from the Moon) or the 8th sign. These are the same periods as the couple timeline.
 - **Fixtures:** `uv run python scripts/export_change_fixtures.py` in `backend/` saves the answers the frontend tests use.
 
+**Done in a third pull request:** B3, the yearly forecast for 2027. A paid feature, open to everyone for now (file 07, section 4.6).
+
+- **Engine** (`backend/app/engine/yearly.py`): for one year in Sri Lanka time, each slow planet's stays with their houses, from the change list. `YEARS` says which years have a forecast.
+- **Endpoints:** `GET /v1/yearly/{year}/{lagna}` (cached) and `POST /v1/yearly/{year}/personal` (from the lagna and from the Moon sign). Both depend on `yearly_access()`, the one place for the paid check.
+- **Pages:** `/{lang}/forecast/2027` lists the 12 lagnas. `/{lang}/forecast/2027/{lagna}` shows a bar for each planet across the year, the house each planet is in at the start of each month, and the key dates with links to the change pages. It is served with a title and description and is in the sitemap. "Your own 2027" on the same page uses the birth form or the hadahan from this tab.
+- **On the hadahan:** "Your 2027", a link to the year for that lagna.
+- **Kept apart:** `backend/app/engine/yearly.py`, `backend/app/api/yearly.py`, `frontend/lib/yearly.ts`, `frontend/components/yearly/` and `frontend/app/[lang]/forecast/`. The frontend lock goes in `YearlyGate`.
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

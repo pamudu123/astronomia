@@ -310,6 +310,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/yearly/{year}/{lagna}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Yearly
+         * @description The year for one lagna. The same houses hold for that Moon sign (gochara).
+         */
+        get: operations["yearly_v1_yearly__year___lagna__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/yearly/{year}/personal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Personal Yearly
+         * @description The year for one birth chart: from the lagna, and from the Moon sign (gochara).
+         */
+        post: operations["personal_yearly_v1_yearly__year__personal_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/reports/pdf": {
         parameters: {
             query?: never;
@@ -705,6 +745,11 @@ export interface components {
             /** To Theme */
             to_theme: string;
         };
+        /** KeyDateOut */
+        KeyDateOut: {
+            change: components["schemas"]["ChangeOut"];
+            counted: components["schemas"]["CountedOut"];
+        };
         /** KujaOut */
         KujaOut: {
             /** Rule Set */
@@ -916,6 +961,14 @@ export interface components {
             change: components["schemas"]["ChangeOut"];
             lagna: components["schemas"]["CountedOut"] | null;
             gochara: components["schemas"]["CountedOut"] | null;
+        };
+        /** PersonalYearResponse */
+        PersonalYearResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            lagna: components["schemas"]["YearOut"] | null;
+            gochara: components["schemas"]["YearOut"] | null;
         };
         /** PlaceList */
         PlaceList: {
@@ -1262,6 +1315,31 @@ export interface components {
             /** Matches */
             matches: components["schemas"]["StarMatchOut"][];
         };
+        /** StayOut */
+        StayOut: {
+            /** Sign */
+            sign: string;
+            /** House */
+            house: number;
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /** From Before */
+            from_before: boolean;
+            /** Past End */
+            past_end: boolean;
+            /** Text */
+            text: string;
+            /** Theme */
+            theme: string;
+        };
         /** TimeCheckOut */
         TimeCheckOut: {
             /** Stable */
@@ -1412,6 +1490,46 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /** YearMonthOut */
+        YearMonthOut: {
+            /** Month */
+            month: number;
+            /** Name */
+            name: string;
+            /** Houses */
+            houses: {
+                [key: string]: number;
+            };
+            /** Changes */
+            changes: string[];
+        };
+        /** YearOut */
+        YearOut: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Year */
+            year: number;
+            /** Sign */
+            sign: string;
+            /** Sign Name */
+            sign_name: string;
+            /** Planets */
+            planets: components["schemas"]["YearPlanetOut"][];
+            /** Months */
+            months: components["schemas"]["YearMonthOut"][];
+            /** Key Dates */
+            key_dates: components["schemas"]["KeyDateOut"][];
+        };
+        /** YearPlanetOut */
+        YearPlanetOut: {
+            body: components["schemas"]["Body"];
+            /** Stays */
+            stays: components["schemas"]["StayOut"][];
+            /** Quiet */
+            quiet: string | null;
         };
     };
     responses: never;
@@ -1914,6 +2032,75 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PersonalChangeResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    yearly_v1_yearly__year___lagna__get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                year: number;
+                lagna: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["YearOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    personal_yearly_v1_yearly__year__personal_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                year: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalYearResponse"];
                 };
             };
             /** @description Validation Error */

@@ -32,7 +32,7 @@ def test_every_name_exists(lang: Lang) -> None:
 
 @pytest.mark.parametrize("lang", ["si", "en"])
 @pytest.mark.parametrize(
-    "section", ["reason", "porondam_reason", "report", "forecast", "couple", "changes"]
+    "section", ["reason", "porondam_reason", "report", "forecast", "couple", "changes", "yearly"]
 )
 def test_templates_use_the_same_placeholders(lang: Lang, section: str) -> None:
     en, other = labels("en")[section], labels(lang)[section]
@@ -81,6 +81,7 @@ def test_sinhala_text_has_no_stray_latin_words() -> None:
         **table["forecast"],
         **table["couple"],
         **table["changes"],
+        **table["yearly"],
     }.items():
         cleaned = re.sub(r"\{[a-z_]+\}|\d+", "", text)
         assert not re.search(r"[A-Za-z]", cleaned), code

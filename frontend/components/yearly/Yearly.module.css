@@ -1,0 +1,205 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-size: clamp(22px, 2.6vw, 28px);
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+/* One bar per planet across the year */
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--night-raised);
+}
+
+.row p {
+  margin: 0;
+}
+
+.rowHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.planet {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.bar {
+  display: flex;
+  height: 28px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--line-soft);
+}
+
+.segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+  border-right: 2px solid var(--night-raised);
+  color: var(--night);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.segment:last-child {
+  border-right: 0;
+}
+
+.segment:nth-child(odd) {
+  background: var(--teal);
+}
+
+.segment:nth-child(even) {
+  background: var(--gold);
+}
+
+.ticks {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.stays {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+}
+
+/* Month by month */
+.tableWrap {
+  max-width: 640px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.table th,
+.table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: center;
+}
+
+.table th:first-child,
+.table td:first-child {
+  text-align: left;
+}
+
+.table thead th {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.changed td,
+.changed th {
+  background: var(--night-raised);
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  vertical-align: middle;
+}
+
+/* Key dates */
+.keys {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 14px;
+}
+
+.key {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border: 1px solid var(--gold);
+  border-radius: 18px;
+  background: var(--night-raised);
+  font-size: 15px;
+}
+
+.key p {
+  margin: 0;
+}
+
+.when {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.notes {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--gold-hover);
+}
+
+/* On the hadahan */
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.panel h2 {
+  font-size: 26px;
+}
+
+@media (max-width: 520px) {
+  .panel,
+  .row,
+  .key {
+    padding: 16px;
+  }
+
+  .table {
+    font-size: 14px;
+  }
+}
