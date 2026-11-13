@@ -237,6 +237,17 @@ Category B is planet changes and forecasts.
 - **On the hadahan:** "Your 2027", a link to the year for that lagna.
 - **Kept apart:** `backend/app/engine/yearly.py`, `backend/app/api/yearly.py`, `frontend/lib/yearly.ts`, `frontend/components/yearly/` and `frontend/app/[lang]/forecast/`. The frontend lock goes in `YearlyGate`.
 
+Category C is nakath (auspicious times). Rules and sources are in `docs/11-nakath-rules.md`.
+
+**Done in one pull request:** C1, the nakath engine.
+
+- **Sunrise and sunset** (`ephemeris.py`): the upper edge of the Sun with standard refraction, behind the `Ephemeris` protocol. A place where the Sun does not rise that day gets none.
+- **Panchanga** (`backend/app/engine/panchanga.py`, rules in `panchanga_v1.yaml`): the weekday counted from sunrise, thithi, nakatha, yoga and karana, each with its start and end to the minute, and Rahu kalaya. A day runs from one sunrise to the next. Each day at each place is worked out once and kept; 60 days take under a second.
+- **Times to the minute** follow the Sri Lankan sites: sunrise drops the seconds, a change is shown at the first whole minute it holds, and Rahu kalaya is counted in whole minutes.
+- **Endpoint:** `GET /v1/panchanga?date=&place_id=` (or latitude, longitude and time zone). A place and a date are not personal, so it is cached for an hour. Every time comes in UTC and local time, with the offset.
+- **Checked against** porondam.lk for 40 made-up moments (thithi, nakatha, yoga, karana and weekday all 40 of 40; sunrise 39 of 40) and 10 change times (all within a minute), Rahu kalaya from two Sri Lankan sites, and drikpanchang.com (within 3 minutes).
+- **Not built:** the night Rahu kalaya (no single rule found) and horawa (no rule needs it yet).
+
 ## 5. Working rules
 
 - One step, one pull request, with tests. Nothing merges with failing CI.

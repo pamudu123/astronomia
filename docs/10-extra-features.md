@@ -26,7 +26,7 @@ Checked on 2026-11-12 from web search summaries and app store listings only. Tre
 
 **C. Nakath (auspicious times)**
 
-- Nakath engine: thithi, yoga, karana, Rahu kalaya, sunrise.
+- Nakath engine: thithi, yoga, karana, Rahu kalaya, sunrise. **Built.**
 - Avurudu and daily nakath in your own time zone.
 - Wedding nakath finder: engagement, poruwa, homecoming.
 
@@ -76,13 +76,30 @@ Decisions made:
 - The yearly forecast is paid, built open for now. The 12 general yearly pages stay public for now.
 - Times are Sri Lanka time, as the almanacs print them.
 
-## 5. Needed from the astrologer
+## 5. Category C in detail
+
+Planned as three pull requests. Rules and their sources are in file 11.
+
+| # | Feature | Delivers | Check |
+|---|---|---|---|
+| C1 | **Nakath engine** | Sunrise and sunset for any place. The weekday from sunrise, thithi, nakatha, yoga and karana with their start and end times, and Rahu kalaya. `GET /v1/panchanga`. **Built.** | Matches porondam.lk for 40 made-up moments and 10 change times, and two Sri Lankan sites for Rahu kalaya. |
+| C2 | **Avurudu and daily nakath** (free) | The new year moment and punya kalaya, the official lists, past years next to our times, in the visitor's own time zone. A daily page for any place. | The new year moment matches the official lists 2022 to 2027 within a minute. |
+| C3 | **Wedding nakath finder** (paid, open for now) | Good dates and times for the engagement, the poruwa and the homecoming after a porondam match, with reasons. | Each suggestion passes the rules it lists. |
+
+Decisions made:
+
+- Avurudu and daily nakath are free. The wedding finder is paid, built open for now.
+- The rules are checked against several sources and kept in versioned rule files, marked provisional.
+- An Avurudu nakath time is published only when it comes from the official list or matches it. Times we calculate are marked as calculated.
+
+## 6. Needed from the astrologer
 
 Best asked for together, early:
 
 - The rules for Varna, Bhutha, Vruksha, Ayusha and Graha, and a check of the four added factors (A2).
 - How to read Saturn and dasha periods for a couple (A3).
 - What each house means when Saturn, Jupiter, Rahu or Ketu moves through it, for the change pages (B).
+- The nakath rules (category C): see the questions at the end of file 11.
 - The nakath rules (category C), the Sinhala name letter table (D) and the wedding rules (C).
 
 ## Sources

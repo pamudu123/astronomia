@@ -306,3 +306,78 @@ yearly:
   between: "{planet} is in {sign}, your {house} house, from {from} to {to}."
   from: "{planet} is in {sign}, your {house} house, from {from} to the end of the year."
   quiet: "{planet} does not change sign this year."
+
+# The Sinhala panchanga: names of the parts of the day.
+thithi:
+  shukla_1: "Bright 1 (Pratipada)"
+  shukla_2: "Bright 2 (Dwitiya)"
+  shukla_3: "Bright 3 (Tritiya)"
+  shukla_4: "Bright 4 (Chaturthi)"
+  shukla_5: "Bright 5 (Panchami)"
+  shukla_6: "Bright 6 (Shashthi)"
+  shukla_7: "Bright 7 (Saptami)"
+  shukla_8: "Bright 8 (Ashtami)"
+  shukla_9: "Bright 9 (Navami)"
+  shukla_10: "Bright 10 (Dashami)"
+  shukla_11: "Bright 11 (Ekadashi)"
+  shukla_12: "Bright 12 (Dwadashi)"
+  shukla_13: "Bright 13 (Trayodashi)"
+  shukla_14: "Bright 14 (Chaturdashi)"
+  purnima: "Full moon (Pasalosvaka)"
+  krishna_1: "Dark 1 (Pratipada)"
+  krishna_2: "Dark 2 (Dwitiya)"
+  krishna_3: "Dark 3 (Tritiya)"
+  krishna_4: "Dark 4 (Chaturthi)"
+  krishna_5: "Dark 5 (Panchami)"
+  krishna_6: "Dark 6 (Shashthi)"
+  krishna_7: "Dark 7 (Saptami)"
+  krishna_8: "Dark 8 (Ashtami)"
+  krishna_9: "Dark 9 (Navami)"
+  krishna_10: "Dark 10 (Dashami)"
+  krishna_11: "Dark 11 (Ekadashi)"
+  krishna_12: "Dark 12 (Dwadashi)"
+  krishna_13: "Dark 13 (Trayodashi)"
+  krishna_14: "Dark 14 (Chaturdashi)"
+  amavasya: "New moon (Amavaka)"
+yoga:
+  vishkambha: Vishkambha
+  priti: Priti
+  ayushman: Ayushman
+  saubhagya: Saubhagya
+  shobhana: Shobhana
+  atiganda: Atiganda
+  sukarma: Sukarma
+  dhriti: Dhriti
+  shula: Shula
+  ganda: Ganda
+  vriddhi: Vriddhi
+  dhruva: Dhruva
+  vyaghata: Vyaghata
+  harshana: Harshana
+  vajra: Vajra
+  siddhi: Siddhi
+  vyatipata: Vyatipata
+  variyan: Variyan
+  parigha: Parigha
+  shiva: Shiva
+  siddha: Siddha
+  sadhya: Sadhya
+  shubha: Shubha
+  shukla: Shukla
+  brahma: Brahma
+  indra: Indra
+  vaidhriti: Vaidhriti
+karana:
+  bava: Bava
+  balava: Balava
+  kaulava: Kaulava
+  taitila: Taitila
+  gara: Gara
+  vanija: Vanija
+  vishti: Vishti
+  shakuni: Shakuni
+  chatushpada: Chatushpada
+  naga: Naga
+  kimstughna: Kimstughna
+panchanga:
+  timezone: "Times are in {timezone} ({offset})."

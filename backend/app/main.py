@@ -8,6 +8,7 @@ from app.api import (
     charts,
     forecast,
     meta,
+    panchanga,
     places,
     porondam,
     reports,
@@ -40,6 +41,7 @@ def create_app() -> FastAPI:
     app.include_router(forecast.router)
     app.include_router(changes.router)
     app.include_router(yearly.router)
+    app.include_router(panchanga.router)
     app.include_router(reports.router)
     app.include_router(shares.router)
     return app

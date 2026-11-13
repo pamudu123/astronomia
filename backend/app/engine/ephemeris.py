@@ -26,6 +26,14 @@ class NodeType(StrEnum):
     TRUE = "true"
 
 
+# Sunrise is when the upper edge of the Sun clears the horizon, with the usual refraction.
+# This is the definition the civil tables use, and the one porondam.lk matches to the minute
+# (docs/11-nakath-rules.md). The other choice, the centre of the disc without refraction,
+# comes about four minutes later in Colombo.
+_RISE_FLAGS = 0
+_STANDARD_PRESSURE = 1013.25  # hPa
+_STANDARD_TEMPERATURE = 15.0  # degrees Celsius
+
 _SID_MODES = {Ayanamsa.LAHIRI: swe.SIDM_LAHIRI}
 
 _PLANETS = {
@@ -56,6 +64,12 @@ class Ephemeris(Protocol):
     def positions(self, jd_ut: float) -> dict[Body, BodyPosition]: ...
 
     def ascendant(self, jd_ut: float, latitude: float, longitude: float) -> float: ...
+
+    def sun_moon(self, jd_ut: float) -> tuple[float, float]: ...
+
+    def sunrise(self, jd_ut: float, latitude: float, longitude: float) -> float | None: ...
+
+    def sunset(self, jd_ut: float, latitude: float, longitude: float) -> float | None: ...
 
 
 def julian_day(moment: datetime) -> float:
@@ -109,3 +123,33 @@ class SwissEphemeris:
             self._sidereal()
             _cusps, angles = swe.houses_ex(jd_ut, latitude, longitude, b"W", swe.FLG_SIDEREAL)
         return normalize(angles[0])
+
+    def sun_moon(self, jd_ut: float) -> tuple[float, float]:
+        """Sidereal longitudes of the Sun and Moon only, for the many panchanga searches."""
+        flags = swe.FLG_SWIEPH | swe.FLG_SIDEREAL
+        with self._lock:
+            self._sidereal()
+            sun, _ = swe.calc_ut(jd_ut, swe.SUN, flags)
+            moon, _ = swe.calc_ut(jd_ut, swe.MOON, flags)
+        return normalize(sun[0]), normalize(moon[0])
+
+    def _rise_or_set(
+        self, event: int, jd_ut: float, latitude: float, longitude: float
+    ) -> float | None:
+        """The first sunrise or sunset after jd_ut, or None where the Sun stays up or down."""
+        with self._lock:
+            result, times = swe.rise_trans(
+                jd_ut,
+                swe.SUN,
+                event | _RISE_FLAGS,
+                (longitude, latitude, 0.0),
+                _STANDARD_PRESSURE,
+                _STANDARD_TEMPERATURE,
+            )
+        return None if result != 0 else float(times[0])
+
+    def sunrise(self, jd_ut: float, latitude: float, longitude: float) -> float | None:
+        return self._rise_or_set(swe.CALC_RISE, jd_ut, latitude, longitude)
+
+    def sunset(self, jd_ut: float, latitude: float, longitude: float) -> float | None:
+        return self._rise_or_set(swe.CALC_SET, jd_ut, latitude, longitude)
