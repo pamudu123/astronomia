@@ -19,7 +19,19 @@ def labels(lang: Lang) -> dict[str, Any]:
 
 
 # Fact names ending in these suffixes are keys to look up in a label table.
-_GROUP_TABLES = ("gana", "yoni", "nadi", "rajju", "gothra", "pakshi", "linga", "weekday")
+_GROUP_TABLES = (
+    "gana",
+    "yoni",
+    "nadi",
+    "rajju",
+    "gothra",
+    "pakshi",
+    "linga",
+    "weekday",
+    "varna",
+    "bhuta",
+    "vruksha",
+)
 
 
 def _value(table: dict[str, Any], name: str, value: str | int) -> str:

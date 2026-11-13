@@ -124,7 +124,7 @@ test("a match can be shared", async ({ page }) => {
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.locator("[data-share-preview]")).toContainText("Nimali and Kasun");
-  await expect(dialog.locator("[data-share-preview]")).toContainText("9 of 12 factors agree");
+  await expect(dialog.locator("[data-share-preview]")).toContainText("11 of 16 factors agree");
   await dialog.getByRole("button", { name: "Create link" }).click();
   await expect(dialog.getByLabel("Link")).toHaveValue(new RegExp(`/en/s/${CODE}$`));
   expect(JSON.parse(created[0])).toMatchObject({

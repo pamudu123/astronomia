@@ -27,11 +27,11 @@
       "offset_label": "UTC+05:30"
     },
     "match": {
-      "rule_set": "porondam_si_v2",
+      "rule_set": "porondam_si_v3",
       "provisional": true,
       "score": {
-        "passed": 5,
-        "total": 13
+        "passed": 9,
+        "total": 18
       },
       "hard_checks": [
         {
@@ -188,6 +188,63 @@
             "count": 6
           },
           "reason": "මනාලිය බදාදා දිනක ද මනාලයා සඳුදා දිනක ද උපන්නේය. මනාලයාගේ දිනය මනාලියගේ දිනයට දින එකකට හෝ දෙකකට පෙර වන බැවින් නොගැළපේ."
+        },
+        {
+          "id": "varna",
+          "hard": false,
+          "passed": false,
+          "checked": true,
+          "facts": {
+            "bride_varna": "brahmana",
+            "groom_varna": "vaishya"
+          },
+          "reason": "මනාලියගේ චන්ද්‍ර රාශිය බ්‍රාහ්මණ වර්ණයට ද මනාලයාගේ රාශිය වෛශ්‍ය වර්ණයට ද අයත් වේ. මනාලයාගේ වර්ණය පහළ බැවින් නොගැළපේ."
+        },
+        {
+          "id": "bhuta",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "bride_bhuta": "vayo",
+            "groom_bhuta": "tejo"
+          },
+          "reason": "මනාලියගේ නැකත වායෝ භූතයට ද මනාලයාගේ නැකත තේජෝ භූතයට ද අයත් වේ. මේවා එකිනෙකට විරුද්ධ නොවේ."
+        },
+        {
+          "id": "vruksha",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "bride_vruksha": "kiri",
+            "groom_vruksha": "hara"
+          },
+          "reason": "මනාලියගේ නැකතේ වෘක්ෂය කිරි ගසක් ද මනාලයාගේ නැකතේ වෘක්ෂය හර ගසක් ද වේ. මෙම යුගලය ගැළපේ."
+        },
+        {
+          "id": "ayusha",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "distance": 6
+          },
+          "reason": "නැකැත් 28 ගණනයේදී නැකැත් දෙක අතර පරතරය 6 කි. එය ගැළපේ."
+        },
+        {
+          "id": "graha",
+          "hard": false,
+          "passed": true,
+          "checked": true,
+          "facts": {
+            "bride_lagna_lord": "sun",
+            "groom_lagna_lord": "moon",
+            "bride_moon_lord": "mars",
+            "groom_moon_lord": "mercury",
+            "positive": 3
+          },
+          "reason": "ලග්නාධිපතීන් (රවි සහ චන්ද්‍ර) සහ චන්ද්‍ර රාශි අධිපතීන් (කුජ සහ බුධ) අතර පරීක්ෂා 4 න් 3 ක් මිත්‍ර හෝ සම වන බැවින් ගැළපේ."
         },
         {
           "id": "nadi",
