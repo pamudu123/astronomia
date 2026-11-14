@@ -258,20 +258,27 @@ function PorondamForm({
           <h1 className={`display ${styles.title}`}>{f.title}</h1>
           <p className="soft">{f.lead}</p>
         </div>
-        <div role="group" aria-label={f.mode} className={styles.toggle}>
-          {(["full", "quick"] as const).map((value) => (
-            <button
-              key={value}
-              type="button"
-              disabled={!hydrated}
-              aria-pressed={mode === value}
-              className={mode === value ? styles.toggleGold : styles.toggleOff}
-              onClick={() => setMode(value)}
-            >
+      </div>
+
+      {/* Each way of matching says what it compares, before any details are typed. */}
+      <div role="group" aria-label={f.mode} className={`rise ${styles.modes}`}>
+        {(["full", "quick"] as const).map((value) => (
+          <button
+            key={value}
+            type="button"
+            disabled={!hydrated}
+            aria-pressed={mode === value}
+            className={mode === value ? styles.modeOn : styles.modeOff}
+            onClick={() => setMode(value)}
+            data-mode={value}
+          >
+            <span className={styles.modeTitle}>
+              <span aria-hidden="true" className={styles.modeDot} />
               {value === "full" ? f.full : f.quick}
-            </button>
-          ))}
-        </div>
+            </span>
+            <span className={styles.modeText}>{value === "full" ? f.fullText : f.quickText2}</span>
+          </button>
+        ))}
       </div>
 
       <form onSubmit={submit} noValidate className={styles.form}>

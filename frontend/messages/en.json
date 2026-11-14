@@ -253,7 +253,9 @@
       "working": "Matching the charts",
       "privacy": "Nothing is stored. Your details are used once for the calculation.",
       "quickTitle": "No birth time? Use the birth stars.",
-      "quickText": "If you only know each person's nakath, choose \"Birth stars only\". You get the star based points. Lagna based checks such as Kuja dosha need the full details."
+      "quickText": "If you only know each person's nakath, choose \"Birth stars only\". You get the star based points. Lagna based checks such as Kuja dosha need the full details.",
+      "fullText": "Compares both charts, including Kuja dosha. Needs the date, time and place of birth.",
+      "quickText2": "Compares the two birth stars only. Checks that need a birth time, such as Kuja dosha, are left out."
     },
     "clockFor": "For the {who}:",
     "errors": {
@@ -295,7 +297,17 @@
       "kujaNotCounts": "Does not count",
       "kujaDialNote": "Each ring shows the 12 houses counted from one point. Outlined houses count for Kuja dosha. The filled one is where Mars sits.",
       "legend": "Colours in the pictures",
-      "notCounted": "Not counted"
+      "notCounted": "Not counted",
+      "compareTitle": "How the two charts compare",
+      "factorsPanel": "Traditional factors",
+      "factorsCount": "{passed} of {total} agree",
+      "factorsNote": "Each factor compares one traditional point. The count is not a percentage or a forecast.",
+      "notCountedCount": "{count} not counted here: they need full birth details.",
+      "checksPanel": "Separate traditional checks",
+      "checksNames": "Rajju and Vedha",
+      "checksNote": "This rule set reports these apart from the count. Many astrologers give a check that does not pass more weight than the count, and schools weigh them differently.",
+      "seeWhy": "See why",
+      "findDates": "Find ceremony dates"
     },
     "stars": {
       "eyebrow": "නැකැත් පොරොන්දම්",
