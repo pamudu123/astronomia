@@ -16,7 +16,6 @@ import {
   type Porondam,
   type PorondamRequest,
   filterFactors,
-  ringOffset,
 } from "@/lib/porondam";
 
 import { WeddingFinder } from "@/components/wedding/WeddingFinder";
@@ -24,8 +23,6 @@ import { WeddingFinder } from "@/components/wedding/WeddingFinder";
 import { CoupleTimeline } from "./CoupleTimeline";
 import { FactorVisual } from "./FactorVisual";
 import styles from "./Porondam.module.css";
-
-const RING = 2 * Math.PI * 84;
 
 type Props = {
   lang: Locale;
@@ -77,6 +74,7 @@ export function PorondamResult({
   const groom = result.groom!;
   const nameOf = (person: Person, fallback: string) => person.name || fallback;
   const factorName = (factor: Factor) => labels.porondam_factor[factor.id];
+  const uncounted = match.factors.filter((factor) => !factor.checked).length;
 
   const person = (who: Person, fallback: string, tone: string) => (
     <div className={`${styles.who} ${tone}`}>
@@ -105,57 +103,99 @@ export function PorondamResult({
         </div>
       </section>
 
-      <section className={`rise ${styles.summary}`} style={{ animationDelay: ".1s" }}>
-        <svg
-          className={styles.ring}
-          role="img"
-          aria-label={fill(t.scoreLabel, { passed: match.score.passed, total: match.score.total })}
-          viewBox="0 0 220 220"
-        >
-          <circle cx="110" cy="110" r="104" className={styles.halo} />
-          <circle cx="110" cy="110" r="84" className={styles.track} />
-          <circle
-            cx="110"
-            cy="110"
-            r="84"
-            className={styles.fill}
-            style={
-              {
-                "--ring": `${RING}`,
-                "--offset": `${ringOffset(match.score.passed, match.score.total, RING)}`,
-              } as React.CSSProperties
-            }
-            transform="rotate(-90 110 110)"
-          />
-          <text x="110" y="104" className={styles.ringNumber}>
-            {match.score.passed}
-          </text>
-          <text x="110" y="146" className={styles.ringText}>
-            {fill(t.agree, { total: match.score.total })}
-          </text>
-        </svg>
-        <div className={styles.summaryText}>
-          <h2 className={`display ${styles.summaryTitle}`}>{match.summary_text}</h2>
+      {/*
+        Two answers with equal weight, side by side: how many traditional factors agree, and
+        the checks this rule set reports apart from that count. No single verdict on the
+        couple, and the count is never shown as a percentage (QA report, section D).
+      */}
+      <section className={`rise ${styles.compare}`} style={{ animationDelay: ".1s" }} aria-labelledby="compare-title">
+        <div className={styles.compareHead}>
+          <h2 id="compare-title" className={`display ${styles.summaryTitle}`}>
+            {t.compareTitle}
+          </h2>
           <p className="soft">{t.guide}</p>
           {match.same_star_text && <p className={styles.note}>{match.same_star_text}</p>}
-          <div className={styles.hardGrid}>
-            {match.hard_checks.map((check) => (
-              <div key={check.id} className={check.passed ? styles.hardPass : styles.hardFail} data-check={check.id}>
-                <div className={styles.cardHead}>
-                  <span className={styles.factorName}>{factorName(check).name}</span>
-                  <span className={check.passed ? styles.pillPass : styles.pillFail}>
-                    <Check ok={check.passed} />
-                    {check.passed ? t.pass : t.fail}
-                  </span>
-                </div>
-                <span className={styles.small}>
-                  {t.essential} · {factorName(check).meaning}
-                </span>
-                <FactorVisual factor={check} labels={labels} />
-                <span className={styles.small}>{check.reason}</span>
-              </div>
-            ))}
-          </div>
+        </div>
+
+        <div className={styles.comparePanels}>
+          <article className={styles.comparePanel} data-panel="factors">
+            <span className={styles.panelLabel}>{t.factorsPanel}</span>
+            <p className={`display ${styles.panelCount}`}>
+              {fill(t.factorsCount, { passed: match.score.passed, total: match.score.total })}
+            </p>
+            {/* The whole count at a glance: one segment per factor. */}
+            <div className={styles.bar} aria-hidden="true">
+              {match.factors.map((factor) => (
+                <span
+                  key={factor.id}
+                  className={!factor.checked ? styles.barOff : factor.passed ? styles.barPass : styles.barFail}
+                />
+              ))}
+            </div>
+            {/* Every factor by name, each leading to its explanation further down. */}
+            <ul className={styles.markers}>
+              {match.factors.map((factor) => {
+                const state = !factor.checked ? "off" : factor.passed ? "pass" : "fail";
+                const status = !factor.checked ? t.notCounted : factor.passed ? t.agrees : t.notAgrees;
+                return (
+                  <li key={factor.id} data-marker={state}>
+                    <a
+                      href={`#factor-${factor.id}`}
+                      aria-label={`${factorName(factor).name}: ${status}`}
+                      className={state === "off" ? styles.markerOff : state === "pass" ? styles.markerPass : styles.markerFail}
+                      onClick={() => setFilter("all")}
+                    >
+                      <span className={styles.markerIcon} aria-hidden="true">
+                        {state === "off" ? "–" : <Check ok={state === "pass"} />}
+                      </span>
+                      <span>{factorName(factor).name}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className={styles.markerLegend} aria-hidden="true">
+              <span><Check ok /> {t.agrees}</span>
+              <span><Check ok={false} /> {t.notAgrees}</span>
+              {uncounted > 0 && <span>– {t.notCounted}</span>}
+            </p>
+            {uncounted > 0 && <p className={styles.small}>{fill(t.notCountedCount, { count: uncounted })}</p>}
+            <p className={styles.small}>{t.factorsNote}</p>
+          </article>
+
+          <article className={styles.comparePanel} data-panel="checks">
+            <span className={styles.panelLabel}>{t.checksPanel}</span>
+            <p className={`display ${styles.panelCount}`}>{t.checksNames}</p>
+            <ul className={styles.checkRows}>
+              {match.hard_checks.map((check) => (
+                <li key={check.id} className={check.passed ? styles.hardPass : styles.hardFail} data-check={check.id}>
+                  <div className={styles.cardHead}>
+                    <span className={styles.factorName}>{factorName(check).name}</span>
+                    <span className={check.passed ? styles.pillPass : styles.pillFail}>
+                      <Check ok={check.passed} />
+                      {check.passed ? t.pass : t.fail}
+                    </span>
+                  </div>
+                  <span className={styles.small}>{factorName(check).meaning}</span>
+                  <FactorVisual factor={check} labels={labels} />
+                  <span className={styles.small}>{check.reason}</span>
+                </li>
+              ))}
+            </ul>
+            <p className={styles.small}>{t.checksNote}</p>
+          </article>
+        </div>
+
+        <div className={styles.nextActions}>
+          <a href="#factors-title" className={`btn btn-outline lift ${styles.nextLink}`}>
+            {t.seeWhy}
+          </a>
+          {request && wedding && (
+            <a href="#wedding-title" className={`btn btn-primary lift ${styles.nextLink}`}>
+              {t.findDates}
+              <ArrowRight />
+            </a>
+          )}
         </div>
       </section>
 
@@ -206,6 +246,7 @@ export function PorondamResult({
               key={factor.id}
               className={`rise lift ${!counted ? styles.factorOff : factor.passed ? styles.factor : styles.factorFail}`}
               style={{ animationDelay: `${0.04 * index}s` }}
+              id={`factor-${factor.id}`}
               data-factor={factor.id}
               data-counted={counted}
             >
