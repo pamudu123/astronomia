@@ -24,6 +24,7 @@ import { useHydrated } from "@/lib/useHydrated";
 import { BirthForm, EMPTY_FORM, type FormValues } from "./BirthForm";
 import styles from "./BirthForm.module.css";
 import { HadahanResult } from "./HadahanResult";
+import { placeLabel } from "./PlaceSearch";
 
 type View =
   | { kind: "form" }
@@ -141,7 +142,8 @@ function HadahanPage({
         name={saved.name}
         date={saved.request.date}
         time={saved.request.time}
-        placeText={saved.placeLabel}
+        // In the page's language when the place itself was kept, not as it was typed.
+        placeText={saved.form?.place && !saved.form.manual ? placeLabel(saved.form.place, lang) : saved.placeLabel}
         share={share}
         request={saved.request}
         yearly={yearly}

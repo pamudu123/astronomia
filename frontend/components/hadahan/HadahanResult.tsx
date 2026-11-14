@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -18,12 +17,12 @@ import {
   formatDegree,
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
-import { RASHI } from "@/lib/rashi";
 
 import { DashaTimeline } from "./DashaTimeline";
 import { Forecast } from "./Forecast";
 import styles from "./HadahanResult.module.css";
 import { Kendara } from "./Kendara";
+import { SummaryCards } from "./SummaryCards";
 
 type Props = {
   lang: Locale;
@@ -43,9 +42,13 @@ type Props = {
   yearly?: Dictionary["yearly"];
 };
 
-function rashiImage(key: string): string {
-  return RASHI.find((r) => r.key === key)?.image ?? "";
-}
+/** What each step of the reading guide lights up: houses, and a planet to pick out. */
+const GUIDE_FOCUS: ((moonHouse: number) => { houses: number[]; planet?: string })[] = [
+  () => ({ houses: [1] }),
+  () => ({ houses: [1, 2, 3, 4] }),
+  (moonHouse) => ({ houses: [moonHouse], planet: "moon" }),
+  () => ({ houses: [] }),
+];
 
 export function HadahanResult({
   lang,
@@ -62,6 +65,7 @@ export function HadahanResult({
   yearly,
 }: Props) {
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
+  const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;
   const sign = (key: string) => labels.rashi[key];
@@ -70,42 +74,28 @@ export function HadahanResult({
   const offset = result.time.offset_label ?? "";
 
   const kujaStatus = !kuja.present ? t.kujaAbsent : kuja.reduced ? t.kujaReduced : t.kujaPresent;
+  const title = name ? fill(t.titleNamed, { name }) : t.title;
+  const details = [
+    formatDate(`${date}T00:00:00Z`, lang),
+    fill(t.detailsTime, { time }),
+    placeText,
+    offset ? fill(t.detailsOffset, { offset }) : "",
+  ].filter(Boolean);
 
-  const cards = [
-    {
-      id: "lagna",
-      label: t.lagna,
-      value: sign(lagna.sign).name,
-      sub: lang === "en" ? `${sign(lagna.sign).western}` : formatDegree(lagna.degree),
-      text: t.lagnaText,
-      image: rashiImage(lagna.sign),
-    },
-    {
-      id: "rashi",
-      label: t.rashi,
-      value: sign(moon.sign).name,
-      sub: lang === "en" ? `${sign(moon.sign).western}` : formatDegree(moon.degree),
-      text: t.rashiText,
-      image: rashiImage(moon.sign),
-    },
-    {
-      id: "nakath",
-      label: t.nakath,
-      value: labels.nakshatra[moon.nakshatra],
-      sub: fill(t.pada, { pada: moon.pada }),
-      text: t.nakathText,
-      image: null,
-    },
-  ];
+  // The reading guide: which houses to light up at each step, with the chart in rashi view.
+  const moonHouse = chart.planets.find((planet) => planet.body === "moon")?.house ?? 1;
+  const guide = step === null ? null : GUIDE_FOCUS[step](moonHouse);
+  const guideText =
+    step === null
+      ? ""
+      : fill(t.guide[step], { lagna: sign(lagna.sign).name, moon: sign(moon.sign).name, house: moonHouse });
 
   return (
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.top}`}>
         <div className={styles.topText}>
-          <h1 className={`display ${styles.title}`}>{name ? fill(t.titleNamed, { name }) : t.title}</h1>
-          <p className="soft">
-            {formatDate(`${date}T00:00:00Z`, lang)} · {time} · {placeText}
-          </p>
+          <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
+          <h1 className={`display ${styles.title}`}>{title}</h1>
         </div>
         {request && (
           <div className={styles.actions}>
@@ -115,7 +105,7 @@ export function HadahanResult({
                 lang={lang}
                 t={share}
                 request={{ kind: "hadahan", name, birth: { ...request, lang } }}
-                title={name ? fill(t.titleNamed, { name }) : t.title}
+                title={title}
                 anonTitle={share.anonHadahan}
                 summary={fill(share.summaryHadahan, {
                   lagna: sign(lagna.sign).name,
@@ -125,38 +115,31 @@ export function HadahanResult({
                 hasNames={Boolean(name)}
               />
             )}
-            {onEdit && (
-              <button type="button" className={styles.outlineButton} onClick={onEdit}>
-                {t.edit}
-              </button>
-            )}
           </div>
         )}
       </section>
 
-      <section className={styles.cards} aria-label={t.lagna}>
-        {cards.map((card, index) => (
-          <article key={card.id} className={`rise lift ${styles.card}`} style={{ animationDelay: `${0.1 * (index + 1)}s` }} data-card={card.id}>
-            {card.image ? (
-              <Image src={card.image} alt="" width={112} height={112} unoptimized={card.image.endsWith(".svg")} />
-            ) : (
-              <svg aria-hidden="true" viewBox="0 0 200 80" className={styles.stars}>
-                <path d="M30 60L70 24L112 40L150 20" fill="none" stroke="var(--line)" strokeWidth="1.2" />
-                <circle cx="30" cy="60" r="3" fill="var(--ink)" />
-                <circle cx="70" cy="24" r="4" fill="var(--coral)" />
-                <circle cx="112" cy="40" r="3" fill="var(--ink)" />
-                <circle cx="150" cy="20" r="3.5" fill="var(--ink)" />
-              </svg>
-            )}
-            <div className={styles.cardValue}>
-              <span className={styles.cardLabel}>{card.label}</span>
-              <span className={`display ${styles.cardName}`}>{card.value}</span>
-              <span className={styles.cardSub}>{card.sub}</span>
-            </div>
-            <p className={styles.cardText}>{card.text}</p>
-          </article>
-        ))}
+      {/* What the chart was worked out from, first, so a wrong time or place is caught early. */}
+      <section className={`rise ${styles.details}`} aria-label={t.detailsUsed} data-card="details">
+        <div className={styles.detailsText}>
+          <span className={styles.detailsLabel}>{t.detailsUsed}</span>
+          <p className={styles.detailsLine}>
+            {details.map((part, index) => (
+              <span key={index} className={styles.detailsPart}>
+                {part}
+              </span>
+            ))}
+          </p>
+          {onEdit && <p className={styles.small}>{t.detailsHint}</p>}
+        </div>
+        {onEdit && (
+          <button type="button" className={styles.outlineButton} onClick={onEdit}>
+            {t.edit}
+          </button>
+        )}
       </section>
+
+      <SummaryCards lang={lang} t={t} labels={labels} chart={chart} />
 
       <section className={styles.split}>
         <div className={`rise ${styles.panel} ${styles.chartPanel}`}>
@@ -169,7 +152,10 @@ export function HadahanResult({
                   type="button"
                   aria-pressed={mode === value}
                   className={mode === value ? styles.toggleOn : styles.toggleOff}
-                  onClick={() => setMode(value)}
+                  onClick={() => {
+                    setMode(value);
+                    if (value === "navamsha") setStep(null);
+                  }}
                 >
                   {value === "rashi" ? t.chartRashi : t.chartNavamsha}
                 </button>
@@ -185,8 +171,46 @@ export function HadahanResult({
             subtitle={formatDate(`${date}T00:00:00Z`, lang)}
             ariaLabel={fill(t.chartLabel, { chart: mode === "rashi" ? t.chartRashi : t.chartNavamsha })}
             lagnaMark={t.lagnaMark}
-            highlight={kuja.present ? "mars" : undefined}
+            highlight={guide ? guide.planet : kuja.present ? "mars" : undefined}
+            houses={guide?.houses}
+            numbered={guide !== null}
           />
+          {step === null ? (
+            <button
+              type="button"
+              className={styles.guideButton}
+              aria-expanded={false}
+              onClick={() => {
+                setMode("rashi");
+                setStep(0);
+              }}
+            >
+              {t.howToRead}
+            </button>
+          ) : (
+            <div className={styles.guide} data-card="guide">
+              <p className={styles.guideStep}>{fill(t.guideStep, { n: step + 1, total: t.guide.length })}</p>
+              <p aria-live="polite" className={styles.guideText}>
+                {guideText}
+              </p>
+              <div className={styles.guideActions}>
+                {step > 0 && (
+                  <button type="button" className={styles.linkButton} onClick={() => setStep(step - 1)}>
+                    {t.guideBack}
+                  </button>
+                )}
+                {step < t.guide.length - 1 ? (
+                  <button type="button" className={styles.outlineButton} onClick={() => setStep(step + 1)}>
+                    {t.guideNext}
+                  </button>
+                ) : (
+                  <button type="button" className={styles.outlineButton} onClick={() => setStep(null)}>
+                    {t.guideClose}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
           <p className={styles.small}>{t.kendaraNote}</p>
         </div>
 

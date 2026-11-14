@@ -1,0 +1,257 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.heading {
+  font-size: clamp(22px, 2.6vw, 28px);
+}
+
+/*
+ * Three across on wide screens. On tablets two across, with the third card laid out
+ * sideways across the row, so no empty slot is left (QA report, section D). One column
+ * on phones, with every explanation visible.
+ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 1023px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card:last-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 24px;
+    align-items: center;
+  }
+
+  .card:last-child .head,
+  .card:last-child .visual {
+    grid-column: 1;
+  }
+
+  .card:last-child .value,
+  .card:last-child .text {
+    grid-column: 2;
+  }
+
+  .card:last-child .head {
+    grid-row: 1;
+  }
+
+  .card:last-child .visual {
+    grid-row: 2 / span 2;
+  }
+
+  .card:last-child .value {
+    grid-row: 1 / span 2;
+  }
+
+  .card:last-child .text {
+    grid-row: 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .card:last-child {
+    display: flex;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 20px;
+  }
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.term {
+  padding: 2px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.visual {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  align-self: center;
+}
+
+.ring {
+  width: 132px;
+  height: 132px;
+  align-self: center;
+}
+
+.value {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.sub {
+  color: var(--gold);
+}
+
+.fact {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.text {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* Drawing parts */
+
+.sky {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 5;
+}
+
+.rise {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.arrow {
+  fill: var(--gold);
+}
+
+.horizon {
+  stroke: var(--ink-soft);
+  stroke-width: 1.4;
+}
+
+.point {
+  fill: var(--gold);
+  stroke: var(--night);
+  stroke-width: 2;
+}
+
+.label,
+.labelSoft {
+  font-size: 11px;
+  text-anchor: middle;
+  fill: var(--ink);
+}
+
+.labelSoft {
+  fill: var(--ink-soft);
+}
+
+.segment {
+  fill: var(--night-raised);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.segmentOn {
+  fill: color-mix(in srgb, var(--gold) 28%, var(--night-raised));
+  stroke: var(--gold);
+  stroke-width: 1.4;
+}
+
+.moon {
+  fill: var(--ink);
+  stroke: var(--night);
+  stroke-width: 1.5;
+  paint-order: stroke;
+}
+
+.tick {
+  fill: var(--line);
+}
+
+.tickOn {
+  fill: var(--gold);
+}
+
+.zoom {
+  fill: color-mix(in srgb, var(--gold) 10%, transparent);
+}
+
+.quarter {
+  fill: var(--night-raised);
+  stroke: var(--line);
+}
+
+.quarterOn {
+  fill: var(--gold);
+  stroke: var(--gold);
+}
+
+.quarterText,
+.quarterTextOn {
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+  fill: var(--ink-soft);
+}
+
+.quarterTextOn {
+  fill: var(--night);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    animation: draw 1.2s 0.4s ease-out forwards;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

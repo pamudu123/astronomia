@@ -45,7 +45,7 @@ test("a birth gives the full hadahan", async ({ page }) => {
   await expect(page.getByText("Time zone on that date: UTC+05:30")).toBeVisible();
   await page.getByRole("button", { name: "Show my hadahan" }).click();
 
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's hadahan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's birth chart");
   await expect(page.locator('[data-card="lagna"]')).toContainText("Simha");
   await expect(page.locator('[data-card="nakath"]')).toContainText("Jyeshtha");
   await expect(page.getByRole("img", { name: /Rashi chart/ })).toBeVisible();
@@ -251,7 +251,7 @@ test("Edit details brings back every field, also after a reload (QA AST-01)", as
   await page.goto("/en/hadahan");
   await fillForm(page);
   await page.getByRole("button", { name: "Show my hadahan" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's hadahan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's birth chart");
 
   await page.getByRole("button", { name: "Edit details" }).first().click();
   await expect(page.getByLabel(/Name/)).toHaveValue("Nimali");
@@ -311,4 +311,60 @@ test("each field has one label of its own (QA AST-08)", async ({ page }) => {
   await expect(page.getByLabel("Date of birth")).toHaveCount(1);
   const ids = await page.locator("input[id]").evaluateAll((inputs) => inputs.map((input) => input.id));
   expect(new Set(ids).size).toBe(ids.length);
+});
+
+test("the result leads with the birth details and three plain answers", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+
+  // What the chart was worked out from, with the way to correct it beside it.
+  const details = page.locator('[data-card="details"]');
+  await expect(details).toContainText("19 April 1995");
+  await expect(details).toContainText("14:35 local time");
+  await expect(details).toContainText("Kandy");
+  await expect(details).toContainText("UTC+05:30 on that date");
+  await expect(details.getByRole("button", { name: "Edit details" })).toBeVisible();
+
+  // Plain titles first, the traditional term beside them.
+  await expect(page.getByRole("heading", { name: "Your chart at a glance" })).toBeVisible();
+  const rising = page.locator('[data-card="lagna"]');
+  await expect(rising.getByRole("heading", { name: "Rising sign" })).toBeVisible();
+  await expect(rising).toContainText("Lagna");
+  await expect(rising).toContainText("Sign 5 of 12");
+  await expect(page.locator('[data-card="rashi"]')).toContainText("Moon sign");
+  await expect(page.locator('[data-card="rashi"]')).toContainText("Sign 8 of 12");
+  const star = page.locator('[data-card="nakath"]');
+  await expect(star).toContainText("Birth star");
+  await expect(star).toContainText("Star 18 of 27");
+  await expect(star).toContainText("Quarter 4 of 4 (pada 4)");
+
+  // The cards come before the full chart.
+  const order = await page
+    .locator('[data-card="nakath"], [role="img"][aria-label*="Rashi chart"]')
+    .evaluateAll((items) => items.map((item) => item.getAttribute("data-card") ?? "chart"));
+  expect(order).toEqual(["nakath", "chart"]);
+});
+
+test("the reading guide walks through the chart", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+
+  await page.getByRole("button", { name: "How to read this chart" }).click();
+  const guide = page.locator('[data-card="guide"]');
+  await expect(guide).toContainText("Step 1 of 4");
+  await expect(guide).toContainText("It holds your rising sign, Simha");
+  await guide.getByRole("button", { name: "Next" }).click();
+  await guide.getByRole("button", { name: "Next" }).click();
+  await expect(guide).toContainText("The Moon is in house 4, which is why your Moon sign is Vrischika.");
+  await guide.getByRole("button", { name: "Back" }).click();
+  await expect(guide).toContainText("Step 2 of 4");
+  await guide.getByRole("button", { name: "Next" }).click();
+  await guide.getByRole("button", { name: "Next" }).click();
+  await guide.getByRole("button", { name: "Close" }).click();
+  await expect(guide).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "How to read this chart" })).toBeVisible();
 });
