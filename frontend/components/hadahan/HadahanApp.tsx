@@ -11,11 +11,15 @@ import {
   fetchHadahan,
   fetchLabels,
   fill,
+  formFor,
+  loadDraft,
   loadResult,
+  saveDraft,
   saveResult,
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { clearHandoff, handoffSnapshot, parseHandoff } from "@/lib/kendara";
+import { useHydrated } from "@/lib/useHydrated";
 
 import { BirthForm, EMPTY_FORM, type FormValues } from "./BirthForm";
 import styles from "./BirthForm.module.css";
@@ -60,6 +64,20 @@ function HadahanPage({
   const [form, setForm] = useState<FormValues>(
     handoff ? { ...EMPTY_FORM, date: handoff.date, time: handoff.time, place: handoff.place } : EMPTY_FORM,
   );
+  // Bumped to remount the form with new values (a restored draft, or Edit details).
+  const [formKey, setFormKey] = useState(0);
+  // The draft is read once the page is live, and only written after that, so the form's
+  // first empty values never wipe it (QA report AST-05: switching language keeps the draft).
+  const hydrated = useHydrated();
+  const [draftRead, setDraftRead] = useState(Boolean(handoff));
+  if (hydrated && !draftRead) {
+    setDraftRead(true);
+    const draft = loadDraft();
+    if (draft) {
+      setForm(draft);
+      setFormKey((key) => key + 1);
+    }
+  }
   const [filled, setFilled] = useState(Boolean(handoff));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,6 +88,11 @@ function HadahanPage({
       .catch(() => setError(t.errors.failed));
   }, [lang, t.errors.failed]);
 
+  function fillForm(values: FormValues) {
+    setForm(values);
+    setFormKey((key) => key + 1);
+  }
+
   // Bring back the last result in this tab, in the current language.
   useEffect(() => {
     if (handoff) return; // a birth just sent here wins over an older result
@@ -78,8 +101,12 @@ function HadahanPage({
     fetchHadahan(saved.request, lang)
       .then((result) => {
         if (result.status === "ok") setView({ kind: "result", saved: { ...saved, result } });
+        else fillForm(formFor(saved));
       })
-      .catch(() => saveResult(null));
+      .catch(() => {
+        saveResult(null);
+        fillForm(formFor(saved));
+      });
   }, [lang, handoff]);
 
   async function run(request: BirthRequest, pending: Omit<SavedResult, "result">) {
@@ -119,7 +146,11 @@ function HadahanPage({
         request={saved.request}
         yearly={yearly}
         onEdit={() => {
+          // Back to the form as it was submitted, so one field can change (QA report AST-01).
+          const values = formFor(saved);
+          saveDraft(values);
           saveResult(null);
+          fillForm(values);
           setView({ kind: "form" });
         }}
       />
@@ -161,9 +192,12 @@ function HadahanPage({
 
   return (
     <BirthForm
+      key={formKey}
       lang={lang}
       t={t}
       initial={form}
+      // A birth sent from the old horoscope search is for one use only, so it is not kept.
+      onChange={draftRead && !filled ? saveDraft : undefined}
       busy={busy || !labels}
       error={error}
       kendara={kendara}
@@ -172,7 +206,7 @@ function HadahanPage({
         clearHandoff();
         setFilled(false);
         setForm(values);
-        void run(request, { name: values.name.trim(), placeLabel: placeText, request });
+        void run(request, { name: values.name.trim(), placeLabel: placeText, request, form: values });
       }}
     />
   );

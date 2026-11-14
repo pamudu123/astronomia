@@ -134,3 +134,16 @@ test("an unknown year, city or date is not found", async ({ page }) => {
     await expect(page.getByText("This page could not be found.")).toBeVisible();
   }
 });
+
+test("a backend that is down or out of date says so, and retrying works (QA AST-02)", async ({ page }) => {
+  let calls = 0;
+  await page.route("**/api/v1/panchanga?*", (route) => {
+    calls += 1;
+    if (calls === 1) return route.fulfill({ status: 404, contentType: "application/json", body: '{"detail":"Not Found"}' });
+    return route.fulfill({ contentType: "application/json", body: fixture("panchanga-2027-04-14-colombo-en.json") });
+  });
+  await page.goto("/en/nakath/2027-04-14");
+  await expect(page.getByText("The service is not answering right now")).toBeVisible();
+  await page.getByRole("button", { name: "Try again" }).click();
+  await expect(page.locator('[data-card="rahu"]')).toBeVisible();
+});

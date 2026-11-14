@@ -44,11 +44,38 @@ export type BirthRequest = {
   fold?: 0 | 1;
 };
 
+/** What the birth form holds, as typed. Kept so a result can be edited without retyping. */
+export type FormValues = {
+  name: string;
+  date: string;
+  time: string;
+  place: Place | null;
+  manual: boolean;
+  latitude: string;
+  longitude: string;
+  timezone: string;
+  /** Which of a repeated clock time was chosen. Dropped when the date, time or place changes. */
+  fold?: 0 | 1;
+};
+
+export const EMPTY_FORM: FormValues = {
+  name: "",
+  date: "",
+  time: "",
+  place: null,
+  manual: false,
+  latitude: "",
+  longitude: "",
+  timezone: "",
+};
+
 export type SavedResult = {
   name: string;
   placeLabel: string;
   request: BirthRequest;
   result: Hadahan;
+  /** The form as submitted. Missing on results saved before it was kept. */
+  form?: FormValues;
 };
 
 const API = "/api";
@@ -191,6 +218,33 @@ const STORAGE_KEY = "astronomia.hadahan";
 
 export const saveResult = (saved: SavedResult | null) => saveSession(STORAGE_KEY, saved);
 export const loadResult = () => loadSession<SavedResult>(STORAGE_KEY);
+
+/**
+ * The form while it is being filled in, so switching language or reloading keeps it
+ * (QA report AST-05). Tab only, like the result.
+ */
+const DRAFT_KEY = "astronomia.hadahan.draft";
+
+export const saveDraft = (values: FormValues | null) => saveSession(DRAFT_KEY, values);
+export const loadDraft = () => loadSession<FormValues>(DRAFT_KEY);
+
+/** The form for a saved result: as submitted, or rebuilt from the request for older saves. */
+export function formFor(saved: SavedResult): FormValues {
+  if (saved.form) return { ...saved.form, fold: saved.request.fold };
+  const { request } = saved;
+  const manual = request.place_id === undefined;
+  return {
+    ...EMPTY_FORM,
+    name: saved.name,
+    date: request.date,
+    time: request.time,
+    manual,
+    latitude: manual && request.latitude !== undefined ? String(request.latitude) : "",
+    longitude: manual && request.longitude !== undefined ? String(request.longitude) : "",
+    timezone: manual ? (request.timezone ?? "") : "",
+    fold: request.fold,
+  };
+}
 
 export const RASHI_ORDER = [
   "mesha",

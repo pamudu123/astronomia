@@ -15,14 +15,14 @@ from importlib import metadata, resources
 from pathlib import Path
 
 from app.geo.normalize import normalize, word_keys
-from app.geo.regions import LK_PROVINCES
+from app.geo.regions import LK_PROVINCES, WORLD_REGIONS
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 LK_CSV = DATA_DIR / "places_lk.csv"
 DEFAULT_DB = DATA_DIR / "places.sqlite"
 
 # Bump when the schema or the ranking changes, so old index files are rebuilt.
-BUILD_VERSION = "1"
+BUILD_VERSION = "2"  # 2: regions for places abroad
 
 FEATURE_BONUS = {"PPLC": 3.0, "PPLA": 2.0, "PPLA2": 1.0}
 MAX_WORLD_ALTERNATES = 5
@@ -119,6 +119,13 @@ def country_names() -> dict[str, str]:
     return {code: str(info["name"]) for code, info in countries.items()}
 
 
+def region_names() -> dict[str, dict[str, str]]:
+    """admin1 names by country for places abroad: US states from geonamescache, then ours."""
+    path = resources.files("geonamescache") / "data" / "us_states.json"
+    states: dict[str, dict[str, object]] = json.loads(path.read_text(encoding="utf-8"))
+    return {"US": {code: str(info["name"]) for code, info in states.items()}, **WORLD_REGIONS}
+
+
 SCHEMA = """
 CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE places (
@@ -144,6 +151,7 @@ def build(db_path: Path = DEFAULT_DB) -> Path:
     tmp = db_path.with_suffix(".tmp")
     tmp.unlink(missing_ok=True)
     countries = country_names()
+    regions = region_names()
     con = sqlite3.connect(tmp)
     try:
         con.executescript(SCHEMA)
@@ -151,6 +159,7 @@ def build(db_path: Path = DEFAULT_DB) -> Path:
         names: list[tuple[str, int, int]] = []
         for row in [*sri_lanka_rows(), *world_rows()]:
             province = LK_PROVINCES.get(row.admin1) if row.country_code == "LK" else None
+            abroad = regions.get(row.country_code, {}).get(row.admin1)
             places.append(
                 (
                     row.id,
@@ -159,7 +168,7 @@ def build(db_path: Path = DEFAULT_DB) -> Path:
                     row.country_code,
                     countries.get(row.country_code, row.country_code),
                     row.admin1,
-                    province["en"] if province else None,
+                    province["en"] if province else abroad,
                     province["si"] if province else None,
                     row.latitude,
                     row.longitude,

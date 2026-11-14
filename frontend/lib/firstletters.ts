@@ -7,6 +7,7 @@
 import type { components } from "./api-types";
 import type { BirthRequest } from "./hadahan";
 import type { Locale } from "./i18n";
+import { SEARCH_TIMEOUT_MS, ensureOk } from "./request";
 
 export type FirstLetters = components["schemas"]["FirstLettersResponse"];
 export type FirstLettersSuggestion = FirstLetters["suggestions"][number];
@@ -40,7 +41,8 @@ export async function fetchFirstLetters(child: Child, options: FirstLettersOptio
       ...(options.placeId ? { place_id: options.placeId } : {}),
       lang,
     }),
+    signal: AbortSignal.timeout(SEARCH_TIMEOUT_MS),
   });
-  if (!response.ok) throw new Error(`request failed: ${response.status}`);
+  await ensureOk(response);
   return (await response.json()) as FirstLetters;
 }

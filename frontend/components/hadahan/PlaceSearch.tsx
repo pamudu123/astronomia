@@ -23,6 +23,24 @@ export function placeLabel(place: Place, lang: Locale): string {
   return [name, region, country].filter(Boolean).join(", ");
 }
 
+/**
+ * Labels for a list of places that never repeat: where two read the same, the time zone is
+ * added, then the coordinates (QA report AST-07). Screen readers hear the same text.
+ */
+export function distinctLabels(places: Place[], lang: Locale): string[] {
+  const count = (labels: string[]) =>
+    labels.reduce((seen, label) => seen.set(label, (seen.get(label) ?? 0) + 1), new Map<string, number>());
+  let labels = places.map((place) => placeLabel(place, lang));
+  let seen = count(labels);
+  labels = labels.map((label, i) => ((seen.get(label) ?? 0) > 1 ? `${label} · ${places[i].timezone}` : label));
+  seen = count(labels);
+  return labels.map((label, i) => {
+    if ((seen.get(label) ?? 0) <= 1) return label;
+    const { latitude, longitude } = places[i];
+    return `${label} · ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+  });
+}
+
 export function PlaceSearch({ lang, label, hint, empty, value, onChange }: Props) {
   const id = useId();
   const listId = `${id}-list`;
@@ -32,6 +50,7 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange }: Props
   const [active, setActive] = useState(-1);
   const [searched, setSearched] = useState(false);
   const skipNext = useRef(false);
+  const labels = distinctLabels(results, lang);
 
   useEffect(() => {
     if (skipNext.current) {
@@ -137,7 +156,7 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange }: Props
             >
               <span>{lang === "si" && place.name_si ? place.name_si : place.name}</span>
               <span className={styles.optionMeta}>
-                {placeLabel(place, lang).split(", ").slice(1).join(", ")}
+                {labels[index].split(", ").slice(1).join(", ")}
               </span>
             </li>
           ))}

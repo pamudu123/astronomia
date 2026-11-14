@@ -9,6 +9,7 @@ import { type Child, type FirstLetters, MONTHS, type Months, fetchFirstLetters }
 import { type Place, fill, formatDate, loadResult } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { NAKSHATRA } from "@/lib/nakshatra";
+import { failureText } from "@/lib/request";
 import { useHydrated } from "@/lib/useHydrated";
 
 import styles from "./FirstLetters.module.css";
@@ -56,8 +57,8 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
       const answer = await fetchFirstLetters(found, { months, placeId: place?.id }, lang);
       if (answer.status === "ok") setResult(answer);
       else setError(t.clock);
-    } catch {
-      setError(t.failed);
+    } catch (caught) {
+      setError(failureText(caught, t));
     } finally {
       setBusy(false);
     }

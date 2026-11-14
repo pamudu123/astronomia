@@ -6,6 +6,7 @@
 import type { components } from "./api-types";
 import type { Locale } from "./i18n";
 import type { PorondamRequest } from "./porondam";
+import { SEARCH_TIMEOUT_MS, ensureOk } from "./request";
 
 export type Wedding = components["schemas"]["WeddingResponse"];
 export type WeddingCeremony = Wedding["ceremonies"][number];
@@ -31,7 +32,8 @@ export async function fetchWedding(request: PorondamRequest, options: WeddingOpt
       ...(options.placeId ? { place_id: options.placeId } : {}),
       lang,
     }),
+    signal: AbortSignal.timeout(SEARCH_TIMEOUT_MS),
   });
-  if (!response.ok) throw new Error(`request failed: ${response.status}`);
+  await ensureOk(response);
   return (await response.json()) as Wedding;
 }
