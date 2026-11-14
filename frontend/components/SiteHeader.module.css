@@ -24,6 +24,23 @@
   font-family: var(--font-marcellus), serif;
   font-size: 24px;
   letter-spacing: 0.04em;
+  transition: color 0.25s ease;
+}
+
+/* Hints that the logo is a link home: the name turns brass and the planet moves along its orbit.
+   The move follows the orbit's tangent at the planet, so it stays on the ring. */
+.brand [data-planet] {
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.brand:hover .brandName,
+.brand:focus-visible .brandName {
+  color: var(--gold);
+}
+
+.brand:hover [data-planet],
+.brand:focus-visible [data-planet] {
+  transform: translate(7.6px, -2.4px);
 }
 
 .nav {

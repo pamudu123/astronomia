@@ -370,6 +370,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/panchanga/month": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Panchanga Month
+         * @description Every day of a month: sunrise, Rahu kalaya, the thithi and nakatha at sunrise, and poya.
+         */
+        get: operations["panchanga_month_v1_panchanga_month_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/avurudu/{year}": {
         parameters: {
             query?: never;
@@ -1366,6 +1386,26 @@ export interface components {
             /** Ephemeris */
             ephemeris: string;
         };
+        /** MonthDayOut */
+        MonthDayOut: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Weekday */
+            weekday: string;
+            /** Weekday Name */
+            weekday_name: string;
+            sunrise: components["schemas"]["LocalTimeOut"] | null;
+            sunset: components["schemas"]["LocalTimeOut"] | null;
+            rahu_kalaya: components["schemas"]["LocalRangeOut"] | null;
+            thithi: components["schemas"]["PanchangaPartOut"] | null;
+            nakatha: components["schemas"]["PanchangaPartOut"] | null;
+            /** Poya */
+            poya: boolean;
+            full_moon: components["schemas"]["LocalTimeOut"] | null;
+        };
         /** MonthOut */
         MonthOut: {
             /** Year */
@@ -1384,6 +1424,26 @@ export interface components {
              * Format: date
              */
             end: string;
+        };
+        /** MonthPanchangaResponse */
+        MonthPanchangaResponse: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Year */
+            year: number;
+            /** Month */
+            month: number;
+            place: components["schemas"]["PanchangaPlaceOut"];
+            /** Offset */
+            offset: string;
+            /** Timezone Note */
+            timezone_note: string;
+            /** Poya Note */
+            poya_note: string;
+            /** Days */
+            days: components["schemas"]["MonthDayOut"][];
         };
         /** MoveOut */
         MoveOut: {
@@ -2953,6 +3013,43 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PanchangaResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    panchanga_month_v1_panchanga_month_get: {
+        parameters: {
+            query: {
+                year: number;
+                month: number;
+                place_id?: number | null;
+                latitude?: number | null;
+                longitude?: number | null;
+                timezone?: string | null;
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MonthPanchangaResponse"];
                 };
             };
             /** @description Validation Error */

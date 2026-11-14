@@ -84,10 +84,10 @@ test("a year without an official list is marked as calculated", async ({ page })
 
 test("the Avurudu pages carry a title and description as served", async ({ request }) => {
   const city = await (await request.get("/si/avurudu/2027/london")).text();
-  expect(city).toContain("<title>ලන්ඩන් වේලාවෙන් 2027 අවුරුදු නැකත් · Astronomia</title>");
+  expect(city).toContain("<title>ලන්ඩන් වේලාවෙන් 2027 අවුරුදු නැකත් · Sidera</title>");
   expect(city).toContain('name="description"');
   const year = await (await request.get("/en/avurudu/2027")).text();
-  expect(year).toContain("<title>Avurudu nakath 2027: Sinhala and Tamil New Year times · Astronomia</title>");
+  expect(year).toContain("<title>Avurudu nakath 2027: Sinhala and Tamil New Year times · Sidera</title>");
   expect(year).toContain('<link rel="canonical" href="http://localhost:3000/en/avurudu/2027"/>');
 });
 

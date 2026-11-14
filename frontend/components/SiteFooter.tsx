@@ -11,13 +11,21 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.inner}`}>
-        <span className={styles.brand}>Astronomia</span>
+        <p className={styles.brandBlock}>
+          <span className={styles.brand}>Sidera</span>
+          <span className={styles.tagline} lang="en">
+            {dict.hero.tagline.sky}
+            <span className="visually-hidden">,</span> <span className={styles.taglineCalc}>{dict.hero.tagline.calculated}</span>
+          </span>
+        </p>
         <p className={styles.disclaimer}>{dict.footer.disclaimer}</p>
         <nav className={styles.links} aria-label={dict.footer.legal}>
+          <Link href={`/${lang}/tools`}>{dict.nav.tools}</Link>
           <Link href={`/${lang}/changes`}>{dict.footer.changes}</Link>
           <Link href={`/${lang}/forecast/${YEARS[0]}`}>{fill(dict.yearly.footer, { year: YEARS[0] })}</Link>
           <Link href={`/${lang}/avurudu`}>{dict.avurudu.footer}</Link>
           <Link href={`/${lang}/nakath`}>{dict.nakath.footer}</Link>
+          <Link href={`/${lang}/litha`}>{dict.litha.footer}</Link>
           <Link href={`/${lang}/baby-names`}>{dict.babyNames.footer}</Link>
           <Link href={`/${lang}/first-letters`}>{dict.firstLetters.footer}</Link>
           <Link href={`/${lang}/privacy`}>{dict.footer.privacy}</Link>

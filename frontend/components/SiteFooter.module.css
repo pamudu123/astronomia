@@ -12,11 +12,30 @@
   font-size: 14px;
 }
 
+.brandBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .brand {
   font-family: var(--font-marcellus), serif;
   font-size: 18px;
   letter-spacing: 0.04em;
   color: var(--ink);
+}
+
+.tagline {
+  font-family: var(--font-marcellus), serif;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.taglineCalc {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
 }
 
 .disclaimer {

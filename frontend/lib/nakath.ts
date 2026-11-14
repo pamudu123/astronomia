@@ -8,6 +8,28 @@ export type LocalTime = components["schemas"]["LocalTimeOut"];
 export type Avurudu = components["schemas"]["AvuruduResponse"];
 export type AvuruduItem = components["schemas"]["AvuruduItemOut"];
 export type BothTimes = components["schemas"]["BothTimes"];
+export type MonthPanchanga = components["schemas"]["MonthPanchangaResponse"];
+export type MonthDay = components["schemas"]["MonthDayOut"];
+
+/** A month of the litha calendar for one place. Not personal, so a GET that may be cached. */
+export function monthPath(year: number, month: number, placeId: number, lang: Locale): string {
+  return `/v1/panchanga/month?${new URLSearchParams({
+    year: String(year),
+    month: String(month),
+    place_id: String(placeId),
+    lang,
+  })}`;
+}
+
+/** "2026-11" for a month page address. */
+export const isMonth = (value: string) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
+
+/** The month before or after a "YYYY-MM" month. */
+export function shiftMonth(month: string, by: number): string {
+  const [year, number] = month.split("-").map(Number);
+  const moment = new Date(Date.UTC(year, number - 1 + by, 1));
+  return moment.toISOString().slice(0, 7);
+}
 
 export const SRI_LANKA = "Asia/Colombo";
 export const COLOMBO = 1248991;

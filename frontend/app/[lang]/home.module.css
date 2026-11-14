@@ -47,10 +47,27 @@
   gap: 24px;
 }
 
-.eyebrow {
+/* Tagline lockup: "The sky" in the display serif over "calculated" in mono brass. */
+.tagline {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 16px;
+  border-left: 1px solid var(--gold);
+  line-height: 1.2;
+}
+
+.taglineSky {
+  font-family: var(--font-marcellus), serif;
+  font-size: 24px;
+  color: var(--ink);
+}
+
+.taglineCalc {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.24em;
   color: var(--gold);
-  font-size: 17px;
-  letter-spacing: 0.06em;
 }
 
 .heroTitle {
@@ -277,11 +294,3 @@ html[lang="si"] .heroTitle {
   font-weight: 600;
 }
 
-.toolMore {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  margin-top: 20px;
-  font-weight: 600;
-}

@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/terms">): 
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = await getDictionary(lang);
-  return { title: `${dict.terms.title} · Astronomia` };
+  return { title: `${dict.terms.title} · Sidera` };
 }
 
 export default async function TermsPage({ params }: PageProps<"/[lang]/terms">) {
