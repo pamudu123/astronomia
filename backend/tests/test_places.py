@@ -34,6 +34,16 @@ def test_big_cities_abroad_rank_first(places_db: Path) -> None:
     assert first(places_db, "sydney") == ("Sydney", "AU")
 
 
+def test_places_abroad_with_the_same_name_have_regions(places_db: Path) -> None:
+    # QA report AST-07: several results read "London, United States".
+    londons = [p for p in search(places_db, "london", 10) if p.name == "London"]
+    labels = [(p.name, p.region, p.country_name) for p in londons]
+    assert ("London", "England", "United Kingdom") in labels
+    assert ("London", "Ontario", "Canada") in labels
+    assert ("London", "Kentucky", "United States") in labels
+    assert len(set(labels)) == len(labels)
+
+
 def test_small_sri_lankan_village_is_found(places_db: Path) -> None:
     # Yakkala is not in the worldwide list (fewer than 1000 people recorded).
     names = [(p.name, p.country_code) for p in search(places_db, "yakkala", 5)]

@@ -24,6 +24,109 @@
   line-height: 1.15;
 }
 
+.eyebrow {
+  color: var(--gold);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+/* The birth details the chart was worked out from, with the way to correct them. */
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding: 18px 24px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-field);
+  background: var(--night-raised);
+}
+
+.detailsText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.detailsLabel {
+  color: var(--ink-soft);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.detailsLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 0;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.detailsPart:not(:last-child)::after {
+  content: "·";
+  padding-inline: 10px;
+  color: var(--gold);
+}
+
+/* On phones each detail gets its own line, without dangling separators. */
+@media (max-width: 640px) {
+  .detailsLine {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .detailsPart:not(:last-child)::after {
+    content: none;
+  }
+}
+
+.guideButton {
+  align-self: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.guideButton:hover {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+.guide {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-field);
+  background: var(--night-raised);
+}
+
+.guideStep {
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.guideText {
+  line-height: 1.55;
+}
+
+.guideActions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -47,53 +150,6 @@
   border-color: var(--gold);
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  gap: 24px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  background: var(--panel);
-}
-
-.stars {
-  width: 100%;
-  max-width: 220px;
-  height: 112px;
-}
-
-.cardValue {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.cardLabel {
-  color: var(--ink-soft);
-  font-size: 14px;
-}
-
-.cardName {
-  font-size: 34px;
-  line-height: 1.25;
-}
-
-.cardSub {
-  color: var(--gold);
-}
-
-.cardText {
-  color: var(--ink-soft);
-  font-size: 15px;
-}
-
 .split {
   display: flex;
   flex-wrap: wrap;
@@ -112,8 +168,7 @@
 }
 
 @media (max-width: 640px) {
-  .panel,
-  .card {
+  .panel {
     padding: 20px;
   }
 }

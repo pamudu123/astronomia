@@ -1,0 +1,34 @@
+name: Deployed smoke check
+
+# Calls every tool on the deployed site, through the frontend's /api like a visitor would.
+# A green build is not enough: the QA round found three tools failing in production
+# while CI passed (AST-02 to AST-04).
+#
+# Needs two repository secrets:
+#   SMOKE_URL               the site's API base, for example https://<site>.vercel.app/api
+#   SMOKE_STAGING_PASSWORD  the staging password, while the site is behind the staging gate
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 1 * * *" # 07:00 in Sri Lanka
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SMOKE_URL: ${{ secrets.SMOKE_URL }}
+      SMOKE_STAGING_PASSWORD: ${{ secrets.SMOKE_STAGING_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Every tool answers on the deployed site
+        run: |
+          if [ -z "$SMOKE_URL" ]; then
+            echo "::warning::SMOKE_URL is not set, so the deployed site was not checked."
+            exit 0
+          fi
+          python3 backend/scripts/smoke.py "$SMOKE_URL"

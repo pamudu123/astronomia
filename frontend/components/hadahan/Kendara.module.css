@@ -78,3 +78,18 @@
     transform: none;
   }
 }
+
+/* The reading guide lights houses up and numbers them. */
+.houseOn {
+  fill: var(--gold);
+  opacity: 0.22;
+  transition: opacity 0.3s ease;
+}
+
+.houseNumber {
+  fill: var(--gold);
+  font-size: 10px;
+  opacity: 0.85;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}

@@ -26,7 +26,7 @@ async function makeHadahan(page: Page) {
   await page.getByRole("combobox").fill("kandy");
   await page.getByRole("option").first().click();
   await page.getByRole("button", { name: "Show my hadahan" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's hadahan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's birth chart");
 }
 
 test("All tools lists every tool by occasion, with what each needs", async ({ page }) => {

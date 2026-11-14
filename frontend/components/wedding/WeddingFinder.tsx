@@ -8,6 +8,7 @@ import { type Place, fill, formatDate } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import type { PorondamRequest } from "@/lib/porondam";
 import { CEREMONIES, type Ceremony, MONTHS, type Months, type Wedding, fetchWedding } from "@/lib/wedding";
+import { failureText } from "@/lib/request";
 import { useHydrated } from "@/lib/useHydrated";
 
 import styles from "./Wedding.module.css";
@@ -41,8 +42,8 @@ export function WeddingFinder({ lang, t, request }: Props) {
       const found = await fetchWedding(request, { months, ceremonies: chosen, placeId: place?.id }, lang);
       if (found.status === "ok") setResult(found);
       else setError(t.clock);
-    } catch {
-      setError(t.failed);
+    } catch (caught) {
+      setError(failureText(caught, t));
     } finally {
       setBusy(false);
     }

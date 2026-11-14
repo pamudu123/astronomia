@@ -39,7 +39,7 @@ test("a quick match by birth stars", async ({ page }) => {
   await page.getByRole("button", { name: "Match the charts" }).click();
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
-  await expect(page.getByRole("img", { name: "11 of 16 factors agree" })).toBeVisible();
+  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 16 agree");
   await expect(page.locator('[data-check="rajju"]')).toContainText("Pass");
   await expect(page.locator('[data-check="vedha"]')).toContainText("Pass");
   // 16 counted factors, and Dina and Graha shown as not counted (they need the birth details).
@@ -78,7 +78,7 @@ test("a full match shows Kuja dosha for both", async ({ page }) => {
     await card.getByRole("option").first().click();
   }
   await page.getByRole("button", { name: "Match the charts" }).click();
-  await expect(page.getByRole("img", { name: "9 of 18 factors agree" })).toBeVisible();
+  await expect(page.locator('[data-panel="factors"]')).toContainText("9 of 18 agree");
   await expect(page.locator('[data-factor="graha"]')).toHaveAttribute("data-counted", "true");
   await expect(page.locator('[data-factor="weekday"]')).toHaveAttribute("data-counted", "true");
   await expect(page.getByRole("heading", { name: "Kuja dosha" })).toBeVisible();
@@ -247,5 +247,48 @@ test("the wedding finder asks for at least one ceremony, and survives a failure"
   await section.getByLabel("Poruwa ceremony").check();
   await section.getByRole("button", { name: "Find dates" }).click();
   await expect(section.getByRole("alert")).toHaveText("We could not search. Please try again.");
-  await expect(page.getByRole("img", { name: "11 of 16 factors agree" })).toBeVisible();
+  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 16 agree");
+});
+
+test("each way of matching says what it compares, before anything is typed", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.goto("/en/porondam");
+  const full = page.getByRole("button", { name: /Full birth details/ });
+  const quick = page.getByRole("button", { name: /Birth stars only/ });
+  await expect(full).toContainText("including Kuja dosha");
+  await expect(quick).toContainText("Checks that need a birth time, such as Kuja dosha, are left out.");
+  await expect(full).toHaveAttribute("aria-pressed", "true");
+  await quick.click();
+  await expect(quick).toHaveAttribute("aria-pressed", "true");
+});
+
+test("the result shows the count and the separate checks side by side, with no verdict", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const factors = page.locator('[data-panel="factors"]');
+  const checks = page.locator('[data-panel="checks"]');
+  await expect(factors).toContainText("Traditional factors");
+  await expect(factors).toContainText("11 of 16 agree");
+  await expect(factors).toContainText("2 not counted here");
+  await expect(factors).toContainText("not a percentage or a forecast");
+  await expect(checks).toContainText("Separate traditional checks");
+  await expect(checks).toContainText("Rajju and Vedha");
+  await expect(checks).toContainText("apart from the count");
+  await expect(page.locator("main")).not.toContainText("%");
+
+  // Every factor is named, with its outcome in words as well as colour.
+  await expect(factors.locator("[data-marker]")).toHaveCount(18);
+  await expect(factors.getByRole("link", { name: "Graha: Not counted" })).toBeVisible();
+
+  // A factor's link opens its explanation, even when the filter would hide it.
+  await page.getByRole("button", { name: "Agree", exact: true }).click();
+  await factors.getByRole("link", { name: "Graha: Not counted" }).click();
+  await expect(page.locator("#factor-graha")).toBeInViewport();
+
+  await expect(page.getByRole("link", { name: "See why" })).toHaveAttribute("href", "#factors-title");
+  await page.getByRole("link", { name: "Find ceremony dates" }).click();
+  await expect(page.getByRole("heading", { name: "Wedding nakath for this couple" })).toBeInViewport();
 });

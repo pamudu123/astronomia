@@ -68,6 +68,74 @@
   color: var(--ink-soft);
 }
 
+/* The two ways of matching, each with one sentence on what it compares. */
+.modes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .modes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
+.modeOn,
+.modeOff {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.modeOn {
+  border: 1.5px solid var(--gold);
+  background: color-mix(in srgb, var(--gold) 8%, var(--panel));
+}
+
+.modeOff {
+  border: 1px solid var(--line);
+}
+
+.modeOff:hover {
+  border-color: var(--gold);
+}
+
+.modeTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.modeDot {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border: 2px solid var(--ink-soft);
+  border-radius: 50%;
+}
+
+.modeOn .modeDot {
+  border-color: var(--gold);
+  background: radial-gradient(circle, var(--gold) 0 4px, transparent 5px);
+}
+
+.modeText {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -249,77 +317,182 @@
   animation: pulse 3s ease-in-out infinite;
 }
 
-.summary {
+/* The comparison: two panels of equal weight (QA report, section D). */
+.compare {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 40px;
-  padding: 40px;
+  flex-direction: column;
+  gap: 24px;
+  padding: 36px;
   border: 1px solid var(--line);
   border-radius: 28px;
   background: var(--panel);
 }
 
 @media (max-width: 640px) {
-  .summary {
+  .compare {
     padding: 24px 20px;
   }
 }
 
-.ring {
-  flex: 0 1 240px;
-  min-width: 200px;
-  margin: 0 auto;
-  height: auto;
-}
-
-.halo {
-  fill: none;
-  stroke: var(--gold);
-  stroke-opacity: 0.45;
-  stroke-width: 1.2;
-  stroke-dasharray: 2 10;
-  transform-origin: 110px 110px;
-  animation: spin 90s linear infinite;
-}
-
-.track {
-  fill: none;
-  stroke: var(--panel-raised);
-  stroke-width: 14;
-}
-
-.fill {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 14;
-  stroke-linecap: round;
-  stroke-dasharray: var(--ring);
-  stroke-dashoffset: var(--offset);
-  animation: ring 1.8s cubic-bezier(0.3, 0.7, 0.2, 1) 0.3s both;
-}
-
-.ringNumber {
-  fill: var(--ink);
-  font-family: var(--font-marcellus), serif;
-  font-size: 58px;
-  text-anchor: middle;
-  dominant-baseline: middle;
-}
-
-.ringText {
-  fill: var(--ink-soft);
-  font-size: 14px;
-  text-anchor: middle;
-  dominant-baseline: middle;
-}
-
-.summaryText {
-  flex: 1 1 420px;
-  min-width: 0;
+.compareHead {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
+  max-width: 720px;
+}
+
+.comparePanels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 860px) {
+  .comparePanels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.comparePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--night);
+}
+
+@media (max-width: 640px) {
+  .comparePanel {
+    padding: 18px 16px;
+  }
+}
+
+.panelLabel {
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.panelCount {
+  font-size: clamp(26px, 3vw, 32px);
+  line-height: 1.2;
+}
+
+.bar {
+  display: flex;
+  gap: 3px;
+  height: 10px;
+}
+
+.barPass,
+.barFail,
+.barOff {
+  flex: 1;
+  border-radius: 3px;
+}
+
+.barPass {
+  background: var(--teal);
+}
+
+.barFail {
+  background: var(--coral);
+  opacity: 0.85;
+}
+
+.barOff {
+  border: 1px dashed var(--line);
+}
+
+/* Each factor by name, in the order the rule set lists them. */
+.markers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(112px, 100%), 1fr));
+  gap: 4px 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.markerPass,
+.markerFail,
+.markerOff {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  color: var(--ink);
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.markerPass:hover,
+.markerFail:hover,
+.markerOff:hover {
+  color: var(--gold);
+}
+
+.markerOff {
+  color: var(--ink-soft);
+}
+
+.markerIcon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.markerPass .markerIcon {
+  background: var(--teal);
+  color: var(--night);
+}
+
+.markerFail .markerIcon {
+  border: 1.5px solid var(--coral);
+  color: var(--coral);
+}
+
+.markerOff .markerIcon {
+  border: 1px dashed var(--line);
+}
+
+.markerLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.markerLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.checkRows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.nextActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nextLink {
+  text-decoration: none;
 }
 
 .summaryTitle {
@@ -509,15 +682,6 @@
   background: none;
   cursor: pointer;
   font-family: inherit;
-}
-
-@keyframes ring {
-  from {
-    stroke-dashoffset: var(--ring);
-  }
-  to {
-    stroke-dashoffset: var(--offset);
-  }
 }
 
 @keyframes link {
