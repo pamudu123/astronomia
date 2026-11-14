@@ -59,7 +59,7 @@ test("a hadahan is shared only after Create link, and the link holds no birth de
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Share this result" });
   await expect(dialog).toBeVisible();
-  await expect(dialog.locator("[data-share-preview]")).toContainText("Nimali's hadahan");
+  await expect(dialog.locator("[data-share-preview]")).toContainText("Nimali's birth chart");
   await expect(dialog).toContainText("Nothing is saved before you press Create link");
   expect(created).toHaveLength(0);
 
@@ -144,7 +144,7 @@ test("the shared hadahan opens read only", async ({ page }) => {
   await expect(banner.getByRole("link", { name: "Make your own hadahan" })).toBeVisible();
   await expect(banner.getByRole("button", { name: "Delete this link" })).toHaveCount(0);
 
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's hadahan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's birth chart");
   await expect(page.locator('[data-card="lagna"]')).toContainText("Simha");
   await expect(page.locator('[data-card="kuja"]')).toBeVisible();
   await expect(page.getByRole("button", { name: "Download PDF" })).toHaveCount(0);
