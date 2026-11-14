@@ -8,6 +8,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
 import { type Place, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
+import { failureText } from "@/lib/request";
 import { COLOMBO, type Panchanga, type PanchangaPart, type PlaceChoice, fetchPanchanga } from "@/lib/nakath";
 
 import styles from "./Nakath.module.css";
@@ -51,7 +52,7 @@ export function DailyView({ lang, t, day, initial }: Props) {
   const router = useRouter();
   const [place, setPlace] = useState<Place | null>(null);
   const [data, setData] = useState<Panchanga | null>(initial);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [picked, setPicked] = useState(day);
 
@@ -63,7 +64,7 @@ export function DailyView({ lang, t, day, initial }: Props) {
     let stale = false;
     fetchPanchanga(day, choice, lang)
       .then((result) => !stale && setData(result))
-      .catch(() => !stale && setFailed(true));
+      .catch((caught) => !stale && setFailed(failureText(caught, t)));
     return () => {
       stale = true;
     };
@@ -103,13 +104,13 @@ export function DailyView({ lang, t, day, initial }: Props) {
 
       {!shown ? (
         <div className={styles.status} role="status">
-          <p>{failed ? t.failed : t.loading}</p>
+          <p>{failed ?? t.loading}</p>
           {failed && (
             <button
               type="button"
               className="btn btn-outline lift"
               onClick={() => {
-                setFailed(false);
+                setFailed(null);
                 setAttempt((n) => n + 1);
               }}
             >

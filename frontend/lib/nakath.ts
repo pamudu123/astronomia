@@ -1,5 +1,6 @@
 import type { components } from "./api-types";
 import type { Locale } from "./i18n";
+import { SEARCH_TIMEOUT_MS, ensureOk } from "./request";
 
 export type Panchanga = components["schemas"]["PanchangaResponse"];
 export type PanchangaPart = components["schemas"]["PanchangaPartOut"];
@@ -66,8 +67,8 @@ export function panchangaPath(day: string, place: PlaceChoice, lang: Locale): st
 }
 
 async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(`/api${path}`);
-  if (!response.ok) throw new Error(`request failed: ${response.status}`);
+  const response = await fetch(`/api${path}`, { signal: AbortSignal.timeout(SEARCH_TIMEOUT_MS) });
+  await ensureOk(response);
   return (await response.json()) as T;
 }
 

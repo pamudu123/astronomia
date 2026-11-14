@@ -72,6 +72,8 @@ jobs:
             sleep 2
           done
           curl -sf http://localhost:9000/healthz
+      - name: Every tool answers inside the image
+        run: python3 scripts/smoke.py http://localhost:9000
       - name: A chart and a PDF work inside the image
         run: |
           body='{"date":"1995-04-19","time":"14:35","place_id":1241622,"lang":"si"}'

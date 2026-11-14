@@ -245,3 +245,70 @@ test("the hadahan still shows when the planet changes fail", async ({ page }) =>
   await expect(page.locator('[data-card="forecast"]')).toBeVisible();
   await expect(page.locator('[data-card="changes"]')).toHaveCount(0);
 });
+
+test("Edit details brings back every field, also after a reload (QA AST-01)", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali's hadahan");
+
+  await page.getByRole("button", { name: "Edit details" }).first().click();
+  await expect(page.getByLabel(/Name/)).toHaveValue("Nimali");
+  await expect(page.getByLabel("Date of birth")).toHaveValue("1995-04-19");
+  await expect(page.getByLabel("Time of birth")).toHaveValue("14:35");
+  await expect(page.getByRole("combobox")).toHaveValue(/Kandy/);
+
+  await page.reload();
+  await expect(page.getByLabel("Date of birth")).toHaveValue("1995-04-19");
+  await expect(page.getByRole("combobox")).toHaveValue(/Kandy/);
+});
+
+test("a half-filled form survives switching language (QA AST-05)", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.goto("/si/hadahan");
+  const date = page.locator('input[type="date"]');
+  await expect(date).toBeEnabled();
+  await page.locator('input[type="text"]').first().fill("QA Draft");
+  await date.fill("1990-01-15");
+  await page.getByRole("combobox").fill("kandy");
+  await page.getByRole("option").first().click();
+
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await expect(page.getByLabel(/Name/)).toHaveValue("QA Draft");
+  await expect(page.getByLabel("Date of birth")).toHaveValue("1990-01-15");
+  await expect(page.getByRole("combobox")).toHaveValue(/Kandy/);
+});
+
+test("bad coordinates and time zones are named beside the field (QA AST-06)", async ({ page }) => {
+  const requests = await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await page.getByLabel("Date of birth").fill("1990-01-15");
+  await page.getByLabel("Time of birth").fill("23:59");
+  await page.getByRole("button", { name: "Enter coordinates instead" }).click();
+  await page.getByLabel("Latitude").fill("91");
+  await page.getByLabel("Longitude").fill("181");
+  await page.getByLabel("Time zone").fill("Mars/Olympus");
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+
+  await expect(page.getByLabel("Latitude")).toBeFocused();
+  await expect(page.getByLabel("Latitude")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.getByText("Latitude must be a number from -90 to 90")).toBeVisible();
+  await expect(page.getByText("Longitude must be a number from -180 to 180")).toBeVisible();
+  await expect(page.getByText("That time zone is not recognised")).toBeVisible();
+  expect(requests).toHaveLength(0);
+
+  // Fixing one field keeps the others and clears only its message.
+  await page.getByLabel("Latitude").fill("6.9271");
+  await expect(page.getByText("Latitude must be a number")).toHaveCount(0);
+  await expect(page.getByLabel("Longitude")).toHaveValue("181");
+});
+
+test("each field has one label of its own (QA AST-08)", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await expect(page.getByLabel("Date of birth")).toHaveCount(1);
+  const ids = await page.locator("input[id]").evaluateAll((inputs) => inputs.map((input) => input.id));
+  expect(new Set(ids).size).toBe(ids.length);
+});

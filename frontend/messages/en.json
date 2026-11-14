@@ -133,7 +133,10 @@
     "errors": {
       "missing": "Please fill in the date, time and place.",
       "failed": "We could not work out the chart. Please try again.",
-      "notFound": "That place was not found. Please search again."
+      "notFound": "That place was not found. Please search again.",
+      "latitude": "Latitude must be a number from -90 to 90, such as 6.9271.",
+      "longitude": "Longitude must be a number from -180 to 180, such as 79.8612.",
+      "timezone": "That time zone is not recognised. Use a name such as Asia/Colombo or Europe/London."
     },
     "result": {
       "sample": "Your hadahan",
@@ -328,7 +331,7 @@
         "24": "2 years"
       },
       "ceremonies": "Ceremonies",
-      "place": "Where the ceremonies take place",
+      "place": "That place could not be found. Please choose it again from the list.",
       "placeHint": "Its sunrise and lagna are used. Colombo when left empty.",
       "noPlaces": "No places found",
       "find": "Find dates",
@@ -341,6 +344,8 @@
       "cautions": "Weaker points",
       "range_text": "Searched {first} to {last}.",
       "failed": "We could not search. Please try again.",
+      "unavailable": "The service is not answering right now. It may be starting up. Your details are kept: please try again in a minute.",
+      "invalid": "Some of these details could not be used. Please check them and try again.",
       "clock": "A birth time here happened twice because of a clock change. Please check the birth details first.",
       "provisional": "The rules are provisional until a practising astrologer confirms them.",
       "ceremony": {
@@ -717,7 +722,7 @@
     "metaDescription": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for today, for Colombo or any place in the world, with start and end times.",
     "metaDateTitle": "Nakath for {date}: Rahu kalaya, thithi and nakatha · Astronomia",
     "metaDateDescription": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for {date} in Colombo or any place, with start and end times.",
-    "place": "Place",
+    "place": "That place could not be found. Please choose it again from the list.",
     "placeHint": "Type a city or town.",
     "noPlaces": "No places found",
     "date": "Date",
@@ -741,6 +746,8 @@
     "provisional": "These rules are provisional until a practising astrologer confirms them. Times are to the minute, as Sri Lankan almanacs print them.",
     "loading": "Working out the day",
     "failed": "We could not load this day. Please try again.",
+    "unavailable": "The service is not answering right now. It may be starting up. Your details are kept: please try again in a minute.",
+    "invalid": "Some of these details could not be used. Please check them and try again.",
     "retry": "Try again",
     "footer": "Daily nakath",
     "homeLink": "Today's nakath and Rahu kalaya"
@@ -850,7 +857,7 @@
       "3": "3 months",
       "6": "6 months"
     },
-    "place": "Where the ceremony takes place",
+    "place": "That place could not be found. Please choose it again from the list.",
     "placeHint": "Its sunrise and lagna are used, and times are shown in its time zone. Colombo when left empty.",
     "noPlaces": "No places found",
     "find": "Find dates",
@@ -864,6 +871,8 @@
     "why": "Why this time",
     "cautions": "Weaker points",
     "failed": "We could not search. Please try again.",
+    "unavailable": "The service is not answering right now. It may be starting up. Your details are kept: please try again in a minute.",
+    "invalid": "Some of these details could not be used. Please check them and try again.",
     "clock": "That birth time happened twice, or not at all, because of a clock change. Please check the birth details.",
     "provisional": "The rules are provisional until a practising astrologer confirms them.",
     "footer": "First letters nakath",
