@@ -1,0 +1,195 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-block: 40px 96px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 16px;
+}
+
+.title {
+  font-size: clamp(32px, 4.4vw, 48px);
+  line-height: 1.15;
+}
+
+.monthNav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.monthNav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.status {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--panel);
+}
+
+/* Seven columns from Sunday, as a printed litha. */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.weekday {
+  padding: 4px 6px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 132px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.day:hover {
+  color: var(--ink);
+  border-color: var(--gold);
+}
+
+.poya {
+  border-color: var(--gold);
+  background: var(--panel-raised);
+}
+
+.today {
+  outline: 2px solid var(--sky);
+  outline-offset: -2px;
+}
+
+.dayHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.dayNumber {
+  font-size: 20px;
+  color: var(--ink);
+}
+
+/* The weekday shows inside each day only in the phone list. */
+.dayName {
+  display: none;
+  color: var(--ink-soft);
+}
+
+.todayBadge,
+.poyaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.todayBadge {
+  border: 1px solid var(--sky);
+  color: var(--sky);
+}
+
+.poyaBadge {
+  background: var(--gold);
+  color: var(--night);
+}
+
+.star {
+  color: var(--gold);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.thithi {
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.rahu {
+  margin-top: auto;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.rahu :global(.mono) {
+  color: var(--ink);
+}
+
+.fullMoon {
+  color: var(--gold);
+  font-size: 12px;
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  max-width: 760px;
+}
+
+.notes a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+/* Phones: a list of days instead of a grid. */
+@media (max-width: 760px) {
+  .calendar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .weekday,
+  .blank {
+    display: none;
+  }
+
+  .day {
+    min-height: 0;
+  }
+
+  .dayName {
+    display: inline;
+  }
+
+  .rahu {
+    margin-top: 0;
+  }
+}

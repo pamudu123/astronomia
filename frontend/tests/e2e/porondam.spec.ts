@@ -123,7 +123,7 @@ test("a match downloads as a PDF report", async ({ page }) => {
 
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download PDF" }).click();
-  expect((await download).suggestedFilename()).toBe("astronomia-porondam.pdf");
+  expect((await download).suggestedFilename()).toBe("sidera-porondam.pdf");
   expect(JSON.parse(reports[0])).toMatchObject({
     kind: "porondam",
     match: {

@@ -35,5 +35,5 @@ export function saveFile(file: Blob, fileName: string): void {
 }
 
 export function reportFileName(body: ReportRequest): string {
-  return `astronomia-${body.kind}.pdf`;
+  return `sidera-${body.kind}.pdf`;
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { NextSteps } from "@/components/NextSteps";
 import { BirthForm, EMPTY_FORM, type FormValues } from "@/components/hadahan/BirthForm";
 import { type BabyLetters, fetchBabyLetters } from "@/lib/babynames";
 import { type BirthRequest, fill, loadResult } from "@/lib/hadahan";
@@ -18,10 +19,12 @@ type Props = {
   t: Dictionary["babyNames"];
   hadahan: Dictionary["hadahan"];
   lang: Locale;
+  /** Next steps under the letters. */
+  next?: Dictionary["next"];
 };
 
 /** Birth details in, the birth star, pada and starting letters out. */
-export function BabyLettersApp({ t, hadahan, lang }: Props) {
+export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
   const hydrated = useHydrated();
   const [form, setForm] = useState<FormValues>(EMPTY_FORM);
   const [busy, setBusy] = useState(false);
@@ -147,6 +150,16 @@ export function BabyLettersApp({ t, hadahan, lang }: Props) {
         letters={result.star_letters.padas.map((pada) => pada.letter)}
         selected={[result.letter.letter]}
       />
+      {next && (
+        <NextSteps
+          title={next.title}
+          steps={[
+            { id: "first-letters", href: `/${lang}/first-letters`, label: next.baby.firstLetters },
+            { id: "hadahan", href: `/${lang}/hadahan`, label: next.baby.hadahan },
+            { id: "nakath", href: `/${lang}/nakath`, label: next.baby.nakath },
+          ]}
+        />
+      )}
       </>
     );
   }

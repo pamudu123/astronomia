@@ -401,6 +401,7 @@ karana:
   kimstughna: "කිංස්තුඝ්න"
 panchanga:
   timezone: "වේලාවන් {timezone} ({offset}) අනුවයි."
+  poya: "පොහොය දින මෙහි ගණනය කළ පුර පසළොස්වක දිනයි. නිල ශ්‍රී ලංකා දින දර්ශනය දිනකින් වෙනස් විය හැකි බැවින් ආගමික වතාවත් සඳහා එය ද පරීක්ෂා කරන්න."
 direction: {north: උතුර, south: දකුණ, east: නැගෙනහිර, west: බටහිර, north_east: ඊසාන, north_west: වයඹ, south_east: ගිනිකොන, south_west: නිරිත}
 
 # සිංහල හා දෙමළ අලුත් අවුරුද්ද.

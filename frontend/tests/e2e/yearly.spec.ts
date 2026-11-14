@@ -61,7 +61,7 @@ test("the year list leads to one lagna's year", async ({ page }) => {
 
 test("the year pages are rendered on the server for search engines", async ({ request }) => {
   const html = await (await request.get("/si/forecast/2027/makara")).text();
-  expect(html).toContain("<title>මකර ලග්නයට 2027 පලාපල · Astronomia</title>");
+  expect(html).toContain("<title>මකර ලග්නයට 2027 පලාපල · Sidera</title>");
   expect(html).toContain('name="description"');
   expect(html).toContain('<link rel="canonical" href="http://localhost:3000/si/forecast/2027/makara"/>');
 });

@@ -11,7 +11,10 @@ import {
   avuruduPath,
   hasAvuruduYear,
   isIsoDate,
+  isMonth,
+  monthPath,
   panchangaPath,
+  shiftMonth,
   todayIn,
 } from "@/lib/nakath";
 import en from "@/messages/en.json";
@@ -82,5 +85,31 @@ describe("sitemap", () => {
     expect(urls).toContain("http://localhost:3000/si/avurudu/2027/london");
     expect(urls).toContain("http://localhost:3000/en/nakath");
     expect(urls.filter((url) => /\/avurudu\/\d{4}$/.test(url))).toHaveLength(AVURUDU_YEARS.length * 2);
+  });
+});
+
+describe("litha months", () => {
+  it("reads only real YYYY-MM months", () => {
+    expect(isMonth("2026-11")).toBe(true);
+    expect(isMonth("2026-13")).toBe(false);
+    expect(isMonth("2026-1")).toBe(false);
+  });
+
+  it("steps across year ends", () => {
+    expect(shiftMonth("2026-12", 1)).toBe("2027-01");
+    expect(shiftMonth("2027-01", -1)).toBe("2026-12");
+    expect(shiftMonth("2026-11", 0)).toBe("2026-11");
+  });
+
+  it("asks for a month by place, never by birth details", () => {
+    expect(monthPath(2026, 12, 1248991, "si")).toBe(
+      "/v1/panchanga/month?year=2026&month=12&place_id=1248991&lang=si",
+    );
+  });
+
+  it("lists the litha and All tools pages in the sitemap", () => {
+    const urls = sitemap().map((entry) => entry.url);
+    expect(urls.some((url) => url.endsWith("/en/litha"))).toBe(true);
+    expect(urls.some((url) => url.endsWith("/si/tools"))).toBe(true);
   });
 });

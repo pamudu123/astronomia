@@ -52,7 +52,7 @@ test("the list leads to the change and then to one lagna", async ({ page }) => {
   await noSidewaysScroll(page);
 
   await page.getByRole("link", { name: "Rahu and Ketu change 2026" }).click();
-  await expect(page).toHaveTitle("Rahu and Ketu change 2026: what it means for each lagna · Astronomia");
+  await expect(page).toHaveTitle("Rahu and Ketu change 2026: what it means for each lagna · Sidera");
   // Scoped to the summary: the list page may stay in the document, hidden, after navigating.
   const summary = page.getByRole("region", { name: "5 December 2026, 22:32 Sri Lanka time" });
   await expect(summary).toBeVisible();
@@ -64,7 +64,7 @@ test("the list leads to the change and then to one lagna", async ({ page }) => {
   await page.locator('[data-lagna="makara"]').click();
   await expect(page).toHaveURL(/\/en\/changes\/rahu-ketu-2026-12\/makara$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Rahu and Ketu change 2026 for Makara lagna");
-  await expect(page).toHaveTitle("Rahu and Ketu change 2026 for Makara lagna · Astronomia");
+  await expect(page).toHaveTitle("Rahu and Ketu change 2026 for Makara lagna · Sidera");
   const rahu = page.locator('[data-counted="lagna"] [data-planet="rahu"]');
   await expect(rahu).toContainText("2nd house to 1st house");
   await expect(rahu).toContainText("The 1st house is about yourself and how you begin things.");
@@ -78,13 +78,13 @@ test("the list leads to the change and then to one lagna", async ({ page }) => {
 
 test("the general pages are rendered on the server for search engines", async ({ request }) => {
   const hub = await (await request.get(`/si/changes/${CHANGE}`)).text();
-  expect(hub).toContain("<title>2026 රාහු කේතු මාරුව: එක් එක් ලග්නයට පලාපල · Astronomia</title>");
+  expect(hub).toContain("<title>2026 රාහු කේතු මාරුව: එක් එක් ලග්නයට පලාපල · Sidera</title>");
   expect(hub).toContain('name="description"');
   expect(hub).toContain("කුම්භ රාශියේ සිට මකර රාශියට මාරු වේ");
   expect(hub).toContain('hrefLang="en"');
 
   const lagna = await (await request.get(`/en/changes/${CHANGE}/makara`)).text();
-  expect(lagna).toContain("<title>Rahu and Ketu change 2026 for Makara lagna · Astronomia</title>");
+  expect(lagna).toContain("<title>Rahu and Ketu change 2026 for Makara lagna · Sidera</title>");
   expect(lagna).toContain(
     '<meta name="description" content="5 December 2026: Rahu moves from Kumbha into Makara. Ketu moves from Simha into Kataka. What it means for Makara lagna, house by house."/>',
   );
@@ -138,7 +138,7 @@ test("a Saturn change shows the Moon sign periods", async ({ page }) => {
   await mockSaturn(page, "en");
   await page.goto("/en/changes/saturn-2027-06/vrishabha");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Saturn change 2027 into Mesha for Vrishabha lagna");
-  await expect(page).toHaveTitle("Saturn change 2027 into Mesha for Vrishabha lagna · Astronomia");
+  await expect(page).toHaveTitle("Saturn change 2027 into Mesha for Vrishabha lagna · Sidera");
   const summary = page.getByRole("region", { name: "3 June 2027, 05:28 Sri Lanka time" });
   await expect(summary).toContainText("Saturn moves from Meena into Mesha.");
   await expect(summary).toContainText("Stays until 20 October 2027, then moves into Meena.");
@@ -167,6 +167,6 @@ test("an unknown change or lagna is not found", async ({ page }) => {
 
 test("the home page points to the Rahu and Ketu change", async ({ page }) => {
   await page.goto("/en");
-  await page.getByRole("link", { name: /Rahu and Ketu change on 5 December 2026/ }).click();
+  await page.getByRole("link", { name: /Rahu and Ketu change\s*5 December 2026/ }).click();
   await expect(page).toHaveURL(/\/en\/changes\/rahu-ketu-2026-12$/);
 });

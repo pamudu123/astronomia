@@ -128,7 +128,7 @@ test("the result downloads as a PDF report", async ({ page }) => {
 
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download PDF" }).click();
-  expect((await download).suggestedFilename()).toBe("astronomia-hadahan.pdf");
+  expect((await download).suggestedFilename()).toBe("sidera-hadahan.pdf");
 
   // The details go in the request body, and the page address never changes.
   expect(JSON.parse(reports[0])).toMatchObject({

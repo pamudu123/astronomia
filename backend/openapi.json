@@ -1001,6 +1001,136 @@
         }
       }
     },
+    "/v1/panchanga/month": {
+      "get": {
+        "tags": [
+          "nakath"
+        ],
+        "summary": "Panchanga Month",
+        "description": "Every day of a month: sunrise, Rahu kalaya, the thithi and nakatha at sunrise, and poya.",
+        "operationId": "panchanga_month_v1_panchanga_month_get",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Year"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Month"
+            }
+          },
+          {
+            "name": "place_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Place Id"
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Latitude"
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Longitude"
+            }
+          },
+          {
+            "name": "timezone",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Timezone"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthPanchangaResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/avurudu/{year}": {
       "get": {
         "tags": [
@@ -4031,6 +4161,101 @@
         ],
         "title": "MethodOut"
       },
+      "MonthDayOut": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "weekday": {
+            "type": "string",
+            "title": "Weekday"
+          },
+          "weekday_name": {
+            "type": "string",
+            "title": "Weekday Name"
+          },
+          "sunrise": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalTimeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sunset": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalTimeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rahu_kalaya": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalRangeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "thithi": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PanchangaPartOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nakatha": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PanchangaPartOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "poya": {
+            "type": "boolean",
+            "title": "Poya"
+          },
+          "full_moon": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalTimeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "weekday",
+          "weekday_name",
+          "sunrise",
+          "sunset",
+          "rahu_kalaya",
+          "thithi",
+          "nakatha",
+          "poya",
+          "full_moon"
+        ],
+        "title": "MonthDayOut"
+      },
       "MonthOut": {
         "properties": {
           "year": {
@@ -4065,6 +4290,61 @@
           "end"
         ],
         "title": "MonthOut"
+      },
+      "MonthPanchangaResponse": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "month": {
+            "type": "integer",
+            "title": "Month"
+          },
+          "place": {
+            "$ref": "#/components/schemas/PanchangaPlaceOut"
+          },
+          "offset": {
+            "type": "string",
+            "title": "Offset"
+          },
+          "timezone_note": {
+            "type": "string",
+            "title": "Timezone Note"
+          },
+          "poya_note": {
+            "type": "string",
+            "title": "Poya Note"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/MonthDayOut"
+            },
+            "type": "array",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "year",
+          "month",
+          "place",
+          "offset",
+          "timezone_note",
+          "poya_note",
+          "days"
+        ],
+        "title": "MonthPanchangaResponse"
       },
       "MoveOut": {
         "properties": {

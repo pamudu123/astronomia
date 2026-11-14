@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/privacy">)
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = await getDictionary(lang);
-  return { title: `${dict.privacy.title} · Astronomia` };
+  return { title: `${dict.privacy.title} · Sidera` };
 }
 
 export default async function PrivacyPage({ params }: PageProps<"/[lang]/privacy">) {

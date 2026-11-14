@@ -188,9 +188,43 @@ export function loadSession<T>(key: string): T | null {
 }
 
 const STORAGE_KEY = "astronomia.hadahan";
+/** A chart the visitor chose to keep on this device (Remember my chart). Never sent anywhere. */
+const DEVICE_KEY = "astronomia.hadahan.device";
 
 export const saveResult = (saved: SavedResult | null) => saveSession(STORAGE_KEY, saved);
-export const loadResult = () => loadSession<SavedResult>(STORAGE_KEY);
+
+/** The last result in this tab, or else the chart remembered on this device. */
+export const loadResult = () => loadSession<SavedResult>(STORAGE_KEY) ?? loadRemembered();
+
+export function rememberChart(saved: SavedResult): void {
+  try {
+    localStorage.setItem(DEVICE_KEY, JSON.stringify(saved));
+  } catch {
+    // Storage can be unavailable (private mode). Remembering then simply does not happen.
+  }
+}
+
+export function forgetChart(): void {
+  try {
+    localStorage.removeItem(DEVICE_KEY);
+  } catch {
+    // Nothing to forget.
+  }
+}
+
+export function loadRemembered(): SavedResult | null {
+  try {
+    const raw = localStorage.getItem(DEVICE_KEY);
+    const saved = raw ? (JSON.parse(raw) as SavedResult) : null;
+    return saved?.request && saved.result?.chart ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
+/** True when the remembered chart is for the same birth as this one. */
+export const isRemembered = (request: BirthRequest) =>
+  JSON.stringify(loadRemembered()?.request ?? null) === JSON.stringify(request);
 
 export const RASHI_ORDER = [
   "mesha",

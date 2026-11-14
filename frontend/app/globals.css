@@ -1,4 +1,5 @@
-/* Design tokens from the Astronomia design canvas (night sky look). */
+/* Sidera design tokens (night sky look). See design/README.md for the brand rules.
+   --gold holds the brass accent; the name is kept so existing styles keep working. */
 :root {
   --night: #0b1026;
   --night-raised: #0e1430;
@@ -6,15 +7,17 @@
   --panel-raised: #1b2450;
   --line: #2a3364;
   --line-soft: #1b2450;
-  --gold: #e3b866;
-  --gold-hover: #f3d598;
+  --gold: #c9a45c;
+  --gold-hover: #ddbf83;
+  --sky: #7fa7d9;
   --teal: #7fd6c2;
   --coral: #f08a5d;
-  --ink: #f2eee3;
+  --ink: #f4f1ea;
   --ink-soft: #b4b9d6;
 
   --font-display: var(--font-marcellus), var(--font-serif-sinhala), serif;
   --font-body: var(--font-dm-sans), var(--font-sans-sinhala), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
   --font-sinhala: var(--font-sans-sinhala), sans-serif;
   --font-sinhala-display: var(--font-serif-sinhala), serif;
 
@@ -113,6 +116,12 @@ html[lang="si"] .display {
 
 .sinhala {
   font-family: var(--font-sinhala);
+}
+
+/* Calculated values: degrees, times, coordinates. */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .soft {
@@ -221,7 +230,7 @@ html[lang="si"] .display {
 }
 .lift:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgb(227 184 102 / 16%);
+  box-shadow: 0 12px 32px rgb(201 164 92 / 16%);
 }
 
 @media (prefers-reduced-motion: reduce) {

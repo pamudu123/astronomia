@@ -114,20 +114,35 @@ export function Globe() {
   );
 }
 
-export function Logo() {
+const STAR = "M0,-13 L3.25,-3.25 L13,0 L3.25,3.25 L0,13 L-3.25,3.25 L-13,0 L-3.25,-3.25 Z";
+
+/**
+ * The Sidera mark: two great circles of the sky crossing (the solid one with a planet on it),
+ * around a four pointed star. Strokes are sized for the header (about 56 px wide).
+ * Below about 48 px use the bold single orbit in app/icon.svg instead.
+ */
+export function Logo({ width = 56 }: { width?: number }) {
   return (
     <svg
       aria-hidden="true"
-      width="30"
-      height="30"
-      viewBox="0 0 30 30"
+      width={width}
+      height={(width * 64) / 120}
+      viewBox="-60 -32 120 64"
       fill="none"
-      stroke="var(--gold)"
-      strokeWidth="1.5"
     >
-      <circle cx="15" cy="15" r="13" />
-      <circle cx="15" cy="15" r="4" fill="var(--gold)" />
-      <circle cx="24" cy="9" r="1.6" fill="var(--gold)" />
+      <ellipse
+        rx="54"
+        ry="17"
+        transform="rotate(14)"
+        stroke="var(--gold)"
+        strokeWidth="2.4"
+        strokeDasharray="6 5"
+      />
+      <g transform="rotate(-14)">
+        <ellipse rx="54" ry="17" stroke="var(--gold)" strokeWidth="3.2" />
+        <circle cx="-38.2" cy="-12" r="7" fill="var(--sky)" stroke="var(--night)" strokeWidth="3" data-planet />
+      </g>
+      <path d={STAR} fill="var(--ink)" />
     </svg>
   );
 }

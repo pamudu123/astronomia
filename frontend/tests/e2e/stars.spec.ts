@@ -30,7 +30,7 @@ test("the list of stars leads to one star's matches", async ({ page }) => {
   await page.getByRole("link", { name: /Krittika/ }).click();
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Krittika: which birth stars match");
-  await expect(page).toHaveTitle("Krittika porondam: matching birth stars · Astronomia");
+  await expect(page).toHaveTitle("Krittika porondam: matching birth stars · Sidera");
   await expect(page.locator("[data-star]")).toHaveCount(36);
   const first = page.locator("[data-star]").first();
   await expect(first).toHaveAttribute("data-star", "jyeshtha");

@@ -84,3 +84,63 @@ def test_bad_input(client: TestClient) -> None:
     assert get(date="2026-12-17", latitude=91, longitude=1, timezone="UTC") == 422
     assert get(date="2026-12-17", place_id=999999999) == 404
     assert get(date="1700-01-01", place_id=COLOMBO) == 422
+
+
+def test_a_month_in_colombo(client: TestClient) -> None:
+    response = client.get(
+        "/v1/panchanga/month",
+        params={"year": 2026, "month": 12, "place_id": COLOMBO, "lang": "en"},
+    )
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "public, max-age=3600"
+    body = response.json()
+    assert (body["year"], body["month"], body["place"]["name"]) == (2026, 12, "Colombo")
+    assert body["offset"] == "UTC+05:30"
+    assert "official Sri Lankan calendar" in body["poya_note"]
+    days = body["days"]
+    assert len(days) == 31
+    assert days[0]["date"] == "2026-12-01"
+    assert days[-1]["date"] == "2026-12-31"
+    # Each day matches the one day answer.
+    one = client.get(
+        "/v1/panchanga", params={"date": "2026-12-17", "place_id": COLOMBO, "lang": "en"}
+    ).json()
+    day = days[16]
+    assert day["date"] == "2026-12-17"
+    assert day["sunrise"] == one["sunrise"]
+    assert day["rahu_kalaya"] == one["rahu_kalaya"]
+    assert day["thithi"] == one["thithi"][0]
+    assert day["nakatha"] == one["nakatha"][0]
+
+
+def test_one_poya_a_month_on_the_full_moon(client: TestClient) -> None:
+    for month in range(1, 13):
+        days = client.get(
+            "/v1/panchanga/month", params={"year": 2027, "month": month, "place_id": COLOMBO}
+        ).json()["days"]
+        poya = [d for d in days if d["poya"]]
+        assert 1 <= len(poya) <= 2, month  # a blue moon month has two
+        for day in poya:
+            moment = day["full_moon"]
+            assert moment is not None
+            # The full moon falls between this sunrise and the next.
+            assert moment["local"] >= day["sunrise"]["local"]
+        assert all(d["full_moon"] is None for d in days if not d["poya"])
+
+
+def test_month_in_sinhala_and_bad_queries(client: TestClient) -> None:
+    body = client.get(
+        "/v1/panchanga/month",
+        params={"year": 2026, "month": 12, "place_id": COLOMBO, "lang": "si"},
+    ).json()
+    assert body["place"]["name"] == "කොළඹ"
+    assert body["days"][16]["thithi"]["name"] == "පුර අටවක"
+    assert "පොහොය" in body["poya_note"]
+    bad: list[dict[str, int | str]] = [
+        {"year": 2026, "month": 13, "place_id": COLOMBO},
+        {"year": 1000, "month": 1, "place_id": COLOMBO},
+        {"year": 2026, "month": 1},
+        {"year": 2026, "month": 1, "place_id": COLOMBO, "timezone": "Asia/Colombo"},
+    ]
+    for params in bad:
+        assert client.get("/v1/panchanga/month", params=params).status_code == 422, params

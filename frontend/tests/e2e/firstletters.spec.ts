@@ -95,6 +95,6 @@ test("the search asks for the child first", async ({ page }) => {
 
 test("the page carries a title and description as served", async ({ request }) => {
   const html = await (await request.get("/si/first-letters")).text();
-  expect(html).toContain("<title>අකුරු කියවීමේ නැකත් · Astronomia</title>");
+  expect(html).toContain("<title>අකුරු කියවීමේ නැකත් · Sidera</title>");
   expect(html).toContain('<link rel="canonical" href="http://localhost:3000/si/first-letters"/>');
 });

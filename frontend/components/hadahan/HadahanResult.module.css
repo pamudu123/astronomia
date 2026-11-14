@@ -416,9 +416,9 @@
 @keyframes beat {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgb(227 184 102 / 50%);
+    box-shadow: 0 0 0 0 rgb(201 164 92 / 50%);
   }
   50% {
-    box-shadow: 0 0 0 8px rgb(227 184 102 / 0%);
+    box-shadow: 0 0 0 8px rgb(201 164 92 / 0%);
   }
 }

@@ -5,17 +5,13 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Eye, Globe, Lock } from "@/components/Icons";
 import { Starfield } from "@/components/Starfield";
 import { ZodiacWheel } from "@/components/ZodiacWheel";
-import { localDate } from "@/components/changes/text";
-import { FEATURED, findChange } from "@/lib/changes";
-import { fill } from "@/lib/hadahan";
+import { MoreTools } from "@/components/home/MoreTools";
+import { YourSky } from "@/components/home/YourSky";
 import { hasLocale } from "@/lib/i18n";
-import { FEATURED_YEAR } from "@/lib/nakath";
 import { RASHI } from "@/lib/rashi";
 
 import { getDictionary } from "./dictionaries";
 import styles from "./home.module.css";
-
-const featured = findChange(FEATURED);
 
 const TRUST_ICONS = [<Eye key="eye" />, <Lock key="lock" size={28} color="var(--gold)" />, <Globe key="globe" />];
 
@@ -46,7 +42,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
         <section className={`container ${styles.hero}`}>
           <div className={styles.heroText}>
-            <p className={`rise sinhala ${styles.eyebrow}`}>{dict.hero.eyebrow}</p>
+            {/* The tagline sits on two lines; the hidden comma keeps it reading right aloud. */}
+            <p className={`rise ${styles.tagline}`} lang="en">
+              <span className={styles.taglineSky}>{dict.hero.tagline.sky}</span>
+              <span className="visually-hidden">, </span>
+              <span className={styles.taglineCalc}>{dict.hero.tagline.calculated}</span>
+            </p>
             <h1 className={`rise display ${styles.heroTitle}`} style={{ animationDelay: ".1s" }}>
               {dict.hero.title}
             </h1>
@@ -72,6 +73,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           </div>
         </section>
       </div>
+
+      <YourSky lang={lang} t={dict.yourSky} kinds={dict.changes.kind} />
 
       <section className={`container ${styles.section}`} aria-labelledby="tools-title">
         <div className={styles.sectionHead}>
@@ -107,36 +110,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             </Link>
           ))}
         </div>
-        <Link href={`/${lang}/porondam/stars`} className={styles.toolMore}>
-          {dict.porondam.stars.homeLink}
-          <ArrowRight />
-        </Link>
-        {featured && (
-          <Link href={`/${lang}/changes/${featured.id}`} className={styles.toolMore} data-link="changes">
-            {fill(dict.changes.homeLink, {
-              change: dict.changes.kind[featured.kind],
-              date: localDate(featured, lang),
-            })}
-            <ArrowRight />
-          </Link>
-        )}
-        <Link href={`/${lang}/avurudu/${FEATURED_YEAR}`} className={styles.toolMore} data-link="avurudu">
-          {fill(dict.avurudu.homeLink, { year: FEATURED_YEAR })}
-          <ArrowRight />
-        </Link>
-        <Link href={`/${lang}/nakath`} className={styles.toolMore} data-link="nakath">
-          {dict.nakath.homeLink}
-          <ArrowRight />
-        </Link>
-        <Link href={`/${lang}/baby-names`} className={styles.toolMore} data-link="baby-names">
-          {dict.babyNames.homeLink}
-          <ArrowRight />
-        </Link>
-        <Link href={`/${lang}/first-letters`} className={styles.toolMore} data-link="first-letters">
-          {dict.firstLetters.link}
-          <ArrowRight />
-        </Link>
       </section>
+
+      <MoreTools lang={lang} dict={dict} />
 
       <section className={`container ${styles.sectionTight}`} aria-labelledby="rashi-title">
         <div className={styles.sectionHead}>
