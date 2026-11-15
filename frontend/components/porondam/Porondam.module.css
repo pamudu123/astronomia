@@ -411,10 +411,21 @@
 /* Each factor by name, in the order the rule set lists them. */
 .markers {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(112px, 100%), 1fr));
+  /* Wide enough for the longest English name (Rashyadhipathi) on one line (QA UI-02). */
+  grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
   gap: 4px 10px;
   padding: 0;
   list-style: none;
+}
+
+.markers > li {
+  min-width: 0;
+}
+
+/* A name longer than its cell wraps inside the cell instead of running into the next one. */
+.markerName {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .markerPass,

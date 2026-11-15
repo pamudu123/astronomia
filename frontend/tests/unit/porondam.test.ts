@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { type Factor, filterFactors, ringOffset, spanPercent, yearTicks } from "@/lib/porondam";
+import { type Factor, filterFactors, isCounted, ringOffset, spanPercent, yearTicks } from "@/lib/porondam";
 
 const factor = (id: string, passed: boolean): Factor => ({ id, passed, hard: false, checked: true, facts: {}, reason: "" });
 
@@ -21,6 +21,18 @@ describe("filterFactors", () => {
     expect(filterFactors(withWeekday, "all")).toHaveLength(4);
     expect(filterFactors(withWeekday, "agree").map((f) => f.id)).toEqual(["dina", "yoni"]);
     expect(filterFactors(withWeekday, "disagree").map((f) => f.id)).toEqual(["gana"]);
+  });
+
+  it("counts a factor from a result made before `checked` existed (QA UI-01)", () => {
+    const old = all.map((f) => {
+      const copy: Partial<Factor> = { ...f };
+      delete copy.checked;
+      return copy as Factor;
+    });
+    expect(old.every(isCounted)).toBe(true);
+    expect(filterFactors(old, "agree").map((f) => f.id)).toEqual(["dina", "yoni"]);
+    expect(filterFactors(old, "disagree").map((f) => f.id)).toEqual(["gana"]);
+    expect(isCounted({ checked: false })).toBe(false);
   });
 });
 

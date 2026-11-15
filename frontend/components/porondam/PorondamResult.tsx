@@ -19,6 +19,7 @@ import {
   type Porondam,
   type PorondamRequest,
   filterFactors,
+  isCounted,
 } from "@/lib/porondam";
 
 import { WeddingFinder } from "@/components/wedding/WeddingFinder";
@@ -82,7 +83,7 @@ export function PorondamResult({
   const groom = result.groom!;
   const nameOf = (person: Person, fallback: string) => person.name || fallback;
   const factorName = (factor: Factor) => labels.porondam_factor[factor.id];
-  const uncounted = match.factors.filter((factor) => !factor.checked).length;
+  const uncounted = match.factors.filter((factor) => !isCounted(factor)).length;
 
   const person = (who: Person, fallback: string, tone: string) => (
     <div className={`${styles.who} ${tone}`}>
@@ -136,15 +137,15 @@ export function PorondamResult({
               {match.factors.map((factor) => (
                 <span
                   key={factor.id}
-                  className={!factor.checked ? styles.barOff : factor.passed ? styles.barPass : styles.barFail}
+                  className={!isCounted(factor) ? styles.barOff : factor.passed ? styles.barPass : styles.barFail}
                 />
               ))}
             </div>
             {/* Every factor by name, each leading to its explanation further down. */}
             <ul className={styles.markers}>
               {match.factors.map((factor) => {
-                const state = !factor.checked ? "off" : factor.passed ? "pass" : "fail";
-                const status = !factor.checked ? t.notCounted : factor.passed ? t.agrees : t.notAgrees;
+                const state = !isCounted(factor) ? "off" : factor.passed ? "pass" : "fail";
+                const status = !isCounted(factor) ? t.notCounted : factor.passed ? t.agrees : t.notAgrees;
                 return (
                   <li key={factor.id} data-marker={state}>
                     <a
@@ -156,7 +157,7 @@ export function PorondamResult({
                       <span className={styles.markerIcon} aria-hidden="true">
                         {state === "off" ? "–" : <Check ok={state === "pass"} />}
                       </span>
-                      <span>{factorName(factor).name}</span>
+                      <span className={styles.markerName}>{factorName(factor).name}</span>
                     </a>
                   </li>
                 );
@@ -248,7 +249,7 @@ export function PorondamResult({
         </div>
         <ul className={styles.factorGrid}>
           {filterFactors(match.factors, filter).map((factor, index) => {
-            const counted = factor.checked;
+            const counted = isCounted(factor);
             return (
             <li
               key={factor.id}

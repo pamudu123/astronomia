@@ -62,7 +62,10 @@ test("a litha month has its title, the months either side, and a calendar or a c
   // With the backend away the page says so; with it, there are 31 days.
   const days = page.locator("[data-day]");
   if ((await days.count()) > 0) await expect(days).toHaveCount(31);
-  else await expect(page.getByRole("status")).toContainText("could not be loaded");
+  else {
+    await expect(page.getByRole("status")).toContainText("could not be loaded");
+    await expect(page.getByRole("link", { name: "Try again" })).toHaveAttribute("href", "/en/litha/2026-12");
+  }
 });
 
 test("a month that does not exist is not found", async ({ page }) => {
