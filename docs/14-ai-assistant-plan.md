@@ -255,6 +255,8 @@ Only the first steps are detailed. After step 6, we pick the next step from the 
 | **2. Cards in the chat** | Match and chart summary cards. Point and ask on match checks. Greeting and suggestion buttons built from the result | Tapping a check card's ask icon gives an answer about that check, with the card shown |
 | **3. People list and asking** | One people list shared by forms and chat. Birth details form and choice buttons in the chat. Chat fills forms and forms fill the chat | Details entered on the birth chart page are used by the chat without asking again |
 | **4. All main pages** | Context from birth chart, good times, wedding, baby names, year ahead, old horoscope, shared results. Matching skills and cards | Each page's typical question (section 3.2) gets an answer about what's on screen |
+
+**Step 4, text part (2026-11-15):** every page now tells the chat what it shows (`frontend/lib/assistant/pages.ts`), or the chat reads the page address and looks the facts up. Ten engine tools cover the public endpoints (calendar, Avurudu, names, planet changes, star matches). Topic skills with researched reference notes cover birth charts, the almanac and poya, Avurudu, and ceremonies and names. Two helpers: `researcher` and `date-checker`, at most 4 per question. Cards come with step 2.
 | **5. Answers point at the page** | `highlight_on_page`, `open_page`, `fill_form` | "Where is that?" highlights the right card |
 | **6. Ready for testers** | Fact checker, sensitive topics, limits, bot protection, off switch, privacy page update | Safety and fact check tests pass. Test group uses it on staging for a week |
 
@@ -270,16 +272,22 @@ This list grows as we go. A new row is added when we find a question worth answe
 | 2 | Is this a good match? | Match | Safe reply: the factors and trade-offs, no yes or no | 1 | Done (local) |
 | 2a | Which birth stars suit mine? | Match | `find_matching_stars` tool, `star-matches` skill | 1 | Done (local) |
 | 3 | Which checks didn't pass, and does it matter? | Match | Point and ask, match card, `explain-match` skill | 2 | Planned |
-| 4 | What does my chart say about me? | Birth chart | Chart summary card, `explain-birth-chart` skill | 2 | Planned |
+| 4 | What does my chart say about me? | Birth chart | Chart page context, `birth-chart` skill (card later) | 4 | Done (text answers, no card yet) |
 | 5 | Check our match (no details entered yet) | Any | People list, birth details form | 3 | Planned |
-| 6 | Which life period am I in, and when does it change? | Birth chart | Timeline card | 4 | Planned |
-| 7 | Is today a good day for ...? | Good times | Good times card | 4 | Planned |
+| 6 | Which life period am I in, and when does it change? | Birth chart | Chart page context (current and next period), timeline card later | 4 | Done (text answers, no card yet) |
+| 7 | Is today a good day for ...? | Good times | `good_times_for_day`, `calendar-and-nakath` skill | 4 | Done (text answers, no card yet) |
 | 8 | Find a wedding date in March | Wedding | Ask for place and event, good times card | 4 | Planned |
-| 9 | Which letter should my baby's name start with? | Baby names | Letters card | 4 | Planned |
+| 9 | Which letter should my baby's name start with? | Baby names | `name_letters_for_star`, `names_for_letters`, `ceremonies-and-names` skill | 4 | Done (text answers, no card yet) |
 | 10 | Where is that on the page? | Any | `highlight_on_page` | 5 | Planned |
 | 11 | Compare my 4 proposals | Match | Dynamic subagents, comparison card | Later | Idea |
 | 12 | Make me a full report | Birth chart | Async subagent, progress card | Later | Idea |
 | 13 | Remember me next time | Any | "Remember on this device", later sign in and memory | Later | Idea |
+| 14 | What is on this page? (any page) | Any | Page context or address, `site-guide` skill | 4 | Done |
+| 15 | When is the next poya, and what is it about? | Litha | `month_calendar`, `calendar-and-nakath` skill | 4 | Done |
+| 16 | When are the New Year nakath, and what do we do? | Avurudu | `new_year_times`, `avurudu` skill | 4 | Done |
+| 17 | How does Saturn's change affect my sign? | Changes, forecast | `planet_change_for_sign`, `year_ahead_for_sign`, `birth-chart` skill | 4 | Done |
+| 18 | Compare these dates or places | Good times | `date-checker` helper, one per date or place | 4 | Done |
+| 19 | Customs: poruwa, akuru kiyaweema, house warming, poya | Any | Reference notes, `researcher` helper for broad questions | 4 | Done |
 
 **How the list grows:**
 

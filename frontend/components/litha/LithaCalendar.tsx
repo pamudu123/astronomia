@@ -5,6 +5,9 @@ import { fill, formatMonthYear } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { type MonthDay, type MonthPanchanga, shiftMonth } from "@/lib/nakath";
 
+import { ShareWithAssistant } from "@/components/assistant/PageContext";
+import { monthContext } from "@/lib/assistant/pages";
+
 import styles from "./Litha.module.css";
 
 /** "November 2026" or "2026 නොවැම්බර්" for a "YYYY-MM" month. */
@@ -47,7 +50,10 @@ export function LithaCalendar({ lang, t, month, today, data }: Props) {
           {t.failed}
         </p>
       ) : (
-        <Grid lang={lang} t={t} data={data} today={today} />
+        <>
+          <ShareWithAssistant context={monthContext(data, lang)} />
+          <Grid lang={lang} t={t} data={data} today={today} />
+        </>
       )}
 
       {data && (

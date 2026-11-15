@@ -2,7 +2,7 @@
 
 The AI assistant behind the chat on the website. A [Deep Agents](https://docs.langchain.com/oss/python/deepagents/overview) agent served over [AG-UI](https://docs.ag-ui.com) for the frontend's CopilotKit chat. The plan is in [`docs/14-ai-assistant-plan.md`](../docs/14-ai-assistant-plan.md).
 
-The rule: **the AI talks, the engine calculates.** Facts come from the page the person is looking at, or from the backend API through tools. The model never works anything out itself.
+The rule: **the AI talks, the engine calculates.** Facts come from the page the person is looking at, or from the backend API through tools. Background (what a word or a custom means) comes from the skills' reference notes. The model never works anything out itself.
 
 ## Layout
 
@@ -10,11 +10,19 @@ The rule: **the AI talks, the engine calculates.** Facts come from the page the 
 |---|---|---|
 | `app/prompts/guide.md` | Who the assistant is and the rules for every answer. Always loaded | The tone or a rule for every answer changes |
 | `skills/<name>/SKILL.md` | Guidance for one topic. The agent sees the one-line description and reads the file only when the topic comes up | Adding a topic: add a folder. No code change |
-| `app/tools/engine.py` | Tools that call the backend API | The assistant needs a new kind of fact |
-| `app/graph.py` | Puts the agent together: model, skills, tools, page context | Turning on a Deep Agents feature (subagents, memory, ...) |
+| `skills/<name>/reference.md` | Longer background notes for a topic, with sources. Read only when the SKILL.md isn't enough | The facts or sources change |
+| `app/tools/` | Tools that call the backend's public endpoints, one module per topic: `porondam`, `calendar`, `naming`, `planets`. `engine.py` is the shared client | The assistant needs a new kind of fact |
+| `app/subagents.py`, `app/prompts/<helper>.md` | Helpers the guide hands work to with the `task` tool: `researcher` (several reference notes) and `date-checker` (several dates or places, one helper each) | A kind of question keeps crowding the conversation |
+| `app/graph.py` | Puts the agent together: model, skills, tools, helpers, page context, the cap on helpers per question | Turning on a Deep Agents feature (memory, approvals, ...) |
 | `app/main.py` | The web service: `POST /agent` (AG-UI), `GET /healthz` | Rarely |
 
-**Adding a skill:** create `skills/<name>/SKILL.md` with frontmatter (`name` the same as the folder, and a `description` that says when to use it), then the instructions. `uv run pytest` checks the format.
+**Skills now:** `site-guide` (every page and how to read it), `explain-match`, `star-matches`, `birth-chart`, `calendar-and-nakath`, `avurudu`, `ceremonies-and-names`, `sinhala-style`.
+
+**Adding a skill:** create `skills/<name>/SKILL.md` with frontmatter (`name` the same as the folder, and a `description` that says when to use it), then the instructions. Put long background in `reference.md` beside it and point to it from the SKILL.md. `uv run pytest` checks the format.
+
+**Reference notes** were researched on the web in November 2026. Each section lists its sources; points that couldn't be confirmed are marked "(unverified)". They describe tradition and belief, never proven fact. Ask an astrologer and a Sinhala reader to review them before launch.
+
+**Helpers cost extra model calls.** One question can start at most `ASTRONOMIA_AGENT_MAX_SUBAGENT_CALLS` (default 4). Set it to 0 to switch helpers off.
 
 ## Run it locally
 
@@ -38,7 +46,7 @@ Browser (CopilotKit popup, components/assistant/)
   -> backend API            engine tools
 ```
 
-Each page tells the assistant what it shows with `useAssistantContext(...)` (`frontend/components/assistant/PageContext.tsx`). The summary is built in `frontend/lib/assistant/context.ts` and holds no names, birth dates, times or places.
+Each page tells the assistant what it shows with `useAssistantContext(...)` (`frontend/components/assistant/PageContext.tsx`). The summaries are built in `frontend/lib/assistant/context.ts` (match) and `frontend/lib/assistant/pages.ts` (every other result) and hold no names, birth dates, times or places. Pages whose address already says what they show (a month, a sign, a planet change) send only the address; the `site-guide` skill tells the assistant which tool gives the same facts.
 
 ## Checks
 

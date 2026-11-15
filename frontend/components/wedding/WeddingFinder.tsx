@@ -11,6 +11,9 @@ import { CEREMONIES, type Ceremony, MONTHS, type Months, type Wedding, fetchWedd
 import { failureText } from "@/lib/request";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { weddingContext } from "@/lib/assistant/pages";
+
 import styles from "./Wedding.module.css";
 import { WeddingGate } from "./WeddingGate";
 
@@ -29,6 +32,8 @@ export function WeddingFinder({ lang, t, request }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Wedding | null>(null);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(result ? weddingContext(result, lang) : null, "wedding");
 
   async function search(event: React.FormEvent) {
     event.preventDefault();

@@ -17,13 +17,18 @@ class RecordingModel(FakeMessagesListChatModel):
     """
 
     offered: list[str] = Field(default_factory=list)
+    descriptions: dict[str, str] = Field(default_factory=dict)
     model_name: str = "gpt-6-luna"
 
     def _get_ls_params(self, stop: list[str] | None = None, **kwargs: Any) -> Any:
         return {**super()._get_ls_params(stop=stop, **kwargs), "ls_provider": "openai"}
 
     def bind_tools(self, tools: Sequence[Any], **kwargs: Any) -> "RecordingModel":
-        self.offered = [getattr(t, "name", None) or t.get("name") for t in tools]
+        def field(tool: Any, name: str) -> Any:
+            return getattr(tool, name, None) or tool.get(name)
+
+        self.offered = [field(t, "name") for t in tools]
+        self.descriptions = {field(t, "name"): field(t, "description") or "" for t in tools}
         return self
 
 

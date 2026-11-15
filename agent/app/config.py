@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     # How hard the model thinks before answering. Low keeps replies quick and cheap; the
     # engine does the hard work.
     reasoning_effort: Effort = "low"
+    # How many helpers (subagents) one question may start. Each costs extra model calls.
+    max_subagent_calls: int = Field(default=4, ge=0, le=10)
     openai_api_key: SecretStr = Field(default=SecretStr(""), alias="OPENAI_API_KEY")
     # The calculation engine (the existing backend) and its staging access key, if any.
     backend_url: str = "http://localhost:8000"

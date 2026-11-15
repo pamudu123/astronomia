@@ -6,12 +6,13 @@ What goes where:
 - `skills/<name>/SKILL.md`: guidance for one topic. The agent sees each skill's one-line
   description and reads the full file only when the topic comes up (Deep Agents skills).
   Adding a topic means adding a folder, not changing code.
-- `app/tools/`: facts from the calculation engine.
+- `app/tools/`: facts from the calculation engine, one module per topic.
+- `app/subagents.py`: helpers the guide can hand work to (`task` tool), capped per question.
 - Page context: CopilotKit's middleware adds what the person sees on the page to every
   model call, under "App Context".
 
 Deep Agents features are switched on only when a question needs them (docs/14, section 7).
-For now there are no subagents and no file writing.
+There is no file writing and no general-purpose subagent.
 """
 
 from collections.abc import Sequence
@@ -27,6 +28,7 @@ from deepagents import (
     register_harness_profile,
 )
 from deepagents.backends import CompositeBackend, FilesystemBackend, StateBackend
+from langchain.agents.middleware import ToolCallLimitMiddleware
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
 from langchain_core.tools import BaseTool
@@ -35,6 +37,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph.state import CompiledStateGraph
 
 from app.config import Settings
+from app.subagents import build_subagents
 
 AGENT_ROOT = Path(__file__).resolve().parents[1]
 SKILLS_DIR = AGENT_ROOT / "skills"
@@ -92,6 +95,12 @@ def build_agent(
     )
     # Scratch files live in the conversation state. /skills/ is the repository folder,
     # read only.
+    # Typed loosely: each middleware declares its own state type, which mypy can't join.
+    middleware: list[Any] = [
+        CopilotKitMiddleware(),
+        # A cap on helpers per question, so one message can't start a costly fan-out.
+        ToolCallLimitMiddleware(tool_name="task", run_limit=settings.max_subagent_calls),
+    ]
     backend = CompositeBackend(
         default=StateBackend(),
         routes={SKILLS_PATH: FilesystemBackend(root_dir=SKILLS_DIR, virtual_mode=True)},
@@ -105,7 +114,8 @@ def build_agent(
         permissions=[
             FilesystemPermission(operations=["write"], paths=[f"{SKILLS_PATH}**"], mode="deny")
         ],
-        middleware=[CopilotKitMiddleware()],
+        subagents=build_subagents(tools, SKILLS_PATH),
+        middleware=middleware,
         checkpointer=checkpointer or InMemorySaver(),
         name="guide",
     )
