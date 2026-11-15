@@ -1,4 +1,4 @@
-"""Accounts, sessions and saved reports (docs/15).
+"""Accounts, sessions and saved reports (docs/16).
 
 A guest account is made quietly the first time someone presses Save. It is a random session
 code in a cookie, and nothing personal. Google sign in (later) turns a guest into a Google

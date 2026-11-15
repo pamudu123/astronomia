@@ -1,5 +1,5 @@
 /**
- * My reports (docs/15). The first Save makes a quiet guest account: an HttpOnly cookie the
+ * My reports (docs/16). The first Save makes a quiet guest account: an HttpOnly cookie the
  * backend sets, tied to this browser. Nobody signs up. Google sign in comes later, at payment.
  */
 import type { components } from "./api-types";

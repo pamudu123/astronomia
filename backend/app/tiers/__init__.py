@@ -6,6 +6,6 @@ def save_access() -> None:
 
     Everyone may save for now. Once payments exist, only paid reports can be saved: this then
     looks at the account and the purchase and raises 402 for a result that was not bought
-    (docs/15, phase C). Reports already saved stay readable either way, because only
+    (docs/16, phase C). Reports already saved stay readable either way, because only
     POST /v1/saved depends on this.
     """

@@ -46,9 +46,13 @@ export function LithaCalendar({ lang, t, month, today, data }: Props) {
       </nav>
 
       {!data ? (
-        <p className={styles.status} role="status">
-          {t.failed}
-        </p>
+        <div className={styles.status} role="status">
+          <p>{t.failed}</p>
+          {/* A full page load, so the month is asked for again (the page is made per request). */}
+          <a href={`/${lang}/litha/${month}`} className="btn btn-outline lift">
+            {t.retry}
+          </a>
+        </div>
       ) : (
         <>
           <ShareWithAssistant context={monthContext(data, lang)} />

@@ -31,15 +31,15 @@ export async function ensureOk(response: Response): Promise<Response> {
 
 /**
  * - unavailable: the service did not answer, timed out, or is missing the route (an old deploy)
- * - place: the chosen place is not known to the backend
+ * - unknownPlace: the chosen place is not known to the backend
  * - invalid: the backend refused the details as given
  * - failed: anything else
  */
-export type Failure = "unavailable" | "place" | "invalid" | "failed";
+export type Failure = "unavailable" | "unknownPlace" | "invalid" | "failed";
 
 export function failureOf(caught: unknown): Failure {
   if (caught instanceof RequestError) {
-    if (caught.status === 404) return caught.detail === "unknown place" ? "place" : "unavailable";
+    if (caught.status === 404) return caught.detail === "unknown place" ? "unknownPlace" : "unavailable";
     if (caught.status === 400 || caught.status === 422) return "invalid";
     // 401 is the access key between the frontend and backend, not the visitor's fault.
     if (caught.status === 401 || caught.status === 408 || caught.status >= 502) return "unavailable";
@@ -56,7 +56,7 @@ export function failureOf(caught: unknown): Failure {
 /** The message for a failure, from a block of text that has one for each kind. */
 export function failureText(
   caught: unknown,
-  t: { failed: string; unavailable: string; invalid: string; place: string },
+  t: { failed: string; unavailable: string; invalid: string; unknownPlace: string },
 ): string {
   return t[failureOf(caught)];
 }

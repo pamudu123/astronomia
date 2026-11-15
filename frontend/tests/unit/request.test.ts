@@ -23,7 +23,7 @@ describe("request failures (QA AST-02 to AST-04)", () => {
 
   it("tells a missing route (an old deploy) from an unknown place", () => {
     expect(failureOf(new RequestError(404, "Not Found"))).toBe("unavailable");
-    expect(failureOf(new RequestError(404, "unknown place"))).toBe("place");
+    expect(failureOf(new RequestError(404, "unknown place"))).toBe("unknownPlace");
   });
 
   it("sorts the other answers", () => {
@@ -39,10 +39,13 @@ describe("request failures (QA AST-02 to AST-04)", () => {
   it("has every message in both languages for each date tool", () => {
     for (const dict of [en, si]) {
       for (const t of [dict.nakath, dict.porondam.wedding, dict.firstLetters]) {
-        for (const kind of ["failed", "unavailable", "invalid", "place"] as const) {
+        for (const kind of ["failed", "unavailable", "invalid", "unknownPlace"] as const) {
           expect(t[kind]).toBeTruthy();
         }
         expect(failureText(new RequestError(503, null), t)).toBe(t.unavailable);
+        // The location field's label must not be the unknown-place error (QA SID-01).
+        expect(t.place).toBeTruthy();
+        expect(t.place).not.toBe(t.unknownPlace);
       }
     }
   });
