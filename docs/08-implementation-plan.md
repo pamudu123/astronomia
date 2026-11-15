@@ -165,7 +165,7 @@ At the end of stage 1 the site is a complete free product.
 | 15 | **Detailed explanations** | Rule based long text for every factor, Kuja check and dasha period, in both languages. Paid sections of the PDF, and both languages in one file. Screen: PDF report page 2. | Paid PDF contains the explanations. Free PDF does not. |
 | 16 | **AI explanations** | "Explain this" and questions about a chart. The model receives only computed facts, through tools. Guardrails, caching, rate limits, an automated fact check, and a Sinhala quality comparison of models. | The 100 question test set passes the fact check. Sensitive topics get the safe reply. |
 | 17 | **Sign in and plans** | Accounts with the chosen sign in method. Plans page. Account page with delete. Screen: Plans. | Sign up, sign in, delete the account. |
-| 18 | **Payments** | Single report purchase and membership, in test mode, through PayHere (plan in `docs/14-payments.md`). Purchases set what the account is entitled to, replacing the setting from step 13. | Test payments unlock exactly what was bought. A failed payment unlocks nothing. |
+| 18 | **Payments** | Single report purchase and membership, in test mode, through PayHere (plan in `docs/15-payments.md`). Purchases set what the account is entitled to, replacing the setting from step 13. | Test payments unlock exactly what was bought. A failed payment unlocks nothing. |
 | 19 | **Alerts** | Opt in saved profile, a daily job that finds upcoming key dates, email sending, and the off switch that deletes the profile. | Turn alerts on with a test date, receive the email, turn them off, confirm the profile is deleted. |
 
 ### Stage 3: launch

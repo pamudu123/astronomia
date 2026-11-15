@@ -11,6 +11,7 @@ A website for **hadahan** (Sri Lankan birth charts) and **porondam** (marriage m
 |---|---|
 | `backend/` | Python 3.12+ API (FastAPI). Calculation engine, rules, reports |
 | `frontend/` | Next.js website (TypeScript). Pages in `si` and `en` |
+| `agent/` | The AI assistant behind the chat (Python, Deep Agents, AG-UI). See [`agent/README.md`](agent/README.md) |
 | `design/` | Artwork and the scripts that prepare it for the web |
 | `docs/` | Research and plans |
 
@@ -35,6 +36,16 @@ npm run dev
 ```
 
 The frontend forwards `/api/*` to the backend at `BACKEND_URL` (default `http://localhost:8000`).
+
+**AI assistant** (http://localhost:8123, optional): needs an OpenAI key in `agent/.env`. See [`agent/README.md`](agent/README.md).
+
+```
+cd agent
+uv sync
+uv run uvicorn app.main:create_app --factory --port 8123
+```
+
+The chat is off unless the frontend has `AGENT_URL` set. To turn it on locally, put `AGENT_URL=http://localhost:8123/agent` in `frontend/.env.local` and restart `npm run dev`. If the agent has an access key, set the same value as `AGENT_ACCESS_KEY`.
 
 **Both with Docker:** `docker compose up --build`
 
