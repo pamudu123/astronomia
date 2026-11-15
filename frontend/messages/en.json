@@ -1,10 +1,10 @@
 {
   "meta": {
-    "title": "Astronomia: hadahan and porondam",
+    "title": "Sidera: hadahan and porondam",
     "description": "Your birth chart and marriage matching, worked out precisely and explained in Sinhala or English."
   },
   "nav": {
-    "home": "Astronomia home",
+    "home": "Sidera home",
     "skip": "Skip to content",
     "main": "Main",
     "homeTab": "Home",
@@ -12,15 +12,17 @@
     "porondam": "Porondam",
     "how": "How it works",
     "plans": "Plans",
+    "tools": "All tools",
+    "more": "More",
     "language": "Language"
   },
   "hero": {
-    "eyebrow": "හඳහන · පොරොන්දම්",
+    "tagline": { "sky": "The sky", "calculated": "calculated" },
     "title": "Your birth chart, read with clarity.",
-    "lead": "Astronomia works out your hadahan and porondam from precise planetary positions. Then it explains every result in plain Sinhala or English, for a birth anywhere in the world.",
+    "lead": "Sidera works out your hadahan and porondam from precise planetary positions. Then it explains every result in plain Sinhala or English, for a birth anywhere in the world.",
     "ctaHadahan": "Create my hadahan",
     "ctaPorondam": "Match two charts",
-    "privacy": "No sign up. Nothing you enter is stored.",
+    "privacy": "No sign up. Nothing is stored on our servers.",
     "wheelLabel": "A slowly turning zodiac wheel with the twelve rashi named in Sinhala and planets in orbit"
   },
   "tools": {
@@ -46,6 +48,19 @@
       ],
       "cta": "Match two charts"
     }
+  },
+  "more": {
+    "title": "Everyday tools",
+    "lead": "Good times, family occasions and the year ahead, worked out the same careful way.",
+    "times": "Good times",
+    "family": "Family",
+    "year": "The year ahead",
+    "old": "Old horoscopes",
+    "today": "Today",
+    "todayPlace": "Colombo time",
+    "todayAll": "All of today's nakath",
+    "todayMissing": "See today's Rahu kalaya, thithi and nakatha.",
+    "allTools": "See all tools"
   },
   "rashi": {
     "title": "The twelve rashi",
@@ -313,11 +328,11 @@
       "eyebrow": "නැකැත් පොරොන්දම්",
       "indexTitle": "Which birth stars match yours?",
       "indexLead": "Choose a birth star (nakath) to see all 27 stars as partners, ranked by the porondam factors. No birth details are needed.",
-      "metaIndexTitle": "Porondam by birth star: which nakath match · Astronomia",
+      "metaIndexTitle": "Porondam by birth star: which nakath match · Sidera",
       "metaIndexDescription": "Choose any of the 27 birth stars and see which stars match it in porondam, with Rajju and Vedha shown for each.",
       "title": "{star}: which birth stars match",
       "lead": "All 27 birth stars as partners for {star}, ranked by the porondam factors. Stars that pass both essential checks come first.",
-      "metaTitle": "{star} porondam: matching birth stars · Astronomia",
+      "metaTitle": "{star} porondam: matching birth stars · Sidera",
       "metaDescription": "Which birth stars match {star} in porondam. All 27 stars ranked, with the factor count and the Rajju and Vedha checks for each.",
       "role": "This star belongs to",
       "bride": "The bride",
@@ -424,7 +439,7 @@
     "anonPorondam": "A porondam match",
     "summaryHadahan": "Lagna {lagna} · Rashi {rashi} · {star}",
     "summaryPorondam": "{passed} of {total} factors agree",
-    "whatsappText": "{title} on Astronomia:",
+    "whatsappText": "{title} on Sidera:",
     "metaHadahan": "Lagna {lagna} · Rashi {rashi}",
     "deletedTitle": "The link is deleted",
     "homeHadahan": "Make a hadahan",
@@ -438,7 +453,7 @@
   },
   "privacy": {
     "title": "Privacy",
-    "lead": "Astronomia works out charts without keeping them. This page says exactly what happens to the details you give.",
+    "lead": "Sidera works out charts without keeping them. This page says exactly what happens to the details you give.",
     "glance": [
       {
         "icon": "account",
@@ -481,6 +496,7 @@
         "title": "On your device",
         "body": [
           "Your last result is kept in this browser tab, so a reload does not lose it. It is cleared when the tab closes.",
+          "If you tick Remember my chart on this device, that chart is kept in this browser until you press Forget. It is never kept on our servers.",
           "When you make a share link, its delete code is kept in this browser so you can delete the link later.",
           "There are no cookies, no adverts and no tracking or analytics."
         ]
@@ -564,7 +580,7 @@
     "eyebrow": "ග්‍රහ මාරු",
     "indexTitle": "Planet changes",
     "indexLead": "Each time Saturn, Jupiter, Rahu or Ketu moves into a new sign, with the date and time, and what it means for each lagna.",
-    "metaIndexTitle": "Planet changes 2026 and 2027: Rahu, Ketu, Saturn and Jupiter · Astronomia",
+    "metaIndexTitle": "Planet changes 2026 and 2027: Rahu, Ketu, Saturn and Jupiter · Sidera",
     "metaIndexDescription": "Dates and times of every Rahu, Ketu, Saturn and Jupiter sign change in 2026 and 2027, in Sri Lanka time, and what each one means for your lagna.",
     "kind": {
       "rahu-ketu": "Rahu and Ketu change",
@@ -575,10 +591,10 @@
     "nameInto": "{change} {year} into {to}",
     "nameBack": "{change} {year} back into {to}",
     "hubLead": "What it means for each of the 12 lagnas. Choose yours.",
-    "metaHubTitle": "{name}: what it means for each lagna · Astronomia",
+    "metaHubTitle": "{name}: what it means for each lagna · Sidera",
     "metaHubDescription": "{date}: {moves} See which houses it touches for all 12 lagnas.",
     "lagnaTitle": "{name} for {lagna} lagna",
-    "metaLagnaTitle": "{name} for {lagna} lagna · Astronomia",
+    "metaLagnaTitle": "{name} for {lagna} lagna · Sidera",
     "metaLagnaDescription": "{date}: {moves} What it means for {lagna} lagna, house by house.",
     "move": "{planet} moves from {from} into {to}.",
     "moveBack": "{planet} steps back (retrograde) from {from} into {to}.",
@@ -661,10 +677,10 @@
     "eyebrow": "වාර්ෂික පලාපල",
     "indexTitle": "{year} forecast by lagna",
     "indexLead": "Where Saturn, Jupiter, Rahu and Ketu stay through {year}, month by month, for each of the 12 lagnas. Choose yours.",
-    "metaIndexTitle": "{year} forecast for each lagna · Astronomia",
+    "metaIndexTitle": "{year} forecast for each lagna · Sidera",
     "metaIndexDescription": "Where Saturn, Jupiter, Rahu and Ketu stay through {year} for each of the 12 lagnas, month by month, with every sign change in Sri Lanka time.",
     "title": "{year} forecast for {lagna} lagna",
-    "metaTitle": "{year} forecast for {lagna} lagna · Astronomia",
+    "metaTitle": "{year} forecast for {lagna} lagna · Sidera",
     "metaDescription": "Where Saturn, Jupiter, Rahu and Ketu stay through {year} for {lagna} lagna, month by month, with the date of every sign change.",
     "lead": "Where the slow planets stay through {year}, counted from {lagna} lagna.",
     "planetsTitle": "The year for each planet",
@@ -709,13 +725,13 @@
     "eyebrow": "අලුත් අවුරුදු නැකත්",
     "indexTitle": "Sinhala and Tamil New Year nakath",
     "indexLead": "The official Avurudu nakath for each year, in Sri Lanka time and on your own clock wherever you live.",
-    "metaIndexTitle": "Avurudu nakath 2027: Sinhala and Tamil New Year times · Astronomia",
+    "metaIndexTitle": "Avurudu nakath 2027: Sinhala and Tamil New Year times · Sidera",
     "metaIndexDescription": "The official Sinhala and Tamil New Year nakath for 2027 and past years, in Sri Lanka time and in your own time zone, for Sri Lankans abroad.",
     "title": "Avurudu nakath {year}",
     "cityTitle": "Avurudu nakath {year} in {city} time",
-    "metaTitle": "Avurudu nakath {year}: Sinhala and Tamil New Year times · Astronomia",
+    "metaTitle": "Avurudu nakath {year}: Sinhala and Tamil New Year times · Sidera",
     "metaDescription": "The {year} Sinhala and Tamil New Year: the dawn of the new year, punya kalaya and every nakath, in Sri Lanka time and in your own time zone.",
-    "metaCityTitle": "Avurudu nakath {year} in {city} time · Astronomia",
+    "metaCityTitle": "Avurudu nakath {year} in {city} time · Sidera",
     "metaCityDescription": "Sinhala and Tamil New Year {year} nakath for Sri Lankans in {city}: the dawn of the new year, punya kalaya and every nakath, on {city} clocks.",
     "lead": "The dawn of the new year, punya kalaya and the nakath that follow.",
     "official": "Official list",
@@ -759,9 +775,9 @@
     "title": "Today's nakath",
     "dateTitle": "Nakath for {date}",
     "lead": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for a place. The day begins at sunrise.",
-    "metaTitle": "Today's nakath: Rahu kalaya, thithi and nakatha · Astronomia",
+    "metaTitle": "Today's nakath: Rahu kalaya, thithi and nakatha · Sidera",
     "metaDescription": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for today, for Colombo or any place in the world, with start and end times.",
-    "metaDateTitle": "Nakath for {date}: Rahu kalaya, thithi and nakatha · Astronomia",
+    "metaDateTitle": "Nakath for {date}: Rahu kalaya, thithi and nakatha · Sidera",
     "metaDateDescription": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for {date} in Colombo or any place, with start and end times.",
     "place": "That place could not be found. Please choose it again from the list.",
     "placeHint": "Type a city or town.",
@@ -797,7 +813,7 @@
     "eyebrow": "නම් අකුරු",
     "title": "Baby name letters from the birth star",
     "lead": "Enter the baby's birth details to find the birth star (nakatha), its pada and the starting letter tradition gives for it. Or open a star below.",
-    "metaTitle": "Baby name letters by birth star (nakatha) · Astronomia",
+    "metaTitle": "Baby name letters by birth star (nakatha) · Sidera",
     "metaDescription": "Find the starting letter for a baby's name from the birth time: nakatha, pada, Moon sign and lagna, with the letters for all 27 stars in Sinhala and English.",
     "formTitle": "Letters from the birth time",
     "formLead": "The Moon's star and pada at the moment of birth give the letter. Birth details stay in this browser tab and are not saved.",
@@ -833,7 +849,7 @@
     "indexLead": "Open a star to see its four padas. No birth details needed.",
     "starTitle": "{star}: baby name letters",
     "starLead": "The four padas of {star}, each with its starting letter and Moon sign. No birth details needed.",
-    "metaStarTitle": "{star} nakatha baby name letters: {letters} · Astronomia",
+    "metaStarTitle": "{star} nakatha baby name letters: {letters} · Sidera",
     "metaStarDescription": "Starting letters for a baby born in {star} nakatha: {letters}. Pada by pada, in Sinhala and English, with the Moon sign.",
     "whichPada": "Which pada? It depends on the exact birth time. Enter the birth details to find it.",
     "findOwn": "Find the letter from a birth time",
@@ -872,7 +888,7 @@
     "eyebrow": "අකුරු කියවීම",
     "title": "First letters ceremony nakath",
     "lead": "Good dates and times for a child's first letters (akuru kiyaweema), from the child's birth star and the place of the ceremony. Each time says why it was chosen.",
-    "metaTitle": "Akuru kiyaweema nakath: first letters ceremony times · Astronomia",
+    "metaTitle": "Akuru kiyaweema nakath: first letters ceremony times · Sidera",
     "metaDescription": "Find good dates and times for a child's first letters ceremony (akuru kiyaweema) from the birth star, for 1, 3 or 6 months, in your own time zone.",
     "childTitle": "The child",
     "mode": {
@@ -920,7 +936,7 @@
     "link": "First letters ceremony nakath"
   },
   "kendara": {
-    "metaTitle": "Old horoscope: find the birth from a paper kendara · Astronomia",
+    "metaTitle": "Old horoscope: find the birth from a paper kendara · Sidera",
     "metaDescription": "Have only an old paper horoscope? Draw its kendara and see the dates and times of birth from 1900 to now that fit it.",
     "eyebrow": "පැරණි කේන්දරය",
     "title": "Find the birth from an old horoscope",
@@ -992,10 +1008,156 @@
   },
   "assistant": {
     "open": "Ask about this page",
-    "title": "Ask Astronomia",
+    "title": "Ask Sidera",
     "note": "AI answers, based on what is on your screen. A guide, not a decision.",
     "placeholder": "Ask about your result…",
     "welcome": "Hello! Ask me about anything on this page, in Sinhala or English.",
     "close": "Close the chat"
+  },
+  "litha": {
+    "eyebrow": "ලිත",
+    "indexTitle": "Litha calendar",
+    "title": "{month} litha calendar",
+    "lead": "Every day of the month at a glance: the nakatha and thithi at sunrise, Rahu kalaya and the poya days, worked out for Colombo time.",
+    "metaTitle": "{month} litha: nakath, Rahu kalaya and poya days",
+    "metaDescription": "A Sinhala litha calendar for {month}: the nakatha and thithi each day, Rahu kalaya and poya days, worked out for Colombo time.",
+    "previous": "Previous month",
+    "next": "Next month",
+    "thisMonth": "This month",
+    "poya": "Poya",
+    "fullMoon": "Full moon {time}",
+    "rahu": "Rahu",
+    "today": "Today",
+    "failed": "The calendar could not be loaded just now. Try again in a moment.",
+    "dayLink": "Daily nakath for any place",
+    "footer": "Litha calendar"
+  },
+  "allTools": {
+    "title": "All tools",
+    "lead": "Everything Sidera works out, grouped by what you are planning. Every tool is free.",
+    "metaTitle": "All tools: hadahan, porondam, nakath and more",
+    "metaDescription": "Every Sidera tool in one place: birth charts, marriage matching, daily nakath, the litha calendar, Avurudu times, baby name letters and more.",
+    "planning": "What are you planning?",
+    "free": "Free",
+    "need": "You need",
+    "needs": {
+      "nothing": "Nothing",
+      "birth": "Birth details",
+      "two": "Two people's birth details",
+      "paper": "A paper horoscope"
+    },
+    "groups": {
+      "chart": "Your chart",
+      "marriage": "Marriage",
+      "baby": "New baby",
+      "daily": "Every day",
+      "newYear": "New year",
+      "old": "Old records"
+    },
+    "items": {
+      "hadahan": {
+        "name": "Hadahan",
+        "text": "Your birth chart: lagna, rashi, nakath, the nine planets and your dasha periods."
+      },
+      "forecast": {
+        "name": "{year} forecast",
+        "text": "What the year holds for each lagna, month by month."
+      },
+      "changes": {
+        "name": "Planet changes",
+        "text": "Rahu, Ketu, Saturn and Jupiter changes, and what each means for your lagna."
+      },
+      "porondam": {
+        "name": "Porondam",
+        "text": "Marriage matching with every factor shown one by one, with the reason."
+      },
+      "stars": {
+        "name": "Birth star matches",
+        "text": "Which birth stars match yours, before you have full charts."
+      },
+      "kuja": {
+        "name": "Kuja dosha check",
+        "text": "Whether kuja dosha is present, and the rules that cancel it. Part of every hadahan."
+      },
+      "wedding": {
+        "name": "Wedding nakath",
+        "text": "Good times for the wedding ceremonies, found from a porondam match."
+      },
+      "babyNames": {
+        "name": "Baby name letters",
+        "text": "The first letters for a child's name from the birth star, with name ideas."
+      },
+      "firstLetters": {
+        "name": "First letters ceremony",
+        "text": "Good times for akuru kiyaweema, worked out for the child."
+      },
+      "nakath": {
+        "name": "Today's nakath",
+        "text": "Rahu kalaya, thithi, nakatha, yoga and karana for any day and place."
+      },
+      "litha": {
+        "name": "Litha calendar",
+        "text": "The whole month at a glance, with poya days and Rahu kalaya."
+      },
+      "avurudu": {
+        "name": "Avurudu nakath",
+        "text": "Sinhala and Tamil New Year times, in your own time zone anywhere in the world."
+      },
+      "kendara": {
+        "name": "Find a birth from an old horoscope",
+        "text": "Enter a paper kendara and find the dates and times it fits."
+      }
+    },
+    "hiddenTitle": "Also inside the results",
+    "hidden": [
+      {
+        "title": "PDF reports",
+        "text": "Download a hadahan or porondam as a PDF to print or send to family."
+      },
+      {
+        "title": "Private share links",
+        "text": "Share a result with a link that closes after 30 days."
+      },
+      {
+        "title": "Remember on this device",
+        "text": "Keep your chart in this browser so Sidera greets you with your own sky."
+      }
+    ]
+  },
+  "next": {
+    "title": "Next steps",
+    "hadahan": {
+      "babyNames": "Baby name letters from this birth star",
+      "firstLetters": "First letters ceremony nakath for this child",
+      "porondam": "Match with a partner",
+      "litha": "This month's litha calendar"
+    },
+    "porondam": {
+      "stars": "Other birth stars that match",
+      "hadahan": "Each person's full hadahan",
+      "litha": "This month's litha calendar"
+    },
+    "baby": {
+      "firstLetters": "First letters ceremony nakath for this child",
+      "hadahan": "The child's full hadahan",
+      "nakath": "Today's nakath"
+    }
+  },
+  "yourSky": {
+    "title": "Your sky",
+    "welcome": "Welcome back",
+    "welcomeNamed": "Welcome back, {name}",
+    "summary": "{lagna} lagna · Moon in {rashi} · {star}",
+    "forecast": "Your {year} forecast",
+    "change": "{change}: what it means for you",
+    "hadahan": "Open your hadahan",
+    "forget": "Forget this chart",
+    "note": "Kept only in this browser."
+  },
+  "remember": {
+    "label": "Remember my chart on this device",
+    "note": "Kept only in this browser, never on our servers. Next time, Sidera greets you with your own sky.",
+    "saved": "Remembered on this device.",
+    "forget": "Forget"
   }
 }

@@ -6,6 +6,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { useAssistantContext } from "@/components/assistant/PageContext";
 import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
+import { NextSteps } from "@/components/NextSteps";
 import { ReportButton } from "@/components/ReportButton";
 import { ShareButton } from "@/components/ShareButton";
 import { matchContext } from "@/lib/assistant/context";
@@ -40,6 +41,8 @@ type Props = {
   timeline?: Dictionary["porondam"]["timeline"];
   /** Text for the wedding nakath finder. Needs the request too. */
   wedding?: Dictionary["porondam"]["wedding"];
+  /** Next steps under the match. Left out on shared pages. */
+  next?: Dictionary["next"];
   onAgain?: () => void;
   /** Shown where the actions are when the result is read only. */
   readOnlyAction?: React.ReactNode;
@@ -67,6 +70,7 @@ export function PorondamResult({
   request,
   timeline,
   wedding,
+  next,
   onAgain,
   readOnlyAction,
 }: Props) {
@@ -354,6 +358,17 @@ export function PorondamResult({
           )}
         </div>
       </section>
+
+      {request && next && (
+        <NextSteps
+          title={next.title}
+          steps={[
+            { id: "stars", href: `/${lang}/porondam/stars`, label: next.porondam.stars },
+            { id: "hadahan", href: `/${lang}/hadahan`, label: next.porondam.hadahan },
+            { id: "litha", href: `/${lang}/litha`, label: next.porondam.litha },
+          ]}
+        />
+      )}
     </main>
   );
 }

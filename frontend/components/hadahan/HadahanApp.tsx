@@ -38,6 +38,9 @@ type Props = {
   yearly?: Dictionary["yearly"];
   /** Text for the link to the old horoscope search, and for a form filled from it. */
   kendara?: Dictionary["kendara"];
+  /** Next steps and Remember my chart, under the result. */
+  next?: Dictionary["next"];
+  remember?: Dictionary["remember"];
 };
 
 const noop = () => () => {};
@@ -58,6 +61,8 @@ function HadahanPage({
   share,
   yearly,
   kendara,
+  next,
+  remember,
   handoff,
 }: Props & { handoff: ReturnType<typeof parseHandoff> }) {
   const [labels, setLabels] = useState<Labels | null>(null);
@@ -147,6 +152,8 @@ function HadahanPage({
         share={share}
         request={saved.request}
         yearly={yearly}
+        next={next}
+        remember={remember}
         onEdit={() => {
           // Back to the form as it was submitted, so one field can change (QA report AST-01).
           const values = formFor(saved);

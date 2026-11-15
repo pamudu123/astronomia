@@ -60,7 +60,7 @@ export default async function BabyNamesPage({ params }: PageProps<"/[lang]/baby-
         <h1 className={`display ${styles.title}`}>{t.title}</h1>
         <p className="soft">{t.lead}</p>
       </div>
-      <BabyLettersApp t={t} hadahan={dict.hadahan} lang={lang} />
+      <BabyLettersApp t={t} hadahan={dict.hadahan} lang={lang} next={dict.next} />
       <section aria-labelledby="stars-title" className={styles.head}>
         <h2 id="stars-title" className={`display ${styles.sectionTitle}`}>
           {t.indexTitle}

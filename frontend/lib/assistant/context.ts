@@ -24,7 +24,7 @@ export function pageFromPath(pathname: string): string {
 }
 
 export const CONTEXT_DESCRIPTION =
-  "The page the person has open on Astronomia and a summary of what is on their screen";
+  "The page the person has open on Sidera and a summary of what is on their screen";
 
 function personSummary(person: Person, labels: Labels): { [key: string]: Json } {
   return {

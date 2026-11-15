@@ -4,6 +4,21 @@ Visual design work for the Astronomia website (night sky look: deep indigo, soft
 
 The screens live on a design canvas: https://claude.ai/artifact/7p29bNJpsgp6ZbZSVxYFWX (private, share it from the page's Share menu).
 
+## Brand
+
+The site is branded **Sidera**, with the tagline *The sky calculated* (domain idea: SideraSky.com). The repository and code keep the name Astronomia.
+
+| Item | Rule |
+|---|---|
+| Logo | Two crossing orbits around a four pointed star, with a planet on the solid orbit. `Logo` in `frontend/components/Icons.tsx` |
+| Small icon | Below about 48 px, use the bold single orbit (same tilt and planet position). `frontend/app/icon.svg` is the favicon |
+| Tagline | Two lines, no punctuation: "The sky" in the display serif over "calculated" in mono brass. On one line, separate the parts with a gap or thin rule |
+| Colours | Night navy `#0b1026`, brass `#c9a45c` (the `--gold` token), sky blue `#7fa7d9` (`--sky`), starlight `#f4f1ea` (`--ink`). Teal and coral stay for results |
+| Fonts | Marcellus for display, DM Sans for body, JetBrains Mono (`.mono`) for calculated values such as degrees and times |
+| Avoid | Purple nebula gradients, glows, crystal balls and other mystic clichés |
+
+The logo story, for an About page: the two rings are great circles of the sky. Where they cross lie the points astronomers have measured for thousands of years, from the equinoxes to the lunar nodes, Rahu and Ketu.
+
 ## Folders
 
 | Folder | Contents |

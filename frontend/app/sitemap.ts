@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   if (process.env.STAGING_PASSWORD) return [];
   const paths = [
     "",
+    "/tools",
     "/hadahan",
     "/porondam",
     "/porondam/stars",
@@ -28,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...AVURUDU_YEARS.map((year) => `/avurudu/${year}`),
     ...CITIES.map((city) => `/avurudu/${FEATURED_YEAR}/${city.key}`),
     "/nakath",
+    "/litha",
     "/baby-names",
     ...NAKSHATRA.map((star) => `/baby-names/${star.key}`),
     "/first-letters",

@@ -1,0 +1,155 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 96px;
+  scroll-margin-top: 24px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-size: 36px;
+  line-height: 1.2;
+}
+
+/* Today strip: real numbers from the nakath engine, in mono. */
+.today {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+  color: var(--ink);
+}
+.today:hover {
+  color: var(--ink);
+  border-color: var(--gold);
+}
+
+.todayHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.todayTitle {
+  font-size: 26px;
+}
+
+.todayPlace {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+  gap: 16px;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.factLabel {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.factValue {
+  font-size: 17px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+html[lang="si"] .factValue {
+  font-family: var(--font-mono), var(--font-sinhala);
+}
+
+.todayCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* Grouped tool cards. */
+/* Four groups: an even two by two grid, one column on phones. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.cardTitle {
+  font-size: 22px;
+}
+
+.links {
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+  padding-block: 8px;
+  border-top: 1px solid var(--line-soft);
+  font-weight: 500;
+}
+
+.linkEnd {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.allTools {
+  align-self: flex-start;
+}
+
+.detail {
+  color: var(--sky);
+  font-size: 13px;
+  font-weight: 400;
+}

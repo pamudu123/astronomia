@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Marcellus, Noto_Sans_Sinhala, Noto_Serif_Sinhala } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Marcellus, Noto_Sans_Sinhala, Noto_Serif_Sinhala } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -13,6 +13,7 @@ import { type Dictionary, getDictionary } from "./dictionaries";
 
 const marcellus = Marcellus({ weight: "400", subsets: ["latin"], variable: "--font-marcellus" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 const notoSansSinhala = Noto_Sans_Sinhala({
   subsets: ["sinhala"],
   variable: "--font-sans-sinhala",
@@ -22,7 +23,7 @@ const notoSerifSinhala = Noto_Serif_Sinhala({
   variable: "--font-serif-sinhala",
 });
 
-const fontVariables = [marcellus, dmSans, notoSansSinhala, notoSerifSinhala]
+const fontVariables = [marcellus, dmSans, jetbrainsMono, notoSansSinhala, notoSerifSinhala]
   .map((font) => font.variable)
   .join(" ");
 

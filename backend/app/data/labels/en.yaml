@@ -401,6 +401,7 @@ karana:
   kimstughna: Kimstughna
 panchanga:
   timezone: "Times are in {timezone} ({offset})."
+  poya: "Poya days are the calculated full moon days. The official Sri Lankan calendar can differ by a day, so check it for religious observances."
 direction: {north: north, south: south, east: east, west: west, north_east: north east, north_west: north west, south_east: south east, south_west: south west}
 
 # Sinhala and Tamil New Year (Avurudu).

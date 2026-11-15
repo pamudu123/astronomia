@@ -179,6 +179,13 @@ def resolve_place(
     return Place(query.latitude, query.longitude, query.timezone), None, None
 
 
+def _check_location(query: PanchangaQuery) -> None:
+    if query.latitude is not None and not -90 < query.latitude < 90:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "latitude out of range")
+    if query.longitude is not None and not -180 <= query.longitude <= 180:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "longitude out of range")
+
+
 @router.get("/v1/panchanga", response_model=PanchangaResponse)
 def panchanga(
     query: Annotated[PanchangaQuery, Query()], response: Response, db: PlacesDb
@@ -186,11 +193,133 @@ def panchanga(
     """Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for the day beginning at sunrise."""
     if not MIN_YEAR <= query.date.year <= MAX_YEAR:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "year out of range")
-    if query.latitude is not None and not -90 < query.latitude < 90:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "latitude out of range")
-    if query.longitude is not None and not -180 <= query.longitude <= 180:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "longitude out of range")
+    _check_location(query)
     place, place_id, name = resolve_place(query, db, query.lang)
     result = day_panchanga(EPHEMERIS, query.date, place)
     response.headers.update(CACHE)
     return panchanga_out(result, query.lang, place_id, name)
+
+
+# ---------- a month at a glance (the litha calendar) ----------
+
+FULL_MOON = 15  # thithi 15 (Purnima) ends at the full moon
+
+
+class MonthDayOut(BaseModel):
+    date: dt.date
+    weekday: str
+    weekday_name: str
+    sunrise: LocalTimeOut | None
+    sunset: LocalTimeOut | None
+    rahu_kalaya: LocalRangeOut | None
+    thithi: PanchangaPartOut | None  # the part holding at sunrise
+    nakatha: PanchangaPartOut | None
+    poya: bool  # the full moon falls in this Sinhala day (calculated)
+    full_moon: LocalTimeOut | None  # the moment of the full moon, on a poya day
+
+
+class MonthPanchangaResponse(BaseModel):
+    rule_set: str
+    provisional: bool
+    year: int
+    month: int
+    place: PanchangaPlaceOut
+    offset: str  # on the 15th of the month
+    timezone_note: str
+    poya_note: str
+    days: list[MonthDayOut]
+
+
+class MonthQuery(BaseModel):
+    year: int
+    month: int
+    place_id: int | None = None
+    latitude: float | None = None
+    longitude: float | None = None
+    timezone: str | None = None
+    lang: Lang = "en"
+
+    @model_validator(mode="after")
+    def valid(self) -> Self:
+        if not 1 <= self.month <= 12:
+            raise ValueError("month must be 1 to 12")
+        manual = [self.latitude, self.longitude, self.timezone]
+        if self.place_id is not None and any(v is not None for v in manual):
+            raise ValueError("give either place_id or latitude, longitude and timezone")
+        if self.place_id is None and any(v is None for v in manual):
+            raise ValueError("give place_id, or all of latitude, longitude and timezone")
+        return self
+
+
+def _full_moon(result: DayPanchanga) -> dt.datetime | None:
+    """The end of thithi 15 when it falls between this sunrise and the next."""
+    if result.sunrise is None or result.next_sunrise is None:
+        return None
+    for span in result.thithi:
+        if span.number == FULL_MOON and result.sunrise <= span.end < result.next_sunrise:
+            return span.end
+    return None
+
+
+def month_day_out(result: DayPanchanga, lang: Lang) -> MonthDayOut:
+    zone = zoneinfo.ZoneInfo(result.place.timezone)
+    day = panchanga_out(result, lang)
+    full_moon = _full_moon(result)
+    return MonthDayOut(
+        date=day.date,
+        weekday=day.weekday,
+        weekday_name=day.weekday_name,
+        sunrise=day.sunrise,
+        sunset=day.sunset,
+        rahu_kalaya=day.rahu_kalaya,
+        thithi=day.thithi[0] if day.thithi else None,
+        nakatha=day.nakatha[0] if day.nakatha else None,
+        poya=full_moon is not None,
+        full_moon=None if full_moon is None else time_out(full_moon, zone),
+    )
+
+
+@router.get("/v1/panchanga/month", response_model=MonthPanchangaResponse)
+def panchanga_month(
+    query: Annotated[MonthQuery, Query()], response: Response, db: PlacesDb
+) -> MonthPanchangaResponse:
+    """Every day of a month: sunrise, Rahu kalaya, the thithi and nakatha at sunrise, and poya."""
+    if not MIN_YEAR <= query.year <= MAX_YEAR:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "year out of range")
+    location = PanchangaQuery(
+        date=dt.date(query.year, query.month, 1),
+        place_id=query.place_id,
+        latitude=query.latitude,
+        longitude=query.longitude,
+        timezone=query.timezone,
+        lang=query.lang,
+    )
+    _check_location(location)
+    place, place_id, name = resolve_place(location, db, query.lang)
+    first = dt.date(query.year, query.month, 1)
+    following = dt.date(query.year + query.month // 12, query.month % 12 + 1, 1)
+    results = [
+        day_panchanga(EPHEMERIS, first + dt.timedelta(days=n), place)
+        for n in range((following - first).days)
+    ]
+    zone = zoneinfo.ZoneInfo(place.timezone)
+    offset = offset_label(dt.datetime(query.year, query.month, 15, 12, tzinfo=zone))
+    table = labels(query.lang)
+    response.headers.update(CACHE)
+    return MonthPanchangaResponse(
+        rule_set=results[0].rule_set,
+        provisional=results[0].provisional,
+        year=query.year,
+        month=query.month,
+        place=PanchangaPlaceOut(
+            id=place_id,
+            name=name,
+            latitude=place.latitude,
+            longitude=place.longitude,
+            timezone=place.timezone,
+        ),
+        offset=offset,
+        timezone_note=table["panchanga"]["timezone"].format(timezone=place.timezone, offset=offset),
+        poya_note=table["panchanga"]["poya"],
+        days=[month_day_out(result, query.lang) for result in results],
+    )

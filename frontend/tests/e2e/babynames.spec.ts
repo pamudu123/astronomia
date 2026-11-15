@@ -127,11 +127,11 @@ test("a star across two signs, in Sinhala", async ({ page }) => {
 
 test("the star pages are rendered on the server for search engines", async ({ request }) => {
   const html = await (await request.get("/si/baby-names/ardra")).text();
-  expect(html).toContain("<title>අද නැකතට නමේ අකුරු: කු ඝ ඞ ඡ · Astronomia</title>");
+  expect(html).toContain("<title>අද නැකතට නමේ අකුරු: කු ඝ ඞ ඡ · Sidera</title>");
   expect(html).toContain('name="description"');
   expect(html).toContain('<link rel="canonical" href="http://localhost:3000/si/baby-names/ardra"/>');
   const index = await (await request.get("/en/baby-names")).text();
-  expect(index).toContain("<title>Baby name letters by birth star (nakatha) · Astronomia</title>");
+  expect(index).toContain("<title>Baby name letters by birth star (nakatha) · Sidera</title>");
   expect(index).toContain("චු චෙ චො ල");
 });
 

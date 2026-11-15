@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
+import { NextSteps } from "@/components/NextSteps";
 import { ReportButton } from "@/components/ReportButton";
 import { ShareButton } from "@/components/ShareButton";
 import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
@@ -22,6 +23,7 @@ import { DashaTimeline } from "./DashaTimeline";
 import { Forecast } from "./Forecast";
 import styles from "./HadahanResult.module.css";
 import { Kendara } from "./Kendara";
+import { RememberChart } from "./RememberChart";
 import { SummaryCards } from "./SummaryCards";
 
 type Props = {
@@ -40,6 +42,9 @@ type Props = {
   onEdit?: () => void;
   /** The yearly forecast link. Left out on shared pages. */
   yearly?: Dictionary["yearly"];
+  /** Next steps and Remember my chart. Left out on shared pages. */
+  next?: Dictionary["next"];
+  remember?: Dictionary["remember"];
 };
 
 /** What each step of the reading guide lights up: houses, and a planet to pick out. */
@@ -63,6 +68,8 @@ export function HadahanResult({
   request,
   onEdit,
   yearly,
+  next,
+  remember,
 }: Props) {
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
   const [step, setStep] = useState<number | null>(null);
@@ -309,6 +316,19 @@ export function HadahanResult({
         </article>
       </section>
 
+      {request && next && (
+        <NextSteps
+          title={next.title}
+          steps={[
+            { id: "baby-names", href: `/${lang}/baby-names`, label: next.hadahan.babyNames },
+            { id: "first-letters", href: `/${lang}/first-letters`, label: next.hadahan.firstLetters },
+            { id: "porondam", href: `/${lang}/porondam`, label: next.hadahan.porondam },
+            { id: "litha", href: `/${lang}/litha`, label: next.hadahan.litha },
+          ]}
+        >
+          {remember && <RememberChart t={remember} saved={{ name, placeLabel: placeText, request, result }} />}
+        </NextSteps>
+      )}
     </main>
   );
 }

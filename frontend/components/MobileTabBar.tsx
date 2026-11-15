@@ -15,17 +15,24 @@ export function MobileTabBar(props: Props) {
 
 type Props = { lang: Locale; dict: Dictionary };
 
+/** The All tools page and the tools it leads to beyond the first three tabs; the More tab is lit on them. */
+const MORE_PAGES = ["tools", "nakath", "litha", "avurudu", "first-letters", "baby-names", "porondam/stars", "changes", "forecast", "kendara"];
+
+const isMorePage = (lang: Locale, pathname: string) =>
+  MORE_PAGES.some((page) => pathname === `/${lang}/${page}` || pathname.startsWith(`/${lang}/${page}/`));
+
 /** The tabs for a given page address. Also the stand-in while the address is not known. */
 export function MobileTabs({ lang, dict, pathname }: Props & { pathname: string }) {
   const tabs = [
-    { href: `/${lang}`, label: dict.nav.homeTab, icon: <HomeIcon /> },
-    { href: `/${lang}/hadahan`, label: dict.nav.hadahan, icon: <ChartIcon /> },
-    { href: `/${lang}/porondam`, label: dict.nav.porondam, icon: <MatchIcon /> },
+    { href: `/${lang}`, label: dict.nav.homeTab, icon: <HomeIcon />, active: pathname === `/${lang}` },
+    { href: `/${lang}/hadahan`, label: dict.nav.hadahan, icon: <ChartIcon />, active: pathname === `/${lang}/hadahan` },
+    { href: `/${lang}/porondam`, label: dict.nav.porondam, icon: <MatchIcon />, active: pathname === `/${lang}/porondam` },
+    { href: `/${lang}/tools`, label: dict.nav.more, icon: <MoreIcon />, active: isMorePage(lang, pathname) },
   ];
   return (
     <nav className={styles.bar} aria-label={dict.nav.main}>
       {tabs.map((tab) => {
-        const active = pathname === tab.href;
+        const active = tab.active;
         return (
           <Link
             key={tab.href}
@@ -55,6 +62,17 @@ function ChartIcon() {
     <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.5">
       <rect x="3" y="3" width="16" height="16" />
       <path d="M8.3 3v16M13.7 3v16M3 8.3h16M3 13.7h16" />
+    </svg>
+  );
+}
+
+function MoreIcon() {
+  return (
+    <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <rect x="3" y="3" width="6.5" height="6.5" rx="1.5" />
+      <rect x="12.5" y="3" width="6.5" height="6.5" rx="1.5" />
+      <rect x="3" y="12.5" width="6.5" height="6.5" rx="1.5" />
+      <rect x="12.5" y="12.5" width="6.5" height="6.5" rx="1.5" />
     </svg>
   );
 }
