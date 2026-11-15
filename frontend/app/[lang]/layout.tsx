@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { DM_Sans, Marcellus, Noto_Sans_Sinhala, Noto_Serif_Sinhala } from "next/font/google";
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
 
+import { Assistant } from "@/components/assistant/Assistant";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { hasLocale, locales } from "@/lib/i18n";
+import { type Locale, hasLocale, locales } from "@/lib/i18n";
 
 import "../globals.css";
-import { getDictionary } from "./dictionaries";
+import { type Dictionary, getDictionary } from "./dictionaries";
 
 const marcellus = Marcellus({ weight: "400", subsets: ["latin"], variable: "--font-marcellus" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" });
@@ -45,6 +47,16 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
   };
 }
 
+/** The AI chat wraps the page only when the agent is configured (AGENT_URL): that is its off switch. */
+function Page({ lang, dict, children }: { lang: Locale; dict: Dictionary; children: ReactNode }) {
+  if (!process.env.AGENT_URL) return children;
+  return (
+    <Assistant lang={lang} t={dict.assistant}>
+      {children}
+    </Assistant>
+  );
+}
+
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
@@ -56,9 +68,11 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         <a className="skip-link" href="#main">
           {dict.nav.skip}
         </a>
-        <SiteHeader lang={lang} dict={dict} />
-        {children}
-        <SiteFooter lang={lang} dict={dict} />
+        <Page lang={lang} dict={dict}>
+          <SiteHeader lang={lang} dict={dict} />
+          {children}
+          <SiteFooter lang={lang} dict={dict} />
+        </Page>
       </body>
     </html>
   );

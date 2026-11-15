@@ -3,10 +3,12 @@
 import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { useAssistantContext } from "@/components/assistant/PageContext";
 import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
 import { ReportButton } from "@/components/ReportButton";
 import { ShareButton } from "@/components/ShareButton";
+import { matchContext } from "@/lib/assistant/context";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
@@ -69,6 +71,8 @@ export function PorondamResult({
   readOnlyAction,
 }: Props) {
   const [filter, setFilter] = useState<FactorFilter>("all");
+  // What the AI assistant sees: this result, with no names or birth details.
+  useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction)));
   const match = result.match!;
   const bride = result.bride!;
   const groom = result.groom!;
