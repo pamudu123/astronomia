@@ -2,6 +2,7 @@
 
 from typing import Any
 
+import pytest
 from langchain_core.messages import HumanMessage
 
 from app.config import Settings
@@ -62,6 +63,14 @@ def test_openai_model_keeps_no_data_and_uses_low_effort(settings: Settings) -> N
     assert model.model_name == "gpt-6-luna"
     assert model.store is False
     assert model.reasoning == {"effort": "low"}
+
+
+def test_missing_openai_key_says_so_plainly(settings: Settings) -> None:
+    from pydantic import SecretStr
+
+    no_key = settings.model_copy(update={"openai_api_key": SecretStr("")})
+    with pytest.raises(RuntimeError, match="OPENAI_API_KEY is not set"):
+        build_model(no_key)
 
 
 def test_real_model_matches_the_profile_key(settings: Settings) -> None:

@@ -53,6 +53,9 @@ def build_model(settings: Settings) -> BaseChatModel:
     kwargs: dict[str, Any] = {}
     if settings.model.startswith("openai:"):
         key = settings.openai_api_key.get_secret_value()
+        if not key:
+            # One clear line in the host's logs instead of a long OpenAI traceback.
+            raise RuntimeError("OPENAI_API_KEY is not set. Add it to the agent's environment.")
         kwargs = {
             # Responses API without storing anything on OpenAI's side (privacy, docs/14 s.11).
             # Reasoning is passed back encrypted, so multi-step turns still work.
@@ -60,7 +63,7 @@ def build_model(settings: Settings) -> BaseChatModel:
             "store": False,
             "include": ["reasoning.encrypted_content"],
             "reasoning": {"effort": settings.reasoning_effort},
-            **({"api_key": key} if key else {}),
+            "api_key": key,
         }
     model: BaseChatModel = init_chat_model(settings.model, **kwargs)
     return model
