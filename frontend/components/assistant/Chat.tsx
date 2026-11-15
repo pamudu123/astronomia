@@ -12,6 +12,9 @@ import {
 } from "@copilotkit/react-core/v2";
 import { usePathname } from "next/navigation";
 import {
+  type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
   type ReactElement,
   createContext,
   useCallback,
@@ -26,13 +29,18 @@ import {
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { CONTEXT_DESCRIPTION, type PageContext, type PageKey, pageFromPath, pageKey } from "@/lib/assistant/context";
+import { PANEL_MAX, PANEL_MIN, PANEL_WIDTH, clampWidth, followUpInstructions } from "@/lib/assistant/panel";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
-// The agent's name, shared with app/api/copilotkit/route.ts.
+import { ToolCards } from "./ToolCards";
+
+// The agents' names, shared with app/api/copilotkit/route.ts: the guide answers, the
+// suggester writes the follow-up questions under each answer.
 const AGENT_ID = "guide";
-// Wide enough for a match card later; the page keeps the rest on a laptop screen.
-const PANEL_WIDTH = 400;
+const SUGGEST_ID = "suggest";
+// Where the width the person chose is remembered, in this browser only.
+const WIDTH_KEY = "sidera.assistant.width";
 
 type Text = Dictionary["assistant"];
 type Tools = Dictionary["allTools"];
@@ -132,8 +140,21 @@ function useAgentReady(): boolean {
   );
 }
 
-/** Sends the current page context to the agent with every message, and sets the suggestions. */
-function ContextBridge({ value, t, chipsKey }: { value: PageContext; t: Text; chipsKey: PageKey | null }) {
+/**
+ * Sends the current page context to the agent with every message, and sets the suggestions:
+ * the page's own questions before the first message, then follow-ups written after each answer.
+ */
+function ContextBridge({
+  value,
+  t,
+  lang,
+  chipsKey,
+}: {
+  value: PageContext;
+  t: Text;
+  lang: Locale;
+  chipsKey: PageKey | null;
+}) {
   useAgentContext({ description: CONTEXT_DESCRIPTION, value });
   const ready = useAgentReady();
   const chips = useMemo(() => {
@@ -146,7 +167,87 @@ function ContextBridge({ value, t, chipsKey }: { value: PageContext; t: Text; ch
     { suggestions: chips, available: "before-first-message", consumerAgentId: AGENT_ID },
     [chips, ready],
   );
+  const instructions = useMemo(() => followUpInstructions(lang), [lang]);
+  useConfigureSuggestions(
+    {
+      instructions,
+      minSuggestions: 2,
+      maxSuggestions: 3,
+      available: "after-first-message",
+      providerAgentId: SUGGEST_ID,
+      consumerAgentId: AGENT_ID,
+    },
+    [instructions, ready],
+  );
   return null;
+}
+
+/** The width the person last chose, or the default. Storage can be missing or blocked. */
+function savedWidth(): number {
+  try {
+    const saved = Number(window.localStorage.getItem(WIDTH_KEY));
+    if (saved) return clampWidth(saved, window.innerWidth);
+  } catch {
+    // Private windows and blocked storage: use the default.
+  }
+  return PANEL_WIDTH;
+}
+
+/**
+ * The panel's left edge, which people drag to make the chat wider or narrower (laptops only;
+ * on a phone the panel covers the screen). Arrow keys move it too, Home goes back to the default.
+ */
+function ResizeHandle({ width, onChange, label }: { width: number; onChange: (w: number) => void; label: string }) {
+  const frame = useRef(0);
+  const [dragging, setDragging] = useState(false);
+  useEffect(() => {
+    // While dragging, the page follows the edge at once instead of easing after it.
+    document.documentElement.classList.toggle("sidera-resizing", dragging);
+    return () => document.documentElement.classList.remove("sidera-resizing");
+  }, [dragging]);
+  const move = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+    const next = clampWidth(window.innerWidth - event.clientX, window.innerWidth);
+    cancelAnimationFrame(frame.current);
+    frame.current = requestAnimationFrame(() => onChange(next));
+  };
+  const key = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const step = event.shiftKey ? 80 : 24;
+    const next =
+      event.key === "ArrowLeft"
+        ? width + step
+        : event.key === "ArrowRight"
+          ? width - step
+          : event.key === "Home"
+            ? PANEL_WIDTH
+            : null;
+    if (next === null) return;
+    event.preventDefault();
+    onChange(clampWidth(next, window.innerWidth));
+  };
+  return (
+    <div
+      className="sidera-resize"
+      data-dragging={dragging || undefined}
+      role="separator"
+      aria-orientation="vertical"
+      aria-label={label}
+      aria-valuemin={PANEL_MIN}
+      aria-valuemax={PANEL_MAX}
+      aria-valuenow={width}
+      tabIndex={0}
+      onPointerDown={(event) => {
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        setDragging(true);
+      }}
+      onPointerMove={move}
+      onPointerUp={() => setDragging(false)}
+      onPointerCancel={() => setDragging(false)}
+      onDoubleClick={() => onChange(PANEL_WIDTH)}
+      onKeyDown={key}
+    />
+  );
 }
 
 /**
@@ -166,6 +267,21 @@ export default function Chat({
   page: PageContext | null;
 }) {
   const [open, setOpen] = useState(false);
+  const [width, setWidth] = useState(savedWidth);
+  const resize = useCallback((next: number) => {
+    setWidth(next);
+    try {
+      window.localStorage.setItem(WIDTH_KEY, String(next));
+    } catch {
+      // Not remembered in private windows; the panel still resizes.
+    }
+  }, []);
+  // A smaller window can leave a wide panel too wide: bring it back inside the limits.
+  useEffect(() => {
+    const fit = () => setWidth((current) => clampWidth(current, window.innerWidth));
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
   const launcher = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
   // Keyboard: Escape closes; opening moves focus to the input (laptops only, so phones don't
@@ -204,10 +320,14 @@ export default function Chat({
 
   return (
     <CopilotKitProvider runtimeUrl="/api/copilotkit" useSingleEndpoint agentId={AGENT_ID} enableInspector={false}>
-      <ContextBridge value={value} t={t} chipsKey={key} />
+      <ContextBridge value={value} t={t} lang={lang} chipsKey={key} />
+      <ToolCards lang={lang} t={t.cards} />
       <PanelContext value={panel}>
-        {/* "dark" switches CopilotKit to light text; assistant.css sets the site colours. */}
-        <div className="dark assistant-theme">
+        {/* "dark" switches CopilotKit to light text; assistant.css sets the site colours.
+            The panel's width is a CSS variable: CopilotKit reads its width prop only once,
+            but it measures the panel, so the page's margin follows the variable. */}
+        <div className="dark assistant-theme" style={{ "--sidera-panel-width": `${width}px` } as CSSProperties}>
+          {open && <ResizeHandle width={width} onChange={resize} label={t.resize} />}
           {!open && (
             <button ref={launcher} type="button" className="sidera-launcher" onClick={() => setOpen(true)}>
               <Sparkle size={18} />
@@ -217,7 +337,6 @@ export default function Chat({
           <CopilotSidebar
             open={open}
             onOpenChange={setOpen}
-            width={PANEL_WIDTH}
             position="right"
             header={Header}
             // The launcher above replaces CopilotKit's round toggle button.

@@ -1,0 +1,241 @@
+/* Cards and status lines for the agent's tool calls, in the chat panel's night look. */
+
+/* A: one quiet line per lookup. */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.status svg {
+  flex: none;
+}
+
+.working {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sky);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.done {
+  color: var(--teal);
+}
+
+.failed {
+  color: var(--coral);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+    transform: scale(0.7);
+  }
+}
+
+/* B and C: a card the width of the answer. */
+.card {
+  margin: 6px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+:global(html[lang="si"]) .title {
+  font-family: var(--font-sinhala-display, var(--font-display));
+}
+
+.sub {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.tag {
+  flex: none;
+  padding: 1px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
+.mono {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The daylight bar: sunrise on the left, sunset on the right, Rahu kalaya in coral. */
+.bar {
+  position: relative;
+  height: 22px;
+  margin: 12px 0 4px;
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  background: var(--night);
+}
+
+.rahu {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  min-width: 4px;
+  border-radius: 4px;
+  background: var(--coral);
+  opacity: 0.85;
+}
+
+.ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
+.rows {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 12px;
+  margin: 12px 0 0;
+}
+
+.rows dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.rows dd {
+  margin: 0;
+}
+
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--coral);
+}
+
+.part + .part::before {
+  margin: 0 6px;
+  color: var(--ink-soft);
+  content: "·";
+}
+
+.until {
+  margin-left: 4px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+/* Star matches: one row per star, a brass score bar, and the essential checks. */
+.matches {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.match {
+  display: grid;
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.star {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.star small {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
+.track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--night);
+}
+
+.fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--gold);
+}
+
+.checks {
+  display: flex;
+  gap: 2px;
+}
+
+.pass {
+  color: var(--teal);
+}
+
+.fail {
+  color: var(--coral);
+}
+
+.legend {
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.link {
+  color: var(--gold);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--gold-hover);
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .working {
+    animation: none;
+  }
+}

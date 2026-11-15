@@ -14,7 +14,8 @@ The rule: **the AI talks, the engine calculates.** Facts come from the page the 
 | `app/tools/` | Tools that call the backend's public endpoints, one module per topic: `porondam`, `calendar`, `naming`, `planets`. `engine.py` is the shared client | The assistant needs a new kind of fact |
 | `app/subagents.py`, `app/prompts/<helper>.md` | Helpers the guide hands work to with the `task` tool: `researcher` (several reference notes) and `date-checker` (several dates or places, one helper each) | A kind of question keeps crowding the conversation |
 | `app/graph.py` | Puts the agent together: model, skills, tools, helpers, page context, the cap on helpers per question | Turning on a Deep Agents feature (memory, approvals, ...) |
-| `app/main.py` | The web service: `POST /agent` (AG-UI), `GET /healthz` | Rarely |
+| `app/suggest.py`, `app/prompts/suggest.md` | The follow-up questions under each answer, written in the person's own voice ("What does my Rajju result mean?"). One model call, no tools, served at `POST /agent/suggest` | The suggestions' wording or rules change |
+| `app/main.py` | The web service: `POST /agent` (AG-UI), `POST /agent/suggest`, `GET /healthz` | Rarely |
 
 **Skills now:** `site-guide` (every page and how to read it), `explain-match`, `star-matches`, `birth-chart`, `calendar-and-nakath`, `avurudu`, `ceremonies-and-names`, `sinhala-style`.
 

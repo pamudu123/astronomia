@@ -20,3 +20,11 @@ def test_agent_needs_the_access_key_when_one_is_set(settings: Settings) -> None:
     assert client.post("/agent", json={}, headers=wrong).status_code == 401
     # With the key, the request reaches the agent route (and fails validation on the empty body).
     assert client.post("/agent", json={}, headers={"X-Access-Key": "k"}).status_code == 422
+
+
+def test_suggest_route_is_locked_the_same_way(settings: Settings) -> None:
+    locked = settings.model_copy(update={"access_key": SecretStr("k")})
+    client = TestClient(create_app(locked))
+
+    assert client.post("/agent/suggest", json={}).status_code == 401
+    assert client.post("/agent/suggest", json={}, headers={"X-Access-Key": "k"}).status_code == 422
