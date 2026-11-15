@@ -15,6 +15,8 @@ export type PageContext = {
   /** Someone else's result, opened from a share link. */
   shared?: boolean;
   result?: Json;
+  /** Results of parts inside the page, such as the wedding dates under a match. */
+  also_on_page?: { [part: string]: Json };
 };
 
 /** The page name from the address: "/en/porondam/stars" -> "porondam/stars", "/en" -> "home". */

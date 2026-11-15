@@ -19,6 +19,9 @@ import {
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { chartContext } from "@/lib/assistant/pages";
+
 import { DashaTimeline } from "./DashaTimeline";
 import { Forecast } from "./Forecast";
 import styles from "./HadahanResult.module.css";
@@ -72,6 +75,8 @@ export function HadahanResult({
   remember,
 }: Props) {
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(chartContext(result, labels, lang, !request));
   const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;

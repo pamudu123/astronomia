@@ -4,7 +4,7 @@ from typing import Any
 import httpx
 import pytest
 
-from app.tools.engine import EngineClient, engine_tools
+from app.tools import EngineClient, engine_tools
 
 STARS_RESPONSE: dict[str, Any] = {
     "nakshatra": "rohini",

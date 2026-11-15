@@ -16,6 +16,9 @@ import {
 } from "@/lib/nakath";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { avuruduContext } from "@/lib/assistant/pages";
+
 import styles from "./Nakath.module.css";
 import { dayText, localDate } from "./format";
 
@@ -73,6 +76,8 @@ export function AvuruduView({ lang, t, year, zone: initialZone, fixed, initial }
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [place, setPlace] = useState<Place | null>(null);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(data ? avuruduContext(data, zone, lang) : null);
 
   // On the year page, show the visitor's own time next to Sri Lanka time.
   const browser = hydrated ? browserTimezone() : null;

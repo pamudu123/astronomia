@@ -11,6 +11,9 @@ import { type BirthRequest, fill, loadResult } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { babyLettersContext } from "@/lib/assistant/pages";
+
 import styles from "./BabyNames.module.css";
 import { NameSuggestions } from "./NameSuggestions";
 import { PadaCards } from "./PadaCards";
@@ -31,6 +34,8 @@ export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [clock, setClock] = useState(false);
   const [result, setResult] = useState<BabyLetters | null>(null);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(result ? babyLettersContext(result, lang) : null);
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
 

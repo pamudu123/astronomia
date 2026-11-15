@@ -10,6 +10,9 @@ import { type BirthRequest, fill, loadResult } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { personalChangeContext } from "@/lib/assistant/pages";
+
 import styles from "./Changes.module.css";
 import { CountedView } from "./CountedView";
 import { type ChangesText, lagnaName } from "./text";
@@ -32,6 +35,8 @@ export function PersonalChange({ t, hadahan, lang, changeId, current }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Data | null>(null);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(result ? personalChangeContext(result, lang) : null);
   const [clock, setClock] = useState(false);
 
   // A hadahan made earlier in this tab saves typing. It stays in this tab only, and is
