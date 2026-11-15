@@ -12,7 +12,11 @@ import { CopilotRuntime, createCopilotRuntimeHandler } from "@copilotkit/runtime
 // No usage reports from the CopilotKit runtime (privacy, docs/14 section 11).
 process.env.COPILOTKIT_TELEMETRY_DISABLED ??= "true";
 
-// The agent's name, shared with components/assistant/Assistant.tsx.
+// An answer streams for a few seconds, but an agent on a free host may first need to wake up.
+// 60 seconds is the most every Vercel plan allows.
+export const maxDuration = 60;
+
+// The agent's name, shared with components/assistant/Chat.tsx.
 const AGENT_ID = "guide";
 
 function createHandler(agentUrl: string) {
@@ -24,6 +28,10 @@ function createHandler(agentUrl: string) {
         headers: accessKey ? { "X-Access-Key": accessKey } : {},
       }),
     },
+    // CopilotKit passes the browser's `authorization` and `x-*` headers on to the agent by
+    // default. Pass none: proxy.ts puts the backend's access key on every /api call, and the
+    // agent needs only its own key, set above.
+    forwardHeaders: { deny: ["authorization"], denyPrefixes: ["x-"] },
   });
   return createCopilotRuntimeHandler({ runtime, basePath: "/api/copilotkit", mode: "single-route" });
 }

@@ -53,3 +53,15 @@ The tests use a stand-in model, so they need no key and no network.
 ## Settings
 
 All settings have local defaults. See `.env.example`. The model is a setting (`ASTRONOMIA_AGENT_MODEL`, default `openai:gpt-6-luna`), so changing it needs no code change. OpenAI is called through the Responses API with `store=False`, so OpenAI keeps no copy of conversations.
+
+## Deploy
+
+Staging runs the `Dockerfile` on Render as `astronomia-agent` (see `render.yaml`). The settings come from the host's environment; `.env` never goes into the image. How to turn the chat on, and the settings each host needs, are in [`docs/09-launch.md`](../docs/09-launch.md).
+
+To try the image locally:
+
+```
+docker build -t astronomia-agent .
+docker run --rm -p 8123:8123 --env-file .env \
+  -e ASTRONOMIA_AGENT_BACKEND_URL=http://host.docker.internal:8000 astronomia-agent
+```

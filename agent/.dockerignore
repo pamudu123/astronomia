@@ -1,0 +1,9 @@
+# .env holds the local OpenAI key: it must never go into the image.
+.env
+.env.*
+.venv
+__pycache__
+.pytest_cache
+.mypy_cache
+.ruff_cache
+tests
