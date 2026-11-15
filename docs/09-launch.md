@@ -32,7 +32,7 @@ AI assistant (Render):
 |---|---|
 | `OPENAI_API_KEY` | The OpenAI key. Set in the dashboard |
 | `ASTRONOMIA_AGENT_ACCESS_KEY` | Render makes a random one. Every request except `/healthz` needs it in `X-Access-Key` |
-| `ASTRONOMIA_AGENT_BACKEND_URL` | The backend's public address, the same as `BACKEND_URL` |
+| `ASTRONOMIA_AGENT_BACKEND_URL` | The backend's public address, the same as `BACKEND_URL`. Set in `render.yaml` |
 | `ASTRONOMIA_AGENT_BACKEND_ACCESS_KEY` | Copied by Render from the backend's `ASTRONOMIA_ACCESS_KEY` |
 | `ASTRONOMIA_AGENT_MODEL` | Optional. Default `openai:gpt-6-luna` |
 | `PORT` | Set by Render. Default 8123 |
@@ -67,12 +67,13 @@ Three locks keep it private:
 
 ## Turning on the chat
 
-1. Merge to `main`. Render reads `render.yaml` and adds the `astronomia-agent` service. It asks
-   for the two values marked `sync: false`.
-2. In Render, set `OPENAI_API_KEY`, and `ASTRONOMIA_AGENT_BACKEND_URL` (the same as Vercel's
-   `BACKEND_URL`). Check that `https://<agent address>/healthz` answers.
-3. In Vercel, set `AGENT_URL` and `AGENT_ACCESS_KEY` (copy `ASTRONOMIA_AGENT_ACCESS_KEY` from
-   Render), then redeploy.
+1. Merge to `main`. Render reads `render.yaml` and adds the `astronomia-agent` service. If it
+   doesn't appear, sync the blueprint by hand in Render.
+2. In Render, set `OPENAI_API_KEY` on the agent service (the only value marked `sync: false`).
+   Check that `https://<agent address>/healthz` answers. Render adds a random suffix to the
+   address, as it did for the backend (`astronomia-api-njxu`).
+3. In Vercel, set `AGENT_URL` (`https://<agent address>/agent`) and `AGENT_ACCESS_KEY` (copy
+   `ASTRONOMIA_AGENT_ACCESS_KEY` from Render), then redeploy.
 4. Open the site, then the gold chat button.
 
 To turn it off, remove `AGENT_URL` in Vercel and redeploy. The chat has no usage limits yet, so

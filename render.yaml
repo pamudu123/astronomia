@@ -52,7 +52,7 @@ services:
       # The backend's public address, the same as Vercel's BACKEND_URL. Free services can't
       # take calls over Render's private network, so the agent uses the public one.
       - key: ASTRONOMIA_AGENT_BACKEND_URL
-        sync: false
+        value: https://astronomia-api-njxu.onrender.com
       - key: ASTRONOMIA_AGENT_BACKEND_ACCESS_KEY
         fromService:
           type: web
