@@ -174,7 +174,7 @@ Paid tiers change the first plan in three ways.
 |---|---|---|
 | 1 | How do people pay? | Pay per report, a subscription, or both. The market check (section 7) suggests both: per report for porondam, subscription for forecast and alerts |
 | 2 | Prices | To be tested. Local software reports were seen around LKR 1,000. Human reports run from LKR 1,900 to LKR 9,900 |
-| 3 | Payment gateways | Local gateway for LKR, card gateway for USD |
+| 3 | Payment gateways | **Decided (2026-11-15): PayHere only at launch**, for LKR and foreign cards. A second gateway later if overseas buyers need it. See `docs/14-payments.md` |
 | 4 | Sign in method | Email link, Google, or phone OTP |
 | 5 | Default life of a share link | 30 days suggested |
 
