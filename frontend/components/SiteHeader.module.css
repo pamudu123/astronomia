@@ -59,6 +59,15 @@
   font-weight: 500;
 }
 
+.mine {
+  gap: 8px;
+  color: var(--gold);
+}
+
+.mine:hover {
+  color: var(--gold-hover);
+}
+
 .languages {
   display: flex;
   margin-left: 8px;

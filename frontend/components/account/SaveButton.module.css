@@ -1,0 +1,46 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.button {
+  min-height: 48px;
+  padding: 0 22px;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.button[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.75;
+}
+
+.note {
+  max-width: 320px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.note:empty {
+  display: none;
+}
+
+.link {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.error {
+  max-width: 320px;
+  color: var(--coral);
+  font-size: 14px;
+}

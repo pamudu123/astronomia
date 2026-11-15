@@ -21,7 +21,8 @@ Backend (Render):
 | Variable | Meaning |
 |---|---|
 | `ASTRONOMIA_ENVIRONMENT` | `staging` or `production` |
-| `ASTRONOMIA_DATABASE_URL` | PostgreSQL for share links. Without it, SQLite under `backend/var/` is used |
+| `ASTRONOMIA_DATABASE_URL` | PostgreSQL for share links and saved reports. Without it, SQLite under `backend/var/` is used. **Required when `ASTRONOMIA_ENVIRONMENT` is `production`**: the backend refuses to start without it |
+| `ASTRONOMIA_SITE_ORIGINS` | Optional. The site's own addresses as a JSON list, for example `["https://sidera.lk"]`. Saving, renaming and deleting are refused from any other page. When empty, the address the request was forwarded from is used |
 | `ASTRONOMIA_ACCESS_KEY` | When set, every request except `/healthz` needs it in `X-Access-Key`. Keeps staging private |
 | `ASTRONOMIA_SHARE_DAYS` | How long a share link stays open. Default 30 |
 | `PORT` | Set by Render. Default 8000 |

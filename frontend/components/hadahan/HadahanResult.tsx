@@ -6,6 +6,8 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
 import { NextSteps } from "@/components/NextSteps";
 import { ReportButton } from "@/components/ReportButton";
+import { SaveButton } from "@/components/account/SaveButton";
+import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
 import { YearlyLink } from "@/components/yearly/YearlyLink";
@@ -40,6 +42,8 @@ type Props = {
   placeText: string;
   /** Share text. Left out on a shared page, where nothing can be shared again. */
   share?: Dictionary["share"];
+  /** Text for the Save button. Left out where the result is already saved or read only. */
+  saveText?: Dictionary["saved"];
   /** The birth details. Left out on a shared page: then the result is read only. */
   request?: BirthRequest;
   onEdit?: () => void;
@@ -68,6 +72,7 @@ export function HadahanResult({
   time,
   placeText,
   share,
+  saveText,
   request,
   onEdit,
   yearly,
@@ -112,6 +117,16 @@ export function HadahanResult({
         {request && (
           <div className={styles.actions}>
             <ReportButton request={{ kind: "hadahan", name, birth: { ...request, lang } }} t={t} />
+            {saveText && (
+              <SaveGate>
+                <SaveButton
+                  key={JSON.stringify(request) + name}
+                  lang={lang}
+                  t={saveText}
+                  request={{ kind: "hadahan", name, birth: { ...request, lang } }}
+                />
+              </SaveGate>
+            )}
             {share && (
               <ShareButton
                 lang={lang}

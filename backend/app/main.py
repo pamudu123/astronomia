@@ -16,6 +16,7 @@ from app.api import (
     places,
     porondam,
     reports,
+    saved,
     shares,
     timeresolve,
     wedding,
@@ -29,6 +30,9 @@ from app.security import AccessKeyMiddleware
 def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level)
+    if settings.environment == "production" and not settings.database_url:
+        # Accounts and saved reports must outlive a restart; SQLite on a passing disk would not.
+        raise RuntimeError("ASTRONOMIA_DATABASE_URL is required in production")
 
     app = FastAPI(
         title="Astronomia API",
@@ -54,6 +58,7 @@ def create_app() -> FastAPI:
     app.include_router(kendara.router)
     app.include_router(reports.router)
     app.include_router(shares.router)
+    app.include_router(saved.router)
     return app
 
 

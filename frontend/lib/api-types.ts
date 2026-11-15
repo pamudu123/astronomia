@@ -600,6 +600,82 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Me
+         * @description The account on this browser, if any, and how many reports it keeps.
+         */
+        get: operations["me_v1_me_get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Me
+         * @description Deletes the account on this browser and every report it keeps.
+         */
+        delete: operations["delete_me_v1_me_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/saved": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Saved
+         * @description Every report this browser's account keeps, newest first.
+         */
+        get: operations["list_saved_v1_saved_get"];
+        put?: never;
+        /**
+         * Save Report
+         * @description Saves a hadahan or a match to My reports. Makes a guest account if there is none.
+         */
+        post: operations["save_report_v1_saved_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/saved/{report_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Open Saved
+         * @description One saved report in one language, with the request it was made from.
+         */
+        get: operations["open_saved_v1_saved__report_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Saved
+         * @description Deletes one saved report.
+         */
+        delete: operations["delete_saved_v1_saved__report_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename Saved
+         * @description Gives a saved report a name. An empty name goes back to the names in it.
+         */
+        patch: operations["rename_saved_v1_saved__report_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1080,6 +1156,22 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HadahanCard */
+        HadahanCard: {
+            /** Name */
+            name: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Lagna */
+            lagna: string;
+            /** Rashi */
+            rashi: string;
+            /** Nakshatra */
+            nakshatra: string;
+        };
         /** HadahanReport */
         HadahanReport: {
             /**
@@ -1363,6 +1455,13 @@ export interface components {
             same_star: boolean;
             /** Same Star Text */
             same_star_text: string | null;
+        };
+        /** MeOut */
+        MeOut: {
+            /** Kind */
+            kind: ("guest" | "google") | null;
+            /** Saved */
+            saved: number;
         };
         /** Meta */
         Meta: {
@@ -1826,6 +1925,22 @@ export interface components {
             /** Navamsha Sign */
             navamsha_sign: string;
         };
+        /** PorondamCard */
+        PorondamCard: {
+            /** Bride */
+            bride: string;
+            /** Groom */
+            groom: string;
+            /** Passed */
+            passed: number;
+            /** Total */
+            total: number;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "full" | "quick";
+        };
         /** PorondamReport */
         PorondamReport: {
             /**
@@ -1875,6 +1990,11 @@ export interface components {
             /** Pada */
             pada: number;
         };
+        /** Rename */
+        Rename: {
+            /** Title */
+            title: string;
+        };
         /** SaturnOut */
         SaturnOut: {
             /**
@@ -1898,6 +2018,83 @@ export interface components {
              * @enum {string}
              */
             kind: "erashtaka" | "ashtama";
+        };
+        /** SavedCreated */
+        SavedCreated: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /** Title */
+            title: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            hadahan?: components["schemas"]["HadahanCard"] | null;
+            porondam?: components["schemas"]["PorondamCard"] | null;
+            /** Created */
+            created: boolean;
+        };
+        /** SavedDetail */
+        SavedDetail: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /** Title */
+            title: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            hadahan?: components["schemas"]["HadahanCard"] | null;
+            porondam?: components["schemas"]["PorondamCard"] | null;
+            /** Request */
+            request: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            hadahan_result?: components["schemas"]["SnapshotHadahan"] | null;
+            porondam_result?: components["schemas"]["PorondamResponse"] | null;
+        };
+        /** SavedList */
+        SavedList: {
+            /** Reports */
+            reports: components["schemas"]["SavedOut"][];
+        };
+        /** SavedOut */
+        SavedOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /** Title */
+            title: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            hadahan?: components["schemas"]["HadahanCard"] | null;
+            porondam?: components["schemas"]["PorondamCard"] | null;
         };
         /** ScoreOut */
         ScoreOut: {
@@ -1956,7 +2153,7 @@ export interface components {
             expires_at: string;
             /** Names Hidden */
             names_hidden: boolean;
-            hadahan?: components["schemas"]["SharedHadahan"] | null;
+            hadahan?: components["schemas"]["SnapshotHadahan"] | null;
             porondam?: components["schemas"]["PorondamResponse"] | null;
         };
         /** SharePorondam */
@@ -1973,8 +2170,20 @@ export interface components {
              */
             hide_names: boolean;
         };
-        /** SharedHadahan */
-        SharedHadahan: {
+        /** SignLettersOut */
+        SignLettersOut: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Letters */
+            letters: string[];
+        };
+        /**
+         * SnapshotHadahan
+         * @description A kept hadahan in one language.
+         */
+        SnapshotHadahan: {
             /** Name */
             name: string;
             /**
@@ -1987,15 +2196,6 @@ export interface components {
             /** Place */
             place: string;
             result: components["schemas"]["HadahanResponse"];
-        };
-        /** SignLettersOut */
-        SignLettersOut: {
-            /** Key */
-            key: string;
-            /** Name */
-            name: string;
-            /** Letters */
-            letters: string[];
         };
         /** SpanOut */
         SpanOut: {
@@ -3438,6 +3638,201 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    me_v1_me_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeOut"];
+                };
+            };
+        };
+    };
+    delete_me_v1_me_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    list_saved_v1_saved_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedList"];
+                };
+            };
+        };
+    };
+    save_report_v1_saved_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            };
+        };
+        responses: {
+            /** @description Already saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCreated"];
+                };
+            };
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCreated"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    open_saved_v1_saved__report_id__get: {
+        parameters: {
+            query?: {
+                lang?: "si" | "en";
+            };
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_saved_v1_saved__report_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rename_saved_v1_saved__report_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Rename"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             204: {

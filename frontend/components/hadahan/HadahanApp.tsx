@@ -35,6 +35,8 @@ type Props = {
   lang: Locale;
   t: Dictionary["hadahan"];
   share: Dictionary["share"];
+  /** Text for the Save button. */
+  saveText?: Dictionary["saved"];
   yearly?: Dictionary["yearly"];
   /** Text for the link to the old horoscope search, and for a form filled from it. */
   kendara?: Dictionary["kendara"];
@@ -59,6 +61,7 @@ function HadahanPage({
   lang,
   t,
   share,
+  saveText,
   yearly,
   kendara,
   next,
@@ -150,6 +153,7 @@ function HadahanPage({
         // In the page's language when the place itself was kept, not as it was typed.
         placeText={saved.form?.place && !saved.form.manual ? placeLabel(saved.form.place, lang) : saved.placeLabel}
         share={share}
+        saveText={saveText}
         request={saved.request}
         yearly={yearly}
         next={next}
