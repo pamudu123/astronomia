@@ -1063,6 +1063,7 @@
     "placeholder": "Ask about this page…",
     "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
     "close": "Close the chat",
+    "resize": "Resize the chat. Drag, or use the arrow keys",
     "greeting": "What would you like to know?",
     "reading": "Reading: {page}",
     "home": "Home",

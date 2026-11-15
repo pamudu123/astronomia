@@ -30,6 +30,90 @@
   display: none !important;
 }
 
+/*
+ * The panel's width on laptops comes from --sidera-panel-width (set in Chat.tsx, changed by
+ * dragging the edge). CopilotKit sizes the panel with `width: var(--sidebar-width) !important`
+ * and sets that variable inline, so the variable is what gets replaced. On phones the panel
+ * still covers the screen.
+ */
+.assistant-theme .copilotKitSidebar {
+  --sidebar-width: var(--sidera-panel-width, 400px) !important;
+}
+
+/* The drag edge: invisible until hovered, then a thin sky line with a grip in the middle. */
+.sidera-resize {
+  position: fixed;
+  top: 0;
+  right: calc(var(--sidera-panel-width, 400px) - 5px);
+  bottom: 0;
+  z-index: 1201;
+  display: none;
+  width: 10px;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+@media (min-width: 768px) {
+  .sidera-resize {
+    display: block;
+  }
+}
+
+.sidera-resize::before,
+.sidera-resize::after {
+  position: absolute;
+  left: 50%;
+  content: "";
+  transform: translateX(-50%);
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease;
+}
+
+.sidera-resize::before {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--sky);
+  opacity: 0;
+}
+
+.sidera-resize::after {
+  top: 50%;
+  width: 4px;
+  height: 36px;
+  margin-top: -18px;
+  border-radius: 4px;
+  background: var(--line);
+}
+
+.sidera-resize:hover::before,
+.sidera-resize:focus-visible::before,
+.sidera-resize[data-dragging]::before {
+  opacity: 0.6;
+}
+
+.sidera-resize:hover::after,
+.sidera-resize:focus-visible::after,
+.sidera-resize[data-dragging]::after {
+  background: var(--sky);
+}
+
+.sidera-resize:focus-visible {
+  outline: none;
+}
+
+/* While dragging: no text selection, and the page keeps up with the edge. */
+html.sidera-resizing,
+html.sidera-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+html.sidera-resizing body {
+  transition: none !important;
+}
+
 /* The panel: a night sky with a faint glow rising from the bottom, like the site's hero. */
 .assistant-theme .copilotKitSidebar {
   background:
@@ -148,8 +232,11 @@ html[lang="si"] .sidera-welcome-hero h3 {
   padding: 0 16px 10px;
 }
 
-/* Suggestions stack on the left, one per line, like a browser assistant's. */
-.sidera-welcome-chips > * {
+/*
+ * Suggestions stack on the left, one per line, like a browser assistant's: the page's own
+ * questions on the welcome screen, and the follow-ups under each answer.
+ */
+.assistant-theme [data-testid="copilot-suggestions"] {
   display: flex !important;
   flex-direction: column;
   max-width: 100%;
@@ -158,7 +245,7 @@ html[lang="si"] .sidera-welcome-hero h3 {
   gap: 8px;
 }
 
-.sidera-welcome-chips button {
+.assistant-theme [data-testid="copilot-suggestions"] button {
   max-width: 100%;
   height: auto !important;
   padding: 10px 16px;
@@ -176,15 +263,76 @@ html[lang="si"] .sidera-welcome-hero h3 {
     background 0.15s ease;
 }
 
-.sidera-welcome-chips button > * {
+.assistant-theme [data-testid="copilot-suggestions"] button > * {
   line-height: 1.35 !important;
   white-space: normal !important;
 }
 
-.sidera-welcome-chips button:hover,
-.sidera-welcome-chips button:focus-visible {
+.assistant-theme [data-testid="copilot-suggestions"] button:hover,
+.assistant-theme [data-testid="copilot-suggestions"] button:focus-visible {
   border-color: var(--gold);
   background: var(--panel-raised);
+}
+
+/*
+ * The message box. CopilotKit draws a grey pill (#303030) with a white send button; here it
+ * is a night panel with a hairline border. The site's gold focus outline would land on the
+ * textarea inside the pill, so the pill shows focus instead, with a soft sky-blue edge.
+ */
+.assistant-theme .copilotKitInput {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 28%);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.assistant-theme .copilotKitInput:focus-within {
+  border-color: rgb(127 167 217 / 55%);
+  box-shadow:
+    0 0 0 3px rgb(127 167 217 / 12%),
+    0 6px 24px rgb(0 0 0 / 28%);
+}
+
+.assistant-theme .copilotKitInput textarea,
+.assistant-theme .copilotKitInput textarea:focus-visible {
+  outline: none;
+  color: var(--ink);
+}
+
+.assistant-theme .copilotKitInput textarea::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+/* Send: brass when there is something to send, a quiet circle when empty. */
+.assistant-theme [data-testid="copilot-send-button"] {
+  background: var(--gold);
+  color: var(--night);
+}
+
+.assistant-theme [data-testid="copilot-send-button"]:hover:not(:disabled) {
+  background: var(--gold-hover);
+  opacity: 1;
+}
+
+.assistant-theme [data-testid="copilot-send-button"]:disabled {
+  background: var(--panel-raised);
+  color: var(--ink-soft);
+}
+
+.assistant-theme [data-testid="copilot-send-button"]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* The note under the box: small and quiet, so it reads as a footnote. */
+.assistant-theme [data-copilotkit] .cpk\:text-center.cpk\:text-xs {
+  color: var(--ink-soft);
+  opacity: 0.8;
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 /* The launcher: a pill at the bottom right while the panel is closed. */
@@ -218,7 +366,8 @@ html[lang="si"] .sidera-welcome-hero h3 {
 
 @media (prefers-reduced-motion: reduce) {
   .sidera-launcher,
-  .sidera-welcome-chips button {
+  .assistant-theme [data-testid="copilot-suggestions"] button,
+  .assistant-theme .copilotKitInput {
     transition: none;
   }
 

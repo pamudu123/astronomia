@@ -1,7 +1,8 @@
 """The agent service: the assistant served over AG-UI, for the website's CopilotKit chat.
 
-POST /agent   AG-UI run (server-sent events)
-GET  /healthz health check, always open
+POST /agent          AG-UI run (server-sent events): the guide, who answers
+POST /agent/suggest  AG-UI run: the follow-up questions shown under each answer
+GET  /healthz        health check, always open
 
 Run with `uvicorn app.main:create_app --factory`. The app is built when the server starts,
 not on import, so importing this module (tests, CI) needs no OpenAI key.
@@ -18,9 +19,11 @@ from app import __version__
 from app.config import Settings, get_settings
 from app.graph import build_agent
 from app.security import AccessKeyMiddleware
+from app.suggest import build_suggester
 from app.tools import EngineClient, engine_tools
 
 AGENT_NAME = "guide"
+SUGGEST_NAME = "suggest"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -56,5 +59,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             emit_raw_events=False,
         ),
         "/agent",
+    )
+    add_langgraph_fastapi_endpoint(
+        app,
+        LangGraphAGUIAgent(
+            name=SUGGEST_NAME,
+            description="Writes the follow-up questions shown under each answer.",
+            graph=build_suggester(settings),
+            emit_raw_events=False,
+        ),
+        "/agent/suggest",
     )
     return app
