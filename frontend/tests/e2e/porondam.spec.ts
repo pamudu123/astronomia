@@ -56,6 +56,34 @@ test("a quick match by birth stars", async ({ page }) => {
   });
 });
 
+test("a result without checked counts every factor, and names stay in their cells (QA UI-01, UI-02)", async ({ page }) => {
+  // A result from before `checked` existed: an older backend, a saved match or an old share link.
+  const quick = JSON.parse(fixture("porondam-quick-en.json"));
+  for (const factor of quick.match.factors) delete factor.checked;
+  quick.match.score.total = quick.match.factors.filter((f: { hard: boolean }) => !f.hard).length;
+  quick.match.score.passed = quick.match.factors.filter((f: { hard: boolean; passed: boolean }) => !f.hard && f.passed).length;
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.route("**/api/v1/porondam", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify(quick) }),
+  );
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const factors = page.locator('[data-panel="factors"]');
+  await expect(factors).toContainText(`${quick.match.score.passed} of ${quick.match.score.total} agree`);
+  await expect(factors.locator('[data-marker="off"]')).toHaveCount(0);
+  await expect(factors).not.toContainText("not counted here");
+  await expect(factors.getByRole("link", { name: /: Not counted$/ })).toHaveCount(0);
+
+  // No marker's name runs past its own cell.
+  const overflowing = await factors.locator("[data-marker]").evaluateAll((items) =>
+    items.filter((item) => item.querySelector("a")!.scrollWidth > item.clientWidth + 1).map((item) => item.textContent),
+  );
+  expect(overflowing).toEqual([]);
+});
+
 test("the factor filter", async ({ page }) => {
   await mockBackend(page, "en", "porondam-quick-en.json");
   await page.goto("/en/porondam");

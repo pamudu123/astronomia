@@ -1024,6 +1024,7 @@
     "rahu": "Rahu",
     "today": "Today",
     "failed": "The calendar could not be loaded just now. Try again in a moment.",
+    "retry": "Try again",
     "dayLink": "Daily nakath for any place",
     "footer": "Litha calendar"
   },
