@@ -7,6 +7,8 @@ import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
 import { NextSteps } from "@/components/NextSteps";
 import { ReportButton } from "@/components/ReportButton";
+import { SaveButton } from "@/components/account/SaveButton";
+import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -33,6 +35,8 @@ type Props = {
   result: Porondam;
   /** Share text. Left out on a shared page. */
   share?: Dictionary["share"];
+  /** Text for the Save button. Left out where the result is already saved or read only. */
+  saveText?: Dictionary["saved"];
   /** The two people's details. Left out on a shared page: then the result is read only. */
   request?: PorondamRequest;
   /** Text for "Years ahead for the couple". That section needs the request too. */
@@ -65,6 +69,7 @@ export function PorondamResult({
   labels,
   result,
   share,
+  saveText,
   request,
   timeline,
   wedding,
@@ -328,6 +333,16 @@ export function PorondamResult({
           {request ? (
             <>
               <ReportButton request={{ kind: "porondam", match: { ...request, lang } }} t={t} />
+              {saveText && (
+                <SaveGate>
+                  <SaveButton
+                    key={JSON.stringify(request)}
+                    lang={lang}
+                    t={saveText}
+                    request={{ kind: "porondam", match: { ...request, lang } }}
+                  />
+                </SaveGate>
+              )}
               {share && (
                 <ShareButton
                   lang={lang}

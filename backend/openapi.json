@@ -1780,6 +1780,266 @@
           }
         }
       }
+    },
+    "/v1/me": {
+      "get": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "Me",
+        "description": "The account on this browser, if any, and how many reports it keeps.",
+        "operationId": "me_v1_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "Delete Me",
+        "description": "Deletes the account on this browser and every report it keeps.",
+        "operationId": "delete_me_v1_me_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        }
+      }
+    },
+    "/v1/saved": {
+      "get": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "List Saved",
+        "description": "Every report this browser's account keeps, newest first.",
+        "operationId": "list_saved_v1_saved_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "Save Report",
+        "description": "Saves a hadahan or a match to My reports. Makes a guest account if there is none.",
+        "operationId": "save_report_v1_saved_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/HadahanReport"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PorondamReport"
+                  }
+                ],
+                "title": "Body",
+                "discriminator": {
+                  "propertyName": "kind",
+                  "mapping": {
+                    "hadahan": "#/components/schemas/HadahanReport",
+                    "porondam": "#/components/schemas/PorondamReport"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedCreated"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedCreated"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/saved/{report_id}": {
+      "get": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "Open Saved",
+        "description": "One saved report in one language, with the request it was made from.",
+        "operationId": "open_saved_v1_saved__report_id__get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "si",
+                "en"
+              ],
+              "type": "string",
+              "default": "en",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "Rename Saved",
+        "description": "Gives a saved report a name. An empty name goes back to the names in it.",
+        "operationId": "rename_saved_v1_saved__report_id__patch",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rename"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "Delete Saved",
+        "description": "Deletes one saved report.",
+        "operationId": "delete_saved_v1_saved__report_id__delete",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3271,6 +3531,40 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HadahanCard": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "lagna": {
+            "type": "string",
+            "title": "Lagna"
+          },
+          "rashi": {
+            "type": "string",
+            "title": "Rashi"
+          },
+          "nakshatra": {
+            "type": "string",
+            "title": "Nakshatra"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "date",
+          "lagna",
+          "rashi",
+          "nakshatra"
+        ],
+        "title": "HadahanCard"
+      },
       "HadahanReport": {
         "properties": {
           "kind": {
@@ -4101,6 +4395,35 @@
           "same_star_text"
         ],
         "title": "MatchOut"
+      },
+      "MeOut": {
+        "properties": {
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "guest",
+                  "google"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kind"
+          },
+          "saved": {
+            "type": "integer",
+            "title": "Saved"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "saved"
+        ],
+        "title": "MeOut"
       },
       "Meta": {
         "properties": {
@@ -5460,6 +5783,43 @@
         ],
         "title": "PointOut"
       },
+      "PorondamCard": {
+        "properties": {
+          "bride": {
+            "type": "string",
+            "title": "Bride"
+          },
+          "groom": {
+            "type": "string",
+            "title": "Groom"
+          },
+          "passed": {
+            "type": "integer",
+            "title": "Passed"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "full",
+              "quick"
+            ],
+            "title": "Mode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bride",
+          "groom",
+          "passed",
+          "total",
+          "mode"
+        ],
+        "title": "PorondamCard"
+      },
       "PorondamReport": {
         "properties": {
           "kind": {
@@ -5625,6 +5985,20 @@
         "title": "QuickPerson",
         "description": "Birth star only: the pada fixes the Moon sign. Lagna based checks are not possible."
       },
+      "Rename": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 80,
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "Rename"
+      },
       "SaturnOut": {
         "properties": {
           "start": {
@@ -5668,6 +6042,228 @@
           "kind"
         ],
         "title": "SaturnOut"
+      },
+      "SavedCreated": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hadahan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HadahanCard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "porondam": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PorondamCard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created": {
+            "type": "boolean",
+            "title": "Created"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "created_at",
+          "created"
+        ],
+        "title": "SavedCreated"
+      },
+      "SavedDetail": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hadahan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HadahanCard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "porondam": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PorondamCard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "request": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Request",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "hadahan_result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SnapshotHadahan"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "porondam_result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PorondamResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "created_at",
+          "request"
+        ],
+        "title": "SavedDetail"
+      },
+      "SavedList": {
+        "properties": {
+          "reports": {
+            "items": {
+              "$ref": "#/components/schemas/SavedOut"
+            },
+            "type": "array",
+            "title": "Reports"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reports"
+        ],
+        "title": "SavedList"
+      },
+      "SavedOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hadahan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HadahanCard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "porondam": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PorondamCard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "created_at"
+        ],
+        "title": "SavedOut"
       },
       "ScoreOut": {
         "properties": {
@@ -5767,7 +6363,7 @@
           "hadahan": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SharedHadahan"
+                "$ref": "#/components/schemas/SnapshotHadahan"
               },
               {
                 "type": "null"
@@ -5817,7 +6413,33 @@
         ],
         "title": "SharePorondam"
       },
-      "SharedHadahan": {
+      "SignLettersOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "letters": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Letters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "letters"
+        ],
+        "title": "SignLettersOut"
+      },
+      "SnapshotHadahan": {
         "properties": {
           "name": {
             "type": "string",
@@ -5848,33 +6470,8 @@
           "place",
           "result"
         ],
-        "title": "SharedHadahan"
-      },
-      "SignLettersOut": {
-        "properties": {
-          "key": {
-            "type": "string",
-            "title": "Key"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "letters": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Letters"
-          }
-        },
-        "type": "object",
-        "required": [
-          "key",
-          "name",
-          "letters"
-        ],
-        "title": "SignLettersOut"
+        "title": "SnapshotHadahan",
+        "description": "A kept hadahan in one language."
       },
       "SpanOut": {
         "properties": {

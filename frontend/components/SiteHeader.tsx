@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
 
+import { MyReportsLink } from "./account/MyReportsLink";
 import { Logo } from "./Icons";
 import { LanguageLinks, LanguageSwitch } from "./LanguageSwitch";
 import { MobileTabBar, MobileTabs } from "./MobileTabBar";
@@ -32,6 +33,8 @@ export function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         <Link href={`/${lang}/plans`} className={`${styles.link} ${styles.wide}`}>
           {dict.nav.plans}
         </Link>
+        {/* Shown on phones too: the tab bar has no place for it. */}
+        <MyReportsLink href={`/${lang}/my`} label={dict.nav.myReports} className={`${styles.link} ${styles.mine}`} />
         {/* Pages with a code in the address (shared links) only know it at request time. */}
         <Suspense fallback={<LanguageLinks current={lang} label={dict.nav.language} pathname={`/${lang}`} />}>
           <LanguageSwitch current={lang} label={dict.nav.language} />

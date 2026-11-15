@@ -14,7 +14,8 @@
     "plans": "Plans",
     "tools": "All tools",
     "more": "More",
-    "language": "Language"
+    "language": "Language",
+    "myReports": "My reports"
   },
   "hero": {
     "tagline": { "sky": "The sky", "calculated": "calculated" },
@@ -22,7 +23,7 @@
     "lead": "Sidera works out your hadahan and porondam from precise planetary positions. Then it explains every result in plain Sinhala or English, for a birth anywhere in the world.",
     "ctaHadahan": "Create my hadahan",
     "ctaPorondam": "Match two charts",
-    "privacy": "No sign up. Nothing is stored on our servers.",
+    "privacy": "No sign up. Nothing is stored unless you save or share it.",
     "wheelLabel": "A slowly turning zodiac wheel with the twelve rashi named in Sinhala and planets in orbit"
   },
   "tools": {
@@ -446,9 +447,51 @@
     "homePorondam": "Match two charts",
     "deletedText": "Nobody can open it now. Nothing from it is kept."
   },
+  "saved": {
+    "save": "Save",
+    "saving": "Saving…",
+    "savedButton": "Saved",
+    "savedNote": "Saved to My reports.",
+    "alreadyNote": "Already in My reports.",
+    "open": "Open My reports",
+    "failed": "It could not be saved. Please try again.",
+    "limit": "My reports is full. Delete a report there to save this one.",
+    "title": "My reports",
+    "lead": "Results you saved, ready to open, download or share again.",
+    "loading": "Opening your reports…",
+    "unavailable": "Your reports could not be loaded. Please try again in a moment.",
+    "retry": "Try again",
+    "emptyTitle": "Nothing saved yet",
+    "emptyText": "Press Save on a hadahan or a porondam match and it will wait for you here.",
+    "makeHadahan": "Make a hadahan",
+    "makePorondam": "Match two charts",
+    "groupPorondam": "Porondam matches",
+    "groupHadahan": "Hadahan charts",
+    "savedOn": "Saved {date}",
+    "quick": "Quick match by birth star",
+    "openReport": "Open",
+    "rename": "Rename",
+    "renameLabel": "Name for this report",
+    "renameSave": "Save name",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this report?",
+    "deleteYes": "Yes, delete",
+    "deleting": "Deleting…",
+    "actionFailed": "That did not work. Please try again.",
+    "browserOnly": "Your reports are kept for this browser only. If you clear its data or use another device, they will not be there.",
+    "deleteAll": "Delete all my saved reports",
+    "deleteAllConfirm": "Delete every saved report? This cannot be undone.",
+    "deleteAllYes": "Yes, delete everything",
+    "deletedAll": "Everything is deleted. Nothing from it is kept.",
+    "banner": "Saved report",
+    "back": "My reports",
+    "goneTitle": "This report is not here",
+    "goneText": "It may have been deleted, or it was saved in another browser."
+  },
   "legal": {
     "draft": "Draft: to be reviewed before the site goes public.",
-    "updated": "Last updated: 12 November 2026",
+    "updated": "Last updated: 15 November 2026",
     "contactTodo": "A contact address will be added here before launch."
   },
   "privacy": {
@@ -457,18 +500,18 @@
     "glance": [
       {
         "icon": "account",
-        "title": "No account",
-        "text": "You never sign up or sign in."
+        "title": "No sign up",
+        "text": "You never sign up or sign in. Saving a report only gives this browser a private key."
       },
       {
         "icon": "nothing",
         "title": "Nothing kept by default",
-        "text": "A chart or a match is worked out and sent back. Nothing about it is saved."
+        "text": "A chart or a match is worked out and sent back. Nothing about it is saved unless you press Save."
       },
       {
         "icon": "share",
-        "title": "Sharing is your choice",
-        "text": "Only a share link keeps a copy, for 30 days, and you can delete it sooner."
+        "title": "Saving and sharing are your choice",
+        "text": "Only Save and share links keep a copy, and you can delete either at any time."
       },
       {
         "icon": "logs",
@@ -487,9 +530,11 @@
       {
         "title": "What is kept",
         "body": [
-          "Nothing, unless you press Create link in the Share dialog.",
+          "Nothing, unless you press Save on a result or Create link in the Share dialog.",
           "Then a copy of that result is kept, in Sinhala and English, with the birth date, time and place line, and the name or names unless you chose to hide them. The link code and its delete code are kept only in a scrambled (hashed) form.",
-          "A share link closes after 30 days and is then deleted. The device that made it can delete it sooner."
+          "A share link closes after 30 days and is then deleted. The device that made it can delete it sooner.",
+          "When you press Save, a copy of that result is kept for My reports, in Sinhala and English, with the details it was made from (name, birth date, time and place), so you can open it, download it and share it again. It belongs to a guest account that holds nothing else about you: no email, no name of yours and no password.",
+          "A guest account that is not used for a year is deleted with its reports. You can delete one report, or all of them, from My reports at any time."
         ]
       },
       {
@@ -498,7 +543,8 @@
           "Your last result is kept in this browser tab, so a reload does not lose it. It is cleared when the tab closes.",
           "If you tick Remember my chart on this device, that chart is kept in this browser until you press Forget. It is never kept on our servers.",
           "When you make a share link, its delete code is kept in this browser so you can delete the link later.",
-          "There are no cookies, no adverts and no tracking or analytics."
+          "When you first press Save, the site sets two cookies: a private key that tells our server which reports are yours (your browser keeps it hidden from the page), and a small marker that shows the My reports link. Without Save there are no cookies.",
+          "There are no adverts and no tracking or analytics."
         ]
       },
       {
@@ -516,13 +562,14 @@
       {
         "title": "Who runs the site",
         "body": [
-          "The pages are served by Vercel. The calculations and the share links run on Render, in Singapore. Fonts and pictures come from the site itself, so your browser does not contact other services."
+          "The pages are served by Vercel. The calculations, share links and saved reports run on Render, in Singapore. Fonts and pictures come from the site itself, so your browser does not contact other services."
         ]
       },
       {
         "title": "Questions and deletion",
         "body": [
-          "To delete a share link, open it on the device that made it and press Delete this link."
+          "To delete a share link, open it on the device that made it and press Delete this link.",
+          "To delete a saved report, or all of them, open My reports in the same browser."
         ]
       }
     ]

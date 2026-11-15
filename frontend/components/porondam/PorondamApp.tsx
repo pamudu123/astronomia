@@ -183,6 +183,7 @@ function PorondamForm({
         labels={labels}
         result={view.saved.result}
         share={dict.share}
+        saveText={dict.saved}
         request={view.saved.request}
         timeline={t.timeline}
         wedding={t.wedding}

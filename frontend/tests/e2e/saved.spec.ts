@@ -1,0 +1,216 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { type Page, expect, test } from "@playwright/test";
+
+/** The backend is not running in these tests: its answers are saved real responses. */
+const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
+const json = (name: string) => ({ contentType: "application/json", body: fixture(name) });
+const reply = (status: number, body: unknown, headers: Record<string, string> = {}) => ({
+  status,
+  contentType: "application/json",
+  headers,
+  body: JSON.stringify(body),
+});
+
+const ID = "3f1c9a52-7d4e-4b0a-9c55-0e6f2b1a8d10";
+const MATCH_ID = "8a2d4f6e-1b3c-4d5e-8f70-123456789abc";
+const SAVED_AT = "2026-11-15T08:00:00Z";
+const HINT = "sidera_saved=1; Path=/; SameSite=Lax";
+
+const hadahanItem = {
+  id: ID,
+  kind: "hadahan",
+  title: "",
+  created_at: SAVED_AT,
+  hadahan: { name: "Nimali", date: "1995-04-19", lagna: "simha", rashi: "vrischika", nakshatra: "jyeshtha" },
+  porondam: null,
+};
+const matchItem = {
+  id: MATCH_ID,
+  kind: "porondam",
+  title: "",
+  created_at: SAVED_AT,
+  hadahan: null,
+  porondam: { bride: "Nimali", groom: "Kasun", passed: 11, total: 16, mode: "quick" },
+};
+
+async function mockTools(page: Page) {
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/places?*", (route) => route.fulfill(json("places-kandy.json")));
+  await page.route("**/api/v1/time/resolve", (route) => route.fulfill(json("time-kandy.json")));
+  await page.route("**/api/v1/hadahan", (route) => route.fulfill(json("hadahan-en.json")));
+  await page.route("**/api/v1/forecast", (route) => route.fulfill(json("forecast-en.json")));
+  await page.route("**/api/v1/porondam", (route) => route.fulfill(json("porondam-quick-en.json")));
+}
+
+async function showHadahan(page: Page) {
+  await page.goto("/en/hadahan");
+  await page.getByLabel(/Name/).fill("Nimali");
+  await page.getByLabel("Date of birth").fill("1995-04-19");
+  await page.getByLabel("Time of birth").fill("14:35");
+  await page.getByRole("combobox").fill("kandy");
+  await page.getByRole("option").first().click();
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.locator('[data-card="lagna"]')).toBeVisible();
+}
+
+test("a hadahan is saved quietly, with no sign in, and My reports appears", async ({ page }) => {
+  await mockTools(page);
+  const posted: string[] = [];
+  let answer = 201;
+  await page.route("**/api/v1/saved", (route) => {
+    posted.push(route.request().postData() ?? "");
+    const created = answer === 201;
+    answer = 200;
+    return route.fulfill(reply(created ? 201 : 200, { ...hadahanItem, created }, { "set-cookie": HINT }));
+  });
+  await showHadahan(page);
+
+  // Nothing about accounts shows before Save.
+  await expect(page.locator("[data-my-reports]")).toHaveCount(0);
+  await expect(page.getByText(/sign in/i)).toHaveCount(0);
+  expect(posted).toHaveLength(0);
+
+  const save = page.locator("[data-save]");
+  await save.getByRole("button", { name: "Save" }).click();
+  await expect(save.getByRole("button", { name: "Saved" })).toBeDisabled();
+  await expect(save.getByRole("status")).toContainText("Saved to My reports.");
+  expect(JSON.parse(posted[0])).toMatchObject({
+    kind: "hadahan",
+    name: "Nimali",
+    birth: { date: "1995-04-19", time: "14:35", lang: "en" },
+  });
+
+  // The header now offers My reports, on phones too.
+  await expect(page.locator("[data-my-reports]")).toBeVisible();
+  await save.getByRole("link", { name: "Open My reports" }).click();
+  await expect(page).toHaveURL(/\/en\/my$/);
+});
+
+test("saving the same result again says it is already there", async ({ page }) => {
+  await mockTools(page);
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { ...hadahanItem, created: false })));
+  await showHadahan(page);
+  const save = page.locator("[data-save]");
+  await save.getByRole("button", { name: "Save" }).click();
+  await expect(save.getByRole("status")).toContainText("Already in My reports.");
+});
+
+test("a full My reports shows the reason", async ({ page }) => {
+  await mockTools(page);
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(409, { detail: "saved report limit reached" })));
+  await showHadahan(page);
+  const save = page.locator("[data-save]");
+  await save.getByRole("button", { name: "Save" }).click();
+  await expect(save.getByRole("alert")).toHaveText("My reports is full. Delete a report there to save this one.");
+  await expect(save.getByRole("button", { name: "Save" })).toBeEnabled();
+});
+
+test("My reports lists, renames and deletes", async ({ page }) => {
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  const calls: string[] = [];
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { reports: [matchItem, hadahanItem] })));
+  await page.route(`**/api/v1/saved/*`, (route) => {
+    const request = route.request();
+    calls.push(`${request.method()} ${new URL(request.url()).pathname} ${request.postData() ?? ""}`.trim());
+    return route.fulfill({ status: 204, body: "" });
+  });
+  await page.goto("/en/my");
+
+  await expect(page.getByRole("heading", { name: "My reports", level: 1 })).toBeVisible();
+  const match = page.locator('[data-saved-report="porondam"]');
+  await expect(match).toContainText("Nimali and Kasun");
+  await expect(match).toContainText("11 of 16 factors agree · Quick match by birth star");
+  await expect(match).toContainText("Saved 15 November 2026");
+  const chart = page.locator('[data-saved-report="hadahan"]');
+  await expect(chart).toContainText("Nimali's birth chart");
+  await expect(chart).toContainText("Lagna Simha · Rashi Vrischika · Jyeshtha");
+  await expect(page.getByText("kept for this browser only")).toBeVisible();
+
+  await chart.getByRole("button", { name: "Rename" }).click();
+  await chart.getByLabel("Name for this report").fill("Amma");
+  await chart.getByRole("button", { name: "Save name" }).click();
+  await expect(chart.getByRole("link", { name: "Amma" })).toBeVisible();
+
+  await match.getByRole("button", { name: "Delete" }).click();
+  await expect(match).toContainText("Delete this report?");
+  await match.getByRole("button", { name: "Yes, delete" }).click();
+  await expect(page.locator('[data-saved-report="porondam"]')).toHaveCount(0);
+
+  expect(calls).toEqual([`PATCH /api/v1/saved/${ID} {"title":"Amma"}`, `DELETE /api/v1/saved/${MATCH_ID}`]);
+});
+
+test("everything can be deleted at once", async ({ page }) => {
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { reports: [hadahanItem] })));
+  const wiped: string[] = [];
+  await page.route("**/api/v1/me", (route) => {
+    wiped.push(route.request().method());
+    return route.fulfill({ status: 204, body: "" });
+  });
+  await page.goto("/en/my");
+  await page.getByRole("button", { name: "Delete all my saved reports" }).click();
+  await page.getByRole("button", { name: "Yes, delete everything" }).click();
+  await expect(page.getByText("Everything is deleted. Nothing from it is kept.")).toBeVisible();
+  expect(wiped).toEqual(["DELETE"]);
+});
+
+test("an empty My reports points to the tools", async ({ page }) => {
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { reports: [] })));
+  await page.goto("/en/my");
+  await expect(page.locator("[data-saved-empty]")).toContainText("Nothing saved yet");
+  await expect(page.getByRole("link", { name: "Make a hadahan" })).toHaveAttribute("href", "/en/hadahan");
+});
+
+test("a saved hadahan opens with its PDF and Share buttons", async ({ page }) => {
+  const shared = JSON.parse(fixture("share-hadahan-en.json"));
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/forecast", (route) => route.fulfill(json("forecast-en.json")));
+  await page.route(`**/api/v1/saved/${ID}?lang=en`, (route) =>
+    route.fulfill(
+      reply(200, {
+        ...hadahanItem,
+        title: "Amma",
+        request: {
+          kind: "hadahan",
+          name: "Nimali",
+          birth: { date: "1995-04-19", time: "14:35", place_id: 1241622, latitude: null, lang: "en" },
+        },
+        hadahan_result: shared.hadahan,
+        porondam_result: null,
+      }),
+    ),
+  );
+  const pdf: string[] = [];
+  await page.route("**/api/v1/reports/pdf", (route) => {
+    pdf.push(route.request().postData() ?? "");
+    return route.fulfill({ status: 200, contentType: "application/pdf", body: "%PDF-1.7" });
+  });
+
+  await page.goto(`/en/my/${ID}`);
+  const banner = page.locator("[data-saved-banner]");
+  await expect(banner).toContainText("Saved report");
+  await expect(banner).toContainText("Amma");
+  await expect(page.locator('[data-card="lagna"]')).toBeVisible();
+  await expect(page.getByRole("button", { name: "Share", exact: true })).toBeVisible();
+  await expect(page.locator("[data-save]")).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => pdf.length).toBe(1);
+  expect(JSON.parse(pdf[0])).toEqual({
+    kind: "hadahan",
+    name: "Nimali",
+    birth: { date: "1995-04-19", time: "14:35", place_id: 1241622, lang: "en" },
+  });
+});
+
+test("a report from another browser is not there", async ({ page }) => {
+  await page.route(`**/api/v1/saved/${ID}?lang=en`, (route) =>
+    route.fulfill(reply(404, { detail: "no such saved report" })),
+  );
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.goto(`/en/my/${ID}`);
+  await expect(page.locator("[data-saved-gone]")).toContainText("This report is not here");
+});
