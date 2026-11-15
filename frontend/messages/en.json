@@ -1053,6 +1053,14 @@
       "groom": "The groom's details are filled from your old horoscope. The time is the middle of the window."
     }
   },
+  "assistant": {
+    "open": "Ask about this page",
+    "title": "Ask Sidera",
+    "note": "AI answers, based on what is on your screen. A guide, not a decision.",
+    "placeholder": "Ask about your result…",
+    "welcome": "Hello! Ask me about anything on this page, in Sinhala or English.",
+    "close": "Close the chat"
+  },
   "litha": {
     "eyebrow": "ලිත",
     "indexTitle": "Litha calendar",

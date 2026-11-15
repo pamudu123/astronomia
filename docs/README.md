@@ -17,7 +17,8 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [11-nakath-rules.md](11-nakath-rules.md) | The nakath rules (set C), their sources and where the sources disagree |
 | [12-baby-rules.md](12-baby-rules.md) | The baby name letter table and child rules (set D), their sources and where the sources disagree |
 | [13-old-horoscopes.md](13-old-horoscopes.md) | Set E: finding the birth from an old paper kendara. How the search works, the edge margins and why, privacy and limits |
-| [14-accounts-and-saved-reports.md](14-accounts-and-saved-reports.md) | Saving results to "My reports": quiet guest accounts, Google sign in only at payment, data, API, security, screens and build steps |
+| [14-ai-assistant-plan.md](14-ai-assistant-plan.md) | The AI chat assistant: Deep Agents, CopilotKit and AG-UI. Knows the page and the details entered, answers with cards, plain words, features used only when needed, step by step build and a growing question list |
+| [15-accounts-and-saved-reports.md](15-accounts-and-saved-reports.md) | Saving results to "My reports": quiet guest accounts, Google sign in only at payment, data, API, security, screens and build steps |
 
 ## Read this first
 

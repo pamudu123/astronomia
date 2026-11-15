@@ -1,0 +1,35 @@
+/*
+ * The chat in the site's night sky look. CopilotKit styles its chat from these variables.
+ * The chat sits in <div class="dark assistant-theme">: "dark" turns on CopilotKit's light
+ * text, and this selector is more specific than CopilotKit's own ".dark [data-copilotkit]".
+ */
+.dark.assistant-theme [data-copilotkit] {
+  --background: var(--panel);
+  --foreground: var(--ink);
+  --card: var(--panel-raised);
+  --card-foreground: var(--ink);
+  --popover: var(--panel-raised);
+  --popover-foreground: var(--ink);
+  --primary: var(--gold);
+  --primary-foreground: var(--night);
+  --secondary: var(--panel-raised);
+  --secondary-foreground: var(--ink);
+  --muted: var(--panel-raised);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--panel-raised);
+  --accent-foreground: var(--ink);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--gold);
+  --radius: var(--radius-field);
+  font-family: var(--font-body);
+  color-scheme: dark;
+}
+
+/* On phones the site has a 72px tab bar at the bottom (MobileTabBar): sit above it. */
+@media (max-width: 860px) {
+  .assistant-theme .copilotKitButton {
+    bottom: calc(72px + 16px + env(safe-area-inset-bottom));
+    right: 16px;
+  }
+}

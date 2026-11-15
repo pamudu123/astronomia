@@ -2,7 +2,7 @@
 
 Nobody signs up. The first Save makes a guest account: a random session code in an HttpOnly
 cookie, tied to this browser. Every later call finds the account through that cookie. Google
-sign in (docs/14, phase B) will turn a guest into a Google account and keep its reports.
+sign in (docs/15, phase B) will turn a guest into a Google account and keep its reports.
 
 Like share links, a saved report keeps the finished result in both languages, worked out again
 on the server. It also keeps the request (the birth details as typed), because its owner opens
