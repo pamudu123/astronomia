@@ -244,6 +244,7 @@ Recommendation: B, unless A handles questions well in the trial.
 - Model: `openai:gpt-6-luna`, low reasoning effort, through the Responses API with `store=False`, so OpenAI keeps no copy of conversations. The model is a setting.
 - Rules for every answer (plain words, safety, format) live in `agent/app/prompts/guide.md`, which is always loaded. Topic guidance lives in skills (`explain-match`, `sinhala-style`, `star-matches`), read only when the topic comes up.
 - The page context sends no names, birth dates, times or places. Only the results shown on screen.
+- The assistant is called **Astro** (chosen 2026-11-15). The chat is a panel on the right, like a browser's side panel: on a laptop it pushes the page aside, on a phone it covers the screen. Its header names the page it is reading, and its suggestion chips change with the page (`frontend/components/assistant/Chat.tsx`).
 
 ## 9. Steps
 

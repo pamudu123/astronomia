@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
 function Page({ lang, dict, children }: { lang: Locale; dict: Dictionary; children: ReactNode }) {
   if (!process.env.AGENT_URL) return children;
   return (
-    <Assistant lang={lang} t={dict.assistant}>
+    <Assistant lang={lang} t={dict.assistant} tools={dict.allTools}>
       {children}
     </Assistant>
   );

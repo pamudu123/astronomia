@@ -78,7 +78,7 @@ The assistant runs on Render at `https://astronomia-agent.onrender.com`.
    answers.
 3. In Vercel, set `AGENT_URL` to `https://astronomia-agent.onrender.com/agent`, then redeploy.
    The chat sends `BACKEND_ACCESS_KEY`, which Vercel already has.
-4. Open the site, then the gold chat button.
+4. Open the site, then "Ask Astro" at the bottom right.
 
 To turn it off, remove `AGENT_URL` in Vercel and redeploy. The chat has no usage limits yet, so
 on staging only people with the staging password can use it (docs/14, section 11).

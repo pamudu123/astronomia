@@ -1,10 +1,10 @@
 /*
- * The chat in the site's night sky look. CopilotKit styles its chat from these variables.
+ * The chat panel in the site's night sky look. CopilotKit styles its chat from these variables.
  * The chat sits in <div class="dark assistant-theme">: "dark" turns on CopilotKit's light
  * text, and this selector is more specific than CopilotKit's own ".dark [data-copilotkit]".
  */
 .dark.assistant-theme [data-copilotkit] {
-  --background: var(--panel);
+  --background: var(--night-raised);
   --foreground: var(--ink);
   --card: var(--panel-raised);
   --card-foreground: var(--ink);
@@ -12,9 +12,9 @@
   --popover-foreground: var(--ink);
   --primary: var(--gold);
   --primary-foreground: var(--night);
-  --secondary: var(--panel-raised);
+  --secondary: var(--panel);
   --secondary-foreground: var(--ink);
-  --muted: var(--panel-raised);
+  --muted: var(--panel);
   --muted-foreground: var(--ink-soft);
   --accent: var(--panel-raised);
   --accent-foreground: var(--ink);
@@ -26,10 +26,211 @@
   color-scheme: dark;
 }
 
+.sidera-hidden {
+  display: none !important;
+}
+
+/* The panel: a night sky with a faint glow rising from the bottom, like the site's hero. */
+.assistant-theme .copilotKitSidebar {
+  background:
+    radial-gradient(120% 45% at 50% 105%, rgb(127 167 217 / 16%), transparent 70%),
+    radial-gradient(90% 30% at 85% 100%, rgb(201 164 92 / 10%), transparent 70%),
+    var(--night-raised);
+  border-color: var(--line-soft);
+  box-shadow: -12px 0 40px rgb(0 0 0 / 35%);
+}
+
+/* Header: the star, the name, what the assistant is reading, and close. */
+.sidera-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px 12px 18px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.sidera-panel-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidera-panel-heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.sidera-panel-heading p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 0;
+  overflow: hidden;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* A small live dot: the assistant can see this page. */
+.sidera-panel-heading p::before {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 6px var(--teal);
+  content: "";
+}
+
+.sidera-panel-close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.sidera-panel-close:hover,
+.sidera-panel-close:focus-visible {
+  background: var(--panel-raised);
+  color: var(--ink);
+}
+
+/* Welcome: the greeting in the middle, suggestions above the input. */
+.sidera-welcome {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidera-welcome-hero {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 28px;
+  text-align: center;
+}
+
+.sidera-welcome-hero h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+html[lang="si"] .sidera-welcome-hero h3 {
+  font-family: var(--font-sinhala-display);
+  font-size: 1.5rem;
+}
+
+.sidera-welcome-hero p {
+  max-width: 300px;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.sidera-welcome-chips {
+  padding: 0 16px 10px;
+}
+
+/* Suggestions stack on the left, one per line, like a browser assistant's. */
+.sidera-welcome-chips > * {
+  display: flex !important;
+  flex-direction: column;
+  max-width: 100%;
+  flex-wrap: nowrap !important;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.sidera-welcome-chips button {
+  max-width: 100%;
+  height: auto !important;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgb(19 26 58 / 85%);
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  text-align: left;
+  /* CopilotKit keeps pills on one line; long questions wrap here instead of overflowing. */
+  white-space: normal !important;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.sidera-welcome-chips button > * {
+  line-height: 1.35 !important;
+  white-space: normal !important;
+}
+
+.sidera-welcome-chips button:hover,
+.sidera-welcome-chips button:focus-visible {
+  border-color: var(--gold);
+  background: var(--panel-raised);
+}
+
+/* The launcher: a pill at the bottom right while the panel is closed. */
+.sidera-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1100;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--panel-raised), var(--panel));
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 40%);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.sidera-launcher:hover,
+.sidera-launcher:focus-visible {
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidera-launcher,
+  .sidera-welcome-chips button {
+    transition: none;
+  }
+
+  .sidera-launcher:hover {
+    transform: none;
+  }
+}
+
 /* On phones the site has a 72px tab bar at the bottom (MobileTabBar): sit above it. */
 @media (max-width: 860px) {
-  .assistant-theme .copilotKitButton {
-    bottom: calc(72px + 16px + env(safe-area-inset-bottom));
+  .sidera-launcher {
     right: 16px;
+    bottom: calc(72px + 16px + env(safe-area-inset-bottom));
   }
 }
