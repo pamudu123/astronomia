@@ -18,7 +18,7 @@ from app import __version__
 from app.config import Settings, get_settings
 from app.graph import build_agent
 from app.security import AccessKeyMiddleware
-from app.tools.engine import EngineClient, engine_tools
+from app.tools import EngineClient, engine_tools
 
 AGENT_NAME = "guide"
 

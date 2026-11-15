@@ -1054,12 +1054,70 @@
     }
   },
   "assistant": {
-    "open": "Ask about this page",
-    "title": "Ask Sidera",
+    "open": "Ask Astro",
+    "title": "Astro",
     "note": "AI answers, based on what is on your screen. A guide, not a decision.",
-    "placeholder": "Ask about your result…",
-    "welcome": "Hello! Ask me about anything on this page, in Sinhala or English.",
-    "close": "Close the chat"
+    "placeholder": "Ask about this page…",
+    "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
+    "close": "Close the chat",
+    "greeting": "What would you like to know?",
+    "reading": "Reading: {page}",
+    "home": "Home",
+    "shared": "Shared result",
+    "chips": {
+      "any": [
+        "What can you do?",
+        "Is today a good day to start something?"
+      ],
+      "porondam": [
+        "Explain my match result",
+        "Which checks didn't pass, and does it matter?"
+      ],
+      "stars": [
+        "Which birth stars suit mine?",
+        "Is a star match enough?"
+      ],
+      "hadahan": [
+        "What does my chart say about me?",
+        "Which life period am I in?"
+      ],
+      "nakath": [
+        "When is Rahu kalaya today?",
+        "What is a thithi?"
+      ],
+      "litha": [
+        "When is the poya this month, and what is it about?",
+        "What is Rahu kalaya?"
+      ],
+      "avurudu": [
+        "What do we do at each New Year nakath?",
+        "Why is there a neutral period?"
+      ],
+      "changes": [
+        "How does this change affect my sign?",
+        "What is erashtaka?"
+      ],
+      "forecast": [
+        "What does this year hold for my sign?",
+        "What is erashtaka?"
+      ],
+      "babyNames": [
+        "Which letter should the name start with?",
+        "Show me some names"
+      ],
+      "firstLetters": [
+        "What happens at akuru kiyaweema?",
+        "How are the times chosen?"
+      ],
+      "wedding": [
+        "Which of these dates is best for us?",
+        "What happens at the poruwa?"
+      ],
+      "kendara": [
+        "Why can more than one birth time fit?",
+        "How do I narrow it down?"
+      ]
+    }
   },
   "litha": {
     "eyebrow": "ලිත",

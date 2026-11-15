@@ -11,6 +11,9 @@ import type { Locale } from "@/lib/i18n";
 import { failureText } from "@/lib/request";
 import { COLOMBO, type Panchanga, type PanchangaPart, type PlaceChoice, fetchPanchanga } from "@/lib/nakath";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { dayContext } from "@/lib/assistant/pages";
+
 import styles from "./Nakath.module.css";
 import { localDate } from "./format";
 
@@ -55,6 +58,8 @@ export function DailyView({ lang, t, day, initial }: Props) {
   const [failed, setFailed] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [picked, setPicked] = useState(day);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(data ? dayContext(data, place, lang) : null);
 
   const choice: PlaceChoice = { placeId: place?.id ?? COLOMBO };
   const current = data && data.date === day && data.place.id === choice.placeId && data ? data : null;

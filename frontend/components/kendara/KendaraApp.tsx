@@ -27,6 +27,9 @@ import {
 import { NAKSHATRA } from "@/lib/nakshatra";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { kendaraContext } from "@/lib/assistant/pages";
+
 import styles from "./Kendara.module.css";
 import { KendaraInput } from "./KendaraInput";
 
@@ -47,6 +50,8 @@ export function KendaraApp({ lang, dict }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{ found: KendaraResult; place: Place | null } | null>(null);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(result ? kendaraContext(result.found, lang) : null);
 
   useEffect(() => {
     fetchLabels(lang)

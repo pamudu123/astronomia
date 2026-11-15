@@ -15,12 +15,71 @@ export type PageContext = {
   /** Someone else's result, opened from a share link. */
   shared?: boolean;
   result?: Json;
+  /** Results of parts inside the page, such as the wedding dates under a match. */
+  also_on_page?: { [part: string]: Json };
 };
 
 /** The page name from the address: "/en/porondam/stars" -> "porondam/stars", "/en" -> "home". */
 export function pageFromPath(pathname: string): string {
   const rest = pathname.split("/").filter(Boolean).slice(1).join("/");
   return rest || "home";
+}
+
+/** Which tool a page belongs to, for the chat panel's "Reading: …" line and its suggestions. */
+export type PageKey =
+  | "home"
+  | "tools"
+  | "hadahan"
+  | "porondam"
+  | "stars"
+  | "nakath"
+  | "litha"
+  | "avurudu"
+  | "babyNames"
+  | "firstLetters"
+  | "wedding"
+  | "kendara"
+  | "changes"
+  | "forecast";
+
+const BY_RESULT: Record<string, PageKey> = {
+  chart: "hadahan",
+  chart_result: "hadahan",
+  match: "porondam",
+  match_result: "porondam",
+  good_times_day: "nakath",
+  litha_month: "litha",
+  avurudu: "avurudu",
+  baby_names: "babyNames",
+  baby_names_result: "babyNames",
+  first_letters_result: "firstLetters",
+  wedding_dates_result: "wedding",
+  old_horoscope_result: "kendara",
+  planet_change_personal: "changes",
+  year_ahead_personal: "forecast",
+};
+
+const BY_ADDRESS: Record<string, PageKey> = {
+  home: "home",
+  tools: "tools",
+  hadahan: "hadahan",
+  porondam: "porondam",
+  nakath: "nakath",
+  litha: "litha",
+  avurudu: "avurudu",
+  "baby-names": "babyNames",
+  "first-letters": "firstLetters",
+  kendara: "kendara",
+  changes: "changes",
+  forecast: "forecast",
+};
+
+/** "match_result" -> "porondam", "porondam/stars/rohini" -> "stars", "privacy" -> null. */
+export function pageKey(page: string): PageKey | null {
+  if (page in BY_RESULT) return BY_RESULT[page];
+  const [first, second] = page.split("/");
+  if (first === "porondam" && second === "stars") return "stars";
+  return BY_ADDRESS[first] ?? null;
 }
 
 export const CONTEXT_DESCRIPTION =

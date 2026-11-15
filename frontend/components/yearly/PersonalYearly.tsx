@@ -10,6 +10,9 @@ import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 import { type PersonalYear, fetchPersonalYear } from "@/lib/yearly";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { personalYearContext } from "@/lib/assistant/pages";
+
 import { YearView } from "./YearView";
 
 type Props = {
@@ -29,6 +32,8 @@ export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PersonalYear | null>(null);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(result ? personalYearContext(result, lang) : null);
   const [clock, setClock] = useState(false);
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;

@@ -12,6 +12,9 @@ import { NAKSHATRA } from "@/lib/nakshatra";
 import { failureText } from "@/lib/request";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { firstLettersContext } from "@/lib/assistant/pages";
+
 import styles from "./FirstLetters.module.css";
 import { FirstLettersGate } from "./FirstLettersGate";
 
@@ -36,6 +39,8 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FirstLetters | null>(null);
+  // What the AI assistant sees: this result, with no birth details.
+  useAssistantContext(result ? firstLettersContext(result, lang) : null);
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
 

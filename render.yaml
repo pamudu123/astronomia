@@ -46,9 +46,13 @@ services:
       # Set in the dashboard, never here.
       - key: OPENAI_API_KEY
         sync: false
-      # Render makes a random key. Copy it to Vercel as AGENT_ACCESS_KEY.
+      # Staging uses one access key for the backend and the assistant: the frontend already
+      # sends it (BACKEND_ACCESS_KEY), and the assistant already holds it to call the backend.
       - key: ASTRONOMIA_AGENT_ACCESS_KEY
-        generateValue: true
+        fromService:
+          type: web
+          name: astronomia-api
+          envVarKey: ASTRONOMIA_ACCESS_KEY
       # The backend's public address, the same as Vercel's BACKEND_URL. Free services can't
       # take calls over Render's private network, so the agent uses the public one.
       - key: ASTRONOMIA_AGENT_BACKEND_URL

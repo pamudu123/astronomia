@@ -2,11 +2,12 @@
 
 from typing import Any
 
+import pytest
 from langchain_core.messages import HumanMessage
 
 from app.config import Settings
 from app.graph import HIDDEN_TOOLS, build_agent, build_model
-from app.tools.engine import EngineClient, engine_tools
+from app.tools import EngineClient, engine_tools
 
 from .conftest import RecordingModel
 
@@ -22,10 +23,37 @@ async def test_offers_engine_tools_and_skill_reading_but_no_writing(
 ) -> None:
     await agent(settings, model).ainvoke({"messages": [HumanMessage("hi")]}, CONFIG)
 
-    assert "find_matching_stars" in model.offered
+    assert {"find_matching_stars", "good_times_for_day", "year_ahead_for_sign"} <= set(
+        model.offered
+    )
     assert "read_file" in model.offered
     assert not HIDDEN_TOOLS & set(model.offered)
-    assert "task" not in model.offered, "no subagents until a question needs one"
+
+
+async def test_offers_the_two_helpers_and_no_general_purpose_one(
+    settings: Settings, model: RecordingModel
+) -> None:
+    await agent(settings, model).ainvoke({"messages": [HumanMessage("hi")]}, CONFIG)
+
+    task = model.descriptions["task"]
+    assert "- researcher:" in task
+    assert "- date-checker:" in task
+    assert "- general-purpose:" not in task
+
+
+def test_each_helper_gets_only_the_tools_its_job_needs() -> None:
+    from app.subagents import build_subagents
+
+    tools = engine_tools(EngineClient("http://engine.test"))
+    helpers = {s["name"]: s for s in build_subagents(tools, "/skills/")}
+
+    assert helpers["researcher"].get("tools") == []
+    assert helpers["researcher"].get("skills") == ["/skills/"]
+    assert {t.name for t in helpers["date-checker"].get("tools", [])} == {  # type: ignore[union-attr]
+        "find_place",
+        "good_times_for_day",
+        "month_calendar",
+    }
 
 
 async def test_finds_every_skill_in_the_skills_folder(
@@ -53,7 +81,7 @@ async def test_system_prompt_lists_skills(settings: Settings) -> None:
     await agent(settings, model).ainvoke({"messages": [HumanMessage("hi")]}, CONFIG)
 
     system = seen[0]
-    assert "You are the guide on Sidera" in system
+    assert "You are Astro, the guide on Sidera" in system
     assert "/skills/explain-match/SKILL.md" in system
 
 
@@ -62,6 +90,14 @@ def test_openai_model_keeps_no_data_and_uses_low_effort(settings: Settings) -> N
     assert model.model_name == "gpt-6-luna"
     assert model.store is False
     assert model.reasoning == {"effort": "low"}
+
+
+def test_missing_openai_key_says_so_plainly(settings: Settings) -> None:
+    from pydantic import SecretStr
+
+    no_key = settings.model_copy(update={"openai_api_key": SecretStr("")})
+    with pytest.raises(RuntimeError, match="OPENAI_API_KEY is not set"):
+        build_model(no_key)
 
 
 def test_real_model_matches_the_profile_key(settings: Settings) -> None:
