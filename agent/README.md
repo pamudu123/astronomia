@@ -40,7 +40,7 @@ The backend should run too (http://localhost:8000), for the engine tools. The we
 ## How the chat reaches the agent
 
 ```
-Browser (CopilotKit popup, components/assistant/)
+Browser (Astro, a CopilotKit side panel, components/assistant/)
   -> POST /api/copilotkit   Next.js route, CopilotKit runtime, single-endpoint mode
   -> POST /agent            this service, AG-UI stream
   -> backend API            engine tools

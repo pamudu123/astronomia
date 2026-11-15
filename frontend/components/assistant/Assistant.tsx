@@ -34,10 +34,13 @@ export function combine(slots: Slots): PageContext | null {
 export function Assistant({
   lang,
   t,
+  tools,
   children,
 }: {
   lang: Locale;
   t: Dictionary["assistant"];
+  /** The tools' names, for the chat panel's "Reading: …" line. */
+  tools: Dictionary["allTools"];
   children: ReactNode;
 }) {
   const [slots, setSlots] = useState<Slots>({});
@@ -55,7 +58,7 @@ export function Assistant({
   return (
     <PageContextSetter value={set}>
       {children}
-      <Chat lang={lang} t={t} page={page} />
+      <Chat lang={lang} t={t} tools={tools} page={page} />
     </PageContextSetter>
   );
 }

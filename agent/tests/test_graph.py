@@ -81,7 +81,7 @@ async def test_system_prompt_lists_skills(settings: Settings) -> None:
     await agent(settings, model).ainvoke({"messages": [HumanMessage("hi")]}, CONFIG)
 
     system = seen[0]
-    assert "You are the guide on Sidera" in system
+    assert "You are Astro, the guide on Sidera" in system
     assert "/skills/explain-match/SKILL.md" in system
 
 

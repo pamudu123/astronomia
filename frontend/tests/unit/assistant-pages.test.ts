@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { combine } from "@/components/assistant/Assistant";
+import { pageKey } from "@/lib/assistant/context";
 import type { BabyLetters } from "@/lib/babynames";
 import type { Hadahan, Labels } from "@/lib/hadahan";
 import type { KendaraResult } from "@/lib/kendara";
@@ -90,6 +91,22 @@ describe("other pages", () => {
     const text = JSON.stringify(kendaraContext(result, "en"));
     expect(text).toContain(`"possible_birth_times_found":${result.matches.length}`);
     for (const match of result.matches) expect(text).not.toContain(match.start.local);
+  });
+});
+
+describe("pageKey", () => {
+  it("names the tool for a result page or an address", () => {
+    expect(pageKey("match_result")).toBe("porondam");
+    expect(pageKey("chart_result")).toBe("hadahan");
+    expect(pageKey("porondam/stars/rohini")).toBe("stars");
+    expect(pageKey("changes/saturn-2027-06/mesha")).toBe("changes");
+    expect(pageKey("litha/2026-12")).toBe("litha");
+    expect(pageKey("home")).toBe("home");
+  });
+
+  it("has no tool for policy pages and share links", () => {
+    expect(pageKey("privacy")).toBeNull();
+    expect(pageKey("s/abc123")).toBeNull();
   });
 });
 
