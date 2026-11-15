@@ -1,4 +1,4 @@
-# Render blueprint for the backend and its database (staging for now).
+# Render blueprint for the backend, its database and the AI assistant (staging for now).
 # The frontend runs on Vercel. See docs/09-launch.md.
 services:
   - type: web
@@ -22,6 +22,42 @@ services:
       # Shared with the frontend (BACKEND_ACCESS_KEY). Set in the dashboard, never here.
       - key: ASTRONOMIA_ACCESS_KEY
         sync: false
+
+  # The AI assistant behind the website's chat (agent/). The chat stays off until Vercel has
+  # AGENT_URL, so this service can run before anyone can reach it.
+  - type: web
+    name: astronomia-agent
+    runtime: docker
+    plan: free
+    region: singapore
+    repo: https://github.com/pamudu123/astronomia
+    branch: main
+    dockerContext: ./agent
+    dockerfilePath: ./agent/Dockerfile
+    healthCheckPath: /healthz
+    autoDeploy: true
+    # Only changes to the assistant rebuild it.
+    buildFilter:
+      paths:
+        - agent/**
+    envVars:
+      - key: ASTRONOMIA_AGENT_ENVIRONMENT
+        value: staging
+      # Set in the dashboard, never here.
+      - key: OPENAI_API_KEY
+        sync: false
+      # Render makes a random key. Copy it to Vercel as AGENT_ACCESS_KEY.
+      - key: ASTRONOMIA_AGENT_ACCESS_KEY
+        generateValue: true
+      # The backend's public address, the same as Vercel's BACKEND_URL. Free services can't
+      # take calls over Render's private network, so the agent uses the public one.
+      - key: ASTRONOMIA_AGENT_BACKEND_URL
+        value: https://astronomia-api-njxu.onrender.com
+      - key: ASTRONOMIA_AGENT_BACKEND_ACCESS_KEY
+        fromService:
+          type: web
+          name: astronomia-api
+          envVarKey: ASTRONOMIA_ACCESS_KEY
 
 databases:
   - name: astronomia-db

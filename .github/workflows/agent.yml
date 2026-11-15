@@ -1,0 +1,64 @@
+name: Agent
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "agent/**"
+      - ".github/workflows/agent.yml"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: agent
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - name: Lint
+        run: uv run ruff check . && uv run ruff format --check .
+      - name: Type check
+        run: uv run mypy app tests
+      # The tests use a stand-in model: no key and no network needed.
+      - name: Tests
+        run: uv run pytest
+
+  # The image Render runs: build it, start it, and check it answers and keeps its lock.
+  # The OpenAI key is a stand-in: starting up makes no OpenAI call.
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image
+        run: docker build -t astronomia-agent .
+      - name: No .env in the image
+        run: test -z "$(docker run --rm --entrypoint sh astronomia-agent -c 'ls -a /srv | grep -x .env')"
+      - name: Start it
+        run: >
+          docker run -d --name agent -e PORT=9123 -p 9123:9123
+          -e OPENAI_API_KEY=stand-in -e ASTRONOMIA_AGENT_ACCESS_KEY=ci-key astronomia-agent
+      - name: It answers
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:9123/healthz && break
+            sleep 2
+          done
+          curl -sf http://localhost:9123/healthz
+      - name: It needs the access key
+        run: |
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:9123/agent -H 'content-type: application/json' -d '{}')" = 401
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:9123/agent -H 'content-type: application/json' -H 'X-Access-Key: ci-key' -d '{}')" = 422
+      - name: Logs if it failed
+        if: failure()
+        run: docker logs agent || true
