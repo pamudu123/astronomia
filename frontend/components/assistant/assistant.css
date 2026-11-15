@@ -335,6 +335,51 @@ html[lang="si"] .sidera-welcome-hero h3 {
   line-height: 1.5;
 }
 
+/*
+ * Answers come in point form (agent/app/prompts/guide.md): one opening line, then short
+ * points. Brass bullets, tight spacing and a bold lead word make them quick to scan.
+ */
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose {
+  --tw-prose-invert-body: var(--ink);
+  --tw-prose-invert-bold: var(--ink);
+  --tw-prose-invert-bullets: var(--gold);
+  --tw-prose-invert-counters: var(--gold);
+  --tw-prose-invert-links: var(--gold);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose p {
+  margin: 0 0 0.5em;
+}
+
+/* CopilotKit's markdown puts bullets inside the line; outside keeps wrapped lines aligned. */
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose ul,
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose ol {
+  margin: 0.35em 0 0.6em;
+  padding-inline-start: 1.15em;
+  list-style-position: outside;
+}
+
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose li {
+  margin: 0.3em 0;
+  padding-inline-start: 0.2em;
+}
+
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose li::marker {
+  color: var(--gold);
+}
+
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose strong,
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose [data-streamdown="strong"] {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.assistant-theme .copilotKitAssistantMessage .cpk\:prose > :last-child {
+  margin-bottom: 0;
+}
+
 /* The launcher: a pill at the bottom right while the panel is closed. */
 .sidera-launcher {
   position: fixed;

@@ -1064,6 +1064,82 @@
     "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
     "close": "Close the chat",
     "resize": "Resize the chat. Drag, or use the arrow keys",
+    "cards": {
+      "status": {
+        "find_place": [
+          "Finding the place…",
+          "Found the place"
+        ],
+        "good_times_for_day": [
+          "Checking the day's times…",
+          "Checked the day's times"
+        ],
+        "month_calendar": [
+          "Reading the month's calendar…",
+          "Read the month's calendar"
+        ],
+        "new_year_times": [
+          "Looking up the New Year times…",
+          "Looked up the New Year times"
+        ],
+        "find_matching_stars": [
+          "Comparing the 27 birth stars…",
+          "Compared the 27 birth stars"
+        ],
+        "name_letters_for_star": [
+          "Finding the name letters…",
+          "Found the name letters"
+        ],
+        "names_for_letters": [
+          "Finding names…",
+          "Found names"
+        ],
+        "upcoming_planet_changes": [
+          "Checking planet changes…",
+          "Checked planet changes"
+        ],
+        "planet_change_for_sign": [
+          "Checking this planet change…",
+          "Checked this planet change"
+        ],
+        "year_ahead_for_sign": [
+          "Reading the year ahead…",
+          "Read the year ahead"
+        ],
+        "task": [
+          "Asking a helper…",
+          "A helper checked"
+        ],
+        "notes": [
+          "Reading my notes…",
+          "Read my notes"
+        ],
+        "other": [
+          "Working…",
+          "Done"
+        ],
+        "failed": "Couldn't check this"
+      },
+      "provisional": "Provisional",
+      "day": {
+        "label": "Times for {date}",
+        "sunrise": "Sunrise",
+        "sunset": "Sunset",
+        "rahu": "Rahu kalaya",
+        "thithi": "Thithi",
+        "nakatha": "Nakatha",
+        "until": "until {time}",
+        "open": "Open the full day"
+      },
+      "stars": {
+        "title": "Best matches for {star}, quarter {pada}",
+        "factors": "{agree} of {total} factors agree",
+        "passes": "passes",
+        "fails": "does not pass",
+        "legend": "Ticks: the essential checks ({checks})",
+        "open": "See all 27 stars"
+      }
+    },
     "greeting": "What would you like to know?",
     "reading": "Reading: {page}",
     "home": "Home",

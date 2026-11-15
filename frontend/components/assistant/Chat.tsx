@@ -33,6 +33,8 @@ import { PANEL_MAX, PANEL_MIN, PANEL_WIDTH, clampWidth, followUpInstructions } f
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { ToolCards } from "./ToolCards";
+
 // The agents' names, shared with app/api/copilotkit/route.ts: the guide answers, the
 // suggester writes the follow-up questions under each answer.
 const AGENT_ID = "guide";
@@ -319,6 +321,7 @@ export default function Chat({
   return (
     <CopilotKitProvider runtimeUrl="/api/copilotkit" useSingleEndpoint agentId={AGENT_ID} enableInspector={false}>
       <ContextBridge value={value} t={t} lang={lang} chipsKey={key} />
+      <ToolCards lang={lang} t={t.cards} />
       <PanelContext value={panel}>
         {/* "dark" switches CopilotKit to light text; assistant.css sets the site colours.
             The panel's width is a CSS variable: CopilotKit reads its width prop only once,
