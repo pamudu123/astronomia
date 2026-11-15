@@ -31,7 +31,7 @@ AI assistant (Render):
 | Variable | Meaning |
 |---|---|
 | `OPENAI_API_KEY` | The OpenAI key. Set in the dashboard |
-| `ASTRONOMIA_AGENT_ACCESS_KEY` | Render makes a random one. Every request except `/healthz` needs it in `X-Access-Key` |
+| `ASTRONOMIA_AGENT_ACCESS_KEY` | Every request except `/healthz` needs it in `X-Access-Key`. On staging, Render copies the backend's `ASTRONOMIA_ACCESS_KEY` |
 | `ASTRONOMIA_AGENT_BACKEND_URL` | The backend's public address, the same as `BACKEND_URL`. Set in `render.yaml` |
 | `ASTRONOMIA_AGENT_BACKEND_ACCESS_KEY` | Copied by Render from the backend's `ASTRONOMIA_ACCESS_KEY` |
 | `ASTRONOMIA_AGENT_MODEL` | Optional. Default `openai:gpt-6-luna` |
@@ -46,7 +46,7 @@ Frontend (Vercel):
 | `SITE_URL` | The site's own address, used in link previews |
 | `STAGING_PASSWORD` | When set, the whole site asks for this password and is not indexed |
 | `AGENT_URL` | The assistant's address plus `/agent`, for example `https://astronomia-agent.onrender.com/agent`. The chat appears only when it is set: it is the chat's off switch |
-| `AGENT_ACCESS_KEY` | The same value as `ASTRONOMIA_AGENT_ACCESS_KEY` |
+| `AGENT_ACCESS_KEY` | Only if the assistant has a key of its own. Without it, the chat sends `BACKEND_ACCESS_KEY`, which staging uses for both |
 
 Secrets (`*_ACCESS_KEY`, `OPENAI_API_KEY`, `STAGING_PASSWORD`) are set only in the host
 dashboards, never in the repository. Changing a Vercel variable needs a redeploy. `AGENT_URL` is
@@ -62,18 +62,22 @@ Three locks keep it private:
    `robots.txt` disallows everything.
 2. **The backend** refuses any request without the access key (`backend/app/security.py`), so
    its own address is no way in either. Only `/healthz` is open, for Render's health check.
-3. **The AI assistant** does the same with its own key (`agent/app/security.py`). Only the
-   site's chat route has it, so nobody can use the OpenAI key by calling the assistant directly.
+3. **The AI assistant** does the same (`agent/app/security.py`). On staging it takes the same key
+   as the backend. Only the site has it, so nobody can use the OpenAI key by calling the
+   assistant directly.
 
 ## Turning on the chat
 
-1. Merge to `main`. Render reads `render.yaml` and adds the `astronomia-agent` service. If it
-   doesn't appear, sync the blueprint by hand in Render.
-2. In Render, set `OPENAI_API_KEY` on the agent service (the only value marked `sync: false`).
-   Check that `https://<agent address>/healthz` answers. Render adds a random suffix to the
-   address, as it did for the backend (`astronomia-api-njxu`).
-3. In Vercel, set `AGENT_URL` (`https://<agent address>/agent`) and `AGENT_ACCESS_KEY` (copy
-   `ASTRONOMIA_AGENT_ACCESS_KEY` from Render), then redeploy.
+The assistant runs on Render at `https://astronomia-agent.onrender.com`.
+
+1. Render's blueprint creates the `astronomia-agent` service from `render.yaml`. A new service
+   waits for approval under Blueprints, then Syncs.
+2. The blueprint does not create `OPENAI_API_KEY`. Add it on the service's Environment page,
+   then Save, rebuild, and deploy. Without it the service stops at start-up with
+   "OPENAI_API_KEY is not set". Check that `https://astronomia-agent.onrender.com/healthz`
+   answers.
+3. In Vercel, set `AGENT_URL` to `https://astronomia-agent.onrender.com/agent`, then redeploy.
+   The chat sends `BACKEND_ACCESS_KEY`, which Vercel already has.
 4. Open the site, then the gold chat button.
 
 To turn it off, remove `AGENT_URL` in Vercel and redeploy. The chat has no usage limits yet, so

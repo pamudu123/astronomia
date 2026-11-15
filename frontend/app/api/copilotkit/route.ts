@@ -20,7 +20,9 @@ export const maxDuration = 60;
 const AGENT_ID = "guide";
 
 function createHandler(agentUrl: string) {
-  const accessKey = process.env.AGENT_ACCESS_KEY;
+  // Staging uses the backend's key for the agent too (render.yaml). AGENT_ACCESS_KEY is for
+  // an agent with a key of its own.
+  const accessKey = process.env.AGENT_ACCESS_KEY || process.env.BACKEND_ACCESS_KEY;
   const runtime = new CopilotRuntime({
     agents: {
       [AGENT_ID]: new HttpAgent({
