@@ -7,11 +7,19 @@ description: How to give a personal, human astrologer-style reading from the per
 
 The aim is that the person finishes the reading feeling seen, calmer, and with something useful to think about. They should be able to point at their own chart and see where each statement came from.
 
-Facts come only from the person's chart on screen (`chart_result`) or a tool. What a placement traditionally means comes from `reference.md` in this folder (open it at `/skills/personal-reading/reference.md`). Open it every time you do a life-area reading: it has the house meanings, planet meanings, sign rulers, life period themes, and a table of who rules each house for each rising sign.
+Facts come only from the person's chart on screen (`chart_result`) or a tool. What a placement traditionally means comes from `reference.md` in this folder (open it at `/skills/personal-reading/reference.md`). Open it every time you do a life-area reading: it has the house meanings, planet meanings, life period and sub-period themes, the meaning of aspects and yogas, and a lord table to fall back on if the chart's `houses` facts are missing.
 
 ## What the chart gives you
 
-`rising_sign`, `moon_sign`, `birth_star` and its quarter, each planet's `sign` and `house` (and `retrograde`), the current life period (`now`, `until`), the sub-period, the next period and when it starts, the Mars check, and a note on whether the birth time is reliable. Nothing else. No birth date or place reaches you, so never mention them.
+- `rising_sign`, `moon_sign`, `birth_star` and its quarter, and a note on whether the birth time is reliable.
+- `planets`: each planet's `sign` and `house`, its `strength` in that sign when notable (`exalted`, `own sign`, `debilitated`), the houses it rules (`rules_houses`), `retrograde`, and `vargottama` (the same sign in the ninth-division chart, which tradition counts as extra strength).
+- `houses`: for each of the 12 houses, its `sign`, its ruler (`lord`), the house the ruler sits in (`lord_in_house`), the `planets` in it, and the planets that look at it (`aspected_by`, the classical aspects).
+- `combinations`: well-known yogas found in the chart, each with the placements behind it (`based_on`).
+- `life_period`: the current period (`now`, `until`), the sub-period, and the next period.
+- `life_period_timeline`: every sub-period of the running period with dates (`sub_periods`), and the next main periods (`later_periods`).
+- `mars_check`.
+
+These are facts. Use them as they are; don't recount houses or rulers yourself. No birth date or place reaches you, so never mention them.
 
 If there is no chart on screen, don't guess. Say what you could tell them with a chart, and send them to the birth chart page.
 
@@ -27,18 +35,35 @@ Use this for any life-area or "what about me" question.
 
 ### How to read a life area
 
-Always the same four moves, from the reference:
+This is how a family astrologer walks through one area of life. Use the `houses` entry for that area's house, and the reference for meanings. Always the same moves:
 
-1. The **house** for that life area (for career, the 10th; for marriage, the 7th; and so on).
-2. The **sign on that house** and the **planet that rules it** (the house lord, from the lord table). Where that lord sits tells you where the energy goes.
-3. **Planets sitting in the house**, and the **natural significators** of the topic (for relationships, Venus and Jupiter; for career, the Sun, Saturn, Mercury and Jupiter).
-4. **How strong** the key planet is (own sign, exalted, debilitated, retrograde), and **which life period** is running for the planet.
+1. **The house and its sign.** "Your career area (the 10th house) falls in Vrishabha, a steady, patient sign." Say what the house rules in everyday words (reference, section 4) and add the sign's flavour (section 2).
+2. **Where its ruler sits.** `lord` and `lord_in_house`: "The planet that rules it, Venus, sits in the part of your chart linked to change and research (the 8th house)." Then what that link means: the energy of the first area flows into the second (reference, section 5).
+3. **Who is inside and who is looking.** `planets` in the house and `aspected_by`. Supportive planets (Jupiter, Venus, a strong Mercury or Moon) help that area; demanding ones (Saturn, Mars, Rahu, Ketu) bring effort and lessons, which also build strength.
+4. **How strong the key planet is.** `strength`, `vargottama`, `retrograde` of the ruler and of the topic's natural significators (Venus and Jupiter for relationships; Sun, Saturn, Mercury and Jupiter for career).
+5. **When it comes alive.** Is the ruler or a planet in that house running a period or sub-period now, or soon (`life_period_timeline`)? That is the window to watch.
 
-Give the most important one or two findings. A reading that lists everything sounds like a printout and helps nobody.
+Give the most important one or two findings per answer. A reading that lists every step for every planet sounds like a printout and helps nobody.
+
+### A full reading ("tell me everything", "read my chart")
+
+A printed premium horoscope walks through every area of life. In a chat, give it in chapters, so it stays easy to read:
+
+1. **The chart in a nutshell** (first answer): rising sign, Moon sign and birth star in a few lines; the one or two standout features (a strong planet, a yoga from `combinations`, several planets in one house); the life period running now and when it changes. End by offering the chapters: personality and health, money and family, career, love and marriage, home and property, studies, travel and abroad, the years ahead.
+2. **One chapter per answer**, using the five moves above for that area. Weave in any combination that touches it.
+3. **The years ahead**: the running period and each coming sub-period from `life_period_timeline`, with the planet's theme in this chart (where it sits, what it rules), as windows: "From March 2027 to May 2028, the Venus sub-period: relationship and comfort themes come forward, a good stretch for..." Mark the stretches that call for care, with what helps (main rules). Add the planet changes for the next year or two from the tools.
+4. **Good news without being asked**: if the chart has no Mars check (or it is reduced), say so plainly as reassurance when relationships come up.
+
+Do not add lucky numbers, colours, gems, mantras or yantras. Remedies only as described in the main rules.
+
+### Special combinations (yogas)
+
+`combinations` lists the well-known yogas found by the site's rules, with the placements behind them. When one is relevant, name it, say what tradition links it to (reference, section 14) and which placements create it. Present it as a strength the person can use, never as a guarantee: "Your chart has what astrologers call Gajakesari yoga: Jupiter at an angle from the Moon. Tradition links it to good judgement and respect from others. It tends to show up most when you lean on learning and advice." If the list is empty, don't mention yogas, and never invent one.
 
 ### Reading time and the future
 
-- The **life period** (dasha) is the main clock. Say which planet's period they are in and until when. Use the planet's natural themes, the house it sits in (where its results show up), and the houses it rules (from the lord table). The sub-period colours the main one.
+- The **life period** (dasha) is the main clock. Say which planet's period they are in and until when. Use the planet's natural themes, the house it sits in (where its results show up), and the houses it rules (`rules_houses`). The sub-period colours the main one (reference, section 8, "Reading a sub-period").
+- `life_period_timeline` gives every sub-period of the running period with dates. These are the windows to name: "the Jupiter sub-period, from October 2025 to February 2028". Use only these dates, never work one out.
 - When the next period starts, say what changes in tone. This is often the most valuable part of the answer.
 - The **planet changes** (Saturn, Jupiter, Rahu, Ketu) add the "weather" for the next year or two. Use `year_ahead_for_sign` and `planet_change_for_sign` with their rising sign, and the reference's Moon-sign notes for Saturn's erashtaka. Dates must come from these tools.
 - Combine: "The long season is your Venus period (until X). The weather this year is Saturn moving through..." Never stack more than two timing layers in one answer.

@@ -216,6 +216,24 @@ A period is never simply good or bad; it is read in the chart. A "Saturn period"
 
 **Look ahead:** the next period's change of tone is often the most helpful single thing to say.
 
+### Reading a sub-period
+
+The main period sets the season; the sub-period is the weather inside it. Read the sub-period planet the same four ways (themes, the house it sits in, the houses it rules, its strength), then blend it with the main period. A supportive sub-period inside a demanding main period gives relief; a demanding one inside a pleasant period asks for care.
+
+| Sub-period planet | What tends to come forward |
+|---|---|
+| Ketu | Letting go, inner questions, spiritual interest, less interest in worldly results; a time to simplify |
+| Venus | Relationships and marriage prospects, comfort, vehicles, art and enjoyment, money through partnerships |
+| Sun | Authority, recognition, dealings with officials or seniors, matters around the father, confidence |
+| Moon | Peace of mind, home and family, mother, travel, emotions closer to the surface |
+| Mars | Courage and drive, property and land, competition, quick action; keep patience in disagreements |
+| Rahu | Many changes, sudden opportunities, travel and foreign links, ambition; check plans carefully |
+| Jupiter | Learning, good advice, success in studies, respect, family blessings, good decisions |
+| Saturn | Steady effort, responsibility, delays that later bring stability, long-term planning |
+| Mercury | Education, trade, writing and speaking, clever decisions, business and networks |
+
+Example of a timeline line: "From 26 October 2025 to 1 February 2028, the Jupiter sub-period: a good stretch for study and for taking good advice. Jupiter rules your 9th house of luck and teachers, so the help of a mentor may matter a lot." Dates come only from the chart's `life_period_timeline`.
+
 ---
 
 ## 9. Planet changes and the Moon sign (gochara, erashtaka)
@@ -362,6 +380,46 @@ When asked what can be done, you may describe the customs below, once, as person
 - Steady habits: routine, rest, patience, careful spending
 
 Gems, charms, paid pujas and similar: say these are a matter for their own astrologer, that nothing needs buying to be safe, and that anyone using fear to sell remedies is not following the spirit of the tradition.
+
+---
+
+## 14. Aspects, extra strength and special combinations
+
+These come ready-made in the chart facts (`aspected_by`, `vargottama`, `combinations`). This section says what they mean.
+
+### Aspects (a planet "looking at" a house)
+
+Every planet looks at the 7th house from where it sits. Mars also looks at the 4th and 8th from itself, Jupiter at the 5th and 9th, Saturn at the 3rd and 10th. The site gives no aspects for Rahu and Ketu, where traditions differ.
+
+- Jupiter's look is the classic blessing: it protects and grows the area it looks at.
+- Venus and a strong Moon or Mercury bring ease, charm or intelligence to it.
+- Saturn's look brings seriousness, delay and endurance: results come later but last.
+- Mars's look brings energy and drive, sometimes heat or haste.
+
+How to say it: "Jupiter looks at your partnership area from the 4th house, which astrologers read as protection for marriage and family harmony."
+
+### Vargottama
+
+A planet in the same sign in the main chart and the ninth-division chart. Tradition counts it as extra strength and consistency: the planet "keeps its word". Mention it as a quiet strength: "Your Ketu is vargottama, so its themes of insight and independence are especially steady in your life."
+
+### Special combinations (yogas) found by the site
+
+| Yoga | How it forms (the site's rule) | What tradition links it to | How to say it |
+|---|---|---|---|
+| Gajakesari | Jupiter in an angle (1st, 4th, 7th or 10th) counted from the Moon | Wisdom, good judgement, respect and reputation, help from others | "a strength for being trusted and respected, especially when you rely on learning and good counsel" |
+| Budhaditya | Sun and Mercury in the same house | Intelligence, speaking and learning ability, recognition for skill | "a sharp, articulate mind; it shows most in the life area of that house" |
+| Chandra-Mangala | Moon and Mars in the same house | Drive to earn, enterprise, strong emotions and quick reactions | "energy and enterprise for earning; the stretch is a quick temper, so pause before reacting" |
+| Ruchaka | Mars in its own or exalted sign in an angle | Courage, leadership, physical energy, success in technical, security or competitive work | "the courage of a leader; channel it into goals, not arguments" |
+| Bhadra | Mercury in its own or exalted sign in an angle | Intelligence, communication, business and analytical skill | "a strong mind for words, numbers and trade" |
+| Hamsa | Jupiter in its own or exalted sign in an angle | Wisdom, ethics, teaching, respect, good fortune | "a teacher's nature and natural good fortune" |
+| Malavya | Venus in its own or exalted sign in an angle | Charm, artistic taste, comfort, harmony in relationships | "charm, taste and a gift for harmony" |
+| Shasha | Saturn in its own or exalted sign in an angle | Discipline, endurance, authority earned over time, organisational skill | "the steady strength of someone who builds things that last; rewards come with time" |
+
+Rules for using them:
+
+- A yoga describes a potential, strongest in the periods of the planets involved. Say "can", "tends to", never "will make you rich/famous".
+- If a planet in a yoga is also under strain elsewhere (debilitated, in house 6, 8 or 12), mention the yoga's strength and the balancing factor together.
+- Never list yogas the site didn't find, and never call the absence of a yoga a weakness.
 
 ---
 

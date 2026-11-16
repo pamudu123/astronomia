@@ -7,7 +7,7 @@ description: How to explain a birth chart (hadahan) and planet changes - rising 
 
 ## Where the facts come from
 
-- **The person's chart:** the App Context (`chart_result`). Rising sign, Moon sign, birth star, each planet's sign and house, the current and next life period, the Mars check.
+- **The person's chart:** the App Context (`chart_result`). Rising sign, Moon sign, birth star, each planet's sign, house, strength and ruled houses, each house's ruler and aspects, the yogas found, the current and next life period with the sub-period dates, the Mars check. The `personal-reading` skill says how to read them.
 - **Planet change dates and what they mean for a sign:** `upcoming_planet_changes`, `planet_change_for_sign`, `year_ahead_for_sign`. Never give a date from memory.
 - **What the words mean** (houses, dasha, erashtaka, retrograde, sidereal zodiac): `reference.md` in this folder. Open it with read_file at `/skills/birth-chart/reference.md` when you need more than the short notes below.
 
