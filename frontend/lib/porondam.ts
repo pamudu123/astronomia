@@ -1,5 +1,5 @@
 import type { components } from "./api-types";
-import type { BirthRequest } from "./hadahan";
+import type { BirthRequest, Labels } from "./hadahan";
 import type { Locale } from "./i18n";
 
 export type Porondam = components["schemas"]["PorondamResponse"];
@@ -46,6 +46,72 @@ export function filterFactors(factors: Factor[], filter: FactorFilter): Factor[]
   if (filter === "agree") return factors.filter((f) => isCounted(f) && f.passed);
   if (filter === "disagree") return factors.filter((f) => isCounted(f) && !f.passed);
   return factors;
+}
+
+export type Themes = NonNullable<Labels["porondam_theme"]>;
+
+/** One life area of the summary chart, with its factors in the result's order. */
+export type FactorGroup = {
+  /** The theme id, or "" for factors no theme names. */
+  id: string;
+  /** The theme's name, or "" for the group with no name. */
+  name: string;
+  factors: Factor[];
+  /** How many of the counted factors agree. */
+  agree: number;
+  /** How many factors count. Ones that need the birth dates may not. */
+  counted: number;
+};
+
+const group = (id: string, name: string, factors: Factor[]): FactorGroup => ({
+  id,
+  name,
+  factors,
+  agree: factors.filter((f) => isCounted(f) && f.passed).length,
+  counted: factors.filter(isCounted).length,
+});
+
+/**
+ * The factors grouped by life area, in the themes' order. A factor no theme names (a newer
+ * rule set, or labels from an older backend) goes in a last group with no name, so the chart
+ * never drops one. Themes with no factor in this result are left out.
+ */
+export function groupFactors(factors: Factor[], themes: Themes | undefined): FactorGroup[] {
+  const groups: FactorGroup[] = [];
+  const placed = new Set<string>();
+  for (const [id, theme] of Object.entries(themes ?? {})) {
+    const inTheme = factors.filter((f) => theme.factors.includes(f.id) && !placed.has(f.id));
+    inTheme.forEach((f) => placed.add(f.id));
+    if (inTheme.length) groups.push(group(id, theme.name, inTheme));
+  }
+  const rest = factors.filter((f) => !placed.has(f.id));
+  if (rest.length) groups.push(group("", "", rest));
+  return groups;
+}
+
+/**
+ * Where each factor's segment sits on the summary ring, in degrees clockwise from the top.
+ * Groups are split by a wider gap than the segments inside them.
+ */
+export function ringSegments(
+  sizes: number[],
+  groupGap: number,
+  segmentGap: number,
+): { start: number; end: number }[] {
+  const total = sizes.reduce((sum, n) => sum + n, 0);
+  if (total <= 0) return [];
+  const gaps = sizes.length > 1 ? sizes.length * groupGap : 0;
+  const each = (360 - gaps) / total;
+  const segments = [];
+  let at = sizes.length > 1 ? groupGap / 2 : 0;
+  for (const size of sizes) {
+    for (let i = 0; i < size; i++) {
+      segments.push({ start: at + segmentGap / 2, end: at + each - segmentGap / 2 });
+      at += each;
+    }
+    if (sizes.length > 1) at += groupGap;
+  }
+  return segments;
 }
 
 /** Stroke offset for a ring of the given circumference showing passed out of total. */

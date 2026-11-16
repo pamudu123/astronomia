@@ -32,6 +32,8 @@ export type Labels = {
   bhuta: Record<string, string>;
   vruksha: Record<string, string>;
   porondam_factor: Record<string, { name: string; meaning: string }>;
+  /** Life areas for the porondam summary chart, in order. Missing from an older backend. */
+  porondam_theme?: Record<string, { name: string; factors: string[] }>;
 };
 
 export type BirthRequest = {

@@ -382,33 +382,7 @@
   line-height: 1.2;
 }
 
-.bar {
-  display: flex;
-  gap: 3px;
-  height: 10px;
-}
-
-.barPass,
-.barFail,
-.barOff {
-  flex: 1;
-  border-radius: 3px;
-}
-
-.barPass {
-  background: var(--teal);
-}
-
-.barFail {
-  background: var(--coral);
-  opacity: 0.85;
-}
-
-.barOff {
-  border: 1px dashed var(--line);
-}
-
-/* Each factor by name, in the order the rule set lists them. */
+/* Each factor by name, under its life area in the summary (MatchGlance). */
 .markers {
   display: grid;
   /* Wide enough for the longest English name (Rashyadhipathi) on one line (QA UI-02). */
