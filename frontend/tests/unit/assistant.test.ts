@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { matchContext } from "@/lib/assistant/context";
+import { WEDDING_SEARCH, matchContext } from "@/lib/assistant/context";
 import type { Labels } from "@/lib/hadahan";
 import type { Porondam } from "@/lib/porondam";
 
@@ -76,8 +76,25 @@ describe("matchContext", () => {
   it("tells a quick match apart, with no Mars check", () => {
     const s = summary(quickResult);
     expect(s.quick_match).toBe(true);
-    expect(s.mars_check).toBe("needs full birth details for both people");
+    expect(s.mars_check).toBe("not checked: only the Mars check needs full birth details for both people");
     expect(s.factors_not_counted.length).toBeGreaterThan(0);
     expect(summary(fullResult).quick_match).toBe(false);
+  });
+
+  it("says a quick match can search wedding dates, when the page has the search", () => {
+    // QA ASTRO-02: Astro said a wedding date needed full birth charts.
+    const withSearch = matchContext(quickResult, labels, "en", false, true).result as Record<string, unknown>;
+    expect(withSearch.wedding_dates).toBe(WEDDING_SEARCH);
+    expect(WEDDING_SEARCH).toContain("birth stars alone");
+    expect(WEDDING_SEARCH).toContain("venue");
+    expect(summary(quickResult)).not.toHaveProperty("wedding_dates");
+  });
+
+  it("counts every factor of an older result saved before factors were marked counted", () => {
+    const legacy = structuredClone(fullResult);
+    for (const factor of legacy.match!.factors) delete (factor as { checked?: boolean }).checked;
+    const s = summary(legacy);
+    expect(s.factors_not_counted).toEqual([]);
+    expect(s.factors_agreeing.length + s.factors_not_agreeing.length).toBe(legacy.match!.factors.length);
   });
 });

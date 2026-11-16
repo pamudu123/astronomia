@@ -100,6 +100,13 @@ export const fetchAvurudu = (year: number, timezone: string, lang: Locale) =>
 export const fetchPanchanga = (day: string, place: PlaceChoice, lang: Locale) =>
   getJson<Panchanga>(panchangaPath(day, place, lang));
 
+/**
+ * A litha month, asked for by the browser when the server's quick try came back empty. It
+ * waits as long as a sleeping backend needs to wake and work out the month (QA APP-01).
+ */
+export const fetchMonth = (month: string, placeId: number, lang: Locale) =>
+  getJson<MonthPanchanga>(monthPath(Number(month.slice(0, 4)), Number(month.slice(5)), placeId, lang));
+
 /** The browser's own time zone, or null when it cannot tell. */
 export function browserTimezone(): string | null {
   try {

@@ -77,7 +77,7 @@ export function AvuruduView({ lang, t, year, zone: initialZone, fixed, initial }
   const [attempt, setAttempt] = useState(0);
   const [place, setPlace] = useState<Place | null>(null);
   // What the AI assistant sees: this result, with no birth details.
-  useAssistantContext(data ? avuruduContext(data, zone, lang) : null);
+  useAssistantContext(data ? avuruduContext(data, lang) : null);
 
   // On the year page, show the visitor's own time next to Sri Lanka time.
   const browser = hydrated ? browserTimezone() : null;

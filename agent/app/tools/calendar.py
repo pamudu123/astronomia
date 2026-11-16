@@ -1,13 +1,15 @@
-"""Calendar tools: places, the good and bad times of a day, a month's litha, and Avurudu."""
+"""Calendar tools: places, today's date, the times of a day, a month's litha, and Avurudu."""
 
 from typing import Annotated, Any
 
-from langchain_core.tools import BaseTool, StructuredTool
+from langchain_core.tools import BaseTool, StructuredTool, ToolException
 from pydantic import BaseModel, Field
 
+from app import clock as today
 from app.tools.engine import COLOMBO, EngineClient, Lang, clock, span
 
 DATE = r"^\d{4}-\d{2}-\d{2}$"
+SRI_LANKA = today.SRI_LANKA
 LangField = Annotated[Lang, Field(description="Language of the names: 'en' or 'si'.")]
 PlaceField = Annotated[
     int,
@@ -18,6 +20,19 @@ PlaceField = Annotated[
 class FindPlaceArgs(BaseModel):
     query: Annotated[str, Field(min_length=2, description="A town or city name.")]
     limit: Annotated[int, Field(ge=1, le=10)] = 5
+
+
+class TodayArgs(BaseModel):
+    timezone: Annotated[
+        str,
+        Field(
+            max_length=64,
+            description=(
+                "The place's IANA time zone, from find_place or the page, for example "
+                "'Europe/London'. Default: Sri Lanka."
+            ),
+        ),
+    ] = SRI_LANKA
 
 
 class DayArgs(BaseModel):
@@ -35,6 +50,16 @@ class MonthArgs(BaseModel):
 
 class YearArgs(BaseModel):
     year: Annotated[int, Field(ge=1950, le=2100)]
+    timezone: Annotated[
+        str,
+        Field(
+            max_length=64,
+            description=(
+                "IANA time zone to show the times in as well, for example 'Europe/London' "
+                "(the Avurudu page's chosen zone). Default: Sri Lanka only."
+            ),
+        ),
+    ] = SRI_LANKA
     lang: LangField = "en"
 
 
@@ -46,12 +71,20 @@ def parts(items: list[dict[str, Any]], day: str) -> list[dict[str, Any]]:
     ]
 
 
-def sri_lanka(moment: dict[str, Any] | None) -> str | None:
-    """An Avurudu time in Sri Lanka time, as "09:32 on 2026-04-14"."""
+def on_day(moment: dict[str, Any]) -> str:
+    """A local time with its date: "09:32 on 2026-04-14"."""
+    return f"{moment['clock']} on {moment['date']}"
+
+
+def both(moment: dict[str, Any] | None, timezone: str) -> str | None:
+    """An Avurudu time in Sri Lanka time, and in the chosen zone when that is another one:
+    "21:44 on 2028-04-13 Sri Lanka time; 17:14 on 2028-04-13 in Europe/London"."""
     if not moment:
         return None
-    sl = moment["sri_lanka"]
-    return f"{sl['clock']} on {sl['date']}"
+    text = f"{on_day(moment['sri_lanka'])} Sri Lanka time"
+    if timezone != SRI_LANKA:
+        text += f"; {on_day(moment['local'])} in {timezone}"
+    return text
 
 
 def tools(engine: EngineClient) -> list[BaseTool]:
@@ -59,10 +92,21 @@ def tools(engine: EngineClient) -> list[BaseTool]:
         body = await engine.get("/v1/places", {"q": query, "limit": limit})
         return {
             "places": [
-                {"place_id": p["id"], "name": p["name"], "country": p["country_name"]}
+                {
+                    "place_id": p["id"],
+                    "name": p["name"],
+                    "country": p["country_name"],
+                    "timezone": p["timezone"],
+                }
                 for p in body["places"]
             ]
         }
+
+    async def current_date(timezone: str = SRI_LANKA) -> dict[str, Any]:
+        try:
+            return today.local_days(timezone)
+        except ValueError as error:
+            raise ToolException(str(error)) from error
 
     async def good_times_for_day(
         date: str, place_id: int = COLOMBO, lang: Lang = "en"
@@ -114,27 +158,48 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             "provisional": body["provisional"],
         }
 
-    async def new_year_times(year: int, lang: Lang = "en") -> dict[str, Any]:
-        body = await engine.get(f"/v1/avurudu/{year}", {"lang": lang})
+    async def new_year_times(
+        year: int, timezone: str = SRI_LANKA, lang: Lang = "en"
+    ) -> dict[str, Any]:
+        body = await engine.get(f"/v1/avurudu/{year}", {"timezone": timezone, "lang": lang})
+        zone = body.get("timezone") or timezone
+        calc = body["calculated"]
+        # The site's own calculation is there for every year, the official list only for
+        # some. Both go back, each labelled, so a year without a list still has its dawn
+        # (QA ASTRO-03).
         return {
             "year": year,
-            "official": body["official"],
-            "source": body["source"],
-            "times": [
-                {
-                    "name": i["name"],
-                    "what_to_do": i["text"],
-                    "at": sri_lanka(i["at"]),
-                    "from": sri_lanka(i["start"]),
-                    "to": sri_lanka(i["end"]),
-                    "date": i["date_text"],
-                    "colour": i["colour"],
-                    "direction": i["direction"],
-                }
-                for i in body["items"]
-            ],
+            "timezone": zone,
+            "official_list": body["official"],
+            "calculated": {
+                "label": "Calculated by the site from the Sun's position (its own rules).",
+                "new_year_dawn": both(calc["dawn"], zone),
+                "punya_kalaya_from": both(calc["punya_start"], zone),
+                "punya_kalaya_to": both(calc["punya_end"], zone),
+                "minutes_after_official_dawn": calc["dawn_difference"],
+            },
+            "official": {
+                "label": (
+                    f"Official times from {body['source']}"
+                    if body["official"]
+                    else "No official list has been published for this year yet."
+                ),
+                "source": body["source"],
+                "times": [
+                    {
+                        "name": i["name"],
+                        "what_to_do": i["text"],
+                        "at": both(i["at"], zone),
+                        "from": both(i["start"], zone),
+                        "to": both(i["end"], zone),
+                        "date": i["date_text"],
+                        "colour": i["colour"],
+                        "direction": i["direction"],
+                    }
+                    for i in body["items"]
+                ],
+            },
             "notes": body["notes"],
-            "times_are": "Sri Lanka time. Abroad, the same moments on the local clock.",
             "provisional": body["provisional"],
         }
 
@@ -143,9 +208,22 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             coroutine=find_place,
             name="find_place",
             description=(
-                "Find a town or city and its place id, for the times of a day or month there."
+                "Find a town or city: its place id, for the times of a day or month there, "
+                "and its time zone, for current_date and new_year_times."
             ),
             args_schema=FindPlaceArgs,
+            handle_tool_error=True,
+        ),
+        StructuredTool.from_function(
+            coroutine=current_date,
+            name="current_date",
+            description=(
+                "Today's, tomorrow's and yesterday's dates (YYYY-MM-DD) and the local time in a "
+                "time zone. Needs only the time zone. Use before good_times_for_day whenever "
+                "the person says 'today', 'tomorrow' or 'yesterday' for a place outside Sri "
+                "Lanka."
+            ),
+            args_schema=TodayArgs,
             handle_tool_error=True,
         ),
         StructuredTool.from_function(
@@ -153,8 +231,9 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             name="good_times_for_day",
             description=(
                 "The day's almanac for a place: sunrise, sunset, Rahu kalaya, and the thithi, "
-                "nakatha, yoga and karana with the times each starts and ends. Use for "
-                "'is today good?', 'when is Rahu kalaya?' or a date the person names."
+                "nakatha, yoga and karana with the times each starts and ends. Needs an exact "
+                "date (YYYY-MM-DD) and a place id. For 'today', 'tomorrow' or 'yesterday', use "
+                "the date from the Today note (Sri Lanka) or from current_date (elsewhere)."
             ),
             args_schema=DayArgs,
             handle_tool_error=True,
@@ -174,8 +253,12 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             coroutine=new_year_times,
             name="new_year_times",
             description=(
-                "The Sinhala and Tamil New Year (Avurudu) nakath for a year: each custom with "
-                "its time, colour and direction, and whether the list is the official one."
+                "The Sinhala and Tamil New Year (Avurudu) times for a year. Needs only the year "
+                "(and a time zone to show local times). Gives two labelled parts: `calculated`, "
+                "the site's own new year dawn and punya kalaya, there for every year; and "
+                "`official`, the published list of customs with time, colour and direction, "
+                "empty when no list is out yet. Without an official list, give the calculated "
+                "times and say they are the site's calculation."
             ),
             args_schema=YearArgs,
             handle_tool_error=True,

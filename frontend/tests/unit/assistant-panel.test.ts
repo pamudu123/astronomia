@@ -25,8 +25,18 @@ describe("followUpInstructions", () => {
     expect(text).toContain('no "you", "your"');
   });
 
-  it("asks for the page's language", () => {
-    expect(followUpInstructions("si")).toContain("Write in Sinhala");
-    expect(followUpInstructions("en")).toContain("Write in English");
+  it("follows the language of the last answer, then the page's", () => {
+    // QA ASTRO-04: a Sinhala answer on an English page had English buttons.
+    const text = followUpInstructions("en");
+    expect(text).toContain("same language as Astro's last answer");
+    expect(text.indexOf("last answer")).toBeLessThan(text.indexOf("write in English"));
+    expect(followUpInstructions("si")).toContain("write in Sinhala, the page's language");
+  });
+
+  it("asks only for fully answerable questions, and allows none", () => {
+    const text = followUpInstructions("en");
+    expect(text).toContain("answer in full");
+    expect(text).toContain("details they haven't entered");
+    expect(text).toContain("empty list");
   });
 });

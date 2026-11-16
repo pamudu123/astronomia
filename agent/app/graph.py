@@ -36,6 +36,7 @@ from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph.state import CompiledStateGraph
 
+from app.clock import today_middleware
 from app.config import Settings
 from app.subagents import build_subagents
 
@@ -98,6 +99,8 @@ def build_agent(
     # Typed loosely: each middleware declares its own state type, which mypy can't join.
     middleware: list[Any] = [
         CopilotKitMiddleware(),
+        # Today's date on every call, so "today" is the real day (QA ASTRO-01).
+        today_middleware,
         # A cap on helpers per question, so one message can't start a costly fan-out.
         ToolCallLimitMiddleware(tool_name="task", run_limit=settings.max_subagent_calls),
     ]

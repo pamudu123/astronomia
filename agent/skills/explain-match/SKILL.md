@@ -19,7 +19,8 @@ The App Context on the match page gives:
 - `summary`: the site's one-line reading of the whole result.
 - `mars_check`: whether each person's chart shows Kuja dosha, and how the two compare. Only with both birth details.
 - `provisional`: true when the rules are still waiting for an astrologer to confirm them.
-- `quick_match`: true when only the birth stars were entered. Fewer factors are counted and there is no Mars check.
+- `quick_match`: true when only the birth stars were entered, not full birth details. Then fewer factors are counted and there is no Mars check. Everything else on the page still works, including the wedding dates search.
+- `wedding_dates`: present when the page has the wedding dates search. It says what the search needs: a venue and a range, nothing more.
 
 ## A full explanation ("explain my result", "tell me about our match")
 
@@ -44,7 +45,7 @@ Say what it is about in everyday words (reference), then the site's `reason` in 
 ## Things to keep in mind
 
 - The count is not a percentage or a forecast. The page says so too.
-- A factor that was "not counted" needs full birth details. Suggest a full match if they only did a quick match.
+- A factor that was "not counted" needs full birth details. Suggest a full match if they only did a quick match, but only for those factors and the Mars check: wedding dates don't need it.
 - If `provisional` is true and the person is weighing a decision, mention that the rules are still being confirmed by an astrologer.
 - Same birth star for both: traditions differ, so the site suggests an astrologer reviews it.
 - Many matches have some factors that don't agree. Say this when someone is worried, without promising anything.

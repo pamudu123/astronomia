@@ -8,7 +8,9 @@ loop; this is a single model call with the tool forced:
 - `CopilotKitMiddleware` offers the frontend tool to the model, adds the page context
   ("App Context"), and ends the run when the model calls the tool, so the browser gets it.
 - `_followup_call` keeps only the recent text of the conversation (no engine tool calls,
-  which the model has no tools for) and forces the `copilotkitSuggest` tool.
+  which the model has no tools for) and forces the `copilotkitSuggest` tool. It also names
+  the language of Astro's last answer, so the buttons match the answer, not the page
+  (QA ASTRO-04: a Sinhala answer on an English page had English buttons).
 """
 
 from collections.abc import Awaitable, Callable
@@ -19,7 +21,7 @@ from copilotkit import CopilotKitMiddleware
 from langchain.agents import create_agent
 from langchain.agents.middleware import ModelRequest, ModelResponse, wrap_model_call
 from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import AIMessage, AnyMessage, HumanMessage
+from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemMessage
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph.state import CompiledStateGraph
@@ -34,6 +36,9 @@ SUGGEST_TOOL = "copilotkitSuggest"
 
 # Enough of the conversation to follow the thread, and to avoid repeating earlier questions.
 RECENT_MESSAGES = 8
+
+# The Sinhala block of Unicode.
+SINHALA = range(0x0D80, 0x0E00)
 
 
 def _text(message: AnyMessage) -> str:
@@ -63,15 +68,46 @@ def recent_text(messages: list[AnyMessage]) -> list[AnyMessage]:
     return kept[-RECENT_MESSAGES:]
 
 
+def answer_language(messages: list[AnyMessage]) -> str | None:
+    """'si' or 'en': the language of Astro's last written answer, by its letters.
+
+    Mostly Sinhala letters means Sinhala; a few English words (a star's name, "Rahu kalaya")
+    don't change that. None when there is no answer yet.
+    """
+    for message in reversed(messages):
+        if not isinstance(message, AIMessage):
+            continue
+        letters = [ch for ch in _text(message) if ch.isalpha()]
+        if not letters:
+            continue
+        sinhala = sum(ord(ch) in SINHALA for ch in letters)
+        return "si" if sinhala / len(letters) >= 0.3 else "en"
+    return None
+
+
+def language_note(language: str) -> str:
+    name = "Sinhala" if language == "si" else "English"
+    return (
+        "# Language of these suggestions\n\n"
+        f"Astro's last answer is in {name}. Write every suggestion in {name}, whatever the "
+        f"page's language. This overrides any other note about language."
+    )
+
+
 @wrap_model_call
 async def _followup_call(
     request: ModelRequest[Any],
     handler: Callable[[ModelRequest[Any]], Awaitable[ModelResponse[Any]]],
 ) -> ModelResponse[Any]:
     offered = {getattr(t, "name", None) or t.get("name") for t in request.tools}  # type: ignore[union-attr]
-    overrides: dict[str, Any] = {"messages": recent_text(request.messages)}
+    messages = recent_text(request.messages)
+    overrides: dict[str, Any] = {"messages": messages}
     if SUGGEST_TOOL in offered:
         overrides["tool_choice"] = SUGGEST_TOOL
+    if language := answer_language(messages):
+        base = request.system_prompt
+        note = language_note(language)
+        overrides["system_message"] = SystemMessage(content=f"{base}\n\n{note}" if base else note)
     return await handler(request.override(**overrides))
 
 

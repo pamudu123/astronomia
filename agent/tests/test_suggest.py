@@ -107,3 +107,59 @@ def test_prompt_asks_for_first_person_questions() -> None:
     assert "First person" in prompt
     assert "Would you like" in prompt  # named as something never to write
     assert "මගේ" in prompt
+
+
+def test_answer_language_reads_the_last_answer() -> None:
+    from app.suggest import answer_language
+
+    assert answer_language([HumanMessage("hi")]) is None
+    english = AIMessage(content="Rahu kalaya today in Colombo is 16:16 to 17:44.")
+    sinhala = AIMessage(content="අද කොළඹ රාහු කාලය 16:16 සිට 17:44 දක්වා. **Rohini** නැකත.")
+    assert answer_language([HumanMessage("x"), english]) == "en"
+    assert answer_language([english, HumanMessage("අද?"), sinhala]) == "si"
+
+
+async def test_buttons_follow_a_sinhala_answer_on_an_english_page(settings: Settings) -> None:
+    # QA ASTRO-04: a Sinhala answer on an English page had English buttons.
+    model = Capturing(responses=[suggestion_call()])
+    graph = build_suggester(settings, model=model)
+    history = [
+        HumanMessage("අද රාහු කාලය කීයටද?"),
+        AIMessage(content="අද කොළඹ රාහු කාලය සවස 16:16 සිට 17:44 දක්වා."),
+        HumanMessage("Suggest what the user could say next. Write in English."),
+    ]
+
+    await graph.ainvoke({"messages": history, "copilotkit": {"actions": [FRONTEND_TOOL]}}, CONFIG)
+
+    system = str(model.seen[0].content)
+    assert "Astro's last answer is in Sinhala. Write every suggestion in Sinhala" in system
+
+
+def test_prompt_asks_only_for_fully_answerable_questions_with_no_fixed_count() -> None:
+    prompt = PROMPT_FILE.read_text(encoding="utf-8")
+    assert "Only questions Astro can answer in full" in prompt
+    assert "There is no fixed number" in prompt
+    assert "empty `suggestions` list" in prompt
+
+
+async def test_an_empty_list_of_suggestions_reaches_the_browser(settings: Settings) -> None:
+    # Nothing on the page Astro could answer in full: no buttons, and no error.
+    empty = AIMessage(
+        content="",
+        tool_calls=[{"id": "c1", "name": SUGGEST_TOOL, "args": {"suggestions": []}}],
+    )
+    model = Capturing(responses=[empty])
+    graph = build_suggester(settings, model=model)
+    history = [
+        HumanMessage("Thanks!"),
+        AIMessage(content="You're welcome."),
+        HumanMessage("Suggest what the user could say next."),
+    ]
+
+    result = await graph.ainvoke(
+        {"messages": history, "copilotkit": {"actions": [FRONTEND_TOOL]}}, CONFIG
+    )
+
+    calls = [c for m in result["messages"] for c in getattr(m, "tool_calls", None) or []]
+    assert calls[-1]["name"] == SUGGEST_TOOL
+    assert calls[-1]["args"]["suggestions"] == []
