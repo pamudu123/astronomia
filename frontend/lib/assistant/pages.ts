@@ -8,6 +8,7 @@ import type { Avurudu, MonthPanchanga, Panchanga } from "@/lib/nakath";
 import type { Wedding } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
+import { combinations, houseFacts, periodTimeline, planetFacts } from "./chartFacts";
 import type { Json, PageContext } from "./context";
 
 /**
@@ -68,12 +69,12 @@ export function chartContext(
       birth_time_check: chart.time_check.stable
         ? "the rising sign is the same for nearby birth times"
         : chart.time_check.reason,
-      planets: chart.planets.map((p) => ({
-        planet: planet(labels, p.body),
-        sign: sign(labels, p.sign),
-        house: p.house,
-        ...(p.retrograde && { retrograde: true }),
-      })),
+      // Each planet with its strength in its sign and the houses it rules.
+      planets: planetFacts(chart, labels),
+      // Each house with its ruler, where the ruler sits, and the planets in it and looking at it.
+      houses: houseFacts(chart, labels),
+      // Well-known combinations (yogas) found from the placements above. Provisional rules.
+      combinations: combinations(chart, labels),
       // Current and next life periods only: the first period starts at birth.
       life_period: now
         ? {
@@ -83,6 +84,8 @@ export function chartContext(
             ...(next && { next: planet(labels, next.lord), next_from: next.start }),
           }
         : null,
+      // The sub-periods of the running period and the periods after it, for "what's ahead".
+      life_period_timeline: dasha ? periodTimeline(dasha, labels) : null,
       mars_check: kuja ? { present: kuja.present, reduced: kuja.reduced } : null,
     },
   };

@@ -64,7 +64,7 @@ async def test_finds_every_skill_in_the_skills_folder(
 
     state = await graph.aget_state(CONFIG)
     names = {s["name"] for s in state.values["skills_metadata"]}
-    assert {"explain-match", "sinhala-style", "star-matches"} <= names
+    assert {"explain-match", "sinhala-style", "star-matches", "personal-reading"} <= names
 
 
 async def test_system_prompt_lists_skills(settings: Settings) -> None:
@@ -83,6 +83,30 @@ async def test_system_prompt_lists_skills(settings: Settings) -> None:
     system = seen[0]
     assert "You are Astro, the guide on Sidera" in system
     assert "/skills/explain-match/SKILL.md" in system
+    assert "/skills/personal-reading/SKILL.md" in system
+
+
+def test_guide_prompt_gives_personal_readings_inside_the_safety_limits() -> None:
+    """The guide explains what the chart means for the person's life, with limits that stay."""
+    from app.graph import system_prompt
+
+    prompt = system_prompt()
+    # What it should do.
+    assert "personal-reading" in prompt
+    assert "real life" in prompt
+    assert "possibilities" in prompt.lower()
+    # What it must still never do.
+    assert "Answer the hard questions too" in prompt
+    assert "A warning is a gift, not a blow" in prompt
+    assert "steer around it" in prompt
+    assert "Never frighten" in prompt
+    assert "Never say death, dying, how long someone will live" in prompt
+    assert "never push a product" in prompt
+    assert "Never give a final yes or no" in prompt or "never give a final yes or no" in prompt
+    assert "Never pin an event to an exact day or month" in prompt
+    assert "Never calculate a position or a date yourself" in prompt
+    # The old rule that capped every answer at four 15-word points is gone.
+    assert "15 words at most" not in prompt
 
 
 def test_openai_model_keeps_no_data_and_uses_low_effort(settings: Settings) -> None:

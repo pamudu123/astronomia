@@ -17,7 +17,7 @@ type MatchSummary = {
   score: { agree: number; counted: number };
   essential_checks: { id: string; name: string; passes: boolean; reason: string }[];
   factors_not_agreeing: { id: string; name: string; meaning: string; reason: string }[];
-  factors_agreeing: string[];
+  factors_agreeing: { id: string; name: string; meaning: string; reason: string }[];
   factors_not_counted: string[];
   quick_match: boolean;
   mars_check: unknown;
@@ -63,6 +63,14 @@ describe("matchContext", () => {
     expect(gana.meaning).toBe(labels.porondam_factor.gana.meaning);
     expect(gana.reason).toBe(match!.factors.find((f) => f.id === "gana")!.reason);
     expect(s.essential_checks.map((c) => c.id)).toEqual(["rajju", "vedha"]);
+  });
+
+  it("says why each agreeing factor agrees, not only that it does", () => {
+    const s = summary(fullResult);
+    const first = s.factors_agreeing[0];
+    const factor = fullResult.match!.factors.find((f) => f.id === first.id)!;
+    expect(first.reason).toBe(factor.reason);
+    expect(first.meaning).toBe(labels.porondam_factor[first.id].meaning);
   });
 
   it("tells a quick match apart, with no Mars check", () => {
