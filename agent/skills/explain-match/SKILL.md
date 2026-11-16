@@ -31,6 +31,10 @@ Use the factor's `meaning` from the context as the plain description, then its `
 
 > The Rajju check is about the long life of the couple. Here it doesn't pass, because both birth stars fall in the same group. Tradition takes this check seriously, so it's worth talking over with your family and an astrologer.
 
+## Making it real
+
+Add one sentence on what a factor can look like in daily life, without predicting. For example, for Gana (temperament): "Two people with different temperaments often argue about pace and style, for instance one likes quick decisions and the other likes to talk things over. Many couples work well with that once they know it." For Nakath (star distance), Yoni (natural attraction), and Rashi: say what the factor is about in everyday words, then one ordinary example. Always say a factor is one part of a whole picture.
+
 ## Things to keep in mind
 
 - The count is not a percentage or a forecast. The page says so too.
