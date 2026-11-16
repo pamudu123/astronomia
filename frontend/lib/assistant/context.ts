@@ -1,6 +1,6 @@
 import type { Labels } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
-import type { Factor, Person, Porondam } from "@/lib/porondam";
+import { type Factor, type Person, type Porondam, isCounted } from "@/lib/porondam";
 
 /**
  * What the assistant sees: the page the person has open and a short summary of what is on
@@ -100,16 +100,31 @@ function factorSummary(factor: Factor, labels: Labels) {
   return { id: factor.id, name: label?.name ?? factor.id, meaning: label?.meaning ?? "" };
 }
 
-/** The match result page: the score, each factor, the essential checks and the Mars check. */
+/**
+ * What the wedding dates search under a match needs. It works from the birth stars alone, so a
+ * quick match can use it too (QA ASTRO-02: Astro asked for full birth charts instead).
+ */
+export const WEDDING_SEARCH =
+  "on this page, below the match: works with the birth stars alone (quick or full match). " +
+  "The person picks the venue and how many months ahead (3, 6, 12 or 24), chooses the " +
+  "ceremonies and presses search; the dates found then appear under also_on_page.wedding";
+
+/**
+ * The match result page: the score, each factor, the essential checks and the Mars check.
+ * `weddingSearch` is true when the page shows the wedding dates search.
+ */
 export function matchContext(
   result: Porondam,
   labels: Labels,
   language: Locale,
   shared = false,
+  weddingSearch = false,
 ): PageContext {
   const { match, bride, groom, kuja } = result;
   if (!match || !bride || !groom) return { page: "match", language, ...(shared && { shared }) };
-  const counted = match.factors.filter((f) => f.checked);
+  // The page's own rule: only an explicit `checked: false` is not counted, so an older saved
+  // result without the field counts every factor, as the page shows it.
+  const counted = match.factors.filter(isCounted);
   return {
     page: "match_result",
     language,
@@ -132,11 +147,12 @@ export function matchContext(
         .map((f) => ({ ...factorSummary(f, labels), reason: f.reason })),
       factors_agreeing: counted.filter((f) => f.passed).map((f) => factorSummary(f, labels).name),
       factors_not_counted: match.factors
-        .filter((f) => !f.checked)
+        .filter((f) => !isCounted(f))
         .map((f) => factorSummary(f, labels).name),
       mars_check: kuja
         ? { bride: kuja.bride.present, groom: kuja.groom.present, comparison: kuja.reason }
-        : "needs full birth details for both people",
+        : "not checked: only the Mars check needs full birth details for both people",
+      ...(weddingSearch && { wedding_dates: WEDDING_SEARCH }),
     },
   };
 }

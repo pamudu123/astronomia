@@ -82,7 +82,7 @@ export function PorondamResult({
 }: Props) {
   const [filter, setFilter] = useState<FactorFilter>("all");
   // What the AI assistant sees: this result, with no names or birth details.
-  useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction)));
+  useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding)));
   const match = result.match!;
   const bride = result.bride!;
   const groom = result.groom!;

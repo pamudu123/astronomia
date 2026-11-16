@@ -51,6 +51,7 @@ def test_each_helper_gets_only_the_tools_its_job_needs() -> None:
     assert helpers["researcher"].get("skills") == ["/skills/"]
     assert {t.name for t in helpers["date-checker"].get("tools", [])} == {  # type: ignore[union-attr]
         "find_place",
+        "current_date",
         "good_times_for_day",
         "month_calendar",
     }
@@ -83,6 +84,36 @@ async def test_system_prompt_lists_skills(settings: Settings) -> None:
     system = seen[0]
     assert "You are Astro, the guide on Sidera" in system
     assert "/skills/explain-match/SKILL.md" in system
+
+
+async def test_every_model_call_carries_todays_date(settings: Settings) -> None:
+    # QA ASTRO-01: asked for "today", the model guessed 4 February and 7 December.
+    import datetime as dt
+
+    from langchain_core.messages import AIMessage
+
+    from app import clock
+
+    seen: list[str] = []
+
+    class Capturing(RecordingModel):
+        def _generate(self, messages: Any, *args: Any, **kwargs: Any) -> Any:
+            seen.append(str(messages[0].content))
+            return super()._generate(messages, *args, **kwargs)
+
+    # 19:30 UTC on 15 November is already 01:00 on 16 November in Sri Lanka.
+    clock.set_clock(lambda: dt.datetime(2026, 11, 15, 19, 30, tzinfo=dt.UTC))
+    try:
+        model = Capturing(responses=[AIMessage(content="ok")])
+        await agent(settings, model).ainvoke({"messages": [HumanMessage("today?")]}, CONFIG)
+    finally:
+        clock.set_clock(None)
+
+    system = seen[0]
+    assert "# Today" in system
+    assert "01:00 on Monday, 2026-11-16" in system
+    assert "Tomorrow is 2026-11-17; yesterday was 2026-11-15." in system
+    assert "`current_date`" in system
 
 
 def test_openai_model_keeps_no_data_and_uses_low_effort(settings: Settings) -> None:

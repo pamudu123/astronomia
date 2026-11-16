@@ -9,7 +9,7 @@ description: Baby names from the birth star (first letters), the first letters c
 
 - **Letters and names:** the App Context (`baby_names_result`) or the tools `name_letters_for_star`, then `names_for_letters`. Always the site's letters, never the Indian syllable table.
 - **First letters ceremony times:** the App Context (`first_letters_result`). The site works these out on the first letters page; the chat can't calculate new ones.
-- **Wedding dates:** under a match result, in `also_on_page.wedding`. The site finds them from both people's charts.
+- **Wedding dates:** the search under a match result, on the match page. It works for a quick match (birth stars only) as well as a full one. The person picks the venue and the range (3, 6, 12 or 24 months ahead), chooses the ceremonies, and presses search; the dates found arrive in `also_on_page.wedding`. The chat can't run the search. If no dates are on screen yet, point to those controls rather than asking for birth charts, then read the dates once they appear.
 - **Old horoscope search:** `old_horoscope_result` says how many birth times fit, never the dates. Talk about the count and what it means; the person sees the dates on the page.
 - **Customs and background:** `reference.md` in this folder (`/skills/ceremonies-and-names/reference.md`). Sections: 1 naming by birth star, 2 the first letters ceremony, 3 weddings (porondam, nakath, poruwa steps, homecoming, Kandyan customs), 4 other occasions, 5 old horoscopes (including their use as proof of birth date).
 

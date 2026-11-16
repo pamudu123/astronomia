@@ -59,13 +59,33 @@ test("a litha month has its title, the months either side, and a calendar or a c
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("December 2026 litha calendar");
   await expect(page.getByRole("link", { name: /Previous month/ })).toHaveAttribute("href", "/en/litha/2026-11");
   await expect(page.getByRole("link", { name: /Next month/ })).toHaveAttribute("href", "/en/litha/2027-01");
-  // With the backend away the page says so; with it, there are 31 days.
+  // With the backend away the page says so after the browser's own try; with it, there are 31 days.
   const days = page.locator("[data-day]");
+  await expect(days.first().or(page.getByText("could not be loaded"))).toBeVisible({ timeout: 30_000 });
   if ((await days.count()) > 0) await expect(days).toHaveCount(31);
-  else {
-    await expect(page.getByRole("status")).toContainText("could not be loaded");
-    await expect(page.getByRole("link", { name: "Try again" })).toHaveAttribute("href", "/en/litha/2026-12");
-  }
+  else await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
+});
+
+test("a litha month the server could not load is fetched by the browser, and Try again recovers in place", async ({
+  page,
+}) => {
+  // QA APP-01: the server gives up after a few seconds, a waking backend takes longer, and
+  // "Try again" used to reload into the same short server try.
+  let calls = 0;
+  await page.route("**/api/v1/panchanga/month?*", (route) => {
+    calls += 1;
+    if (calls === 1) return route.fulfill({ status: 503, body: "waking up" });
+    return route.fulfill({ contentType: "application/json", body: fixture("litha-2026-12-colombo-en.json") });
+  });
+  await page.goto("/en/litha/2026-12");
+  await expect(page.getByRole("status")).toContainText("could not be loaded");
+  const url = page.url();
+  await page.getByRole("button", { name: "Try again" }).click();
+  await expect(page.locator("[data-day]")).toHaveCount(31);
+  await expect(page.locator('[data-day="2026-12-01"]')).toBeVisible();
+  // Recovered without a page load.
+  expect(page.url()).toBe(url);
+  expect(calls).toBe(2);
 });
 
 test("a month that does not exist is not found", async ({ page }) => {
