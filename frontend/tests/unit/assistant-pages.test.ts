@@ -85,6 +85,59 @@ describe("chartContext", () => {
   });
 });
 
+// The fixture chart: Simha rising. Sun and Mercury in 9 (Mesha), Moon and Jupiter in 4
+// (Vrischika), Mars in 12 (Kataka), Venus in 8 (Meena), Saturn in 7 (Kumbha).
+describe("chart facts for readings", () => {
+  type House = { house: number; sign: string; lord: string; lord_in_house: number; planets?: string[]; aspected_by?: string[] };
+  type PlanetFact = { planet: string; strength?: string; rules_houses?: number[] };
+  const summary = chartContext(chart, labels, "en").result as {
+    houses: House[];
+    planets: PlanetFact[];
+    combinations: { name: string; based_on: string }[];
+    life_period_timeline: { sub_periods?: { sub: string; from: string; until: string }[]; later_periods: unknown[] };
+  };
+  const house = (n: number) => summary.houses.find((h) => h.house === n)!;
+  const planetFact = (name: string) => summary.planets.find((p) => p.planet === name)!;
+
+  it("names each house's sign, its ruler, and where the ruler sits", () => {
+    expect(summary.houses).toHaveLength(12);
+    expect(house(1)).toMatchObject({ sign: "Simha", lord: "Sun", lord_in_house: 9 });
+    expect(house(10)).toMatchObject({ sign: "Vrishabha", lord: "Venus", lord_in_house: 8 });
+    expect(house(7)).toMatchObject({ sign: "Kumbha", lord: "Saturn", lord_in_house: 7, planets: ["Saturn"] });
+  });
+
+  it("lists the classical aspects on each house", () => {
+    // Saturn in 7 looks at 9, 1 and 4; Jupiter in 4 at 8, 10 and 12; Mars in 12 at 3, 6 and 7.
+    expect(house(1).aspected_by).toContain("Saturn");
+    expect(house(10).aspected_by).toEqual(expect.arrayContaining(["Jupiter", "Moon"]));
+    expect(house(7).aspected_by).toContain("Mars");
+    expect(house(2).aspected_by).toEqual(["Venus"]); // Venus in 8 looks at the 7th from it
+    expect(house(5).aspected_by).toBeUndefined();
+  });
+
+  it("gives each planet's strength and the houses it rules", () => {
+    expect(planetFact("Saturn")).toMatchObject({ strength: "own sign", rules_houses: [6, 7] });
+    expect(planetFact("Venus")).toMatchObject({ strength: "exalted", rules_houses: [3, 10] });
+    expect(planetFact("Mars").strength).toBe("debilitated");
+    expect(planetFact("Moon").strength).toBe("debilitated");
+    expect(planetFact("Rahu").strength).toBeUndefined();
+  });
+
+  it("finds the well-known combinations, with the placements behind them", () => {
+    const names = summary.combinations.map((c) => c.name);
+    expect(names).toEqual(expect.arrayContaining(["Gajakesari yoga", "Budhaditya yoga", "Shasha yoga"]));
+    expect(names).not.toContain("Malavya yoga"); // Venus is exalted, but in house 8, not an angle
+    expect(names).not.toContain("Chandra-Mangala yoga");
+  });
+
+  it("lays out the running period's sub-periods and the periods after it", () => {
+    const timeline = summary.life_period_timeline;
+    expect(timeline.sub_periods).toHaveLength(9);
+    expect(timeline.sub_periods![0]).toMatchObject({ sub: "Sun", from: "2024-04-13" });
+    expect(timeline.later_periods).toHaveLength(2);
+  });
+});
+
 describe("other pages", () => {
   it("shares the day's times with the place id, so the assistant can look up more", () => {
     const summary = dayContext(panchanga as unknown as Panchanga, null, "en").result as Record<string, unknown>;

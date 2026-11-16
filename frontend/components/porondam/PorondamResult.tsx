@@ -26,8 +26,10 @@ import {
 
 import { WeddingFinder } from "@/components/wedding/WeddingFinder";
 
+import { Check } from "./Check";
 import { CoupleTimeline } from "./CoupleTimeline";
 import { FactorVisual } from "./FactorVisual";
+import { MatchGlance } from "./MatchGlance";
 import styles from "./Porondam.module.css";
 
 type Props = {
@@ -52,18 +54,6 @@ type Props = {
   /** Shown where the actions are when the result is read only. */
   readOnlyAction?: React.ReactNode;
 };
-
-function Check({ ok }: { ok: boolean }) {
-  return ok ? (
-    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 8.5l3 3 7-7.5" />
-    </svg>
-  ) : (
-    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-      <path d="M4 4l8 8M12 4l-8 8" />
-    </svg>
-  );
-}
 
 export function PorondamResult({
   lang,
@@ -134,46 +124,28 @@ export function PorondamResult({
         <div className={styles.comparePanels}>
           <article className={styles.comparePanel} data-panel="factors">
             <span className={styles.panelLabel}>{t.factorsPanel}</span>
-            <p className={`display ${styles.panelCount}`}>
-              {fill(t.factorsCount, { passed: match.score.passed, total: match.score.total })}
-            </p>
-            {/* The whole count at a glance: one segment per factor. */}
-            <div className={styles.bar} aria-hidden="true">
-              {match.factors.map((factor) => (
-                <span
-                  key={factor.id}
-                  className={!isCounted(factor) ? styles.barOff : factor.passed ? styles.barPass : styles.barFail}
-                />
-              ))}
-            </div>
-            {/* Every factor by name, each leading to its explanation further down. */}
-            <ul className={styles.markers}>
-              {match.factors.map((factor) => {
-                const state = !isCounted(factor) ? "off" : factor.passed ? "pass" : "fail";
-                const status = !isCounted(factor) ? t.notCounted : factor.passed ? t.agrees : t.notAgrees;
-                return (
-                  <li key={factor.id} data-marker={state}>
-                    <a
-                      href={`#factor-${factor.id}`}
-                      aria-label={`${factorName(factor).name}: ${status}`}
-                      className={state === "off" ? styles.markerOff : state === "pass" ? styles.markerPass : styles.markerFail}
-                      onClick={() => setFilter("all")}
-                    >
-                      <span className={styles.markerIcon} aria-hidden="true">
-                        {state === "off" ? "–" : <Check ok={state === "pass"} />}
-                      </span>
-                      <span className={styles.markerName}>{factorName(factor).name}</span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-            <p className={styles.markerLegend} aria-hidden="true">
-              <span><Check ok /> {t.agrees}</span>
-              <span><Check ok={false} /> {t.notAgrees}</span>
-              {uncounted > 0 && <span>– {t.notCounted}</span>}
-            </p>
-            {uncounted > 0 && <p className={styles.small}>{fill(t.notCountedCount, { count: uncounted })}</p>}
+            {/*
+              The whole count at a glance: a ring with one segment per factor, grouped by life
+              area, then every factor by name, each leading to its explanation further down.
+            */}
+            <MatchGlance
+              factors={match.factors}
+              labels={labels}
+              t={t}
+              passed={match.score.passed}
+              total={match.score.total}
+              onPick={() => setFilter("all")}
+            >
+              <p className={`display ${styles.panelCount}`}>
+                {fill(t.factorsCount, { passed: match.score.passed, total: match.score.total })}
+              </p>
+              <p className={styles.markerLegend} aria-hidden="true">
+                <span><Check ok /> {t.agrees}</span>
+                <span><Check ok={false} /> {t.notAgrees}</span>
+                {uncounted > 0 && <span>– {t.notCounted}</span>}
+              </p>
+              {uncounted > 0 && <p className={styles.small}>{fill(t.notCountedCount, { count: uncounted })}</p>}
+            </MatchGlance>
             <p className={styles.small}>{t.factorsNote}</p>
           </article>
 

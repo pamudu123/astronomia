@@ -84,6 +84,77 @@ test("a result without checked counts every factor, and names stay in their cell
   expect(overflowing).toEqual([]);
 });
 
+test("the summary ring groups the factors by life area, with Rajju and Vedha kept apart", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const factors = page.locator('[data-panel="factors"]');
+  // One segment per factor: 16 counted, and Dina and Graha drawn as not counted.
+  const ring = factors.locator("[data-ring]");
+  await expect(ring).toHaveAttribute("aria-hidden", "true");
+  await expect(ring.locator("[data-segment]")).toHaveCount(18);
+  await expect(ring.locator('[data-segment="off"]')).toHaveCount(2);
+  await expect(ring.locator('[data-segment="pass"]')).toHaveCount(11);
+  await expect(ring).toContainText("of 16");
+
+  const themes = factors.locator("[data-theme]");
+  await expect(themes).toHaveCount(4);
+  await expect(themes.locator("h3")).toHaveText([
+    "Long life and health4 of 4 agree",
+    "Bond and temperament5 of 8 agree",
+    "Family and children1 of 3 agree",
+    "Planets and birth days1 of 1 agree",
+  ]);
+  await expect(factors.locator('[data-theme="planets"] [data-marker="off"]')).toHaveCount(2);
+  await expect(factors).toContainText("Grouped by what each factor is traditionally said to relate to.");
+  // Rajju and Vedha stay in their own panel, not in the ring or the count.
+  await expect(factors.getByRole("link", { name: /^(Rajju|Vedha):/ })).toHaveCount(0);
+  await expect(page.locator('[data-panel="checks"] [data-check]')).toHaveCount(2);
+
+  // Pointing at a life area makes the rest of the ring step back.
+  await factors.locator('[data-theme="health"]').hover();
+  await expect(ring.locator("path[class*=dim]")).toHaveCount(14);
+});
+
+test("labels with no life areas still show every factor in the summary", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  const labels = JSON.parse(fixture("labels-en.json"));
+  delete labels.porondam_theme;
+  await page.route("**/api/v1/labels/*", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify(labels) }),
+  );
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const factors = page.locator('[data-panel="factors"]');
+  await expect(factors.locator("[data-ring] [data-segment]")).toHaveCount(18);
+  await expect(factors.locator("[data-marker]")).toHaveCount(18);
+  await expect(factors.locator("[data-theme] h3")).toHaveCount(0);
+  await expect(factors).not.toContainText("Grouped by");
+});
+
+test("the summary fits a phone screen", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await mockBackend(page, "en", "porondam-full-en.json");
+  await page.goto("/en/porondam");
+  for (const role of ["Bride", "Groom"]) {
+    const card = page.getByRole("group", { name: role });
+    await card.getByLabel("Date of birth").fill(role === "Bride" ? "1995-04-19" : "1992-08-03");
+    await card.getByLabel("Time of birth").fill("10:00");
+    await card.getByRole("combobox").fill("kandy");
+    await card.getByRole("option").first().click();
+  }
+  await page.getByRole("button", { name: "Match the charts" }).click();
+  const factors = page.locator('[data-panel="factors"]');
+  await expect(factors.locator("[data-ring]")).toBeVisible();
+  await expect(factors.locator('[data-theme="planets"] h3')).toContainText("1 of 3 agree");
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 test("the factor filter", async ({ page }) => {
   await mockBackend(page, "en", "porondam-quick-en.json");
   await page.goto("/en/porondam");

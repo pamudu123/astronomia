@@ -145,7 +145,11 @@ export function matchContext(
       factors_not_agreeing: counted
         .filter((f) => !f.passed)
         .map((f) => ({ ...factorSummary(f, labels), reason: f.reason })),
-      factors_agreeing: counted.filter((f) => f.passed).map((f) => factorSummary(f, labels).name),
+      // With the reason too, so the assistant can say why a factor agrees ("both stars are
+      // in the same temperament group"), not only that it does.
+      factors_agreeing: counted
+        .filter((f) => f.passed)
+        .map((f) => ({ ...factorSummary(f, labels), reason: f.reason })),
       factors_not_counted: match.factors
         .filter((f) => !isCounted(f))
         .map((f) => factorSummary(f, labels).name),

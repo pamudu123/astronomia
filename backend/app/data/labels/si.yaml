@@ -133,6 +133,15 @@ porondam_factor:
   rajju: {name: රජ්ජු, meaning: යුවළගේ දීර්ඝායුෂ}
   vedha: {name: වේධ, meaning: එකිනෙකාට පීඩා නොකළ යුතු නැකැත්}
 
+# The summary chart groups the counted factors by what each is traditionally said to relate
+# to. Rajju and Vedha are left out: the page shows them apart from the count. Not yet
+# reviewed by an astrologer.
+porondam_theme:
+  health: {name: දීර්ඝායුෂ සහ සෞඛ්‍යය, factors: [dina, stree_deergha, ayusha, nadi]}
+  bond: {name: බැඳීම සහ ස්වභාවය, factors: [gana, yoni, rashi, vashya, pakshi, linga, varna, bhuta]}
+  family: {name: පවුල සහ දරුවන්, factors: [mahendra, gothra, vruksha]}
+  planets: {name: ග්‍රහයන් සහ උපන් දින, factors: [rashyadhipathi, weekday, graha]}
+
 porondam_reason:
   dina_pass: "මනාලියගේ නැකතේ සිට ගණන් කළ විට මනාලයාගේ නැකත {count} වැන්නයි. නවයෙන් බෙදූ විට ඉතිරිය {remainder} වන අතර එය යහපත්ය."
   dina_fail: "මනාලියගේ නැකතේ සිට ගණන් කළ විට මනාලයාගේ නැකත {count} වැන්නයි. නවයෙන් බෙදූ විට ඉතිරිය {remainder} වන අතර එය යහපත් නොවේ."

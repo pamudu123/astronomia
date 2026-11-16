@@ -11,8 +11,9 @@ import type { PageContext } from "./context";
  * A chip is dropped when it:
  * - is empty or too long to be one short question;
  * - speaks to the person instead of as the person ("Would you like…", "your", ඔබ);
- * - asks for something the site never gives: a verdict on a marriage, a prediction, a remedy,
- *   or health, money or legal advice;
+ * - asks for something Astro never gives: a verdict on a marriage, a guaranteed outcome or
+ *   exact date, anything about death or lifespan, a named disease, investment or legal
+ *   advice, or a product such as a gem;
  * - asks about the person's own chart or match while no such result is on the page, so Astro
  *   would need details the person hasn't given.
  */
@@ -24,19 +25,31 @@ const MAX_LENGTH = 90;
 
 const ADDRESSED_TO_THEM = [/\b(you|your|yours|yourself)\b/i, /ඔබ/];
 
-/** Things the site never answers (agent/app/prompts/guide.md, "Care and limits"). */
+/**
+ * What Astro never gives (agent/app/prompts/guide.md, "Care and limits", and the "Never
+ * suggest" list in agent/app/prompts/suggest.md). Hard but honest life questions (work,
+ * money, love, a difficult period, what is coming) are fine: Astro answers those as
+ * possibilities from the chart.
+ */
 const NEVER_ANSWERED = [
+  // A final verdict on a marriage.
   /\bshould (we|i) (get )?marr/i,
   /\b(marry|marriage) or not\b/i,
-  /\bwill (we|i|my|our|this)\b/i,
-  /\b(predict|prediction|future|fortune|lucky number|lottery)\b/i,
-  /\b(remed(y|ies)|pooja|puja|gem ?stones?|amulet|charm|ritual to)\b/i,
-  /\b(health|illness|disease|medical|medicine|doctor|pregnan)/i,
-  /\b(money|invest|loan|salary|business profit|stock)/i,
-  /\b(legal|lawyer|court|divorce)\b/i,
   /විවාහ (විය යුතු|කරගත යුතු)/,
-  /අනාගතය/,
-  /(සෞඛ්‍ය|ලෙඩ|බෙහෙත්|මුදල්|ආයෝජන|නීති)/,
+  // A guaranteed outcome or an exact date.
+  /\b(exact(ly)?|guarantee[ds]?|for sure|definitely)\b/i,
+  // Death, dying or lifespan.
+  /\b(die|dying|death|dead|lifespan|life span)\b/i,
+  /\bhow long will .* live\b/i,
+  /(මරණ|මැරෙ|ආයුෂ)/,
+  // A named disease.
+  /\b(cancer|diabetes|heart attack|stroke|tumou?r|hiv|aids|dementia|kidney failure)\b/i,
+  /(පිළිකා|දියවැඩියා|හෘදයාබාධ)/,
+  // Investment and legal advice.
+  /\b(invest(ing|ment)?|stocks?|shares|crypto|lottery|lawsuit|court case|lawyer|legal advice)\b/i,
+  /(ආයෝජන|නඩු)/,
+  // Products: gems, charms and the like are for their own astrologer.
+  /\b(gem ?stones?|amulets?|charms?|yantras?|talisman)\b/i,
 ];
 
 /** A question about the person's own chart, match or ceremony times. */

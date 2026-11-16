@@ -25,16 +25,29 @@ describe("answerable", () => {
     expect(answerable(chip("Explain our match score"), match)).toBe(true);
   });
 
-  it("drops what the site never answers", () => {
+  it("drops what Astro never gives", () => {
     for (const text of [
       "Should we marry?",
-      "Will we be happy together?",
-      "Which remedy fixes Kuja dosha?",
-      "Is this a good day to invest money?",
-      "Can astrology help my health?",
-      "මගේ අනාගතය කොහොමද?",
+      "When exactly will I get married?",
+      "How long will I live?",
+      "Will I get cancer?",
+      "Should I invest in shares now?",
+      "Which gemstone should I wear?",
+      "මගේ ආයුෂ කොච්චරද?",
     ]) {
       expect(answerable(chip(text), match), text).toBe(false);
+    }
+  });
+
+  it("keeps hard but honest life questions when the chart is on the page", () => {
+    const chart: PageContext = { page: "chart_result", language: "en", result: { rising_sign: "Simha" } };
+    for (const text of [
+      "How will my current life period feel?",
+      "What does my chart say about money?",
+      "Is there anything I should be careful about in this period?",
+      "Does my chart show strain in relationships?",
+    ]) {
+      expect(answerable(chip(text), chart), text).toBe(true);
     }
   });
 
@@ -71,7 +84,7 @@ describe("pickFollowUps", () => {
   });
 
   it("keeps each chip's original place, and renumbers the loading ones", () => {
-    const chips = [chip("Will we be rich?"), chip("What is a yoga?"), chip("", true)];
+    const chips = [chip("Should we marry?"), chip("What is a yoga?"), chip("", true)];
     const picked = pickFollowUps(chips, home, [2]);
     expect(picked.original).toEqual([1, 2]);
     expect(picked.loading).toEqual([1]);

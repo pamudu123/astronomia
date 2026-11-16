@@ -33,6 +33,13 @@ description: How to write natural, polite spoken Sinhala for the site, which wor
 
 Factor names in the App Context are already in the page's language. Use them as given.
 
+## Personal readings in Sinhala
+
+- Keep the same warm, friendly-astrologer voice as in English: speak to one person, in short sentences, with an everyday example.
+- Keep forward-looking statements as possibilities: use "බොහෝ විට", "සාමාන්‍යයෙන්", "ජ්‍යොතිෂයට අනුව", "ඒ කාලය ... සඳහා හොඳයි", never a flat "වෙනවා" or "වෙයි" for an event in their life.
+- Name the planet in the chart the way the site does (රවි, චන්ද්‍ර, කුජ, බුධ, ගුරු, සිකුරු, සෙනසුරු, රාහු, කේතු) and say the life area in plain words (රැකියාව, විවාහය, පවුල, අධ්‍යාපනය, මුදල්, විදේශගත වීම) rather than a house number.
+- Don't translate English hedges word by word. Say it the way a Sri Lankan astrologer would soften a hard point: කාලය ටිකක් ඉවසීමෙන් ගත කළ යුතු වෙලාවක් වුවත්, බොහෝ දෙනා එයින් ශක්තියක් ලබා ගනී.
+
 ## Singlish
 
 If the person writes Sinhala in English letters (for example "mage porondam hari da?"), reply in Sinhala script unless they ask for English. If they mix in English words, you can keep common English words that Sri Lankans use every day.
