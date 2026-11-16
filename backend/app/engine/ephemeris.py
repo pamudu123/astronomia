@@ -7,6 +7,7 @@ Swiss Ephemeris keeps global state and is not thread safe, so every call holds a
 """
 
 import threading
+from collections.abc import Hashable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
@@ -55,7 +56,7 @@ class BodyPosition:
     speed: float  # degrees per day, negative when retrograde
 
 
-class Ephemeris(Protocol):
+class Ephemeris(Hashable, Protocol):
     @property
     def description(self) -> str: ...
 
@@ -66,6 +67,8 @@ class Ephemeris(Protocol):
     def ascendant(self, jd_ut: float, latitude: float, longitude: float) -> float: ...
 
     def sun_moon(self, jd_ut: float) -> tuple[float, float]: ...
+
+    def longitudes(self, jd_ut: float, bodies: tuple[Body, ...]) -> dict[Body, float]: ...
 
     def sunrise(self, jd_ut: float, latitude: float, longitude: float) -> float | None: ...
 
@@ -132,6 +135,15 @@ class SwissEphemeris:
             sun, _ = swe.calc_ut(jd_ut, swe.SUN, flags)
             moon, _ = swe.calc_ut(jd_ut, swe.MOON, flags)
         return normalize(sun[0]), normalize(moon[0])
+
+    def longitudes(self, jd_ut: float, bodies: tuple[Body, ...]) -> dict[Body, float]:
+        """Sidereal longitudes of a few planets only (not the nodes), for long searches."""
+        flags = swe.FLG_SWIEPH | swe.FLG_SIDEREAL
+        with self._lock:
+            self._sidereal()
+            return {
+                body: normalize(swe.calc_ut(jd_ut, _PLANETS[body], flags)[0][0]) for body in bodies
+            }
 
     def _rise_or_set(
         self, event: int, jd_ut: float, latitude: float, longitude: float

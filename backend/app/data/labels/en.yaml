@@ -500,3 +500,19 @@ kendara:
     mercury_far_from_sun: "Mercury is never more than one box from the Sun. Please check where they are drawn."
     venus_far_from_sun: "Venus is never more than two boxes from the Sun. Please check where they are drawn."
     navamsha_nodes_not_opposite: "In the navamsha too, Rahu and Ketu are always in opposite boxes. Please check the navamsha."
+
+# The life road: a hundred years of dasha periods, with Saturn's Erashtaka and Jupiter's returns.
+journey:
+  birth_title: "The road begins"
+  birth_text: "Born under {star}, in the {planet} main period."
+  period_title: "{planet} main period begins"
+  period_text: "It runs for {years} years. {planet} is in your {house} house, which is about {theme}."
+  erashtaka_start_title: "Erashtaka begins"
+  erashtaka_start_text: "Saturn enters the 12th, 1st or 2nd sign from your Moon and stays until {to}."
+  erashtaka_start_helps: "Keep commitments small and steady, and look after your health."
+  erashtaka_end_title: "Erashtaka ends"
+  erashtaka_end_text: "Saturn leaves the 12th, 1st and 2nd signs from your Moon."
+  guru_return_title: "Jupiter returns to {sign}"
+  guru_return_text: "Jupiter is back in the sign it held at your birth, until {to}. This comes about every twelve years."
+  onward_title: "The road goes on"
+  onward_text: "Every road here is drawn to a hundred years. The chart marks no ending."

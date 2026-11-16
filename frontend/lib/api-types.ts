@@ -210,6 +210,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/journey": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Journey
+         * @description The life road for one birth chart: a hundred years, whatever the chart. Dates are UTC.
+         */
+        post: operations["journey_v1_journey_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/changes": {
         parameters: {
             query?: never;
@@ -1257,6 +1277,44 @@ export interface components {
             /** To Theme */
             to_theme: string;
         };
+        /** JourneyOut */
+        JourneyOut: {
+            /** Rule Set */
+            rule_set: string;
+            /** Provisional */
+            provisional: boolean;
+            /**
+             * Birth
+             * Format: date-time
+             */
+            birth: string;
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+            /**
+             * Now
+             * Format: date-time
+             */
+            now: string;
+            /** Periods */
+            periods: components["schemas"]["MainPeriodOut"][];
+            /** Erashtaka */
+            erashtaka: components["schemas"]["app__api__journey__SpanOut"][];
+            /** Guru Returns */
+            guru_returns: components["schemas"]["app__api__journey__SpanOut"][];
+            /** Stops */
+            stops: components["schemas"]["StopOut"][];
+            quality: components["schemas"]["QualityOut"];
+        };
+        /** JourneyResponse */
+        JourneyResponse: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"];
+            journey: components["schemas"]["JourneyOut"] | null;
+        };
         /** KendaraMatchOut */
         KendaraMatchOut: {
             start: components["schemas"]["LocalTimeOut"];
@@ -1435,6 +1493,31 @@ export interface components {
              * Format: date
              */
             date: string;
+        };
+        /** MainPeriodOut */
+        MainPeriodOut: {
+            lord: components["schemas"]["Body"];
+            /**
+             * Start
+             * Format: date-time
+             */
+            start: string;
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+            /** House */
+            house: number;
+            /** Theme */
+            theme: string;
+            /**
+             * Tone
+             * @enum {string}
+             */
+            tone: "good" | "mixed" | "careful";
+            /** Sub */
+            sub: components["schemas"]["SubPeriodOut"][];
         };
         /** MatchOut */
         MatchOut: {
@@ -1975,6 +2058,13 @@ export interface components {
             match?: components["schemas"]["MatchOut"] | null;
             kuja?: components["schemas"]["KujaPairOut"] | null;
         };
+        /** QualityOut */
+        QualityOut: {
+            /** Step Days */
+            step_days: number;
+            /** Values */
+            values: number[];
+        };
         /**
          * QuickPerson
          * @description Birth star only: the pada fixes the Moon sign. Lagna based checks are not possible.
@@ -2197,25 +2287,6 @@ export interface components {
             place: string;
             result: components["schemas"]["HadahanResponse"];
         };
-        /** SpanOut */
-        SpanOut: {
-            /**
-             * Start
-             * Format: date
-             */
-            start: string;
-            /**
-             * End
-             * Format: date
-             */
-            end: string;
-            /** From Before */
-            from_before: boolean;
-            /** Continues */
-            continues: boolean;
-            /** Text */
-            text: string;
-        };
         /** StarLettersOut */
         StarLettersOut: {
             /** Star */
@@ -2323,6 +2394,54 @@ export interface components {
             text: string;
             /** Theme */
             theme: string;
+        };
+        /** StopOut */
+        StopOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "birth" | "period" | "erashtaka_start" | "erashtaka_end" | "guru_return" | "onward";
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /**
+             * Tone
+             * @enum {string}
+             */
+            tone: "good" | "mixed" | "careful";
+            lord?: components["schemas"]["Body"] | null;
+            /** Title */
+            title: string;
+            /** Text */
+            text: string;
+            /** Helps */
+            helps?: string | null;
+        };
+        /** SubPeriodOut */
+        SubPeriodOut: {
+            lord: components["schemas"]["Body"];
+            /**
+             * Start
+             * Format: date-time
+             */
+            start: string;
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+            /** House */
+            house: number;
+            /** Theme */
+            theme: string;
+            /**
+             * Tone
+             * @enum {string}
+             */
+            tone: "good" | "mixed" | "careful";
         };
         /** SuggestionOut */
         SuggestionOut: {
@@ -2440,7 +2559,7 @@ export interface components {
             bride: components["schemas"]["PersonTimelineOut"];
             groom: components["schemas"]["PersonTimelineOut"];
             /** Overlaps */
-            overlaps: components["schemas"]["SpanOut"][];
+            overlaps: components["schemas"]["app__api__porondam__SpanOut"][];
         };
         /** TimelineRequest */
         TimelineRequest: {
@@ -2606,6 +2725,38 @@ export interface components {
             stays: components["schemas"]["StayOut"][];
             /** Quiet */
             quiet: string | null;
+        };
+        /** SpanOut */
+        app__api__journey__SpanOut: {
+            /**
+             * Start
+             * Format: date-time
+             */
+            start: string;
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+        };
+        /** SpanOut */
+        app__api__porondam__SpanOut: {
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /** From Before */
+            from_before: boolean;
+            /** Continues */
+            continues: boolean;
+            /** Text */
+            text: string;
         };
     };
     responses: never;
@@ -2942,6 +3093,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ForecastResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    journey_v1_journey_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JourneyResponse"];
                 };
             };
             /** @description Validation Error */

@@ -28,6 +28,7 @@ import { DashaTimeline } from "./DashaTimeline";
 import { Forecast } from "./Forecast";
 import styles from "./HadahanResult.module.css";
 import { Kendara } from "./Kendara";
+import { LifeRoad } from "./LifeRoad";
 import { RememberChart } from "./RememberChart";
 import { SummaryCards } from "./SummaryCards";
 
@@ -283,6 +284,8 @@ export function HadahanResult({
       </section>
 
       {result.dasha && <DashaTimeline dasha={result.dasha} labels={labels} lang={lang} t={t} />}
+
+      {request && <LifeRoad lang={lang} t={t} labels={labels} request={request} />}
 
       {request && <Forecast lang={lang} t={t} labels={labels} request={request} />}
 

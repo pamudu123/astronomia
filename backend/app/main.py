@@ -10,6 +10,7 @@ from app.api import (
     charts,
     first_letters,
     forecast,
+    journey,
     kendara,
     meta,
     panchanga,
@@ -48,6 +49,7 @@ def create_app() -> FastAPI:
     app.include_router(charts.router)
     app.include_router(porondam.router)
     app.include_router(forecast.router)
+    app.include_router(journey.router)
     app.include_router(changes.router)
     app.include_router(yearly.router)
     app.include_router(panchanga.router)
