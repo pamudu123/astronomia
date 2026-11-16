@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { type Factor, filterFactors, isCounted, ringOffset, spanPercent, yearTicks } from "@/lib/porondam";
+import {
+  type Factor,
+  filterFactors,
+  groupFactors,
+  isCounted,
+  ringOffset,
+  ringSegments,
+  spanPercent,
+  yearTicks,
+} from "@/lib/porondam";
 
 const factor = (id: string, passed: boolean): Factor => ({ id, passed, hard: false, checked: true, facts: {}, reason: "" });
 
@@ -33,6 +42,64 @@ describe("filterFactors", () => {
     expect(filterFactors(old, "agree").map((f) => f.id)).toEqual(["dina", "yoni"]);
     expect(filterFactors(old, "disagree").map((f) => f.id)).toEqual(["gana"]);
     expect(isCounted({ checked: false })).toBe(false);
+  });
+});
+
+describe("groupFactors", () => {
+  const themes = {
+    health: { name: "Long life and health", factors: ["dina", "nadi"] },
+    bond: { name: "Bond and temperament", factors: ["gana", "yoni"] },
+    planets: { name: "Planets and birth days", factors: ["weekday", "graha"] },
+  };
+  const all = [
+    factor("dina", true),
+    factor("gana", false),
+    factor("yoni", true),
+    factor("nadi", false),
+    { ...factor("weekday", false), checked: false },
+  ];
+
+  it("groups by theme, in the themes' order, and counts what agrees", () => {
+    const groups = groupFactors(all, themes);
+    expect(groups.map((g) => [g.id, g.factors.map((f) => f.id), g.agree, g.counted])).toEqual([
+      ["health", ["dina", "nadi"], 1, 2],
+      ["bond", ["gana", "yoni"], 1, 2],
+      // Dina needs the birth dates: shown, but not counted.
+      ["planets", ["weekday"], 0, 0],
+    ]);
+  });
+
+  it("puts a factor no theme names in a last group, so none is dropped", () => {
+    const groups = groupFactors([...all, factor("vruksha", true)], themes);
+    expect(groups.at(-1)).toMatchObject({ id: "", name: "", agree: 1, counted: 1 });
+    expect(groups.flatMap((g) => g.factors)).toHaveLength(6);
+  });
+
+  it("keeps every factor in one group when the labels have no themes", () => {
+    const groups = groupFactors(all, undefined);
+    expect(groups).toHaveLength(1);
+    expect(groups[0]).toMatchObject({ name: "", agree: 2, counted: 4 });
+  });
+});
+
+describe("ringSegments", () => {
+  it("fills the ring, with wider gaps between groups", () => {
+    const segments = ringSegments([2, 1], 10, 2);
+    // 340 degrees left for 3 segments.
+    const each = 340 / 3;
+    expect(segments).toHaveLength(3);
+    expect(segments[0].start).toBeCloseTo(5 + 1);
+    expect(segments[0].end).toBeCloseTo(5 + each - 1);
+    expect(segments[1].start).toBeCloseTo(5 + each + 1);
+    expect(segments[2].start).toBeCloseTo(5 + 2 * each + 10 + 1);
+    expect(segments[2].end).toBeCloseTo(355 - 1);
+  });
+
+  it("uses no group gap for a single group, and nothing for no factors", () => {
+    const segments = ringSegments([4], 10, 2);
+    expect(segments[0].start).toBeCloseTo(1);
+    expect(segments[3].end).toBeCloseTo(359);
+    expect(ringSegments([], 10, 2)).toEqual([]);
   });
 });
 

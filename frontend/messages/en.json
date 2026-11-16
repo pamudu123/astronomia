@@ -318,6 +318,8 @@
       "factorsPanel": "Traditional factors",
       "factorsCount": "{passed} of {total} agree",
       "factorsNote": "Each factor compares one traditional point. The count is not a percentage or a forecast.",
+      "ringOf": "of {total}",
+      "themesNote": "Grouped by what each factor is traditionally said to relate to.",
       "notCountedCount": "{count} not counted here: they need full birth details.",
       "checksPanel": "Separate traditional checks",
       "checksNames": "Rajju and Vedha",

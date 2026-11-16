@@ -1,0 +1,113 @@
+/* The match at a glance: the ring with the count beside it, then each life area by name. */
+.glance {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 22px;
+}
+
+.ring {
+  width: 148px;
+  height: 148px;
+  flex: none;
+}
+
+.side {
+  display: flex;
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.segPass,
+.segFail,
+.segOff {
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.segPass {
+  fill: var(--teal);
+}
+
+.segFail {
+  fill: var(--coral);
+  opacity: 0.85;
+}
+
+.segOff {
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 0.8;
+  stroke-dasharray: 2 2;
+}
+
+/* While a life area is pointed at, the other segments step back. */
+.dim {
+  opacity: 0.22;
+}
+
+.ringCount {
+  fill: var(--ink);
+  font-family: var(--font-display);
+  font-size: 30px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.ringOf {
+  fill: var(--ink-soft);
+  font-size: 10px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.group + .group {
+  padding-top: 12px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.groupHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.groupCount {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segPass,
+  .segFail,
+  .segOff {
+    transition: none;
+  }
+}
