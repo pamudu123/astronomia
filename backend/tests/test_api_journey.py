@@ -1,15 +1,18 @@
+from typing import Any
+
 from fastapi.testclient import TestClient
 
 KANDY = 1241622
 BIRTH = {"date": "1995-04-19", "time": "14:35", "place_id": KANDY}
 
 
-def journey(client: TestClient, lang: str = "en") -> dict:
+def journey(client: TestClient, lang: str = "en") -> dict[str, Any]:
     body = client.post(
         "/v1/journey", json={**BIRTH, "lang": lang, "as_of": "2026-11-12T00:00:00Z"}
     ).json()
     assert body["status"] == "ok"
-    return body["journey"]
+    road: dict[str, Any] = body["journey"]
+    return road
 
 
 def test_the_road_in_english(client: TestClient) -> None:

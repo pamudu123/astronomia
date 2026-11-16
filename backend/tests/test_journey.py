@@ -30,8 +30,8 @@ def test_periods_cover_the_road_without_gaps() -> None:
         assert before.end == after.start
     subs = [sub for main in periods for sub in main.subs]
     assert subs[0].start <= BIRTH < subs[0].end
-    for before, after in itertools.pairwise(subs):
-        assert before.end == after.start
+    for earlier, later in itertools.pairwise(subs):
+        assert earlier.end == later.start
 
 
 def test_saturn_stays_match_the_almanac() -> None:
