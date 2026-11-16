@@ -133,6 +133,15 @@ porondam_factor:
   rajju: {name: Rajju, meaning: Long life of the couple}
   vedha: {name: Vedha, meaning: Stars that must not afflict each other}
 
+# The summary chart groups the counted factors by what each is traditionally said to relate
+# to. Rajju and Vedha are left out: the page shows them apart from the count. Not yet
+# reviewed by an astrologer.
+porondam_theme:
+  health: {name: Long life and health, factors: [dina, stree_deergha, ayusha, nadi]}
+  bond: {name: Bond and temperament, factors: [gana, yoni, rashi, vashya, pakshi, linga, varna, bhuta]}
+  family: {name: Family and children, factors: [mahendra, gothra, vruksha]}
+  planets: {name: Planets and birth days, factors: [rashyadhipathi, weekday, graha]}
+
 porondam_reason:
   dina_pass: "Counting from the bride's star, the groom's is number {count}. The remainder after nine is {remainder}, which is favourable."
   dina_fail: "Counting from the bride's star, the groom's is number {count}. The remainder after nine is {remainder}, which is not favourable."

@@ -67,6 +67,19 @@ def test_every_porondam_factor_has_names_and_both_reasons() -> None:
         assert "weekday_unchecked" in table["porondam_reason"]
 
 
+def test_every_counted_porondam_factor_sits_in_one_theme() -> None:
+    from app.engine.porondam import load_rules
+
+    counted = [f["id"] for f in load_rules()["factors"] if not f.get("hard")]
+    themes = {lang: labels(lang)["porondam_theme"] for lang in ("si", "en")}
+    # Both languages group the factors the same way, in the same order.
+    assert {k: v["factors"] for k, v in themes["si"].items()} == {
+        k: v["factors"] for k, v in themes["en"].items()
+    }
+    grouped = [f for theme in themes["en"].values() for f in theme["factors"]]
+    assert sorted(grouped) == sorted(counted)
+
+
 @pytest.mark.parametrize("lang", ["si", "en"])
 def test_every_group_in_the_rules_has_a_name(lang: Lang) -> None:
     from app.engine.porondam import WEEKDAYS, load_rules

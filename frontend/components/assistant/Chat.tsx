@@ -4,6 +4,7 @@ import "@copilotkit/react-core/v2/styles.css";
 import "./assistant.css";
 
 import {
+  CopilotChatSuggestionView,
   CopilotKitProvider,
   CopilotSidebar,
   useAgentContext,
@@ -13,10 +14,12 @@ import {
 import { usePathname } from "next/navigation";
 import {
   type CSSProperties,
+  type ComponentProps,
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   type ReactElement,
   createContext,
+  forwardRef,
   useCallback,
   useContext,
   useEffect,
@@ -29,6 +32,7 @@ import {
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { CONTEXT_DESCRIPTION, type PageContext, type PageKey, pageFromPath, pageKey } from "@/lib/assistant/context";
+import { pickFollowUps } from "@/lib/assistant/followups";
 import {
   ASK_EVENT,
   PANEL_MAX,
@@ -52,7 +56,7 @@ const WIDTH_KEY = "sidera.assistant.width";
 type Text = Dictionary["assistant"];
 type Tools = Dictionary["allTools"];
 
-type Panel = { t: Text; reading: string | null; close: () => void };
+type Panel = { t: Text; reading: string | null; close: () => void; page: PageContext; fixed: ReadonlySet<string> };
 const PanelContext = createContext<Panel | null>(null);
 
 function usePanel(): Panel {
@@ -118,6 +122,30 @@ function Welcome({ input, suggestionView }: { input: ReactElement; suggestionVie
   );
 }
 
+type SuggestionViewProps = ComponentProps<typeof CopilotChatSuggestionView>;
+
+/**
+ * The chips under an answer: only those Astro can answer in full from this page, as many as
+ * that leaves, which may be none (lib/assistant/followups.ts). With none, nothing is drawn.
+ */
+const FollowUps = forwardRef<HTMLDivElement, SuggestionViewProps>(function FollowUps(
+  { suggestions, loadingIndexes, onSelectSuggestion, ...rest },
+  ref,
+) {
+  const { page, fixed } = usePanel();
+  const picked = pickFollowUps(suggestions, page, loadingIndexes, fixed);
+  if (picked.chips.length === 0) return null;
+  return (
+    <CopilotChatSuggestionView
+      {...rest}
+      ref={ref}
+      suggestions={picked.chips}
+      loadingIndexes={picked.loading}
+      onSelectSuggestion={(suggestion, index) => onSelectSuggestion?.(suggestion, picked.original[index])}
+    />
+  );
+});
+
 /** The page's name for the "Reading: …" line: the tool's own name, as the tools page shows it. */
 function readingLabel(key: PageKey | null, page: string, t: Text, tools: Tools, shared: boolean): string | null {
   if (shared) return t.shared;
@@ -178,7 +206,9 @@ function ContextBridge({
   useConfigureSuggestions(
     {
       instructions,
-      minSuggestions: 2,
+      // No fixed count: only questions Astro can answer in full, usually one to three, and
+      // none when nothing fits (FollowUps filters again on the page).
+      minSuggestions: 0,
       maxSuggestions: 3,
       available: "after-first-message",
       providerAgentId: SUGGEST_ID,
@@ -336,15 +366,18 @@ export default function Chat({
     };
   }, [open]);
   const pathname = usePathname();
-  const value = page ?? { page: pageFromPath(pathname), language: lang };
+  const value = useMemo(() => page ?? { page: pageFromPath(pathname), language: lang }, [page, pathname, lang]);
   const key = pageKey(value.page);
   const panel = useMemo<Panel>(
     () => ({
       t,
       reading: readingLabel(key, value.page, t, tools, Boolean(value.shared)),
       close: () => setOpen(false),
+      page: value,
+      // The site's own page questions, shown before the first message: never filtered.
+      fixed: new Set(Object.values(t.chips).flat()),
     }),
-    [t, tools, key, value.page, value.shared],
+    [t, tools, key, value],
   );
 
   return (
@@ -372,6 +405,7 @@ export default function Chat({
             // The launcher above replaces CopilotKit's round toggle button.
             toggleButton="sidera-hidden"
             welcomeScreen={Welcome}
+            suggestionView={FollowUps}
             labels={{
               modalHeaderTitle: t.title,
               sidebarLabel: t.title,

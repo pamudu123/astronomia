@@ -14,6 +14,8 @@ from pathlib import Path
 from deepagents import SubAgent
 from langchain_core.tools import BaseTool
 
+from app.clock import today_middleware
+
 PROMPTS = Path(__file__).parent / "prompts"
 
 
@@ -47,6 +49,10 @@ def build_subagents(tools: Sequence[BaseTool], skills_path: str) -> list[SubAgen
                 "at the same time, and compare their answers."
             ),
             "system_prompt": _prompt("date-checker"),
-            "tools": _pick(tools, {"find_place", "good_times_for_day", "month_calendar"}),
+            "tools": _pick(
+                tools, {"find_place", "current_date", "good_times_for_day", "month_calendar"}
+            ),
+            # The guide passes exact dates, but the checker also knows today's.
+            "middleware": [today_middleware],
         },
     ]

@@ -4,10 +4,11 @@ import type { FirstLetters } from "@/lib/firstletters";
 import type { Hadahan, Labels, Place } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import type { KendaraResult } from "@/lib/kendara";
-import type { Avurudu, MonthPanchanga, Panchanga } from "@/lib/nakath";
+import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/lib/nakath";
 import type { Wedding } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
+import { combinations, houseFacts, periodTimeline, planetFacts } from "./chartFacts";
 import type { Json, PageContext } from "./context";
 
 /**
@@ -68,12 +69,12 @@ export function chartContext(
       birth_time_check: chart.time_check.stable
         ? "the rising sign is the same for nearby birth times"
         : chart.time_check.reason,
-      planets: chart.planets.map((p) => ({
-        planet: planet(labels, p.body),
-        sign: sign(labels, p.sign),
-        house: p.house,
-        ...(p.retrograde && { retrograde: true }),
-      })),
+      // Each planet with its strength in its sign and the houses it rules.
+      planets: planetFacts(chart, labels),
+      // Each house with its ruler, where the ruler sits, and the planets in it and looking at it.
+      houses: houseFacts(chart, labels),
+      // Well-known combinations (yogas) found from the placements above. Provisional rules.
+      combinations: combinations(chart, labels),
       // Current and next life periods only: the first period starts at birth.
       life_period: now
         ? {
@@ -83,24 +84,34 @@ export function chartContext(
             ...(next && { next: planet(labels, next.lord), next_from: next.start }),
           }
         : null,
+      // The sub-periods of the running period and the periods after it, for "what's ahead".
+      life_period_timeline: dasha ? periodTimeline(dasha, labels) : null,
       mars_check: kuja ? { present: kuja.present, reduced: kuja.reduced } : null,
     },
   };
 }
 
-/** The day's good times: the place and the almanac shown. */
+/**
+ * The day's good times: the place and the almanac shown.
+ *
+ * Everything comes from the fetched day itself. The place picker can already hold a new city
+ * while the old day is still on screen; its name is used only when it is the day's own place,
+ * so the city, time zone and times always belong together (code review follow-up to the QA).
+ */
 export function dayContext(data: Panchanga, place: Place | null, language: Locale): PageContext {
   const day = data.date;
   const parts = (items: Panchanga["thithi"]): Json =>
     items.map((p) => ({ name: p.name, time: range(p.start, p.end, day) }));
+  const picked = place && data.place.id != null && place.id === data.place.id ? place.name : null;
   return {
     page: "good_times_day",
     language,
     result: {
       date: day,
       weekday: data.weekday_name,
-      place: place?.name ?? data.place.name,
+      place: data.place.name ?? picked,
       place_id: data.place.id ?? null,
+      timezone: data.place.timezone,
       sunrise: at(data.sunrise, day),
       sunset: at(data.sunset, day),
       rahu_kalaya: data.rahu_kalaya ? range(data.rahu_kalaya.start, data.rahu_kalaya.end, day) : null,
@@ -127,17 +138,47 @@ export function monthContext(data: MonthPanchanga, language: Locale): PageContex
   };
 }
 
-/** The New Year times for a year, in the time zone picked. */
-export function avuruduContext(data: Avurudu, zone: string, language: Locale): PageContext {
+type Both = Avurudu["calculated"]["dawn"] | null | undefined;
+
+/** "21:44 on 2028-04-13", in Sri Lanka time and, when the page shows another zone, in that one. */
+function both(moment: Both, zone: string): Json {
+  if (!moment) return null;
+  const sriLanka = `${moment.sri_lanka.clock} on ${moment.sri_lanka.date}`;
+  if (zone === SRI_LANKA) return { sri_lanka: sriLanka };
+  return { sri_lanka: sriLanka, [zone]: `${moment.local.clock} on ${moment.local.date}` };
+}
+
+/**
+ * The New Year times for a year, as the page shows them: the site's calculated dawn and punya
+ * kalaya (every year) and the official list (only when published), each labelled. The time
+ * zone is the one the fetched times are in, never a zone picked but not loaded yet (QA ASTRO-03).
+ */
+export function avuruduContext(data: Avurudu, language: Locale): PageContext {
+  const zone = data.timezone;
   return {
     page: "avurudu",
     language,
     result: {
       year: data.year,
-      official: data.official,
-      source: data.source ?? null,
       time_zone_shown: zone,
-      customs: data.items.map((i) => i.name),
+      calculated: {
+        label: "the site's own calculation",
+        new_year_dawn: both(data.calculated.dawn, zone),
+        punya_kalaya_from: both(data.calculated.punya_start, zone),
+        punya_kalaya_to: both(data.calculated.punya_end, zone),
+      },
+      official: data.official
+        ? {
+            source: data.source ?? null,
+            times: data.items.map((i) => ({
+              custom: i.name,
+              at: both(i.at, zone),
+              from: both(i.start, zone),
+              to: both(i.end, zone),
+              ...(i.date_text ? { date: i.date_text } : {}),
+            })),
+          }
+        : "no official list published for this year yet",
     },
   };
 }

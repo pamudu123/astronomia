@@ -8,6 +8,7 @@ description: Background on nakath (auspicious times), the litha almanac (thithi,
 ## Where the facts come from
 
 - **Times for a day or month:** the App Context (`good_times_day`, `litha_month`) or the tools `good_times_for_day` and `month_calendar`. Default place: Colombo. Say which place the times are for.
+- **Today, tomorrow, yesterday:** the date in the Today note for Sri Lanka; `current_date` with the place's time zone for anywhere else. Look up that exact date and say it in the answer.
 - **What the words and customs mean:** `reference.md` in this folder (`/skills/calendar-and-nakath/reference.md`). Sections: 1 nakath, 2 the five parts of the litha, 3 Rahu kalaya, 4 the twelve poya days and Adhi poya, 5 Sinhala months, 6 directions and colours.
 
 ## Answering "is this time good for…?"
@@ -16,7 +17,7 @@ The site shows the day's parts (Rahu kalaya, thithi, nakatha, yoga, karana). It 
 
 1. Give the facts for that time: inside or outside Rahu kalaya, and which thithi and nakatha it falls in.
 2. Say what tradition says about those, from the reference: for example, people avoid starting new things in Rahu kalaya.
-3. For an important personal event, suggest asking their astrologer. For a wedding, point to the wedding dates under a match result. For a first letters ceremony, point to the first letters page.
+3. For an important personal event, suggest asking their astrologer. For a wedding, point to the wedding dates search under a match result (birth stars are enough). For a first letters ceremony, point to the first letters page.
 
 ## Poya
 

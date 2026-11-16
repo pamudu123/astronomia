@@ -11,13 +11,13 @@ The App Context `page` is either a result name set by the page (such as `chart_r
 
 | Address | What it is | Needs | Look it up with |
 |---|---|---|---|
-| `home` | Start page, with today's nakath strip and the tool groups | Nothing | `good_times_for_day` for today |
+| `home` | Start page, with today's nakath strip and the tool groups | Nothing | `good_times_for_day` for today's date from the Today note (Colombo) |
 | `hadahan` | Birth chart: rising sign, Moon sign, birth star, the nine planets, life periods (dasha), the life road, Mars check, PDF | Birth date, time and place | Page sends `chart_result` |
-| `porondam` | Marriage match, factor by factor, with reasons, the Mars check, a couple timeline and wedding dates | Two people's birth details, or just their birth stars (quick match) | Page sends `match_result`. Wedding dates arrive under `also_on_page.wedding` |
+| `porondam` | Marriage match, factor by factor, with reasons, the Mars check, a couple timeline and wedding dates | Two people's birth details, or just their birth stars (quick match). The wedding dates search needs only a venue and a range, for either kind of match | Page sends `match_result`. Wedding dates arrive under `also_on_page.wedding` after the person searches |
 | `porondam/stars` and `porondam/stars/<star>` | Which birth stars suit a star, before full charts | A birth star | `find_matching_stars` |
 | `nakath` and `nakath/<YYYY-MM-DD>` | One day's almanac for a place: Rahu kalaya, thithi, nakatha, yoga, karana | A date and place | Page sends `good_times_day`; or `good_times_for_day` |
 | `litha` and `litha/<YYYY-MM>` | The month at a glance, with poya days and Rahu kalaya | A month | Page sends `litha_month`; or `month_calendar` |
-| `avurudu`, `avurudu/<year>`, `avurudu/<year>/<city>` | Sinhala and Tamil New Year nakath, in any time zone | A year | Page sends `avurudu`; or `new_year_times` |
+| `avurudu`, `avurudu/<year>`, `avurudu/<year>/<city>` | Sinhala and Tamil New Year nakath, in any time zone: the site's calculated dawn every year, and the official list when published | A year | Page sends `avurudu`; or `new_year_times` |
 | `baby-names` | First letters for a baby's name from the birth, with name ideas | Baby's birth details | Page sends `baby_names_result` |
 | `baby-names/<star>` | Letters for each quarter of one birth star | A birth star | `name_letters_for_star`, then `names_for_letters` |
 | `first-letters` | Good times for the first letters ceremony (akuru kiyaweema) | The child's birth details, or birth star | Page sends `first_letters_result` |
@@ -36,7 +36,7 @@ Sign ids in addresses: mesha, vrishabha, mithuna, kataka, simha, kanya, tula, vr
 - "What's my rising sign / dasha?" with no chart on screen: the birth chart page (`/hadahan`), with date, time and place of birth.
 - "Do we match?": the match page (`/porondam`). With only birth stars, the quick match, or the birth star matches page.
 - "Is today good?": today's nakath (`/nakath`). A whole month: the litha (`/litha`).
-- Baby names: `/baby-names`. First letters ceremony: `/first-letters`. Wedding dates: under a match result.
+- Baby names: `/baby-names`. First letters ceremony: `/first-letters`. Wedding dates: the search under a match result (a quick match with birth stars is enough).
 - "How will Saturn's change affect me?": `/changes`, then the person's rising sign, or their birth details for a personal reading.
 - Lost birth date but an old horoscope: `/kendara`.
 
