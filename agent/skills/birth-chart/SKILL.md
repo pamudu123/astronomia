@@ -9,6 +9,7 @@ description: How to explain a birth chart (hadahan) and planet changes - rising 
 
 - **The person's chart:** the App Context (`chart_result`). Rising sign, Moon sign, birth star, each planet's sign, house, strength and ruled houses, each house's ruler and aspects, the yogas found, the current and next life period with the sub-period dates, the Mars check. The `personal-reading` skill says how to read them.
 - **Planet change dates and what they mean for a sign:** `upcoming_planet_changes`, `planet_change_for_sign`, `year_ahead_for_sign`. Never give a date from memory.
+- **The life road** on the chart page draws the dasha periods as a road. Every road is drawn to 100 years for everyone, so it says nothing about how long a life is: never estimate a lifespan or a death. Its wide, lit stretches and narrow, broken ones follow provisional rules (the period lords' nature and place in the chart, Saturn's erashtaka, Jupiter's return to its birth sign). When a question names a year, age, main period and sub period from the road, answer about that time using the chart.
 - **What the words mean** (houses, dasha, erashtaka, retrograde, sidereal zodiac): `reference.md` in this folder. Open it with read_file at `/skills/birth-chart/reference.md` when you need more than the short notes below.
 
 ## Answering

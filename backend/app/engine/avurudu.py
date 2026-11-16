@@ -92,7 +92,7 @@ def avurudu(ephemeris: Ephemeris, year: int) -> Avurudu:
     if not FIRST_YEAR <= year <= LAST_YEAR:
         raise ValueError(f"no new year for {year}")
     rules = load_rules()
-    dawn = _sun_enters_mesha(ephemeris, year)  # type: ignore[arg-type]
+    dawn = _sun_enters_mesha(ephemeris, year)
     half = timedelta(minutes=int(rules["punya_kalaya_minutes"]))
     listed = rules["years"].get(year) or {}
     return Avurudu(

@@ -489,6 +489,48 @@
         }
       }
     },
+    "/v1/journey": {
+      "post": {
+        "tags": [
+          "journey"
+        ],
+        "summary": "Journey",
+        "description": "The life road for one birth chart: a hundred years, whatever the chart. Dates are UTC.",
+        "operationId": "journey_v1_journey_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HadahanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JourneyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/changes": {
       "get": {
         "tags": [
@@ -3810,6 +3852,106 @@
         ],
         "title": "HouseMoveOut"
       },
+      "JourneyOut": {
+        "properties": {
+          "rule_set": {
+            "type": "string",
+            "title": "Rule Set"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          },
+          "birth": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Birth"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "now": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Now"
+          },
+          "periods": {
+            "items": {
+              "$ref": "#/components/schemas/MainPeriodOut"
+            },
+            "type": "array",
+            "title": "Periods"
+          },
+          "erashtaka": {
+            "items": {
+              "$ref": "#/components/schemas/app__api__journey__SpanOut"
+            },
+            "type": "array",
+            "title": "Erashtaka"
+          },
+          "guru_returns": {
+            "items": {
+              "$ref": "#/components/schemas/app__api__journey__SpanOut"
+            },
+            "type": "array",
+            "title": "Guru Returns"
+          },
+          "stops": {
+            "items": {
+              "$ref": "#/components/schemas/StopOut"
+            },
+            "type": "array",
+            "title": "Stops"
+          },
+          "quality": {
+            "$ref": "#/components/schemas/QualityOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_set",
+          "provisional",
+          "birth",
+          "end",
+          "now",
+          "periods",
+          "erashtaka",
+          "guru_returns",
+          "stops",
+          "quality"
+        ],
+        "title": "JourneyOut"
+      },
+      "JourneyResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "$ref": "#/components/schemas/TimeResolveResponse"
+          },
+          "journey": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JourneyOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "journey"
+        ],
+        "title": "JourneyResponse"
+      },
       "KendaraMatchOut": {
         "properties": {
           "start": {
@@ -4330,6 +4472,58 @@
           "date"
         ],
         "title": "LocalTimeOut"
+      },
+      "MainPeriodOut": {
+        "properties": {
+          "lord": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "theme": {
+            "type": "string",
+            "title": "Theme"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "good",
+              "mixed",
+              "careful"
+            ],
+            "title": "Tone"
+          },
+          "sub": {
+            "items": {
+              "$ref": "#/components/schemas/SubPeriodOut"
+            },
+            "type": "array",
+            "title": "Sub"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lord",
+          "start",
+          "end",
+          "house",
+          "theme",
+          "tone",
+          "sub"
+        ],
+        "title": "MainPeriodOut"
       },
       "MatchOut": {
         "properties": {
@@ -5957,6 +6151,27 @@
         ],
         "title": "PorondamResponse"
       },
+      "QualityOut": {
+        "properties": {
+          "step_days": {
+            "type": "number",
+            "title": "Step Days"
+          },
+          "values": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Values"
+          }
+        },
+        "type": "object",
+        "required": [
+          "step_days",
+          "values"
+        ],
+        "title": "QualityOut"
+      },
       "QuickPerson": {
         "properties": {
           "name": {
@@ -6473,41 +6688,6 @@
         "title": "SnapshotHadahan",
         "description": "A kept hadahan in one language."
       },
-      "SpanOut": {
-        "properties": {
-          "start": {
-            "type": "string",
-            "format": "date",
-            "title": "Start"
-          },
-          "end": {
-            "type": "string",
-            "format": "date",
-            "title": "End"
-          },
-          "from_before": {
-            "type": "boolean",
-            "title": "From Before"
-          },
-          "continues": {
-            "type": "boolean",
-            "title": "Continues"
-          },
-          "text": {
-            "type": "string",
-            "title": "Text"
-          }
-        },
-        "type": "object",
-        "required": [
-          "start",
-          "end",
-          "from_before",
-          "continues",
-          "text"
-        ],
-        "title": "SpanOut"
-      },
       "StarLettersOut": {
         "properties": {
           "star": {
@@ -6783,6 +6963,118 @@
           "theme"
         ],
         "title": "StayOut"
+      },
+      "StopOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "birth",
+              "period",
+              "erashtaka_start",
+              "erashtaka_end",
+              "guru_return",
+              "onward"
+            ],
+            "title": "Kind"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "good",
+              "mixed",
+              "careful"
+            ],
+            "title": "Tone"
+          },
+          "lord": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Body"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "helps": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Helps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "at",
+          "tone",
+          "title",
+          "text"
+        ],
+        "title": "StopOut"
+      },
+      "SubPeriodOut": {
+        "properties": {
+          "lord": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          },
+          "theme": {
+            "type": "string",
+            "title": "Theme"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "good",
+              "mixed",
+              "careful"
+            ],
+            "title": "Tone"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lord",
+          "start",
+          "end",
+          "house",
+          "theme",
+          "tone"
+        ],
+        "title": "SubPeriodOut"
       },
       "SuggestionOut": {
         "properties": {
@@ -7095,7 +7387,7 @@
           },
           "overlaps": {
             "items": {
-              "$ref": "#/components/schemas/SpanOut"
+              "$ref": "#/components/schemas/app__api__porondam__SpanOut"
             },
             "type": "array",
             "title": "Overlaps"
@@ -7731,6 +8023,61 @@
           "quiet"
         ],
         "title": "YearPlanetOut"
+      },
+      "app__api__journey__SpanOut": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "SpanOut"
+      },
+      "app__api__porondam__SpanOut": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "from_before": {
+            "type": "boolean",
+            "title": "From Before"
+          },
+          "continues": {
+            "type": "boolean",
+            "title": "Continues"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "from_before",
+          "continues",
+          "text"
+        ],
+        "title": "SpanOut"
       }
     }
   }

@@ -41,6 +41,7 @@ def test_every_name_exists(lang: Lang) -> None:
         "couple",
         "changes",
         "yearly",
+        "journey",
         "panchanga",
         "baby",
     ],

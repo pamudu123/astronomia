@@ -12,6 +12,10 @@ type Setter = (slot: Slot, context: PageContext | null) => void;
 /** Set by the Assistant. Without it (the assistant is off) pages share nothing. */
 export const PageContextSetter = createContext<Setter>(() => undefined);
 
+/** True where the chat is on (AGENT_URL is set), so a page can offer to ask it something. */
+export const AssistantOn = createContext(false);
+export const useAssistantOn = () => useContext(AssistantOn);
+
 /**
  * Tells the assistant what this page shows (docs/14, section 3). Pages call this with a
  * summary of their result; when the page goes away, the assistant falls back to the page name.

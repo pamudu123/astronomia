@@ -8,6 +8,14 @@ export const PANEL_WIDTH = 400;
 export const PANEL_MIN = 340;
 export const PANEL_MAX = 760;
 
+/** The browser event a page sends to put a question to the assistant (Chat.tsx listens). */
+export const ASK_EVENT = "sidera:ask";
+
+/** Opens the chat panel and asks this question, as if the person had typed it. */
+export function askAssistant(question: string): void {
+  window.dispatchEvent(new CustomEvent<string>(ASK_EVENT, { detail: question }));
+}
+
 /** A panel width inside the limits, leaving at least 40% of the window for the page. */
 export function clampWidth(width: number, viewport: number): number {
   const max = Math.max(PANEL_MIN, Math.min(PANEL_MAX, Math.round(viewport * 0.6)));

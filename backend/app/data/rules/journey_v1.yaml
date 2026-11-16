@@ -1,0 +1,50 @@
+# Life road rules, version 1.
+#
+# PROVISIONAL: these weights have not been confirmed by a practising astrologer yet.
+# They turn the dasha periods, each lord's place in the birth chart, Saturn's Erashtaka and
+# Jupiter's return into one number per month: how easy or hard the road is drawn.
+# Every result carries this version and the provisional flag, so the page can say so.
+
+version: journey_v1
+provisional: true
+
+# Every road is drawn to this many years, whatever the chart says.
+years: 100
+
+# The natural leaning of each planet as a period lord.
+nature:
+  jupiter: 0.4
+  venus: 0.4
+  mercury: 0.2
+  moon: 0.2
+  sun: 0.0
+  mars: -0.15
+  ketu: -0.2
+  saturn: -0.25
+  rahu: -0.3
+
+# Where the lord sits in the birth chart. Rahu and Ketu have no dignity here.
+dignity:
+  exalted: {sun: mesha, moon: vrishabha, mars: makara, mercury: kanya, jupiter: kataka, venus: meena, saturn: tula}
+  debilitated: {sun: tula, moon: vrischika, mars: kataka, mercury: meena, jupiter: makara, venus: kanya, saturn: mesha}
+  weights: {exalted: 0.25, own: 0.15, debilitated: -0.25}
+
+# The lord's house counted from the lagna.
+houses:
+  good: [1, 4, 5, 7, 9, 10, 11]
+  hard: [6, 8, 12]
+  weights: {good: 0.1, hard: -0.15}
+
+# How much each part adds to the month's number, which is then kept within -1 and 1.
+weights:
+  main: 0.8
+  sub: 0.5
+  erashtaka: -0.4
+  guru_return: 0.3
+
+# A period is "good" at or above the first number and "careful" at or below the second.
+tone: {good: 0.2, careful: -0.2}
+
+# Stays of Saturn or Jupiter closer together than this many days count as one stretch,
+# so a short backward step does not break Erashtaka in two.
+join_days: {erashtaka: 300, guru_return: 400}

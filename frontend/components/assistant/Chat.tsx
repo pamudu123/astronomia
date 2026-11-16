@@ -33,7 +33,14 @@ import {
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { CONTEXT_DESCRIPTION, type PageContext, type PageKey, pageFromPath, pageKey } from "@/lib/assistant/context";
 import { pickFollowUps } from "@/lib/assistant/followups";
-import { PANEL_MAX, PANEL_MIN, PANEL_WIDTH, clampWidth, followUpInstructions } from "@/lib/assistant/panel";
+import {
+  ASK_EVENT,
+  PANEL_MAX,
+  PANEL_MIN,
+  PANEL_WIDTH,
+  clampWidth,
+  followUpInstructions,
+} from "@/lib/assistant/panel";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
@@ -212,6 +219,27 @@ function ContextBridge({
   return null;
 }
 
+/**
+ * Questions a page puts to the assistant (askAssistant in lib/assistant/panel.ts): the panel
+ * opens and the question is sent as the person's own message.
+ */
+function AskBridge({ onOpen }: { onOpen: () => void }) {
+  const { copilotkit } = useCopilotKit();
+  useEffect(() => {
+    const onAsk = (event: Event) => {
+      const question = (event as CustomEvent<string>).detail;
+      onOpen();
+      const agent = copilotkit.getAgent(AGENT_ID);
+      if (!agent || !question) return;
+      agent.addMessage({ id: crypto.randomUUID(), role: "user", content: question });
+      void copilotkit.runAgent({ agent });
+    };
+    window.addEventListener(ASK_EVENT, onAsk);
+    return () => window.removeEventListener(ASK_EVENT, onAsk);
+  }, [copilotkit, onOpen]);
+  return null;
+}
+
 /** The width the person last chose, or the default. Storage can be missing or blocked. */
 function savedWidth(): number {
   try {
@@ -312,6 +340,7 @@ export default function Chat({
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);
   }, []);
+  const openPanel = useCallback(() => setOpen(true), []);
   const launcher = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
   // Keyboard: Escape closes; opening moves focus to the input (laptops only, so phones don't
@@ -355,6 +384,7 @@ export default function Chat({
     <CopilotKitProvider runtimeUrl="/api/copilotkit" useSingleEndpoint agentId={AGENT_ID} enableInspector={false}>
       <ContextBridge value={value} t={t} lang={lang} chipsKey={key} />
       <ToolCards lang={lang} t={t.cards} />
+      <AskBridge onOpen={openPanel} />
       <PanelContext value={panel}>
         {/* "dark" switches CopilotKit to light text; assistant.css sets the site colours.
             The panel's width is a CSS variable: CopilotKit reads its width prop only once,

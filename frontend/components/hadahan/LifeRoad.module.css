@@ -1,0 +1,481 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+  --mist: #a6aed0;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.title {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.age {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.age b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--gold-hover);
+}
+
+.age span {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* The road */
+.stage,
+.stageDragging {
+  position: relative;
+  height: clamp(420px, 62vh, 560px);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--night);
+  overflow: hidden;
+  /* A sideways drag travels the road; an up or down swipe still scrolls the page. */
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.stageDragging {
+  cursor: grabbing;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.roadNow {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  font-size: 13px;
+  cursor: default;
+}
+
+.roadNow small {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.roadNow i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.roadNow b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.good {
+  color: var(--teal);
+}
+
+.mixed {
+  color: var(--sky);
+}
+
+.careful {
+  color: var(--coral);
+}
+
+.you {
+  color: var(--gold-hover);
+}
+
+.card {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  width: min(380px, calc(100% - 24px));
+  max-height: calc(100% - 64px);
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--panel) 93%, transparent);
+  backdrop-filter: blur(6px);
+  cursor: default;
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pill::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.when {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.cardTitle {
+  font-size: 22px;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.helps {
+  font-weight: 600;
+  color: var(--gold-hover);
+}
+
+.sub {
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.sub b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.ask {
+  display: grid;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.askLabel {
+  font-size: 12px;
+  color: var(--gold);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 4px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--gold);
+  color: var(--gold-hover);
+}
+
+/* Under the road */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.button,
+.buttonMain {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--gold);
+  color: var(--gold-hover);
+}
+
+.buttonMain {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--night);
+  font-weight: 600;
+}
+
+.buttonMain:hover {
+  background: var(--gold-hover);
+}
+
+.hint {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.map {
+  position: relative;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--night-raised);
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.seg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 2px;
+  border-right: 1px solid var(--night);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.seg_good {
+  background: color-mix(in srgb, var(--teal) 30%, var(--panel));
+}
+
+.seg_mixed {
+  background: color-mix(in srgb, var(--sky) 26%, var(--panel));
+}
+
+.seg_careful {
+  background: color-mix(in srgb, var(--coral) 32%, var(--panel));
+}
+
+.era {
+  position: absolute;
+  bottom: 0;
+  height: 7px;
+  background: repeating-linear-gradient(115deg, var(--mist) 0 3px, transparent 3px 6px);
+  opacity: 0.85;
+}
+
+.wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wave polyline {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The far end of the ribbon softens too: no road shows an ending. */
+.mapFade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 9%;
+  background: linear-gradient(to right, transparent, var(--panel));
+  backdrop-filter: blur(1.5px);
+  pointer-events: none;
+}
+
+.todayMark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed var(--ink);
+  opacity: 0.7;
+}
+
+.marker {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--gold-hover);
+  box-shadow: 0 0 10px var(--gold);
+}
+
+.scale {
+  position: relative;
+  height: 16px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.scale span {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.scale span:first-child {
+  transform: none;
+}
+
+.scale span:last-child {
+  transform: translateX(-100%);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.key i {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.keyGood {
+  background: var(--teal);
+}
+
+.keyMixed {
+  background: var(--sky);
+}
+
+.keyCareful {
+  background: var(--coral);
+}
+
+.keyMist {
+  background: repeating-linear-gradient(115deg, var(--mist) 0 3px, transparent 3px 6px);
+}
+
+.key .keyLine {
+  height: 0;
+  border-top: 2px solid var(--ink);
+  border-radius: 0;
+}
+
+.small {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* On a phone the card sits under the road instead of over it. */
+@media (max-width: 720px) {
+  .panel {
+    padding: 20px;
+  }
+
+  .stage,
+  .stageDragging {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .canvas {
+    position: static;
+    height: 300px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+  }
+
+  .card {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-top: 12px;
+    backdrop-filter: none;
+  }
+
+  .hint {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  .seg {
+    font-size: 9px;
+  }
+}
