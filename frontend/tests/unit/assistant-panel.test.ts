@@ -32,4 +32,11 @@ describe("followUpInstructions", () => {
     expect(text.indexOf("last answer")).toBeLessThan(text.indexOf("write in English"));
     expect(followUpInstructions("si")).toContain("write in Sinhala, the page's language");
   });
+
+  it("asks only for fully answerable questions, and allows none", () => {
+    const text = followUpInstructions("en");
+    expect(text).toContain("answer in full");
+    expect(text).toContain("details they haven't entered");
+    expect(text).toContain("empty list");
+  });
 });

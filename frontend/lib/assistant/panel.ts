@@ -29,5 +29,9 @@ export function followUpInstructions(lang: Locale): string {
     "Each suggestion is the person's own next question to Astro, in the first person (I, my, we, our),",
     'never addressed to them: no "you", "your", "Would you like", "Do you want".',
     "Use the same short text for title and message, at most 10 words.",
+    // No fixed count (CopilotKit is told "at least 0"): only what Astro can fully answer.
+    "Suggest only questions Astro can answer in full from the page on screen, the site's tools or its background notes,",
+    "with what the person has already given: nothing that needs details they haven't entered or facts the site can't work out.",
+    "Usually one to three. If none can be answered in full, call the tool with an empty list.",
   ].join(" ");
 }
