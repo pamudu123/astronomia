@@ -117,8 +117,8 @@ html.sidera-resizing body {
 /* The panel: a night sky with a faint glow rising from the bottom, like the site's hero. */
 .assistant-theme .copilotKitSidebar {
   background:
-    radial-gradient(120% 45% at 50% 105%, rgb(127 167 217 / 16%), transparent 70%),
-    radial-gradient(90% 30% at 85% 100%, rgb(201 164 92 / 10%), transparent 70%),
+    radial-gradient(120% 45% at 50% 105%, color-mix(in srgb, var(--sky) 16%, transparent), transparent 70%),
+    radial-gradient(90% 30% at 85% 100%, rgb(var(--glow) / 10%), transparent 70%),
     var(--night-raised);
   border-color: var(--line-soft);
   box-shadow: -12px 0 40px rgb(0 0 0 / 35%);
@@ -251,7 +251,7 @@ html[lang="si"] .sidera-welcome-hero h3 {
   padding: 10px 16px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgb(19 26 58 / 85%);
+  background: color-mix(in srgb, var(--panel-raised) 85%, transparent);
   color: var(--ink);
   font-size: 0.9rem;
   line-height: 1.35;
@@ -289,9 +289,9 @@ html[lang="si"] .sidera-welcome-hero h3 {
 }
 
 .assistant-theme .copilotKitInput:focus-within {
-  border-color: rgb(127 167 217 / 55%);
+  border-color: color-mix(in srgb, var(--gold) 55%, transparent);
   box-shadow:
-    0 0 0 3px rgb(127 167 217 / 12%),
+    0 0 0 3px rgb(var(--glow) / 12%),
     0 6px 24px rgb(0 0 0 / 28%);
 }
 
@@ -308,8 +308,8 @@ html[lang="si"] .sidera-welcome-hero h3 {
 
 /* Send: brass when there is something to send, a quiet circle when empty. */
 .assistant-theme [data-testid="copilot-send-button"] {
-  background: var(--gold);
-  color: var(--night);
+  background: var(--gold-fill);
+  color: var(--on-gold);
 }
 
 .assistant-theme [data-testid="copilot-send-button"]:hover:not(:disabled) {

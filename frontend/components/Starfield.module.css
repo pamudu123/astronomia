@@ -1,4 +1,5 @@
 .field {
+  display: var(--hero-media);
   position: absolute;
   inset: 0;
   width: 100%;
