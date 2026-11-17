@@ -10,11 +10,21 @@ import { hasSavedReports, onSavedChange } from "@/lib/account";
  * cookie the backend sets, so showing it never wakes the backend. Visitors who never saved
  * anything see no change.
  */
-export function MyReportsLink({ href, label, className }: { href: string; label: string; className: string }) {
+export function MyReportsLink({
+  href,
+  label,
+  className,
+  active = false,
+}: {
+  href: string;
+  label: string;
+  className: string;
+  active?: boolean;
+}) {
   const show = useSyncExternalStore(onSavedChange, hasSavedReports, () => false);
   if (!show) return null;
   return (
-    <Link href={href} className={className} data-my-reports>
+    <Link href={href} className={className} aria-current={active ? "page" : undefined} data-my-reports>
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 18 18" fill="currentColor">
         <path d="M4.5 2.5h9v13L9 12l-4.5 3.5z" />
       </svg>

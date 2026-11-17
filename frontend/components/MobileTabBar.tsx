@@ -18,7 +18,7 @@ type Props = { lang: Locale; dict: Dictionary };
 /** The All tools page and the tools it leads to beyond the first three tabs; the More tab is lit on them. */
 const MORE_PAGES = ["tools", "nakath", "litha", "avurudu", "first-letters", "baby-names", "porondam/stars", "changes", "forecast", "kendara"];
 
-const isMorePage = (lang: Locale, pathname: string) =>
+export const isMorePage = (lang: Locale, pathname: string) =>
   MORE_PAGES.some((page) => pathname === `/${lang}/${page}` || pathname.startsWith(`/${lang}/${page}/`));
 
 /** The tabs for a given page address. Also the stand-in while the address is not known. */
@@ -57,7 +57,7 @@ function HomeIcon() {
   );
 }
 
-function ChartIcon() {
+export function ChartIcon() {
   return (
     <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.5">
       <rect x="3" y="3" width="16" height="16" />
@@ -66,7 +66,7 @@ function ChartIcon() {
   );
 }
 
-function MoreIcon() {
+export function MoreIcon() {
   return (
     <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.5">
       <rect x="3" y="3" width="6.5" height="6.5" rx="1.5" />
@@ -77,7 +77,7 @@ function MoreIcon() {
   );
 }
 
-function MatchIcon() {
+export function MatchIcon() {
   return (
     <svg aria-hidden="true" width="26" height="22" viewBox="0 0 26 22" fill="none" stroke="currentColor" strokeWidth="1.5">
       <circle cx="9.5" cy="11" r="7" />
