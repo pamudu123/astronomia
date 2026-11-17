@@ -26,7 +26,7 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
           Colour theme lab
         </h1>
         <p className="soft" style={{ marginTop: 8, maxWidth: 640 }}>
-          The current design with the blue swapped for black, three ways. Option 0 is the site as it is now. Only
+          The current design with the blue swapped for black, five ways. Option 0 is the site as it is now. Only
           colours change; layout, fonts and text stay the same. Nothing else in the site is touched.
         </p>
       </div>

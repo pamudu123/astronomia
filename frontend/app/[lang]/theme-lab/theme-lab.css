@@ -3,72 +3,125 @@
    new set of token values, set on <body> whenever a page holds [data-lab-theme]. That also
    re-colours the shared header and footer. The "current" theme sets nothing and shows the site as is. */
 
-/* 1. Black and Brass: Black #0A0A0A, Ivory #F4F1EA, Brass #C9A45C (as today) */
-body:has([data-lab-theme="black"]) {
+/* 1. Black and Crimson: Black #0A0A0A, Bone #EDE6D6, Crimson #E5484D */
+body:has([data-lab-theme="crimson"]) {
   --night: #0a0a0a;
   --night-raised: #101010;
   --panel: #151515;
   --panel-raised: #1f1f1f;
-  --line: #2d2d2d;
+  --line: #2e2e2e;
   --line-soft: #1d1d1d;
+  --gold: #e5484d;
+  --gold-hover: #f0696d;
   --sky: #a4a8ae;
-  --ink-soft: #b1afa9;
+  --ink: #f1ebdd;
+  --ink-soft: #b1ada5;
   --lab-shade: 10 10 10;
-  --lab-hero-filter: grayscale(1) brightness(0.95);
-  --lab-canvas-filter: grayscale(1) contrast(1.05);
-  --lab-mist: #a9a7a1;
   --lab-tab: 16 16 16;
+  --lab-glow: 229 72 77;
+  --lab-hero-filter: grayscale(1) contrast(1.1) brightness(0.9);
+  --lab-canvas-filter: grayscale(1) contrast(1.05);
+  --lab-mist: #aaa69e;
 }
 
-/* 2. Warm Black and Brass: Warm Black #0F0D0B, Soft Ivory #F4EFE4, Brass #C9A45C */
-body:has([data-lab-theme="warm"]) {
-  --night: #0f0d0b;
-  --night-raised: #151210;
-  --panel: #1b1815;
-  --panel-raised: #26221d;
-  --line: #3a342c;
-  --line-soft: #241f1a;
-  --sky: #b5a98f;
-  --ink: #f4efe4;
-  --ink-soft: #b7afa1;
-  --lab-shade: 15 13 11;
-  --lab-hero-filter: grayscale(1) sepia(0.4) brightness(0.9);
+/* 2. Black and Bright Gold: Black #0A0A0A, Ivory #F4F1EA, Bright Gold #E8B84B */
+body:has([data-lab-theme="gold"]) {
+  --night: #0a0a0a;
+  --night-raised: #101010;
+  --panel: #151515;
+  --panel-raised: #1f1f1f;
+  --line: #2f2d28;
+  --line-soft: #1d1c19;
+  --gold: #e8b84b;
+  --gold-hover: #f2cb72;
+  --sky: #a4a8ae;
+  --ink: #f4f1ea;
+  --ink-soft: #b3b0a8;
+  --lab-shade: 10 10 10;
+  --lab-tab: 16 16 16;
+  --lab-glow: 232 184 75;
+  --lab-hero-filter: grayscale(1) sepia(0.25) brightness(0.95);
+  --lab-canvas-filter: grayscale(1) sepia(0.3);
+  --lab-mist: #b0aa9a;
+}
+
+/* 3. Black and Amber: Black #0C0B0A, Warm White #F6F1E7, Amber #F2A93B */
+body:has([data-lab-theme="amber"]) {
+  --night: #0c0b0a;
+  --night-raised: #121110;
+  --panel: #181614;
+  --panel-raised: #221f1c;
+  --line: #322e29;
+  --line-soft: #1f1c19;
+  --gold: #f2a93b;
+  --gold-hover: #f7be63;
+  --sky: #a4a8ae;
+  --ink: #f6f1e7;
+  --ink-soft: #b9b1a3;
+  --lab-shade: 12 11 10;
+  --lab-tab: 18 17 15;
+  --lab-glow: 242 169 59;
+  --lab-hero-filter: grayscale(1) sepia(0.35) brightness(0.95);
   --lab-canvas-filter: grayscale(1) sepia(0.35);
-  --lab-mist: #b3a995;
-  --lab-tab: 21 18 16;
+  --lab-mist: #b6ad9d;
 }
 
-/* 3. Black and Champagne: Black #0B0B0C, White #F6F4EF, Champagne #E2CF9F */
-body:has([data-lab-theme="champagne"]) {
-  --night: #0b0b0c;
-  --night-raised: #111113;
-  --panel: #161618;
-  --panel-raised: #202023;
-  --line: #313134;
-  --line-soft: #1d1d20;
-  --gold: #e2cf9f;
-  --gold-hover: #f0e2bb;
-  --sky: #a9abb0;
-  --ink: #f6f4ef;
-  --ink-soft: #adaaa4;
-  --lab-shade: 11 11 12;
+/* 4. Black and Copper: Black #0B0A09, Bone #EDE6D6, Copper #D9763A */
+body:has([data-lab-theme="copper"]) {
+  --night: #0b0a09;
+  --night-raised: #110f0e;
+  --panel: #171412;
+  --panel-raised: #221e1b;
+  --line: #342d28;
+  --line-soft: #201b18;
+  --gold: #d9763a;
+  --gold-hover: #e6915b;
+  --sky: #a4a8ae;
+  --ink: #eee7d8;
+  --ink-soft: #b4ab9d;
+  --lab-shade: 11 10 9;
+  --lab-tab: 17 15 14;
+  --lab-glow: 217 118 58;
+  --lab-hero-filter: grayscale(1) sepia(0.3) brightness(0.92);
+  --lab-canvas-filter: grayscale(1) sepia(0.3);
+  --lab-mist: #b1a899;
+}
+
+/* 5. Black and Bone, no colour: Black #0A0A0A, White #FFFFFF, Bone #EDE6D6 */
+body:has([data-lab-theme="bone"]) {
+  --night: #0a0a0a;
+  --night-raised: #101010;
+  --panel: #151515;
+  --panel-raised: #1f1f1f;
+  --line: #303030;
+  --line-soft: #1d1d1d;
+  --gold: #ede6d6;
+  --gold-hover: #ffffff;
+  --sky: #a4a8ae;
+  --ink: #ffffff;
+  --ink-soft: #a9a7a1;
+  --lab-shade: 10 10 10;
+  --lab-tab: 16 16 16;
+  --lab-glow: 237 230 214;
   --lab-hero-filter: grayscale(1) brightness(0.95);
   --lab-canvas-filter: grayscale(1) contrast(1.05);
-  --lab-mist: #a9a7a1;
-  --lab-tab: 17 17 19;
+  --lab-mist: #a5a39d;
 }
 
-/* The primary button keeps dark text on the accent. */
-body:has([data-lab-theme="champagne"]) .btn-primary,
-body:has([data-lab-theme="champagne"]) .btn-primary:hover,
-body:has([data-lab-theme="champagne"]) .skip-link {
-  color: #0b0b0c;
+/* Crimson: deep red buttons with white text; links and small accents use the brighter red. */
+body:has([data-lab-theme="crimson"]) .btn-primary {
+  background: #c42b26;
+  color: #fff;
 }
-body:has([data-lab-theme="champagne"]) .lift:hover {
-  box-shadow: 0 12px 32px rgb(226 207 159 / 14%);
+body:has([data-lab-theme="crimson"]) .btn-primary:hover {
+  background: #d83a34;
+  color: #fff;
 }
 
-/* Things the site hardcodes in navy instead of reading a token. Not for the "current" theme. */
+/* Things the site hardcodes in navy or gold instead of reading a token. Not for the "current" theme. */
+body:has([data-lab-theme]:not([data-lab-theme="current"])) .lift:hover {
+  box-shadow: 0 12px 32px rgb(var(--lab-glow) / 16%);
+}
 body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="heroShade"] {
   background: linear-gradient(90deg, rgb(var(--lab-shade) / 60%), rgb(var(--lab-shade) / 0%) 60%);
 }
