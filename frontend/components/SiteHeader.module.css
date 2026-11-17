@@ -50,17 +50,44 @@
   gap: 4px 8px;
 }
 
-.link {
+.link,
+.linkActive {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0 12px;
+  border-radius: 999px;
   color: var(--ink);
   font-weight: 500;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Icons in brass, so each link reads at a glance. */
+.link svg,
+.linkActive svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--gold);
+}
+
+.link:hover {
+  background: color-mix(in srgb, var(--gold) 9%, transparent);
+  color: var(--ink);
+}
+
+/* The page you are on: a soft brass pill. */
+.linkActive,
+.linkActive:hover {
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .mine {
-  gap: 8px;
   color: var(--gold);
 }
 
@@ -165,6 +192,18 @@
 .themeOption[aria-checked="true"] {
   color: var(--gold);
   font-weight: 600;
+}
+
+/* Mid widths: drop the link icons so the links stay on one row with the logo. */
+@media (max-width: 1180px) {
+  .link svg,
+  .linkActive svg {
+    display: none;
+  }
+
+  .mine svg {
+    display: block;
+  }
 }
 
 /* On narrow screens the page links move to the bottom tab bar. */

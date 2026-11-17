@@ -109,6 +109,12 @@ export function PorondamResult({
           </span>
           {person(groom, f.groom, styles.whoGroom)}
         </div>
+        {request && onAgain && (
+          <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
+            {t.again}
+            <ArrowRight />
+          </button>
+        )}
       </section>
 
       {/*

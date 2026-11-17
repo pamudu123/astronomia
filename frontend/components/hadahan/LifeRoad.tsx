@@ -28,6 +28,7 @@ import { type RoadText, drawRoad } from "@/lib/journeyDraw";
 import { type RoadFonts, useRoadTravel } from "@/lib/useRoadTravel";
 
 import styles from "./LifeRoad.module.css";
+import { RoadArrows } from "./RoadArrows";
 
 type Props = {
   lang: Locale;
@@ -257,7 +258,7 @@ function RoadView({
         >
           {text.next} ›
         </button>
-        <span className={styles.hint}>{text.hint}</span>
+        <RoadArrows later={text.later} earlier={text.earlier} onMove={(years) => go(target.current + years)} />
       </div>
 
       <div>

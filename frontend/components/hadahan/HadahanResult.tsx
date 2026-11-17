@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
 import { NextSteps } from "@/components/NextSteps";
+import { ArrowRight } from "@/components/Icons";
 import { ReportButton } from "@/components/ReportButton";
 import { SaveButton } from "@/components/account/SaveButton";
 import { SaveGate } from "@/components/account/SaveGate";
@@ -48,6 +49,8 @@ type Props = {
   /** The birth details. Left out on a shared page: then the result is read only. */
   request?: BirthRequest;
   onEdit?: () => void;
+  /** Starts over with an empty form, for another person. Left out where the result is read only. */
+  onAgain?: () => void;
   /** The yearly forecast link. Left out on shared pages. */
   yearly?: Dictionary["yearly"];
   /** Next steps and Remember my chart. Left out on shared pages. */
@@ -76,6 +79,7 @@ export function HadahanResult({
   saveText,
   request,
   onEdit,
+  onAgain,
   yearly,
   next,
   remember,
@@ -142,6 +146,12 @@ export function HadahanResult({
                 })}
                 hasNames={Boolean(name)}
               />
+            )}
+            {onAgain && (
+              <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
+                {t.again}
+                <ArrowRight />
+              </button>
             )}
           </div>
         )}
