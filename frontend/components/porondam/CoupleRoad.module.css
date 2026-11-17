@@ -1,0 +1,147 @@
+/* What the couple's road adds to the life road's styles (components/hadahan/LifeRoad.module.css). */
+
+.nowRow {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: calc(100% - 24px);
+  cursor: default;
+}
+
+.now {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  font-size: 13px;
+}
+
+.now small {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.now i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.now b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* The two people, one line each, in the card. */
+.pair {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.pair li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 10px;
+  font-size: 14px;
+}
+
+.pair b {
+  font-weight: 500;
+}
+
+.pair .word {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.pair .detail {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* The ribbon: one row for each person. */
+.mapRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 10px;
+}
+
+.names {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  max-width: 96px;
+  font-size: 12px;
+}
+
+.names span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameBride {
+  color: var(--teal);
+}
+
+.nameGroom {
+  color: var(--gold);
+}
+
+.map {
+  height: 60px;
+}
+
+.map .seg {
+  bottom: auto;
+  height: 50%;
+}
+
+.map .segGroom {
+  top: 50%;
+}
+
+.map .segBride {
+  border-bottom: 1px solid var(--night);
+}
+
+.map .era {
+  height: 5px;
+}
+
+.map .eraBride {
+  bottom: 50%;
+}
+
+.scale {
+  grid-column: 2;
+}
+
+.keyThread {
+  background: var(--gold);
+}
+
+.legendKey .keyThread {
+  width: 3px;
+  height: 12px;
+  border-radius: 1px;
+}
+
+@media (max-width: 720px) {
+  .names {
+    max-width: 64px;
+    font-size: 11px;
+  }
+}

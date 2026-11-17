@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from app.api.birth import resolve_birth
 from app.api.charts import EPHEMERIS, HadahanRequest
 from app.api.deps import PlacesDb
+from app.api.porondam import FullPerson, PorondamRequest, QuickPerson, Role
 from app.api.timeresolve import TimeResolveResponse
 from app.engine.chart import Chart, compute_chart
 from app.engine.dasha import YEAR_DAYS, YEARS
@@ -224,3 +225,41 @@ def journey(body: HadahanRequest, db: PlacesDb) -> JourneyResponse:
     return JourneyResponse(
         status="ok", time=birth.time, journey=journey_out(result, chart, now, body.lang)
     )
+
+
+# ---------- the couple's road ----------
+
+
+class CoupleJourneyRequest(PorondamRequest):
+    as_of: dt.datetime | None = None  # "today"; for tests
+
+
+class CoupleJourneyResponse(BaseModel):
+    # "needs_birth" when either person gave a birth star only: dasha periods need the birth time.
+    status: str
+    waiting_for: Role | None = None  # whose birth time needs a clock change choice
+    time: TimeResolveResponse | None = None
+    bride: JourneyOut | None = None
+    groom: JourneyOut | None = None
+
+
+@router.post("/v1/journey/couple", response_model=CoupleJourneyResponse)
+def couple_journey(body: CoupleJourneyRequest, db: PlacesDb) -> CoupleJourneyResponse:
+    """A life road for each of two people, for the porondam page to draw side by side.
+
+    Each road is the one /v1/journey gives for that person alone. Dates are UTC."""
+    people: dict[Role, FullPerson | QuickPerson] = {"bride": body.bride, "groom": body.groom}
+    if any(isinstance(person, QuickPerson) for person in people.values()):
+        return CoupleJourneyResponse(status="needs_birth")
+    now = body.as_of or dt.datetime.now(dt.UTC)
+    roads: dict[Role, JourneyOut] = {}
+    for role, person in people.items():
+        assert isinstance(person, FullPerson)
+        birth = resolve_birth(person, db)
+        if birth.utc is None:
+            return CoupleJourneyResponse(
+                status=birth.time.status, waiting_for=role, time=birth.time
+            )
+        chart = compute_chart(EPHEMERIS, birth.utc, birth.latitude, birth.longitude)
+        roads[role] = journey_out(life_journey(EPHEMERIS, chart), chart, now, body.lang)
+    return CoupleJourneyResponse(status="ok", bride=roads["bride"], groom=roads["groom"])

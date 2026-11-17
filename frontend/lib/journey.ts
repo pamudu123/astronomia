@@ -178,8 +178,8 @@ export function roadWord(quality: number): { word: RoadWord; tone: Tone } {
 }
 
 /** The stop whose card shows at this age, if one is close enough. */
-export function stopNear(road: Road, age: number): RoadStop | null {
-  let near: RoadStop | null = null;
+export function stopNear<Stop extends { y: number }>(road: { stops: Stop[] }, age: number): Stop | null {
+  let near: Stop | null = null;
   let best = STOP_REACH;
   for (const stop of road.stops) {
     const gap = Math.abs(stop.y - age);
@@ -192,7 +192,11 @@ export function stopNear(road: Road, age: number): RoadStop | null {
 }
 
 /** The next stop ahead of (direction 1) or behind (direction -1) an age. */
-export function stopBeside(road: Road, age: number, direction: 1 | -1): RoadStop | null {
+export function stopBeside<Stop extends { y: number }>(
+  road: { stops: Stop[] },
+  age: number,
+  direction: 1 | -1,
+): Stop | null {
   if (direction > 0) return road.stops.find((stop) => stop.y > age + 0.02) ?? null;
   return [...road.stops].reverse().find((stop) => stop.y < age - 0.02) ?? null;
 }

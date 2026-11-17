@@ -1,6 +1,6 @@
 "use client";
 
-import { type KeyboardEvent, type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { useAssistantOn } from "@/components/assistant/PageContext";
@@ -25,6 +25,7 @@ import {
   yearAt,
 } from "@/lib/journey";
 import { type RoadText, drawRoad } from "@/lib/journeyDraw";
+import { type RoadFonts, useRoadTravel } from "@/lib/useRoadTravel";
 
 import styles from "./LifeRoad.module.css";
 
@@ -82,114 +83,41 @@ function RoadView({
   provisional,
 }: Omit<Props, "request"> & { road: Road; provisional: boolean }) {
   const text = t.road;
-  const stage = useRef<HTMLDivElement>(null);
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const title = useRef<HTMLHeadingElement>(null);
   const marker = useRef<HTMLDivElement>(null);
   const map = useRef<HTMLDivElement>(null);
-  // Where the viewer is and where they are heading, in years of age. Kept outside React so
-  // moving along the road does not re-render the page on every frame.
-  const pos = useRef(road.today);
-  const target = useRef(road.today);
-  const frame = useRef(0);
-  const drag = useRef<{ x: number; y: number } | null>(null);
   const [view, setView] = useState<View>(() => viewAt(road, road.today));
-  const [dragging, setDragging] = useState(false);
   const canAsk = useAssistantOn();
 
-  const paint = useCallback(() => {
-    const element = canvas.current;
-    const holder = stage.current;
-    if (!element || !holder) return;
-    // The canvas fills the stage on a laptop and sits above the card on a phone.
-    const { width, height } = element.getBoundingClientRect();
-    if (width < 1 || height < 1) return;
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
-    if (element.width !== Math.round(width * ratio) || element.height !== Math.round(height * ratio)) {
-      element.width = Math.round(width * ratio);
-      element.height = Math.round(height * ratio);
-    }
-    const context = element.getContext("2d");
-    if (!context) return;
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    const words: RoadText = {
-      fonts: {
-        display: title.current ? getComputedStyle(title.current).fontFamily : "serif",
-        body: getComputedStyle(holder).fontFamily,
-      },
-      planet: (lord) => labels.planet[lord],
-      sky: (lord) => fill(text.period, { planet: labels.planet[lord].name }),
-      short: (kind) => text.short[kind as keyof typeof text.short] ?? "",
-    };
-    // On a wide stage the card covers the left, so the road sits to the right of it.
-    const centre = width > 720 ? Math.min(0.62, (400 + (width - 400) / 2) / width) : 0.5;
-    const blur = drawRoad(context, width, height, road, pos.current, words, centre);
-    element.style.filter = blur ? `blur(${blur}px)` : "none";
-    if (marker.current) marker.current.style.left = `${(pos.current / ROAD_YEARS) * 100}%`;
-    const next = viewAt(road, pos.current);
-    setView((current) => (current.key === next.key ? current : next));
-  }, [road, labels, text]);
-
-  const go = useCallback(
-    (age: number) => {
-      target.current = clamp(age, 0, road.last);
-      const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const tick = () => {
-        const gap = target.current - pos.current;
-        if (still || Math.abs(gap) < 0.003) {
-          pos.current = target.current;
-          frame.current = 0;
-        } else {
-          pos.current += gap * 0.12;
-          frame.current = requestAnimationFrame(tick);
-        }
-        paint();
+  const draw = useCallback(
+    (context: CanvasRenderingContext2D, width: number, height: number, at: number, fonts: RoadFonts) => {
+      const words: RoadText = {
+        fonts,
+        planet: (lord) => labels.planet[lord],
+        sky: (lord) => fill(text.period, { planet: labels.planet[lord].name }),
+        short: (kind) => text.short[kind as keyof typeof text.short] ?? "",
       };
-      if (!frame.current) frame.current = requestAnimationFrame(tick);
+      // On a wide stage the card covers the left, so the road sits to the right of it.
+      const centre = width > 720 ? Math.min(0.62, (400 + (width - 400) / 2) / width) : 0.5;
+      return drawRoad(context, width, height, road, at, words, centre);
     },
-    [road, paint],
+    [road, labels, text],
   );
-
-  useEffect(() => {
-    const element = canvas.current;
-    if (!element) return;
-    const observer = new ResizeObserver(paint);
-    observer.observe(element);
-    // The web fonts can arrive after the first paint.
-    void document.fonts?.ready.then(paint);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame.current);
-      frame.current = 0;
-    };
-  }, [paint]);
-
-  const onKey = (event: KeyboardEvent<HTMLElement>) => {
-    const step = event.shiftKey ? 5 : 0.5;
-    if (event.key === "ArrowUp" || event.key === "ArrowRight") go(target.current + step);
-    else if (event.key === "ArrowDown" || event.key === "ArrowLeft") go(target.current - step);
-    else if (event.key === "Home") go(0);
-    else if (event.key === "End") go(road.last);
-    else return;
-    event.preventDefault();
-  };
-
-  // Dragging the road: left or up moves forward. Vertical swipes on a phone still scroll the page.
-  const onDown = (event: PointerEvent<HTMLDivElement>) => {
-    if ((event.target as HTMLElement).closest("[data-card]")) return;
-    drag.current = { x: event.clientX, y: event.clientY };
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setDragging(true);
-  };
-  const onMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (!drag.current) return;
-    go(target.current + (drag.current.x - event.clientX + (drag.current.y - event.clientY)) * 0.02);
-    drag.current = { x: event.clientX, y: event.clientY };
-  };
-  const onUp = () => {
-    drag.current = null;
-    setDragging(false);
-  };
+  const onMove = useCallback(
+    (at: number) => {
+      if (marker.current) marker.current.style.left = `${(at / ROAD_YEARS) * 100}%`;
+      const next = viewAt(road, at);
+      setView((current) => (current.key === next.key ? current : next));
+    },
+    [road],
+  );
+  // Where the viewer is and where they are heading, in years of age.
+  const { stage, canvas, title, target, go, dragging, onKey, stageHandlers } = useRoadTravel({
+    start: road.today,
+    min: 0,
+    max: road.last,
+    draw,
+    onMove,
+  });
 
   const seek = (event: PointerEvent<HTMLDivElement>) => {
     const box = map.current?.getBoundingClientRect();
@@ -245,11 +173,7 @@ function RoadView({
         tabIndex={0}
         role="group"
         aria-label={text.canvasLabel}
-        onKeyDown={onKey}
-        onPointerDown={onDown}
-        onPointerMove={onMove}
-        onPointerUp={onUp}
-        onPointerCancel={onUp}
+        {...stageHandlers}
       >
         <canvas ref={canvas} className={styles.canvas} aria-hidden="true" />
         <p className={`${styles.roadNow} ${styles[quality.tone]}`} data-card="now">

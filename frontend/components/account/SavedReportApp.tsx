@@ -109,6 +109,7 @@ export function SavedReportApp({ lang, id, dict }: Props) {
           share={dict.share}
           request={matchOf(request.match)}
           timeline={dict.porondam.timeline}
+          road={{ text: dict.porondam.road, words: dict.hadahan.result.road }}
         />
       )}
     </>

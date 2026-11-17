@@ -434,6 +434,48 @@
       "dashaQuick": "Dasha periods need the full birth details.",
       "note": "These are dates only. How to read them for a marriage is waiting for an astrologer's confirmation. Dates are in UTC."
     },
+    "road": {
+      "title": "Your road together",
+      "lead": "Both life roads side by side: {bride} on the left, {groom} on the right. They run apart before today and together after it. Each side is wide and lit where that person's going is good, narrow and broken where it is hard.",
+      "canvasLabel": "Two night roads running toward the horizon, one for each person. Each is wide and lit in good years and narrow, dark and broken in hard years. Signposts mark major years.",
+      "mapLabel": "Position on the couple's road, by year",
+      "ages": "{bride} {brideAge} · {groom} {groomAge}",
+      "together": "Together",
+      "todayTitle": "Today: where your roads meet",
+      "todayText": "From here the two roads are drawn side by side, tied by a gold thread.",
+      "phases": {
+        "both_good": {
+          "title": "Both roads are clear",
+          "text": "A good stretch for both of you. A time to build, save and plan ahead."
+        },
+        "both_hard": {
+          "title": "Both roads are rough",
+          "text": "A hard stretch for both of you at once. Keep plans small and be patient with each other."
+        },
+        "one_hard": {
+          "title": "{name}'s road is rough",
+          "text": "{other}'s road is easier here, so {other} can carry more of the load."
+        },
+        "steady": {
+          "title": "Steady going",
+          "text": "Neither road is hard here. An ordinary, workable stretch."
+        }
+      },
+      "bothMistTitle": "Erashtaka for both",
+      "bothMistText": "Both of you are in Erashtaka at the same time, until {to}. The road is misty on both sides.",
+      "bothMistHelps": "Plan slowly, avoid new debt, and be patient with each other.",
+      "bothMistShort": "Both in Erashtaka",
+      "person": "{name}, {age}",
+      "inMist": "{period}, in Erashtaka",
+      "legendThread": "The gold thread ties the two roads from today",
+      "note": "The roads describe general conditions for each person. They do not predict events, health or how long a life is, and they do not judge the match: every road is drawn to the elder's 100th year.",
+      "questions": [
+        "What should we focus on in this time?",
+        "Which of us needs more support here?",
+        "When is the next good stretch for both of us?"
+      ],
+      "askContext": "On our couple's road I am looking at {year}: the bride is in the {brideMain} main period and the groom is in the {groomMain} main period. {question}"
+    },
     "wedding": {
       "title": "Wedding nakath for this couple",
       "lead": "Dates and times that pass the nakath rules for the engagement, the poruwa ceremony and the homecoming, from both birth stars. Each one says why.",
