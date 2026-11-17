@@ -22,7 +22,7 @@ export default async function ThemedPage({ params, searchParams }: PageProps<"/[
 
   const { default: Page } = await entry.load();
   return (
-    <div data-lab-theme={theme.id}>
+    <div data-lab-theme={theme.id} data-lab-hero={theme.hero}>
       <LabBar lang={lang} theme={theme} page={entry.id} />
       <Page params={Promise.resolve({ lang })} searchParams={searchParams} />
     </div>

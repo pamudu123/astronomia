@@ -1,31 +1,12 @@
 /* Colour theme lab. Throwaway test styles, only loaded by the theme-lab pages.
    Every site style reads the tokens in globals.css (--night, --ink, --gold ...), so a sample is a
    new set of token values, set on <body> whenever a page holds [data-lab-theme]. That also
-   re-colours the shared header and footer. The "current" theme sets nothing and shows the site as is. */
+   re-colours the shared header and footer.
+   D is the chosen dark theme. The light themes use a deep bronze for text and links (bright gold is too
+   pale on a light page) and keep bright gold, with dark text, for the main buttons. */
 
-/* 1. Black and Crimson: Black #0A0A0A, Bone #EDE6D6, Crimson #E5484D */
-body:has([data-lab-theme="crimson"]) {
-  --night: #0a0a0a;
-  --night-raised: #101010;
-  --panel: #151515;
-  --panel-raised: #1f1f1f;
-  --line: #2e2e2e;
-  --line-soft: #1d1d1d;
-  --gold: #e5484d;
-  --gold-hover: #f0696d;
-  --sky: #a4a8ae;
-  --ink: #f1ebdd;
-  --ink-soft: #b1ada5;
-  --lab-shade: 10 10 10;
-  --lab-tab: 16 16 16;
-  --lab-glow: 229 72 77;
-  --lab-hero-filter: grayscale(1) contrast(1.1) brightness(0.9);
-  --lab-canvas-filter: grayscale(1) contrast(1.05);
-  --lab-mist: #aaa69e;
-}
-
-/* 2. Black and Bright Gold: Black #0A0A0A, Ivory #F4F1EA, Bright Gold #E8B84B */
-body:has([data-lab-theme="gold"]) {
+/* D. Dark: Black #0A0A0A, Ivory #F4F1EA, Bright Gold #E8B84B */
+body:has([data-lab-theme="dark"]) {
   --night: #0a0a0a;
   --night-raised: #101010;
   --panel: #151515;
@@ -45,104 +26,131 @@ body:has([data-lab-theme="gold"]) {
   --lab-mist: #b0aa9a;
 }
 
-/* 3. Black and Amber: Black #0C0B0A, Warm White #F6F1E7, Amber #F2A93B */
-body:has([data-lab-theme="amber"]) {
-  --night: #0c0b0a;
-  --night-raised: #121110;
-  --panel: #181614;
-  --panel-raised: #221f1c;
-  --line: #322e29;
-  --line-soft: #1f1c19;
-  --gold: #f2a93b;
-  --gold-hover: #f7be63;
-  --sky: #a4a8ae;
-  --ink: #f6f1e7;
-  --ink-soft: #b9b1a3;
-  --lab-shade: 12 11 10;
-  --lab-tab: 18 17 15;
-  --lab-glow: 242 169 59;
-  --lab-hero-filter: grayscale(1) sepia(0.35) brightness(0.95);
-  --lab-canvas-filter: grayscale(1) sepia(0.35);
-  --lab-mist: #b6ad9d;
-}
-
-/* 4. Black and Copper: Black #0B0A09, Bone #EDE6D6, Copper #D9763A */
-body:has([data-lab-theme="copper"]) {
-  --night: #0b0a09;
-  --night-raised: #110f0e;
-  --panel: #171412;
-  --panel-raised: #221e1b;
-  --line: #342d28;
-  --line-soft: #201b18;
-  --gold: #d9763a;
-  --gold-hover: #e6915b;
-  --sky: #a4a8ae;
-  --ink: #eee7d8;
-  --ink-soft: #b4ab9d;
-  --lab-shade: 11 10 9;
-  --lab-tab: 17 15 14;
-  --lab-glow: 217 118 58;
-  --lab-hero-filter: grayscale(1) sepia(0.3) brightness(0.92);
+/* Light themes share these. */
+body:has([data-lab-theme="ivory"]),
+body:has([data-lab-theme="ivory-light"]),
+body:has([data-lab-theme="white"]),
+body:has([data-lab-theme="stone"]) {
+  color-scheme: light;
+  --gold: #8a6212;
+  --gold-hover: #6f4e0f;
+  --sky: #5f6a73;
+  --teal: #3d7059;
+  --coral: #b04a2a;
+  --ink: #0a0a0a;
+  --ink-soft: #5a564e;
+  --lab-shade: 10 10 10;
+  --lab-glow: 138 98 18;
+  --lab-hero-filter: grayscale(1) sepia(0.25) brightness(0.95);
   --lab-canvas-filter: grayscale(1) sepia(0.3);
-  --lab-mist: #b1a899;
+  --lab-mist: #6d6a62;
 }
 
-/* 5. Black and Bone, no colour: Black #0A0A0A, White #FFFFFF, Bone #EDE6D6 */
-body:has([data-lab-theme="bone"]) {
+/* Light 1 and 2: Ivory #F4F1EA */
+body:has([data-lab-theme="ivory"]),
+body:has([data-lab-theme="ivory-light"]) {
+  --night: #f4f1ea;
+  --night-raised: #ebe5d7;
+  --panel: #fbf9f4;
+  --panel-raised: #ffffff;
+  --line: #d9d1bf;
+  --line-soft: #e6e0d1;
+  --lab-tab: 251 249 244;
+}
+
+/* Light 3: Crisp White #FFFFFF */
+body:has([data-lab-theme="white"]) {
+  --night: #ffffff;
+  --night-raised: #f6f5f1;
+  --panel: #f8f7f3;
+  --panel-raised: #ffffff;
+  --line: #dedbd0;
+  --line-soft: #ebe9e2;
+  --lab-tab: 255 255 255;
+}
+
+/* Light 4: Stone #E8E3D6, with a deeper bronze to keep the text readable */
+body:has([data-lab-theme="stone"]) {
+  --night: #e8e3d6;
+  --night-raised: #ded8c9;
+  --panel: #f1ede2;
+  --panel-raised: #f8f5ec;
+  --line: #cfc7b3;
+  --line-soft: #dbd4c3;
+  --gold: #7a5410;
+  --gold-hover: #5f410c;
+  --ink-soft: #524e46;
+  --lab-tab: 241 237 226;
+}
+
+/* The main buttons are bright gold with near-black text in every theme. */
+body:has([data-lab-theme]) .btn-primary,
+body:has([data-lab-theme]) .skip-link,
+body:has([data-lab-theme]) [class*="SiteHeader-module__"][class*="languageActive"] {
+  background: #e8b84b;
+  color: #0a0a0a;
+}
+body:has([data-lab-theme]) .btn-primary:hover,
+body:has([data-lab-theme]) [class*="SiteHeader-module__"][class*="languageActive"]:hover {
+  background: #f2cb72;
+  color: #0a0a0a;
+}
+body:has([data-lab-theme]) .lift:hover {
+  box-shadow: 0 12px 32px rgb(var(--lab-glow) / 16%);
+}
+
+/* The hero. Dark band: the hero keeps the dark theme colours and sits under the header, not behind it.
+   Light hero: no photo, no stars. */
+body:has([data-lab-hero="dark"]) [class*="heroWrap"] {
   --night: #0a0a0a;
   --night-raised: #101010;
   --panel: #151515;
   --panel-raised: #1f1f1f;
-  --line: #303030;
-  --line-soft: #1d1d1d;
-  --gold: #ede6d6;
-  --gold-hover: #ffffff;
+  --line: #2f2d28;
+  --line-soft: #1d1c19;
+  --gold: #e8b84b;
+  --gold-hover: #f2cb72;
   --sky: #a4a8ae;
-  --ink: #ffffff;
-  --ink-soft: #a9a7a1;
-  --lab-shade: 10 10 10;
-  --lab-tab: 16 16 16;
-  --lab-glow: 237 230 214;
-  --lab-hero-filter: grayscale(1) brightness(0.95);
-  --lab-canvas-filter: grayscale(1) contrast(1.05);
-  --lab-mist: #a5a39d;
+  --teal: #7fd6c2;
+  --coral: #f08a5d;
+  --ink: #f4f1ea;
+  --ink-soft: #b3b0a8;
+  color: var(--ink);
+  margin-top: 0;
+  padding-top: 0;
+}
+body:has([data-lab-hero="dark"]) [class*="heroFade"] {
+  display: none;
+}
+body:has([data-lab-hero="light"]) [class*="heroSky"],
+body:has([data-lab-hero="light"]) [class*="heroShade"],
+body:has([data-lab-hero="light"]) [class*="heroFade"],
+body:has([data-lab-hero="light"]) [class*="Starfield-module__"] {
+  display: none;
+}
+body:has([data-lab-hero="light"]) [class*="heroWrap"] {
+  border-bottom: 1px solid var(--line-soft);
 }
 
-/* Crimson: deep red buttons with white text; links and small accents use the brighter red. */
-body:has([data-lab-theme="crimson"]) .btn-primary {
-  background: #c42b26;
-  color: #fff;
-}
-body:has([data-lab-theme="crimson"]) .btn-primary:hover {
-  background: #d83a34;
-  color: #fff;
-}
-
-/* Things the site hardcodes in navy or gold instead of reading a token. Not for the "current" theme. */
-body:has([data-lab-theme]:not([data-lab-theme="current"])) .lift:hover {
-  box-shadow: 0 12px 32px rgb(var(--lab-glow) / 16%);
-}
-body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="heroShade"] {
+/* Things the site hardcodes in navy or gold instead of reading a token. */
+body:has([data-lab-theme]) [class*="heroShade"] {
   background: linear-gradient(90deg, rgb(var(--lab-shade) / 60%), rgb(var(--lab-shade) / 0%) 60%);
 }
 @media (max-width: 860px) {
-  body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="heroShade"] {
+  body:has([data-lab-theme]) [class*="heroShade"] {
     background: rgb(var(--lab-shade) / 60%);
   }
 }
-body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="heroFade"] {
-  background: linear-gradient(rgb(var(--lab-shade) / 0%), var(--night));
-}
-body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="heroSky"] {
+body:has([data-lab-theme]) [class*="heroSky"] {
   filter: var(--lab-hero-filter);
 }
-body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="MobileTabBar-module__"][class$="__bar"] {
-  background: rgb(var(--lab-tab) / 96%);
+body:has([data-lab-theme]) [class*="MobileTabBar-module__"][class$="__bar"] {
+  background: rgb(var(--lab-tab) / 97%);
 }
-body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="LifeRoad-module__"][class$="__panel"] {
+body:has([data-lab-theme]) [class*="LifeRoad-module__"][class$="__panel"] {
   --mist: var(--lab-mist);
 }
-body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="LifeRoad-module__"][class$="__canvas"] {
+body:has([data-lab-theme]) [class*="LifeRoad-module__"][class$="__canvas"] {
   filter: var(--lab-canvas-filter) !important; /* the page sets filter: none inline */
 }
 
@@ -236,7 +244,7 @@ body:has([data-lab-theme]:not([data-lab-theme="current"])) [class*="LifeRoad-mod
 }
 .labColors {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
   gap: 8px;
 }
 .labColor {

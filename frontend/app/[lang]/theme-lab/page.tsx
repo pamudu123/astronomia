@@ -26,8 +26,9 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
           Colour theme lab
         </h1>
         <p className="soft" style={{ marginTop: 8, maxWidth: 640 }}>
-          The current design with the blue swapped for black, five ways. Option 0 is the site as it is now. Only
-          colours change; layout, fonts and text stay the same. Nothing else in the site is touched.
+          The dark theme you chose (D) next to four light theme options. Light 1 and 2 use the same ivory and differ in
+          the hero (dark band or light). Light 3 and 4 change the page colour. Only colours change; layout, fonts and
+          text stay the same. Nothing else in the site is touched.
         </p>
       </div>
       <div className="labGrid">
@@ -44,7 +45,7 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
           return (
             <section key={theme.id} className="labCard" style={style}>
               <div>
-                <p style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>{theme.letter === "0" ? "For comparison" : `Sample ${theme.letter}`}</p>
+                <p style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>{theme.letter === "D" ? "Dark theme" : `Light option ${theme.letter}`}</p>
                 <h2 className="display">{theme.name}</h2>
               </div>
               <div className="labColors">
