@@ -267,10 +267,29 @@
   background: var(--gold-fill-hover);
 }
 
-.hint {
+.arrows {
+  display: flex;
+  gap: 8px;
   margin-left: auto;
-  font-size: 13px;
-  color: var(--ink-soft);
+}
+
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-raised);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.arrow:hover {
+  border-color: var(--gold);
+  color: var(--gold-hover);
 }
 
 .map {
@@ -470,10 +489,6 @@
     backdrop-filter: none;
   }
 
-  .hint {
-    flex-basis: 100%;
-    margin-left: 0;
-  }
 
   .seg {
     font-size: 9px;

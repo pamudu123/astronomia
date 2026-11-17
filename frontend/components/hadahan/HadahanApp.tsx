@@ -166,6 +166,14 @@ function HadahanPage({
           fillForm(values);
           setView({ kind: "form" });
         }}
+        onAgain={() => {
+          // A fresh, empty form for someone else's chart.
+          saveDraft(null);
+          saveResult(null);
+          fillForm(EMPTY_FORM);
+          setView({ kind: "form" });
+          window.scrollTo({ top: 0 });
+        }}
       />
     );
   }

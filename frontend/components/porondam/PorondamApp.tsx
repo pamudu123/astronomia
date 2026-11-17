@@ -191,6 +191,7 @@ function PorondamForm({
         onAgain={() => {
           saveSession(PORONDAM_KEY, null);
           setView({ kind: "form" });
+          window.scrollTo({ top: 0 });
         }}
       />
     );

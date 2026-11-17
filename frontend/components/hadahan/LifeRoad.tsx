@@ -333,7 +333,30 @@ function RoadView({
         >
           {text.next} ›
         </button>
-        <span className={styles.hint}>{text.hint}</span>
+        <div className={styles.arrows}>
+          <button
+            type="button"
+            className={styles.arrow}
+            aria-label={text.later}
+            title={text.later}
+            onClick={() => go(target.current + 1)}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className={styles.arrow}
+            aria-label={text.earlier}
+            title={text.earlier}
+            onClick={() => go(target.current - 1)}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div>
