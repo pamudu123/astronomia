@@ -1,37 +1,48 @@
-/** Colour themes being tested. Throwaway: lives only in the theme-lab folder. */
+/** Colour samples being tested. Throwaway: lives only in the theme-lab folder. */
 export const THEMES = [
   {
-    id: "green",
-    letter: "A",
-    name: "Ink Green and Brass",
+    id: "current",
+    letter: "0",
+    name: "Current (Navy and Brass)",
     colors: [
-      { name: "Ink Green", hex: "#0F2A24" },
-      { name: "Ivory", hex: "#F3EBDD" },
-      { name: "Antique Brass", hex: "#B8924A" },
+      { name: "Night Navy", hex: "#0B1026" },
+      { name: "Ivory", hex: "#F4F1EA" },
+      { name: "Brass", hex: "#C9A45C" },
     ],
-    mood: "A leather-bound book. Dark and calm, so your gold artwork matches the accent.",
+    mood: "The site as it is today. Shown for comparison.",
   },
   {
-    id: "parchment",
-    letter: "B",
-    name: "Parchment and Vermilion",
+    id: "black",
+    letter: "1",
+    name: "Black and Brass",
     colors: [
-      { name: "Parchment", hex: "#F2E9D8" },
-      { name: "Ink Brown", hex: "#1F1A16" },
-      { name: "Vermilion", hex: "#B5472F" },
+      { name: "Black", hex: "#0A0A0A" },
+      { name: "Ivory", hex: "#F4F1EA" },
+      { name: "Brass", hex: "#C9A45C" },
     ],
-    mood: "A printed almanac or palm-leaf manuscript. A light site, the boldest change.",
+    mood: "The closest swap: blue becomes neutral black, everything else is the same.",
   },
   {
-    id: "cinnamon",
-    letter: "C",
-    name: "Cinnamon and Saffron",
+    id: "warm",
+    letter: "2",
+    name: "Warm Black and Brass",
     colors: [
-      { name: "Cinnamon", hex: "#241512" },
-      { name: "Warm Cream", hex: "#EFE4CF" },
-      { name: "Saffron", hex: "#D9A441" },
+      { name: "Warm Black", hex: "#0F0D0B" },
+      { name: "Soft Ivory", hex: "#F4EFE4" },
+      { name: "Brass", hex: "#C9A45C" },
     ],
-    mood: "Lamp-lit and temple-warm. Matches the candle photos, the most cultural.",
+    mood: "A black with a hint of brown. Softer and less techy than pure black.",
+  },
+  {
+    id: "champagne",
+    letter: "3",
+    name: "Black and Champagne",
+    colors: [
+      { name: "Black", hex: "#0B0B0C" },
+      { name: "White", hex: "#F6F4EF" },
+      { name: "Champagne", hex: "#E2CF9F" },
+    ],
+    mood: "Black with a pale gold accent. The most luxe and the lightest touch.",
   },
 ] as const;
 

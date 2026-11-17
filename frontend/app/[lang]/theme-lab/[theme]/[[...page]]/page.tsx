@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "@/lib/i18n";
 
 import { LabBar } from "../../LabBar";
-import { LabStyle } from "../../LabStyle";
 import "../../theme-lab.css";
 import { LAB_PAGES, findPage } from "../../pages";
 import { THEMES, findTheme } from "../../themes";
@@ -24,7 +23,6 @@ export default async function ThemedPage({ params, searchParams }: PageProps<"/[
   const { default: Page } = await entry.load();
   return (
     <div data-lab-theme={theme.id}>
-      <LabStyle />
       <LabBar lang={lang} theme={theme} page={entry.id} />
       <Page params={Promise.resolve({ lang })} searchParams={searchParams} />
     </div>

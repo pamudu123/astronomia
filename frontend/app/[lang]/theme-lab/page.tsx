@@ -26,9 +26,8 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
           Colour theme lab
         </h1>
         <p className="soft" style={{ marginTop: 8, maxWidth: 640 }}>
-          Three premium, non-AI palettes tried on the real pages of the site. Each also gets matte styling (no glow,
-          hairline borders, tighter corners) and a more editorial serif. The text and layout stay the same. Nothing else
-          in the site is touched.
+          The current design with the blue swapped for black, three ways. Option 0 is the site as it is now. Only
+          colours change; layout, fonts and text stay the same. Nothing else in the site is touched.
         </p>
       </div>
       <div className="labGrid">
@@ -45,7 +44,7 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
           return (
             <section key={theme.id} className="labCard" style={style}>
               <div>
-                <p style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>Option {theme.letter}</p>
+                <p style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>{theme.letter === "0" ? "For comparison" : `Sample ${theme.letter}`}</p>
                 <h2 className="display">{theme.name}</h2>
               </div>
               <div className="labColors">
