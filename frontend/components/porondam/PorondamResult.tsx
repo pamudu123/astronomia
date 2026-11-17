@@ -27,6 +27,7 @@ import {
 import { WeddingFinder } from "@/components/wedding/WeddingFinder";
 
 import { Check } from "./Check";
+import { CoupleRoad, type CoupleRoadText } from "./CoupleRoad";
 import { CoupleTimeline } from "./CoupleTimeline";
 import { FactorVisual } from "./FactorVisual";
 import { MatchGlance } from "./MatchGlance";
@@ -46,6 +47,8 @@ type Props = {
   request?: PorondamRequest;
   /** Text for "Years ahead for the couple". That section needs the request too. */
   timeline?: Dictionary["porondam"]["timeline"];
+  /** Text for the couple's road. That section needs the request too, with both birth times. */
+  road?: CoupleRoadText;
   /** Text for the wedding nakath finder. Needs the request too. */
   wedding?: Dictionary["porondam"]["wedding"];
   /** Next steps under the match. Left out on shared pages. */
@@ -65,6 +68,7 @@ export function PorondamResult({
   saveText,
   request,
   timeline,
+  road,
   wedding,
   next,
   onAgain,
@@ -292,6 +296,18 @@ export function PorondamResult({
         <CoupleTimeline
           lang={lang}
           t={timeline}
+          labels={labels}
+          request={request}
+          brideName={nameOf(bride, f.bride)}
+          groomName={nameOf(groom, f.groom)}
+        />
+      )}
+
+      {request && road && (
+        <CoupleRoad
+          lang={lang}
+          text={road.text}
+          words={road.words}
           labels={labels}
           request={request}
           brideName={nameOf(bride, f.bride)}

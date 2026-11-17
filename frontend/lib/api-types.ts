@@ -230,6 +230,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/journey/couple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Couple Journey
+         * @description A life road for each of two people, for the porondam page to draw side by side.
+         *
+         *     Each road is the one /v1/journey gives for that person alone. Dates are UTC.
+         */
+        post: operations["couple_journey_v1_journey_couple_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/changes": {
         parameters: {
             query?: never;
@@ -955,6 +977,31 @@ export interface components {
             others: components["schemas"]["OtherOut"][];
             /** Notes */
             notes: string[];
+        };
+        /** CoupleJourneyRequest */
+        CoupleJourneyRequest: {
+            /** Bride */
+            bride: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /** Groom */
+            groom: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+            /** As Of */
+            as_of?: string | null;
+        };
+        /** CoupleJourneyResponse */
+        CoupleJourneyResponse: {
+            /** Status */
+            status: string;
+            /** Waiting For */
+            waiting_for?: ("bride" | "groom") | null;
+            time?: components["schemas"]["TimeResolveResponse"] | null;
+            bride?: components["schemas"]["JourneyOut"] | null;
+            groom?: components["schemas"]["JourneyOut"] | null;
         };
         /** DashaMainOut */
         DashaMainOut: {
@@ -3126,6 +3173,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JourneyResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    couple_journey_v1_journey_couple_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CoupleJourneyRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoupleJourneyResponse"];
                 };
             };
             /** @description Validation Error */
