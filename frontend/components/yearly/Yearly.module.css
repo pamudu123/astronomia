@@ -78,7 +78,8 @@
 }
 
 .segment:nth-child(even) {
-  background: var(--gold);
+  background: var(--gold-fill);
+  color: var(--on-gold);
 }
 
 .ticks {

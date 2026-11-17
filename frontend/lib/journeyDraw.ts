@@ -19,13 +19,14 @@ import {
 
 type Rgb = [number, number, number];
 
-// The site's colours (app/globals.css), as numbers so they can be mixed.
-const TONE: Record<Tone, Rgb> = { good: [127, 214, 194], mixed: [127, 167, 217], careful: [240, 138, 93] };
-const NIGHT: Rgb = [11, 16, 38];
-const MIST: Rgb = [166, 174, 208];
-const GOLD: Rgb = [201, 164, 92];
+// The site's dark theme colours (app/globals.css), as numbers so they can be mixed. The road is a
+// night scene, so it keeps these in the light theme too, as a dark window inside a light card.
+const TONE: Record<Tone, Rgb> = { good: [127, 214, 194], mixed: [164, 168, 174], careful: [240, 138, 93] };
+const NIGHT: Rgb = [12, 11, 10];
+const MIST: Rgb = [176, 170, 154];
+const GOLD: Rgb = [232, 184, 75];
 const INK: Rgb = [244, 241, 234];
-const DARK: Rgb = [4, 5, 12];
+const DARK: Rgb = [4, 4, 4];
 const LAMP: Rgb = [255, 226, 160];
 
 const NEAR = 0.35; // years ahead of the viewer where the road meets the bottom edge
@@ -215,8 +216,8 @@ export function drawRoad(
     const ground = mix(mix(mix(NIGHT, tone, (stripe ? 0.13 : 0.09) + 0.1 * good), DARK, hard * 0.55), MIST, era * 0.2);
     ctx.fillStyle = css(far(ground, year));
     ctx.fillRect(0, yF, W, yN - yF + 1);
-    const base: Rgb = stripe ? [19, 26, 58] : [23, 31, 68];
-    const surface = mix(mix(base, [50, 64, 126], good * 0.6), [8, 9, 19], hard * 0.7);
+    const base: Rgb = stripe ? [22, 21, 19] : [27, 26, 23];
+    const surface = mix(mix(base, [64, 61, 54], good * 0.6), [8, 8, 7], hard * 0.7);
     ctx.fillStyle = css(far(mix(surface, MIST, era * 0.12), year));
     quad(xF - wF, yF, xF + wF, yF, xN + wN, yN + 1, xN - wN, yN + 1);
     const fade = 1 - fadeAt(year);
@@ -308,7 +309,7 @@ export function drawRoad(
       ctx.stroke();
       const rx = x + (h3 * 2 - 1) * w * 0.8;
       const rr = w * (0.06 + 0.08 * h1);
-      ctx.fillStyle = css([7, 9, 20]);
+      ctx.fillStyle = css([7, 7, 6]);
       ctx.beginPath();
       ctx.moveTo(rx - rr, yb);
       ctx.lineTo(rx - rr * 0.6, yb - rr * 0.8);
@@ -329,7 +330,7 @@ export function drawRoad(
       const mw = w * 0.24;
       const mh = w * 0.3;
       const mx = x + w * 1.14;
-      ctx.fillStyle = css([27, 36, 80]);
+      ctx.fillStyle = css([36, 34, 30]);
       ctx.strokeStyle = css(MIST, 0.7);
       ctx.lineWidth = Math.max(0.8, w * 0.012);
       ctx.beginPath();
@@ -360,7 +361,7 @@ export function drawRoad(
         ctx.fillStyle = css(mix(tone, NIGHT, 0.35));
         ctx.fillRect(x - w * 1.22 - pw / 2, yb - gh, pw, gh);
         ctx.fillRect(x + w * 1.22 - pw / 2, yb - gh, pw, gh);
-        ctx.fillStyle = css([19, 26, 58]);
+        ctx.fillStyle = css([22, 21, 19]);
         ctx.strokeStyle = css(tone);
         ctx.lineWidth = Math.max(1, w * 0.02);
         ctx.fillRect(x - w * 1.32, yb - gh - bh, w * 2.64, bh);

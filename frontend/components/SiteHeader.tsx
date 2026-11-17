@@ -9,6 +9,7 @@ import { Logo } from "./Icons";
 import { LanguageLinks, LanguageSwitch } from "./LanguageSwitch";
 import { MobileTabBar, MobileTabs } from "./MobileTabBar";
 import styles from "./SiteHeader.module.css";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 export function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   return (
@@ -39,6 +40,7 @@ export function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         <Suspense fallback={<LanguageLinks current={lang} label={dict.nav.language} pathname={`/${lang}`} />}>
           <LanguageSwitch current={lang} label={dict.nav.language} />
         </Suspense>
+        <ThemeSwitch t={dict.nav} />
       </nav>
       <Suspense fallback={<MobileTabs lang={lang} dict={dict} pathname="" />}>
         <MobileTabBar lang={lang} dict={dict} />

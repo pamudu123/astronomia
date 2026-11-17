@@ -1,6 +1,6 @@
 # Design
 
-Visual design work for the Astronomia website (night sky look: deep indigo, soft gold, teal and coral accents).
+Visual design work for the Astronomia website (night sky look in black and bright gold, with an ivory light theme; teal and coral accents).
 
 The screens live on a design canvas: https://claude.ai/artifact/7p29bNJpsgp6ZbZSVxYFWX (private, share it from the page's Share menu).
 
@@ -13,9 +13,9 @@ The site is branded **Sidera**, with the tagline *The sky calculated* (domain id
 | Logo | Two crossing orbits around a four pointed star, with a planet on the solid orbit. `Logo` in `frontend/components/Icons.tsx` |
 | Small icon | Below about 48 px, use the bold single orbit (same tilt and planet position). `frontend/app/icon.svg` is the favicon |
 | Tagline | Two lines, no punctuation: "The sky" in the display serif over "calculated" in mono brass. On one line, separate the parts with a gap or thin rule |
-| Colours | Night navy `#0b1026`, brass `#c9a45c` (the `--gold` token), sky blue `#7fa7d9` (`--sky`), starlight `#f4f1ea` (`--ink`). Teal and coral stay for results |
+| Colours | Two themes; the site follows the device setting unless the visitor picks one in the header. Dark: black `#0a0a0a`, ivory `#f4f1ea` text, bright gold `#e8b84b`. Light: ivory `#f4f1ea`, near-black `#0a0a0a` text, bronze `#8a6212` for gold text and links (bright gold is too pale on ivory). Filled buttons and chips are bright gold with dark text in both (`--gold-fill`, `--on-gold`). Teal and coral stay for results. The tokens live in `frontend/app/globals.css` |
 | Fonts | Marcellus for display, DM Sans for body, JetBrains Mono (`.mono`) for calculated values such as degrees and times |
-| Avoid | Purple nebula gradients, glows, crystal balls and other mystic clichés |
+| Avoid | Purple nebula gradients, glows, crystal balls and other mystic clichés. Blue: it reads as a generic tech site |
 
 The logo story, for an About page: the two rings are great circles of the sky. Where they cross lie the points astronomers have measured for thousands of years, from the equinoxes to the lunar nodes, Rahu and Ketu.
 

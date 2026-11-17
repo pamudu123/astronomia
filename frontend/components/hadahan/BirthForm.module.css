@@ -157,7 +157,7 @@
 }
 
 .optionActive {
-  background: rgb(201 164 92 / 14%);
+  background: rgb(var(--glow) / 14%);
 }
 
 .optionMeta {

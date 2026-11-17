@@ -1,19 +1,14 @@
-/* Sidera design tokens (night sky look). See design/README.md for the brand rules.
-   --gold holds the brass accent; the name is kept so existing styles keep working. */
+/* Sidera design tokens. See design/README.md for the brand rules.
+   Two themes: dark (black and bright gold) and light (ivory and bronze). The site follows the
+   device setting unless the visitor picks one; then <html> carries data-theme="light" or "dark",
+   set before the page paints by the script in app/[lang]/layout.tsx.
+   --gold is the accent for text, lines and icons (bronze in light, where bright gold is too pale to read).
+   --gold-fill and --on-gold are for filled buttons, chips and badges, which stay bright gold with dark
+   text in both themes. The name --gold is kept so existing styles keep working. */
 :root {
-  --night: #0b1026;
-  --night-raised: #0e1430;
-  --panel: #131a3a;
-  --panel-raised: #1b2450;
-  --line: #2a3364;
-  --line-soft: #1b2450;
-  --gold: #c9a45c;
-  --gold-hover: #ddbf83;
-  --sky: #7fa7d9;
-  --teal: #7fd6c2;
-  --coral: #f08a5d;
-  --ink: #f4f1ea;
-  --ink-soft: #b4b9d6;
+  --gold-fill: #e8b84b;
+  --gold-fill-hover: #f2cb72;
+  --on-gold: #0a0a0a;
 
   --font-display: var(--font-marcellus), var(--font-serif-sinhala), serif;
   --font-body: var(--font-dm-sans), var(--font-sans-sinhala), system-ui, sans-serif;
@@ -28,6 +23,88 @@
   --header-height: 92px;
 }
 
+/* Dark: Black #0a0a0a, ivory #f4f1ea, bright gold #e8b84b. The default before any preference is known. */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --night: #0a0a0a;
+  --night-raised: #101010;
+  --panel: #151515;
+  --panel-raised: #1f1f1f;
+  --line: #2f2d28;
+  --line-soft: #1d1c19;
+  --gold: #e8b84b;
+  --gold-hover: #f2cb72;
+  --sky: #a4a8ae;
+  --teal: #7fd6c2;
+  --coral: #f08a5d;
+  --ink: #f4f1ea;
+  --ink-soft: #b3b0a8;
+  --mist: #b0aa9a;
+  /* Hover glow, as "r g b" so it can take an alpha. */
+  --glow: 232 184 75;
+  /* The home hero: the night sky photo, toned to warm grey, under a black shade. */
+  --hero-media: block;
+  --hero-shade: 10 10 10;
+  --hero-photo: grayscale(1) sepia(0.25) brightness(0.95);
+  --hero-rule: transparent;
+  --tab-bar: rgb(16 16 16 / 96%);
+  --backdrop: rgb(0 0 0 / 70%);
+}
+
+/* Light: Ivory #f4f1ea, near-black #0a0a0a, bronze #8a6212 for text. The hero has no photo.
+   The same values twice: once for a device set to light, once for a visitor who picked light. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --night: #f4f1ea;
+    --night-raised: #ebe5d7;
+    --panel: #fbf9f4;
+    --panel-raised: #ffffff;
+    --line: #d9d1bf;
+    --line-soft: #e6e0d1;
+    --gold: #8a6212;
+    --gold-hover: #6f4e0f;
+    --sky: #5f6a73;
+    --teal: #3d7059;
+    --coral: #b04a2a;
+    --ink: #0a0a0a;
+    --ink-soft: #5a564e;
+    --mist: #8a8478;
+    --glow: 138 98 18;
+    --hero-media: none;
+    --hero-shade: 244 241 234;
+    --hero-photo: none;
+    --hero-rule: var(--line-soft);
+    --tab-bar: rgb(251 249 244 / 97%);
+    --backdrop: rgb(10 10 10 / 45%);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --night: #f4f1ea;
+  --night-raised: #ebe5d7;
+  --panel: #fbf9f4;
+  --panel-raised: #ffffff;
+  --line: #d9d1bf;
+  --line-soft: #e6e0d1;
+  --gold: #8a6212;
+  --gold-hover: #6f4e0f;
+  --sky: #5f6a73;
+  --teal: #3d7059;
+  --coral: #b04a2a;
+  --ink: #0a0a0a;
+  --ink-soft: #5a564e;
+  --mist: #8a8478;
+  --glow: 138 98 18;
+  --hero-media: none;
+  --hero-shade: 244 241 234;
+  --hero-photo: none;
+  --hero-rule: var(--line-soft);
+  --tab-bar: rgb(251 249 244 / 97%);
+  --backdrop: rgb(10 10 10 / 45%);
+}
+
 *,
 *::before,
 *::after {
@@ -35,7 +112,6 @@
 }
 
 html {
-  color-scheme: dark;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -144,13 +220,13 @@ html[lang="si"] .display {
   z-index: 10;
   padding: 10px 16px;
   border-radius: 999px;
-  background: var(--gold);
-  color: var(--night);
+  background: var(--gold-fill);
+  color: var(--on-gold);
   font-weight: 600;
 }
 .skip-link:focus {
   top: 12px;
-  color: var(--night);
+  color: var(--on-gold);
 }
 
 /* Buttons */
@@ -166,12 +242,12 @@ html[lang="si"] .display {
   font-size: 16px;
 }
 .btn-primary {
-  background: var(--gold);
-  color: var(--night);
+  background: var(--gold-fill);
+  color: var(--on-gold);
 }
 .btn-primary:hover {
-  background: var(--gold-hover);
-  color: var(--night);
+  background: var(--gold-fill-hover);
+  color: var(--on-gold);
 }
 .btn-outline {
   border: 1px solid var(--gold);
@@ -230,7 +306,7 @@ html[lang="si"] .display {
 }
 .lift:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgb(201 164 92 / 16%);
+  box-shadow: 0 12px 32px rgb(var(--glow) / 16%);
 }
 
 @media (prefers-reduced-motion: reduce) {
