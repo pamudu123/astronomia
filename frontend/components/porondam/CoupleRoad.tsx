@@ -5,6 +5,7 @@ import { type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { useAssistantOn } from "@/components/assistant/PageContext";
 import road from "@/components/hadahan/LifeRoad.module.css";
+import { RoadArrows } from "@/components/hadahan/RoadArrows";
 import { askAssistant } from "@/lib/assistant/panel";
 import { type CoupleText, drawCoupleRoad } from "@/lib/coupleDraw";
 import {
@@ -305,7 +306,7 @@ function CoupleView({
         >
           {words.next} ›
         </button>
-        <span className={road.hint}>{words.hint}</span>
+        <RoadArrows later={words.later} earlier={words.earlier} onMove={(years) => go(target.current + years)} />
       </div>
 
       <div className={styles.mapRow}>
