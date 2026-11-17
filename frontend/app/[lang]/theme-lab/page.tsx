@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "@/lib/i18n";
 
 import "./theme-lab.css";
+import { LAB_PAGES } from "./pages";
 import { THEMES } from "./themes";
 
 export const metadata = { title: "Colour theme lab", robots: { index: false, follow: false } };
@@ -25,12 +26,13 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
           Colour theme lab
         </h1>
         <p className="soft" style={{ marginTop: 8, maxWidth: 640 }}>
-          Three palettes tried on the real Home and Hadahan pages. Only the colours change, so layout, fonts and
-          text stay the same. Nothing else in the site is touched.
+          Three premium, non-AI palettes tried on the real pages of the site. Each also gets matte styling (no glow,
+          hairline borders, tighter corners) and a more editorial serif. The text and layout stay the same. Nothing else
+          in the site is touched.
         </p>
       </div>
       <div className="labGrid">
-        {THEMES.map((theme, index) => {
+        {THEMES.map((theme) => {
           const [base, second, accent] = theme.colors.map((color) => color.hex);
           const style = {
             "--tc-bg": base,
@@ -43,7 +45,7 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
           return (
             <section key={theme.id} className="labCard" style={style}>
               <div>
-                <p style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>{theme.short}</p>
+                <p style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>Option {theme.letter}</p>
                 <h2 className="display">{theme.name}</h2>
               </div>
               <div className="labColors">
@@ -64,12 +66,15 @@ export default async function ThemeLabIndex({ params }: PageProps<"/[lang]/theme
               </div>
               <p>{theme.mood}</p>
               <div className="labLinks">
-                <Link className="labBtn" href={`/${lang}/theme-lab/${theme.id}`}>
-                  Home {index + 1}
-                </Link>
-                <Link className="labBtn labBtnGhost" href={`/${lang}/theme-lab/${theme.id}/hadahan`}>
-                  Hadahan {index + 1}
-                </Link>
+                {LAB_PAGES.map((page, index) => (
+                  <Link
+                    key={page.id}
+                    className={index === 0 ? "labBtn" : "labBtn labBtnGhost"}
+                    href={["", lang, "theme-lab", theme.id, ...page.path].join("/")}
+                  >
+                    {page.label}
+                  </Link>
+                ))}
               </div>
             </section>
           );

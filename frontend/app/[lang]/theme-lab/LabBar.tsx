@@ -1,41 +1,39 @@
 import Link from "next/link";
 
+import { LAB_PAGES } from "./pages";
 import { THEMES, type Theme } from "./themes";
 
-type Page = "home" | "hadahan";
+const href = (lang: string, theme: string, path: string[]) =>
+  ["", lang, "theme-lab", theme, ...path].join("/");
 
-const PAGES: { id: Page; label: string; path: string }[] = [
-  { id: "home", label: "Home", path: "" },
-  { id: "hadahan", label: "Hadahan", path: "/hadahan" },
-];
-
-/** Sticky bar to jump between the 3 themes and the 2 pages while comparing. Not part of the site. */
-export function LabBar({ lang, theme, page }: { lang: string; theme: Theme; page: Page }) {
-  const base = `/${lang}/theme-lab`;
+/** Sticky bar to jump between the themes and pages while comparing. Not part of the site. */
+export function LabBar({ lang, theme, page }: { lang: string; theme: Theme; page: string }) {
+  const current = LAB_PAGES.find((item) => item.id === page);
   return (
     <nav className="labBar" aria-label="Theme lab">
-      <Link href={base} className="labChip">
+      <Link href={`/${lang}/theme-lab`} className="labChip">
         All themes
       </Link>
       <span className="labGroup">
         <span className="labLabel">Theme</span>
-        {THEMES.map((item, index) => (
+        {THEMES.map((item) => (
           <Link
             key={item.id}
-            href={`${base}/${item.id}${page === "hadahan" ? "/hadahan" : ""}`}
+            href={href(lang, item.id, current?.path ?? [])}
             className="labChip"
             aria-current={item.id === theme.id ? "page" : undefined}
+            title={item.name}
           >
-            {index + 1}
+            {item.letter}
           </Link>
         ))}
       </span>
       <span className="labGroup">
         <span className="labLabel">Page</span>
-        {PAGES.map((item) => (
+        {LAB_PAGES.map((item) => (
           <Link
             key={item.id}
-            href={`${base}/${theme.id}${item.path}`}
+            href={href(lang, theme.id, item.path)}
             className="labChip"
             aria-current={item.id === page ? "page" : undefined}
           >
