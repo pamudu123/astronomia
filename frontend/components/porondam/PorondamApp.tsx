@@ -186,6 +186,7 @@ function PorondamForm({
         saveText={dict.saved}
         request={view.saved.request}
         timeline={t.timeline}
+        road={{ text: t.road, words: dict.hadahan.result.road }}
         wedding={t.wedding}
         next={dict.next}
         onAgain={() => {

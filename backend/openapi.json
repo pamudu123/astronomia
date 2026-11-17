@@ -531,6 +531,48 @@
         }
       }
     },
+    "/v1/journey/couple": {
+      "post": {
+        "tags": [
+          "journey"
+        ],
+        "summary": "Couple Journey",
+        "description": "A life road for each of two people, for the porondam page to draw side by side.\n\nEach road is the one /v1/journey gives for that person alone. Dates are UTC.",
+        "operationId": "couple_journey_v1_journey_couple_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoupleJourneyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoupleJourneyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/changes": {
       "get": {
         "tags": [
@@ -2919,6 +2961,117 @@
         ],
         "title": "CountedOut",
         "description": "A change counted from one sign: the lagna, or the Moon sign for gochara."
+      },
+      "CoupleJourneyRequest": {
+        "properties": {
+          "bride": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Bride"
+          },
+          "groom": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FullPerson"
+              },
+              {
+                "$ref": "#/components/schemas/QuickPerson"
+              }
+            ],
+            "title": "Groom"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bride",
+          "groom"
+        ],
+        "title": "CoupleJourneyRequest"
+      },
+      "CoupleJourneyResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "waiting_for": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bride",
+                  "groom"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waiting For"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeResolveResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bride": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JourneyOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "groom": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JourneyOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "CoupleJourneyResponse"
       },
       "DashaMainOut": {
         "properties": {

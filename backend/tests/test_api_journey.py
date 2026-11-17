@@ -48,3 +48,29 @@ def test_the_road_in_sinhala(client: TestClient) -> None:
 def test_an_unknown_place_is_not_found(client: TestClient) -> None:
     body = {"date": "1995-04-19", "time": "14:35", "place_id": 999999999}
     assert client.post("/v1/journey", json=body).status_code == 404
+
+
+GROOM = {"date": "1992-08-03", "time": "06:10", "place_id": KANDY}
+
+
+def test_a_couple_gets_a_road_each(client: TestClient) -> None:
+    body = client.post(
+        "/v1/journey/couple",
+        json={"bride": BIRTH, "groom": GROOM, "as_of": "2026-11-12T00:00:00Z"},
+    ).json()
+    assert body["status"] == "ok"
+    assert body["bride"] == journey(client)
+    assert body["groom"]["birth"].startswith("1992-08-03")
+    assert body["groom"]["stops"][-1]["kind"] == "onward"
+
+
+def test_a_birth_star_only_person_has_no_road(client: TestClient) -> None:
+    quick = {"nakshatra": "rohini", "pada": 1}
+    body = client.post("/v1/journey/couple", json={"bride": BIRTH, "groom": quick}).json()
+    assert body == {
+        "status": "needs_birth",
+        "waiting_for": None,
+        "time": None,
+        "bride": None,
+        "groom": None,
+    }
