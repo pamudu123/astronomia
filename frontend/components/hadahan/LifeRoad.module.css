@@ -6,7 +6,6 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background: var(--panel);
-  --mist: #a6aed0;
 }
 
 .head {
@@ -257,14 +256,15 @@
 }
 
 .buttonMain {
-  border-color: var(--gold);
-  background: var(--gold);
-  color: var(--night);
+  border-color: var(--gold-fill);
+  background: var(--gold-fill);
+  color: var(--on-gold);
   font-weight: 600;
 }
 
 .buttonMain:hover {
-  background: var(--gold-hover);
+  border-color: var(--gold-fill-hover);
+  background: var(--gold-fill-hover);
 }
 
 .hint {

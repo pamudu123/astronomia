@@ -27,6 +27,9 @@ import {
   MIST,
   NEAR,
   NIGHT,
+  ROAD,
+  ROAD_DARK,
+  ROAD_LIT,
   type Rgb,
   SLICES,
   TONE,
@@ -186,8 +189,7 @@ export function drawCoupleRoad(
       const cF = xF + SIDE[role] * apart(pos + df) * RW * sF;
       const wN = RW * sN * half(role, pos + dn) * ragged;
       const wF = RW * sF * half(role, pos + df) * ragged;
-      const base: Rgb = stripe ? [19, 26, 58] : [23, 31, 68];
-      const surface = mix(mix(base, [50, 64, 126], good * 0.6), [8, 9, 19], hard * 0.7);
+      const surface = mix(mix(ROAD[stripe ? 0 : 1], ROAD_LIT, good * 0.6), ROAD_DARK, hard * 0.7);
       ctx.fillStyle = css(far(mix(surface, MIST, era * 0.14), year));
       quad(cF - wF, yF, cF + wF, yF, cN + wN, yN + 1, cN - wN, yN + 1);
       ctx.fillStyle = css(mix(tone(role, year), MIST, era * 0.55), (stripe ? 0.95 : 0.6) * (1 - 0.5 * hard) * fade);

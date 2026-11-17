@@ -15,7 +15,11 @@
     "tools": "All tools",
     "more": "More",
     "language": "Language",
-    "myReports": "My reports"
+    "myReports": "My reports",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark"
   },
   "hero": {
     "tagline": { "sky": "The sky", "calculated": "calculated" },

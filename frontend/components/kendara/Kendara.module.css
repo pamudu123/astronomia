@@ -103,9 +103,9 @@
 }
 
 .chipOn {
-  border-color: var(--gold);
-  background: var(--gold);
-  color: var(--night);
+  border-color: var(--gold-fill);
+  background: var(--gold-fill);
+  color: var(--on-gold);
 }
 
 .chipDone {
@@ -264,7 +264,8 @@
 }
 
 .pillNear {
-  background: var(--gold);
+  background: var(--gold-fill);
+  color: var(--on-gold);
 }
 
 .stars {

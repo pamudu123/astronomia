@@ -329,8 +329,8 @@
 }
 
 .periodNow {
-  background: var(--gold);
-  color: var(--night);
+  background: var(--gold-fill);
+  color: var(--on-gold);
   animation: beat 2.4s ease-in-out infinite;
 }
 
@@ -471,9 +471,9 @@
 @keyframes beat {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgb(201 164 92 / 50%);
+    box-shadow: 0 0 0 0 rgb(var(--glow) / 50%);
   }
   50% {
-    box-shadow: 0 0 0 8px rgb(201 164 92 / 0%);
+    box-shadow: 0 0 0 8px rgb(var(--glow) / 0%);
   }
 }

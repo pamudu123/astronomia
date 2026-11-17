@@ -9,7 +9,7 @@
     z-index: 20;
     display: flex;
     border-top: 1px solid var(--line-soft);
-    background: rgb(14 20 48 / 96%);
+    background: var(--tab-bar);
     padding-bottom: env(safe-area-inset-bottom);
   }
 

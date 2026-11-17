@@ -58,8 +58,8 @@
 }
 
 .toggleGold {
-  background: var(--gold);
-  color: var(--night);
+  background: var(--gold-fill);
+  color: var(--on-gold);
   font-weight: 600;
 }
 

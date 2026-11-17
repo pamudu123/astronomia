@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans, JetBrains_Mono, Marcellus, Noto_Sans_Sinhala, Noto_Serif_Sinhala } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -7,6 +7,7 @@ import { Assistant } from "@/components/assistant/Assistant";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { type Locale, hasLocale, locales } from "@/lib/i18n";
+import { THEME_SCRIPT } from "@/lib/theme";
 
 import "../globals.css";
 import { type Dictionary, getDictionary } from "./dictionaries";
@@ -26,6 +27,14 @@ const notoSerifSinhala = Noto_Serif_Sinhala({
 const fontVariables = [marcellus, dmSans, jetbrainsMono, notoSansSinhala, notoSerifSinhala]
   .map((font) => font.variable)
   .join(" ");
+
+/** The phone browser's bar follows the device theme. */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f1ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -64,7 +73,12 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   const dict = await getDictionary(lang);
 
   return (
-    <html lang={lang} className={fontVariables}>
+    // The theme script sets data-theme on <html> before React takes over, hence suppressHydrationWarning.
+    <html lang={lang} className={fontVariables} suppressHydrationWarning>
+      <head>
+        {/* Applies a saved light or dark choice before the page paints, so it never flashes. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         <a className="skip-link" href="#main">
           {dict.nav.skip}

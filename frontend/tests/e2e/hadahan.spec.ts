@@ -81,10 +81,11 @@ test("the Sinhala result uses Sinhala names", async ({ page }) => {
 
 test("the form waits for the page to be ready, so nothing typed is lost", async ({ page }) => {
   await mockBackend(page, "en");
-  // Hold the page scripts back, as on a slow phone.
+  // Hold the page scripts back, as on a slow phone. Only the scripts: holding the stylesheets too
+  // would also hold the theme script in <head>, which a browser runs only once the CSS before it is in.
   let release = () => {};
   const scripts = new Promise<void>((resolve) => (release = resolve));
-  await page.route("**/_next/static/chunks/**", async (route) => {
+  await page.route("**/_next/static/chunks/**/*.js", async (route) => {
     await scripts;
     await route.continue();
   });

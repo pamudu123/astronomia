@@ -34,7 +34,7 @@ export function ZodiacWheel({ label }: { label: string }) {
         </radialGradient>
         <radialGradient id="zw-moon" cx="35%" cy="30%">
           <stop offset="0" stopColor="#FFFFFF" />
-          <stop offset="1" stopColor="#A9AFCF" />
+          <stop offset="1" stopColor="#B8B4AA" />
         </radialGradient>
       </defs>
       <circle cx="240" cy="240" r="222" fill="var(--night-raised)" stroke="var(--line)" />

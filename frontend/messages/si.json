@@ -15,7 +15,11 @@
     "tools": "සියලු මෙවලම්",
     "more": "තවත්",
     "language": "භාෂාව",
-    "myReports": "මගේ වාර්තා"
+    "myReports": "මගේ වාර්තා",
+    "theme": "පෙනුම",
+    "themeSystem": "උපාංගය අනුව",
+    "themeLight": "ආලෝක",
+    "themeDark": "අඳුරු"
   },
   "hero": {
     "tagline": { "sky": "The sky", "calculated": "calculated" },
