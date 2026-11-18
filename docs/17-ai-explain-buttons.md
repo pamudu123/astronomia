@@ -1,6 +1,6 @@
 # AI Explanations: Full Reading and Explain Buttons
 
-Date: 2026-11-18. Updated the same day: cut to the main places only, then added the full detailed reading at the top of the chart and match results, modelled on two competitor samples. Step 1 (the match page) is built; the rest is a plan.
+Date: 2026-11-18. Updated the same day: cut to the main places only, then added the full detailed reading at the top of the chart and match results, modelled on two competitor samples. Steps 1 (the match page) and 2 (the birth chart page) are built; the rest is a plan.
 
 **Where the code is:** `agent/app/explain.py` (endpoint, chapter table, prompt), `agent/app/prompts/explain.md`, `agent/skills/explain-card/`, the "Chapters" part of `agent/skills/explain-match/SKILL.md`, `frontend/app/api/explain/route.ts`, `frontend/lib/assistant/explain.ts` (ids, store, text), `frontend/components/assistant/Explain.tsx`, `frontend/lib/entitlements.ts`. The words are under `assistant.explain` in `frontend/messages/*.json`.
 
@@ -87,7 +87,7 @@ Data: ✓ the engine has it today · ◐ a small addition (a look-up table or on
 | 8 | **Life periods with dates** | Every main period and its sub-periods with dates and what each tends to bring. The current one in most detail | ✓ three levels from `dasha.py` | personal-reading |
 | 9 | **Saturn periods** | Each erashtaka and 8th-house Saturn period with its dates and the age at the start, and what helps | ✓ from the Moon sign (life road). ◐ the same from the rising sign | birth-chart |
 | 10 | **Areas to take care of** | Health, partnerships and business, investments, travel and legal matters, each with the sub-periods to be careful in and practical steps. Calm, no named illnesses, no death or lifespan | ✓ | personal-reading |
-| 11 | **The next 12 months** | Sun, Jupiter, Saturn and Rahu moving through signs, counted from the Moon sign, with dates | ✓ (`transits.py`, year ahead) | birth-chart |
+| 11 | **The next 12 months** | Sun, Jupiter, Saturn and Rahu moving through signs, counted from the Moon sign, with dates | ◐ the engine has it (`transits.py`, year ahead), but the chart page doesn't hold it: the page fetches the month forecast and planet changes separately. Add them to the reading's facts, or give the explain endpoint the year-ahead tool | birth-chart |
 
 **Not included, and why:**
 
@@ -130,9 +130,9 @@ Each place joins several components that people read together, so one explanatio
 | # | Place | Joins these components | The question it answers | Same as chapter |
 |---|---|---|---|---|
 | 1 | **My chart** | `SummaryCards`, `Kendara` square, planets table, birth time check | "What does my chart say about me?" | Chart 2 |
-| 2 | **Kuja dosha** | Kuja section and its check rows | "Do I have Kuja dosha, and does it matter?" | Part of chart 4 |
+| 2 | **Kuja dosha** | Kuja section and its check rows | "Do I have Kuja dosha, and does it matter?" | `chart.mars`, its own chapter |
 | 3 | **My life periods** | `DashaTimeline`, `LifeRoad`, `Forecast` | "Where am I in life now and what's coming?" | Chart 8 (current period) |
-| 4 | **Life topics** (chips: personality, work, love and marriage, money, family, studies, going abroad) | Below the result | "What does my chart say about my work?" | Chart 2, 6, 7, and the matching house in 5 |
+| 4 | **Life topics** (chips: your nature, work and money, love and marriage, family and home, studies, travel and going abroad) | Below the summary cards and chart | "What does my chart say about my work?" | Chart 2, 6, 7; family, studies and abroad are chapters of their own, shown only by the chips |
 
 ### Match (`/porondam`)
 
@@ -228,8 +228,8 @@ Each step is one pull request, like file 14.
 | Step | What | Done when |
 |---|---|---|
 | 1 | `/agent/explain`, `explain.md`, `explain-card`, `AiExplain`, `FullReading`, registry, `canUse`. Match full reading chapters 1 to 4, 7 and 10. Places 5 and 6 | Built 2026-11-18, not yet tried against the real model. Checked in the browser with a stand-in agent: chapters open and hide, write once per visit (a button reuses the chapter), a failed chapter offers "Try again", fits a phone |
-| 2 | Chart full reading chapters 2, 3, 5 to 8, 10, 11. Places 1 to 4 | The life topic chips match the chapters and the chat |
-| 3 | The ◐ additions: birth table, vargottama, papa kartari, friendship table, rising-sign erashtaka. Chart chapters 1, 4, 9 and match chapters 5, 6 (after the astrologer review) | |
+| 2 | Chart full reading chapters 2, 3, 5 to 8 and 10, plus the Mars check as its own chapter (8 chapters). Places 1 to 4, with three chip-only chapters (family, studies, abroad) | Built 2026-11-18, not yet tried against the real model. Checked in the browser with a stand-in agent: the chip and the button for "Your nature" reuse the reading's chapter (5 AI calls for 5 different chapters), fits a phone. Chapter 11 moved to step 3: its facts aren't on the page |
+| 3 | The ◐ additions: birth table, papa kartari, friendship table, rising-sign erashtaka, the next 12 months' planet moves in the reading's facts. Chart chapters 1, 4, 9, 11 and match chapters 5, 6 (after the astrologer review). Vargottama needs nothing more: the chart facts already mark it | |
 | 4 | Match chapters 8, 9 and places 7, 8 | |
 | 5 | Places 9 to 14 | |
 | 6 | `old-horoscope` skill and place 15. PDF download of the full reading. Paid lock wired to payments (file 15) | Flip `canUse` and the locked state shows |

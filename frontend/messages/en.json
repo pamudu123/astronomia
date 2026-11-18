@@ -1187,13 +1187,35 @@
         "openAll": "Open all",
         "hideAll": "Hide all"
       },
+      "chartReading": {
+        "title": "Full chart reading",
+        "lead": "{count} chapters that walk through this chart: nature, the nine planets, the 12 parts of life, work and money, love and marriage, life periods with dates, the Mars check, and areas to take care of.",
+        "get": "Get the full reading",
+        "openAll": "Open all",
+        "hideAll": "Hide all"
+      },
+      "topics": {
+        "title": "What the chart says about…",
+        "lead": "Pick a part of life for a short AI reading of it."
+      },
       "chapters": {
         "match.people": "The two of you",
         "match.factors": "All the factors",
         "match.checks": "The serious checks",
         "match.mars": "The Mars check for both",
         "match.styles": "Emotional styles",
-        "match.summary": "Summing up"
+        "match.summary": "Summing up",
+        "chart.nature": "Your nature",
+        "chart.planets": "The nine planets",
+        "chart.houses": "The 12 parts of life",
+        "chart.work": "Work and money",
+        "chart.love": "Love and marriage",
+        "chart.family": "Family and home",
+        "chart.studies": "Studies",
+        "chart.abroad": "Travel and going abroad",
+        "chart.periods": "Your life periods",
+        "chart.mars": "The Mars check",
+        "chart.care": "Areas to take care of"
       }
     },
     "cards": {

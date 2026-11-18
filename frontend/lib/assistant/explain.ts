@@ -21,7 +21,18 @@ export type ChapterId =
   | "match.checks"
   | "match.mars"
   | "match.styles"
-  | "match.summary";
+  | "match.summary"
+  | "chart.nature"
+  | "chart.planets"
+  | "chart.houses"
+  | "chart.work"
+  | "chart.love"
+  | "chart.family"
+  | "chart.studies"
+  | "chart.abroad"
+  | "chart.periods"
+  | "chart.mars"
+  | "chart.care";
 
 /** The full match reading, in reading order. */
 export const MATCH_READING: ChapterId[] = [
@@ -40,6 +51,38 @@ export const MATCH_PLACES = {
   /** Place 6: "Is anything serious wrong?" Rajju, Vedha and the Mars check. */
   serious: ["match.checks", "match.mars"],
 } satisfies Record<string, ChapterId[]>;
+
+/** The full birth chart reading, in reading order (docs/17, section 2.2). */
+export const CHART_READING: ChapterId[] = [
+  "chart.nature",
+  "chart.planets",
+  "chart.houses",
+  "chart.work",
+  "chart.love",
+  "chart.periods",
+  "chart.mars",
+  "chart.care",
+];
+
+/** The explain buttons on the chart page (docs/17, section 3, places 1 to 3). */
+export const CHART_PLACES = {
+  /** Place 1: "What does my chart say about me?" */
+  chart: ["chart.nature"],
+  /** Place 2: "Do I have Kuja dosha, and does it matter?" */
+  mars: ["chart.mars"],
+  /** Place 3: "Where am I in life now and what's coming?" */
+  periods: ["chart.periods"],
+} satisfies Record<string, ChapterId[]>;
+
+/** Place 4: the life topic chips under the chart, one chapter each. */
+export const CHART_TOPICS: ChapterId[] = [
+  "chart.nature",
+  "chart.work",
+  "chart.love",
+  "chart.family",
+  "chart.studies",
+  "chart.abroad",
+];
 
 /** The first chapters a full reading opens by itself, so there is something to read at once. */
 export const OPEN_FIRST = 2;

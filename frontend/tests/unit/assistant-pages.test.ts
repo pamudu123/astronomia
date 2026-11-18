@@ -11,6 +11,7 @@ import {
   avuruduContext,
   babyLettersContext,
   chartContext,
+  chartReadingContext,
   dayContext,
   kendaraContext,
   weddingContext,
@@ -135,6 +136,45 @@ describe("chart facts for readings", () => {
     expect(timeline.sub_periods).toHaveLength(9);
     expect(timeline.sub_periods![0]).toMatchObject({ sub: "Sun", from: "2024-04-13" });
     expect(timeline.later_periods).toHaveLength(2);
+  });
+});
+
+describe("chartReadingContext", () => {
+  type Reading = {
+    life_period_timeline: { later_periods: { period: string; sub_periods: unknown[] }[] };
+    mars_check: { present: boolean; reasons: string[]; checks: { rule: string; applies: boolean }[] };
+  };
+  const reading = chartReadingContext(chart, labels, "en").result as unknown as Reading;
+
+  it("lists every later life period with its own sub-periods", () => {
+    const now = chart.dasha!.current[0];
+    const index = chart.dasha!.periods.findIndex((p) => p.start === now.start);
+    const later = reading.life_period_timeline.later_periods;
+    expect(later).toHaveLength(chart.dasha!.periods.length - index - 1);
+    for (const period of later) expect(period.sub_periods).toHaveLength(9);
+  });
+
+  it("gives the Mars check's reasons and each cancelling rule by name", () => {
+    expect(reading.mars_check.reasons).toEqual(chart.kuja!.reasons);
+    expect(reading.mars_check.checks).toHaveLength(chart.kuja!.cancellations.length);
+    for (const check of reading.mars_check.checks) expect(check.rule).not.toMatch(/^[a-z_]+$/);
+  });
+
+  it("still never shares the birth date, time or place", () => {
+    const text = JSON.stringify(chartReadingContext(chart, labels, "en"));
+    for (const detail of birthDetails(chart)) expect(text).not.toContain(detail);
+  });
+
+  it("fits well inside the agent's 40 KB limit for facts (agent/app/explain.py)", () => {
+    const bytes = new TextEncoder().encode(JSON.stringify(chartReadingContext(chart, labels, "en"))).length;
+    expect(bytes).toBeLessThan(20_000);
+  });
+
+  it("keeps the chat's summary otherwise", () => {
+    const chat = chartContext(chart, labels, "en").result as Record<string, unknown>;
+    const full = chartReadingContext(chart, labels, "en", true);
+    expect(full.shared).toBe(true);
+    expect((full.result as Record<string, unknown>).houses).toEqual(chat.houses);
   });
 });
 

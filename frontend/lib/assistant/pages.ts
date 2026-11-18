@@ -8,7 +8,7 @@ import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/
 import type { Wedding } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
-import { combinations, houseFacts, periodTimeline, planetFacts } from "./chartFacts";
+import { combinations, houseFacts, lifeTimeline, periodTimeline, planetFacts } from "./chartFacts";
 import type { Json, PageContext } from "./context";
 
 /**
@@ -87,6 +87,42 @@ export function chartContext(
       // The sub-periods of the running period and the periods after it, for "what's ahead".
       life_period_timeline: dasha ? periodTimeline(dasha, labels) : null,
       mars_check: kuja ? { present: kuja.present, reduced: kuja.reduced } : null,
+    },
+  };
+}
+
+/**
+ * What the written chart reading gets (docs/17): the chat's summary, with every later life
+ * period and its sub-periods, and the Mars check's reasons and cancelling rules. Still no
+ * birth date, time or place.
+ */
+export function chartReadingContext(
+  result: Hadahan,
+  labels: Labels,
+  language: Locale,
+  shared = false,
+): PageContext {
+  const context = chartContext(result, labels, language, shared);
+  const { dasha, kuja } = result;
+  if (!context.result || typeof context.result !== "object" || Array.isArray(context.result)) return context;
+  return {
+    ...context,
+    result: {
+      ...context.result,
+      ...(dasha && { life_period_timeline: lifeTimeline(dasha, labels) }),
+      ...(kuja && {
+        mars_check: {
+          present: kuja.present,
+          reduced: kuja.reduced,
+          strength: kuja.strength,
+          reasons: kuja.reasons,
+          checks: kuja.cancellations.map((check) => ({
+            rule: labels.kuja_rule[check.id] ?? check.id,
+            applies: check.applies,
+            reason: check.reason,
+          })),
+        },
+      }),
     },
   };
 }

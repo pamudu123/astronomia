@@ -240,3 +240,28 @@ export function periodTimeline(dasha: Dasha, labels: Labels, ahead = 2): Json | 
     })),
   };
 }
+
+/**
+ * The life periods for a written reading: the sub-periods of the running period and every
+ * later period, each with its own sub-periods. Longer than `periodTimeline`, which the chat
+ * gets with every message. The first main period is still left out: it is tied to the birth
+ * date.
+ */
+export function lifeTimeline(dasha: Dasha, labels: Labels): Json | null {
+  const names = namesFrom(labels);
+  const now = dasha.current[0];
+  if (!now) return null;
+  const index = dasha.periods.findIndex((p) => p.start === now.start);
+  if (index < 0) return null;
+  const subs = (period: Dasha["periods"][number]) =>
+    period.sub.map((s) => ({ sub: names.planet(s.lord), from: day(s.start), until: day(s.end) }));
+  return {
+    ...(index > 0 && { sub_periods: subs(dasha.periods[index]) }),
+    later_periods: dasha.periods.slice(index + 1).map((p) => ({
+      period: names.planet(p.lord),
+      from: day(p.start),
+      until: day(p.end),
+      sub_periods: subs(p),
+    })),
+  };
+}

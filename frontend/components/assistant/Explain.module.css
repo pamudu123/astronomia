@@ -163,6 +163,55 @@
   background: var(--panel-raised);
 }
 
+/* ---- The life topic chips ---- */
+
+.topics {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.topicsHead {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip,
+.chipOn {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.chipOn {
+  border-color: var(--gold-fill);
+  background: var(--gold-fill);
+  color: var(--on-gold);
+}
+
 /* ---- Shared ---- */
 
 .caret,
@@ -306,6 +355,10 @@
 }
 
 @media (max-width: 640px) {
+  .topics {
+    padding: 22px 18px;
+  }
+
   .reading {
     padding: 22px 18px;
   }
