@@ -1,0 +1,331 @@
+/* AI explanations on the page (Explain.tsx): the full reading card and the explain buttons. */
+
+.spark {
+  color: var(--gold);
+}
+
+/* The site has no global button reset: each button sets its own look. */
+.smallButton,
+.chapterButton,
+.toggle,
+.ask,
+.linkButton {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---- The full reading card ---- */
+
+.reading {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgb(var(--glow) / 10%), transparent 60%),
+    var(--panel);
+}
+
+.readingHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+}
+
+.readingHead > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 680px;
+}
+
+.readingTitle {
+  font-size: 28px;
+}
+
+.readingActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.smallButton {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.smallButton:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.chapters {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-soft);
+}
+
+.chapterRow,
+.chapterOpen {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.chapterOpen {
+  padding-bottom: 18px;
+}
+
+.chapterTitle {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.chapterButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 0;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.chapterButton:hover {
+  color: var(--gold);
+}
+
+.chapterNumber {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.chapterOpen .chapterNumber {
+  border-color: var(--gold);
+}
+
+/* ---- The explain button on a place ---- */
+
+.place {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toggle:hover,
+.toggle[aria-expanded="true"] {
+  background: rgb(var(--glow) / 12%);
+}
+
+.panel {
+  width: 100%;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 16px;
+  background: var(--panel-raised);
+}
+
+/* ---- Shared ---- */
+
+.caret,
+.caretUp {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.toggle .caret,
+.toggle .caretUp {
+  margin-left: 2px;
+}
+
+.caretUp {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+.chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chapter + .chapter {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.chapterHeading {
+  margin: 0;
+  color: var(--gold);
+  font-size: 16px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 72ch;
+  line-height: 1.65;
+}
+
+.text p,
+.text ul {
+  margin: 0;
+}
+
+.text ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 20px;
+}
+
+.text strong {
+  color: var(--ink);
+}
+
+.text .lead {
+  margin: 6px 0 -6px;
+}
+
+.text .lead:first-child {
+  margin-top: 0;
+}
+
+.writing {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.dots {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* Local to this module: CSS Modules rename keyframes, so the global ones can't be used here. */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.failed {
+  color: var(--coral);
+  font-size: 14px;
+}
+
+.linkButton {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.ask {
+  align-self: flex-start;
+  min-height: 36px;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ask:hover {
+  text-decoration: underline;
+}
+
+.label {
+  margin: 0;
+  color: var(--mist);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.panel .label {
+  margin-top: 14px;
+}
+
+.locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .reading {
+    padding: 22px 18px;
+  }
+
+  .readingTitle {
+    font-size: 23px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots {
+    animation: none;
+  }
+
+  .caret,
+  .caretUp {
+    transition: none;
+  }
+}

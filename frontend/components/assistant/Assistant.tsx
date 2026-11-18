@@ -7,7 +7,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { PageContext } from "@/lib/assistant/context";
 import type { Locale } from "@/lib/i18n";
 
-import { AssistantOn, PageContextSetter, type Slot } from "./PageContext";
+import { AssistantOn, ExplainText, PageContextSetter, type Slot } from "./PageContext";
 
 // CopilotKit reads the clock while rendering, which server prerendering does not allow, and
 // it is large. So the chat loads in the browser only, once the page is up.
@@ -57,7 +57,9 @@ export function Assistant({
   const page = useMemo(() => combine(slots), [slots]);
   return (
     <PageContextSetter value={set}>
-      <AssistantOn value>{children}</AssistantOn>
+      <AssistantOn value>
+        <ExplainText value={t.explain}>{children}</ExplainText>
+      </AssistantOn>
       <Chat lang={lang} t={t} tools={tools} page={page} />
     </PageContextSetter>
   );

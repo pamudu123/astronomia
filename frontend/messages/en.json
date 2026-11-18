@@ -1169,6 +1169,33 @@
     "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
     "close": "Close the chat",
     "resize": "Resize the chat. Drag, or use the arrow keys",
+    "explain": {
+      "label": "AI explanation · for guidance only",
+      "readingLabel": "AI reading · for guidance only",
+      "explain": "Explain this",
+      "hide": "Hide",
+      "ask": "Ask Astro about this",
+      "askQuestion": "Tell me more about \"{title}\" in this result.",
+      "writing": "Writing…",
+      "failed": "This couldn't be written just now.",
+      "retry": "Try again",
+      "locked": "Available on paid plans",
+      "matchReading": {
+        "title": "Full match reading",
+        "lead": "{count} chapters that walk through this match: each person, every factor, the serious checks, the Mars check, emotional styles, and a summing up.",
+        "get": "Get the full reading",
+        "openAll": "Open all",
+        "hideAll": "Hide all"
+      },
+      "chapters": {
+        "match.people": "The two of you",
+        "match.factors": "All the factors",
+        "match.checks": "The serious checks",
+        "match.mars": "The Mars check for both",
+        "match.styles": "Emotional styles",
+        "match.summary": "Summing up"
+      }
+    },
     "cards": {
       "status": {
         "find_place": [
