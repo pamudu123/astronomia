@@ -4,8 +4,11 @@ export type ReportRequest =
   | components["schemas"]["HadahanReport"]
   | components["schemas"]["PorondamReport"];
 
+/** What the PDF takes: a report request, plus the AI chapters already read (docs/17). */
+export type PdfRequest = components["schemas"]["HadahanPdf"] | components["schemas"]["PorondamPdf"];
+
 /** The server works the report out again from these details, sent in a POST body. */
-export async function fetchReport(body: ReportRequest): Promise<Blob> {
+export async function fetchReport(body: PdfRequest | ReportRequest): Promise<Blob> {
   const response = await fetch("/api/v1/reports/pdf", {
     method: "POST",
     headers: { "content-type": "application/json" },

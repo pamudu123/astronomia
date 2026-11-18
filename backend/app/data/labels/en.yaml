@@ -266,6 +266,8 @@ report:
   disclaimer: "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer."
   made_on: "Made on {date}."
   footer: "Lahiri ayanamsa · For guidance only"
+  ai_reading: AI reading
+  ai_reading_note: "Written by AI from the results above, as read on the site. For guidance and cultural interest only, not professional advice."
   page: "Page {page} of {pages}"
 
 # What each house is about, 1 to 12, in a few plain words. PROVISIONAL: for the astrologer.

@@ -1,6 +1,7 @@
 """Build the hadahan and porondam PDF reports from the same results the pages show."""
 
 import datetime as dt
+from collections.abc import Sequence
 from functools import lru_cache
 from typing import Any
 
@@ -18,6 +19,7 @@ from app.reports.format import (
 )
 from app.reports.kendara import LINES, planet_labels
 from app.reports.pdf import REPORTS_DIR, html_to_pdf
+from app.reports.reading import blocks
 
 TEMPLATES = REPORTS_DIR / "templates"
 
@@ -115,8 +117,17 @@ def _about(lang: Lang, method: str, rule_sets: list[str], made_on: dt.date) -> l
     ]
 
 
+def _reading(chapters: Sequence[tuple[str, str]]) -> list[dict[str, Any]]:
+    """The AI chapters the person read, as blocks for reading.html."""
+    return [{"title": title, "blocks": blocks(text)} for title, text in chapters]
+
+
 def render_hadahan(
-    build: HadahanBuild, request: HadahanRequest, name: str, today: dt.date
+    build: HadahanBuild,
+    request: HadahanRequest,
+    name: str,
+    today: dt.date,
+    reading: Sequence[tuple[str, str]] = (),
 ) -> bytes:
     response = build.response
     assert response.chart and response.dasha and response.kuja, "only a finished chart prints"
@@ -206,6 +217,7 @@ def render_hadahan(
             [kuja.rule_set],
             today,
         ),
+        "reading": _reading(reading),
     }
     return _render("hadahan.html", lang, report["hadahan_kind"], context)
 
@@ -246,7 +258,12 @@ def _person(person: PersonOut, role: str, table: dict[str, Any], lang: Lang) -> 
     }
 
 
-def render_porondam(build: PorondamBuild, lang: Lang, today: dt.date) -> bytes:
+def render_porondam(
+    build: PorondamBuild,
+    lang: Lang,
+    today: dt.date,
+    reading: Sequence[tuple[str, str]] = (),
+) -> bytes:
     response = build.response
     assert response.bride and response.groom and response.match, "only a finished match prints"
     table = labels(lang)
@@ -287,5 +304,6 @@ def render_porondam(build: PorondamBuild, lang: Lang, today: dt.date) -> bytes:
         "about": _about(
             lang, f"{report['method_porondam']} {report['porondam_provisional']}", rule_sets, today
         ),
+        "reading": _reading(reading),
     }
     return _render("porondam.html", lang, report["porondam_kind"], context)

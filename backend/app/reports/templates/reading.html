@@ -1,0 +1,26 @@
+{#
+  The AI reading: the chapters the person read on the page, sent back with the request
+  (app/reports/reading.py). Every piece of text is escaped by the template.
+#}
+{% if reading %}
+<section class="reading">
+  <h2>{{ r.ai_reading }}</h2>
+  <p class="small soft">{{ r.ai_reading_note }}</p>
+  {% for chapter in reading %}
+  <h3>{{ chapter.title }}</h3>
+  {% for block in chapter.blocks %}
+  {% if block.kind == "list" %}
+  <ul>
+    {% for item in block.items %}
+    <li>{% for text, bold in item %}{% if bold %}<strong>{{ text }}</strong>{% else %}{{ text }}{% endif %}{% endfor %}</li>
+    {% endfor %}
+  </ul>
+  {% elif block.kind == "lead" %}
+  <p class="lead-line"><strong>{{ block.spans[0][0] }}</strong></p>
+  {% else %}
+  <p>{% for text, bold in block.spans %}{% if bold %}<strong>{{ text }}</strong>{% else %}{{ text }}{% endif %}{% endfor %}</p>
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+</section>
+{% endif %}

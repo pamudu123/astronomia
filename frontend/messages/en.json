@@ -1180,6 +1180,7 @@
       "failed": "This couldn't be written just now.",
       "retry": "Try again",
       "locked": "Available on paid plans",
+      "inPdf": "Chapters you open are added to the PDF report.",
       "matchReading": {
         "title": "Full match reading",
         "lead": "{count} chapters that walk through this match, from each person and every factor to the serious checks, the marriage combinations and a summing up.",
@@ -1229,7 +1230,8 @@
         "names.letters": "The name letters",
         "names.first": "Choosing a time",
         "changes.mine": "What this change means for you",
-        "yearly.mine": "Your year ahead"
+        "yearly.mine": "Your year ahead",
+        "kendara.dates": "Possible birth dates"
       }
     },
     "cards": {

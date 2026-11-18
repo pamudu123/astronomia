@@ -287,3 +287,22 @@ html[lang="si"] .score {
 .page-break {
   break-before: page;
 }
+
+/* The AI reading (reading.html): its own pages, after the engine's results. */
+.reading {
+  break-before: page;
+}
+
+.reading h3 {
+  margin-top: 5mm;
+}
+
+.reading p,
+.reading li {
+  line-height: 1.5;
+}
+
+.reading .lead-line {
+  margin-top: 2.5mm;
+  margin-bottom: 0.5mm;
+}

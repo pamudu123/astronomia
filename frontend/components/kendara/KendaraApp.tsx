@@ -27,7 +27,9 @@ import {
 import { NAKSHATRA } from "@/lib/nakshatra";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
+import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { kendaraContext } from "@/lib/assistant/pages";
 
 import styles from "./Kendara.module.css";
@@ -316,6 +318,7 @@ function KendaraResults({
         </ul>
       )}
       {result.note && <p className={styles.note}>{result.note}</p>}
+      <AiExplain chapters={PAGE_PLACES.kendara} lang={lang} facts={kendaraContext(result, lang)} />
 
       {shared && (
         <section className={styles.shared} data-shared-star={shared.nakshatra}>
