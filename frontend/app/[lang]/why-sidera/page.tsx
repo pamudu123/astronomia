@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "@/components/Icons";
 import { Starfield } from "@/components/Starfield";
 import { CalcCard } from "@/components/why/CalcCard";
-import { MathsTiles } from "@/components/why/MathsTiles";
 import { PillarArt } from "@/components/why/PillarArt";
 import { WhyIcon } from "@/components/why/WhyIcons";
 import { ARTICLES } from "@/lib/articles";
@@ -73,26 +72,12 @@ export default async function WhySideraPage({ params }: PageProps<"/[lang]/why-s
             </div>
           </div>
           <div className={`rise ${styles.heroCard}`} style={{ animationDelay: ".2s" }}>
-            <CalcCard lang={lang} calc={page.calc} />
+            <CalcCard lang={lang} copy={page.calc} />
           </div>
         </section>
       </div>
 
-      {/* 2. Try the maths: live tiles */}
-      <section className={styles.band} aria-labelledby="try-title">
-        <div className={`container ${styles.section}`}>
-          <header className={styles.sectionHead}>
-            <p className={styles.eyebrow}>{page.try.eyebrow}</p>
-            <h2 id="try-title" className={`display ${styles.sectionTitle}`}>
-              {page.try.title}
-            </h2>
-            <p className="soft">{page.try.lead}</p>
-          </header>
-          <MathsTiles lang={lang} copy={page.try} />
-        </div>
-      </section>
-
-      {/* 3. Three pillars, maths first */}
+      {/* 2. Three pillars, maths first */}
       <section className={`container ${styles.section}`} aria-labelledby="pillars-title">
         <h2 id="pillars-title" className={`display ${styles.sectionTitle}`}>
           {page.pillarsTitle}

@@ -1,36 +1,47 @@
 const round = (value: number) => Math.round(value * 100) / 100;
 
-/** A point on a circle, with 0° pointing right and angles going anticlockwise (maths convention). */
+/** A point on a circle, measured clockwise from the top (the way the zodiac wheel counts). */
 function point(cx: number, cy: number, r: number, deg: number) {
   const rad = (deg * Math.PI) / 180;
-  return { x: round(cx + r * Math.cos(rad)), y: round(cy - r * Math.sin(rad)) };
+  return { x: round(cx + r * Math.sin(rad)), y: round(cy - r * Math.cos(rad)) };
 }
 
-/** Maths: a measuring gauge with a needle and an exact reading. */
+/** Maths: a round dial measuring 47°12′ from 0°, with the exact reading beside it. */
 function MathsArt() {
-  const cx = 110;
-  const cy = 92;
-  const ticks = Array.from({ length: 13 }, (_, k) => {
-    const deg = 180 - k * 15;
+  const cx = 62;
+  const cy = 62;
+  const r = 46;
+  const angle = 47.2;
+  const ticks = Array.from({ length: 36 }, (_, k) => {
     const major = k % 3 === 0;
-    return { k, major, from: point(cx, cy, 74, deg), to: point(cx, cy, major ? 62 : 68, deg) };
+    return { k, major, from: point(cx, cy, r - 3, k * 10), to: point(cx, cy, r - (major ? 11 : 7), k * 10) };
   });
-  const gaugeEnd = point(cx, cy, 80, 108);
-  const needle = point(cx, cy, 56, 108);
+  const arcEnd = point(cx, cy, r, angle);
+  const needle = point(cx, cy, r - 14, angle);
   return (
     <svg viewBox="0 0 220 124" width="100%" height="100%" aria-hidden="true">
-      <path d={`M${cx - 80} ${cy} A80 80 0 0 1 ${cx + 80} ${cy}`} fill="none" stroke="var(--line)" strokeWidth="4" strokeLinecap="round" />
-      <path d={`M${cx - 80} ${cy} A80 80 0 0 1 ${gaugeEnd.x} ${gaugeEnd.y}`} fill="none" stroke="var(--gold)" strokeWidth="4" strokeLinecap="round" />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--line)" strokeWidth="3" />
+      <path d={`M${cx} ${cy - r} A${r} ${r} 0 0 1 ${arcEnd.x} ${arcEnd.y}`} fill="none" stroke="var(--gold)" strokeWidth="3" strokeLinecap="round" />
       <g stroke="var(--ink-soft)" strokeLinecap="round">
         {ticks.map((tick) => (
-          <line key={tick.k} x1={tick.from.x} y1={tick.from.y} x2={tick.to.x} y2={tick.to.y} strokeOpacity={tick.major ? 0.9 : 0.45} />
+          <line key={tick.k} x1={tick.from.x} y1={tick.from.y} x2={tick.to.x} y2={tick.to.y} strokeOpacity={tick.major ? 0.9 : 0.4} />
         ))}
       </g>
+      <line x1={cx} y1={cy} x2={cx} y2={cy - r + 14} stroke="var(--ink-soft)" strokeOpacity=".5" strokeDasharray="2 3" />
       <line x1={cx} y1={cy} x2={needle.x} y2={needle.y} stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" />
-      <circle cx={cx} cy={cy} r="5" fill="var(--gold)" />
-      <text x={cx} y="118" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="13" fill="var(--ink)">
-        18° 05′ 32″
-      </text>
+      <circle cx={cx} cy={cy} r="4.5" fill="var(--gold)" />
+      <circle cx={arcEnd.x} cy={arcEnd.y} r="3.5" fill="var(--gold)" />
+      <g fontFamily="var(--font-mono)">
+        <text x="128" y="44" fontSize="12" fill="var(--gold)">
+          λ
+        </text>
+        <text x="128" y="70" fontSize="17" fill="var(--ink)">
+          47°12′08″
+        </text>
+        <text x="128" y="90" fontSize="11" fill="var(--ink-soft)">
+          = 47.2022°
+        </text>
+      </g>
     </svg>
   );
 }

@@ -79,3 +79,102 @@
   font-weight: 600;
   font-family: var(--font-body);
 }
+
+/* The three inputs: Moon and Sun sliders side by side, the place below. */
+.controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin: 4px 0 6px;
+  padding: 12px 0 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.placeControl {
+  grid-column: 1 / -1;
+}
+
+.controlHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.controlHead b {
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* Sliders drawn in the theme's own colours: a thin line track and a gold thumb, in light and dark. */
+.control input[type="range"] {
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+}
+
+.control input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.control input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.control input[type="range"]::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  background: var(--gold-fill);
+  appearance: none;
+}
+
+.control input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  background: var(--gold-fill);
+}
+
+.control input[type="range"]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
+.control select {
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--night-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.note {
+  padding: 8px 0 4px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--ink-soft);
+  font-size: 11px;
+}
