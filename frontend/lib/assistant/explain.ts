@@ -40,7 +40,13 @@ export type ChapterId =
   | "chart.abroad"
   | "chart.periods"
   | "chart.mars"
-  | "chart.care";
+  | "chart.care"
+  | "nakath.day"
+  | "avurudu.times"
+  | "names.letters"
+  | "names.first"
+  | "changes.mine"
+  | "yearly.mine";
 
 /** The full match reading, in reading order. */
 export const MATCH_READING: ChapterId[] = [
@@ -102,6 +108,22 @@ export const CHART_PLACES = {
   mars: ["chart.mars"],
   /** Place 3: "Where am I in life now and what's coming?" */
   periods: ["chart.periods"],
+} satisfies Record<string, ChapterId[]>;
+
+/** The explain buttons on the other main pages (docs/17, section 3, places 9 to 14). */
+export const PAGE_PLACES = {
+  /** Place 9: "What kind of day is today, and what is it good for?" */
+  day: ["nakath.day"],
+  /** Place 10: "What do we do, and when?" */
+  avurudu: ["avurudu.times"],
+  /** Place 11: "Which letter, and why?" */
+  babyLetters: ["names.letters"],
+  /** Place 12: "Which time for akuru kiyaweema?" */
+  firstLetters: ["names.first"],
+  /** Place 13: "How does this planet change affect me?" */
+  change: ["changes.mine"],
+  /** Place 14: "What does next year look like for me?" */
+  year: ["yearly.mine"],
 } satisfies Record<string, ChapterId[]>;
 
 /** Place 4: the life topic chips under the chart, one chapter each. */

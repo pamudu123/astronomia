@@ -11,7 +11,9 @@ import type { Locale } from "@/lib/i18n";
 import { failureText } from "@/lib/request";
 import { COLOMBO, type Panchanga, type PanchangaPart, type PlaceChoice, fetchPanchanga } from "@/lib/nakath";
 
+import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
+import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { dayContext } from "@/lib/assistant/pages";
 
 import styles from "./Nakath.module.css";
@@ -59,7 +61,8 @@ export function DailyView({ lang, t, day, initial }: Props) {
   const [attempt, setAttempt] = useState(0);
   const [picked, setPicked] = useState(day);
   // What the AI assistant sees: this result, with no birth details.
-  useAssistantContext(data ? dayContext(data, place, lang) : null);
+  const context = data ? dayContext(data, place, lang) : null;
+  useAssistantContext(context);
 
   const choice: PlaceChoice = { placeId: place?.id ?? COLOMBO };
   const current = data && data.date === day && data.place.id === choice.placeId && data ? data : null;
@@ -128,6 +131,7 @@ export function DailyView({ lang, t, day, initial }: Props) {
           <p className={styles.small} data-card="where">
             {[shown.place.name, shown.weekday_name, shown.timezone_note].filter(Boolean).join(" · ")}
           </p>
+          <AiExplain chapters={PAGE_PLACES.day} lang={lang} facts={context} />
           <div className={styles.day}>
             <div className={styles.item} data-card="sun">
               <p className={styles.itemName}>

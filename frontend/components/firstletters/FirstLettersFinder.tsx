@@ -12,7 +12,9 @@ import { NAKSHATRA } from "@/lib/nakshatra";
 import { failureText } from "@/lib/request";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
+import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { firstLettersContext } from "@/lib/assistant/pages";
 
 import styles from "./FirstLetters.module.css";
@@ -40,7 +42,8 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FirstLetters | null>(null);
   // What the AI assistant sees: this result, with no birth details.
-  useAssistantContext(result ? firstLettersContext(result, lang) : null);
+  const context = result ? firstLettersContext(result, lang) : null;
+  useAssistantContext(context);
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
 
@@ -197,6 +200,7 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
 
         {result?.place && result.first && result.last && (
           <div className={styles.ceremony} data-card="first-letters-result">
+            <AiExplain chapters={PAGE_PLACES.firstLetters} lang={lang} facts={context} />
             <p className={styles.small}>
               {result.child && fill(t.forChild, { star: result.child.star_name })}{" "}
               {fill(t.rangeText, {

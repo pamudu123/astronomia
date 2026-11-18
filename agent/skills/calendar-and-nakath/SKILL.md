@@ -24,6 +24,12 @@ The site shows the day's parts (Rahu kalaya, thithi, nakatha, yoga, karana). It 
 - Poya days from the tools are calculated full moons. The official calendar can differ by a day: say so for religious observance.
 - What each poya commemorates is in the reference. Keep it to one or two sentences unless they ask for more.
 
+## Chapters
+
+The day's nakath page has an explain button that writes one chapter from this skill. The shape of a chapter is in the `explain-card` skill.
+
+- **`nakath.day`, What kind of day it is.** From the page's day (`good_times_day`): the date, weekday and place, then in plain words what the day's thithi and nakatha are (with their times when they change during the day), what tradition links them to, and Rahu kalaya with its time and what people avoid starting in it. Then what the day suits and what people usually put off, as tradition, with a note that a family astrologer sets the time for a big event. If `provisional` is true, say once that the rules are still being confirmed. Use only the times given.
+
 ## Never
 
 - Don't invent a nakath time, a direction or a colour. Those come only from the tools or the page.

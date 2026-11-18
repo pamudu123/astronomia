@@ -22,9 +22,11 @@ description: Baby names from the birth star (first letters), the first letters c
 
 ## Chapters
 
-The match page's full reading and the explain button under the wedding dates use one chapter from this skill. The shape of a chapter is in the `explain-card` skill.
+Three explain buttons write chapters from this skill: the wedding dates under a match (also in the match's full reading), the baby name letters, and the first letters times. The shape of a chapter is in the `explain-card` skill.
 
 - **`match.wedding`, Wedding dates.** From `wedding_dates_found`: the range and place searched, then for each ceremony the dates found, best first as the site lists them, with what sets each apart (weekday, the star and thithi of the time, any cautions the site lists) and how a family usually chooses between them (the reference, section 3: nakath, the poruwa, homecoming). Then what to weigh beyond the almanac: the venue, family travel, the couple's own preference, and checking with their family astrologer. If a ceremony has no dates (`none_found`), say so and suggest a longer range. Never call one date the right one; the choice is the family's.
+- **`names.letters`, The name letters.** From the baby names result: the birth star, its quarter (`pada`) and the Moon sign, then the first letter this gives (`first_letter`, `sounds_like`) and why tradition ties name letters to the star's quarter (reference, section 1). Then the other letters some families use (`also_used`) and, if the birth time is close to a change, the nearby letters (`nearby_letters`) and why. End with how families usually choose: the letter, then a name they love, with their family astrologer for the final word. Never judge a name.
+- **`names.first`, Choosing a time.** From the first letters result: what akuru kiyaweema is (reference, section 2), the range and place searched, then the times found, best first as the site lists them, with what sets each apart (weekday, star, thithi, cautions) and what families weigh beyond the almanac (the child's routine, the teacher or monk, the temple). If none were found, suggest a longer range. Never call one time the right one.
 
 ## Never
 

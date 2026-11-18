@@ -78,6 +78,13 @@ CHAPTERS: dict[str, Chapter] = {
     "chart.periods": Chapter("personal-reading", "Your life periods"),
     "chart.mars": Chapter("personal-reading", "The Mars check"),
     "chart.care": Chapter("personal-reading", "Areas to take care of"),
+    # One explain button each on the other main pages (docs/17, places 9 to 14).
+    "nakath.day": Chapter("calendar-and-nakath", "What kind of day it is"),
+    "avurudu.times": Chapter("avurudu", "The Avurudu timetable"),
+    "names.letters": Chapter("ceremonies-and-names", "The name letters"),
+    "names.first": Chapter("ceremonies-and-names", "Choosing a time"),
+    "changes.mine": Chapter("birth-chart", "What this change means for you"),
+    "yearly.mine": Chapter("birth-chart", "Your year ahead"),
 }
 
 Language = Literal["en", "si"]
