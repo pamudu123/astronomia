@@ -6,6 +6,7 @@ import {
   chartReadingContext,
   coupleYearsContext,
   matchReadingContext,
+  sriLankaDay,
   weddingReadingContext,
 } from "@/lib/assistant/pages";
 import type { Upcoming } from "@/lib/changes";
@@ -136,6 +137,35 @@ describe("chartExtrasContext", () => {
     expect(result.saturn_erashtaka_from_rising_sign).toEqual([
       { from: "2034-07-13", until: "2041-01-01", state: "ahead" },
     ]);
+  });
+
+  it("never sends a date taken from the birth or the road's end (review on #52)", () => {
+    const born = {
+      ...journey,
+      birth: "1995-04-19T09:05:00Z",
+      end: "2095-04-19T09:05:00Z",
+      // A rising-sign stay already running at birth, and a Moon one cut where the road ends.
+      erashtaka_lagna: [{ start: "1995-04-19T09:05:00Z", end: "1997-06-01T00:00:00Z" }],
+      erashtaka: [{ start: "2092-03-01T00:00:00Z", end: "2095-04-19T09:05:00Z" }],
+    } as unknown as Journey;
+    const result = chartExtrasContext(base, { journey: born });
+    const facts = result.result as {
+      saturn_erashtaka_from_rising_sign: { from: string; until: string }[];
+      saturn_erashtaka: { from: string; until: string }[];
+    };
+    expect(facts.saturn_erashtaka_from_rising_sign[0]).toMatchObject({
+      from: "already running at birth",
+      until: "1997-06-01",
+    });
+    expect(facts.saturn_erashtaka[0]).toMatchObject({ from: "2092-03-01", until: "beyond the life road" });
+    expect(JSON.stringify(result)).not.toContain("1995-04-19");
+    expect(JSON.stringify(result)).not.toContain("2095-04-19");
+  });
+
+  it("dates the Sun's months in Sri Lanka time (review on #52)", () => {
+    // 19:00 UTC on 16 November is already 17 November in Sri Lanka.
+    expect(sriLankaDay("2026-11-16T19:00:00Z")).toBe("2026-11-17");
+    expect(sriLankaDay("2026-11-16T18:00:00Z")).toBe("2026-11-16");
   });
 
   it("adds the Sun's months with their houses", () => {

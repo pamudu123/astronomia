@@ -5,6 +5,7 @@ personal answers need a birth chart, so they are POST requests with the birth in
 """
 
 import datetime as dt
+from functools import lru_cache
 from typing import Annotated, Any
 
 from fastapi import APIRouter, HTTPException, Path, Query, Response, status
@@ -29,7 +30,7 @@ from app.engine.changes import (
     saturn_notes,
 )
 from app.engine.chart import compute_chart
-from app.engine.transits import sign_changes, signs_at
+from app.engine.transits import SignChange, sign_changes, signs_at
 from app.engine.zodiac import RASHI, Body, whole_sign_house
 from app.explain.labels import Lang, labels
 from app.reports.format import format_date, format_time
@@ -157,13 +158,30 @@ class UpcomingResponse(BaseModel):
     sun_months: list[SunStayOut] = []
 
 
+@lru_cache(maxsize=8)
+def _sun_ingresses(year: int) -> tuple[SignChange, ...]:
+    """The Sun's twelve sign changes in one calendar year, worked out once per server.
+
+    Finding them means stepping through the year a day at a time; every request for the year
+    ahead would repeat that, so each year is kept.
+    """
+    start = dt.datetime(year, 1, 1, tzinfo=dt.UTC)
+    end = dt.datetime(year + 1, 1, 1, tzinfo=dt.UTC)
+    return tuple(sign_changes(EPHEMERIS, start, end, bodies=(Body.SUN,)))
+
+
 def sun_months(now: dt.datetime, lagna: int, moon: int, lang: Lang) -> list[SunStayOut]:
     """The Sun's stays from now to a year ahead, the first one already running."""
     names = labels(lang)["rashi"]
     end = now + AHEAD
+    ingresses = [
+        change
+        for year in range(now.year, end.year + 1)
+        for change in _sun_ingresses(year)
+        if now < change.moment < end
+    ]
     starts = [(signs_at(EPHEMERIS, now)[Body.SUN], now)] + [
-        (change.to_sign, change.moment)
-        for change in sign_changes(EPHEMERIS, now, end, bodies=(Body.SUN,))
+        (change.to_sign, change.moment) for change in ingresses
     ]
     months = []
     for index, (sign, start) in enumerate(starts):

@@ -179,3 +179,17 @@ def test_the_suns_months_ahead(client: TestClient) -> None:
         from_moon = (order.index(month["sign"]) - order.index("vrischika")) % 12 + 1
         assert (month["house_from_lagna"], month["house_from_moon"]) == (from_lagna, from_moon)
     assert months[0]["sign_name"] == "Tula"
+
+
+def test_the_suns_changes_are_worked_out_once_a_year(client: TestClient) -> None:
+    """A second request for the same year ahead reuses the year's Sun changes (review on #52)."""
+    from app.api.changes import _sun_ingresses
+
+    _sun_ingresses.cache_clear()
+    body = {**BIRTH, "as_of": "2026-11-13T00:00:00Z"}
+    first = client.post("/v1/changes/personal", json=body).json()["sun_months"]
+    misses = _sun_ingresses.cache_info().misses
+    second = client.post("/v1/changes/personal", json=body).json()["sun_months"]
+    assert second == first
+    assert _sun_ingresses.cache_info().misses == misses  # nothing worked out again
+    assert misses == 2  # 2026 and 2027
