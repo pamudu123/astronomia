@@ -212,6 +212,8 @@ report:
   star_pada: "{star}, pada {pada}"
   dasha_now: Dasha now
   dasha_now_value: "{main} main period, {sub} sub period"
+  dasha_now_main: "{main} main period"
+  dasha_now_none: No dasha period runs on this date
   kuja: Kuja dosha
   kuja_present: Present
   kuja_reduced: Present, reduced

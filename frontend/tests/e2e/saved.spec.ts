@@ -88,6 +88,36 @@ test("a hadahan is saved quietly, with no sign in, and My reports appears", asyn
   await expect(page).toHaveURL(/\/en\/my$/);
 });
 
+test("two tabs saving at once share one guest account", async ({ context }) => {
+  const tabs = [await context.newPage(), await context.newPage()];
+  for (const tab of tabs) {
+    await mockTools(tab);
+    await showHadahan(tab);
+  }
+  // The first save is held open; a second save sent meanwhile would carry no cookie.
+  const cookies: (string | null)[] = [];
+  let release = () => {};
+  const held = new Promise<void>((resolve) => (release = resolve));
+  await context.route("**/api/v1/saved", async (route) => {
+    cookies.push(await route.request().headerValue("cookie"));
+    if (cookies.length === 1) await held;
+    const first = cookies.length === 1;
+    const headers: Record<string, string> = first ? { "set-cookie": "sid=one; Path=/; HttpOnly; SameSite=Lax" } : {};
+    return route.fulfill(reply(201, { ...hadahanItem, created: true }, headers));
+  });
+
+  for (const tab of tabs) await tab.locator("[data-save]").getByRole("button", { name: "Save" }).click();
+  await expect.poll(() => cookies.length).toBe(1);
+  await tabs[1].waitForTimeout(300);
+  expect(cookies).toHaveLength(1); // the second tab waits for the first answer
+  release();
+  await expect.poll(() => cookies.length).toBe(2);
+  expect(cookies[1]).toContain("sid=one");
+  for (const tab of tabs) {
+    await expect(tab.locator("[data-save]").getByRole("status")).toContainText("Saved to My reports.");
+  }
+});
+
 test("saving the same result again says it is already there", async ({ page }) => {
   await mockTools(page);
   await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { ...hadahanItem, created: false })));

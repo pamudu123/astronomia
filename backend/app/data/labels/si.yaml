@@ -212,6 +212,8 @@ report:
   star_pada: "{star}, පාද {pada}"
   dasha_now: දැන් ගෙවෙන දශාව
   dasha_now_value: "{main} මහ දශාව, {sub} අතුරු දශාව"
+  dasha_now_main: "{main} මහ දශාව"
+  dasha_now_none: මේ දිනයේ ගෙවෙන දශාවක් නැත
   kuja: කුජ දෝෂය
   kuja_present: ඇත
   kuja_reduced: ඇත, අඩු වී ඇත

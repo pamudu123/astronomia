@@ -202,21 +202,34 @@ class AccountStore:
     def create_guest(self) -> Session:
         """A new guest account with its first session. Also clears out old guests."""
         now = self.clock()
+        with self._connect() as db:
+            return self._insert_guest(db, now)
+
+    def create_guest_with(self, report: NewReport, limit: int) -> tuple[Session, SavedSummary]:
+        """A new guest account holding its first report, kept together or not at all.
+
+        A save that fails leaves no empty account behind (and no cookie for one)."""
+        now = self.clock()
+        with self._connect() as db:
+            session = self._insert_guest(db, now)
+            item, _ = self._save(db, session.user.id, report, limit, now)
+        return session, item
+
+    def _insert_guest(self, db: Any, now: dt.datetime) -> Session:
         user = User(id=str(uuid.uuid4()), kind="guest")
         token = secrets.token_urlsafe(32)
         expires = now + dt.timedelta(days=GUEST_SESSION_DAYS)
-        with self._connect() as db:
-            self._purge(db, now)
-            self._run(
-                db,
-                "INSERT INTO users (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?)",
-                (user.id, user.kind, self._ts(now), self._ts(now)),
-            )
-            self._run(
-                db,
-                "INSERT INTO sessions VALUES (?, ?, ?, ?)",
-                (_hash(token), user.id, self._ts(now), self._ts(expires)),
-            )
+        self._purge(db, now)
+        self._run(
+            db,
+            "INSERT INTO users (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?)",
+            (user.id, user.kind, self._ts(now), self._ts(now)),
+        )
+        self._run(
+            db,
+            "INSERT INTO sessions VALUES (?, ?, ?, ?)",
+            (_hash(token), user.id, self._ts(now), self._ts(expires)),
+        )
         return Session(token=token, user=user, expires_at=expires)
 
     def find_session(self, token: str) -> FoundSession | None:
@@ -285,39 +298,44 @@ class AccountStore:
         """
         now = self.clock()
         with self._connect() as db:
-            existing = self._run(
-                db,
-                "SELECT id, kind, title, summary, created_at FROM saved_reports "
-                "WHERE user_id = ? AND input_hash = ?",
-                (user_id, report.input_hash),
-            ).fetchone()
-            if existing is not None:
-                return self._summary(existing), False
-            (count,) = self._run(
-                db, "SELECT COUNT(*) FROM saved_reports WHERE user_id = ?", (user_id,)
-            ).fetchone()
-            if count >= limit:
-                raise LimitReached
-            report_id = str(uuid.uuid4())
-            self._run(
-                db,
-                "INSERT INTO saved_reports (id, user_id, kind, title, input, input_hash, "
-                "snapshot, summary, rules, created_at, updated_at) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (
-                    report_id,
-                    user_id,
-                    report.kind,
-                    "",
-                    self._json(report.input),
-                    report.input_hash,
-                    self._json(report.snapshot),
-                    self._json(report.summary),
-                    report.rules,
-                    self._ts(now),
-                    self._ts(now),
-                ),
-            )
+            return self._save(db, user_id, report, limit, now)
+
+    def _save(
+        self, db: Any, user_id: str, report: NewReport, limit: int, now: dt.datetime
+    ) -> tuple[SavedSummary, bool]:
+        existing = self._run(
+            db,
+            "SELECT id, kind, title, summary, created_at FROM saved_reports "
+            "WHERE user_id = ? AND input_hash = ?",
+            (user_id, report.input_hash),
+        ).fetchone()
+        if existing is not None:
+            return self._summary(existing), False
+        (count,) = self._run(
+            db, "SELECT COUNT(*) FROM saved_reports WHERE user_id = ?", (user_id,)
+        ).fetchone()
+        if count >= limit:
+            raise LimitReached
+        report_id = str(uuid.uuid4())
+        self._run(
+            db,
+            "INSERT INTO saved_reports (id, user_id, kind, title, input, input_hash, "
+            "snapshot, summary, rules, created_at, updated_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                report_id,
+                user_id,
+                report.kind,
+                "",
+                self._json(report.input),
+                report.input_hash,
+                self._json(report.snapshot),
+                self._json(report.summary),
+                report.rules,
+                self._ts(now),
+                self._ts(now),
+            ),
+        )
         return SavedSummary(report_id, report.kind, "", report.summary, now), True
 
     def _summary(self, row: Sequence[Any]) -> SavedSummary:

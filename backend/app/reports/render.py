@@ -132,10 +132,17 @@ def render_hadahan(
         if place
         else coordinates_line(build.birth.latitude, build.birth.longitude, lang)
     )
-    main, sub = dasha.current[0], dasha.current[1]
-    dasha_now = report["dasha_now_value"].format(
-        main=planet[main.lord.value], sub=planet[sub.lord.value]
-    )
+    # No period runs before birth or after the 120 years of periods (an old birth, say).
+    main = dasha.current[0] if dasha.current else None
+    sub = dasha.current[1] if len(dasha.current) > 1 else None
+    if main and sub:
+        dasha_now = report["dasha_now_value"].format(
+            main=planet[main.lord.value], sub=planet[sub.lord.value]
+        )
+    elif main:
+        dasha_now = report["dasha_now_main"].format(main=planet[main.lord.value])
+    else:
+        dasha_now = report["dasha_now_none"]
     kuja_status = _kuja_status(kuja, lang)
 
     context = {
@@ -195,7 +202,7 @@ def render_hadahan(
                     "lord": planet[p.lord.value],
                     "start": format_date(p.start.date(), lang),
                     "end": format_date(p.end.date(), lang),
-                    "now": p.lord == main.lord and p.start == main.start,
+                    "now": main is not None and p.lord == main.lord and p.start == main.start,
                 }
                 for p in dasha.periods
             ]

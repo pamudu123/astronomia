@@ -17,12 +17,31 @@ const API = "/api/v1";
 const JSON_HEADERS = { "content-type": "application/json" };
 
 /** Saves a result. Saving one already kept answers with that one (`created` is false). */
-export async function saveReport(body: ReportRequest): Promise<SavedCreated> {
-  const response = await ensureOk(
-    await fetch(`${API}/saved`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(body) }),
-  );
-  announce();
-  return (await response.json()) as SavedCreated;
+export function saveReport(body: ReportRequest): Promise<SavedCreated> {
+  return oneSaveAtATime(async () => {
+    const response = await ensureOk(
+      await fetch(`${API}/saved`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(body) }),
+    );
+    announce();
+    return (await response.json()) as SavedCreated;
+  });
+}
+
+export const SAVE_LOCK = "sidera-save";
+let saving: Promise<unknown> = Promise.resolve();
+
+/**
+ * Saves wait for each other across every tab of this browser. A first save makes the guest
+ * account and sets its cookie; a second save sent before that cookie exists would make a
+ * second account, and the browser keeps only one of the two cookies. Browsers without Web
+ * Locks queue saves within the tab.
+ */
+function oneSaveAtATime<T>(work: () => Promise<T>): Promise<T> {
+  const locks = typeof navigator === "undefined" ? undefined : navigator.locks;
+  if (locks) return locks.request(SAVE_LOCK, () => work()).then((value) => value);
+  const next = saving.then(work, work);
+  saving = next.catch(() => undefined);
+  return next;
 }
 
 export async function listSaved(): Promise<SavedItem[]> {
