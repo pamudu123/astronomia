@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { AiExplain, FullReading } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
 import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
@@ -12,6 +13,7 @@ import { SaveButton } from "@/components/account/SaveButton";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { matchContext } from "@/lib/assistant/context";
+import { MATCH_PLACES, MATCH_READING } from "@/lib/assistant/explain";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
@@ -75,8 +77,12 @@ export function PorondamResult({
   readOnlyAction,
 }: Props) {
   const [filter, setFilter] = useState<FactorFilter>("all");
-  // What the AI assistant sees: this result, with no names or birth details.
-  useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding)));
+  // What the AI assistant sees: this result, with no names or birth details. The written
+  // explanations get the same summary, kept stable so each chapter is written once.
+  const context = matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding));
+  const contextKey = JSON.stringify(context);
+  const facts = useMemo(() => context, [contextKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  useAssistantContext(facts);
   const match = result.match!;
   const bride = result.bride!;
   const groom = result.groom!;
@@ -117,6 +123,8 @@ export function PorondamResult({
         )}
       </section>
 
+      <FullReading chapters={MATCH_READING} lang={lang} facts={facts} reading="matchReading" />
+
       {/*
         Two answers with equal weight, side by side: how many traditional factors agree, and
         the checks this rule set reports apart from that count. No single verdict on the
@@ -129,6 +137,7 @@ export function PorondamResult({
           </h2>
           <p className="soft">{t.guide}</p>
           {match.same_star_text && <p className={styles.note}>{match.same_star_text}</p>}
+          <AiExplain chapters={MATCH_PLACES.result} lang={lang} facts={facts} />
         </div>
 
         <div className={styles.comparePanels}>
@@ -179,6 +188,7 @@ export function PorondamResult({
               ))}
             </ul>
             <p className={styles.small}>{t.checksNote}</p>
+            <AiExplain chapters={MATCH_PLACES.serious} lang={lang} facts={facts} />
           </article>
         </div>
 

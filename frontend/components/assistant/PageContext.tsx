@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo } from "react";
 
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { PageContext } from "@/lib/assistant/context";
 
 /** Where on the page a summary comes from: the page's main result, or a part inside it. */
@@ -15,6 +16,13 @@ export const PageContextSetter = createContext<Setter>(() => undefined);
 /** True where the chat is on (AGENT_URL is set), so a page can offer to ask it something. */
 export const AssistantOn = createContext(false);
 export const useAssistantOn = () => useContext(AssistantOn);
+
+/**
+ * The words for the AI explanations (components/assistant/Explain.tsx). Set by the Assistant,
+ * so the explanations appear only where the AI is on, and pages need no extra text props.
+ */
+export const ExplainText = createContext<Dictionary["assistant"]["explain"] | null>(null);
+export const useExplainText = () => useContext(ExplainText);
 
 /**
  * Tells the assistant what this page shows (docs/14, section 3). Pages call this with a

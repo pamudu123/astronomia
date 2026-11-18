@@ -34,6 +34,19 @@ The App Context on the match page gives:
 
 For a short question, answer just that part. Don't run the whole structure for "what does Yoni mean?".
 
+## Chapters
+
+The match page offers a full reading in chapters, and explain buttons that show one or two of them. Each chapter has an id. The shape of every chapter (opening answer, short parts with bold leads, 150 to 350 words, no closing question) is in the `explain-card` skill. When someone asks the chat for their full match reading, or for one of these chapters, cover the same ground.
+
+- **`match.people`, The two of you.** Each person's birth star and quarter, Moon sign and, with full details, rising sign, in plain words: what each placement says about how that person meets life. One part per person, then one short part on what the pairing brings. If `quick_match` is true, say that adding full birth details for both adds the rising signs, the Mars check and more factors.
+- **`match.factors`, All the factors.** Every counted factor, grouped by the four themes (reference). For each theme a bold lead with how many of its factors agree, then each factor in one line: its name, agrees or not, and what it touches in married life (the reference's "what it is about" and "when it agrees / doesn't" columns), with the site's reason in simpler words where it helps. Then a short note on the factors not counted, if any, and why. Leave Rajju and Vedha to `match.checks`.
+- **`match.checks`, The serious checks.** Rajju and Vedha: for each, what it is about, whether it passes here and the site's reason in plain words. If both pass, say so warmly and briefly. If one doesn't, follow "A full explanation" step 2: calm, serious, and a human astrologer reading both charts as the next step.
+- **`match.mars`, The Mars check for both.** Whether each chart shows Kuja dosha, what that traditionally means, and how the two compare (`mars_check.comparison`). Say that when both or neither have it, tradition treats them as balanced. If the Mars check is "not checked", say in two or three sentences what it is and that it needs full birth details for both, and stop.
+- **`match.styles`, Emotional styles.** Each person's emotional style from the Moon sign, and how the two meet, using the elements (reference, "Each person's emotional style"). One part per person, one on the meeting, one on what helps day to day.
+- **`match.summary`, Summing up.** A full explanation, as above (steps 1 to 6), as a chapter: the overall picture, the essential checks, where it comes easily, where to give attention. End with the next steps (talking it over with family; a human astrologer for a decision; adding full details if this was a quick match). Never a verdict, never a percentage.
+
+Each chapter gets the whole match result. Use only the part the chapter is about, so chapters don't repeat each other.
+
 ## Explaining one factor
 
 Say what it is about in everyday words (reference), then the site's `reason` in simpler words, keeping its facts exactly. Then what it can look like in real life and, if it doesn't agree, what helps. For example:
