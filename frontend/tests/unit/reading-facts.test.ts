@@ -1,16 +1,27 @@
 import { describe, expect, it } from "vitest";
 
 import { type Placement, combinations, relation, seventhLord } from "@/lib/assistant/chartFacts";
-import { chartExtrasContext, chartReadingContext, matchReadingContext } from "@/lib/assistant/pages";
+import {
+  chartExtrasContext,
+  chartReadingContext,
+  coupleYearsContext,
+  matchReadingContext,
+  weddingReadingContext,
+} from "@/lib/assistant/pages";
 import type { Upcoming } from "@/lib/changes";
 import type { Hadahan, Labels } from "@/lib/hadahan";
 import type { Journey } from "@/lib/journey";
-import type { Porondam } from "@/lib/porondam";
+import type { Porondam, Timeline } from "@/lib/porondam";
+import type { Wedding } from "@/lib/wedding";
 
 import upcomingFixture from "../e2e/fixtures/changes-personal-en.json";
 import hadahan from "../e2e/fixtures/hadahan-en.json";
 import labelsEn from "../e2e/fixtures/labels-en.json";
 import porondamFull from "../e2e/fixtures/porondam-full-en.json";
+import timelineFull from "../e2e/fixtures/timeline-full-en.json";
+import timelineQuick from "../e2e/fixtures/timeline-quick-en.json";
+import weddingQuick from "../e2e/fixtures/wedding-quick-en.json";
+import weddingQuickSi from "../e2e/fixtures/wedding-quick-si.json";
 
 const labels = labelsEn as unknown as Labels;
 const chart = hadahan as unknown as Hadahan;
@@ -159,5 +170,72 @@ describe("matchReadingContext", () => {
     const found = (bride.combinations as { name: string }[]).map((c) => c.name);
     expect(found).toContain("Ravi-Sukra yoga");
     expect(found).toContain("Papa Kartari");
+  });
+});
+
+describe("coupleYearsContext", () => {
+  const base = matchReadingContext(porondamFull as unknown as Porondam, labels, "en");
+  type Years = {
+    window: { from: string; until: string };
+    bride: {
+      birth_details: string;
+      life_periods: { period: string; from: string; until: string; sub_periods: { from: string }[] }[];
+      saturn: unknown[];
+    };
+    groom: { saturn: unknown[] };
+    saturn_for_both: unknown[];
+  };
+  const years = (timeline: unknown) =>
+    (coupleYearsContext(base, timeline as Timeline, labels).result as { years_ahead: Years }).years_ahead;
+
+  it("gives each person's periods in the ten-year window, by name", () => {
+    const y = years(timelineFull.timeline);
+    expect(y.window).toEqual({ from: "2026-11-12", until: "2036-11-12" });
+    expect(y.bride.life_periods.map((p) => p.period)).toEqual(["Sun", "Moon"]);
+    expect(y.bride.life_periods[1].from).toBe("2030-04-13");
+    expect(y.groom.saturn).toHaveLength(4);
+  });
+
+  it("never gives the start of a period that began before the window", () => {
+    // It could be the birth date: the first life period starts at birth.
+    const first = years(timelineFull.timeline).bride.life_periods[0];
+    expect(first.from).toBe("before this window");
+    expect(JSON.stringify(years(timelineFull.timeline))).not.toContain("2024-04-13");
+    // Sub-periods are cut to the window too.
+    expect(first.sub_periods.every((s) => s.from >= "2026-11-12")).toBe(true);
+  });
+
+  it("works with birth stars only: Saturn, no life periods", () => {
+    const y = years(timelineQuick.timeline);
+    expect(y.bride.birth_details).toBe("quick");
+    expect(y.bride.life_periods).toEqual([]);
+    expect(y.saturn_for_both).toHaveLength(1);
+  });
+});
+
+describe("weddingReadingContext", () => {
+  it("adds the dates found to the match facts", () => {
+    const base = matchReadingContext(porondamFull as unknown as Porondam, labels, "en");
+    const result = weddingReadingContext(base, weddingQuick as unknown as Wedding).result as {
+      wedding_dates_found: { ceremonies: { ceremony: string; dates: unknown[] }[] };
+      score: unknown;
+    };
+    expect(result.wedding_dates_found.ceremonies.map((c) => c.ceremony)).toEqual([
+      "Engagement",
+      "Poruwa ceremony",
+      "Homecoming",
+    ]);
+    expect(result.wedding_dates_found.ceremonies[1].dates).toHaveLength(5);
+    expect(result.score).toBeTruthy(); // the match facts stay
+  });
+});
+
+describe("the wedding chapter's facts", () => {
+  it("stay well inside the agent's 40 KB limit, even in Sinhala", () => {
+    const porondamSi = { ...(porondamFull as unknown as Porondam) };
+    const base = matchReadingContext(porondamSi, labels, "si");
+    const bytes = (value: unknown) => new TextEncoder().encode(JSON.stringify(value)).length;
+    const si = weddingReadingContext(base, weddingQuickSi as unknown as Wedding);
+    expect(bytes(si)).toBeLessThan(25_000);
   });
 });

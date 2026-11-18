@@ -24,7 +24,17 @@ type Props = {
 };
 
 /** "Wedding nakath for this couple", on the porondam result. Searches only when asked. */
-export function WeddingFinder({ lang, t, request }: Props) {
+/**
+ * `onResult` tells the match page which dates were found, for the written reading; `explain`
+ * is the AI explain button shown under them (docs/17, place 8), when the AI is on.
+ */
+export function WeddingFinder({
+  lang,
+  t,
+  request,
+  onResult,
+  explain,
+}: Props & { onResult?: (result: Wedding) => void; explain?: React.ReactNode }) {
   const hydrated = useHydrated();
   const [months, setMonths] = useState<Months>(6);
   const [chosen, setChosen] = useState<Ceremony[]>([...CEREMONIES]);
@@ -45,7 +55,10 @@ export function WeddingFinder({ lang, t, request }: Props) {
     setError(null);
     try {
       const found = await fetchWedding(request, { months, ceremonies: chosen, placeId: place?.id }, lang);
-      if (found.status === "ok") setResult(found);
+      if (found.status === "ok") {
+        setResult(found);
+        onResult?.(found);
+      }
       else setError(t.clock);
     } catch (caught) {
       setError(failureText(caught, t));
@@ -152,6 +165,7 @@ export function WeddingFinder({ lang, t, request }: Props) {
             ))}
             {result.note && <p className={styles.small}>{result.note}</p>}
             <p className={styles.small}>{t.provisional}</p>
+            {explain}
           </>
         )}
       </section>

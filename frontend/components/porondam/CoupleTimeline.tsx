@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Labels } from "@/lib/hadahan";
@@ -87,7 +87,16 @@ function DashaTrack({
 }
 
 /** "Years ahead for the couple": Saturn and dasha periods for both, on one time line. */
-export function CoupleTimeline({ lang, t, labels, request, brideName, groomName }: Props) {
+/** `explain` is the AI explain button for the years ahead (docs/17, place 7), when the AI is on. */
+export function CoupleTimeline({
+  lang,
+  t,
+  labels,
+  request,
+  brideName,
+  groomName,
+  explain,
+}: Props & { explain?: ReactNode }) {
   const [timeline, setTimeline] = useState<Timeline | null>(null);
 
   useEffect(() => {
@@ -118,6 +127,7 @@ export function CoupleTimeline({ lang, t, labels, request, brideName, groomName 
           {t.title}
         </h2>
         <p className="soft">{t.lead}</p>
+        {explain}
       </div>
 
       <div className={styles.chart} aria-hidden="true">

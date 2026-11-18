@@ -124,18 +124,27 @@ export type TimelineResult = components["schemas"]["TimelineResponse"];
 export type Timeline = NonNullable<TimelineResult["timeline"]>;
 export type PersonTimeline = Timeline["bride"];
 
+// One request per couple and language while the page is open: "Years ahead for the couple"
+// and the written reading (the couple's years ahead) both use it.
+const timelines = new Map<string, Promise<TimelineResult>>();
+
 /** The next ten years for the couple. Birth details go in the body of a POST. */
-export async function fetchTimeline(
-  request: PorondamRequest,
-  lang: Locale,
-): Promise<TimelineResult> {
-  const response = await fetch("/api/v1/porondam/timeline", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ ...request, lang }),
-  });
-  if (!response.ok) throw new Error(`request failed: ${response.status}`);
-  return (await response.json()) as TimelineResult;
+export function fetchTimeline(request: PorondamRequest, lang: Locale): Promise<TimelineResult> {
+  const key = JSON.stringify([request, lang]);
+  const known = timelines.get(key);
+  if (known) return known;
+  const pending = (async () => {
+    const response = await fetch("/api/v1/porondam/timeline", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...request, lang }),
+    });
+    if (!response.ok) throw new Error(`request failed: ${response.status}`);
+    return (await response.json()) as TimelineResult;
+  })();
+  timelines.set(key, pending);
+  pending.catch(() => timelines.delete(key)); // a failed request can be tried again
+  return pending;
 }
 
 const dayNumber = (date: string) => Date.parse(`${date.slice(0, 10)}T00:00:00Z`) / 86_400_000;
