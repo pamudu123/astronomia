@@ -12,6 +12,7 @@ rules the site already has:
 Only keys come out of here; the API adds the names in the page's language.
 """
 
+import zoneinfo
 from dataclasses import dataclass
 
 from app.engine import panchanga, porondam
@@ -35,7 +36,8 @@ STAR_GROUPS: tuple[str, ...] = (
 
 @dataclass(frozen=True)
 class BirthTable:
-    weekday: str
+    weekday: str  # the Sinhala day, from sunrise
+    calendar_weekday: str  # the civil date's weekday, as the match's weekday factor counts it
     thithi: str
     yoga: str
     karana: str
@@ -62,6 +64,9 @@ def birth_table(ephemeris: Ephemeris, chart: Chart, timezone: str) -> BirthTable
     almanac = panchanga.load_rules()
     return BirthTable(
         weekday=panchanga.WEEKDAYS[day.weekday()],
+        calendar_weekday=panchanga.WEEKDAYS[
+            chart.utc.astimezone(zoneinfo.ZoneInfo(timezone)).date().weekday()
+        ],
         thithi=panchanga.THITHI_KEYS[panchanga.thithi_index(sun, moon)],
         yoga=panchanga.YOGA_KEYS[panchanga.yoga_index(sun, moon)],
         karana=panchanga.karana_key(panchanga.karana_index(sun, moon)),

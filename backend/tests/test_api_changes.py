@@ -1,4 +1,5 @@
 import json
+from itertools import pairwise
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -157,3 +158,24 @@ def test_gochara_carries_the_saturn_periods(client: TestClient) -> None:
     assert body["gochara"]["notes"] == []
     assert body["lagna"]["notes"] == []
     assert [(m["from_house"], m["to_house"]) for m in body["gochara"]["moves"]] == [(5, 6)]
+
+
+def test_the_suns_months_ahead(client: TestClient) -> None:
+    """The Sun's sign for each month of the year ahead (docs/17, "The planet changes ahead")."""
+    body = client.post(
+        "/v1/changes/personal", json={**BIRTH, "lang": "en", "as_of": "2026-11-13T00:00:00Z"}
+    ).json()
+    months = body["sun_months"]
+    assert 12 <= len(months) <= 13
+    assert months[0]["start"].startswith("2026-11-13")  # the stay running now
+    signs = [m["sign"] for m in months]
+    assert signs[0] == "tula"  # mid-November 2026, before the Sun enters Vrischika
+    for month, after in pairwise(months):
+        assert month["end"] == after["start"]
+    order = ["mesha", "vrishabha", "mithuna", "kataka", "simha", "kanya", "tula", "vrischika",
+             "dhanu", "makara", "kumbha", "meena"]  # fmt: skip
+    for month in months:
+        from_lagna = (order.index(month["sign"]) - order.index("simha")) % 12 + 1
+        from_moon = (order.index(month["sign"]) - order.index("vrischika")) % 12 + 1
+        assert (month["house_from_lagna"], month["house_from_moon"]) == (from_lagna, from_moon)
+    assert months[0]["sign_name"] == "Tula"

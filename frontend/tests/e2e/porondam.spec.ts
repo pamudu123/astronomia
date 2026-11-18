@@ -48,6 +48,9 @@ test("a quick match by birth stars", async ({ page }) => {
   await expect(page.locator('[data-factor="weekday"]')).toHaveAttribute("data-counted", "false");
   await expect(page.locator('[data-factor="weekday"]')).toContainText("Not counted");
   await expect(page.getByText("Kuja dosha needs the full birth details of both people.")).toBeVisible();
+  // With the AI off (no AGENT_URL), no AI reading or explain buttons (tests/e2e/ai.spec.ts has them on).
+  await expect(page.locator('[data-card="full-reading"]')).toHaveCount(0);
+  await expect(page.locator("[data-explain]")).toHaveCount(0);
 
   expect(JSON.parse(requests[0])).toMatchObject({
     bride: { nakshatra: "anuradha", pada: 2 },

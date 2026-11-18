@@ -29,7 +29,8 @@ from app.engine.changes import (
     saturn_notes,
 )
 from app.engine.chart import compute_chart
-from app.engine.zodiac import RASHI, Body
+from app.engine.transits import sign_changes, signs_at
+from app.engine.zodiac import RASHI, Body, whole_sign_house
 from app.explain.labels import Lang, labels
 from app.reports.format import format_date, format_time
 
@@ -132,6 +133,17 @@ class UpcomingChange(BaseModel):
     gochara: CountedOut
 
 
+class SunStayOut(BaseModel):
+    """One month of the Sun: its sign, when it enters and leaves, and the house it lights."""
+
+    sign: str
+    sign_name: str
+    start: dt.datetime
+    end: dt.datetime
+    house_from_lagna: int
+    house_from_moon: int
+
+
 class UpcomingResponse(BaseModel):
     status: str
     time: TimeResolveResponse
@@ -140,6 +152,33 @@ class UpcomingResponse(BaseModel):
     lagna: str | None
     moon_sign: str | None
     changes: list[UpcomingChange]
+    # The Sun moves sign about once a month: the twelve months ahead, for the written reading
+    # (docs/17, "The planet changes ahead"). Its house is counted like the slow planets'.
+    sun_months: list[SunStayOut] = []
+
+
+def sun_months(now: dt.datetime, lagna: int, moon: int, lang: Lang) -> list[SunStayOut]:
+    """The Sun's stays from now to a year ahead, the first one already running."""
+    names = labels(lang)["rashi"]
+    end = now + AHEAD
+    starts = [(signs_at(EPHEMERIS, now)[Body.SUN], now)] + [
+        (change.to_sign, change.moment)
+        for change in sign_changes(EPHEMERIS, now, end, bodies=(Body.SUN,))
+    ]
+    months = []
+    for index, (sign, start) in enumerate(starts):
+        until = starts[index + 1][1] if index + 1 < len(starts) else end
+        months.append(
+            SunStayOut(
+                sign=RASHI[sign],
+                sign_name=str(names[RASHI[sign]]["name"]),
+                start=start,
+                end=until,
+                house_from_lagna=whole_sign_house(sign, lagna),
+                house_from_moon=whole_sign_house(sign, moon),
+            )
+        )
+    return months
 
 
 def _local(moment: dt.datetime) -> dt.datetime:
@@ -355,6 +394,7 @@ def upcoming_changes(body: HadahanRequest, db: PlacesDb) -> UpcomingResponse:
             for change in all_changes(EPHEMERIS)
             if now <= change.moment < now + AHEAD
         ],
+        sun_months=sun_months(now, lagna, moon, body.lang),
     )
 
 

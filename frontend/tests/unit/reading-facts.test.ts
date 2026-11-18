@@ -78,10 +78,12 @@ describe("the new combinations", () => {
 
 describe("chartReadingContext with the birth table", () => {
   it("adds the almanac at birth and the star's groups by name, with no time", () => {
+    // A birth before sunrise: the Sinhala day is Tuesday, the calendar date a Wednesday.
     const withTable = {
       ...chart,
       birth_table: {
-        weekday: { key: "wednesday", name: "Wednesday" },
+        weekday: { key: "tuesday", name: "Tuesday" },
+        calendar_weekday: { key: "wednesday", name: "Wednesday" },
         thithi: { key: "krishna_5", name: "Dark 5" },
         yoga: { key: "siddhi", name: "Siddhi" },
         karana: { key: "taitila", name: "Taitila" },
@@ -92,7 +94,8 @@ describe("chartReadingContext with the birth table", () => {
     } as unknown as Hadahan;
     const result = chartReadingContext(withTable, labels, "en").result as { birth_table: unknown };
     expect(result.birth_table).toEqual({
-      weekday: "Wednesday",
+      weekday: "Tuesday",
+      calendar_weekday: "Wednesday",
       thithi: "Dark 5",
       yoga: "Siddhi",
       karana: "Taitila",
@@ -113,6 +116,7 @@ describe("chartExtrasContext", () => {
       { start: "2041-01-01T00:00:00Z", end: "2048-07-01T00:00:00Z" },
     ],
     guru_returns: [{ start: "2030-05-01T00:00:00Z", end: "2031-05-01T00:00:00Z" }],
+    erashtaka_lagna: [{ start: "2034-07-13T00:00:00Z", end: "2041-01-01T00:00:00Z" }],
   } as unknown as Journey;
 
   it("marks each Saturn period past, now or ahead, by date only", () => {
@@ -123,6 +127,30 @@ describe("chartExtrasContext", () => {
     expect(result.saturn_erashtaka.map((s) => s.state)).toEqual(["past", "now", "ahead"]);
     expect(result.saturn_erashtaka[1]).toEqual({ from: "2025-03-29", until: "2032-06-01", state: "now" });
     expect(result.jupiter_returns).toHaveLength(1);
+  });
+
+  it("adds Saturn's periods counted from the rising sign too", () => {
+    const result = chartExtrasContext(base, { journey }).result as {
+      saturn_erashtaka_from_rising_sign: { from: string; state: string }[];
+    };
+    expect(result.saturn_erashtaka_from_rising_sign).toEqual([
+      { from: "2034-07-13", until: "2041-01-01", state: "ahead" },
+    ]);
+  });
+
+  it("adds the Sun's months with their houses", () => {
+    const upcoming = {
+      ...(upcomingFixture as object),
+      sun_months: [
+        { sign: "tula", sign_name: "Tula", start: "2026-11-13T00:00:00Z", end: "2026-11-16T10:00:00Z", house_from_lagna: 3, house_from_moon: 12 },
+        { sign: "vrischika", sign_name: "Vrischika", start: "2026-11-16T10:00:00Z", end: "2026-12-16T00:00:00Z", house_from_lagna: 4, house_from_moon: 1 },
+      ],
+    } as unknown as Upcoming;
+    const result = chartExtrasContext(base, { upcoming }).result as { sun_months_ahead: unknown[] };
+    expect(result.sun_months_ahead).toEqual([
+      { sign: "Tula", from: "2026-11-13", until: "2026-11-16", house_from_rising_sign: 3, house_from_moon_sign: 12 },
+      { sign: "Vrischika", from: "2026-11-16", until: "2026-12-16", house_from_rising_sign: 4, house_from_moon_sign: 1 },
+    ]);
   });
 
   it("adds the planet changes ahead, counted from the rising sign and the Moon sign", () => {

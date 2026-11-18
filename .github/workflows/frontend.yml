@@ -41,6 +41,11 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+      - name: Build with the AI switched on, for tests/e2e/ai.spec.ts
+        run: npm run build
+        env:
+          NEXT_DIST_DIR: .next-ai
+          AGENT_URL: http://127.0.0.1:9/agent
       - name: Browser tests
         run: npx playwright test --trace off
       - name: Keep test results when browser tests fail

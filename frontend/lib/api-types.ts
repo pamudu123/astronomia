@@ -828,6 +828,7 @@ export interface components {
          */
         BirthTableOut: {
             weekday: components["schemas"]["LabelOut"];
+            calendar_weekday?: components["schemas"]["LabelOut"] | null;
             thithi: components["schemas"]["LabelOut"];
             yoga: components["schemas"]["LabelOut"];
             karana: components["schemas"]["LabelOut"];
@@ -1384,6 +1385,11 @@ export interface components {
             periods: components["schemas"]["MainPeriodOut"][];
             /** Erashtaka */
             erashtaka: components["schemas"]["app__api__journey__SpanOut"][];
+            /**
+             * Erashtaka Lagna
+             * @default []
+             */
+            erashtaka_lagna: components["schemas"]["app__api__journey__SpanOut"][];
             /** Guru Returns */
             guru_returns: components["schemas"]["app__api__journey__SpanOut"][];
             /** Stops */
@@ -2589,6 +2595,30 @@ export interface components {
             /** Score */
             score: number;
         };
+        /**
+         * SunStayOut
+         * @description One month of the Sun: its sign, when it enters and leaves, and the house it lights.
+         */
+        SunStayOut: {
+            /** Sign */
+            sign: string;
+            /** Sign Name */
+            sign_name: string;
+            /**
+             * Start
+             * Format: date-time
+             */
+            start: string;
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+            /** House From Lagna */
+            house_from_lagna: number;
+            /** House From Moon */
+            house_from_moon: number;
+        };
         /** TimeCheckOut */
         TimeCheckOut: {
             /** Stable */
@@ -2726,6 +2756,11 @@ export interface components {
             moon_sign: string | null;
             /** Changes */
             changes: components["schemas"]["UpcomingChange"][];
+            /**
+             * Sun Months
+             * @default []
+             */
+            sun_months: components["schemas"]["SunStayOut"][];
         };
         /** ValidationError */
         ValidationError: {

@@ -126,6 +126,8 @@ export function chartReadingContext(
       ...(table && {
         birth_table: {
           weekday: table.weekday.name,
+          // Only for a birth before sunrise: the calendar date's weekday, which the match counts.
+          ...(table.calendar_weekday && { calendar_weekday: table.calendar_weekday.name }),
           thithi: table.thithi.name,
           yoga: table.yoga.name,
           karana: table.karana.name,
@@ -177,6 +179,7 @@ export function chartExtrasContext(
       ...(journey && {
         // Counted from the Moon sign. Spans, not ages: an age would give away the birth date.
         saturn_erashtaka: journey.erashtaka.map(span),
+        saturn_erashtaka_from_rising_sign: (journey.erashtaka_lagna ?? []).map(span),
         jupiter_returns: journey.guru_returns.map(span),
         road_provisional: journey.provisional,
       }),
@@ -186,6 +189,13 @@ export function chartExtrasContext(
           when: c.change.when,
           from_rising_sign: counted(c.lagna),
           from_moon_sign: counted(c.gochara),
+        })),
+        sun_months_ahead: (upcoming.sun_months ?? []).map((m) => ({
+          sign: m.sign_name,
+          from: day(m.start),
+          until: day(m.end),
+          house_from_rising_sign: m.house_from_lagna,
+          house_from_moon_sign: m.house_from_moon,
         })),
       }),
     },

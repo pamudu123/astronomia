@@ -2513,6 +2513,16 @@
           "weekday": {
             "$ref": "#/components/schemas/LabelOut"
           },
+          "calendar_weekday": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LabelOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "thithi": {
             "$ref": "#/components/schemas/LabelOut"
           },
@@ -4131,6 +4141,14 @@
             },
             "type": "array",
             "title": "Erashtaka"
+          },
+          "erashtaka_lagna": {
+            "items": {
+              "$ref": "#/components/schemas/app__api__journey__SpanOut"
+            },
+            "type": "array",
+            "title": "Erashtaka Lagna",
+            "default": []
           },
           "guru_returns": {
             "items": {
@@ -7488,6 +7506,47 @@
         ],
         "title": "SuggestionOut"
       },
+      "SunStayOut": {
+        "properties": {
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "sign_name": {
+            "type": "string",
+            "title": "Sign Name"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "house_from_lagna": {
+            "type": "integer",
+            "title": "House From Lagna"
+          },
+          "house_from_moon": {
+            "type": "integer",
+            "title": "House From Moon"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sign",
+          "sign_name",
+          "start",
+          "end",
+          "house_from_lagna",
+          "house_from_moon"
+        ],
+        "title": "SunStayOut",
+        "description": "One month of the Sun: its sign, when it enters and leaves, and the house it lights."
+      },
       "TimeCheckOut": {
         "properties": {
           "stable": {
@@ -7915,6 +7974,14 @@
             },
             "type": "array",
             "title": "Changes"
+          },
+          "sun_months": {
+            "items": {
+              "$ref": "#/components/schemas/SunStayOut"
+            },
+            "type": "array",
+            "title": "Sun Months",
+            "default": []
           }
         },
         "type": "object",

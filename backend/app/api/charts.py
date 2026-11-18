@@ -137,7 +137,10 @@ class LabelOut(BaseModel):
 class BirthTableOut(BaseModel):
     """The almanac at the birth moment and the birth star's traditional groups."""
 
-    weekday: LabelOut
+    weekday: LabelOut  # the Sinhala day, which begins at sunrise
+    # The calendar date's weekday, only when it differs (a birth after midnight, before
+    # sunrise). The match's weekday factor counts by the calendar date.
+    calendar_weekday: LabelOut | None = None
     thithi: LabelOut
     yoga: LabelOut
     karana: LabelOut
@@ -209,6 +212,11 @@ def birth_table_out(table: BirthTable, lang: Lang) -> BirthTableOut:
 
     return BirthTableOut(
         weekday=label("weekday", table.weekday),
+        calendar_weekday=(
+            label("weekday", table.calendar_weekday)
+            if table.calendar_weekday != table.weekday
+            else None
+        ),
         thithi=label("thithi", table.thithi),
         yoga=label("yoga", table.yoga),
         karana=label("karana", table.karana),
