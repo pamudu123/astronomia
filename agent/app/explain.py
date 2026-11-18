@@ -58,7 +58,13 @@ CHAPTERS: dict[str, Chapter] = {
     "match.mars": Chapter("explain-match", "The Mars check for both"),
     "match.styles": Chapter("explain-match", "Emotional styles"),
     "match.summary": Chapter("explain-match", "Summing up"),
+    "match.combinations": Chapter("explain-match", "Marriage combinations in each chart"),
+    "match.lords": Chapter("explain-match", "Your two 7th-house rulers"),
     # The birth chart: the full reading, and the topic chips (family, studies, abroad).
+    "chart.summary": Chapter("birth-chart", "Birth summary"),
+    "chart.combinations": Chapter("personal-reading", "Special combinations"),
+    "chart.saturn": Chapter("birth-chart", "Saturn periods"),
+    "chart.ahead": Chapter("birth-chart", "The planet changes ahead"),
     "chart.nature": Chapter("personal-reading", "Your nature"),
     "chart.planets": Chapter("personal-reading", "The nine planets"),
     "chart.houses": Chapter("personal-reading", "The 12 parts of life"),

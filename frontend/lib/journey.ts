@@ -62,14 +62,26 @@ export type Road = {
   step: number; // years between quality values
 };
 
-export async function fetchJourney(request: BirthRequest, lang: Locale): Promise<JourneyResult> {
-  const response = await fetch("/api/v1/journey", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ ...request, lang }),
-  });
-  if (!response.ok) throw new Error(`request failed: ${response.status}`);
-  return (await response.json()) as JourneyResult;
+// One request per birth and language while the page is open: the life road and the written
+// reading (Saturn periods) both use it.
+const journeys = new Map<string, Promise<JourneyResult>>();
+
+export function fetchJourney(request: BirthRequest, lang: Locale): Promise<JourneyResult> {
+  const key = JSON.stringify([request, lang]);
+  const known = journeys.get(key);
+  if (known) return known;
+  const pending = (async () => {
+    const response = await fetch("/api/v1/journey", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...request, lang }),
+    });
+    if (!response.ok) throw new Error(`request failed: ${response.status}`);
+    return (await response.json()) as JourneyResult;
+  })();
+  journeys.set(key, pending);
+  pending.catch(() => journeys.delete(key)); // a failed request can be tried again
+  return pending;
 }
 
 const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(high, value));

@@ -1182,14 +1182,14 @@
       "locked": "Available on paid plans",
       "matchReading": {
         "title": "Full match reading",
-        "lead": "{count} chapters that walk through this match: each person, every factor, the serious checks, the Mars check, emotional styles, and a summing up.",
+        "lead": "{count} chapters that walk through this match: each person, every factor, the serious checks, the Mars check, marriage combinations in each chart, the two 7th-house rulers, emotional styles, and a summing up.",
         "get": "Get the full reading",
         "openAll": "Open all",
         "hideAll": "Hide all"
       },
       "chartReading": {
         "title": "Full chart reading",
-        "lead": "{count} chapters that walk through this chart: nature, the nine planets, the 12 parts of life, work and money, love and marriage, life periods with dates, the Mars check, and areas to take care of.",
+        "lead": "{count} chapters that walk through this chart: the birth summary, nature, the nine planets, special combinations, the Mars check, the 12 parts of life, work and money, love and marriage, life periods, Saturn periods, areas to take care of, and the planet changes ahead.",
         "get": "Get the full reading",
         "openAll": "Open all",
         "hideAll": "Hide all"
@@ -1215,7 +1215,13 @@
         "chart.abroad": "Travel and going abroad",
         "chart.periods": "Your life periods",
         "chart.mars": "The Mars check",
-        "chart.care": "Areas to take care of"
+        "chart.care": "Areas to take care of",
+        "match.combinations": "Marriage combinations in each chart",
+        "match.lords": "Your two 7th-house rulers",
+        "chart.summary": "Birth summary",
+        "chart.combinations": "Special combinations",
+        "chart.saturn": "Saturn periods",
+        "chart.ahead": "The planet changes ahead"
       }
     },
     "cards": {

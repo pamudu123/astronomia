@@ -42,6 +42,20 @@ A useful way to speak: "Your strongest area is attraction and affection, where a
 | Rajju (essential) | Body-part groups of the stars; read for the stability and strength of the marriage | Passes: one of the two most important checks is clear | Doesn't pass: tradition treats this seriously whatever the score. Say "the stability of the marriage", never "long life" or death | Talk it over with family and a human astrologer who can read both charts |
 | Vedha (essential) | Pairs of stars said to obstruct each other | Passes: no obstruction between your stars | Doesn't pass: tradition says the stars block each other, linked to obstacles in life together | As above |
 
+## The two 7th-house rulers
+
+The 7th house is marriage and partnership. Some family astrologers compare the planets that rule each person's 7th house, using the natural friendship of the planets (the same idea as the Graha factor). Provisional until the astrologer review.
+
+| Relation | What tradition reads into it | How to say it |
+|---|---|---|
+| Same planet | Both look for the same things in a partner | "you look for the same qualities in a partnership" |
+| Friends | The two ideas of partnership support each other | "what each of you hopes for in a marriage fits together naturally" |
+| Neutral | Neither helps nor hinders | "your hopes for partnership are different but not in conflict" |
+| Mixed | One leans towards the other more than it is returned | "one of you may adapt more; say so early and share it out" |
+| Enemies | The two ideas of partnership pull different ways | "you may want different things from married life; talk them through early" |
+
+Never present this as deciding the marriage. It is one traditional pointer, read with the factors and the essential checks.
+
 ## Each person's emotional style
 
 When both Moon signs are on the page, you can add each person's emotional style from the Moon sign (see the sign table in the `personal-reading` reference, section 2), then say how the two meet. Keep it light and balanced. For example: "With a Kataka Moon you feel things deeply and need a calm home. Her Mesha Moon reacts fast and moves on. That can work well: she brings energy, you bring steadiness, as long as she gives you time to talk it through."

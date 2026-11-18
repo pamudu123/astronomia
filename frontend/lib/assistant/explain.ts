@@ -22,6 +22,12 @@ export type ChapterId =
   | "match.mars"
   | "match.styles"
   | "match.summary"
+  | "match.combinations"
+  | "match.lords"
+  | "chart.summary"
+  | "chart.combinations"
+  | "chart.saturn"
+  | "chart.ahead"
   | "chart.nature"
   | "chart.planets"
   | "chart.houses"
@@ -40,6 +46,8 @@ export const MATCH_READING: ChapterId[] = [
   "match.factors",
   "match.checks",
   "match.mars",
+  "match.combinations",
+  "match.lords",
   "match.styles",
   "match.summary",
 ];
@@ -54,15 +62,22 @@ export const MATCH_PLACES = {
 
 /** The full birth chart reading, in reading order (docs/17, section 2.2). */
 export const CHART_READING: ChapterId[] = [
+  "chart.summary",
   "chart.nature",
   "chart.planets",
+  "chart.combinations",
+  "chart.mars",
   "chart.houses",
   "chart.work",
   "chart.love",
   "chart.periods",
-  "chart.mars",
+  "chart.saturn",
   "chart.care",
+  "chart.ahead",
 ];
+
+/** Chart chapters whose facts come from a second request beside the chart (chartExtrasContext). */
+export const CHART_EXTRA: ChapterId[] = ["chart.saturn", "chart.ahead"];
 
 /** The explain buttons on the chart page (docs/17, section 3, places 1 to 3). */
 export const CHART_PLACES = {

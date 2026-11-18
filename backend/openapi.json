@@ -2508,6 +2508,52 @@
         ],
         "title": "BabyLettersResponse"
       },
+      "BirthTableOut": {
+        "properties": {
+          "weekday": {
+            "$ref": "#/components/schemas/LabelOut"
+          },
+          "thithi": {
+            "$ref": "#/components/schemas/LabelOut"
+          },
+          "yoga": {
+            "$ref": "#/components/schemas/LabelOut"
+          },
+          "karana": {
+            "$ref": "#/components/schemas/LabelOut"
+          },
+          "star": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LabelOut"
+            },
+            "type": "object",
+            "title": "Star"
+          },
+          "rule_sets": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rule Sets"
+          },
+          "provisional": {
+            "type": "boolean",
+            "title": "Provisional"
+          }
+        },
+        "type": "object",
+        "required": [
+          "weekday",
+          "thithi",
+          "yoga",
+          "karana",
+          "star",
+          "rule_sets",
+          "provisional"
+        ],
+        "title": "BirthTableOut",
+        "description": "The almanac at the birth moment and the birth star's traditional groups."
+      },
       "Body": {
         "type": "string",
         "enum": [
@@ -3928,6 +3974,16 @@
                 "type": "null"
               }
             ]
+          },
+          "birth_table": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BirthTableOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -4560,6 +4616,24 @@
           "counts"
         ],
         "title": "KujaPointOut"
+      },
+      "LabelOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name"
+        ],
+        "title": "LabelOut"
       },
       "LetterCountOut": {
         "properties": {
@@ -5635,6 +5709,20 @@
               }
             ],
             "title": "Offset Label"
+          },
+          "placements": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PlacementOut"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Placements"
           }
         },
         "type": "object",
@@ -5904,6 +5992,28 @@
           "population"
         ],
         "title": "PlaceOut"
+      },
+      "PlacementOut": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          },
+          "sign": {
+            "type": "string",
+            "title": "Sign"
+          },
+          "house": {
+            "type": "integer",
+            "title": "House"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body",
+          "sign",
+          "house"
+        ],
+        "title": "PlacementOut"
       },
       "PlanetMonthOut": {
         "properties": {

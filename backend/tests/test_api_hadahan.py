@@ -95,3 +95,33 @@ def test_labels_include_porondam_names(client: TestClient) -> None:
     for key in ("gana", "yoni", "nadi", "rajju", "porondam_factor"):
         assert key in en
     assert en["porondam_factor"]["rajju"]["name"] == "Rajju"
+
+
+def test_hadahan_birth_table(client: TestClient) -> None:
+    """The almanac at birth and the birth star's groups (docs/17, chart chapter 1)."""
+    table = client.post("/v1/hadahan", json={**BIRTH, "lang": "en"}).json()["birth_table"]
+    # 14:35 is after sunrise, so the Sinhala day is the civil day, a Wednesday.
+    assert table["weekday"] == {"key": "wednesday", "name": "Wednesday"}
+    # After the full moon of 15 April 1995: the dark half.
+    assert table["thithi"]["key"].startswith("krishna_")
+    assert table["yoga"]["name"] and table["karana"]["name"]
+    # Jyeshtha's groups in the match rules' tables.
+    assert {group: label["key"] for group, label in table["star"].items()} == {
+        "gana": "rakshasa",
+        "yoni": "deer",
+        "nadi": "aadi",
+        "rajju": "pada",
+        "pakshi": "cock",
+        "bhuta": "vayo",
+        "vruksha": "kiri",
+        "gothra": "pulasthi",
+        "linga": "male",
+    }
+    assert table["provisional"] is True
+
+
+def test_birth_before_sunrise_belongs_to_the_day_before(client: TestClient) -> None:
+    early = {**BIRTH, "time": "04:30", "lang": "si"}
+    table = client.post("/v1/hadahan", json=early).json()["birth_table"]
+    assert table["weekday"]["key"] == "tuesday"
+    assert table["weekday"]["name"] != "Tuesday"  # named in Sinhala

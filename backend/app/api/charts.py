@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from app.api.birth import BirthInput, ResolvedBirth, resolve_birth
 from app.api.deps import PlacesDb
 from app.api.timeresolve import TimeResolveResponse
+from app.engine.birthtable import BirthTable, birth_table
 from app.engine.chart import Chart, Point, compute_chart
 from app.engine.dasha import DashaTimeline, Period, vimshottari
 from app.engine.ephemeris import SwissEphemeris
@@ -128,9 +129,27 @@ class ChartResponse(BaseModel):
     chart: ChartOut | None
 
 
+class LabelOut(BaseModel):
+    key: str
+    name: str
+
+
+class BirthTableOut(BaseModel):
+    """The almanac at the birth moment and the birth star's traditional groups."""
+
+    weekday: LabelOut
+    thithi: LabelOut
+    yoga: LabelOut
+    karana: LabelOut
+    star: dict[str, LabelOut]  # gana, yoni, nadi, rajju, pakshi, bhuta, vruksha, gothra, linga
+    rule_sets: list[str]
+    provisional: bool
+
+
 class HadahanResponse(ChartResponse):
     dasha: DashaOut | None
     kuja: KujaOut | None
+    birth_table: BirthTableOut | None = None
 
 
 class HadahanRequest(BirthInput):
@@ -179,6 +198,23 @@ def chart_out(chart: Chart, lang: Lang) -> ChartOut:
             house_system=chart.method.house_system,
             ephemeris=chart.method.ephemeris,
         ),
+    )
+
+
+def birth_table_out(table: BirthTable, lang: Lang) -> BirthTableOut:
+    names = labels(lang)
+
+    def label(group: str, key: str) -> LabelOut:
+        return LabelOut(key=key, name=str(names.get(group, {}).get(key, key)))
+
+    return BirthTableOut(
+        weekday=label("weekday", table.weekday),
+        thithi=label("thithi", table.thithi),
+        yoga=label("yoga", table.yoga),
+        karana=label("karana", table.karana),
+        star={group: label(group, key) for group, key in table.star.items()},
+        rule_sets=list(table.rule_sets),
+        provisional=table.provisional,
     )
 
 
@@ -273,6 +309,7 @@ def build_hadahan(body: HadahanRequest, db: pathlib.Path) -> HadahanBuild:
         chart=chart_out(result, body.lang),
         dasha=dasha_out(timeline, now),
         kuja=kuja_out(kuja_dosha(result), body.lang),
+        birth_table=birth_table_out(birth_table(EPHEMERIS, result, birth.time.timezone), body.lang),
     )
     return HadahanBuild(response, birth, result)
 

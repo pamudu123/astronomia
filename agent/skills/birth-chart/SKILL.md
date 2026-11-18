@@ -23,6 +23,14 @@ This skill covers explaining the chart's parts and the planet changes. When the 
 5. Erashtaka and ashtama shani: explain calmly. They are periods astrologers watch, not fixed misfortune. Many people do well during them. Say what usually helps: patience, steady habits, realistic plans.
 6. Birth time: if the context says nearby times give another rising sign, say the chart depends on an accurate birth time.
 
+## Chapters
+
+The birth chart page's full reading has three chapters written from this skill. The shape of every chapter is in the `explain-card` skill; the other chart chapters are in `personal-reading`.
+
+- **`chart.summary`, Birth summary.** The chart in a nutshell: rising sign, Moon sign, birth star and its quarter, and the life period running now. Then the birth table (`birth_table`): the weekday, thithi, yoga and karana at birth, and the birth star's groups (`star_groups`: gana, yoni, nadi, rajju, bird, element, tree, sage lineage, linga), one short line each on what tradition links it to (reference, sections 2 and 7). Say that these star groups are the ones a match uses. Mention once that the rules are provisional when `provisional` is true.
+- **`chart.saturn`, Saturn periods.** Saturn's seven-and-a-half-year periods (`saturn_erashtaka`, counted from the Moon sign) with their dates, marking the one running now (`state` "now") and the next one; past ones in one line. What erashtaka traditionally brings and what helps (reference, section 5; the main rules: calm, never frightening, many people do well in them). Then Jupiter's returns to its birth sign (`jupiter_returns`) as the lighter, supportive windows. Dates only from the facts; no ages. If neither list is there, say the life road on the page shows these periods.
+- **`chart.ahead`, The planet changes ahead.** Each change in `planet_changes_ahead`, in date order: what moves and when, and what it means for this chart, counted from the rising sign (`from_rising_sign`) and from the Moon sign (`from_moon_sign`): the life area it leaves and enters. At most two sentences per change. If the list is missing, say the "Coming changes" section of the page lists them.
+
 ## Never
 
 - Never say or hint at death or lifespan. Illness, strain in a marriage, money trouble and similar can be discussed as possibilities with a human astrologer for the full picture (see `personal-reading` and the main rules).

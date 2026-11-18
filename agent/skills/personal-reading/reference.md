@@ -414,6 +414,16 @@ A planet in the same sign in the main chart and the ninth-division chart. Tradit
 | Hamsa | Jupiter in its own or exalted sign in an angle | Wisdom, ethics, teaching, respect, good fortune | "a teacher's nature and natural good fortune" |
 | Malavya | Venus in its own or exalted sign in an angle | Charm, artistic taste, comfort, harmony in relationships | "charm, taste and a gift for harmony" |
 | Shasha | Saturn in its own or exalted sign in an angle | Discipline, endurance, authority earned over time, organisational skill | "the steady strength of someone who builds things that last; rewards come with time" |
+| Sunapha | A planet other than the Sun, Rahu or Ketu in the house after the Moon's | Self-made progress, earning by one's own effort, a settled mind | "the knack of building things up yourself, step by step" |
+| Anapha | Such a planet in the house before the Moon's | Good manners, a pleasant presence, comfort and a calm temperament | "an easy, pleasant way with people and a liking for a calm life" |
+| Durudhara | Such planets on both sides of the Moon | Support and resources around you, generosity, a comfortable life | "support from both sides: people and resources tend to be there when needed" |
+| Ravi-Sukra | Sun and Venus in the same house | Charm and creativity with pride; in marriage, a strong self beside affection | "warmth and creative flair; in close relationships, balance pride with give and take" |
+| Kuja-Sukra | Mars and Venus in the same house | Passion, attraction and strong desires; quick romance | "strong attraction and passion; patience keeps it steady" |
+| Shani-Mangala | Saturn and Mars in the same house | Drive held back by caution: effort, frustration and endurance in that life area | "a push-and-pull of energy and patience; that life area rewards steady effort over haste" |
+| Papa Kartari | Hard planets (Sun, Mars, Saturn, Rahu, Ketu) on both sides of a house: the 1st, the 7th or the Moon's | That area feels pressed from both sides: more effort, more responsibility | "this part of life asks for extra patience and support, and grows stronger with it" |
+| Shubha Kartari | Gentle planets (Mercury, Jupiter, Venus) on both sides of the same houses | That area is protected and supported | "this part of life is well supported: help tends to come from around you" |
+
+The last eight rows were added on 2026-11-18 and are provisional until the astrologer review, like the rest of this table. Papa Kartari and Shani-Mangala are traditionally called doshas: say what they ask for and what helps, never that they doom an area. Never mention Kemadruma (no planets beside the Moon); the site doesn't look for it.
 
 Rules for using them:
 
