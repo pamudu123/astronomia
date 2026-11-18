@@ -97,21 +97,9 @@
     "ctaPorondam": "Match two charts",
     "badges": ["Maths first", "Tuned AI", "Astrologer verified"],
     "calc": {
-      "title": "One calculation",
+      "title": "Try the maths",
       "example": "Example",
       "label": "A worked example: from a birth time and the Moon's position to its rashi, nakshatra and pada.",
-      "steps": [
-        "Local time to UT",
-        "Moon longitude",
-        "Rashi",
-        "Nakshatra",
-        "Pada"
-      ]
-    },
-    "try": {
-      "eyebrow": "Try the maths",
-      "title": "Move the sky. Watch the numbers.",
-      "lead": "Every tile is a real step in a reading. Tap a tile to see the working.",
       "moon": "Moon λ",
       "sun": "Sun λ",
       "place": "Birth place",
@@ -121,43 +109,18 @@
         "Melbourne",
         "Toronto"
       ],
-      "note": "Example values. The birth time is fixed at 06:42 local time.",
+      "rows": {
+        "ut": "Time to UT",
+        "rashi": "Rashi",
+        "nak": "Nakshatra",
+        "pada": "Pada",
+        "tithi": "Tithi"
+      },
       "prevDay": " (the day before)",
       "nextDay": " (the next day)",
       "waxing": "Shukla",
       "waning": "Krishna",
-      "tiles": {
-        "ut": {
-          "name": "Time to UT",
-          "tag": "time",
-          "more": "Local time minus the offset gives UT{day}. The offset follows each country's real time-zone history."
-        },
-        "rashi": {
-          "name": "Rashi",
-          "tag": "sign",
-          "more": "12 signs × 30° = 360°. This is {into} into the sign."
-        },
-        "nak": {
-          "name": "Nakshatra",
-          "tag": "star",
-          "more": "27 stars × 13°20′ = 360°. This one starts at {start}."
-        },
-        "pada": {
-          "name": "Pada",
-          "tag": "quarter",
-          "more": "Each star has 4 padas of 3°20′. This is {into} into {star}."
-        },
-        "nav": {
-          "name": "Navamsa",
-          "tag": "D9",
-          "more": "Each sign splits into 9 parts of 3°20′, counted on through the 12 signs."
-        },
-        "tithi": {
-          "name": "Tithi",
-          "tag": "lunar day",
-          "more": "Moon − Sun = {elong}. Each tithi is 12°: 1–15 {waxing}, 16–30 {waning}."
-        }
-      }
+      "note": "Example values. The birth time is fixed at 06:42 local time."
     },
     "pillarsTitle": "Three pillars behind every reading",
     "pillars": [
