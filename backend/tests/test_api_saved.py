@@ -218,6 +218,15 @@ def test_the_limit(client: TestClient) -> None:
     save(client, hadahan(), status=200)
 
 
+def test_a_failed_first_save_makes_no_account_and_no_cookie(client: TestClient) -> None:
+    settings = Settings(guest_saved_limit=0)
+    client.app.dependency_overrides[get_settings] = lambda: settings  # type: ignore[attr-defined]
+    response = client.post("/v1/saved", json=hadahan())
+    assert response.status_code == 409
+    assert not any(c.startswith("sid=") for c in response.headers.get_list("set-cookie"))
+    assert client.get("/v1/me").json() == {"kind": None, "saved": 0}
+
+
 def test_new_guests_are_rate_limited(client: TestClient) -> None:
     limit = saved.RateLimit(1)
     client.app.dependency_overrides[saved.guest_limit] = lambda: limit  # type: ignore[attr-defined]

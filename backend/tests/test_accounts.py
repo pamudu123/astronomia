@@ -207,3 +207,19 @@ def test_the_database_setting_picks_postgres(tmp_path: Path) -> None:
     assert account_store(Settings(database_url=PG_URL)) is account_store(
         Settings(database_url=PG_URL)
     )
+
+
+def test_a_first_report_and_its_guest_are_kept_together(store: AccountStore) -> None:
+    session, item = store.create_guest_with(report(), limit=5)
+    found = store.find_session(session.token)
+    assert found is not None and found.user == session.user
+    assert [saved.id for saved in store.list_saved(session.user.id)] == [item.id]
+
+
+def test_a_first_save_that_fails_leaves_no_account(store: AccountStore) -> None:
+    with pytest.raises(LimitReached):
+        store.create_guest_with(report(), limit=0)
+    with store._connect() as db:
+        (users,) = store._run(db, "SELECT COUNT(*) FROM users").fetchone()
+        (sessions,) = store._run(db, "SELECT COUNT(*) FROM sessions").fetchone()
+    assert (users, sessions) == (0, 0)

@@ -105,6 +105,26 @@ def test_a_birth_by_coordinates_prints_them(client: TestClient) -> None:
     assert "Latitude 6.9271, longitude 79.8612" in text(post(client, body))
 
 
+@pytest.mark.parametrize(
+    "as_of",
+    [
+        "1900-01-01T00:00:00Z",  # before the first period (it starts before the birth)
+        "2200-01-01T00:00:00Z",  # after the 120 years of periods
+    ],
+)
+def test_a_date_with_no_running_period_still_prints(client: TestClient, as_of: str) -> None:
+    content = text(post(client, hadahan(as_of=as_of))).replace("\n", " ")
+    assert "No dasha period runs on this date" in content
+    assert "main period, " not in content
+    assert "Saturn" in content  # the period table still prints
+
+
+def test_an_old_birth_prints_in_sinhala(client: TestClient) -> None:
+    body = hadahan(lang="si", date="1900-01-01", time="12:00", as_of=None)
+    # pypdf moves Sinhala vowel signs and breaks the line, so only the stem is checked.
+    assert "දශාවක" in text(post(client, body))
+
+
 def test_metadata_holds_no_birth_details(client: TestClient) -> None:
     reader = post(client, hadahan())
     metadata = " ".join(str(value) for value in (reader.metadata or {}).values())

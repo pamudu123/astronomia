@@ -333,16 +333,20 @@ def save_report(
 ) -> SavedCreated:
     """Saves a hadahan or a match to My reports. Makes a guest account if there is none."""
     report = _new_report(body, db)  # first, so a refused request makes no account
-    if session.found is not None:
-        user_id, expires = session.found.user.id, session.found.expires_at
-    else:
-        if not limiter.allow(_client_address(request)):
-            raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "too many new accounts")
-        new = accounts.create_guest()
-        user_id, expires = new.user.id, new.expires_at
-        _set_session(response, settings, expires, new.token)
+    limit = settings.guest_saved_limit
     try:
-        item, created = accounts.save(user_id, report, settings.guest_saved_limit)
+        if session.found is not None:
+            expires = session.found.expires_at
+            item, created = accounts.save(session.found.user.id, report, limit)
+        else:
+            if not limiter.allow(_client_address(request)):
+                raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "too many new accounts")
+            # The account and its first report are kept together, so a failed save leaves no
+            # empty account. Two first saves at once from one browser are queued by the page
+            # (saveReport in frontend/lib/account.ts): each one here makes its own account.
+            new, item = accounts.create_guest_with(report, limit)
+            expires, created = new.expires_at, True
+            _set_session(response, settings, expires, new.token)
     except LimitReached as error:
         raise HTTPException(status.HTTP_409_CONFLICT, "saved report limit reached") from error
     _set_hint(response, settings, 1, expires)
