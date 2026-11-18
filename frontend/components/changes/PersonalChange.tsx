@@ -10,7 +10,9 @@ import { type BirthRequest, fill, loadResult } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
+import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { personalChangeContext } from "@/lib/assistant/pages";
 
 import styles from "./Changes.module.css";
@@ -36,7 +38,8 @@ export function PersonalChange({ t, hadahan, lang, changeId, current }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Data | null>(null);
   // What the AI assistant sees: this result, with no birth details.
-  useAssistantContext(result ? personalChangeContext(result, lang) : null);
+  const context = result ? personalChangeContext(result, lang) : null;
+  useAssistantContext(context);
   const [clock, setClock] = useState(false);
 
   // A hadahan made earlier in this tab saves typing. It stays in this tab only, and is
@@ -69,6 +72,7 @@ export function PersonalChange({ t, hadahan, lang, changeId, current }: Props) {
         <h2 id="personal-title" className={`display ${styles.sectionTitle}`}>
           {p.title}
         </h2>
+        <AiExplain chapters={PAGE_PLACES.change} lang={lang} facts={context} />
         <p className={styles.facts}>
           <span>{fill(p.yourLagna, { lagna: result.lagna.sign_name })}</span>
           <span>{fill(p.yourMoon, { sign: result.gochara.sign_name })}</span>

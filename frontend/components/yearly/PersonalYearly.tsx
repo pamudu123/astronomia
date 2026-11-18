@@ -10,7 +10,9 @@ import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 import { type PersonalYear, fetchPersonalYear } from "@/lib/yearly";
 
+import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
+import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { personalYearContext } from "@/lib/assistant/pages";
 
 import { YearView } from "./YearView";
@@ -33,7 +35,8 @@ export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PersonalYear | null>(null);
   // What the AI assistant sees: this result, with no birth details.
-  useAssistantContext(result ? personalYearContext(result, lang) : null);
+  const context = result ? personalYearContext(result, lang) : null;
+  useAssistantContext(context);
   const [clock, setClock] = useState(false);
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
@@ -64,6 +67,7 @@ export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
         <h2 id="personal-year-title" className={`display ${changeStyles.sectionTitle}`}>
           {title}
         </h2>
+        <AiExplain chapters={PAGE_PLACES.year} lang={lang} facts={context} />
         <p className={changeStyles.facts}>
           <span>{fill(p.yourLagna, { lagna: result.lagna.sign_name })}</span>
           <span>{fill(p.yourMoon, { sign: result.gochara.sign_name })}</span>

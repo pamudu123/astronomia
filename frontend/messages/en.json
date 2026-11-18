@@ -1223,7 +1223,13 @@
         "chart.saturn": "Saturn periods",
         "chart.ahead": "The planet changes ahead",
         "match.years": "Your years ahead",
-        "match.wedding": "Wedding dates"
+        "match.wedding": "Wedding dates",
+        "nakath.day": "What kind of day it is",
+        "avurudu.times": "The Avurudu timetable",
+        "names.letters": "The name letters",
+        "names.first": "Choosing a time",
+        "changes.mine": "What this change means for you",
+        "yearly.mine": "Your year ahead"
       }
     },
     "cards": {

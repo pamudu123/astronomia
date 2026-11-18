@@ -16,7 +16,9 @@ import {
 } from "@/lib/nakath";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
+import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { avuruduContext } from "@/lib/assistant/pages";
 
 import styles from "./Nakath.module.css";
@@ -77,7 +79,8 @@ export function AvuruduView({ lang, t, year, zone: initialZone, fixed, initial }
   const [attempt, setAttempt] = useState(0);
   const [place, setPlace] = useState<Place | null>(null);
   // What the AI assistant sees: this result, with no birth details.
-  useAssistantContext(data ? avuruduContext(data, lang) : null);
+  const context = data ? avuruduContext(data, lang) : null;
+  useAssistantContext(context);
 
   // On the year page, show the visitor's own time next to Sri Lanka time.
   const browser = hydrated ? browserTimezone() : null;
@@ -174,6 +177,8 @@ export function AvuruduView({ lang, t, year, zone: initialZone, fixed, initial }
       ) : (
         <p className={styles.note}>{fill(t.noOfficial, { year })}</p>
       )}
+
+      <AiExplain chapters={PAGE_PLACES.avurudu} lang={lang} facts={context} />
 
       <section className={styles.section} aria-labelledby="compare-title" data-card="compare">
         <h2 id="compare-title" className={`display ${styles.sectionTitle}`}>

@@ -11,7 +11,9 @@ import { type BirthRequest, fill, loadResult } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 
+import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
+import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { babyLettersContext } from "@/lib/assistant/pages";
 
 import styles from "./BabyNames.module.css";
@@ -35,7 +37,8 @@ export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
   const [clock, setClock] = useState(false);
   const [result, setResult] = useState<BabyLetters | null>(null);
   // What the AI assistant sees: this result, with no birth details.
-  useAssistantContext(result ? babyLettersContext(result, lang) : null);
+  const context = result ? babyLettersContext(result, lang) : null;
+  useAssistantContext(context);
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
 
@@ -64,6 +67,7 @@ export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
         <h2 id="baby-result-title" className={`display ${styles.sectionTitle}`}>
           {t.letter}
         </h2>
+        <AiExplain chapters={PAGE_PLACES.babyLetters} lang={lang} facts={context} />
         <div className={styles.answer}>
           <div className={styles.bigLetter} data-letter={result.letter.letter}>
             <span className={`sinhala ${styles.letter}`} lang="si">

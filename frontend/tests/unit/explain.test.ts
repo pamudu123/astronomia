@@ -7,6 +7,7 @@ import {
   CHART_TOPICS,
   MATCH_PLACES,
   MATCH_READING,
+  PAGE_PLACES,
   blocks,
   chapterKey,
   chapterState,
@@ -50,7 +51,7 @@ describe("chapter keys", () => {
 
 describe("the chapters and their words", () => {
   it("has a title for every chapter in both languages", () => {
-    for (const id of [...MATCH_READING, ...CHART_READING, ...CHART_TOPICS]) {
+    for (const id of [...MATCH_READING, ...CHART_READING, ...CHART_TOPICS, ...Object.values(PAGE_PLACES).flat()]) {
       expect(en.assistant.explain.chapters[id]).toBeTruthy();
       expect(si.assistant.explain.chapters[id]).toBeTruthy();
     }

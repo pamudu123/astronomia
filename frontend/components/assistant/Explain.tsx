@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useId, useState, useSyncExternalStore } from "react";
+import { Fragment, useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 
 import { Lock } from "@/components/Icons";
 import type { PageContext } from "@/lib/assistant/context";
@@ -142,7 +142,10 @@ export function AiExplain({
   const t = useExplainText();
   const [open, setOpen] = useState(false);
   const panel = useId();
-  if (!t || !facts) return null;
+  // Pages pass a new summary on every render; keep it by content, so a chapter is asked once.
+  const factsKey = JSON.stringify(facts);
+  const stable = useMemo(() => facts, [factsKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (!t || !stable) return null;
   const allowed = canUse("ai_explain");
 
   return (
@@ -165,7 +168,7 @@ export function AiExplain({
           {allowed ? (
             <>
               {chapters.map((id) => (
-                <Chapter key={id} id={id} lang={lang} facts={facts} t={t} heading={chapters.length > 1} />
+                <Chapter key={id} id={id} lang={lang} facts={stable} t={t} heading={chapters.length > 1} />
               ))}
               <p className={styles.label}>{t.label}</p>
             </>

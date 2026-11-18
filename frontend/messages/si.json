@@ -1223,7 +1223,13 @@
         "chart.saturn": "සෙනසුරු කාල",
         "chart.ahead": "ඉදිරි ග්‍රහ මාරු",
         "match.years": "ඔබ දෙදෙනාගේ ඉදිරි වසර",
-        "match.wedding": "විවාහ නැකත්"
+        "match.wedding": "විවාහ නැකත්",
+        "nakath.day": "මේ දවස කෙබඳු ද",
+        "avurudu.times": "අවුරුදු නැකත් සටහන",
+        "names.letters": "නම් අකුරු",
+        "names.first": "නැකතක් තෝරා ගැනීම",
+        "changes.mine": "මෙම ග්‍රහ මාරුව ඔබට",
+        "yearly.mine": "ඔබේ ඉදිරි වසර"
       }
     },
     "cards": {
