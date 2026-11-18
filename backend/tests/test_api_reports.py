@@ -196,3 +196,46 @@ def test_a_clock_change_time_must_be_chosen_first(client: TestClient) -> None:
 )
 def test_bad_requests(client: TestClient, body: dict[str, Any]) -> None:
     assert client.post("/v1/reports/pdf", json=body).status_code == 422
+
+
+READING = [
+    {
+        "title": "Your nature",
+        "text": "You meet life warmly.\n\n**Where it shows**\n- **Work**: steady\n- Home: calm",
+    },
+    {"title": "Saturn periods", "text": "A calm stretch <b>ahead</b>."},
+]
+
+
+def test_the_ai_reading_prints_in_its_own_labelled_section(client: TestClient) -> None:
+    """The chapters the person read come back with the request (docs/17, step 6)."""
+    printed = text(post(client, {**hadahan(), "reading": READING}))
+    assert "AI reading" in printed
+    assert "Written by AI from the results above" in printed
+    assert "Your nature" in printed and "Saturn periods" in printed
+    assert "Where it shows" in printed and "steady" in printed
+    # Text is escaped, never markup: the tag prints as written.
+    assert "<b>ahead</b>" in printed
+
+
+def test_no_reading_no_section(client: TestClient) -> None:
+    assert "AI reading" not in text(post(client, hadahan()))
+
+
+def test_the_match_report_takes_a_reading_too(client: TestClient) -> None:
+    body = {**porondam(NIMALI, KASUN, lang="si"), "reading": READING[:1]}
+    printed = text(post(client, body))
+    # "AI reading" in Sinhala; PDF text extraction splits conjunct letters, so one plain word.
+    assert "කියවීම" in printed
+    assert "Your nature" in printed
+
+
+def test_reading_size_is_limited(client: TestClient) -> None:
+    too_long = [{"title": "A", "text": "x" * 8001}]
+    assert (
+        client.post("/v1/reports/pdf", json={**hadahan(), "reading": too_long}).status_code == 422
+    )
+    too_many = [{"title": "A", "text": "x"}] * 17
+    assert (
+        client.post("/v1/reports/pdf", json={**hadahan(), "reading": too_many}).status_code == 422
+    )

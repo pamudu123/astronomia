@@ -14,12 +14,14 @@ import styles from "./ReportButton.module.css";
 
 type Props = {
   request: ReportRequest;
+  /** The AI chapters already read on the page, added to the PDF as its AI reading (docs/17). */
+  reading?: () => { title: string; text: string }[];
   t: { download: string; preparing: string; downloadFailed: string };
   className?: string;
 };
 
 /** Downloads the PDF report of the result on the page. */
-export function ReportButton({ request, t, className = "" }: Props) {
+export function ReportButton({ request, reading, t, className = "" }: Props) {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -27,7 +29,9 @@ export function ReportButton({ request, t, className = "" }: Props) {
     setBusy(true);
     setFailed(false);
     try {
-      saveFile(await fetchReport(request), reportFileName(request));
+      const chapters = reading?.() ?? [];
+      const body = chapters.length ? { ...request, reading: chapters } : request;
+      saveFile(await fetchReport(body), reportFileName(request));
     } catch {
       setFailed(true);
     } finally {

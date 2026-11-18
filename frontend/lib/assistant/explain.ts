@@ -46,7 +46,8 @@ export type ChapterId =
   | "names.letters"
   | "names.first"
   | "changes.mine"
-  | "yearly.mine";
+  | "yearly.mine"
+  | "kendara.dates";
 
 /** The full match reading, in reading order. */
 export const MATCH_READING: ChapterId[] = [
@@ -124,6 +125,8 @@ export const PAGE_PLACES = {
   change: ["changes.mine"],
   /** Place 14: "What does next year look like for me?" */
   year: ["yearly.mine"],
+  /** Place 15: "Why several dates, and how do I find the right one?" */
+  kendara: ["kendara.dates"],
 } satisfies Record<string, ChapterId[]>;
 
 /** Place 4: the life topic chips under the chart, one chapter each. */
@@ -246,6 +249,26 @@ export async function requestChapter(
   } catch {
     set(key, { status: "failed", text: "" });
   }
+}
+
+/**
+ * The chapters already written in this visit, in the order given: what the PDF report prints
+ * as the AI reading (backend/app/reports/reading.py). `factsFor` gives each chapter's facts,
+ * as the page shows it; a chapter with none yet is left out.
+ */
+export function writtenChapters(
+  ids: ChapterId[],
+  language: Locale,
+  factsFor: (id: ChapterId) => PageContext | null,
+): { id: ChapterId; text: string }[] {
+  const written: { id: ChapterId; text: string }[] = [];
+  for (const id of ids) {
+    const facts = factsFor(id);
+    if (!facts) continue;
+    const state = chapterState(chapterKey(id, language, facts));
+    if (state.status === "done") written.push({ id, text: state.text });
+  }
+  return written;
 }
 
 /** Forgets every chapter in memory (tests). */

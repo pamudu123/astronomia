@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { AiExplain, FullReading } from "@/components/assistant/Explain";
-import { useAssistantContext } from "@/components/assistant/PageContext";
+import { useAssistantContext, useExplainText } from "@/components/assistant/PageContext";
 import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
 import { NextSteps } from "@/components/NextSteps";
@@ -12,8 +12,8 @@ import { ReportButton } from "@/components/ReportButton";
 import { SaveButton } from "@/components/account/SaveButton";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
-import { matchContext } from "@/lib/assistant/context";
-import { MATCH_EXTRA, MATCH_PLACES, MATCH_READING } from "@/lib/assistant/explain";
+import { type PageContext, matchContext } from "@/lib/assistant/context";
+import { type ChapterId, MATCH_EXTRA, MATCH_PLACES, MATCH_READING, writtenChapters } from "@/lib/assistant/explain";
 import { coupleYearsContext, matchReadingContext, weddingReadingContext } from "@/lib/assistant/pages";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -114,6 +114,20 @@ export function PorondamResult({
   );
   // The years ahead only on the couple's own match (a shared one has no birth details to ask
   // with); the wedding dates once a search has found some.
+  // The PDF prints the chapters read so far, in reading order.
+  const explainWords = useExplainText();
+  const readingForPdf = () => {
+    if (!explainWords) return [];
+    const extraFor: Partial<Record<ChapterId, PageContext | null>> = {
+      "match.years": yearsFacts,
+      "match.wedding": weddingFacts,
+    };
+    const factsFor = (id: ChapterId) => (id in extraFor ? (extraFor[id] ?? null) : facts);
+    return writtenChapters(MATCH_READING, lang, factsFor).map(({ id, text }) => ({
+      title: explainWords.chapters[id],
+      text,
+    }));
+  };
   const chapters = MATCH_READING.filter(
     (id) => !MATCH_EXTRA.includes(id) || (id === "match.years" ? Boolean(request && timeline) : Boolean(weddingFacts)),
   );
@@ -163,6 +177,7 @@ export function PorondamResult({
         facts={facts}
         extra={{ "match.years": yearsFacts, "match.wedding": weddingFacts }}
         reading="matchReading"
+        pdf={Boolean(request)}
       />
 
       {/*
@@ -390,7 +405,11 @@ export function PorondamResult({
         <div className={styles.footActions}>
           {request ? (
             <>
-              <ReportButton request={{ kind: "porondam", match: { ...request, lang } }} t={t} />
+              <ReportButton
+                request={{ kind: "porondam", match: { ...request, lang } }}
+                reading={readingForPdf}
+                t={t}
+              />
               {saveText && (
                 <SaveGate>
                   <SaveButton

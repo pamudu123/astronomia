@@ -85,6 +85,7 @@ CHAPTERS: dict[str, Chapter] = {
     "names.first": Chapter("ceremonies-and-names", "Choosing a time"),
     "changes.mine": Chapter("birth-chart", "What this change means for you"),
     "yearly.mine": Chapter("birth-chart", "Your year ahead"),
+    "kendara.dates": Chapter("old-horoscope", "Possible birth dates"),
 }
 
 Language = Literal["en", "si"]

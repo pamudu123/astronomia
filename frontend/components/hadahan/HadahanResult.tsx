@@ -23,8 +23,15 @@ import {
 import type { Locale } from "@/lib/i18n";
 
 import { AiExplain, FullReading, TopicChips } from "@/components/assistant/Explain";
-import { useAssistantContext } from "@/components/assistant/PageContext";
-import { CHART_EXTRA, CHART_PLACES, CHART_READING, CHART_TOPICS } from "@/lib/assistant/explain";
+import { useAssistantContext, useExplainText } from "@/components/assistant/PageContext";
+import {
+  CHART_EXTRA,
+  CHART_PLACES,
+  CHART_READING,
+  CHART_TOPICS,
+  type ChapterId,
+  writtenChapters,
+} from "@/lib/assistant/explain";
 import { chartContext, chartExtrasContext, chartReadingContext } from "@/lib/assistant/pages";
 import { type Upcoming, fetchUpcomingChanges } from "@/lib/changes";
 import { type Journey, fetchJourney } from "@/lib/journey";
@@ -121,6 +128,14 @@ export function HadahanResult({
     const withExtras = extras ? chartExtrasContext(facts, extras) : null;
     return Object.fromEntries(CHART_EXTRA.map((id) => [id, withExtras]));
   }, [request, extras, facts]);
+  // The PDF prints the chapters read so far: the reading's, then the topic-only ones.
+  const explainWords = useExplainText();
+  const readingForPdf = () => {
+    if (!explainWords) return [];
+    const ids: ChapterId[] = [...CHART_READING, ...CHART_TOPICS.filter((id) => !CHART_READING.includes(id))];
+    const factsFor = (id: ChapterId) => (extraFacts && id in extraFacts ? (extraFacts[id] ?? null) : facts);
+    return writtenChapters(ids, lang, factsFor).map(({ id, text }) => ({ title: explainWords.chapters[id], text }));
+  };
   const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;
@@ -155,7 +170,11 @@ export function HadahanResult({
         </div>
         {request && (
           <div className={styles.actions}>
-            <ReportButton request={{ kind: "hadahan", name, birth: { ...request, lang } }} t={t} />
+            <ReportButton
+              request={{ kind: "hadahan", name, birth: { ...request, lang } }}
+              reading={readingForPdf}
+              t={t}
+            />
             {saveText && (
               <SaveGate>
                 <SaveButton
@@ -211,7 +230,14 @@ export function HadahanResult({
         )}
       </section>
 
-      <FullReading chapters={CHART_READING} lang={lang} facts={facts} extra={extraFacts} reading="chartReading" />
+      <FullReading
+        chapters={CHART_READING}
+        lang={lang}
+        facts={facts}
+        extra={extraFacts}
+        reading="chartReading"
+        pdf={Boolean(request)}
+      />
 
       <SummaryCards
         lang={lang}

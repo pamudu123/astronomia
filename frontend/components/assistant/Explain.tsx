@@ -193,6 +193,7 @@ export function FullReading({
   facts,
   reading,
   extra,
+  pdf = false,
 }: {
   chapters: ChapterId[];
   lang: Locale;
@@ -202,6 +203,8 @@ export function FullReading({
    * own facts, or null while those are loading. The other chapters keep the page's facts.
    */
   extra?: Partial<Record<ChapterId, PageContext | null>>;
+  /** True where the page has a PDF report, which prints the chapters opened here. */
+  pdf?: boolean;
   /** Which reading's words the card uses. */
   reading: "matchReading" | "chartReading";
 }) {
@@ -288,7 +291,10 @@ export function FullReading({
               );
             })}
           </ol>
-          <p className={styles.label}>{t.readingLabel}</p>
+          <p className={styles.label}>
+            {t.readingLabel}
+            {pdf && ` · ${t.inPdf}`}
+          </p>
         </>
       )}
     </section>

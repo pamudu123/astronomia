@@ -15,6 +15,7 @@ import {
   requestChapter,
   resetChapters,
   spans,
+  writtenChapters,
 } from "@/lib/assistant/explain";
 import en from "@/messages/en.json";
 import si from "@/messages/si.json";
@@ -119,6 +120,18 @@ describe("requestChapter", () => {
 
     await requestChapter("match.mars", "en", FACTS, streaming(["Neither chart shows it."]));
     expect(chapterState(key)).toEqual({ status: "done", text: "Neither chart shows it." });
+  });
+
+  it("lists only the chapters already written, in the order asked, for the PDF", async () => {
+    await requestChapter("match.summary", "en", FACTS, streaming(["Summing up text."]));
+    await requestChapter("match.people", "en", FACTS, streaming(["People text."]));
+    await requestChapter("match.mars", "en", FACTS, streaming([], 502));
+    const other = { ...FACTS, shared: true };
+    const factsFor = (id: string) => (id === "match.styles" ? null : id === "match.factors" ? other : FACTS);
+    expect(writtenChapters(["match.people", "match.mars", "match.styles", "match.summary"], "en", factsFor)).toEqual([
+      { id: "match.people", text: "People text." },
+      { id: "match.summary", text: "Summing up text." },
+    ]);
   });
 
   it("treats an empty answer as failed", async () => {

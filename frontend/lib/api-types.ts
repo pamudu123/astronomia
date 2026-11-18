@@ -1257,6 +1257,22 @@ export interface components {
             /** Nakshatra */
             nakshatra: string;
         };
+        /** HadahanPdf */
+        HadahanPdf: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "hadahan";
+            /**
+             * Name
+             * @default
+             */
+            name: string;
+            birth: components["schemas"]["HadahanRequest"];
+            /** Reading */
+            reading?: components["schemas"]["ReadingChapter"][];
+        };
         /** HadahanReport */
         HadahanReport: {
             /**
@@ -2107,6 +2123,17 @@ export interface components {
              */
             mode: "full" | "quick";
         };
+        /** PorondamPdf */
+        PorondamPdf: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "porondam";
+            match: components["schemas"]["PorondamRequest"];
+            /** Reading */
+            reading?: components["schemas"]["ReadingChapter"][];
+        };
         /** PorondamReport */
         PorondamReport: {
             /**
@@ -2162,6 +2189,16 @@ export interface components {
             nakshatra: string;
             /** Pada */
             pada: number;
+        };
+        /**
+         * ReadingChapter
+         * @description One AI chapter as the person read it. Long enough for the longest chapter.
+         */
+        ReadingChapter: {
+            /** Title */
+            title: string;
+            /** Text */
+            text: string;
         };
         /** Rename */
         Rename: {
@@ -3836,7 +3873,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+                "application/json": components["schemas"]["HadahanPdf"] | components["schemas"]["PorondamPdf"];
             };
         };
         responses: {
