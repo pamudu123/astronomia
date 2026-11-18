@@ -30,7 +30,7 @@ export function SiteNavLinks({ lang, dict, pathname }: Props & { pathname: strin
       active: under(pathname, `/${lang}/porondam`) && !isMorePage(lang, pathname),
     },
     { href: `/${lang}/tools`, label: dict.nav.tools, icon: <MoreIcon />, active: isMorePage(lang, pathname) },
-    { href: `/${lang}#how`, label: dict.nav.how, icon: <HelpIcon />, active: false },
+    { href: `/${lang}/why-sidera`, label: dict.nav.how, icon: <HelpIcon />, active: under(pathname, `/${lang}/why-sidera`) },
     { href: `/${lang}/plans`, label: dict.nav.plans, icon: <CrownIcon />, active: under(pathname, `/${lang}/plans`) },
   ];
   return (

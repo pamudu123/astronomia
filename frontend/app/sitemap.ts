@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "",
     "/tools",
+    "/why-sidera",
     "/hadahan",
     "/porondam",
     "/porondam/stars",

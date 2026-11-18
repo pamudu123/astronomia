@@ -10,7 +10,7 @@
     "homeTab": "Home",
     "hadahan": "Hadahan",
     "porondam": "Porondam",
-    "how": "How it works",
+    "how": "Why Sidera",
     "plans": "Plans",
     "tools": "All tools",
     "more": "More",
@@ -87,6 +87,152 @@
         "text": "A visual chart with plain reasons beside each point. Switch between Sinhala and English at any time."
       }
     ]
+  },
+  "whyPage": {
+    "meta": "Why Sidera: precise maths, an AI engine tuned for Sinhala astrology, and rules verified with astrologers.",
+    "eyebrow": "Why Sidera",
+    "title": "Precise maths. Tuned AI. Checked by astrologers.",
+    "lead": "Behind every reading is careful groundwork: the exact sky, the rules of Sinhala astrology, and an AI engine built to work with both.",
+    "ctaHadahan": "Create my hadahan",
+    "ctaPorondam": "Match two charts",
+    "badges": ["Maths first", "Tuned AI", "Astrologer verified"],
+    "calc": {
+      "title": "One calculation",
+      "example": "Example",
+      "label": "A worked example: from a birth time and the Moon's position to its rashi, nakshatra and pada.",
+      "steps": [
+        "Local time to UT",
+        "Moon longitude",
+        "Rashi",
+        "Nakshatra",
+        "Pada"
+      ]
+    },
+    "try": {
+      "eyebrow": "Try the maths",
+      "title": "Move the sky. Watch the numbers.",
+      "lead": "Every tile is a real step in a reading. Tap a tile to see the working.",
+      "moon": "Moon λ",
+      "sun": "Sun λ",
+      "place": "Birth place",
+      "cities": [
+        "Colombo",
+        "London",
+        "Melbourne",
+        "Toronto"
+      ],
+      "note": "Example values. The birth time is fixed at 06:42 local time.",
+      "prevDay": " (the day before)",
+      "nextDay": " (the next day)",
+      "waxing": "Shukla",
+      "waning": "Krishna",
+      "tiles": {
+        "ut": {
+          "name": "Time to UT",
+          "tag": "time",
+          "more": "Local time minus the offset gives UT{day}. The offset follows each country's real time-zone history."
+        },
+        "rashi": {
+          "name": "Rashi",
+          "tag": "sign",
+          "more": "12 signs × 30° = 360°. This is {into} into the sign."
+        },
+        "nak": {
+          "name": "Nakshatra",
+          "tag": "star",
+          "more": "27 stars × 13°20′ = 360°. This one starts at {start}."
+        },
+        "pada": {
+          "name": "Pada",
+          "tag": "quarter",
+          "more": "Each star has 4 padas of 3°20′. This is {into} into {star}."
+        },
+        "nav": {
+          "name": "Navamsa",
+          "tag": "D9",
+          "more": "Each sign splits into 9 parts of 3°20′, counted on through the 12 signs."
+        },
+        "tithi": {
+          "name": "Tithi",
+          "tag": "lunar day",
+          "more": "Moon − Sun = {elong}. Each tithi is 12°: 1–15 {waxing}, 16–30 {waning}."
+        }
+      }
+    },
+    "pillarsTitle": "Three pillars behind every reading",
+    "pillars": [
+      {
+        "icon": "maths",
+        "title": "Maths is the engine",
+        "text": "Calculated, never guessed. The same answer every time."
+      },
+      {
+        "icon": "ai",
+        "title": "Tuned AI",
+        "text": "Built for Sinhala astrology. Explains in plain words."
+      },
+      {
+        "icon": "check",
+        "title": "Verified with astrologers",
+        "text": "Rules verified with practising astrologers."
+      }
+    ],
+    "groundTitle": "What goes into one reading",
+    "groundLead": "Three layers work together in every reading.",
+    "layers": [
+      {
+        "icon": "sky",
+        "title": "The exact sky",
+        "text": "Planet positions for your birth minute and place."
+      },
+      {
+        "icon": "rules",
+        "title": "Traditional rules",
+        "text": "The rules of Sinhala astrology, written down and tested."
+      },
+      {
+        "icon": "ai",
+        "title": "Tuned AI engine",
+        "text": "Explains your chart in plain Sinhala or English."
+      }
+    ],
+    "facts": [
+      { "value": "12", "label": "rashi" },
+      { "value": "27", "label": "nakshatra" },
+      { "value": "9", "label": "graha" },
+      { "value": "2", "label": "languages" }
+    ],
+    "journeyTitle": "From your birth to your answer",
+    "steps": [
+      {
+        "title": "Enter the birth",
+        "text": "Date, time and place. Any town in the world works."
+      },
+      {
+        "title": "Maths draws your sky",
+        "text": "Your hadahan chart is calculated for the exact moment and place."
+      },
+      {
+        "title": "AI explains it",
+        "text": "Each point is explained in plain Sinhala or English."
+      },
+      {
+        "title": "Save, share, ask",
+        "text": "Keep the report, send it to family, or ask a follow-up question."
+      }
+    ],
+    "toolsTitle": "Try it now",
+    "tools": [
+      { "title": "Hadahan", "text": "Your full birth chart with a reading beside every point.", "href": "hadahan" },
+      { "title": "Porondam", "text": "Match two charts and see which points agree, and why.", "href": "porondam" },
+      { "title": "Nakath and more", "text": "Auspicious times, avurudu, baby names and other tools.", "href": "tools" }
+    ],
+    "articlesTitle": "Read and learn",
+    "articlesLead": "Short guides to help you understand your chart.",
+    "minutes": "{minutes} min",
+    "closing": "Ready to see your sky?",
+    "disclaimer": "Guidance and cultural insight. For big decisions, talk with your family and an experienced astrologer.",
+    "builtBy": "Built by {name} and team"
   },
   "trust": [
     {
