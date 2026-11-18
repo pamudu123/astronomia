@@ -32,10 +32,10 @@ type Text = NonNullable<ReturnType<typeof useExplainText>>;
  * in place. Both show nothing where the AI is off. The text comes from lib/assistant/explain.ts.
  */
 
-/** A chapter's state, kept in step with the shared store. */
-function useChapter(id: ChapterId, lang: Locale, facts: PageContext) {
-  const key = chapterKey(id, lang, facts);
-  return useSyncExternalStore(subscribe, () => chapterState(key), idleState);
+/** A chapter's state, kept in step with the shared store. Idle while its facts are loading. */
+function useChapter(id: ChapterId, lang: Locale, facts: PageContext | null) {
+  const key = facts ? chapterKey(id, lang, facts) : "";
+  return useSyncExternalStore(subscribe, () => (key ? chapterState(key) : idleState()), idleState);
 }
 
 function Spans({ spans }: { spans: Span[] }) {
@@ -73,7 +73,8 @@ function Chapter({
 }: {
   id: ChapterId;
   lang: Locale;
-  facts: PageContext;
+  /** Null while the facts this chapter needs are still loading. */
+  facts: PageContext | null;
   t: Text;
   /** Show the chapter's title above it (when a button shows more than one chapter). */
   heading?: boolean;
@@ -81,7 +82,7 @@ function Chapter({
   const state = useChapter(id, lang, facts);
   const title = t.chapters[id];
   useEffect(() => {
-    void requestChapter(id, lang, facts);
+    if (facts) void requestChapter(id, lang, facts);
     // The key covers id, language and facts; asking again for a written chapter does nothing.
   }, [id, lang, facts]);
 
@@ -91,7 +92,11 @@ function Chapter({
       {state.status === "failed" ? (
         <p className={styles.failed}>
           {t.failed}{" "}
-          <button type="button" className={styles.linkButton} onClick={() => void requestChapter(id, lang, facts)}>
+          <button
+            type="button"
+            className={styles.linkButton}
+            onClick={() => facts && void requestChapter(id, lang, facts)}
+          >
             {t.retry}
           </button>
         </p>
@@ -184,10 +189,16 @@ export function FullReading({
   lang,
   facts,
   reading,
+  extra,
 }: {
   chapters: ChapterId[];
   lang: Locale;
   facts: PageContext | null;
+  /**
+   * Chapters that need more than the page's facts (the Saturn periods, the year ahead): their
+   * own facts, or null while those are loading. The other chapters keep the page's facts.
+   */
+  extra?: Partial<Record<ChapterId, PageContext | null>>;
   /** Which reading's words the card uses. */
   reading: "matchReading" | "chartReading";
 }) {
@@ -267,7 +278,7 @@ export function FullReading({
                   </h3>
                   {isOpen && (
                     <div id={panel}>
-                      <Chapter id={id} lang={lang} facts={facts} t={t} />
+                      <Chapter id={id} lang={lang} facts={extra && id in extra ? (extra[id] ?? null) : facts} t={t} />
                     </div>
                   )}
                 </li>

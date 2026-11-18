@@ -823,6 +823,24 @@ export interface components {
             weekday_letters: components["schemas"]["SignLettersOut"] | null;
         };
         /**
+         * BirthTableOut
+         * @description The almanac at the birth moment and the birth star's traditional groups.
+         */
+        BirthTableOut: {
+            weekday: components["schemas"]["LabelOut"];
+            thithi: components["schemas"]["LabelOut"];
+            yoga: components["schemas"]["LabelOut"];
+            karana: components["schemas"]["LabelOut"];
+            /** Star */
+            star: {
+                [key: string]: components["schemas"]["LabelOut"];
+            };
+            /** Rule Sets */
+            rule_sets: string[];
+            /** Provisional */
+            provisional: boolean;
+        };
+        /**
          * Body
          * @enum {string}
          */
@@ -1298,6 +1316,7 @@ export interface components {
             chart: components["schemas"]["ChartOut"] | null;
             dasha: components["schemas"]["DashaOut"] | null;
             kuja: components["schemas"]["KujaOut"] | null;
+            birth_table?: components["schemas"]["BirthTableOut"] | null;
         };
         /** Health */
         Health: {
@@ -1508,6 +1527,13 @@ export interface components {
             house: number;
             /** Counts */
             counts: boolean;
+        };
+        /** LabelOut */
+        LabelOut: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
         };
         /** LetterCountOut */
         LetterCountOut: {
@@ -1901,6 +1927,8 @@ export interface components {
             lagna: string | null;
             /** Offset Label */
             offset_label: string | null;
+            /** Placements */
+            placements?: components["schemas"]["PlacementOut"][] | null;
         };
         /** PersonTimelineOut */
         PersonTimelineOut: {
@@ -1968,6 +1996,14 @@ export interface components {
             timezone: string;
             /** Population */
             population: number;
+        };
+        /** PlacementOut */
+        PlacementOut: {
+            body: components["schemas"]["Body"];
+            /** Sign */
+            sign: string;
+            /** House */
+            house: number;
         };
         /** PlanetMonthOut */
         PlanetMonthOut: {

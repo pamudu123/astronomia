@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
@@ -24,8 +24,10 @@ import type { Locale } from "@/lib/i18n";
 
 import { AiExplain, FullReading, TopicChips } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
-import { CHART_PLACES, CHART_READING, CHART_TOPICS } from "@/lib/assistant/explain";
-import { chartContext, chartReadingContext } from "@/lib/assistant/pages";
+import { CHART_EXTRA, CHART_PLACES, CHART_READING, CHART_TOPICS } from "@/lib/assistant/explain";
+import { chartContext, chartExtrasContext, chartReadingContext } from "@/lib/assistant/pages";
+import { type Upcoming, fetchUpcomingChanges } from "@/lib/changes";
+import { type Journey, fetchJourney } from "@/lib/journey";
 
 import { DashaTimeline } from "./DashaTimeline";
 import { Forecast } from "./Forecast";
@@ -94,6 +96,31 @@ export function HadahanResult({
   const reading = chartReadingContext(result, labels, lang, !request);
   const readingKey = JSON.stringify(reading);
   const facts = useMemo(() => reading, [readingKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Two chapters also need the life road's Saturn periods and the planet changes ahead. The
+  // sections below fetch the same data; the requests are shared (lib/journey, lib/changes).
+  const [extras, setExtras] = useState<{ journey: Journey | null; upcoming: Upcoming | null } | null>(null);
+  useEffect(() => {
+    if (!request) return;
+    let live = true;
+    void Promise.allSettled([fetchJourney(request, lang), fetchUpcomingChanges(request, lang)]).then(
+      ([journey, upcoming]) => {
+        if (!live) return;
+        setExtras({
+          journey: journey.status === "fulfilled" ? journey.value.journey : null,
+          upcoming: upcoming.status === "fulfilled" ? upcoming.value : null,
+        });
+      },
+    );
+    return () => {
+      live = false;
+    };
+  }, [request, lang]);
+  // On a shared chart there is no birth to ask with: those chapters use the chart alone.
+  const extraFacts = useMemo(() => {
+    if (!request) return undefined;
+    const withExtras = extras ? chartExtrasContext(facts, extras) : null;
+    return Object.fromEntries(CHART_EXTRA.map((id) => [id, withExtras]));
+  }, [request, extras, facts]);
   const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;
@@ -184,7 +211,7 @@ export function HadahanResult({
         )}
       </section>
 
-      <FullReading chapters={CHART_READING} lang={lang} facts={facts} reading="chartReading" />
+      <FullReading chapters={CHART_READING} lang={lang} facts={facts} extra={extraFacts} reading="chartReading" />
 
       <SummaryCards
         lang={lang}

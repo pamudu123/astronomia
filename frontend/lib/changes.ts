@@ -211,5 +211,16 @@ async function post<T>(path: string, request: BirthRequest, lang: Locale): Promi
 export const fetchPersonalChange = (id: string, request: BirthRequest, lang: Locale) =>
   post<PersonalChange>(`/v1/changes/${encodeURIComponent(id)}/personal`, request, lang);
 
-export const fetchUpcomingChanges = (request: BirthRequest, lang: Locale) =>
-  post<Upcoming>("/v1/changes/personal", request, lang);
+// One request per birth and language while the page is open: the "Coming changes" section and
+// the written reading (the year ahead) both use it.
+const upcoming = new Map<string, Promise<Upcoming>>();
+
+export function fetchUpcomingChanges(request: BirthRequest, lang: Locale): Promise<Upcoming> {
+  const key = JSON.stringify([request, lang]);
+  const known = upcoming.get(key);
+  if (known) return known;
+  const pending = post<Upcoming>("/v1/changes/personal", request, lang);
+  upcoming.set(key, pending);
+  pending.catch(() => upcoming.delete(key)); // a failed request can be tried again
+  return pending;
+}

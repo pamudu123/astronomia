@@ -45,6 +45,12 @@ class PorondamRequest(BaseModel):
     lang: Lang = "en"
 
 
+class PlacementOut(BaseModel):
+    body: Body
+    sign: str
+    house: int
+
+
 class PersonOut(BaseModel):
     name: str
     mode: Literal["full", "quick"]
@@ -53,6 +59,9 @@ class PersonOut(BaseModel):
     rashi: str
     lagna: str | None
     offset_label: str | None
+    # Each planet's sign and house, with full birth details only. For the marriage
+    # combinations in each chart (docs/17, match chapter 5). No degrees.
+    placements: list[PlacementOut] | None = None
 
 
 class FactorOut(BaseModel):
@@ -145,6 +154,10 @@ def _person(
         rashi=RASHI[chart.moon.sign],
         lagna=RASHI[chart.lagna.sign],
         offset_label=birth.time.offset_label,
+        placements=[
+            PlacementOut(body=body, sign=RASHI[placed.point.sign], house=placed.house)
+            for body, placed in chart.planets.items()
+        ],
     )
     return chart.moon, chart, out, person.date.weekday()
 

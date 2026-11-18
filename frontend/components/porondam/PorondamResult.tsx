@@ -14,6 +14,7 @@ import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { matchContext } from "@/lib/assistant/context";
 import { MATCH_PLACES, MATCH_READING } from "@/lib/assistant/explain";
+import { matchReadingContext } from "@/lib/assistant/pages";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
@@ -77,12 +78,13 @@ export function PorondamResult({
   readOnlyAction,
 }: Props) {
   const [filter, setFilter] = useState<FactorFilter>("all");
-  // What the AI assistant sees: this result, with no names or birth details. The written
-  // explanations get the same summary, kept stable so each chapter is written once.
-  const context = matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding));
-  const contextKey = JSON.stringify(context);
-  const facts = useMemo(() => context, [contextKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  useAssistantContext(facts);
+  // What the AI assistant sees: this result, with no names or birth details.
+  useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding)));
+  // The written explanations get the same, plus each chart's marriage facts with full birth
+  // details. Kept stable, so each chapter is written once.
+  const reading = matchReadingContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding));
+  const readingKey = JSON.stringify(reading);
+  const facts = useMemo(() => reading, [readingKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const match = result.match!;
   const bride = result.bride!;
   const groom = result.groom!;

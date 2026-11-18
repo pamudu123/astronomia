@@ -1,15 +1,26 @@
 import type { BabyLetters } from "@/lib/babynames";
-import type { PersonalChange } from "@/lib/changes";
+import type { PersonalChange, Upcoming } from "@/lib/changes";
 import type { FirstLetters } from "@/lib/firstletters";
 import type { Hadahan, Labels, Place } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import type { KendaraResult } from "@/lib/kendara";
 import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/lib/nakath";
+import type { Journey } from "@/lib/journey";
+import type { Person, Porondam } from "@/lib/porondam";
 import type { Wedding } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
-import { combinations, houseFacts, lifeTimeline, periodTimeline, planetFacts } from "./chartFacts";
-import type { Json, PageContext } from "./context";
+import {
+  type Placement,
+  combinations,
+  houseFacts,
+  lifeTimeline,
+  periodTimeline,
+  planetFacts,
+  relation,
+  seventhLord,
+} from "./chartFacts";
+import { type Json, type PageContext, matchContext } from "./context";
 
 /**
  * What each page shows the assistant, one builder per page (docs/14, section 3.2).
@@ -103,13 +114,25 @@ export function chartReadingContext(
   shared = false,
 ): PageContext {
   const context = chartContext(result, labels, language, shared);
-  const { dasha, kuja } = result;
+  const { dasha, kuja, birth_table: table } = result;
   if (!context.result || typeof context.result !== "object" || Array.isArray(context.result)) return context;
   return {
     ...context,
     result: {
       ...context.result,
       ...(dasha && { life_period_timeline: lifeTimeline(dasha, labels) }),
+      // The almanac at birth and the birth star's traditional groups (chapter "Birth summary").
+      // No time: the weekday, thithi, yoga and karana alone don't give the birth date.
+      ...(table && {
+        birth_table: {
+          weekday: table.weekday.name,
+          thithi: table.thithi.name,
+          yoga: table.yoga.name,
+          karana: table.karana.name,
+          star_groups: Object.fromEntries(Object.entries(table.star).map(([group, label]) => [group, label.name])),
+          provisional: table.provisional,
+        },
+      }),
       ...(kuja && {
         mars_check: {
           present: kuja.present,
@@ -123,6 +146,107 @@ export function chartReadingContext(
           })),
         },
       }),
+    },
+  };
+}
+
+const day = (iso: string) => iso.slice(0, 10);
+
+/**
+ * The extra facts two chart chapters need, fetched by the page beside the chart: Saturn's
+ * periods and Jupiter's returns from the life road (chapter "Saturn periods"), and the planet
+ * changes ahead (chapter "The year ahead"). Added to the reading's facts only for those
+ * chapters, so the others keep their facts and their written text.
+ */
+export function chartExtrasContext(
+  base: PageContext,
+  extras: { journey?: Journey | null; upcoming?: Upcoming | null },
+): PageContext {
+  if (!base.result || typeof base.result !== "object" || Array.isArray(base.result)) return base;
+  const { journey, upcoming } = extras;
+  const now = journey?.now ?? "";
+  const span = (s: { start: string; end: string }) => ({
+    from: day(s.start),
+    until: day(s.end),
+    state: s.end < now ? "past" : s.start > now ? "ahead" : "now",
+  });
+  return {
+    ...base,
+    result: {
+      ...base.result,
+      ...(journey && {
+        // Counted from the Moon sign. Spans, not ages: an age would give away the birth date.
+        saturn_erashtaka: journey.erashtaka.map(span),
+        jupiter_returns: journey.guru_returns.map(span),
+        road_provisional: journey.provisional,
+      }),
+      ...(upcoming && {
+        planet_changes_ahead: upcoming.changes.map((c) => ({
+          change: c.change.title,
+          when: c.change.when,
+          from_rising_sign: counted(c.lagna),
+          from_moon_sign: counted(c.gochara),
+        })),
+      }),
+    },
+  };
+}
+
+/** Marriage facts of one person's chart: the 7th house, its ruler, Venus, and the combinations. */
+function marriageFacts(person: Person, labels: Labels): Json | null {
+  const placements = (person.placements ?? null) as Placement[] | null;
+  if (!placements || !person.lagna) return null;
+  const lord = seventhLord(person.lagna);
+  const at = (body: string) => placements.find((p) => p.body === body);
+  const venus = at("venus");
+  return {
+    seventh_house_sign: sign(labels, Object.keys(labels.rashi)[(Object.keys(labels.rashi).indexOf(person.lagna) + 6) % 12]),
+    seventh_lord: lord ? planet(labels, lord) : null,
+    seventh_lord_in_house: lord ? (at(lord)?.house ?? null) : null,
+    planets_in_seventh: placements.filter((p) => p.house === 7).map((p) => planet(labels, p.body)),
+    venus: venus ? { sign: sign(labels, venus.sign), house: venus.house } : null,
+    combinations: combinations({ planets: placements }, labels),
+  };
+}
+
+/**
+ * What the written match reading gets: the chat's summary, and with full birth details each
+ * chart's marriage facts and how the two 7th-house rulers regard each other (chapters
+ * "Marriage combinations" and "Your two 7th-house rulers").
+ */
+export function matchReadingContext(
+  result: Porondam,
+  labels: Labels,
+  language: Locale,
+  shared = false,
+  weddingSearch = false,
+): PageContext {
+  const context = matchContext(result, labels, language, shared, weddingSearch);
+  const { bride, groom } = result;
+  if (!bride || !groom || !context.result || typeof context.result !== "object" || Array.isArray(context.result)) {
+    return context;
+  }
+  const brideFacts = marriageFacts(bride, labels);
+  const groomFacts = marriageFacts(groom, labels);
+  const brideLord = bride.lagna ? seventhLord(bride.lagna) : null;
+  const groomLord = groom.lagna ? seventhLord(groom.lagna) : null;
+  return {
+    ...context,
+    result: {
+      ...context.result,
+      marriage_in_each_chart:
+        brideFacts && groomFacts
+          ? { bride: brideFacts, groom: groomFacts, provisional: true }
+          : "needs full birth details for both people",
+      seventh_lords:
+        brideLord && groomLord
+          ? {
+              bride: planet(labels, brideLord),
+              groom: planet(labels, groomLord),
+              relation: relation(brideLord, groomLord),
+              provisional: true,
+            }
+          : "needs full birth details for both people",
     },
   };
 }

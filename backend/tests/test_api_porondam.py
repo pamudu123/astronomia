@@ -24,6 +24,7 @@ def test_quick_match(client: TestClient) -> None:
     assert body["match"]["provisional"] is True
     assert body["kuja"] is None  # needs full birth details
     assert body["bride"]["rashi"] == "vrischika"
+    assert body["bride"]["placements"] is None  # only with full birth details
     dina = next(f for f in body["match"]["factors"] if f["id"] == "dina")
     assert dina["reason"].startswith("Counting from the bride's star, the groom's is number 15.")
 
@@ -33,6 +34,11 @@ def test_full_match_with_kuja_for_both(client: TestClient) -> None:
     assert body["status"] == "ok"
     assert body["bride"]["mode"] == "full"
     assert body["bride"]["lagna"] == "simha"
+    # Each planet's sign and house, for the marriage combinations (docs/17, match chapter 5).
+    placements = {p["body"]: p for p in body["bride"]["placements"]}
+    assert len(placements) == 9
+    assert placements["moon"] == {"body": "moon", "sign": "vrischika", "house": 4}
+    assert all(set(p) == {"body", "sign", "house"} for p in placements.values())
     assert body["kuja"]["comparison"] in ("both", "neither", "bride_only", "groom_only")
     assert body["kuja"]["bride"]["present"] is True
     assert "කුජ" in body["kuja"]["reason"]
