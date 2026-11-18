@@ -58,6 +58,18 @@ CHAPTERS: dict[str, Chapter] = {
     "match.mars": Chapter("explain-match", "The Mars check for both"),
     "match.styles": Chapter("explain-match", "Emotional styles"),
     "match.summary": Chapter("explain-match", "Summing up"),
+    # The birth chart: the full reading, and the topic chips (family, studies, abroad).
+    "chart.nature": Chapter("personal-reading", "Your nature"),
+    "chart.planets": Chapter("personal-reading", "The nine planets"),
+    "chart.houses": Chapter("personal-reading", "The 12 parts of life"),
+    "chart.work": Chapter("personal-reading", "Work and money"),
+    "chart.love": Chapter("personal-reading", "Love and marriage"),
+    "chart.family": Chapter("personal-reading", "Family and home"),
+    "chart.studies": Chapter("personal-reading", "Studies"),
+    "chart.abroad": Chapter("personal-reading", "Travel and going abroad"),
+    "chart.periods": Chapter("personal-reading", "Your life periods"),
+    "chart.mars": Chapter("personal-reading", "The Mars check"),
+    "chart.care": Chapter("personal-reading", "Areas to take care of"),
 }
 
 Language = Literal["en", "si"]

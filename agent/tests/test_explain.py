@@ -75,6 +75,13 @@ def test_prompt_holds_the_shape_the_topic_and_its_notes() -> None:
     assert "Writing in Sinhala" in system_prompt("match.checks", "si")
 
 
+def test_chart_chapters_read_the_personal_reading_notes() -> None:
+    prompt = system_prompt("chart.periods", "en")
+    assert "Giving a personal reading" in prompt  # personal-reading
+    assert "Reading a chart: meanings, tables and examples" in prompt  # its reference.md
+    assert "The match factors in everyday words" not in prompt  # not the match notes
+
+
 def test_facts_go_in_as_marked_data() -> None:
     request = ExplainRequest(id="match.summary", language="si", facts=FACTS)
     system, human = messages(request)

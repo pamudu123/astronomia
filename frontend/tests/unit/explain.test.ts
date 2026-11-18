@@ -2,6 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PageContext } from "@/lib/assistant/context";
 import {
+  CHART_PLACES,
+  CHART_READING,
+  CHART_TOPICS,
   MATCH_PLACES,
   MATCH_READING,
   blocks,
@@ -47,7 +50,7 @@ describe("chapter keys", () => {
 
 describe("the chapters and their words", () => {
   it("has a title for every chapter in both languages", () => {
-    for (const id of MATCH_READING) {
+    for (const id of [...MATCH_READING, ...CHART_READING, ...CHART_TOPICS]) {
       expect(en.assistant.explain.chapters[id]).toBeTruthy();
       expect(si.assistant.explain.chapters[id]).toBeTruthy();
     }
@@ -57,6 +60,13 @@ describe("the chapters and their words", () => {
     for (const ids of Object.values(MATCH_PLACES)) {
       for (const id of ids) expect(MATCH_READING).toContain(id);
     }
+  });
+
+  it("points the chart buttons at chapters of the chart reading", () => {
+    for (const ids of Object.values(CHART_PLACES)) {
+      for (const id of ids) expect(CHART_READING).toContain(id);
+    }
+    expect(CHART_TOPICS.every((id) => id.startsWith("chart."))).toBe(true);
   });
 });
 

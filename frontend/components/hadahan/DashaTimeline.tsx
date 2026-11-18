@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 
 import { type Dasha, type Labels, fill, formatMonthYear, formatYear } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -9,7 +9,20 @@ import styles from "./HadahanResult.module.css";
 
 type Text = { dasha: string; dashaLead: string; dashaNow: string; dashaSub: string };
 
-export function DashaTimeline({ dasha, labels, lang, t }: { dasha: Dasha; labels: Labels; lang: Locale; t: Text }) {
+/** `explain` is the AI explain button for the life periods (docs/17, place 3), when the AI is on. */
+export function DashaTimeline({
+  dasha,
+  labels,
+  lang,
+  t,
+  explain,
+}: {
+  dasha: Dasha;
+  labels: Labels;
+  lang: Locale;
+  t: Text;
+  explain?: ReactNode;
+}) {
   const [main, sub] = dasha.current;
   const currentMain = dasha.periods.find((p) => main && p.start === main.start) ?? dasha.periods[0];
   const [open, setOpen] = useState(false);
@@ -24,6 +37,7 @@ export function DashaTimeline({ dasha, labels, lang, t }: { dasha: Dasha; labels
           {t.dasha}
         </h2>
         <p className="soft">{t.dashaLead}</p>
+        {explain}
       </div>
       <div className={styles.timelineScroll}>
         <ol className={styles.timeline}>

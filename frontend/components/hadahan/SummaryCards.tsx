@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { type Chart, type Labels, fill, formatDegree } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -115,7 +117,8 @@ function StarQuarters({ index, pada }: { index: number; pada: number }) {
  * The first thing a reader sees: three plain answers, each with a small drawing of what it
  * measures. The traditional term sits beside the everyday one (QA report, section D).
  */
-export function SummaryCards({ lang, t, labels, chart }: Props) {
+/** `explain` is the AI explain button for the three cards (docs/17, place 1), when the AI is on. */
+export function SummaryCards({ lang, t, labels, chart, explain }: Props & { explain?: ReactNode }) {
   const { lagna, moon } = chart;
   const sign = (key: string) => labels.rashi[key];
   const signLine = (key: string, degree: number) =>
@@ -159,6 +162,7 @@ export function SummaryCards({ lang, t, labels, chart }: Props) {
       <h2 id="glance-title" className={`display ${styles.heading}`}>
         {t.glance}
       </h2>
+      {explain}
       <div className={styles.cards}>
         {cards.map((card, index) => (
           <article

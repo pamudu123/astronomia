@@ -189,7 +189,7 @@ export function FullReading({
   lang: Locale;
   facts: PageContext | null;
   /** Which reading's words the card uses. */
-  reading: "matchReading";
+  reading: "matchReading" | "chartReading";
 }) {
   const t = useExplainText();
   const [started, setStarted] = useState(false);
@@ -276,6 +276,69 @@ export function FullReading({
           </ol>
           <p className={styles.label}>{t.readingLabel}</p>
         </>
+      )}
+    </section>
+  );
+}
+
+/**
+ * The life topic chips under a chart (docs/17, place 4): one chapter per chip. Picking a chip
+ * opens its chapter under the row; picking it again hides it.
+ */
+export function TopicChips({
+  chapters,
+  lang,
+  facts,
+}: {
+  chapters: ChapterId[];
+  lang: Locale;
+  facts: PageContext | null;
+}) {
+  const t = useExplainText();
+  const [picked, setPicked] = useState<ChapterId | null>(null);
+  const base = useId();
+  if (!t || !facts) return null;
+  const allowed = canUse("ai_explain");
+
+  return (
+    <section className={`rise ${styles.topics}`} aria-labelledby={`${base}-title`} data-card="topics">
+      <div className={styles.topicsHead}>
+        <h2 id={`${base}-title`} className={`display ${styles.readingTitle}`}>
+          <span aria-hidden="true" className={styles.spark}>
+            ✦
+          </span>{" "}
+          {t.topics.title}
+        </h2>
+        <p className="soft">{t.topics.lead}</p>
+      </div>
+      <div className={styles.chips} role="group" aria-label={t.topics.title}>
+        {chapters.map((id) => (
+          <button
+            key={id}
+            type="button"
+            className={picked === id ? styles.chipOn : styles.chip}
+            aria-pressed={picked === id}
+            aria-controls={`${base}-panel`}
+            onClick={() => setPicked(picked === id ? null : id)}
+            data-topic={id}
+          >
+            {t.chapters[id]}
+          </button>
+        ))}
+      </div>
+      {picked && (
+        <div id={`${base}-panel`} className={styles.panel}>
+          {allowed ? (
+            <>
+              <Chapter key={picked} id={picked} lang={lang} facts={facts} t={t} heading />
+              <p className={styles.label}>{t.label}</p>
+            </>
+          ) : (
+            <p className={styles.locked}>
+              <Lock size={16} /> {t.locked}
+            </p>
+          )}
+        </div>
       )}
     </section>
   );

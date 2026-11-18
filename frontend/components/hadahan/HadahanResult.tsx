@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { KujaDials } from "@/components/KujaDials";
@@ -22,8 +22,10 @@ import {
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { AiExplain, FullReading, TopicChips } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
-import { chartContext } from "@/lib/assistant/pages";
+import { CHART_PLACES, CHART_READING, CHART_TOPICS } from "@/lib/assistant/explain";
+import { chartContext, chartReadingContext } from "@/lib/assistant/pages";
 
 import { DashaTimeline } from "./DashaTimeline";
 import { Forecast } from "./Forecast";
@@ -87,6 +89,11 @@ export function HadahanResult({
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
   // What the AI assistant sees: this result, with no birth details.
   useAssistantContext(chartContext(result, labels, lang, !request));
+  // What the written reading gets: the same, with every later life period and the Mars
+  // check's rules. Kept stable, so each chapter is written once per visit.
+  const reading = chartReadingContext(result, labels, lang, !request);
+  const readingKey = JSON.stringify(reading);
+  const facts = useMemo(() => reading, [readingKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;
@@ -177,7 +184,15 @@ export function HadahanResult({
         )}
       </section>
 
-      <SummaryCards lang={lang} t={t} labels={labels} chart={chart} />
+      <FullReading chapters={CHART_READING} lang={lang} facts={facts} reading="chartReading" />
+
+      <SummaryCards
+        lang={lang}
+        t={t}
+        labels={labels}
+        chart={chart}
+        explain={<AiExplain chapters={CHART_PLACES.chart} lang={lang} facts={facts} />}
+      />
 
       <section className={styles.split}>
         <div className={`rise ${styles.panel} ${styles.chartPanel}`}>
@@ -293,7 +308,17 @@ export function HadahanResult({
         </div>
       </section>
 
-      {result.dasha && <DashaTimeline dasha={result.dasha} labels={labels} lang={lang} t={t} />}
+      <TopicChips chapters={CHART_TOPICS} lang={lang} facts={facts} />
+
+      {result.dasha && (
+        <DashaTimeline
+          dasha={result.dasha}
+          labels={labels}
+          lang={lang}
+          t={t}
+          explain={<AiExplain chapters={CHART_PLACES.periods} lang={lang} facts={facts} />}
+        />
+      )}
 
       {request && <LifeRoad lang={lang} t={t} labels={labels} request={request} />}
 
@@ -335,6 +360,7 @@ export function HadahanResult({
             </>
           )}
           {kuja.provisional && <p className={styles.small}>{t.provisional}</p>}
+          <AiExplain chapters={CHART_PLACES.mars} lang={lang} facts={facts} />
         </article>
 
         <article className={`rise ${styles.panel}`} style={{ animationDelay: ".1s" }} data-card="time">
