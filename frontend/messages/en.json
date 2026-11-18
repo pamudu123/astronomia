@@ -1182,7 +1182,7 @@
       "locked": "Available on paid plans",
       "matchReading": {
         "title": "Full match reading",
-        "lead": "{count} chapters that walk through this match: each person, every factor, the serious checks, the Mars check, marriage combinations in each chart, the two 7th-house rulers, emotional styles, and a summing up.",
+        "lead": "{count} chapters that walk through this match, from each person and every factor to the serious checks, the marriage combinations and a summing up.",
         "get": "Get the full reading",
         "openAll": "Open all",
         "hideAll": "Hide all"
@@ -1221,7 +1221,9 @@
         "chart.summary": "Birth summary",
         "chart.combinations": "Special combinations",
         "chart.saturn": "Saturn periods",
-        "chart.ahead": "The planet changes ahead"
+        "chart.ahead": "The planet changes ahead",
+        "match.years": "Your years ahead",
+        "match.wedding": "Wedding dates"
       }
     },
     "cards": {

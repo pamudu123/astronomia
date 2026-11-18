@@ -20,6 +20,12 @@ description: Baby names from the birth star (first letters), the first letters c
 3. Practice varies by family, region and religion. Say so when it matters, and suggest their family astrologer for personal timing the site doesn't cover.
 4. For "why three possible birth times?" on an old horoscope: many dates can fit the same planet positions, and a time of day or another detail from the paper narrows them down.
 
+## Chapters
+
+The match page's full reading and the explain button under the wedding dates use one chapter from this skill. The shape of a chapter is in the `explain-card` skill.
+
+- **`match.wedding`, Wedding dates.** From `wedding_dates_found`: the range and place searched, then for each ceremony the dates found, best first as the site lists them, with what sets each apart (weekday, the star and thithi of the time, any cautions the site lists) and how a family usually chooses between them (the reference, section 3: nakath, the poruwa, homecoming). Then what to weigh beyond the almanac: the venue, family travel, the couple's own preference, and checking with their family astrologer. If a ceremony has no dates (`none_found`), say so and suggest a longer range. Never call one date the right one; the choice is the family's.
+
 ## Never
 
 - Don't judge a baby name, a marriage or a family's choice. Explain the tradition.

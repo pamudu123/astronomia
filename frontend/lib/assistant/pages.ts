@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n";
 import type { KendaraResult } from "@/lib/kendara";
 import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/lib/nakath";
 import type { Journey } from "@/lib/journey";
-import type { Person, Porondam } from "@/lib/porondam";
+import type { Person, Porondam, Timeline } from "@/lib/porondam";
 import type { Wedding } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
@@ -189,6 +189,70 @@ export function chartExtrasContext(
         })),
       }),
     },
+  };
+}
+
+/**
+ * The couple's next ten years, for the chapter "Your years ahead": each person's life periods
+ * and sub-periods in the window, Saturn's harder stretches, and the stretches they share.
+ *
+ * A period that began before the window has no start date: for a young person that start
+ * could be the birth date (the first life period starts at birth).
+ */
+export function coupleYearsContext(base: PageContext, timeline: Timeline, labels: Labels): PageContext {
+  if (!base.result || typeof base.result !== "object" || Array.isArray(base.result)) return base;
+  const from = timeline.start;
+  const person = (p: Timeline["bride"]) => ({
+    birth_details: p.mode,
+    now: p.dasha_now ?? null,
+    life_periods: (p.dasha ?? []).map((period) => ({
+      period: planet(labels, period.lord),
+      ...(period.start >= from ? { from: day(period.start) } : { from: "before this window" }),
+      until: day(period.end),
+      sub_periods: period.sub
+        .filter((s) => s.end >= from)
+        .map((s) => ({ sub: planet(labels, s.lord), from: day(s.start < from ? from : s.start), until: day(s.end) })),
+    })),
+    saturn: p.saturn.map((s) => ({ kind: s.kind, from: day(s.start), until: day(s.end), text: s.text })),
+  });
+  return {
+    ...base,
+    result: {
+      ...base.result,
+      years_ahead: {
+        window: { from: day(timeline.start), until: day(timeline.end) },
+        bride: person(timeline.bride),
+        groom: person(timeline.groom),
+        saturn_for_both: timeline.overlaps.map((s) => ({ from: day(s.start), until: day(s.end), text: s.text })),
+        provisional: timeline.provisional,
+      },
+    },
+  };
+}
+
+/** How many dates per ceremony, and reasons per date, the chapter "Wedding dates" gets. */
+const WEDDING_DATES = 5;
+const WEDDING_REASONS = 3;
+
+/**
+ * The wedding dates found under the match, for the chapter "Wedding dates": the top dates of
+ * each ceremony with their first reasons. Trimmed because Sinhala text takes three times the
+ * bytes, and the agent takes at most 40 KB of facts.
+ */
+export function weddingReadingContext(base: PageContext, wedding: Wedding): PageContext {
+  if (!base.result || typeof base.result !== "object" || Array.isArray(base.result)) return base;
+  const trimmed: Wedding = {
+    ...wedding,
+    ceremonies: wedding.ceremonies.map((c) => ({
+      ...c,
+      suggestions: c.suggestions
+        .slice(0, WEDDING_DATES)
+        .map((s) => ({ ...s, passes: s.passes.slice(0, WEDDING_REASONS) })),
+    })),
+  };
+  return {
+    ...base,
+    result: { ...base.result, wedding_dates_found: weddingContext(trimmed, base.language).result ?? null },
   };
 }
 

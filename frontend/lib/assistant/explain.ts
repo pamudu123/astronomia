@@ -24,6 +24,8 @@ export type ChapterId =
   | "match.summary"
   | "match.combinations"
   | "match.lords"
+  | "match.years"
+  | "match.wedding"
   | "chart.summary"
   | "chart.combinations"
   | "chart.saturn"
@@ -49,8 +51,17 @@ export const MATCH_READING: ChapterId[] = [
   "match.combinations",
   "match.lords",
   "match.styles",
+  "match.years",
+  "match.wedding",
   "match.summary",
 ];
+
+/**
+ * Match chapters that need data the page loads apart from the match: the couple's years ahead
+ * (with both birth details on the person's own match) and the wedding dates (once searched).
+ * Left out of the reading until there is something to read them from.
+ */
+export const MATCH_EXTRA: ChapterId[] = ["match.years", "match.wedding"];
 
 /** The explain buttons on the match page, and the chapters each one shows (docs/17, section 3). */
 export const MATCH_PLACES = {
@@ -58,6 +69,10 @@ export const MATCH_PLACES = {
   result: ["match.summary"],
   /** Place 6: "Is anything serious wrong?" Rajju, Vedha and the Mars check. */
   serious: ["match.checks", "match.mars"],
+  /** Place 7: "What's ahead for us?" */
+  years: ["match.years"],
+  /** Place 8: "Which date should we pick?" */
+  wedding: ["match.wedding"],
 } satisfies Record<string, ChapterId[]>;
 
 /** The full birth chart reading, in reading order (docs/17, section 2.2). */

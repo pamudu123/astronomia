@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { AiExplain, FullReading } from "@/components/assistant/Explain";
@@ -13,8 +13,8 @@ import { SaveButton } from "@/components/account/SaveButton";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { matchContext } from "@/lib/assistant/context";
-import { MATCH_PLACES, MATCH_READING } from "@/lib/assistant/explain";
-import { matchReadingContext } from "@/lib/assistant/pages";
+import { MATCH_EXTRA, MATCH_PLACES, MATCH_READING } from "@/lib/assistant/explain";
+import { coupleYearsContext, matchReadingContext, weddingReadingContext } from "@/lib/assistant/pages";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
@@ -23,11 +23,14 @@ import {
   type Person,
   type Porondam,
   type PorondamRequest,
+  type Timeline,
+  fetchTimeline,
   filterFactors,
   isCounted,
 } from "@/lib/porondam";
 
 import { WeddingFinder } from "@/components/wedding/WeddingFinder";
+import type { Wedding } from "@/lib/wedding";
 
 import { Check } from "./Check";
 import { CoupleRoad, type CoupleRoadText } from "./CoupleRoad";
@@ -85,6 +88,35 @@ export function PorondamResult({
   const reading = matchReadingContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding));
   const readingKey = JSON.stringify(reading);
   const facts = useMemo(() => reading, [readingKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Two chapters read data the page loads apart from the match: the couple's next ten years
+  // (shared with "Years ahead for the couple") and the wedding dates once searched.
+  const [timelineData, setTimelineData] = useState<Timeline | null>(null);
+  const [weddingFound, setWeddingFound] = useState<Wedding | null>(null);
+  useEffect(() => {
+    if (!request || !timeline) return;
+    let live = true;
+    fetchTimeline(request, lang)
+      .then((found) => {
+        if (live && found.timeline) setTimelineData(found.timeline);
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, [request, timeline, lang]);
+  const yearsFacts = useMemo(
+    () => (timelineData ? coupleYearsContext(facts, timelineData, labels) : null),
+    [facts, timelineData, labels],
+  );
+  const weddingFacts = useMemo(
+    () => (weddingFound ? weddingReadingContext(facts, weddingFound) : null),
+    [facts, weddingFound],
+  );
+  // The years ahead only on the couple's own match (a shared one has no birth details to ask
+  // with); the wedding dates once a search has found some.
+  const chapters = MATCH_READING.filter(
+    (id) => !MATCH_EXTRA.includes(id) || (id === "match.years" ? Boolean(request && timeline) : Boolean(weddingFacts)),
+  );
   const match = result.match!;
   const bride = result.bride!;
   const groom = result.groom!;
@@ -125,7 +157,13 @@ export function PorondamResult({
         )}
       </section>
 
-      <FullReading chapters={MATCH_READING} lang={lang} facts={facts} reading="matchReading" />
+      <FullReading
+        chapters={chapters}
+        lang={lang}
+        facts={facts}
+        extra={{ "match.years": yearsFacts, "match.wedding": weddingFacts }}
+        reading="matchReading"
+      />
 
       {/*
         Two answers with equal weight, side by side: how many traditional factors agree, and
@@ -318,6 +356,7 @@ export function PorondamResult({
           request={request}
           brideName={nameOf(bride, f.bride)}
           groomName={nameOf(groom, f.groom)}
+          explain={yearsFacts && <AiExplain chapters={MATCH_PLACES.years} lang={lang} facts={yearsFacts} />}
         />
       )}
 
@@ -333,7 +372,15 @@ export function PorondamResult({
         />
       )}
 
-      {request && wedding && <WeddingFinder lang={lang} t={wedding} request={request} />}
+      {request && wedding && (
+        <WeddingFinder
+          lang={lang}
+          t={wedding}
+          request={request}
+          onResult={setWeddingFound}
+          explain={weddingFacts && <AiExplain key={JSON.stringify(weddingFacts)} chapters={MATCH_PLACES.wedding} lang={lang} facts={weddingFacts} />}
+        />
+      )}
 
       <section className={styles.footRow}>
         <div className={styles.footText}>

@@ -60,6 +60,8 @@ CHAPTERS: dict[str, Chapter] = {
     "match.summary": Chapter("explain-match", "Summing up"),
     "match.combinations": Chapter("explain-match", "Marriage combinations in each chart"),
     "match.lords": Chapter("explain-match", "Your two 7th-house rulers"),
+    "match.years": Chapter("explain-match", "Your years ahead"),
+    "match.wedding": Chapter("ceremonies-and-names", "Wedding dates"),
     # The birth chart: the full reading, and the topic chips (family, studies, abroad).
     "chart.summary": Chapter("birth-chart", "Birth summary"),
     "chart.combinations": Chapter("personal-reading", "Special combinations"),
