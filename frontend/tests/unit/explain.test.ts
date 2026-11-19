@@ -160,6 +160,13 @@ describe("blocks", () => {
     ]);
   });
 
+  it("keeps a lead that starts with an icon as a lead", () => {
+    expect(blocks("**💼 Work that suits you**\n\nSteady roles suit you.")).toEqual([
+      { kind: "paragraph", spans: [{ text: "💼 Work that suits you", bold: true }] },
+      { kind: "paragraph", spans: [{ text: "Steady roles suit you.", bold: false }] },
+    ]);
+  });
+
   it("shows headings as bold lines and keeps an unclosed ** as text", () => {
     expect(blocks("## The two of you")).toEqual([
       { kind: "paragraph", spans: [{ text: "The two of you", bold: true }] },
