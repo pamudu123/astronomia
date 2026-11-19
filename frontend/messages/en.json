@@ -98,29 +98,49 @@
     "badges": ["Maths first", "Tuned AI", "Astrologer verified"],
     "calc": {
       "title": "Try the maths",
-      "example": "Example",
-      "label": "A worked example: from a birth time and the Moon's position to its rashi, nakshatra and pada.",
-      "moon": "Moon λ",
-      "sun": "Sun λ",
-      "place": "Birth place",
-      "cities": [
-        "Colombo",
-        "London",
-        "Melbourne",
-        "Toronto"
-      ],
-      "rows": {
-        "ut": "Time to UT",
+      "label": "Three worked examples: the Moon's birth star, the shift between the Western and sidereal zodiacs, and the dasha periods of a life.",
+      "prev": "Previous example",
+      "next": "Next example",
+      "count": "{n} of {total}",
+      "star": {
+        "name": "Birth star",
+        "note": "The Moon's longitude, cut into 12 signs and 27 stars.",
+        "moon": "Moon λ",
+        "sun": "Sun λ",
         "rashi": "Rashi",
         "nak": "Nakshatra",
         "pada": "Pada",
-        "tithi": "Tithi"
+        "padaValue": "Pada {n}"
       },
-      "prevDay": " (the day before)",
-      "nextDay": " (the next day)",
-      "waxing": "Shukla",
-      "waning": "Krishna",
-      "note": "Example values. The birth time is fixed at 06:42 local time."
+      "shift": {
+        "name": "Sky shift",
+        "note": "Why your Western sign and your Sri Lankan sign often differ.",
+        "sun": "Sun λ (tropical)",
+        "year": "Birth year",
+        "western": "Western (tropical)",
+        "sidereal": "Sidereal (Sidera)",
+        "ayanamsa": "Ayanamsa",
+        "siderealSun": "Sidereal Sun",
+        "sign": "Sun sign",
+        "same": "{sign} (same)",
+        "signs": ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+      },
+      "dasha": {
+        "name": "Life periods",
+        "note": "Vimshottari dasha: 120 years, set by the Moon's star.",
+        "moon": "Moon λ",
+        "age": "Age",
+        "ageValue": "{age} yrs",
+        "years": "yrs",
+        "lord": "Star lord",
+        "lordValue": "{planet} · {years} yrs",
+        "balance": "Balance at birth",
+        "balanceValue": "{y} y {m} m",
+        "period": "Period at age {age}",
+        "periodValue": "{planet} dasha",
+        "planets": ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"],
+        "short": ["Ke", "Ve", "Su", "Mo", "Ma", "Ra", "Ju", "Sa", "Me"]
+      }
     },
     "pillarsTitle": "Three pillars behind every reading",
     "pillars": [

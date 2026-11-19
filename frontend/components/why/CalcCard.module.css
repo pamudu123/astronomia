@@ -13,24 +13,99 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 12px;
+  height: 34px;
   font-family: var(--font-mono);
   font-size: 13px;
 }
 
 .title {
+  overflow: hidden;
   color: var(--gold);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.example {
+/* Previous / next example. The label has a fixed width, so the arrows never move. */
+.pager {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+}
+
+.arrow svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arrow:hover {
+  background: rgb(var(--glow) / 14%);
+}
+
+.arrow:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.pagerLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 108px;
+  font-family: var(--font-body);
+  line-height: 1.2;
+}
+
+.pagerName,
+.pagerCount {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.pagerName {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.pagerCount {
   color: var(--ink-soft);
+  font-size: 10.5px;
 }
 
-.ruler {
+/* Every example draws into the same 300 × 78 box. */
+.visual {
   display: block;
   width: 100%;
   height: auto;
-  margin-bottom: 6px;
+  aspect-ratio: 300 / 78;
+  margin: 6px 0 4px;
+  font-family: var(--font-body);
 }
 
 .steps {
@@ -39,11 +114,13 @@
   list-style: none;
 }
 
+/* Each step is two fixed lines: the label and its result, then the equation. Nothing wraps. */
 .step {
   display: grid;
   grid-template-columns: 26px minmax(0, 1fr);
+  align-items: center;
   gap: 12px;
-  padding: 11px 0;
+  height: 68px;
   border-top: 1px solid var(--line-soft);
 }
 
@@ -60,27 +137,51 @@
   font-size: 12px;
 }
 
+.stepBody {
+  min-width: 0;
+}
+
+.stepHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.label,
+.result,
+.equation {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .label {
-  margin-bottom: 2px;
+  min-width: 0;
   color: var(--ink-soft);
   font-size: 12px;
 }
 
+.result {
+  flex: none;
+  max-width: 64%;
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
 .equation {
+  height: 22px;
   color: var(--ink-soft);
   font-family: var(--font-mono);
-  font-size: 13.5px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 22px;
 }
 
-.equation b {
-  color: var(--gold);
-  font-weight: 600;
-  font-family: var(--font-body);
-}
-
-/* The three inputs: Moon and Sun sliders side by side, the place below. */
+/* The two sliders, side by side, in every example. */
 .controls {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -97,19 +198,25 @@
   min-width: 0;
 }
 
-.placeControl {
-  grid-column: 1 / -1;
-}
-
 .controlHead {
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  height: 18px;
   color: var(--ink-soft);
   font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.controlName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .controlHead b {
+  flex: none;
   color: var(--gold);
   font-family: var(--font-mono);
   font-weight: 500;
@@ -161,20 +268,35 @@
   border-radius: 999px;
 }
 
-.control select {
-  min-height: 38px;
-  padding: 0 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-field);
-  background: var(--night-raised);
-  color: var(--ink);
-  font: inherit;
-  font-size: 14px;
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 0 8px;
+  border-top: 1px solid var(--line-soft);
 }
 
+.dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  transition: width 0.2s ease;
+}
+
+.dots .dotOn {
+  width: 16px;
+  background: var(--gold);
+}
+
+/* Two lines are always reserved for the note, so a longer note in one language changes nothing. */
 .note {
-  padding: 8px 0 4px;
-  border-top: 1px solid var(--line-soft);
+  display: -webkit-box;
+  height: 32px;
+  overflow: hidden;
   color: var(--ink-soft);
   font-size: 11px;
+  line-height: 16px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
