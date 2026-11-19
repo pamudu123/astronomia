@@ -6,7 +6,7 @@ Date: 2026-11-18. Updated the same day: cut to the main places only, then added 
 
 Two kinds of AI explanation, both collapsible, both free for now and paid later:
 
-1. **Full detailed reading** at the top of the birth chart and match results. A long reading in chapters, like the printed premium reports people buy today (section 2).
+1. **Full detailed reading** at the end of the birth chart and match results (moved down from the top on 2026-11-19: the long card pushed the chart and the match result off the first screen). A long reading in chapters, like the printed premium reports people buy today (section 2).
 2. **Explain buttons** on the 15 main places across the site where people get stuck (section 3).
 
 **Small questions stay in the chat.** "What is a karana?", "what does Yoni mean?" are one-line answers. Astro (file 14) handles those.
@@ -15,7 +15,7 @@ The rule from file 04 still holds: **the AI talks, the engine calculates.** A ch
 
 ## 1. How it looks
 
-### At the top of a result
+### At the end of a result
 
 ```
  ┌────────────────────────────────────────────────────┐

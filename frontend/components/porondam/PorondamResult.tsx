@@ -171,15 +171,6 @@ export function PorondamResult({
         )}
       </section>
 
-      <FullReading
-        chapters={chapters}
-        lang={lang}
-        facts={facts}
-        extra={{ "match.years": yearsFacts, "match.wedding": weddingFacts }}
-        reading="matchReading"
-        pdf={Boolean(request)}
-      />
-
       {/*
         Two answers with equal weight, side by side: how many traditional factors agree, and
         the checks this rule set reports apart from that count. No single verdict on the
@@ -396,6 +387,16 @@ export function PorondamResult({
           explain={weddingFacts && <AiExplain key={JSON.stringify(weddingFacts)} chapters={MATCH_PLACES.wedding} lang={lang} facts={weddingFacts} />}
         />
       )}
+
+      {/* The long chapter reading comes last, so the match result itself is what shows first. */}
+      <FullReading
+        chapters={chapters}
+        lang={lang}
+        facts={facts}
+        extra={{ "match.years": yearsFacts, "match.wedding": weddingFacts }}
+        reading="matchReading"
+        pdf={Boolean(request)}
+      />
 
       <section className={styles.footRow}>
         <div className={styles.footText}>
