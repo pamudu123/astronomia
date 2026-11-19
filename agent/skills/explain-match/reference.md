@@ -6,16 +6,18 @@ Factor names below are the ones the site shows. Where the traditional meaning to
 
 ## The four themes
 
-Grouping factors by theme makes a result easier to follow than a list of twenty names. Use these groups when explaining a whole result.
+Grouping factors by theme makes a result easier to follow than a list of twenty names. The page's ring groups them into these four themes; a written reading gets them, with their counts, as `factor_themes`. Use the theme names and counts from the facts, which are in the page's language.
 
-| Theme | Factors |
+| Theme (as the page names it) | Factors |
 |---|---|
-| Getting along day to day (temperament, outlook, how minds meet) | Gana, Varna, Rashi, Rashyadhipathi, Graha, Bhutha, Pakshi |
-| Attraction and affection | Yoni, Vashya, Linga |
-| Family and children | Mahendra, Vruksha, Gothra, Nadi |
-| Wellbeing and a lasting bond | Nakath, Stree Deergha, Ayusha, Dina, and the two essential checks, Rajju and Vedha |
+| Long life and health | Nakath, Stree Deergha, Ayusha, Nadi |
+| Bond and temperament | Gana, Yoni, Rashi, Vashya, Pakshi, Linga, Varna, Bhutha |
+| Family and children | Mahendra, Gothra, Vruksha |
+| Planets and birth days | Rashyadhipathi, Dina, Graha |
 
-A useful way to speak: "Your strongest area is attraction and affection, where all three factors agree. The area to give attention to is day-to-day temperament, where two factors don't agree."
+The essential checks, Rajju and Vedha, sit apart from these and from the count. For "Long life and health", talk about wellbeing and care for each other, never about lifespan.
+
+A useful way to speak: "Your strongest area is bond and temperament, where six of the eight factors agree. The area to give attention to is planets and birth days, where two don't agree."
 
 ## Factor by factor
 

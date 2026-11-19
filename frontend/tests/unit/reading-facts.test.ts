@@ -106,6 +106,24 @@ describe("chartReadingContext with the birth table", () => {
   });
 });
 
+describe("care periods", () => {
+  it("names the running sub-period when its planet rules the 8th house", () => {
+    // The fixture: Simha rising, so Meena is the 8th house and Jupiter rules it. The running
+    // sub-period is Jupiter's; the next is Saturn's, which neither rules nor sits in the 8th.
+    const result = chartReadingContext(chart, labels, "en").result as { care_periods: unknown[] };
+    expect(result.care_periods).toEqual([
+      {
+        when: "now",
+        main_period: "Sun",
+        sub: "Jupiter",
+        from: "2026-05-02",
+        until: "2027-02-18",
+        because: "rules the 8th house",
+      },
+    ]);
+  });
+});
+
 describe("chartExtrasContext", () => {
   const base = chartReadingContext(chart, labels, "en");
   const journey = {
@@ -139,7 +157,7 @@ describe("chartExtrasContext", () => {
     ]);
   });
 
-  it("never sends a date taken from the birth or the road's end (review on #52)", () => {
+  it("never sends a date taken from the birth, and leaves out stays cut at the road's end", () => {
     const born = {
       ...journey,
       birth: "1995-04-19T09:05:00Z",
@@ -157,7 +175,8 @@ describe("chartExtrasContext", () => {
       from: "already running at birth",
       until: "1997-06-01",
     });
-    expect(facts.saturn_erashtaka[0]).toMatchObject({ from: "2092-03-01", until: "beyond the life road" });
+    // A stay cut where the road ends is left out: naming the road's end sounds like a lifespan.
+    expect(facts.saturn_erashtaka).toEqual([]);
     expect(JSON.stringify(result)).not.toContain("1995-04-19");
     expect(JSON.stringify(result)).not.toContain("2095-04-19");
   });
@@ -202,6 +221,28 @@ describe("chartExtrasContext", () => {
 
 describe("matchReadingContext", () => {
   const full = porondamFull as unknown as Porondam;
+
+  it("gives the factors by the page's themes, with the page's counts", () => {
+    const result = matchReadingContext(full, labels, "en").result as {
+      factor_themes: { theme: string; agree: number; counted: number; factors: string[] }[];
+    };
+    const themes = labels.porondam_theme!;
+    expect(result.factor_themes.map((t) => t.theme)).toEqual(Object.values(themes).map((t) => t.name));
+    // The counts add up to the match's own score.
+    const agree = result.factor_themes.reduce((sum, t) => sum + t.agree, 0);
+    const counted = result.factor_themes.reduce((sum, t) => sum + t.counted, 0);
+    expect({ agree, counted }).toEqual({ agree: full.match!.score.passed, counted: full.match!.score.total });
+    expect(result.factor_themes[0].factors).toContain("Nakath");
+  });
+
+  it("gives each person's Mars check with its reasons and rules", () => {
+    const result = matchReadingContext(full, labels, "en").result as {
+      mars_check: { bride: { reasons: string[]; checks: { rule: string }[] }; comparison: string };
+    };
+    expect(result.mars_check.bride.reasons).toEqual(full.kuja!.bride.reasons);
+    expect(result.mars_check.bride.checks).toHaveLength(full.kuja!.bride.cancellations.length);
+    expect(result.mars_check.comparison).toBe(full.kuja!.reason);
+  });
 
   it("says full birth details are needed when the placements are missing", () => {
     const result = matchReadingContext(full, labels, "en").result as Record<string, unknown>;

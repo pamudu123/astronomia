@@ -33,6 +33,31 @@ description: How to write natural, polite spoken Sinhala for the site, which wor
 
 Factor names in the App Context are already in the page's language. Use them as given.
 
+## Yoga names and dates
+
+Some facts are always in English (the yogas found in a chart). In Sinhala text, never write them in English letters:
+
+| In the facts | In Sinhala |
+|---|---|
+| Gajakesari yoga | ගජකේසරී යෝගය |
+| Budhaditya yoga | බුධාදිත්‍ය යෝගය |
+| Chandra-Mangala yoga | චන්ද්‍ර මංගල යෝගය |
+| Ruchaka yoga | රුචක යෝගය |
+| Bhadra yoga | භද්‍ර යෝගය |
+| Hamsa yoga | හංස යෝගය |
+| Malavya yoga | මාලව්‍ය යෝගය |
+| Shasha yoga | ශශ යෝගය |
+| Sunapha yoga | සුනඵා යෝගය |
+| Anapha yoga | අනඵා යෝගය |
+| Durudhara yoga | දුරුධරා යෝගය |
+| Ravi-Sukra yoga | රවි සිකුරු යෝගය |
+| Kuja-Sukra yoga | කුජ සිකුරු යෝගය |
+| Shani-Mangala yoga | ශනි මංගල යෝගය |
+| Papa Kartari | පාප කර්තරී |
+| Shubha Kartari | ශුභ කර්තරී |
+
+Write dates the Sinhala way, never as 2027-02-18: **2027 පෙබරවාරි 18**. The months: ජනවාරි, පෙබරවාරි, මාර්තු, අප්‍රේල්, මැයි, ජූනි, ජූලි, අගෝස්තු, සැප්තැම්බර්, ඔක්තෝබර්, නොවැම්බර්, දෙසැම්බර්.
+
 ## Personal readings in Sinhala
 
 - Keep the same warm, friendly-astrologer voice as in English: speak to one person, in short sentences, with an everyday example.
