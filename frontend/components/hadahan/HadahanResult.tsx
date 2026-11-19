@@ -230,15 +230,6 @@ export function HadahanResult({
         )}
       </section>
 
-      <FullReading
-        chapters={CHART_READING}
-        lang={lang}
-        facts={facts}
-        extra={extraFacts}
-        reading="chartReading"
-        pdf={Boolean(request)}
-      />
-
       <SummaryCards
         lang={lang}
         t={t}
@@ -427,6 +418,16 @@ export function HadahanResult({
           <p className={styles.small}>{fill(t.method, { ayanamsa: t.ayanamsaLahiri, offset })}</p>
         </article>
       </section>
+
+      {/* The long chapter reading comes last, so the chart itself is what shows first. */}
+      <FullReading
+        chapters={CHART_READING}
+        lang={lang}
+        facts={facts}
+        extra={extraFacts}
+        reading="chartReading"
+        pdf={Boolean(request)}
+      />
 
       {request && next && (
         <NextSteps

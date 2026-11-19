@@ -27,7 +27,7 @@ import { useExplainText } from "./PageContext";
 type Text = NonNullable<ReturnType<typeof useExplainText>>;
 
 /**
- * AI explanations on the page (docs/17): `FullReading`, the chapters card at the top of a
+ * AI explanations on the page (docs/17): `FullReading`, the chapters card at the end of a
  * result, and `AiExplain`, a button on a main place that opens one or two of those chapters
  * in place. Both show nothing where the AI is off. The text comes from lib/assistant/explain.ts.
  */
@@ -184,7 +184,7 @@ export function AiExplain({
 }
 
 /**
- * The full reading at the top of a result (docs/17, section 2): a closed card that lists what
+ * The full reading at the end of a result (docs/17, section 2): a closed card that lists what
  * is inside, then the chapters, each opened and hidden on its own.
  */
 export function FullReading({
