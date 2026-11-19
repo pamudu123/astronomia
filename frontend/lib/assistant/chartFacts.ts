@@ -372,3 +372,44 @@ export function lifeTimeline(dasha: Dasha, labels: Labels): Json | null {
     })),
   };
 }
+
+/**
+ * The running sub-period and the next one, when tradition counts them as calling for extra
+ * care with health and safety: the sub-period's planet rules the 8th house or sits in it
+ * (personal-reading reference, "Periods that call for extra care"). Worked out here so every
+ * reading, in either language, applies the rule the same way.
+ */
+export function carePeriods(chart: Chart, dasha: Dasha, labels: Labels): Json[] {
+  const names = namesFrom(labels);
+  const start = SIGNS.indexOf(chart.lagna.sign as (typeof SIGNS)[number]);
+  const [main, sub] = dasha.current;
+  if (start < 0 || !main || !sub) return [];
+  const eighthLord = SIGN_LORD[SIGNS[(start + 7) % 12]];
+  const inEighth = new Set(chart.planets.filter((p) => p.house === 8).map((p) => p.body));
+  const index = dasha.periods.findIndex((p) => p.start === main.start);
+  const subs = index >= 0 ? dasha.periods[index].sub : [];
+  const at = subs.findIndex((s) => s.start === sub.start);
+  const nextMain = at >= 0 && at + 1 < subs.length ? main : dasha.periods[index + 1];
+  const following = at >= 0 && at + 1 < subs.length ? subs[at + 1] : nextMain?.sub[0];
+  const found: Json[] = [];
+  const entries = [
+    ["now", sub, main],
+    ["next", following, nextMain],
+  ] as const;
+  for (const [when, period, inMain] of entries) {
+    if (!period || !inMain) continue;
+    const because =
+      period.lord === eighthLord ? "rules the 8th house" : inEighth.has(period.lord) ? "sits in the 8th house" : null;
+    if (because) {
+      found.push({
+        when,
+        main_period: names.planet(inMain.lord),
+        sub: names.planet(period.lord),
+        from: day(period.start),
+        until: day(period.end),
+        because,
+      });
+    }
+  }
+  return found;
+}

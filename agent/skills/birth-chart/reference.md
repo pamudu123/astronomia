@@ -114,6 +114,28 @@ The houses fall into groups:
 
 ---
 
+## The birth table
+
+Printed horoscopes open with a table of the almanac at the moment of birth and the birth star's traditional groups. The site gives them as `birth_table`. What each item is, in plain words (the values themselves come from the facts):
+
+| Item | What it is | What tradition links it to |
+|---|---|---|
+| Weekday (සතියේ දවස) | The Sinhala day of birth, which begins at sunrise | Each weekday's planet (Sunday the Sun, Monday the Moon, and so on) colours the day's nature |
+| Thithi (තිථිය) | The lunar day: how far the Moon is from the Sun, in the bright half (waxing) or the dark half (waning) | The Moon's phase at birth; the bright half is read as growing, the dark half as inward |
+| Yoga (යෝගය) | One of 27 divisions made from the Sun's and the Moon's positions added together | A general quality of the moment of birth |
+| Karana (කරණය) | Half a thithi | The working character of the moment, used most for timing activities |
+| Gana (ගණය) | The birth star's temperament group: gentle (deva), human (manushya) or fierce (rakshasa) | Temperament; used in the match |
+| Yoni (යෝනිය) | The birth star's animal symbol | Natural attraction; used in the match |
+| Nadi (නාඩිය) | One of three groups of stars | Constitution and family wellbeing; used in the match |
+| Rajju (රජ්ජුව) | One of five body-part groups of stars | Used in the match's essential Rajju check |
+| Bird (පක්ෂියා) | The star's bird symbol | A small match factor |
+| Element (භූතය) | The star's element: earth, water, fire, air or space | Energy and how a person recharges |
+| Tree (වෘක්ෂය) | The star's tree type, milk or hard | Family growth; a match factor |
+| Sage lineage (ගෝත්‍රය) | One of seven old sage lineages | Some families avoid marrying within the same one |
+| Linga (ලිංගය) | Masculine, feminine or neutral group | A small match factor |
+
+Say these as tradition, briefly. They are background, not a reading of character on their own.
+
 ## 3. The sidereal zodiac and ayanamsa
 
 **Two zodiacs.**

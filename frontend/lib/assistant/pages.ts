@@ -6,12 +6,13 @@ import type { Locale } from "@/lib/i18n";
 import type { KendaraResult } from "@/lib/kendara";
 import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/lib/nakath";
 import type { Journey } from "@/lib/journey";
-import type { Person, Porondam, Timeline } from "@/lib/porondam";
+import { type Person, type Porondam, type Timeline, groupFactors } from "@/lib/porondam";
 import type { Wedding } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
 import {
   type Placement,
+  carePeriods,
   combinations,
   houseFacts,
   lifeTimeline,
@@ -121,6 +122,8 @@ export function chartReadingContext(
     result: {
       ...context.result,
       ...(dasha && { life_period_timeline: lifeTimeline(dasha, labels) }),
+      // The running and next sub-periods tradition counts as needing extra care, if any.
+      ...(dasha && result.chart && { care_periods: carePeriods(result.chart, dasha, labels) }),
       // The almanac at birth and the birth star's traditional groups (chapter "Birth summary").
       // No time: the weekday, thithi, yoga and karana alone don't give the birth date.
       ...(table && {
@@ -175,23 +178,25 @@ export function chartExtrasContext(
   if (!base.result || typeof base.result !== "object" || Array.isArray(base.result)) return base;
   const { journey, upcoming } = extras;
   const now = journey?.now ?? "";
-  // A stay running at birth starts at the birth moment, and the last one is cut where the road
-  // ends, a fixed span after birth: either date would give the birth date away, so neither is
-  // sent (the rule for every builder in this file).
+  // A stay running at birth starts at the birth moment: that date would give the birth date
+  // away, so it is not sent (the rule for every builder in this file).
   const span = (s: { start: string; end: string }) => ({
     from: journey && s.start <= journey.birth ? "already running at birth" : sriLankaDay(s.start),
-    until: journey && s.end >= journey.end ? "beyond the life road" : sriLankaDay(s.end),
+    until: sriLankaDay(s.end),
     state: s.end < now ? "past" : s.start > now ? "ahead" : "now",
   });
+  // A stay cut where the road ends is left out altogether: its end would be the road's end,
+  // and a reading that names where the road stops sounds like a lifespan.
+  const withinRoad = (s: { end: string }) => !journey?.end || s.end < journey.end;
   return {
     ...base,
     result: {
       ...base.result,
       ...(journey && {
         // Counted from the Moon sign. Spans, not ages: an age would give away the birth date.
-        saturn_erashtaka: journey.erashtaka.map(span),
-        saturn_erashtaka_from_rising_sign: (journey.erashtaka_lagna ?? []).map(span),
-        jupiter_returns: journey.guru_returns.map(span),
+        saturn_erashtaka: journey.erashtaka.filter(withinRoad).map(span),
+        saturn_erashtaka_from_rising_sign: (journey.erashtaka_lagna ?? []).filter(withinRoad).map(span),
+        jupiter_returns: journey.guru_returns.filter(withinRoad).map(span),
         road_provisional: journey.provisional,
       }),
       ...(upcoming && {
@@ -311,6 +316,24 @@ export function matchReadingContext(
   if (!bride || !groom || !context.result || typeof context.result !== "object" || Array.isArray(context.result)) {
     return context;
   }
+  const match = result.match;
+  // The factors by theme as the page's ring groups them, with the counts the page shows, so the
+  // reading doesn't group or count them itself (real-model check, 2026-11-19).
+  const themes = match
+    ? groupFactors(match.factors, labels.porondam_theme).map((g) => ({
+        theme: g.name || "other",
+        agree: g.agree,
+        counted: g.counted,
+        factors: g.factors.map((f) => labels.porondam_factor[f.id]?.name ?? f.id),
+      }))
+    : [];
+  const kuja = result.kuja;
+  const marsOf = (k: NonNullable<Porondam["kuja"]>["bride"]) => ({
+    present: k.present,
+    reduced: k.reduced,
+    reasons: k.reasons,
+    checks: k.cancellations.map((c) => ({ rule: labels.kuja_rule[c.id] ?? c.id, applies: c.applies })),
+  });
   const brideFacts = marriageFacts(bride, labels);
   const groomFacts = marriageFacts(groom, labels);
   const brideLord = bride.lagna ? seventhLord(bride.lagna) : null;
@@ -319,6 +342,14 @@ export function matchReadingContext(
     ...context,
     result: {
       ...context.result,
+      factor_themes: themes,
+      ...(kuja && {
+        mars_check: {
+          bride: marsOf(kuja.bride),
+          groom: marsOf(kuja.groom),
+          comparison: kuja.reason,
+        },
+      }),
       marriage_in_each_chart:
         brideFacts && groomFacts
           ? { bride: brideFacts, groom: groomFacts, provisional: true }

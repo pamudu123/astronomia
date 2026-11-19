@@ -245,6 +245,23 @@ request, and "Try again" after a failure. The other browser tests keep running w
 and the quick match test checks that no reading or button shows then. CI builds `.next-ai` in
 its own step; a local run builds it the first time.
 
+## 7b. Checked against the real model (2026-11-19)
+
+The readings were run on the real agent (`gpt-6-luna`) for a sample chart in English and Sinhala and a full match in English. The facts were right throughout and the tone stayed within the care rules. What it found, and what changed:
+
+| Found | Fix |
+|---|---|
+| The match factors chapter miscounted its themes: the skill's four themes differed from the page's ring | The facts now carry `factor_themes` with the page's own counts; the reference's themes match the page |
+| A Saturn period cut at the life road's end was mentioned, which reads like a lifespan | Such periods are left out of the facts; the skill never mentions the road's end |
+| The care chapter flagged a health period in one language and not the other | The facts now carry `care_periods` (the running or next sub-period whose planet rules or sits in the 8th house), so both languages say the same |
+| Yoga names in English letters and ISO dates in Sinhala text | `sinhala-style` lists the Sinhala yoga names and the date format |
+| The birth summary said thithi, yoga and karana have no meaning | The birth chart reference explains every item of the birth table |
+| "The 12 parts of life" ran to about 600 words | One sentence of at most 30 words per house |
+| Most chapters ended with "provisional, see an astrologer" | Only the checks, the Mars check and the summing up (match) and love, the Mars check and care (chart) carry it, once |
+| The match's Mars chapter was thin | The facts carry each person's Mars reasons and cancelling rules |
+
+Speed: a full chart reading takes 20 to 30 seconds with the chapters written in parallel; one chapter about 7 seconds. Size: each chapter sends its topic's notes, about 7,000 to 17,000 tokens (the personal-reading notes are the largest), so a full chart reading is roughly 200,000 tokens in and 6,000 out. Sending only the part of the notes a chapter needs is the main saving left, worth doing before pricing.
+
 ## 8. Decisions needed from the owner
 
 | # | Decision |
