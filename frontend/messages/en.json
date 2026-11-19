@@ -24,22 +24,21 @@
   "hero": {
     "tagline": { "sky": "The sky", "calculated": "calculated" },
     "title": "Your birth chart, read with clarity.",
-    "lead": "Sidera works out your hadahan and porondam from precise planetary positions. Then it explains every result in plain Sinhala or English, for a birth anywhere in the world.",
+    "lead": "Your hadahan and porondam, worked out precisely and explained in plain Sinhala or English.",
     "ctaHadahan": "Create my hadahan",
     "ctaPorondam": "Match two charts",
     "privacy": "No sign up. Nothing is stored unless you save or share it.",
     "wheelLabel": "A slowly turning zodiac wheel with the twelve rashi named in Sinhala and planets in orbit"
   },
   "tools": {
-    "title": "Two tools, done properly",
-    "lead": "Start with either one. Both show how the result was reached.",
+    "title": "Start here",
     "hadahan": {
       "label": "හඳහන",
       "title": "Hadahan, your birth chart",
       "items": [
         "Lagna, rashi and nakath at a glance",
-        "Nine planets, navamsha and the kendara drawing",
-        "A dasha timeline of your life periods"
+        "The nine planets and your kendara",
+        "Your life periods (dasha)"
       ],
       "cta": "Create my hadahan"
     },
@@ -47,16 +46,15 @@
       "label": "පොරොන්දම්",
       "title": "Porondam, marriage matching",
       "items": [
-        "Every factor shown one by one, with the reason",
-        "Rajju and Vedha kept apart from the score",
-        "Kuja dosha checked for both people"
+        "Each factor, with the reason",
+        "Rajju and Vedha shown on their own",
+        "Kuja dosha for both people"
       ],
       "cta": "Match two charts"
     }
   },
   "more": {
     "title": "Everyday tools",
-    "lead": "Good times, family occasions and the year ahead, worked out the same careful way.",
     "times": "Good times",
     "family": "Family",
     "year": "The year ahead",
@@ -76,15 +74,15 @@
     "steps": [
       {
         "title": "Enter the birth details",
-        "text": "Date, time and place. Search any town in the world, or type the coordinates yourself."
+        "text": "Date, time and place of birth. Any town in the world."
       },
       {
         "title": "We calculate the sky",
-        "text": "Planet positions come from astronomical data. Time zones follow the real history of each country."
+        "text": "Exact planet positions, with the right time zone for the date."
       },
       {
         "title": "Read a clear result",
-        "text": "A visual chart with plain reasons beside each point. Switch between Sinhala and English at any time."
+        "text": "A clear chart with a plain reason for each point, in Sinhala or English."
       }
     ]
   },
@@ -220,15 +218,15 @@
   "trust": [
     {
       "title": "The method is shown",
-      "text": "Each result names the ayanamsa and the rule set used."
+      "text": "Each result says how it was worked out."
     },
     {
       "title": "Private by default",
-      "text": "Birth details are used for the calculation and then discarded."
+      "text": "Birth details are used once, then discarded."
     },
     {
       "title": "Made for the world",
-      "text": "Born in Colombo, London or Melbourne, the chart is worked out the same careful way."
+      "text": "Born in Colombo, London or Melbourne, the same care applies."
     }
   ],
   "footer": {
@@ -265,10 +263,10 @@
       "timezoneHint": "For example Asia/Colombo or Europe/London",
       "submit": "Show my hadahan",
       "working": "Working out your chart",
-      "tipTimeTitle": "The exact time matters.",
-      "tipTime": "A few minutes can change the lagna. We will tell you if your time is close to a change.",
+      "tipTimeTitle": "Use the exact time.",
+      "tipTime": "A few minutes can change the lagna.",
       "tipPrivacyTitle": "Nothing is stored.",
-      "tipPrivacy": "Your details are used once for the calculation.",
+      "tipPrivacy": "Details are used once.",
       "moonAlt": "The full moon"
     },
     "clock": {
@@ -294,18 +292,17 @@
       "edit": "Edit details",
       "again": "Check another chart",
       "lagna": "Lagna (ascendant)",
-      "lagnaText": "The zodiac sign rising on the eastern horizon at the time and place of birth. It becomes house 1 of the chart.",
+      "lagnaText": "The sign rising in the east when you were born. It is house 1 of your chart.",
       "rashi": "Rashi (Moon sign)",
-      "rashiText": "The part of the zodiac the Moon was in at birth. Porondam matching starts from here.",
+      "rashiText": "The sign the Moon was in when you were born. Porondam starts from here.",
       "nakath": "Nakath (birth star)",
-      "nakathText": "The Moon's path is split into 27 stars, and each star into 4 quarters, called padas.",
+      "nakathText": "The star the Moon was in when you were born. There are 27 stars, each in 4 parts called padas.",
       "pada": "Pada {pada} of 4",
       "kendara": "Kendara",
       "chartRashi": "Rashi",
       "chartNavamsha": "Navamsha",
       "chartType": "Chart type",
       "chartLabel": "{chart} chart in the Sri Lankan square layout, with the lagna at the top.",
-      "kendaraNote": "House 1 is the lagna box at the top. The other houses follow anticlockwise, as on a Sri Lankan paper horoscope.",
       "lagnaMark": "Lagna",
       "planets": "The nine planets",
       "planet": "Planet",
@@ -315,12 +312,12 @@
       "star": "Star",
       "retrograde": "Retrograde",
       "dasha": "Dasha timeline",
-      "dashaLead": "Life is read in planetary periods. The gold period is the one running now.",
+      "dashaLead": "The gold period is the one running now.",
       "dashaNow": "Now: {main} main period, {sub} sub period.",
       "dashaSub": "Sub periods of the {main} main period",
       "road": {
         "title": "Life road",
-        "lead": "Your dasha periods as a road, drawn to a hundred years for everyone. It is wide and lit where the going is good, narrow and broken where it is hard.",
+        "lead": "Your life periods drawn as a road: wide and bright in good times, narrow in hard times.",
         "canvasLabel": "A night road running toward the horizon. Good years are wide and lit with lamps, hard years are narrow, dark and broken. Signposts mark major years.",
         "age": "age",
         "roadNow": "Road now",
@@ -364,7 +361,6 @@
         "legendCareful": "Careful period",
         "legendErashtaka": "Erashtaka",
         "legendLine": "The line rises in good going and dips in hard going",
-        "note": "The road describes general conditions. It does not predict events, health or how long a life is: every road is drawn to 100 years.",
         "provisional": "How good or hard a stretch is drawn follows provisional rules, until a practising astrologer confirms them.",
         "ask": "Ask Astro",
         "questions": [
@@ -376,46 +372,51 @@
       },
       "kuja": "Kuja dosha",
       "kujaPresent": "Present",
-      "kujaReduced": "Present, reduced",
+      "kujaReduced": "Present, but weaker",
       "kujaAbsent": "Not present",
       "kujaStrength": "Seen from {count} of 3 points",
       "kujaChecks": "Cancellation checks",
       "applies": "Applies",
       "notApplies": "Does not apply",
-      "provisional": "These rules are provisional until a practising astrologer confirms them.",
       "timeCheck": "Birth time check",
       "stable": "Stable",
       "sensitive": "Check the time",
-      "method": "Method: {ayanamsa} ayanamsa, whole sign houses, mean node, time zone {offset} on the birth date.",
+      "method": "{ayanamsa} ayanamsa, whole sign houses, mean node, time zone {offset} on the birth date.",
       "ayanamsaLahiri": "Lahiri",
       "download": "Download PDF",
       "preparing": "Preparing the PDF…",
       "downloadFailed": "The PDF could not be made. Please try again.",
-      "forecast": "This month for you",
-      "forecastLead": "Where the slow planets are this month, counted from your lagna.",
+      "forecast": "This month",
       "forecastHouse": "{house} house",
       "forecastMoves": "Changes sign",
-      "forecastNote": "A forecast describes general conditions. It does not predict events, health or outcomes.",
-      "forecastProvisional": "The house themes are provisional until a practising astrologer confirms them.",
       "forecastSky": "This month",
       "forecastSkyLabel": "The slow planets this month, in houses counted from your lagna.",
-      "forecastSkyNote": "The four slow planets, placed in your houses. A highlighted planet changes sign this month.",
+      "forecastSkyNote": "A highlighted planet changes sign this month.",
+      "detailsDate": "Date",
+      "detailsTimeLabel": "Time",
+      "detailsPlace": "Place",
       "kujaFrom": "From {point}",
       "kujaHouse": "{house} house",
       "kujaCounts": "Counts",
       "kujaNotCounts": "Does not count",
       "kujaDialNote": "Each ring shows the 12 houses counted from one point. Outlined houses count for Kuja dosha. The filled one is where Mars sits.",
-      "changesTitle": "Planet changes for you",
-      "changesLead": "The slow planets that move into a new sign in the next twelve months, counted from your lagna and from your Moon sign (gochara).",
-      "changesLagna": "From your lagna",
-      "changesMoon": "From your Moon sign (gochara)",
+      "changesTitle": "Planet changes",
+      "changesLagna": "From lagna",
+      "changesMoon": "From Moon sign (gochara)",
       "changesOpen": "Read about this change",
-      "changesNote": "Times are Sri Lanka time. House meanings are provisional.",
       "eyebrow": "Hadahan",
-      "detailsUsed": "Worked out for",
-      "detailsTime": "{time} local time",
+      "sections": "Sections",
+      "sectionChart": "Chart",
+      "periodsTitle": "Life periods",
+      "comingTitle": "Coming up",
+      "kujaHow": "See how this was worked out",
+      "methodLabel": "Method",
+      "changesAll": "Show all {count}",
+      "changesFewer": "Show fewer",
+      "pageNote": "This is general guidance. It does not predict events, health or how long a life is. Some rules are still being checked with practising astrologers.",
+      "detailsUsed": "Birth details",
       "detailsOffset": "{offset} on that date",
-      "detailsHint": "Check these first: a wrong AM/PM or birthplace changes the whole chart.",
+      "detailsHint": "A wrong AM/PM or birthplace changes the whole chart.",
       "glance": "Your chart at a glance",
       "risingTitle": "Rising sign",
       "risingTerm": "Lagna",
@@ -446,7 +447,7 @@
     "form": {
       "eyebrow": "පොරොන්දම්",
       "title": "Match two charts",
-      "lead": "Enter the birth details of both people. Tradition counts some points from the bride's star, so we ask who is who.",
+      "lead": "Enter both people's birth details.",
       "mode": "How to match",
       "full": "Full birth details",
       "quick": "Birth stars only",
@@ -457,11 +458,9 @@
       "choose": "Choose",
       "submit": "Match the charts",
       "working": "Matching the charts",
-      "privacy": "Nothing is stored. Your details are used once for the calculation.",
-      "quickTitle": "No birth time? Use the birth stars.",
-      "quickText": "If you only know each person's nakath, choose \"Birth stars only\". You get the star based points. Lagna based checks such as Kuja dosha need the full details.",
-      "fullText": "Compares both charts, including Kuja dosha. Needs the date, time and place of birth.",
-      "quickText2": "Compares the two birth stars only. Checks that need a birth time, such as Kuja dosha, are left out."
+      "privacy": "Nothing is stored. Details are used once.",
+      "fullText": "Most complete, with Kuja dosha. Needs birth times.",
+      "quickText2": "When you don't know the birth times. Kuja dosha is left out."
     },
     "clockFor": "For the {who}:",
     "errors": {
@@ -513,7 +512,7 @@
       "notCountedCount": "{count} not counted here: they need full birth details.",
       "checksPanel": "Separate traditional checks",
       "checksNames": "Rajju and Vedha",
-      "checksNote": "This rule set reports these apart from the count. Many astrologers give a check that does not pass more weight than the count, and schools weigh them differently.",
+      "checksNote": "These are shown apart from the count. Schools weigh them differently.",
       "seeWhy": "See why",
       "findDates": "Find ceremony dates"
     },
@@ -556,7 +555,7 @@
     },
     "timeline": {
       "title": "Years ahead for the couple",
-      "lead": "The next ten years for both people on one line: Saturn's periods counted from each Moon sign, and the dasha periods.",
+      "lead": "The next ten years for both of you: Saturn periods and dasha periods.",
       "saturn": "Saturn",
       "dasha": "Dasha",
       "both": "Both",
@@ -613,7 +612,7 @@
     },
     "wedding": {
       "title": "Wedding nakath for this couple",
-      "lead": "Dates and times that pass the nakath rules for the engagement, the poruwa ceremony and the homecoming, from both birth stars. Each one says why.",
+      "lead": "Good dates and times for the engagement, poruwa and homecoming, from both birth stars, each with the reason.",
       "range": "How far ahead",
       "months": {
         "3": "3 months",
@@ -999,7 +998,7 @@
       "clock": "This time happens twice on that day because of a clock change. Please make your hadahan first and choose the right one."
     },
     "hadahanTitle": "Your {year}",
-    "hadahanLead": "Where the slow planets stay through {year} for {lagna} lagna, month by month, with every key date.",
+    "hadahanLead": "Month by month for {lagna} lagna.",
     "hadahanOpen": "See your {year}",
     "footer": "{year} forecast"
   },
@@ -1520,11 +1519,10 @@
   },
   "allTools": {
     "title": "All tools",
-    "lead": "Everything Sidera works out, grouped by what you are planning. Every tool is free.",
+    "lead": "Grouped by what you are planning. All free.",
     "metaTitle": "All tools: hadahan, porondam, nakath and more",
     "metaDescription": "Every Sidera tool in one place: birth charts, marriage matching, daily nakath, the litha calendar, Avurudu times, baby name letters and more.",
     "planning": "What are you planning?",
-    "free": "Free",
     "need": "You need",
     "needs": {
       "nothing": "Nothing",
@@ -1642,7 +1640,7 @@
   },
   "remember": {
     "label": "Remember my chart on this device",
-    "note": "Kept only in this browser, never on our servers. Next time, Sidera greets you with your own sky.",
+    "note": "Stays in this browser only.",
     "saved": "Remembered on this device.",
     "forget": "Forget"
   }

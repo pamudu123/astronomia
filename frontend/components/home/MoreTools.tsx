@@ -78,7 +78,6 @@ export function MoreTools({ lang, dict }: Props) {
         <h2 id="more-title" className={`display ${styles.title}`}>
           {t.title}
         </h2>
-        <p className="soft">{t.lead}</p>
       </div>
 
       <Suspense fallback={<TodayShell lang={lang} dict={dict} />}>

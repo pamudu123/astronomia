@@ -134,7 +134,17 @@ html[lang="si"] .factValue {
   min-height: 48px;
   padding-block: 8px;
   border-top: 1px solid var(--line-soft);
+  color: var(--ink);
   font-weight: 500;
+}
+
+/* Plain text reads as a list; the gold arrow and hover say it is a link. */
+.link svg {
+  color: var(--gold);
+}
+
+.link:hover {
+  color: var(--gold-hover);
 }
 
 .linkEnd {

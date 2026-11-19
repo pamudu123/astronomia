@@ -14,6 +14,8 @@ type Props = {
   empty: string;
   value: Place | null;
   onChange: (place: Place | null) => void;
+  /** Shown in the empty box: the place used when none is chosen, such as Colombo. */
+  placeholder?: string;
 };
 
 export function placeLabel(place: Place, lang: Locale): string {
@@ -41,7 +43,7 @@ export function distinctLabels(places: Place[], lang: Locale): string[] {
   });
 }
 
-export function PlaceSearch({ lang, label, hint, empty, value, onChange }: Props) {
+export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeholder }: Props) {
   const id = useId();
   const listId = `${id}-list`;
   const [query, setQuery] = useState(value ? placeLabel(value, lang) : "");
@@ -122,6 +124,7 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange }: Props
           aria-activedescendant={open && active >= 0 ? `${listId}-${active}` : undefined}
           aria-describedby={`${id}-hint`}
           autoComplete="off"
+          placeholder={placeholder}
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);

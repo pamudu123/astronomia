@@ -81,7 +81,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           <h2 id="tools-title" className={`display ${styles.sectionTitle}`}>
             {dict.tools.title}
           </h2>
-          <p className="soft">{dict.tools.lead}</p>
         </div>
         <div className={styles.toolGrid}>
           {tools.map((tool) => (

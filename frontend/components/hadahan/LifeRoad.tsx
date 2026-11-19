@@ -73,7 +73,7 @@ export function LifeRoad({ lang, t, labels, request }: Props) {
   }, [journey, labels, text]);
 
   if (!journey || !road) return null;
-  return <RoadView lang={lang} t={t} labels={labels} road={road} provisional={journey.provisional} />;
+  return <RoadView lang={lang} t={t} labels={labels} road={road} />;
 }
 
 function RoadView({
@@ -81,8 +81,7 @@ function RoadView({
   t,
   labels,
   road,
-  provisional,
-}: Omit<Props, "request"> & { road: Road; provisional: boolean }) {
+}: Omit<Props, "request"> & { road: Road }) {
   const text = t.road;
   const marker = useRef<HTMLDivElement>(null);
   const map = useRef<HTMLDivElement>(null);
@@ -155,9 +154,9 @@ function RoadView({
     <section className={`rise ${styles.panel}`} aria-labelledby="road-title" data-card="road">
       <div className={styles.head}>
         <div className={styles.headText}>
-          <h2 id="road-title" ref={title} className={`display ${styles.title}`}>
+          <h3 id="road-title" ref={title} className={`display ${styles.title}`}>
             {text.title}
-          </h2>
+          </h3>
           <p className="soft">{text.lead}</p>
         </div>
         <p className={styles.age}>
@@ -337,9 +336,6 @@ function RoadView({
           {text.legendLine}
         </span>
       </div>
-      <p className={styles.small}>
-        {text.note} {provisional && text.provisional}
-      </p>
     </section>
   );
 }

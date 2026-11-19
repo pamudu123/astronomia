@@ -33,22 +33,20 @@
 /* The birth details the chart was worked out from, with the way to correct them. */
 .details {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px 24px;
-  padding: 18px 24px;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 24px 20px;
   border: 1px solid var(--line);
   border-left: 3px solid var(--gold);
   border-radius: var(--radius-field);
   background: var(--night-raised);
 }
 
-.detailsText {
+.detailsHead {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .detailsLabel {
@@ -58,29 +56,88 @@
   text-transform: uppercase;
 }
 
-.detailsLine {
+.editButton {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.editButton:hover {
+  border-color: var(--gold);
+}
+
+/* Date, time and place side by side; on phones, one per line with the label beside it. */
+.detailsList {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 12px 40px;
+}
+
+.detailsItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.detailsItem dt {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.detailsItem dd {
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 2px 0;
-  font-size: 17px;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: 18px;
   font-weight: 500;
 }
 
-.detailsPart:not(:last-child)::after {
-  content: "·";
-  padding-inline: 10px;
-  color: var(--gold);
+.detailsSoft {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 400;
 }
 
-/* On phones each detail gets its own line, without dangling separators. */
 @media (max-width: 640px) {
-  .detailsLine {
-    flex-direction: column;
-    gap: 2px;
+  .details {
+    padding: 16px 18px;
   }
 
-  .detailsPart:not(:last-child)::after {
-    content: none;
+  .detailsList {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .detailsItem {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 12px;
+    padding-block: 10px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .detailsItem:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .detailsItem dt {
+    padding-top: 3px;
+  }
+
+  .detailsItem dd {
+    font-size: 16px;
   }
 }
 
@@ -134,7 +191,87 @@
   gap: 12px;
 }
 
+/* The jump bar: stays at the top while the page scrolls under it. */
+.sections {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  gap: 4px;
+  margin-block: -16px;
+  padding: 10px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: color-mix(in srgb, var(--night) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.sectionLink {
+  flex: none;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sectionLink:hover,
+.sectionLink:focus-visible {
+  background: var(--panel-raised);
+  color: var(--ink);
+}
+
+/* A part of the page: a heading and its cards, with no box of its own around them. */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scroll-margin-top: 72px;
+}
+
+/* A part whose cards all failed to load shows nothing, not a lone heading. */
+.group:not(:has(> :not(h2))) {
+  display: none;
+}
+
+.anchor {
+  scroll-margin-top: 72px;
+}
+
+.groupTitle {
+  font-size: clamp(26px, 3vw, 32px);
+}
+
+/* Detail folded away until asked for. */
+.more summary {
+  width: fit-content;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--gold);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.more[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pageNote {
+  max-width: 68ch;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
 .again {
+  align-self: flex-start;
   background: none;
   cursor: pointer;
   font-family: inherit;
@@ -207,6 +344,10 @@
   font-size: 26px;
 }
 
+.cardTitle {
+  font-size: 22px;
+}
+
 .subTitle {
   font-size: 17px;
   font-weight: 600;
@@ -244,7 +385,7 @@
 
 .small {
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .tableScroll {

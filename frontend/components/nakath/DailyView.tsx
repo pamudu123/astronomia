@@ -92,7 +92,15 @@ export function DailyView({ lang, t, day, initial }: Props) {
         }}
       >
         <div className={styles.control}>
-          <PlaceSearch lang={lang} label={t.place} hint={t.placeHint} empty={t.noPlaces} value={place} onChange={setPlace} />
+          <PlaceSearch
+            lang={lang}
+            label={t.place}
+            hint={t.placeHint}
+            empty={t.noPlaces}
+            value={place}
+            onChange={setPlace}
+            placeholder={shown?.place.name ?? undefined}
+          />
         </div>
         <div className={styles.control}>
           <label htmlFor="nakath-date" className={styles.label}>

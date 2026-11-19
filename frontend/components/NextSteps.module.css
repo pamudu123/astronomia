@@ -31,10 +31,17 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--panel);
+  color: var(--ink);
   font-weight: 500;
+}
+/* Plain text reads as a list; the gold arrow and hover say it is a link. */
+.step svg {
+  flex: none;
+  color: var(--gold);
 }
 .step:hover {
   border-color: var(--gold);
+  color: var(--gold-hover);
 }
 
 /* Remember my chart on this device */

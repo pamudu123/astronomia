@@ -24,9 +24,9 @@ export function YearlyLink({
   return (
     <YearlyGate>
       <section className={`rise ${styles.panel}`} aria-labelledby="yearly-title" data-card="yearly">
-        <h2 id="yearly-title" className="display">
+        <h3 id="yearly-title" className="display">
           {fill(t.hadahanTitle, { year })}
-        </h2>
+        </h3>
         <p className="soft">{fill(t.hadahanLead, { year, lagna: lagnaName })}</p>
         <Link href={`/${lang}/forecast/${year}/${lagna}`} className="btn btn-outline lift">
           {fill(t.hadahanOpen, { year })}
