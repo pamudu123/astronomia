@@ -76,6 +76,9 @@ class Journey:
     quality: tuple[float, ...]  # one number a month from birth, -1 (hard) to 1 (easy)
     rule_set: str
     provisional: bool
+    # The same seven and a half years counted from the rising sign (lagna erashtaka), for the
+    # written reading. The road's quality follows the Moon's alone, as before.
+    erashtaka_lagna: tuple[Span, ...] = ()
 
 
 _SLOW = (Body.SATURN, Body.JUPITER)
@@ -210,17 +213,22 @@ def life_journey(ephemeris: Ephemeris, chart: Chart, version: str = "journey_v1"
     )
 
     join = rules["join_days"]
-    moon_sign = chart.moon.sign
-    erashtaka = tuple(
-        _joined(
-            [
-                span
-                for sign, span in stays(ephemeris, Body.SATURN, birth, end)
-                if whole_sign_house(sign, moon_sign) in _ERASHTAKA_HOUSES
-            ],
-            timedelta(days=join["erashtaka"]),
+    saturn = list(stays(ephemeris, Body.SATURN, birth, end))
+
+    def erashtaka_from(sign_from: int) -> tuple[Span, ...]:
+        return tuple(
+            _joined(
+                [
+                    span
+                    for sign, span in saturn
+                    if whole_sign_house(sign, sign_from) in _ERASHTAKA_HOUSES
+                ],
+                timedelta(days=join["erashtaka"]),
+            )
         )
-    )
+
+    erashtaka = erashtaka_from(chart.moon.sign)
+    erashtaka_lagna = erashtaka_from(chart.lagna.sign)
     jupiter_sign = chart.planets[Body.JUPITER].point.sign
     guru_returns = tuple(
         span
@@ -255,6 +263,7 @@ def life_journey(ephemeris: Ephemeris, chart: Chart, version: str = "journey_v1"
         end=end,
         periods=periods,
         erashtaka=erashtaka,
+        erashtaka_lagna=erashtaka_lagna,
         guru_returns=guru_returns,
         quality=tuple(quality),
         rule_set=rules["version"],

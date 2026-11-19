@@ -126,6 +126,8 @@ export function chartReadingContext(
       ...(table && {
         birth_table: {
           weekday: table.weekday.name,
+          // Only for a birth before sunrise: the calendar date's weekday, which the match counts.
+          ...(table.calendar_weekday && { calendar_weekday: table.calendar_weekday.name }),
           thithi: table.thithi.name,
           yoga: table.yoga.name,
           karana: table.karana.name,
@@ -153,6 +155,14 @@ export function chartReadingContext(
 const day = (iso: string) => iso.slice(0, 10);
 
 /**
+ * The date of a UTC moment in Sri Lanka, as YYYY-MM-DD. The planet changes in the same chapter
+ * are dated in Sri Lanka time, and a moment after 18:30 UTC is already the next day there.
+ */
+export function sriLankaDay(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-CA", { timeZone: SRI_LANKA });
+}
+
+/**
  * The extra facts two chart chapters need, fetched by the page beside the chart: Saturn's
  * periods and Jupiter's returns from the life road (chapter "Saturn periods"), and the planet
  * changes ahead (chapter "The year ahead"). Added to the reading's facts only for those
@@ -165,9 +175,12 @@ export function chartExtrasContext(
   if (!base.result || typeof base.result !== "object" || Array.isArray(base.result)) return base;
   const { journey, upcoming } = extras;
   const now = journey?.now ?? "";
+  // A stay running at birth starts at the birth moment, and the last one is cut where the road
+  // ends, a fixed span after birth: either date would give the birth date away, so neither is
+  // sent (the rule for every builder in this file).
   const span = (s: { start: string; end: string }) => ({
-    from: day(s.start),
-    until: day(s.end),
+    from: journey && s.start <= journey.birth ? "already running at birth" : sriLankaDay(s.start),
+    until: journey && s.end >= journey.end ? "beyond the life road" : sriLankaDay(s.end),
     state: s.end < now ? "past" : s.start > now ? "ahead" : "now",
   });
   return {
@@ -177,6 +190,7 @@ export function chartExtrasContext(
       ...(journey && {
         // Counted from the Moon sign. Spans, not ages: an age would give away the birth date.
         saturn_erashtaka: journey.erashtaka.map(span),
+        saturn_erashtaka_from_rising_sign: (journey.erashtaka_lagna ?? []).map(span),
         jupiter_returns: journey.guru_returns.map(span),
         road_provisional: journey.provisional,
       }),
@@ -186,6 +200,13 @@ export function chartExtrasContext(
           when: c.change.when,
           from_rising_sign: counted(c.lagna),
           from_moon_sign: counted(c.gochara),
+        })),
+        sun_months_ahead: (upcoming.sun_months ?? []).map((m) => ({
+          sign: m.sign_name,
+          from: sriLankaDay(m.start),
+          until: sriLankaDay(m.end),
+          house_from_rising_sign: m.house_from_lagna,
+          house_from_moon_sign: m.house_from_moon,
         })),
       }),
     },

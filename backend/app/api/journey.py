@@ -72,6 +72,8 @@ class JourneyOut(BaseModel):
     now: dt.datetime
     periods: list[MainPeriodOut]
     erashtaka: list[SpanOut]
+    # Counted from the rising sign; the road uses the Moon's (erashtaka) only.
+    erashtaka_lagna: list[SpanOut] = []
     guru_returns: list[SpanOut]
     stops: list[StopOut]
     quality: QualityOut
@@ -207,6 +209,7 @@ def journey_out(journey: Journey, chart: Chart, now: dt.datetime, lang: Lang) ->
             for main in journey.periods
         ],
         erashtaka=[SpanOut(start=s.start, end=s.end) for s in journey.erashtaka],
+        erashtaka_lagna=[SpanOut(start=s.start, end=s.end) for s in journey.erashtaka_lagna],
         guru_returns=[SpanOut(start=s.start, end=s.end) for s in journey.guru_returns],
         stops=_stops(journey, chart, lang),
         quality=QualityOut(step_days=MONTH_DAYS, values=list(journey.quality)),

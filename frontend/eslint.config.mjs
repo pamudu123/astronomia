@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The build with the AI on, for tests/e2e/ai.spec.ts (scripts/e2e-ai-server.mjs).
+    ".next-ai/**",
   ]),
 ]);
 

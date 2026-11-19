@@ -74,3 +74,14 @@ def test_a_birth_star_only_person_has_no_road(client: TestClient) -> None:
         "bride": None,
         "groom": None,
     }
+
+
+def test_erashtaka_is_also_counted_from_the_rising_sign(client: TestClient) -> None:
+    """For the written reading's Saturn periods (docs/17). The road still uses the Moon's."""
+    road = journey(client)
+    moon, lagna = road["erashtaka"], road["erashtaka_lagna"]
+    assert moon and lagna
+    # Simha rising, Vrischika Moon: the two counts give different stretches.
+    assert [s["start"] for s in moon] != [s["start"] for s in lagna]
+    for span in lagna:
+        assert span["start"] < span["end"]

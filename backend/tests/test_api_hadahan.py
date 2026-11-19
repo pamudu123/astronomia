@@ -102,6 +102,7 @@ def test_hadahan_birth_table(client: TestClient) -> None:
     table = client.post("/v1/hadahan", json={**BIRTH, "lang": "en"}).json()["birth_table"]
     # 14:35 is after sunrise, so the Sinhala day is the civil day, a Wednesday.
     assert table["weekday"] == {"key": "wednesday", "name": "Wednesday"}
+    assert table["calendar_weekday"] is None  # the same day by the calendar
     # After the full moon of 15 April 1995: the dark half.
     assert table["thithi"]["key"].startswith("krishna_")
     assert table["yoga"]["name"] and table["karana"]["name"]
@@ -124,4 +125,6 @@ def test_birth_before_sunrise_belongs_to_the_day_before(client: TestClient) -> N
     early = {**BIRTH, "time": "04:30", "lang": "si"}
     table = client.post("/v1/hadahan", json=early).json()["birth_table"]
     assert table["weekday"]["key"] == "tuesday"
+    # By the calendar it is already Wednesday; the match's weekday factor counts that one.
+    assert table["calendar_weekday"]["key"] == "wednesday"
     assert table["weekday"]["name"] != "Tuesday"  # named in Sinhala
