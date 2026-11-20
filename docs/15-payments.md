@@ -1,12 +1,60 @@
-# Payments with PayHere
+# Payments
 
-Date: 2026-11-15
+Date: 2026-11-15. Updated 2026-11-21 after the legal review.
 
 How the site takes money: which gateway, what it costs, how a payment flows through the backend and the site, how it is tested, and what is left before payments go live. This is the plan for step 18 in `docs/08-implementation-plan.md`.
 
-Fees and limits below come from PayHere's own pages, but those pages disagree with each other in places. **Confirm them with PayHere (0115 339 339) before setting prices.**
+## 0. Status: PayHere is ruled out, payments are on hold (2026-11-21)
 
-## 1. The decision
+**PayHere does not accept astrology services.** Its application guide lists "Astrology services" under "Unsupported Business Categories", and "Multi-vendor platform" under "Unsupported Business Models". Approval is made by its partner banks, and a business rejected for its nature cannot reapply ([PayHere application guide](https://support.payhere.lk/application-process), last updated 31 Jan 2025, checked 2026-11-21). The legal review reached the same finding.
+
+So:
+
+- **The free launch goes ahead without payments.** Nothing on the free site depends on a gateway.
+- **Do not apply to PayHere, or to anyone, under a different business description.** The product is astrology reports, and the application must say so.
+- **Paid features stay off** until a payment provider or acquiring bank approves in writing the actual product (astrology reports), the countries we sell to, the currencies, and the billing model (one-off reports, and subscriptions if any).
+- **The astrologer marketplace** (docs/02, docs/04) needs its own approval, because multi-vendor platforms are excluded too.
+
+### What to ask a provider
+
+Ask each one directly, describing Sidera as it is: "Sri Lankan and English astrology website selling one-off digital astrology reports (and possibly subscriptions) to buyers in Sri Lanka and abroad." Get the answer in writing, covering:
+
+1. Is the astrology category accepted?
+2. Which buyer countries and currencies?
+3. One-off payments, recurring payments, or both?
+4. Who is the seller of record, and who handles foreign VAT?
+5. Fees, limits, payout currency and timing to a Sri Lankan bank account.
+
+### Candidates to ask
+
+Many of these share the same partner banks or exclusion lists, so expect some refusals. None has been asked yet.
+
+| Route | What to check |
+|---|---|
+| A Sri Lankan bank's own payment gateway (for example Sampath, Commercial, HNB) | Whether the bank accepts the category when asked directly. Slower to set up |
+| Other local gateways (WebXPay, Genie Business, OnePay, DirectPay) | Their prohibited lists, and whether their partner banks are the same as PayHere's |
+| Merchant of record (Paddle, Dodo, Polar, Lemon Squeezy) | Their prohibited lists (several exclude astrology or "fortune telling"), and payouts to Sri Lanka. A merchant of record would also take on UK and EU VAT |
+
+### Before charging anything
+
+From the legal review. All of these must be done, whichever provider approves:
+
+- Written category approval, as above.
+- A tax and market review: Sri Lankan registration, VAT and SSCL; UK and EU VAT on digital services if selling there.
+- Delivery and access defined: what is delivered, when, in which language and format, and for how long it stays available.
+- Receipts, refunds and cancellation built, following the refunds policy in `docs/policies/refunds.md`, including the UK and EU 14 day withdrawal rules and the immediate delivery consent.
+- Tested end to end: a duplicate payment, a failed delivery, a lost guest account, a renewal (if subscriptions) and a refund.
+- The privacy notice updated with the real billing fields, recipients, legal bases and retention periods.
+
+Free worldwide access does not mean checkout has to open worldwide. Payments can start in fewer countries.
+
+### How the rest of this file applies
+
+Sections 1 to 11 below were written for PayHere and are kept as the record of that plan. The parts that do not depend on PayHere still hold for any provider: one-time payments first (section 3), the `orders` and `entitlements` tables (section 6.4), verifying every payment notice on the server before unlocking anything, never storing card details, and never sending birth details or reading contents to the gateway (section 6.6). The PayHere-specific parts (account setup, fees, hash, field names, status codes) will be replaced once a provider approves.
+
+## 1. The decision (2026-11-15, superseded by section 0)
+
+Fees and limits below come from PayHere's own pages, but those pages disagree with each other in places.
 
 **PayHere is the only gateway at launch.** One gateway covers both groups of buyers:
 
@@ -240,7 +288,7 @@ This meets the check for step 18: test payments unlock exactly what was bought, 
 | # | Task | Who |
 |---|---|---|
 | 1 | Live PayHere account approved, production domain added, live secret copied | Owner |
-| 2 | Terms, privacy and refund pages final, with a contact address | Owner |
+| 2 | Terms, privacy and refund pages final, with a contact address (drafts in `docs/policies/`) | Owner |
 | 3 | Production on paid Render plans, so notifies are not lost while it sleeps | Owner |
 | 4 | Set the live merchant ID and secret, `ASTRONOMIA_PAYHERE_SANDBOX=false` | Owner |
 | 5 | One real small payment and a refund, from start to end | Owner |
@@ -262,6 +310,7 @@ This meets the check for step 18: test payments unlock exactly what was bought, 
 
 ## Sources
 
+- [PayHere application guide, unsupported categories](https://support.payhere.lk/application-process)
 - [PayHere fees](https://www.payhere.lk/fees)
 - [PayHere limits and fees](https://support.payhere.lk/limits-and-fees)
 - [PayHere USD payouts](https://support.payhere.lk/usd-payouts)
