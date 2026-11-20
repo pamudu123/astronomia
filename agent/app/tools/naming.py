@@ -62,7 +62,8 @@ def tools(engine: EngineClient) -> list[BaseTool]:
                     "name": n["en"],
                     "sinhala": n["si"],
                     "gender": n["gender"],
-                    "meaning": n["meaning"],
+                    # None when the list has no sourced meaning for the name.
+                    "meaning": n["meaning"] or None,
                 }
                 for n in body["names"][:20]
             ],
@@ -86,7 +87,8 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             name="names_for_letters",
             description=(
                 "Sinhala names from the site's list that start with the given first letters, "
-                "with their meanings. Use after name_letters_for_star."
+                "with their meanings. A meaning of null means no source gives one: say so and "
+                "never guess a meaning. Use after name_letters_for_star."
             ),
             args_schema=NamesArgs,
             handle_tool_error=True,

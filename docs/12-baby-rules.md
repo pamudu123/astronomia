@@ -123,6 +123,7 @@ No open data set of Sinhala names with meanings was found.
 - Of the 106 different pada letters, 55 have at least one name. Many letters are rare at the start of a Sinhala name (ට, ඩ, ඨ, ඪ, ණ, ඞ, ඣ, ඤ and most of their vowel forms).
 - There are fewer girls' names, because the Wikipedia categories hold more boys' names.
 - The spellings and meanings need a check by a native speaker.
+- After the first Sinhala review (2026-11-21), 18 meanings with no source were taken out and marked `meaning_from: none`, with both meanings left empty. The page then shows no meaning for that name, and Astro is told not to guess one. A meaning goes back only with a source. The review's open questions on gender and spelling (for example ප්‍රදීප and ප්‍රදීපා, තාමරා, ආලෝක) are listed in the pull request.
 
 ### Questions for a native speaker
 

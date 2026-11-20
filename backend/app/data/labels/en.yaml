@@ -112,7 +112,7 @@ bhuta: {pathavi: earth (Pathavi), apo: water (Apo), tejo: fire (Thejo), vayo: ai
 vruksha: {kiri: milk, hara: hard}
 
 porondam_factor:
-  dina: {name: Nakath, meaning: Health and long life}
+  dina: {name: Nakath, meaning: "A traditional check on the couple's wellbeing"}
   gana: {name: Gana, meaning: Temperament}
   mahendra: {name: Mahendra, meaning: Family growth}
   stree_deergha: {name: Stree Deergha, meaning: Wellbeing of the bride}
@@ -126,18 +126,18 @@ porondam_factor:
   weekday: {name: Dina, meaning: The days of birth}
   varna: {name: Varna, meaning: Temperament and outlook}
   bhuta: {name: Bhutha, meaning: The five elements}
-  vruksha: {name: Vruksha, meaning: Family growth through children}
-  ayusha: {name: Ayusha, meaning: Long life}
+  vruksha: {name: Vruksha, meaning: "A traditional check on children and family life"}
+  ayusha: {name: Ayusha, meaning: "A traditional check on the couple's wellbeing"}
   graha: {name: Graha, meaning: The ruling planets of both charts}
-  nadi: {name: Nadi, meaning: Health of the family line}
-  rajju: {name: Rajju, meaning: Long life of the couple}
+  nadi: {name: Nadi, meaning: "A traditional check on the family's wellbeing"}
+  rajju: {name: Rajju, meaning: "A traditional star check on the couple's wellbeing"}
   vedha: {name: Vedha, meaning: Stars that must not afflict each other}
 
 # The summary chart groups the counted factors by what each is traditionally said to relate
 # to. Rajju and Vedha are left out: the page shows them apart from the count. Not yet
 # reviewed by an astrologer.
 porondam_theme:
-  health: {name: Long life and health, factors: [dina, stree_deergha, ayusha, nadi]}
+  health: {name: Wellbeing, factors: [dina, stree_deergha, ayusha, nadi]}
   bond: {name: Bond and temperament, factors: [gana, yoni, rashi, vashya, pakshi, linga, varna, bhuta]}
   family: {name: Family and children, factors: [mahendra, gothra, vruksha]}
   planets: {name: Planets and birth days, factors: [rashyadhipathi, weekday, graha]}
@@ -168,8 +168,8 @@ porondam_reason:
   weekday_pass: "The bride was born on a {bride_weekday} and the groom on a {groom_weekday}. These days agree."
   weekday_fail: "The bride was born on a {bride_weekday} and the groom on a {groom_weekday}. The groom's day is one or two days before the bride's, which does not agree."
   weekday_unchecked: "This needs the birth dates of both people, so it is not counted when matching by birth stars only."
-  varna_pass: "The bride's Moon sign is of the {bride_varna} varna and the groom's of the {groom_varna} varna. The groom's is the same or higher, which agrees."
-  varna_fail: "The bride's Moon sign is of the {bride_varna} varna and the groom's of the {groom_varna} varna. The groom's is lower, which does not agree."
+  varna_pass: "The bride's Moon sign is of the {bride_varna} varna and the groom's of the {groom_varna} varna. By the traditional varna table, these signs agree."
+  varna_fail: "The bride's Moon sign is of the {bride_varna} varna and the groom's of the {groom_varna} varna. By the traditional varna table, these signs do not agree."
   bhuta_pass: "The bride's star is of {bride_bhuta} and the groom's of {groom_bhuta}. These elements are not opposed."
   bhuta_fail: "The bride's star is of {bride_bhuta} and the groom's of {groom_bhuta}. Water and fire are opposed, which does not agree."
   vruksha_pass: "The tree of the bride's star is a {bride_vruksha} tree and of the groom's a {groom_vruksha} tree. This pair agrees."
