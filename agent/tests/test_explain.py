@@ -75,6 +75,19 @@ def test_prompt_holds_the_shape_the_topic_and_its_notes() -> None:
     assert "Writing in Sinhala" in system_prompt("match.checks", "si")
 
 
+def test_chapters_put_life_first_in_small_paragraphs_with_icons() -> None:
+    """Readers are not astrologers: meaning first, the chart fact as the reason (explain-card)."""
+    for chapter_id in ("chart.work", "match.summary", "nakath.day"):
+        prompt = system_prompt(chapter_id, "en")
+        assert "Life first, chart second" in prompt
+        assert "Small paragraphs" in prompt
+        assert "**💼 Work that suits you**" in prompt  # an icon inside the bold lead
+        assert "🔮" in prompt and "Never any other emoji" in prompt
+    # Each chapter says which question it answers for the person.
+    assert '"What work suits me' in system_prompt("chart.work", "en")
+    assert '"Is anything seriously wrong?"' in system_prompt("match.checks", "en")
+
+
 def test_chart_chapters_read_the_personal_reading_notes() -> None:
     prompt = system_prompt("chart.periods", "en")
     assert "Giving a personal reading" in prompt  # personal-reading

@@ -150,7 +150,7 @@ export type ChapterState = {
 const IDLE: ChapterState = { status: "idle", text: "" };
 
 // Bump when the chapters change shape, so old texts kept in a tab are not shown again.
-const VERSION = "v1";
+const VERSION = "v2"; // v2: plain words first, small paragraphs, an icon on each bold lead
 
 /** A short, stable hash of a string (FNV-1a, 32 bit). Only for cache keys, not for security. */
 export function hash(text: string): string {

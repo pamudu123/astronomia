@@ -277,12 +277,18 @@
   color: var(--ink);
 }
 
+/* Each bold lead (with its icon) opens a part: a thin rule above it keeps the parts apart, and
+   it sits close to the small paragraphs it introduces. */
 .text .lead {
-  margin: 6px 0 -6px;
+  margin: 8px 0 -4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
 }
 
 .text .lead:first-child {
   margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .writing {

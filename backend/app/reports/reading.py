@@ -7,6 +7,9 @@ the PDF holds the same words. They print in their own section, labelled as an AI
 A chapter uses a small part of markdown (the `explain-card` skill): paragraphs, bold leads,
 bold words and simple lists. This turns it into blocks for the template, which escapes every
 piece of text, so nothing in a chapter becomes markup.
+
+On the page each bold lead starts with an icon (an emoji). The report's fonts have no emoji, so
+they would print as empty boxes: the icons are left out of the PDF.
 """
 
 import re
@@ -18,6 +21,16 @@ ITEM = re.compile(r"^(?:[-*•]|\d+[.)])\s+(.*)$")
 HEADING = re.compile(r"^#{1,6}\s+(.*)$")
 LEAD = re.compile(r"^\*\*([^*]+)\*\*:?$")
 BLANK_LINE = re.compile(r"\n\s*\n")
+
+# Emoji and pictographs, with their variation selector, joined sequences and the space after.
+# A zero-width joiner on its own is left alone: Sinhala needs it to join letters (ශ්‍රී).
+_PICTO = "⌀-⏿☀-➿⬀-⯿\U0001f000-\U0001faff"
+ICON = re.compile(f"[{_PICTO}]️?(?:‍[{_PICTO}]️?)*[ \t]*")
+
+
+def without_icons(text: str) -> str:
+    """'**💼 Work that suits you**' -> '**Work that suits you**'."""
+    return ICON.sub("", text)
 
 
 @dataclass(frozen=True)
@@ -48,7 +61,7 @@ def _flush(result: list[Block], paragraph: list[str], items: list[tuple[Span, ..
 def blocks(text: str) -> list[Block]:
     """The same reading of a chapter as the website's (frontend/lib/assistant/explain.ts)."""
     result: list[Block] = []
-    for chunk in BLANK_LINE.split(text.replace("\r\n", "\n")):
+    for chunk in BLANK_LINE.split(without_icons(text).replace("\r\n", "\n")):
         lines = [line.strip() for line in chunk.split("\n") if line.strip()]
         paragraph: list[str] = []
         items: list[tuple[Span, ...]] = []
