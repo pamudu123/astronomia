@@ -1,7 +1,6 @@
 """The share store: hashed codes, expiry and delete."""
 
 import datetime as dt
-import os
 import sqlite3
 from collections.abc import Iterator
 from pathlib import Path
@@ -10,9 +9,7 @@ import psycopg
 import pytest
 
 from app.store.shares import DeleteRefused, PostgresShareStore, ShareStore, Store
-
-# PostgreSQL tests run when a test database is given (CI always gives one).
-PG_URL = os.environ.get("ASTRONOMIA_TEST_DATABASE_URL", "")
+from tests.pg import migrate, need_postgres
 
 START = dt.datetime(2026, 11, 12, 8, 0, tzinfo=dt.UTC)
 
@@ -35,11 +32,9 @@ def store(request: pytest.FixtureRequest, tmp_path: Path, clock: Clock) -> Itera
     if request.param == "sqlite":
         yield ShareStore(tmp_path / "var" / "shares.sqlite", clock)
         return
-    if not PG_URL:
-        pytest.skip("no test PostgreSQL (set ASTRONOMIA_TEST_DATABASE_URL)")
-    with psycopg.connect(PG_URL) as db:
-        db.execute("DROP TABLE IF EXISTS shares")
-    yield PostgresShareStore(PG_URL, clock)
+    url = need_postgres()
+    migrate(url)
+    yield PostgresShareStore(url, clock)
 
 
 def raw(store: Store) -> str:
@@ -52,7 +47,7 @@ def raw(store: Store) -> str:
             db.close()
     assert isinstance(store, PostgresShareStore)
     with psycopg.connect(store.url) as pg:
-        return repr(pg.execute("SELECT * FROM shares").fetchall())
+        return repr(pg.execute("SELECT * FROM sidera.shares").fetchall())
 
 
 def test_create_and_open(store: Store) -> None:
@@ -108,6 +103,6 @@ def test_the_database_setting_picks_postgres(tmp_path: Path) -> None:
 
     sqlite = share_store(Settings(shares_db=tmp_path / "s.sqlite"))
     assert isinstance(sqlite, ShareStore)
-    if not PG_URL:
-        pytest.skip("no test PostgreSQL (set ASTRONOMIA_TEST_DATABASE_URL)")
-    assert isinstance(share_store(Settings(database_url=PG_URL)), PostgresShareStore)
+    url = need_postgres()
+    migrate(url)
+    assert isinstance(share_store(Settings(database_url=url)), PostgresShareStore)

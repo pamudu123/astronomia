@@ -8,8 +8,10 @@ Only a hash of the session code is kept, so a copy of this database cannot be tu
 working sessions. Every saved report query filters on the owner, so one account can never read
 another's reports.
 
-One class for both databases: SQLite for local runs and tests, PostgreSQL on hosts without a
-lasting disk (set ASTRONOMIA_DATABASE_URL). The few differences are in `_Dialect`.
+One class for both databases: SQLite for local runs and tests, PostgreSQL (Supabase) on hosts
+without a lasting disk (set ASTRONOMIA_DATABASE_URL). The few differences are in `_Dialect`.
+SQLite makes its own tables. On PostgreSQL the tables are in the private `sidera` schema and are
+made by the migrations in `supabase/migrations/`, never by the app.
 """
 
 import datetime as dt
@@ -25,13 +27,16 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
 
-import psycopg
 from psycopg.types.json import Jsonb
+
+from app.store import postgres
 
 Clock = Callable[[], dt.datetime]
 Kind = Literal["guest", "google"]
 
 SCHEMA_VERSION = 1
+# The tables this store uses. Queries name them as {users} and so on; see `_Dialect.sql`.
+TABLES = ("users", "sessions", "saved_reports")
 GUEST_SESSION_DAYS = 365
 # A guest account nobody has used for this long is deleted with its reports.
 GUEST_IDLE_DAYS = 365
@@ -105,54 +110,55 @@ class LimitReached(Exception):
 class _Dialect:
     """How SQLite and PostgreSQL differ for this store."""
 
-    timestamp: str
-    json: str
     placeholder: str
+    # Where the tables are: None for SQLite's own file, the private schema on PostgreSQL.
+    schema: str | None
+
+    def table(self, name: str) -> str:
+        return f"{self.schema}.{name}" if self.schema else name
 
     def sql(self, statement: str) -> str:
-        return statement.replace("?", self.placeholder)
+        """A query with its {table} names filled in and the right parameter marks."""
+        names = {name: self.table(name) for name in TABLES}
+        return statement.format(**names).replace("?", self.placeholder)
 
 
-_SQLITE = _Dialect(timestamp="TEXT", json="TEXT", placeholder="?")
-_POSTGRES = _Dialect(timestamp="TIMESTAMPTZ", json="JSONB", placeholder="%s")
+_SQLITE = _Dialect(placeholder="?", schema=None)
+_POSTGRES = _Dialect(placeholder="%s", schema=postgres.SCHEMA)
 
-
-def _schema(d: _Dialect) -> list[str]:
-    return [
-        "CREATE TABLE IF NOT EXISTS accounts_schema (version INTEGER NOT NULL)",
-        f"""CREATE TABLE IF NOT EXISTS users (
-            id TEXT PRIMARY KEY,
-            kind TEXT NOT NULL,
-            google_sub TEXT UNIQUE,
-            email TEXT,
-            name TEXT,
-            created_at {d.timestamp} NOT NULL,
-            last_seen_at {d.timestamp} NOT NULL
-        )""",
-        f"""CREATE TABLE IF NOT EXISTS sessions (
-            token_hash TEXT PRIMARY KEY,
-            user_id TEXT NOT NULL,
-            created_at {d.timestamp} NOT NULL,
-            expires_at {d.timestamp} NOT NULL
-        )""",
-        "CREATE INDEX IF NOT EXISTS sessions_user ON sessions (user_id)",
-        f"""CREATE TABLE IF NOT EXISTS saved_reports (
-            id TEXT PRIMARY KEY,
-            user_id TEXT NOT NULL,
-            kind TEXT NOT NULL,
-            title TEXT NOT NULL,
-            input {d.json} NOT NULL,
-            input_hash TEXT NOT NULL,
-            snapshot {d.json} NOT NULL,
-            summary {d.json} NOT NULL,
-            rules TEXT NOT NULL,
-            purchase_id TEXT,
-            created_at {d.timestamp} NOT NULL,
-            updated_at {d.timestamp} NOT NULL,
-            UNIQUE (user_id, input_hash)
-        )""",
-        "CREATE INDEX IF NOT EXISTS saved_reports_user ON saved_reports (user_id, created_at)",
-    ]
+# SQLite only. PostgreSQL gets its tables from supabase/migrations/.
+_SQLITE_SCHEMA = [
+    "CREATE TABLE IF NOT EXISTS accounts_schema (version INTEGER NOT NULL)",
+    """CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        kind TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        last_seen_at TEXT NOT NULL
+    )""",
+    """CREATE TABLE IF NOT EXISTS sessions (
+        token_hash TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL
+    )""",
+    "CREATE INDEX IF NOT EXISTS sessions_user ON sessions (user_id)",
+    """CREATE TABLE IF NOT EXISTS saved_reports (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        kind TEXT NOT NULL,
+        title TEXT NOT NULL,
+        input TEXT NOT NULL,
+        input_hash TEXT NOT NULL,
+        snapshot TEXT NOT NULL,
+        summary TEXT NOT NULL,
+        rules TEXT NOT NULL,
+        purchase_id TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        UNIQUE (user_id, input_hash)
+    )""",
+    "CREATE INDEX IF NOT EXISTS saved_reports_user ON saved_reports (user_id, created_at)",
+]
 
 
 class AccountStore:
@@ -168,11 +174,6 @@ class AccountStore:
         self._d = dialect
         self._connect = connect
         self.clock = clock
-        with self._connect() as db:
-            for statement in _schema(dialect):
-                db.execute(statement)
-            if db.execute("SELECT version FROM accounts_schema").fetchone() is None:
-                db.execute(self._d.sql("INSERT INTO accounts_schema VALUES (?)"), (SCHEMA_VERSION,))
 
     # Values in and out. SQLite keeps text, PostgreSQL its own types.
 
@@ -193,6 +194,11 @@ class AccountStore:
     def _read_json(value: Any) -> dict[str, Any]:
         loaded: dict[str, Any] = json.loads(value) if isinstance(value, str) else value
         return loaded
+
+    @staticmethod
+    def _read_id(value: Any) -> str:
+        """Ids are text in SQLite and uuid on PostgreSQL. Callers always get text."""
+        return str(value)
 
     def _run(self, db: Any, statement: str, params: Sequence[Any] = ()) -> Any:
         return db.execute(self._d.sql(statement), tuple(params))
@@ -222,12 +228,13 @@ class AccountStore:
         self._purge(db, now)
         self._run(
             db,
-            "INSERT INTO users (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?)",
+            "INSERT INTO {users} (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?)",
             (user.id, user.kind, self._ts(now), self._ts(now)),
         )
         self._run(
             db,
-            "INSERT INTO sessions VALUES (?, ?, ?, ?)",
+            "INSERT INTO {sessions} (token_hash, user_id, created_at, expires_at) "
+            "VALUES (?, ?, ?, ?)",
             (_hash(token), user.id, self._ts(now), self._ts(expires)),
         )
         return Session(token=token, user=user, expires_at=expires)
@@ -238,8 +245,8 @@ class AccountStore:
         with self._connect() as db:
             row = self._run(
                 db,
-                "SELECT u.id, u.kind, s.expires_at FROM sessions s "
-                "JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?",
+                "SELECT u.id, u.kind, s.expires_at FROM {sessions} s "
+                "JOIN {users} u ON u.id = s.user_id WHERE s.token_hash = ?",
                 (_hash(token),),
             ).fetchone()
             if row is None:
@@ -247,7 +254,7 @@ class AccountStore:
             user_id, kind, expires_raw = row
             expires = self._read_ts(expires_raw)
             if expires <= now:
-                self._run(db, "DELETE FROM sessions WHERE token_hash = ?", (_hash(token),))
+                self._run(db, "DELETE FROM {sessions} WHERE token_hash = ?", (_hash(token),))
                 return None
             renewed_expiry = now + dt.timedelta(days=GUEST_SESSION_DAYS)
             renew = renewed_expiry - expires >= RENEW_AFTER
@@ -255,17 +262,18 @@ class AccountStore:
                 expires = renewed_expiry
                 self._run(
                     db,
-                    "UPDATE sessions SET expires_at = ? WHERE token_hash = ?",
+                    "UPDATE {sessions} SET expires_at = ? WHERE token_hash = ?",
                     (self._ts(expires), _hash(token)),
                 )
                 self._run(
-                    db, "UPDATE users SET last_seen_at = ? WHERE id = ?", (self._ts(now), user_id)
+                    db, "UPDATE {users} SET last_seen_at = ? WHERE id = ?", (self._ts(now), user_id)
                 )
-        return FoundSession(user=User(id=user_id, kind=kind), expires_at=expires, renewed=renew)
+        user = User(id=self._read_id(user_id), kind=kind)
+        return FoundSession(user=user, expires_at=expires, renewed=renew)
 
     def end_session(self, token: str) -> None:
         with self._connect() as db:
-            self._run(db, "DELETE FROM sessions WHERE token_hash = ?", (_hash(token),))
+            self._run(db, "DELETE FROM {sessions} WHERE token_hash = ?", (_hash(token),))
 
     def delete_user(self, user_id: str) -> None:
         """The account, every session and every saved report."""
@@ -274,19 +282,19 @@ class AccountStore:
 
     def _delete_users(self, db: Any, user_ids: list[str]) -> None:
         for user_id in user_ids:
-            self._run(db, "DELETE FROM saved_reports WHERE user_id = ?", (user_id,))
-            self._run(db, "DELETE FROM sessions WHERE user_id = ?", (user_id,))
-            self._run(db, "DELETE FROM users WHERE id = ?", (user_id,))
+            self._run(db, "DELETE FROM {saved_reports} WHERE user_id = ?", (user_id,))
+            self._run(db, "DELETE FROM {sessions} WHERE user_id = ?", (user_id,))
+            self._run(db, "DELETE FROM {users} WHERE id = ?", (user_id,))
 
     def _purge(self, db: Any, now: dt.datetime) -> None:
-        self._run(db, "DELETE FROM sessions WHERE expires_at <= ?", (self._ts(now),))
+        self._run(db, "DELETE FROM {sessions} WHERE expires_at <= ?", (self._ts(now),))
         idle_since = now - dt.timedelta(days=GUEST_IDLE_DAYS)
         rows = self._run(
             db,
-            "SELECT id FROM users WHERE kind = 'guest' AND last_seen_at <= ?",
+            "SELECT id FROM {users} WHERE kind = 'guest' AND last_seen_at <= ?",
             (self._ts(idle_since),),
         ).fetchall()
-        self._delete_users(db, [row[0] for row in rows])
+        self._delete_users(db, [self._read_id(row[0]) for row in rows])
 
     # Saved reports
 
@@ -305,21 +313,21 @@ class AccountStore:
     ) -> tuple[SavedSummary, bool]:
         existing = self._run(
             db,
-            "SELECT id, kind, title, summary, created_at FROM saved_reports "
+            "SELECT id, kind, title, summary, created_at FROM {saved_reports} "
             "WHERE user_id = ? AND input_hash = ?",
             (user_id, report.input_hash),
         ).fetchone()
         if existing is not None:
             return self._summary(existing), False
         (count,) = self._run(
-            db, "SELECT COUNT(*) FROM saved_reports WHERE user_id = ?", (user_id,)
+            db, "SELECT COUNT(*) FROM {saved_reports} WHERE user_id = ?", (user_id,)
         ).fetchone()
         if count >= limit:
             raise LimitReached
         report_id = str(uuid.uuid4())
         self._run(
             db,
-            "INSERT INTO saved_reports (id, user_id, kind, title, input, input_hash, "
+            "INSERT INTO {saved_reports} (id, user_id, kind, title, input, input_hash, "
             "snapshot, summary, rules, created_at, updated_at) "
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
@@ -341,14 +349,14 @@ class AccountStore:
     def _summary(self, row: Sequence[Any]) -> SavedSummary:
         report_id, kind, title, summary, created = row
         return SavedSummary(
-            report_id, kind, title, self._read_json(summary), self._read_ts(created)
+            self._read_id(report_id), kind, title, self._read_json(summary), self._read_ts(created)
         )
 
     def list_saved(self, user_id: str) -> list[SavedSummary]:
         with self._connect() as db:
             rows = self._run(
                 db,
-                "SELECT id, kind, title, summary, created_at FROM saved_reports "
+                "SELECT id, kind, title, summary, created_at FROM {saved_reports} "
                 "WHERE user_id = ? ORDER BY created_at DESC, id",
                 (user_id,),
             ).fetchall()
@@ -357,7 +365,7 @@ class AccountStore:
     def count_saved(self, user_id: str) -> int:
         with self._connect() as db:
             (count,) = self._run(
-                db, "SELECT COUNT(*) FROM saved_reports WHERE user_id = ?", (user_id,)
+                db, "SELECT COUNT(*) FROM {saved_reports} WHERE user_id = ?", (user_id,)
             ).fetchone()
         return int(count)
 
@@ -366,7 +374,7 @@ class AccountStore:
             row = self._run(
                 db,
                 "SELECT id, kind, title, summary, created_at, input, snapshot "
-                "FROM saved_reports WHERE user_id = ? AND id = ?",
+                "FROM {saved_reports} WHERE user_id = ? AND id = ?",
                 (user_id, report_id),
             ).fetchone()
         if row is None:
@@ -386,7 +394,7 @@ class AccountStore:
         with self._connect() as db:
             cursor = self._run(
                 db,
-                "UPDATE saved_reports SET title = ?, updated_at = ? WHERE user_id = ? AND id = ?",
+                "UPDATE {saved_reports} SET title = ?, updated_at = ? WHERE user_id = ? AND id = ?",
                 (title, self._ts(self.clock()), user_id, report_id),
             )
             return bool(cursor.rowcount)
@@ -394,12 +402,13 @@ class AccountStore:
     def delete_saved(self, user_id: str, report_id: str) -> bool:
         with self._connect() as db:
             cursor = self._run(
-                db, "DELETE FROM saved_reports WHERE user_id = ? AND id = ?", (user_id, report_id)
+                db, "DELETE FROM {saved_reports} WHERE user_id = ? AND id = ?", (user_id, report_id)
             )
             return bool(cursor.rowcount)
 
 
 def sqlite_accounts(path: Path, clock: Clock = _utc_now) -> AccountStore:
+    """A store in a SQLite file, making its tables if they are not there yet."""
     path.parent.mkdir(parents=True, exist_ok=True)
     lock = threading.Lock()
 
@@ -413,12 +422,15 @@ def sqlite_accounts(path: Path, clock: Clock = _utc_now) -> AccountStore:
             finally:
                 db.close()
 
+    with connect() as db:
+        for statement in _SQLITE_SCHEMA:
+            db.execute(statement)
+        if db.execute("SELECT version FROM accounts_schema").fetchone() is None:
+            db.execute("INSERT INTO accounts_schema VALUES (?)", (SCHEMA_VERSION,))
     return AccountStore(_SQLITE, connect, clock)
 
 
 def postgres_accounts(url: str, clock: Clock = _utc_now) -> AccountStore:
-    def connect() -> psycopg.Connection[Any]:
-        # The connection's context manager commits on success and rolls back on error.
-        return psycopg.connect(url, connect_timeout=10)
-
-    return AccountStore(_POSTGRES, connect, clock)
+    """A store in the `sidera` schema. Raises MissingTables when the migrations are not applied."""
+    postgres.require_tables(url, TABLES)
+    return AccountStore(_POSTGRES, lambda: postgres.connect(url), clock)
