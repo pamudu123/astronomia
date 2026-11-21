@@ -1309,6 +1309,8 @@
       "retry": "Try again",
       "locked": "Available on paid plans",
       "inPdf": "Chapters you open are added to the PDF report.",
+      "inShort": "In short",
+      "next": "Next: {title}",
       "matchReading": {
         "title": "Full match reading",
         "lead": "{count} chapters that walk through this match, from each person and every factor to the serious checks, the marriage combinations and a summing up.",

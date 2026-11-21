@@ -15,6 +15,17 @@
     <li>{% for text, bold in item %}{% if bold %}<strong>{{ text }}</strong>{% else %}{{ text }}{% endif %}{% endfor %}</li>
     {% endfor %}
   </ul>
+  {% elif block.kind == "table" %}
+  <table class="table reading-table">
+    <thead>
+      <tr>{% for cell in block.rows[0] %}<th>{% for text, bold in cell %}{{ text }}{% endfor %}</th>{% endfor %}</tr>
+    </thead>
+    <tbody>
+      {% for row in block.rows[1:] %}
+      <tr>{% for cell in row %}<td>{% for text, bold in cell %}{% if bold %}<strong>{{ text }}</strong>{% else %}{{ text }}{% endif %}{% endfor %}</td>{% endfor %}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
   {% elif block.kind == "lead" %}
   <p class="lead-line"><strong>{{ block.spans[0][0] }}</strong></p>
   {% else %}

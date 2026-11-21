@@ -12,6 +12,7 @@
  */
 
 import type { Locale } from "@/lib/i18n";
+import type { SpotName } from "@/lib/spots";
 
 import type { PageContext } from "./context";
 
@@ -48,6 +49,52 @@ export type ChapterId =
   | "changes.mine"
   | "yearly.mine"
   | "kendara.dates";
+
+/** The picture beside each chapter's opening answer (components/Spot.tsx). */
+export const CHAPTER_SPOT: Record<ChapterId, SpotName> = {
+  "match.people": "couple",
+  "match.factors": "checklist",
+  "match.checks": "shield",
+  "match.mars": "mars",
+  "match.styles": "moon",
+  "match.summary": "compass",
+  "match.combinations": "constellation",
+  "match.lords": "planets",
+  "match.years": "periods",
+  "match.wedding": "wedding",
+  "chart.summary": "compass",
+  "chart.combinations": "constellation",
+  "chart.saturn": "saturn",
+  "chart.ahead": "road",
+  "chart.nature": "sunrise",
+  "chart.planets": "planets",
+  "chart.houses": "houses",
+  "chart.work": "work",
+  "chart.love": "love",
+  "chart.family": "family",
+  "chart.studies": "book",
+  "chart.abroad": "travel",
+  "chart.periods": "periods",
+  "chart.mars": "mars",
+  "chart.care": "lotus",
+  "nakath.day": "lamp",
+  "avurudu.times": "pot",
+  "names.letters": "cradle",
+  "names.first": "book",
+  "changes.mine": "change",
+  "yearly.mine": "year",
+  "kendara.dates": "search",
+};
+
+/** The icon on each life topic chip: the same as the reading's icon for that part of life. */
+export const TOPIC_ICON: Partial<Record<ChapterId, string>> = {
+  "chart.nature": "🙂",
+  "chart.work": "💼",
+  "chart.love": "💞",
+  "chart.family": "🏠",
+  "chart.studies": "📚",
+  "chart.abroad": "✈️",
+};
 
 /** The full match reading, in reading order. */
 export const MATCH_READING: ChapterId[] = [
@@ -150,7 +197,8 @@ export type ChapterState = {
 const IDLE: ChapterState = { status: "idle", text: "" };
 
 // Bump when the chapters change shape, so old texts kept in a tab are not shown again.
-const VERSION = "v2"; // v2: plain words first, small paragraphs, an icon on each bold lead
+// v2: plain words first, small paragraphs, an icon on each bold lead. v3: short answer, small tables.
+const VERSION = "v3";
 
 /** A short, stable hash of a string (FNV-1a, 32 bit). Only for cache keys, not for security. */
 export function hash(text: string): string {
@@ -279,7 +327,77 @@ export function resetChapters(): void {
 // ---- The text: the small part of markdown a chapter uses (explain-card skill). ----
 
 export type Span = { text: string; bold: boolean };
-export type Block = { kind: "paragraph"; spans: Span[] } | { kind: "list"; items: Span[][] };
+export type Block =
+  | { kind: "paragraph"; spans: Span[] }
+  | { kind: "list"; items: Span[][] }
+  | { kind: "table"; head: Span[][]; rows: Span[][][] };
+
+/** "| a | b |" -> ["a", "b"]. Outer pipes are optional; an escaped \| stays in its cell. */
+function cells(line: string): string[] {
+  const inner = line.trim().replace(/^\|/, "").replace(/(?<!\\)\|$/, "");
+  return inner.split(/(?<!\\)\|/).map((cell) => cell.trim().replace(/\\\|/g, "|"));
+}
+
+const TABLE_RULE = /^\|?\s*:?-{2,}:?\s*(?:\|\s*:?-{2,}:?\s*)*\|?$/;
+
+/**
+ * A small table (explain-card skill): a header row, a rule of dashes, then the rows. Lines
+ * that only look like a table (no rule under the first) stay as text. Short rows are padded,
+ * long ones cut, so every row has the header's columns.
+ */
+function table(lines: string[]): Block | null {
+  if (lines.length < 2 || !lines.every((line) => line.includes("|")) || !TABLE_RULE.test(lines[1])) return null;
+  const head = cells(lines[0]);
+  const rows = lines
+    .slice(2)
+    .map(cells)
+    .map((row) => head.map((_, index) => spans(row[index] ?? "")));
+  return { kind: "table", head: head.map(spans), rows };
+}
+
+/** True when a line is part of a table: it starts with a pipe, or is a table's rule. */
+const isTableLine = (line: string) => line.startsWith("|") || TABLE_RULE.test(line);
+
+// An icon at the start of a bold lead: one emoji, with its variation selector and joined parts.
+const ICON = /^(\p{Extended_Pictographic}️?(?:‍\p{Extended_Pictographic}️?)*)\s*/u;
+
+export type Lead = { icon: string | null; text: string };
+
+/** "💼 Work that suits you" -> the icon and the words, so the page can draw the icon apart. */
+export function lead(text: string): Lead {
+  const match = ICON.exec(text);
+  return match ? { icon: match[1], text: text.slice(match[0].length) } : { icon: null, text };
+}
+
+/** A paragraph that is only a bold line: a part's lead. */
+export const isLead = (block: Block): block is { kind: "paragraph"; spans: Span[] } =>
+  block.kind === "paragraph" && block.spans.length === 1 && block.spans[0].bold;
+
+/** What a part is about, from its lead's icon, so the page can tint the ones that matter. */
+export type Tone = "plain" | "good" | "tip" | "attention";
+
+export function tone(icon: string | null): Tone {
+  if (!icon) return "plain";
+  if (icon.startsWith("⚠")) return "attention";
+  if (icon === "💡") return "tip";
+  if (icon === "✅") return "good";
+  return "plain";
+}
+
+/**
+ * A chapter in its pieces: the answer it opens with (the blocks before the first lead), then
+ * each part, a lead with the blocks under it.
+ */
+export function parts(items: Block[]): { answer: Block[]; parts: { lead: Lead; blocks: Block[] }[] } {
+  const answer: Block[] = [];
+  const result: { lead: Lead; blocks: Block[] }[] = [];
+  for (const block of items) {
+    if (isLead(block)) result.push({ lead: lead(block.spans[0].text), blocks: [] });
+    else if (result.length) result[result.length - 1].blocks.push(block);
+    else answer.push(block);
+  }
+  return { answer, parts: result };
+}
 
 /** "**Lead** rest" -> bold and plain spans. An unclosed ** stays as text. */
 export function spans(line: string): Span[] {
@@ -291,8 +409,8 @@ export function spans(line: string): Span[] {
 }
 
 /**
- * Paragraphs, bold and simple lists. Rendered as React elements, never as HTML, so nothing
- * in a chapter can run on the page. Headings (#) are shown as bold lines.
+ * Paragraphs, bold, simple lists and small tables. Rendered as React elements, never as HTML,
+ * so nothing in a chapter can run on the page. Headings (#) are shown as bold lines.
  */
 export function blocks(text: string): Block[] {
   const result: Block[] = [];
@@ -301,13 +419,29 @@ export function blocks(text: string): Block[] {
     if (!lines.length) continue;
     let paragraph: string[] = [];
     let items: Span[][] = [];
+    let rows: string[] = [];
+    const flushTable = () => {
+      if (!rows.length) return;
+      const found = table(rows);
+      // Not a real table (no rule under the header yet, or ever): keep the lines as text.
+      if (found) result.push(found);
+      else result.push({ kind: "paragraph", spans: spans(rows.join(" ")) });
+      rows = [];
+    };
     const flush = () => {
+      flushTable();
       if (paragraph.length) result.push({ kind: "paragraph", spans: spans(paragraph.join(" ")) });
       if (items.length) result.push({ kind: "list", items });
       paragraph = [];
       items = [];
     };
     for (const line of lines) {
+      if (isTableLine(line)) {
+        if (paragraph.length || items.length) flush();
+        rows.push(line);
+        continue;
+      }
+      flushTable();
       const item = /^(?:[-*•]|\d+[.)])\s+(.*)$/.exec(line);
       const heading = /^#{1,6}\s+(.*)$/.exec(line);
       // A bold lead on its own line ("**Where it comes easily**") stays on its own line.

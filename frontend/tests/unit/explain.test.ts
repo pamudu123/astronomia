@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PageContext } from "@/lib/assistant/context";
 import {
+  CHAPTER_SPOT,
   CHART_PLACES,
   CHART_READING,
   CHART_TOPICS,
@@ -12,11 +13,15 @@ import {
   chapterKey,
   chapterState,
   hash,
+  lead,
+  parts,
   requestChapter,
   resetChapters,
   spans,
+  tone,
   writtenChapters,
 } from "@/lib/assistant/explain";
+import { SPOTS } from "@/lib/spots";
 import en from "@/messages/en.json";
 import si from "@/messages/si.json";
 
@@ -177,5 +182,75 @@ describe("blocks", () => {
   it("never turns text into markup", () => {
     const [block] = blocks("<img src=x onerror=alert(1)>");
     expect(block).toEqual({ kind: "paragraph", spans: [{ text: "<img src=x onerror=alert(1)>", bold: false }] });
+  });
+
+  it("reads a small table between paragraphs, padding short rows", () => {
+    const text = [
+      "Three stretches stand out.",
+      "| Period | Dates |",
+      "|---|:--:|",
+      "| **Mercury** | 2026 – 2028 |",
+      "| Ketu |",
+      "",
+      "Each brings its own pace.",
+    ].join("\n");
+    expect(blocks(text)).toEqual([
+      { kind: "paragraph", spans: [{ text: "Three stretches stand out.", bold: false }] },
+      {
+        kind: "table",
+        head: [[{ text: "Period", bold: false }], [{ text: "Dates", bold: false }]],
+        rows: [
+          [[{ text: "Mercury", bold: true }], [{ text: "2026 – 2028", bold: false }]],
+          [[{ text: "Ketu", bold: false }], []],
+        ],
+      },
+      { kind: "paragraph", spans: [{ text: "Each brings its own pace.", bold: false }] },
+    ]);
+  });
+
+  it("keeps lines that only look like a table as text, as while the rule is still arriving", () => {
+    expect(blocks("| Period | Dates |")).toEqual([
+      { kind: "paragraph", spans: [{ text: "| Period | Dates |", bold: false }] },
+    ]);
+  });
+
+  it("keeps an escaped pipe inside its cell", () => {
+    const [block] = blocks("| a | b |\n|---|---|\n| x \\| y | z |");
+    expect(block.kind === "table" && block.rows[0][0]).toEqual([{ text: "x | y", bold: false }]);
+  });
+});
+
+describe("parts", () => {
+  it("splits the opening answer from the parts, with each lead's icon apart", () => {
+    const { answer, parts: found } = parts(
+      blocks("You meet life warmly.\n\n**💼 Work that suits you**\n\nSteady roles.\n\n**💡 What helps**\n\n- Rest"),
+    );
+    expect(answer).toEqual([{ kind: "paragraph", spans: [{ text: "You meet life warmly.", bold: false }] }]);
+    expect(found.map((part) => part.lead)).toEqual([
+      { icon: "💼", text: "Work that suits you" },
+      { icon: "💡", text: "What helps" },
+    ]);
+    expect(found[1].blocks).toEqual([{ kind: "list", items: [[{ text: "Rest", bold: false }]] }]);
+  });
+
+  it("reads joined emoji and leads without an icon", () => {
+    expect(lead("⚠️ Take care")).toEqual({ icon: "⚠️", text: "Take care" });
+    expect(lead("Plain lead")).toEqual({ icon: null, text: "Plain lead" });
+  });
+
+  it("tints tips, cautions and good news only", () => {
+    expect([tone("💡"), tone("⚠️"), tone("✅"), tone("💼"), tone(null)]).toEqual([
+      "tip",
+      "attention",
+      "good",
+      "plain",
+      "plain",
+    ]);
+  });
+
+  it("has a picture for every chapter", () => {
+    for (const id of [...MATCH_READING, ...CHART_READING, ...CHART_TOPICS, ...Object.values(PAGE_PLACES).flat()]) {
+      expect(SPOTS[CHAPTER_SPOT[id]]).toBeDefined();
+    }
   });
 });

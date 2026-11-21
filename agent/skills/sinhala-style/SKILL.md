@@ -8,7 +8,9 @@ description: How to write natural, polite spoken Sinhala for the site, which wor
 ## Tone
 
 - Polite and warm, like a respected family friend. Address the person as ඔබ.
-- Spoken, natural Sinhala in short sentences. Avoid heavy formal or literary forms when a common word exists.
+- Spoken, natural Sinhala in short sentences: about 15 to 20 words each, one idea each. Sinhala looks dense on a phone sooner than English, so split a long sentence rather than joining clauses with commas, and keep paragraphs to one or two sentences.
+- Avoid heavy formal or literary forms when a common word exists.
+- Don't add English or Sanskrit glosses in brackets after headings or terms ("(Vedic Remedies)", "(D10)") unless the person used them or they truly help; once at most.
 - Keep the same words the site uses, so the chat and the page match.
 
 ## Words the site uses

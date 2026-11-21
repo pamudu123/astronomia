@@ -39,6 +39,7 @@ The logo story, for an About page: the two rings are great circles of the sky. W
 | `moon.png` (322 x 323, transparent) | Side illustration on the birth details form | Cut out of the composite image |
 | `share-preview.jpg` (1200 x 630) | Link preview on WhatsApp, Facebook and similar | Zodiac wheel drawn by code over `hero-sky.jpg` |
 | `glyphs/rashi-NN-name.svg` | Zodiac wheel, small icons | Drawn by `tools/gen_rashi.py` |
+| `spots/<name>.svg`, `spots/<name>-light.svg` (480 x 320) | Spot illustrations: the picture beside each AI chapter's "In short" answer; free for social posts, slides and the PDF. One per topic (work, love, family, studies, travel, care, periods, saturn, wedding, lamp, Avurudu pot and more) | Drawn by `tools/gen_spots.py`, which also writes `frontend/lib/spots.ts` so the page draws them in theme colours (`components/Spot.tsx`) |
 
 Rashi numbering: 01 Mesha, 02 Vrishabha, 03 Mithuna, 04 Kataka, 05 Simha, 06 Kanya, 07 Tula, 08 Vrischika, 09 Dhanu, 10 Makara, 11 Kumbha, 12 Meena.
 
@@ -57,6 +58,7 @@ From the repository root:
 ```
 python3 design/tools/build_assets.py   # hero, rashi, card pictures, moon  (needs Pillow and numpy)
 python3 design/tools/gen_rashi.py      # line symbols
+python3 design/tools/gen_spots.py      # spot illustrations (SVG files and frontend/lib/spots.ts)
 python3 design/tools/gen_share.py      # share preview (needs Node with Playwright)
 ```
 

@@ -82,6 +82,8 @@
 .chapterRow,
 .chapterOpen {
   border-bottom: 1px solid var(--line-soft);
+  /* "Next: …" scrolls a chapter to the top: clear of the sticky header. */
+  scroll-margin-top: calc(var(--header-height) + 12px);
 }
 
 .chapterOpen {
@@ -201,6 +203,18 @@
   cursor: pointer;
 }
 
+.chip,
+.chipOn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chipIcon {
+  font-size: 15px;
+  line-height: 1;
+}
+
 .chip:hover {
   border-color: var(--gold);
   color: var(--gold);
@@ -253,12 +267,16 @@
   font-size: 16px;
 }
 
+/*
+ * A chapter, laid out to read at a glance on a phone (Reading in Explain.tsx): the answer in a
+ * card with its picture, then each part. Text size and line height are the site's own (body in
+ * globals.css); the structure, not bigger type, is what makes it easy to read.
+ */
 .text {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-width: 72ch;
-  line-height: 1.65;
+  gap: 12px;
+  max-width: 68ch;
 }
 
 .text p,
@@ -266,29 +284,247 @@
   margin: 0;
 }
 
+.text strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+/* Lists: brass dots, each item with air around it. */
 .text ul {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-left: 20px;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
 }
 
-.text strong {
-  color: var(--ink);
+.text li {
+  position: relative;
+  padding-left: 22px;
 }
 
-/* Each bold lead (with its icon) opens a part: a thin rule above it keeps the parts apart, and
-   it sits close to the small paragraphs it introduces. */
-.text .lead {
-  margin: 8px 0 -4px;
+.text li::before {
+  position: absolute;
+  top: 0.62em;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  content: "";
+}
+
+:global(html[lang="si"]) .text li::before {
+  top: 0.7em;
+}
+
+/* The answer the chapter opens with: the one thing to take away, beside its picture. */
+.answer {
+  --spot-bg: var(--panel-raised);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background:
+    radial-gradient(90% 120% at 100% 50%, rgb(var(--glow) / 9%), transparent 65%),
+    var(--panel-raised);
+}
+
+.answerText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+:global(html[lang="si"]) .eyebrow {
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.spot {
+  flex: none;
+  width: 120px;
+  height: auto;
+}
+
+/* A part: its icon and lead, then the small paragraphs under it. */
+.part {
+  --spot-bg: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 14px;
   border-top: 1px solid var(--line-soft);
 }
 
-.text .lead:first-child {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: 0;
+.partLead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.partIcon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel-raised);
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Tips, cautions and good news sit in a soft tinted box, so they stand out from the rest. */
+.part[data-tone="tip"],
+.part[data-tone="attention"],
+.part[data-tone="good"] {
+  --tone: var(--gold);
+  margin-top: 2px;
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--tone) 30%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--tone) 7%, transparent);
+}
+
+.part[data-tone="attention"] {
+  --tone: var(--coral);
+}
+
+.part[data-tone="good"] {
+  --tone: var(--teal);
+}
+
+.part[data-tone] .partIcon {
+  border-color: color-mix(in srgb, var(--tone, var(--line)) 35%, transparent);
+}
+
+/* A small table: dates, factors or checks side by side. Scrolls inside its frame on phones. */
+.tableFrame {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.tableFrame:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94em;
+  line-height: 1.55;
+}
+
+.table th,
+.table td {
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table th {
+  background: rgb(var(--glow) / 10%);
+  color: var(--gold);
+  font-size: 0.92em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.table td {
+  border-top: 1px solid var(--line-soft);
+}
+
+.table tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--panel-raised) 60%, transparent);
+}
+
+/* The first column names the row (a date, a factor): keep it on one line where it fits. */
+.table td:first-child {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Until the first words arrive: three soft lines where the text will be. */
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.placeholder span {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--line-soft), var(--line), var(--line-soft));
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+.placeholder span:nth-child(2) {
+  width: 86%;
+}
+
+.placeholder span:nth-child(3) {
+  width: 62%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* Under a written chapter: ask about it, or go on to the next one. */
+.after {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  /* As wide as the text above it. */
+  max-width: 68ch;
+  margin-top: 4px;
+}
+
+.next {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.next:hover,
+.next:focus-visible {
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 .writing {
@@ -376,10 +612,39 @@
   .panel {
     padding: 16px;
   }
+
+  /* The picture tucks into the card's top corner, beside the "In short" label, so the
+     answer below it keeps the card's full width. */
+  .answer {
+    position: relative;
+    display: block;
+    padding: 16px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding-right: 84px;
+  }
+
+  .spot {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    width: 76px;
+  }
+
+  .part[data-tone="tip"],
+  .part[data-tone="attention"],
+  .part[data-tone="good"] {
+    padding: 12px 14px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dots {
+  .dots,
+  .placeholder span {
     animation: none;
   }
 
