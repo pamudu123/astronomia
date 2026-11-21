@@ -15,7 +15,7 @@ from pydantic import BaseModel
 
 from app.api.charts import HadahanResponse, build_hadahan
 from app.api.porondam import PorondamResponse, build_porondam
-from app.api.reports import NEEDS_CHOICE, HadahanReport, PorondamReport
+from app.api.report_requests import NEEDS_CHOICE, HadahanReport, PorondamReport
 from app.explain.labels import Lang
 from app.reports.format import coordinates_line, format_time, place_line
 

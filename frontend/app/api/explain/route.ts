@@ -4,12 +4,16 @@
  *
  * A fixed route, like app/api/copilotkit: next.config.ts rewrites /api/* to the backend
  * before dynamic routes are matched.
+ *
+ * Chart and match chapters are part of a paid report (docs/18): the page sends the report it
+ * shows, and the backend says whether this browser's account paid for it (lib/paidCheck.ts).
  */
+import { paidCheck } from "@/lib/paidCheck";
 
 // A chapter takes a few seconds; an agent on a free host may first need to wake up.
 export const maxDuration = 60;
 
-// A full match result as the page sends it is about 6 KB.
+// A full match result as the page sends it is about 6 KB, the report about 1 KB more.
 const MAX_BODY = 50_000;
 const LANGUAGES = new Set(["en", "si"]);
 
@@ -29,10 +33,14 @@ export async function POST(request: Request): Promise<Response> {
   } catch {
     return bad("Not JSON.");
   }
-  const { id, language, facts } = (body ?? {}) as Record<string, unknown>;
+  const { id, language, facts, report } = (body ?? {}) as Record<string, unknown>;
   if (typeof id !== "string" || !LANGUAGES.has(String(language)) || !facts || typeof facts !== "object") {
     return bad("Needs id, language and facts.");
   }
+  const check = await paidCheck(request, id, report);
+  if (check === "locked") return bad("Part of the full report.", 402);
+  if (check === "invalid") return bad("Not a report.");
+  if (check === "unavailable") return bad("The paid check is not answering.", 502);
 
   // Staging uses the backend's key for the agent too, as the chat route does.
   const accessKey = process.env.AGENT_ACCESS_KEY || process.env.BACKEND_ACCESS_KEY;

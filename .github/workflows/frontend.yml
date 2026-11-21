@@ -41,6 +41,10 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+        env:
+          # A stand-in Supabase that the browser tests answer themselves (tests/e2e/supabase.ts).
+          NEXT_PUBLIC_SUPABASE_URL: https://supabase.e2e.test
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_e2e
       - name: Build with the AI switched on, for tests/e2e/ai.spec.ts
         run: npm run build
         env:

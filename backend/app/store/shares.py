@@ -3,8 +3,10 @@
 Only hashes of the link code and of the delete token are kept, so a copy of this database
 cannot be turned back into working links. Snapshots expire and can be deleted at any time.
 
-Two stores with the same methods: SQLite for local runs and tests, PostgreSQL on hosts
-without a lasting disk (set ASTRONOMIA_DATABASE_URL). The API only uses those methods.
+Two stores with the same methods: SQLite for local runs and tests, PostgreSQL (Supabase) on
+hosts without a lasting disk (set ASTRONOMIA_DATABASE_URL). The API only uses those methods.
+SQLite makes its own table. On PostgreSQL it is `sidera.shares`, made by the migrations in
+`supabase/migrations/`, never by the app.
 """
 
 import datetime as dt
@@ -21,6 +23,8 @@ from typing import Any, Protocol
 
 import psycopg
 from psycopg.types.json import Jsonb
+
+from app.store import postgres
 
 Clock = Callable[[], dt.datetime]
 
@@ -155,40 +159,33 @@ class ShareStore:
         return True
 
 
-_PG_SCHEMA = """
-CREATE TABLE IF NOT EXISTS shares (
-    code_hash TEXT PRIMARY KEY,
-    delete_hash TEXT NOT NULL,
-    kind TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL,
-    expires_at TIMESTAMPTZ NOT NULL,
-    payload JSONB NOT NULL
-)
-"""
+_PG_TABLE = postgres.table("shares")
 
 
 class PostgresShareStore:
-    """The same store in PostgreSQL. One short connection per call keeps it simple."""
+    """The same store in PostgreSQL. One short connection per call keeps it simple.
+
+    Raises MissingTables when the migrations have not been applied to the database."""
 
     def __init__(self, url: str, clock: Clock = _utc_now) -> None:
         self.url = url
         self.clock = clock
-        with self._connect() as db:
-            db.execute(_PG_SCHEMA)
+        postgres.require_tables(url, ["shares"])
 
     def _connect(self) -> psycopg.Connection[Any]:
-        # The connection's context manager commits on success and rolls back on error.
-        return psycopg.connect(self.url, connect_timeout=10)
+        return postgres.connect(self.url)
 
     def _purge(self, db: psycopg.Connection[Any]) -> None:
-        db.execute("DELETE FROM shares WHERE expires_at <= %s", (self.clock(),))
+        db.execute(f"DELETE FROM {_PG_TABLE} WHERE expires_at <= %s", (self.clock(),))
 
     def create(self, kind: str, payload: dict[str, Any], days: int) -> NewShare:
         share = _new_share(self.clock(), days)
         with self._connect() as db:
             self._purge(db)
             db.execute(
-                "INSERT INTO shares VALUES (%s, %s, %s, %s, %s, %s)",
+                f"INSERT INTO {_PG_TABLE} "
+                "(code_hash, delete_hash, kind, created_at, expires_at, payload) "
+                "VALUES (%s, %s, %s, %s, %s, %s)",
                 (
                     _hash(share.code),
                     _hash(share.delete_token),
@@ -204,7 +201,8 @@ class PostgresShareStore:
         with self._connect() as db:
             self._purge(db)
             row = db.execute(
-                "SELECT kind, created_at, expires_at, payload FROM shares WHERE code_hash = %s",
+                f"SELECT kind, created_at, expires_at, payload FROM {_PG_TABLE} "
+                "WHERE code_hash = %s",
                 (_hash(code),),
             ).fetchone()
         if row is None:
@@ -221,11 +219,12 @@ class PostgresShareStore:
         with self._connect() as db:
             self._purge(db)
             row = db.execute(
-                "SELECT delete_hash FROM shares WHERE code_hash = %s FOR UPDATE", (_hash(code),)
+                f"SELECT delete_hash FROM {_PG_TABLE} WHERE code_hash = %s FOR UPDATE",
+                (_hash(code),),
             ).fetchone()
             if row is None:
                 return False
             if not secrets.compare_digest(row[0], _hash(delete_token)):
                 raise DeleteRefused
-            db.execute("DELETE FROM shares WHERE code_hash = %s", (_hash(code),))
+            db.execute(f"DELETE FROM {_PG_TABLE} WHERE code_hash = %s", (_hash(code),))
         return True

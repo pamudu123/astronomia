@@ -1,27 +1,25 @@
-"""The account store: guest accounts, sessions and saved reports, in SQLite and PostgreSQL."""
+"""The account store: accounts for Supabase users and their saved reports, SQLite and PostgreSQL."""
 
 import datetime as dt
-import os
 import sqlite3
+import uuid
 from collections.abc import Iterator
 from pathlib import Path
 
-import psycopg
 import pytest
 
 from app.api.deps import account_store
 from app.config import Settings
 from app.store.accounts import (
     AccountStore,
+    Kind,
     LimitReached,
     NewReport,
+    User,
     postgres_accounts,
     sqlite_accounts,
 )
-
-# PostgreSQL tests run when a test database is given (CI always gives one).
-PG_URL = os.environ.get("ASTRONOMIA_TEST_DATABASE_URL", "")
-TABLES = ("saved_reports", "sessions", "users", "accounts_schema")
+from tests.pg import migrate, need_postgres
 
 START = dt.datetime(2026, 11, 15, 8, 0, tzinfo=dt.UTC)
 
@@ -47,12 +45,9 @@ def store(request: pytest.FixtureRequest, tmp_path: Path, clock: Clock) -> Itera
     if request.param == "sqlite":
         yield sqlite_accounts(tmp_path / "var" / "accounts.sqlite", clock)
         return
-    if not PG_URL:
-        pytest.skip("no test PostgreSQL (set ASTRONOMIA_TEST_DATABASE_URL)")
-    with psycopg.connect(PG_URL) as db:
-        for table in TABLES:
-            db.execute(f"DROP TABLE IF EXISTS {table}")
-    yield postgres_accounts(PG_URL, clock)
+    url = need_postgres()
+    migrate(url)
+    yield postgres_accounts(url, clock)
 
 
 def report(name: str = "Nimali", key: str = "a") -> NewReport:
@@ -66,53 +61,47 @@ def report(name: str = "Nimali", key: str = "a") -> NewReport:
     )
 
 
-def test_a_guest_session_finds_its_account(store: AccountStore) -> None:
-    session = store.create_guest()
-    assert session.user.kind == "guest"
-    assert len(session.token) >= 40
-    found = store.find_session(session.token)
-    assert found is not None
-    assert found.user == session.user
-    assert found.renewed is False
-    assert store.find_session("not-a-session") is None
+def new_user(store: AccountStore, kind: Kind = "guest") -> str:
+    return store.add_user(str(uuid.uuid4()), kind).id
 
 
-def test_only_a_hash_of_the_session_is_kept(tmp_path: Path, clock: Clock) -> None:
-    path = tmp_path / "accounts.sqlite"
-    session = sqlite_accounts(path, clock).create_guest()
-    db = sqlite3.connect(path)
-    try:
-        rows = repr(db.execute("SELECT * FROM sessions").fetchall())
-    finally:
-        db.close()
-    assert session.token not in rows
+def test_an_account_is_made_once_per_supabase_user(store: AccountStore) -> None:
+    user_id = str(uuid.uuid4())
+    assert store.find_user(user_id, "guest") is None
+    assert store.add_user(user_id, "guest") == User(user_id, "guest")
+    assert store.add_user(user_id, "guest") == User(user_id, "guest")  # a second call is fine
+    assert store.find_user(user_id, "guest") == User(user_id, "guest")
 
 
-def test_a_session_is_renewed_once_a_day(store: AccountStore, clock: Clock) -> None:
-    session = store.create_guest()
+def test_a_guest_who_links_google_becomes_google_for_good(store: AccountStore) -> None:
+    user_id = new_user(store)
+    item, _ = store.save(user_id, report(), limit=10)
+    assert store.find_user(user_id, "google") == User(user_id, "google")
+    assert store.find_user(user_id, "guest") == User(user_id, "google")
+    assert store.add_user(user_id, "guest") == User(user_id, "google")
+    assert store.get_saved(user_id, item.id) is not None
+
+
+def test_last_seen_is_written_once_a_day(store: AccountStore, clock: Clock) -> None:
+    user_id = new_user(store)
+
+    def last_seen() -> dt.datetime:
+        with store._connect() as db:
+            (value,) = store._run(
+                db, "SELECT last_seen_at FROM {users} WHERE id = ?", (user_id,)
+            ).fetchone()
+        return store._read_ts(value)
+
     clock.advance(hours=23)
-    found = store.find_session(session.token)
-    assert found is not None and found.renewed is False
+    store.find_user(user_id, "guest")
+    assert last_seen() == START
     clock.advance(hours=2)
-    found = store.find_session(session.token)
-    assert found is not None and found.renewed is True
-    assert found.expires_at == clock.now + dt.timedelta(days=365)
-
-
-def test_an_expired_session_is_gone(store: AccountStore, clock: Clock) -> None:
-    session = store.create_guest()
-    clock.advance(days=366)
-    assert store.find_session(session.token) is None
-
-
-def test_ending_a_session(store: AccountStore) -> None:
-    session = store.create_guest()
-    store.end_session(session.token)
-    assert store.find_session(session.token) is None
+    store.find_user(user_id, "guest")
+    assert last_seen() == clock.now
 
 
 def test_save_list_open_rename_delete(store: AccountStore, clock: Clock) -> None:
-    user = store.create_guest().user.id
+    user = new_user(store)
     first, created = store.save(user, report("Nimali", "a"), limit=10)
     assert created is True
     clock.advance(minutes=1)
@@ -138,7 +127,7 @@ def test_save_list_open_rename_delete(store: AccountStore, clock: Clock) -> None
 
 
 def test_saving_the_same_input_twice_keeps_one(store: AccountStore) -> None:
-    user = store.create_guest().user.id
+    user = new_user(store)
     first, _ = store.save(user, report(key="same"), limit=10)
     again, created = store.save(user, report(key="same"), limit=10)
     assert created is False
@@ -147,8 +136,8 @@ def test_saving_the_same_input_twice_keeps_one(store: AccountStore) -> None:
 
 
 def test_one_account_never_sees_anothers_reports(store: AccountStore) -> None:
-    mine = store.create_guest().user.id
-    theirs = store.create_guest().user.id
+    mine = new_user(store)
+    theirs = new_user(store, "google")
     item, _ = store.save(mine, report(key="same"), limit=10)
     store.save(theirs, report(key="same"), limit=10)  # the same input is fine for two people
 
@@ -159,8 +148,25 @@ def test_one_account_never_sees_anothers_reports(store: AccountStore) -> None:
     assert store.get_saved(mine, item.id) is not None
 
 
+def test_moving_a_guests_reports_into_another_account(store: AccountStore) -> None:
+    guest = new_user(store)
+    google = new_user(store, "google")
+    store.save(guest, report("Nimali", "a"), limit=10)
+    store.save(guest, report("Kasun", "b"), limit=10)
+    already, _ = store.save(google, report("Kasun", "b"), limit=10)
+    store.save(google, report("Amma", "c"), limit=10)
+
+    assert store.move_reports(guest, google) == 1  # Kasun is kept once
+    names = sorted(item.summary["name"] for item in store.list_saved(google))
+    assert names == ["Amma", "Kasun", "Nimali"]
+    assert store.get_saved(google, already.id) is not None
+    assert store.find_user(guest, "guest") is None
+    assert store.list_saved(guest) == []
+    assert store.move_reports(google, google) == 0
+
+
 def test_the_limit(store: AccountStore) -> None:
-    user = store.create_guest().user.id
+    user = new_user(store)
     store.save(user, report(key="1"), limit=2)
     store.save(user, report(key="2"), limit=2)
     with pytest.raises(LimitReached):
@@ -170,56 +176,43 @@ def test_the_limit(store: AccountStore) -> None:
 
 
 def test_deleting_an_account_deletes_everything(store: AccountStore) -> None:
-    session = store.create_guest()
-    item, _ = store.save(session.user.id, report(), limit=10)
-    store.delete_user(session.user.id)
-    assert store.find_session(session.token) is None
-    assert store.get_saved(session.user.id, item.id) is None
-    assert store.list_saved(session.user.id) == []
-
-
-def test_unused_guests_are_cleared_out(store: AccountStore, clock: Clock) -> None:
-    idle = store.create_guest()
-    idle_item, _ = store.save(idle.user.id, report(), limit=10)
-    active = store.create_guest()
-    for _ in range(13):  # used every month, so renewed
-        clock.advance(days=30)
-        assert store.find_session(active.token) is not None
-    clock.advance(days=6)
-    store.create_guest()  # clean up runs when a guest is made
-    assert store.find_session(active.token) is not None
-    assert store.get_saved(idle.user.id, idle_item.id) is None
-    assert store.find_session(idle.token) is None
+    user_id = new_user(store)
+    other = new_user(store)
+    item, _ = store.save(user_id, report(), limit=10)
+    kept, _ = store.save(other, report(), limit=10)
+    store.delete_user(user_id)
+    assert store.find_user(user_id, "guest") is None
+    assert store.get_saved(user_id, item.id) is None
+    assert store.list_saved(user_id) == []
+    assert store.get_saved(other, kept.id) is not None
 
 
 def test_reopening_keeps_the_data(tmp_path: Path, clock: Clock) -> None:
     path = tmp_path / "accounts.sqlite"
-    session = sqlite_accounts(path, clock).create_guest()
-    again = sqlite_accounts(path, clock)
-    assert again.find_session(session.token) is not None
+    user_id = new_user(sqlite_accounts(path, clock))
+    assert sqlite_accounts(path, clock).find_user(user_id, "guest") is not None
+
+
+def test_an_old_sessions_table_is_dropped(tmp_path: Path, clock: Clock) -> None:
+    path = tmp_path / "accounts.sqlite"
+    db = sqlite3.connect(path)
+    try:
+        db.execute("CREATE TABLE sessions (token_hash TEXT PRIMARY KEY)")
+        db.commit()
+    finally:
+        db.close()
+    sqlite_accounts(path, clock)
+    db = sqlite3.connect(path)
+    try:
+        tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master")}
+    finally:
+        db.close()
+    assert "sessions" not in tables
 
 
 def test_the_database_setting_picks_postgres(tmp_path: Path) -> None:
     settings = Settings(accounts_db=tmp_path / "a.sqlite")
     assert isinstance(account_store(settings), AccountStore)
-    if not PG_URL:
-        pytest.skip("no test PostgreSQL (set ASTRONOMIA_TEST_DATABASE_URL)")
-    assert account_store(Settings(database_url=PG_URL)) is account_store(
-        Settings(database_url=PG_URL)
-    )
-
-
-def test_a_first_report_and_its_guest_are_kept_together(store: AccountStore) -> None:
-    session, item = store.create_guest_with(report(), limit=5)
-    found = store.find_session(session.token)
-    assert found is not None and found.user == session.user
-    assert [saved.id for saved in store.list_saved(session.user.id)] == [item.id]
-
-
-def test_a_first_save_that_fails_leaves_no_account(store: AccountStore) -> None:
-    with pytest.raises(LimitReached):
-        store.create_guest_with(report(), limit=0)
-    with store._connect() as db:
-        (users,) = store._run(db, "SELECT COUNT(*) FROM users").fetchone()
-        (sessions,) = store._run(db, "SELECT COUNT(*) FROM sessions").fetchone()
-    assert (users, sessions) == (0, 0)
+    url = need_postgres()
+    migrate(url)
+    assert account_store(Settings(database_url=url)) is account_store(Settings(database_url=url))

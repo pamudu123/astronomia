@@ -1,0 +1,162 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgb(var(--glow) / 10%), transparent 60%),
+    var(--panel);
+}
+
+.paid {
+  gap: 10px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0;
+  color: var(--gold);
+  font-size: 24px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.was {
+  color: var(--ink-soft);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.per {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.includes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 8px 24px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.signIn,
+.coupon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.label {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--night);
+  color: var(--ink);
+  font: inherit;
+}
+
+.input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.status:empty {
+  display: none;
+}
+
+.status p {
+  margin: 0;
+}
+
+.small {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.error {
+  margin: 0;
+  color: var(--coral);
+  font-size: 14px;
+}
+
+.badge {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgb(var(--glow) / 16%);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 22px 18px;
+  }
+
+  .price {
+    align-items: flex-start;
+  }
+}

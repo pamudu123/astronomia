@@ -15,13 +15,24 @@ services:
     envVars:
       - key: ASTRONOMIA_ENVIRONMENT
         value: staging
+      # Supabase's session pooler connection string (docs/19). Secret: set in the dashboard,
+      # never here. The tables come from supabase/migrations/, not from the app.
       - key: ASTRONOMIA_DATABASE_URL
-        fromDatabase:
-          name: astronomia-db
-          property: connectionString
+        sync: false
+      # The Supabase project, whose public keys check sign in tokens (docs/19). Not secret.
+      - key: ASTRONOMIA_SUPABASE_URL
+        value: https://ihzvwnwkbcqldhrvsrle.supabase.co
+      # Supabase's secret key, only for deleting users from Supabase Auth (docs/19). Secret: set
+      # in the dashboard, never here.
+      - key: ASTRONOMIA_SUPABASE_SECRET_KEY
+        sync: false
       # Shared with the frontend (BACKEND_ACCESS_KEY). Set in the dashboard, never here.
       - key: ASTRONOMIA_ACCESS_KEY
         sync: false
+      # Paid reports (docs/18, docs/20): the AI reading, explain buttons, full detail and full
+      # PDF only on reports the account unlocked, with a coupon until payments exist.
+      - key: ASTRONOMIA_PAID_REPORTS
+        value: "true"
 
   # The AI assistant behind the website's chat (agent/). The chat stays off until Vercel has
   # AGENT_URL, so this service can run before anyone can reach it.

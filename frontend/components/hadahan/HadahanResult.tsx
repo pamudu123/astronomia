@@ -8,6 +8,8 @@ import { NextSteps } from "@/components/NextSteps";
 import { ArrowRight } from "@/components/Icons";
 import { ReportButton } from "@/components/ReportButton";
 import { SaveButton } from "@/components/account/SaveButton";
+import { DetailLocked, FullReport } from "@/components/paid/FullReport";
+import { PaidOnly, ReportScope } from "@/components/paid/ReportAccess";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
@@ -164,6 +166,7 @@ export function HadahanResult({
       : fill(t.guide[step], { lagna: sign(lagna.sign).name, moon: sign(moon.sign).name, house: moonHouse });
 
   return (
+    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.top}`}>
         <div className={styles.topText}>
@@ -414,7 +417,7 @@ export function HadahanResult({
             {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
             <KujaDials kuja={kuja} labels={labels} t={t} />
             {kuja.present && (
-              <>
+              <PaidOnly feature="full_detail" locked={<DetailLocked />}>
                 <h3 className={styles.subTitle}>{t.kujaChecks}</h3>
                 <ul className={styles.checks}>
                   {kuja.cancellations.map((check) => (
@@ -429,7 +432,7 @@ export function HadahanResult({
                     </li>
                   ))}
                 </ul>
-              </>
+              </PaidOnly>
             )}
           </details>
           <AiExplain chapters={CHART_PLACES.mars} lang={lang} facts={facts} />
@@ -449,6 +452,9 @@ export function HadahanResult({
           </details>
         </article>
       </section>
+
+      {/* Getting the full report, then the reading it unlocks. */}
+      {request && <FullReport lang={lang} />}
 
       {/* The long chapter reading comes last, so the chart itself is what shows first. */}
       <FullReading
@@ -486,5 +492,6 @@ export function HadahanResult({
         </NextSteps>
       )}
     </main>
+    </ReportScope>
   );
 }

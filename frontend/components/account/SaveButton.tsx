@@ -20,8 +20,8 @@ type Props = {
 type Step = "idle" | "saving" | "saved" | "already" | "failed" | "full";
 
 /**
- * Saves the result on the page to My reports. The first save makes a quiet guest account for
- * this browser; nobody is asked to sign up. Once payments exist, SaveGate decides who sees it.
+ * Saves the result on the page to My reports. The first save signs this browser in to Supabase
+ * as a guest; nobody is asked to sign up. Once payments exist, SaveGate decides who sees it.
  */
 export function SaveButton({ lang, t, request }: Props) {
   const [step, setStep] = useState<Step>("idle");

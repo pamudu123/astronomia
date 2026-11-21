@@ -54,6 +54,8 @@ Frontend (Vercel):
 | `STAGING_PASSWORD` | When set, the whole site asks for this password and is not indexed |
 | `AGENT_URL` | The assistant's address plus `/agent`, for example `https://astronomia-agent.onrender.com/agent`. The chat appears only when it is set: it is the chat's off switch |
 | `AGENT_ACCESS_KEY` | Only if the assistant has a key of its own. Without it, the chat sends `BACKEND_ACCESS_KEY`, which staging uses for both |
+| `NEXT_PUBLIC_SUPABASE_URL` | The Supabase project, for sign in (docs/19). Staging: `https://ihzvwnwkbcqldhrvsrle.supabase.co`. Read when the site is built |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | The project's publishable key (`sb_publishable_...`). Public by design: it only lets a browser sign in. Read when the site is built |
 
 Secrets (`*_ACCESS_KEY`, `OPENAI_API_KEY`, `STAGING_PASSWORD`) are set only in the host
 dashboards, never in the repository. Changing a Vercel variable needs a redeploy. `AGENT_URL` is

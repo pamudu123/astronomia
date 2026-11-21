@@ -590,6 +590,9 @@ export interface paths {
         /**
          * Report Pdf
          * @description A print ready A4 report, in the language of the request (`lang`).
+         *
+         *     The AI reading prints only in the full PDF of a paid report (docs/18, section 6); for any
+         *     other report it is left out and the rest prints as before.
          */
         post: operations["report_pdf_v1_reports_pdf_post"];
         delete?: never;
@@ -651,16 +654,44 @@ export interface paths {
         };
         /**
          * Me
-         * @description The account on this browser, if any, and how many reports it keeps.
+         * @description The signed in account, if any, and how many reports it keeps.
          */
         get: operations["me_v1_me_get"];
         put?: never;
         post?: never;
         /**
          * Delete Me
-         * @description Deletes the account on this browser and every report it keeps.
+         * @description Deletes the signed in account: every report it keeps, then its Supabase sign in.
+         *
+         *     The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
+         *     are already gone and 502 asks the page to try again.
          */
         delete: operations["delete_me_v1_me_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/merge-guest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Merge Guest
+         * @description Moves a guest's reports into the Google account that just signed in, then removes the guest.
+         *
+         *     For a guest who presses "Continue with Google" with a Google account that already exists
+         *     (from another phone): Supabase cannot link it, so the page signs in with Google and calls
+         *     this with both tokens. Both are checked, so only the browser that holds the guest's sign in
+         *     can move its reports.
+         */
+        post: operations["merge_guest_v1_me_merge_guest_post"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -675,13 +706,13 @@ export interface paths {
         };
         /**
          * List Saved
-         * @description Every report this browser's account keeps, newest first.
+         * @description Every report the signed in account keeps, newest first.
          */
         get: operations["list_saved_v1_saved_get"];
         put?: never;
         /**
          * Save Report
-         * @description Saves a hadahan or a match to My reports. Makes a guest account if there is none.
+         * @description Saves a hadahan or a match to My reports. The page signs in (anonymously) first.
          */
         post: operations["save_report_v1_saved_post"];
         delete?: never;
@@ -718,10 +749,109 @@ export interface paths {
         patch: operations["rename_saved_v1_saved__report_id__patch"];
         trace?: never;
     };
+    "/v1/price": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Report Price
+         * @description The price of one report for this buyer: LKR in Sri Lanka, USD everywhere else.
+         */
+        get: operations["report_price_v1_price_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Access
+         * @description Whether this browser's account has paid for this report, and what it may use on it.
+         *
+         *     A POST, so the birth details stay out of the address.
+         */
+        post: operations["access_v1_reports_access_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/coupons/apply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Apply Coupon
+         * @description The price of one report after a coupon. Uses nothing up: Unlock does that.
+         */
+        post: operations["apply_coupon_v1_coupons_apply_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/unlock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Unlock
+         * @description Unlocks one report with a free coupon and keeps it in My reports as paid.
+         *
+         *     A report already paid for gives back its order and uses nothing.
+         */
+        post: operations["unlock_v1_reports_unlock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AccessOut
+         * @description What the person may use on one report, and what it costs to unlock.
+         */
+        AccessOut: {
+            /** Paid */
+            paid: boolean;
+            /** Features */
+            features: ("ai_reading" | "ai_explain" | "full_detail" | "full_pdf")[];
+            /** Paid Reports */
+            paid_reports: boolean;
+            /** Account */
+            account: ("guest" | "google") | null;
+            price: components["schemas"]["PriceOut"];
+        };
         /** AllLettersResponse */
         AllLettersResponse: {
             /** Rule Set */
@@ -730,6 +860,16 @@ export interface components {
             provisional: boolean;
             /** Stars */
             stars: components["schemas"]["StarLettersOut"][];
+        };
+        /** ApplyCoupon */
+        ApplyCoupon: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /** Code */
+            code: string;
         };
         /** AvuruduItemOut */
         AvuruduItemOut: {
@@ -1022,6 +1162,26 @@ export interface components {
             bride?: components["schemas"]["JourneyOut"] | null;
             groom?: components["schemas"]["JourneyOut"] | null;
         };
+        /**
+         * CouponQuote
+         * @description The price after a coupon, or why the coupon does not work.
+         *
+         *     - free: 100% off, the report can be unlocked now
+         *     - payment_not_available: a discount, but there is no way to pay the rest yet
+         *     - unknown: no such code (counts as a wrong guess)
+         *     - ended: switched off or past its end date
+         *     - wrong_report: not for this kind of report
+         *     - used_up: no uses left in total
+         *     - account_limit: this account has used it as many times as it may
+         */
+        CouponQuote: {
+            /** Result */
+            result: ("free" | "payment_not_available") | ("unknown" | "ended" | "wrong_report" | "used_up" | "account_limit");
+            /** Percent Off */
+            percent_off?: number | null;
+            price: components["schemas"]["PriceOut"];
+            new_price?: components["schemas"]["PriceOut"] | null;
+        };
         /** DashaMainOut */
         DashaMainOut: {
             lord: components["schemas"]["Body"];
@@ -1246,6 +1406,11 @@ export interface components {
              * @default
              */
             name: string;
+        };
+        /** GuestMerge */
+        GuestMerge: {
+            /** Guest Token */
+            guest_token: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1651,6 +1816,13 @@ export interface components {
             /** Saved */
             saved: number;
         };
+        /** MergeOut */
+        MergeOut: {
+            /** Moved */
+            moved: number;
+            /** Saved */
+            saved: number;
+        };
         /** Meta */
         Meta: {
             /** Version */
@@ -1834,6 +2006,25 @@ export interface components {
             offset_label: string;
             /** Abbreviation */
             abbreviation: string;
+        };
+        /** OrderOut */
+        OrderOut: {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            price: components["schemas"]["PriceOut"];
+            /** Percent Off */
+            percent_off: number;
+            amount_paid: components["schemas"]["PriceOut"];
+            /**
+             * Method
+             * @enum {string}
+             */
+            method: "coupon" | "payment";
         };
         /** OtherOut */
         OtherOut: {
@@ -2184,6 +2375,19 @@ export interface components {
             match?: components["schemas"]["MatchOut"] | null;
             kuja?: components["schemas"]["KujaPairOut"] | null;
         };
+        /** PriceOut */
+        PriceOut: {
+            /**
+             * Amount
+             * @description In the smallest unit of the currency: cents
+             */
+            amount: number;
+            /**
+             * Currency
+             * @enum {string}
+             */
+            currency: "LKR" | "USD";
+        };
         /** QualityOut */
         QualityOut: {
             /** Step Days */
@@ -2220,6 +2424,19 @@ export interface components {
         Rename: {
             /** Title */
             title: string;
+        };
+        /** ReportPrice */
+        ReportPrice: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /** Country */
+            country: string;
+            price: components["schemas"]["PriceOut"];
+            /** Paid Reports */
+            paid_reports: boolean;
         };
         /** SaturnOut */
         SaturnOut: {
@@ -2264,6 +2481,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Created */
@@ -2288,6 +2510,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Request */
@@ -2319,6 +2546,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
         };
@@ -2744,6 +2976,19 @@ export interface components {
             waiting_for?: ("bride" | "groom") | null;
             time?: components["schemas"]["TimeResolveResponse"] | null;
             timeline?: components["schemas"]["TimelineOut"] | null;
+        };
+        /** Unlock */
+        Unlock: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /** Code */
+            code: string;
+        };
+        /** Unlocked */
+        Unlocked: {
+            order: components["schemas"]["OrderOut"];
+            saved: components["schemas"]["SavedOut"] | null;
+            access: components["schemas"]["AccessOut"];
         };
         /** UpcomingChange */
         UpcomingChange: {
@@ -4075,6 +4320,46 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description Reports deleted; Supabase could not delete the sign in yet */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    merge_guest_v1_me_merge_guest_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GuestMerge"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     list_saved_v1_saved_get: {
@@ -4231,6 +4516,164 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    report_price_v1_price_get: {
+        parameters: {
+            query: {
+                kind: "hadahan" | "porondam";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportPrice"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    access_v1_reports_access_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    apply_coupon_v1_coupons_apply_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplyCoupon"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CouponQuote"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unlock_v1_reports_unlock_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unlock"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unlocked"];
+                };
+            };
+            /** @description Not signed in with Google */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The coupon leaves something to pay (payment_not_available) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The coupon was refused: the reason, as in CouponQuote */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Too many wrong codes in the last hour */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

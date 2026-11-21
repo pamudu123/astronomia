@@ -1,21 +1,20 @@
-"""Accounts, sessions and saved reports (docs/16).
+"""Accounts and saved reports (docs/16, docs/19).
 
-A guest account is made quietly the first time someone presses Save. It is a random session
-code in a cookie, and nothing personal. Google sign in (later) turns a guest into a Google
-account and keeps its reports.
+Sign in is Supabase Auth's: an anonymous user on the first Save, or a Google account. The
+backend checks the caller's access token (app/auth.py) and keeps one `users` row per Supabase
+user, under the same id, made the first time that user calls. Supabase keeps the sessions, so
+this store keeps none, and nothing personal: names and emails stay in Supabase Auth.
 
-Only a hash of the session code is kept, so a copy of this database cannot be turned back into
-working sessions. Every saved report query filters on the owner, so one account can never read
-another's reports.
+Every saved report query filters on the owner, so one account can never read another's reports.
 
-One class for both databases: SQLite for local runs and tests, PostgreSQL on hosts without a
-lasting disk (set ASTRONOMIA_DATABASE_URL). The few differences are in `_Dialect`.
+One class for both databases: SQLite for local runs and tests, PostgreSQL (Supabase) on hosts
+without a lasting disk (set ASTRONOMIA_DATABASE_URL). The few differences are in `_Dialect`.
+SQLite makes its own tables. On PostgreSQL the tables are in the private `sidera` schema and are
+made by the migrations in `supabase/migrations/`, never by the app.
 """
 
 import datetime as dt
-import hashlib
 import json
-import secrets
 import sqlite3
 import threading
 import uuid
@@ -25,22 +24,18 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
 
-import psycopg
 from psycopg.types.json import Jsonb
+
+from app.store import postgres
 
 Clock = Callable[[], dt.datetime]
 Kind = Literal["guest", "google"]
 
-SCHEMA_VERSION = 1
-GUEST_SESSION_DAYS = 365
-# A guest account nobody has used for this long is deleted with its reports.
-GUEST_IDLE_DAYS = 365
-# A session is renewed (and its cookie sent again) at most once a day.
-RENEW_AFTER = dt.timedelta(days=1)
-
-
-def _hash(secret: str) -> str:
-    return hashlib.sha256(secret.encode()).hexdigest()
+SCHEMA_VERSION = 2
+# The tables this store uses. Queries name them as {users} and so on; see `_Dialect.sql`.
+TABLES = ("users", "saved_reports")
+# When the user was last seen is written at most once a day.
+SEEN_EVERY = dt.timedelta(days=1)
 
 
 def _utc_now() -> dt.datetime:
@@ -54,26 +49,13 @@ class User:
 
 
 @dataclass(frozen=True)
-class Session:
-    token: str  # goes in the cookie, never stored
-    user: User
-    expires_at: dt.datetime
-
-
-@dataclass(frozen=True)
-class FoundSession:
-    user: User
-    expires_at: dt.datetime
-    renewed: bool  # True when the cookie should be sent again with the new expiry
-
-
-@dataclass(frozen=True)
 class SavedSummary:
     id: str
     kind: str
     title: str
     summary: dict[str, Any]
     created_at: dt.datetime
+    paid: bool = False  # kept with an order (docs/18): a paid report
 
 
 @dataclass(frozen=True)
@@ -85,6 +67,7 @@ class SavedReport:
     created_at: dt.datetime
     input: dict[str, Any]
     snapshot: dict[str, Any]
+    paid: bool = False
 
 
 @dataclass(frozen=True)
@@ -105,54 +88,50 @@ class LimitReached(Exception):
 class _Dialect:
     """How SQLite and PostgreSQL differ for this store."""
 
-    timestamp: str
-    json: str
     placeholder: str
+    # Where the tables are: None for SQLite's own file, the private schema on PostgreSQL.
+    schema: str | None
+
+    def table(self, name: str) -> str:
+        return f"{self.schema}.{name}" if self.schema else name
 
     def sql(self, statement: str) -> str:
-        return statement.replace("?", self.placeholder)
+        """A query with its {table} names filled in and the right parameter marks."""
+        names = {name: self.table(name) for name in TABLES}
+        return statement.format(**names).replace("?", self.placeholder)
 
 
-_SQLITE = _Dialect(timestamp="TEXT", json="TEXT", placeholder="?")
-_POSTGRES = _Dialect(timestamp="TIMESTAMPTZ", json="JSONB", placeholder="%s")
+_SQLITE = _Dialect(placeholder="?", schema=None)
+_POSTGRES = _Dialect(placeholder="%s", schema=postgres.SCHEMA)
 
-
-def _schema(d: _Dialect) -> list[str]:
-    return [
-        "CREATE TABLE IF NOT EXISTS accounts_schema (version INTEGER NOT NULL)",
-        f"""CREATE TABLE IF NOT EXISTS users (
-            id TEXT PRIMARY KEY,
-            kind TEXT NOT NULL,
-            google_sub TEXT UNIQUE,
-            email TEXT,
-            name TEXT,
-            created_at {d.timestamp} NOT NULL,
-            last_seen_at {d.timestamp} NOT NULL
-        )""",
-        f"""CREATE TABLE IF NOT EXISTS sessions (
-            token_hash TEXT PRIMARY KEY,
-            user_id TEXT NOT NULL,
-            created_at {d.timestamp} NOT NULL,
-            expires_at {d.timestamp} NOT NULL
-        )""",
-        "CREATE INDEX IF NOT EXISTS sessions_user ON sessions (user_id)",
-        f"""CREATE TABLE IF NOT EXISTS saved_reports (
-            id TEXT PRIMARY KEY,
-            user_id TEXT NOT NULL,
-            kind TEXT NOT NULL,
-            title TEXT NOT NULL,
-            input {d.json} NOT NULL,
-            input_hash TEXT NOT NULL,
-            snapshot {d.json} NOT NULL,
-            summary {d.json} NOT NULL,
-            rules TEXT NOT NULL,
-            purchase_id TEXT,
-            created_at {d.timestamp} NOT NULL,
-            updated_at {d.timestamp} NOT NULL,
-            UNIQUE (user_id, input_hash)
-        )""",
-        "CREATE INDEX IF NOT EXISTS saved_reports_user ON saved_reports (user_id, created_at)",
-    ]
+# SQLite only. PostgreSQL gets its tables from supabase/migrations/.
+_SQLITE_SCHEMA = [
+    "CREATE TABLE IF NOT EXISTS accounts_schema (version INTEGER NOT NULL)",
+    """CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        kind TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        last_seen_at TEXT NOT NULL
+    )""",
+    # The guest cookie's sessions, before sign in moved to Supabase Auth.
+    "DROP TABLE IF EXISTS sessions",
+    """CREATE TABLE IF NOT EXISTS saved_reports (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        kind TEXT NOT NULL,
+        title TEXT NOT NULL,
+        input TEXT NOT NULL,
+        input_hash TEXT NOT NULL,
+        snapshot TEXT NOT NULL,
+        summary TEXT NOT NULL,
+        rules TEXT NOT NULL,
+        purchase_id TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        UNIQUE (user_id, input_hash)
+    )""",
+    "CREATE INDEX IF NOT EXISTS saved_reports_user ON saved_reports (user_id, created_at)",
+]
 
 
 class AccountStore:
@@ -168,11 +147,6 @@ class AccountStore:
         self._d = dialect
         self._connect = connect
         self.clock = clock
-        with self._connect() as db:
-            for statement in _schema(dialect):
-                db.execute(statement)
-            if db.execute("SELECT version FROM accounts_schema").fetchone() is None:
-                db.execute(self._d.sql("INSERT INTO accounts_schema VALUES (?)"), (SCHEMA_VERSION,))
 
     # Values in and out. SQLite keeps text, PostgreSQL its own types.
 
@@ -194,134 +168,137 @@ class AccountStore:
         loaded: dict[str, Any] = json.loads(value) if isinstance(value, str) else value
         return loaded
 
+    @staticmethod
+    def _read_id(value: Any) -> str:
+        """Ids are text in SQLite and uuid on PostgreSQL. Callers always get text."""
+        return str(value)
+
     def _run(self, db: Any, statement: str, params: Sequence[Any] = ()) -> Any:
         return db.execute(self._d.sql(statement), tuple(params))
 
-    # Accounts and sessions
+    # Accounts
 
-    def create_guest(self) -> Session:
-        """A new guest account with its first session. Also clears out old guests."""
+    def find_user(self, user_id: str, kind: Kind) -> User | None:
+        """The account of a Supabase user, or None when that user has not called before.
+
+        `kind` is what the user's token says now. A guest who linked Google becomes a Google
+        account, under the same id, so every report stays. A Google account never goes back to
+        guest. When the user was last seen is kept, at most once a day.
+        """
         now = self.clock()
         with self._connect() as db:
-            return self._insert_guest(db, now)
+            return self._find_user(db, user_id, kind, now)
 
-    def create_guest_with(self, report: NewReport, limit: int) -> tuple[Session, SavedSummary]:
-        """A new guest account holding its first report, kept together or not at all.
-
-        A save that fails leaves no empty account behind (and no cookie for one)."""
-        now = self.clock()
-        with self._connect() as db:
-            session = self._insert_guest(db, now)
-            item, _ = self._save(db, session.user.id, report, limit, now)
-        return session, item
-
-    def _insert_guest(self, db: Any, now: dt.datetime) -> Session:
-        user = User(id=str(uuid.uuid4()), kind="guest")
-        token = secrets.token_urlsafe(32)
-        expires = now + dt.timedelta(days=GUEST_SESSION_DAYS)
-        self._purge(db, now)
-        self._run(
-            db,
-            "INSERT INTO users (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?)",
-            (user.id, user.kind, self._ts(now), self._ts(now)),
-        )
-        self._run(
-            db,
-            "INSERT INTO sessions VALUES (?, ?, ?, ?)",
-            (_hash(token), user.id, self._ts(now), self._ts(expires)),
-        )
-        return Session(token=token, user=user, expires_at=expires)
-
-    def find_session(self, token: str) -> FoundSession | None:
-        """The account behind a session code, renewing the session once a day."""
-        now = self.clock()
-        with self._connect() as db:
-            row = self._run(
+    def _find_user(self, db: Any, user_id: str, kind: Kind, now: dt.datetime) -> User | None:
+        row = self._run(
+            db, "SELECT kind, last_seen_at FROM {users} WHERE id = ?", (user_id,)
+        ).fetchone()
+        if row is None:
+            return None
+        stored, seen = row
+        new_kind: Kind = "google" if "google" in (stored, kind) else "guest"
+        if new_kind != stored or now - self._read_ts(seen) >= SEEN_EVERY:
+            self._run(
                 db,
-                "SELECT u.id, u.kind, s.expires_at FROM sessions s "
-                "JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?",
-                (_hash(token),),
-            ).fetchone()
-            if row is None:
-                return None
-            user_id, kind, expires_raw = row
-            expires = self._read_ts(expires_raw)
-            if expires <= now:
-                self._run(db, "DELETE FROM sessions WHERE token_hash = ?", (_hash(token),))
-                return None
-            renewed_expiry = now + dt.timedelta(days=GUEST_SESSION_DAYS)
-            renew = renewed_expiry - expires >= RENEW_AFTER
-            if renew:
-                expires = renewed_expiry
-                self._run(
-                    db,
-                    "UPDATE sessions SET expires_at = ? WHERE token_hash = ?",
-                    (self._ts(expires), _hash(token)),
-                )
-                self._run(
-                    db, "UPDATE users SET last_seen_at = ? WHERE id = ?", (self._ts(now), user_id)
-                )
-        return FoundSession(user=User(id=user_id, kind=kind), expires_at=expires, renewed=renew)
+                "UPDATE {users} SET kind = ?, last_seen_at = ? WHERE id = ?",
+                (new_kind, self._ts(now), user_id),
+            )
+        return User(id=user_id, kind=new_kind)
 
-    def end_session(self, token: str) -> None:
+    def add_user(self, user_id: str, kind: Kind) -> User:
+        """The account of a Supabase user, made now if it is not there yet."""
+        now = self.clock()
         with self._connect() as db:
-            self._run(db, "DELETE FROM sessions WHERE token_hash = ?", (_hash(token),))
+            self._run(
+                db,
+                "INSERT INTO {users} (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?) "
+                "ON CONFLICT (id) DO NOTHING",
+                (user_id, kind, self._ts(now), self._ts(now)),
+            )
+            user = self._find_user(db, user_id, kind, now)
+        assert user is not None
+        return user
+
+    def move_reports(self, from_user: str, to_user: str) -> int:
+        """Moves every report of one account into another, then deletes the first account.
+
+        For a guest who signs in with a Google account that already exists. A report the second
+        account already keeps (the same input) is not copied twice. Returns how many moved.
+        """
+        if from_user == to_user:
+            return 0
+        with self._connect() as db:
+            cursor = self._run(
+                db,
+                "UPDATE {saved_reports} SET user_id = ?, updated_at = ? WHERE user_id = ? "
+                "AND input_hash NOT IN "
+                "(SELECT input_hash FROM {saved_reports} WHERE user_id = ?)",
+                (to_user, self._ts(self.clock()), from_user, to_user),
+            )
+            moved = int(cursor.rowcount)
+            self._delete_users(db, [from_user])
+        return moved
 
     def delete_user(self, user_id: str) -> None:
-        """The account, every session and every saved report."""
+        """The account and every saved report."""
         with self._connect() as db:
             self._delete_users(db, [user_id])
 
     def _delete_users(self, db: Any, user_ids: list[str]) -> None:
         for user_id in user_ids:
-            self._run(db, "DELETE FROM saved_reports WHERE user_id = ?", (user_id,))
-            self._run(db, "DELETE FROM sessions WHERE user_id = ?", (user_id,))
-            self._run(db, "DELETE FROM users WHERE id = ?", (user_id,))
-
-    def _purge(self, db: Any, now: dt.datetime) -> None:
-        self._run(db, "DELETE FROM sessions WHERE expires_at <= ?", (self._ts(now),))
-        idle_since = now - dt.timedelta(days=GUEST_IDLE_DAYS)
-        rows = self._run(
-            db,
-            "SELECT id FROM users WHERE kind = 'guest' AND last_seen_at <= ?",
-            (self._ts(idle_since),),
-        ).fetchall()
-        self._delete_users(db, [row[0] for row in rows])
+            self._run(db, "DELETE FROM {saved_reports} WHERE user_id = ?", (user_id,))
+            self._run(db, "DELETE FROM {users} WHERE id = ?", (user_id,))
 
     # Saved reports
 
-    def save(self, user_id: str, report: NewReport, limit: int) -> tuple[SavedSummary, bool]:
+    def save(
+        self, user_id: str, report: NewReport, limit: int, purchase_id: str | None = None
+    ) -> tuple[SavedSummary, bool]:
         """Keeps a report. Saving the same input again returns the one already kept.
 
-        The second value is True when a new report was kept. Raises LimitReached when the
-        account is full.
+        `purchase_id` is the order that paid for it (app/store/orders.py), if any. A report
+        kept free and saved again with one becomes paid. The second value is True when a new
+        report was kept. Raises LimitReached when the account is full.
         """
         now = self.clock()
         with self._connect() as db:
-            return self._save(db, user_id, report, limit, now)
+            return self._save(db, user_id, report, limit, now, purchase_id)
 
     def _save(
-        self, db: Any, user_id: str, report: NewReport, limit: int, now: dt.datetime
+        self,
+        db: Any,
+        user_id: str,
+        report: NewReport,
+        limit: int,
+        now: dt.datetime,
+        purchase_id: str | None = None,
     ) -> tuple[SavedSummary, bool]:
         existing = self._run(
             db,
-            "SELECT id, kind, title, summary, created_at FROM saved_reports "
+            "SELECT id, kind, title, summary, created_at, purchase_id FROM {saved_reports} "
             "WHERE user_id = ? AND input_hash = ?",
             (user_id, report.input_hash),
         ).fetchone()
         if existing is not None:
+            if purchase_id is not None and existing[5] != purchase_id:
+                self._run(
+                    db,
+                    "UPDATE {saved_reports} SET purchase_id = ?, updated_at = ? WHERE id = ?",
+                    (purchase_id, self._ts(now), existing[0]),
+                )
+                return self._summary((*existing[:5], purchase_id)), False
             return self._summary(existing), False
         (count,) = self._run(
-            db, "SELECT COUNT(*) FROM saved_reports WHERE user_id = ?", (user_id,)
+            db, "SELECT COUNT(*) FROM {saved_reports} WHERE user_id = ?", (user_id,)
         ).fetchone()
         if count >= limit:
             raise LimitReached
         report_id = str(uuid.uuid4())
         self._run(
             db,
-            "INSERT INTO saved_reports (id, user_id, kind, title, input, input_hash, "
-            "snapshot, summary, rules, created_at, updated_at) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO {saved_reports} (id, user_id, kind, title, input, input_hash, "
+            "snapshot, summary, rules, purchase_id, created_at, updated_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 report_id,
                 user_id,
@@ -332,23 +309,32 @@ class AccountStore:
                 self._json(report.snapshot),
                 self._json(report.summary),
                 report.rules,
+                purchase_id,
                 self._ts(now),
                 self._ts(now),
             ),
         )
-        return SavedSummary(report_id, report.kind, "", report.summary, now), True
+        summary = SavedSummary(
+            report_id, report.kind, "", report.summary, now, purchase_id is not None
+        )
+        return summary, True
 
     def _summary(self, row: Sequence[Any]) -> SavedSummary:
-        report_id, kind, title, summary, created = row
+        report_id, kind, title, summary, created, purchase_id = row
         return SavedSummary(
-            report_id, kind, title, self._read_json(summary), self._read_ts(created)
+            self._read_id(report_id),
+            kind,
+            title,
+            self._read_json(summary),
+            self._read_ts(created),
+            purchase_id is not None,
         )
 
     def list_saved(self, user_id: str) -> list[SavedSummary]:
         with self._connect() as db:
             rows = self._run(
                 db,
-                "SELECT id, kind, title, summary, created_at FROM saved_reports "
+                "SELECT id, kind, title, summary, created_at, purchase_id FROM {saved_reports} "
                 "WHERE user_id = ? ORDER BY created_at DESC, id",
                 (user_id,),
             ).fetchall()
@@ -357,7 +343,7 @@ class AccountStore:
     def count_saved(self, user_id: str) -> int:
         with self._connect() as db:
             (count,) = self._run(
-                db, "SELECT COUNT(*) FROM saved_reports WHERE user_id = ?", (user_id,)
+                db, "SELECT COUNT(*) FROM {saved_reports} WHERE user_id = ?", (user_id,)
             ).fetchone()
         return int(count)
 
@@ -365,28 +351,29 @@ class AccountStore:
         with self._connect() as db:
             row = self._run(
                 db,
-                "SELECT id, kind, title, summary, created_at, input, snapshot "
-                "FROM saved_reports WHERE user_id = ? AND id = ?",
+                "SELECT id, kind, title, summary, created_at, purchase_id, input, snapshot "
+                "FROM {saved_reports} WHERE user_id = ? AND id = ?",
                 (user_id, report_id),
             ).fetchone()
         if row is None:
             return None
-        summary = self._summary(row[:5])
+        summary = self._summary(row[:6])
         return SavedReport(
             id=summary.id,
             kind=summary.kind,
             title=summary.title,
             summary=summary.summary,
             created_at=summary.created_at,
-            input=self._read_json(row[5]),
-            snapshot=self._read_json(row[6]),
+            input=self._read_json(row[6]),
+            snapshot=self._read_json(row[7]),
+            paid=summary.paid,
         )
 
     def rename(self, user_id: str, report_id: str, title: str) -> bool:
         with self._connect() as db:
             cursor = self._run(
                 db,
-                "UPDATE saved_reports SET title = ?, updated_at = ? WHERE user_id = ? AND id = ?",
+                "UPDATE {saved_reports} SET title = ?, updated_at = ? WHERE user_id = ? AND id = ?",
                 (title, self._ts(self.clock()), user_id, report_id),
             )
             return bool(cursor.rowcount)
@@ -394,12 +381,13 @@ class AccountStore:
     def delete_saved(self, user_id: str, report_id: str) -> bool:
         with self._connect() as db:
             cursor = self._run(
-                db, "DELETE FROM saved_reports WHERE user_id = ? AND id = ?", (user_id, report_id)
+                db, "DELETE FROM {saved_reports} WHERE user_id = ? AND id = ?", (user_id, report_id)
             )
             return bool(cursor.rowcount)
 
 
 def sqlite_accounts(path: Path, clock: Clock = _utc_now) -> AccountStore:
+    """A store in a SQLite file, making its tables if they are not there yet."""
     path.parent.mkdir(parents=True, exist_ok=True)
     lock = threading.Lock()
 
@@ -413,12 +401,15 @@ def sqlite_accounts(path: Path, clock: Clock = _utc_now) -> AccountStore:
             finally:
                 db.close()
 
+    with connect() as db:
+        for statement in _SQLITE_SCHEMA:
+            db.execute(statement)
+        if db.execute("SELECT version FROM accounts_schema").fetchone() is None:
+            db.execute("INSERT INTO accounts_schema VALUES (?)", (SCHEMA_VERSION,))
     return AccountStore(_SQLITE, connect, clock)
 
 
 def postgres_accounts(url: str, clock: Clock = _utc_now) -> AccountStore:
-    def connect() -> psycopg.Connection[Any]:
-        # The connection's context manager commits on success and rolls back on error.
-        return psycopg.connect(url, connect_timeout=10)
-
-    return AccountStore(_POSTGRES, connect, clock)
+    """A store in the `sidera` schema. Raises MissingTables when the migrations are not applied."""
+    postgres.require_tables(url, TABLES)
+    return AccountStore(_POSTGRES, lambda: postgres.connect(url), clock)
