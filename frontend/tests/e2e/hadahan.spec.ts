@@ -51,7 +51,7 @@ test("a birth gives the full hadahan", async ({ page }) => {
   await expect(page.getByRole("img", { name: /Rashi chart/ })).toBeVisible();
   await expect(page.getByRole("table")).toContainText("Mars");
   await expect(page.getByRole("heading", { name: "Dasha timeline" })).toBeVisible();
-  await expect(page.locator('[data-card="kuja"]')).toContainText("Present, reduced");
+  await expect(page.locator('[data-card="kuja"]')).toContainText("Present, but weaker");
 
   // Birth details went in the request body and never into the page address.
   expect(JSON.parse(requests[0])).toMatchObject({ date: "1995-04-19", time: "14:35", lang: "en" });
@@ -160,14 +160,16 @@ test("the result shows this month for you", async ({ page }) => {
   await page.getByRole("button", { name: "Show my hadahan" }).click();
 
   const section = page.locator('[data-card="forecast"]');
-  await expect(section.getByRole("heading", { name: "This month for you" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Coming up" })).toBeVisible();
+  await expect(section.getByRole("heading", { name: "This month" })).toBeVisible();
   await expect(section).toContainText("December 2026");
   await expect(section.locator("[data-planet]")).toHaveCount(4);
   await expect(section.locator('[data-planet="saturn"]')).toContainText("8th house");
   const rahu = section.locator('[data-planet="rahu"]');
   await expect(rahu).toContainText("Changes sign");
   await expect(rahu).toContainText("On 5 December 2026 it moves into Makara, your 6th house.");
-  await expect(section).toContainText("It does not predict events, health or outcomes.");
+  // The general guidance note is said once, for the whole page.
+  await expect(page.locator('[data-card="note"]')).toContainText("It does not predict events, health or how long a life is.");
 });
 
 test("the forecast is in Sinhala on the Sinhala page", async ({ page }) => {
@@ -179,7 +181,7 @@ test("the forecast is in Sinhala on the Sinhala page", async ({ page }) => {
   await page.getByRole("option").first().click();
   await page.getByRole("button", { name: "මගේ හඳහන පෙන්වන්න" }).click();
   const section = page.locator('[data-card="forecast"]');
-  await expect(section.getByRole("heading", { name: "මේ මාසය ඔබට" })).toBeVisible();
+  await expect(section.getByRole("heading", { name: "මේ මාසය" })).toBeVisible();
   await expect(section).toContainText("2026 දෙසැම්බර්");
   await expect(section.locator("[data-planet]")).toHaveCount(4);
 });
@@ -201,11 +203,18 @@ test("the result shows the planet changes for you", async ({ page }) => {
   await page.getByRole("button", { name: "Show my hadahan" }).click();
 
   const section = page.locator('[data-card="changes"]');
-  await expect(section.getByRole("heading", { name: "Planet changes for you" })).toBeVisible();
+  await expect(section.getByRole("heading", { name: "Planet changes" })).toBeVisible();
   const rahu = section.locator('[data-change="rahu-ketu-2026-12"]');
   await expect(rahu).toContainText("5 December 2026, 22:32 Sri Lanka time");
+  // Counted from the lagna first; the Moon sign (gochara) is a tap away.
   await expect(rahu).toContainText("Rahu: 7th house to 6th house");
+  await expect(rahu).not.toContainText("Rahu: 4th house to 3rd house");
+  await section.getByRole("button", { name: "From Moon sign (gochara)" }).click();
   await expect(rahu).toContainText("Rahu: 4th house to 3rd house");
+  await section.getByRole("button", { name: "From lagna" }).click();
+  // The nearest two first, the rest a tap away.
+  await expect(section.locator("[data-change]")).toHaveCount(2);
+  await section.getByRole("button", { name: "Show all 5" }).click();
   await expect(section.locator("[data-change]")).toHaveCount(5);
   await expect(section.getByRole("link", { name: "Read about this change" })).toHaveCount(5);
   const personal: string[] = [];
@@ -323,7 +332,7 @@ test("the result leads with the birth details and three plain answers", async ({
   // What the chart was worked out from, with the way to correct it beside it.
   const details = page.locator('[data-card="details"]');
   await expect(details).toContainText("19 April 1995");
-  await expect(details).toContainText("14:35 local time");
+  await expect(details.getByRole("definition").nth(1)).toContainText("14:35");
   await expect(details).toContainText("Kandy");
   await expect(details).toContainText("UTC+05:30 on that date");
   await expect(details.getByRole("button", { name: "Edit details" })).toBeVisible();

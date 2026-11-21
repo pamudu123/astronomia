@@ -33,7 +33,7 @@ If `problems` is not empty, explain the problem kindly: copying mistakes are com
 
 The old horoscope page has an explain button that writes one chapter from this skill. The shape of a chapter is in the `explain-card` skill.
 
-- **`kendara.dates`, Possible birth dates.** "Answering" above as a chapter: how many windows fit and how many are exact, why there are several, what exact and near mean, how to narrow them down, and what to do next. If `list_cut_short` is true, say a year range or the birth star will bring the list down. If `problems` is not empty, lead with them, kindly. Never mention a date or time.
+- **`kendara.dates`, Possible birth dates.** "Why are there several dates, and how do I find the right one?" "Answering" above as a chapter: how many windows fit and how many are exact, why there are several, what exact and near mean, how to narrow them down, and what to do next. If `list_cut_short` is true, say a year range or the birth star will bring the list down. If `problems` is not empty, lead with them, kindly. Never mention a date or time.
 
 ## Never
 

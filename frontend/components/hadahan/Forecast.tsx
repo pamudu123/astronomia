@@ -77,12 +77,11 @@ export function Forecast({ lang, t, labels, request }: Props) {
   return (
     <section className={`rise ${styles.panel}`} aria-labelledby="forecast-title" data-card="forecast">
       <div className={styles.head}>
-        <h2 id="forecast-title" className={`display ${styles.title}`}>
+        <h3 id="forecast-title" className={`display ${styles.title}`}>
           {t.forecast}
-        </h2>
+        </h3>
         <span className={styles.month}>{forecast.month.title}</span>
       </div>
-      <p className="soft">{t.forecastLead}</p>
 
       <div className={styles.body}>
         <figure className={styles.sky}>
@@ -115,28 +114,24 @@ export function Forecast({ lang, t, labels, request }: Props) {
               >
                 <div className={styles.cardHead}>
                   <PlanetIcon body={planet.body} />
-                  <h3 className={styles.planet}>{labels.planet[planet.body].name}</h3>
+                  <h4 className={styles.planet}>{labels.planet[planet.body].name}</h4>
                   <span className={moves ? styles.badgeGold : styles.badge}>
                     {moves ? t.forecastMoves : fill(t.forecastHouse, { house: labels.house[planet.house - 1] })}
                   </span>
                 </div>
                 <MonthTrack planet={planet} days={days} labels={labels} />
-                <p>{planet.text}</p>
+                {/* What the house is about is the useful part; the sign and house are above. */}
+                <p>{planet.theme}</p>
                 {planet.moves.map((move) => (
                   <p key={move.date} className={styles.move}>
                     {move.text}
                   </p>
                 ))}
-                <p className={styles.small}>{planet.theme}</p>
               </li>
             );
           })}
         </ul>
       </div>
-
-      <p className={styles.small}>
-        {t.forecastNote} {forecast.provisional && t.forecastProvisional}
-      </p>
     </section>
   );
 }

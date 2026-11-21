@@ -228,11 +228,6 @@
   background: var(--night-raised);
 }
 
-.quickTitle {
-  font-size: 18px;
-  font-weight: 600;
-}
-
 .starsLink {
   display: inline-flex;
   align-items: center;

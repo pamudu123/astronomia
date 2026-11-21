@@ -17,14 +17,14 @@
 }
 
 .title {
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .month {
   padding: 4px 14px;
-  border: 1px solid var(--gold);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  color: var(--gold);
+  color: var(--ink-soft);
   font-size: 14px;
   font-weight: 600;
 }
@@ -53,6 +53,11 @@
     width: 100%;
     margin-inline: auto;
   }
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 14px;
 }
 
 .grid {
@@ -140,6 +145,7 @@
 
 .planet {
   flex: 1;
+  margin: 0;
   font-size: 17px;
   font-weight: 600;
 }
@@ -147,7 +153,7 @@
 .badge,
 .badgeGold {
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .badgeGold {
@@ -157,11 +163,6 @@
 
 .move {
   color: var(--gold);
-}
-
-.small {
-  color: var(--ink-soft);
-  font-size: 14px;
 }
 
 @media (max-width: 640px) {

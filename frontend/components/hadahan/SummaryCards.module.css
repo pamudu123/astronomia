@@ -104,8 +104,8 @@
   padding: 2px 10px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  color: var(--gold);
-  font-size: 13px;
+  color: var(--ink-soft);
+  font-size: 14px;
 }
 
 .visual {
@@ -133,7 +133,8 @@
 }
 
 .sub {
-  color: var(--gold);
+  color: var(--ink);
+  font-weight: 500;
 }
 
 .fact {

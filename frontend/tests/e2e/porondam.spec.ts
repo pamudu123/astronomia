@@ -357,8 +357,8 @@ test("each way of matching says what it compares, before anything is typed", asy
   await page.goto("/en/porondam");
   const full = page.getByRole("button", { name: /Full birth details/ });
   const quick = page.getByRole("button", { name: /Birth stars only/ });
-  await expect(full).toContainText("including Kuja dosha");
-  await expect(quick).toContainText("Checks that need a birth time, such as Kuja dosha, are left out.");
+  await expect(full).toContainText("with Kuja dosha. Needs birth times.");
+  await expect(quick).toContainText("When you don't know the birth times. Kuja dosha is left out.");
   await expect(full).toHaveAttribute("aria-pressed", "true");
   await quick.click();
   await expect(quick).toHaveAttribute("aria-pressed", "true");

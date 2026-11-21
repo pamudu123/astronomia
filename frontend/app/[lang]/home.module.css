@@ -182,8 +182,8 @@ html[lang="si"] .heroTitle {
 }
 
 .toolLabel {
-  color: var(--gold);
-  font-size: 15px;
+  color: var(--ink-soft);
+  font-size: 16px;
 }
 
 .toolTitle {
@@ -309,4 +309,3 @@ html[lang="si"] .heroTitle {
   font-size: 18px;
   font-weight: 600;
 }
-

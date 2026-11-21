@@ -18,9 +18,12 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [12-baby-rules.md](12-baby-rules.md) | The baby name letter table and child rules (set D), their sources and where the sources disagree |
 | [13-old-horoscopes.md](13-old-horoscopes.md) | Set E: finding the birth from an old paper kendara. How the search works, the edge margins and why, privacy and limits |
 | [14-ai-assistant-plan.md](14-ai-assistant-plan.md) | The AI chat assistant: Deep Agents, CopilotKit and AG-UI. Knows the page and the details entered, answers with cards, plain words, features used only when needed, step by step build and a growing question list |
-| [15-payments.md](15-payments.md) | Payments with PayHere: why PayHere, plans and fees, what is sold first, the payment flow, backend and site design, testing and going live |
+| [15-payments.md](15-payments.md) | Payments: on hold, because PayHere does not accept astrology services (2026-11-21). What a provider must approve, who to ask, what must be done before charging, and the earlier PayHere design kept for reference |
 | [16-accounts-and-saved-reports.md](16-accounts-and-saved-reports.md) | Saving results to "My reports": quiet guest accounts, Google sign in only at payment, data, API, security, screens and build steps |
 | [17-ai-explain-buttons.md](17-ai-explain-buttons.md) | AI explanations: a full detailed reading in chapters at the top of the chart and match results (modelled on competitor premium reports, only where we have the data), and collapsible "Explain" buttons on the 15 main places (small questions stay in the chat), the facts each sends, one set of skills shared with the Astro chat, the paid switch and build steps |
+
+| [policies/](policies/README.md) | The reviewed privacy notice, terms of use and refunds policy from the 2026-11-20 legal review, the placeholders still to fill, and what must be built before they go live |
+| [reviews/](reviews/) | Material for outside reviewers: the Sinhala wording spreadsheet |
 
 ## Read this first
 
