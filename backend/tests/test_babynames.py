@@ -52,7 +52,11 @@ def test_every_name_says_where_it_came_from() -> None:
     for row in data["names"]:
         assert row["source"] in sources - {"astronomia"}, row["en"]
         assert row["url"].startswith("https://en.wikipedia.org/wiki/"), row["en"]
-        assert row["meaning_from"] in {"wikipedia", "astronomia"}, row["en"]
+        assert row["meaning_from"] in {"wikipedia", "astronomia", "none"}, row["en"]
+        # A meaning with no source is left out, in both languages at once.
+        has_meaning = row["meaning_from"] != "none"
+        assert bool(row["meaning_en"]) is has_meaning, row["en"]
+        assert bool(row["meaning_si"]) is has_meaning, row["en"]
 
 
 def test_names_are_clean_text() -> None:
@@ -67,7 +71,6 @@ def test_names_are_clean_text() -> None:
         assert name.gender in {"boy", "girl", "both"}
         assert re.fullmatch(r"[A-Z][a-z]+", name.en), name.en
         assert not re.search(r"[A-Za-z]", name.si + name.meaning_si), name.en
-        assert name.meaning_en and name.meaning_si
         assert chr(0x2014) not in name.meaning_en and chr(0x2013) not in name.meaning_en
 
 

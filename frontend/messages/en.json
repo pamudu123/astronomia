@@ -89,13 +89,13 @@
     ]
   },
   "whyPage": {
-    "meta": "Why Sidera: precise maths, an AI engine tuned for Sinhala astrology, and rules verified with astrologers.",
+    "meta": "Why Sidera: how it calculates the chart, how it applies the traditional rules, and how AI explains the results in Sinhala and English.",
     "eyebrow": "Why Sidera",
-    "title": "Precise maths. Tuned AI. Checked by astrologers.",
+    "title": "We calculate the sky. AI helps you understand it.",
     "lead": "Behind every reading is careful groundwork: the exact sky, the rules of Sinhala astrology, and an AI engine built to work with both.",
     "ctaHadahan": "Create my hadahan",
     "ctaPorondam": "Match two charts",
-    "badges": ["Maths first", "Tuned AI", "Astrologer verified"],
+    "badges": ["Maths first", "Tuned AI", "Traditional rules"],
     "calc": {
       "title": "Try the maths",
       "label": "Three worked examples: the Moon's birth star, the shift between the Western and sidereal zodiacs, and the dasha periods of a life.",
@@ -104,7 +104,7 @@
       "count": "{n} of {total}",
       "star": {
         "name": "Birth star",
-        "note": "The Moon's longitude, cut into 12 signs and 27 stars.",
+        "note": "The zodiac is cut into 12 signs and 27 stars. The Moon's degree gives the birth star.",
         "moon": "Moon λ",
         "sun": "Sun λ",
         "rashi": "Rashi",
@@ -147,7 +147,7 @@
       {
         "icon": "maths",
         "title": "Maths is the engine",
-        "text": "Calculated, never guessed. The same answer every time."
+        "text": "Calculated, never guessed. The same birth details give the same planet positions every time."
       },
       {
         "icon": "ai",
@@ -156,8 +156,8 @@
       },
       {
         "icon": "check",
-        "title": "Verified with astrologers",
-        "text": "Rules verified with practising astrologers."
+        "title": "Traditional rules",
+        "text": "Results are read by the rules of Sinhala astrology."
       }
     ],
     "groundTitle": "What goes into one reading",
@@ -224,7 +224,7 @@
     },
     {
       "title": "Private by default",
-      "text": "Birth details are used for the calculation and then discarded."
+      "text": "Birth details are used for the calculation. A copy is kept only if you save or share the result."
     },
     {
       "title": "Made for the world",
@@ -267,7 +267,7 @@
       "working": "Working out your chart",
       "tipTimeTitle": "The exact time matters.",
       "tipTime": "A few minutes can change the lagna. We will tell you if your time is close to a change.",
-      "tipPrivacyTitle": "Nothing is stored.",
+      "tipPrivacyTitle": "Your chart is not saved automatically.",
       "tipPrivacy": "Your details are used once for the calculation.",
       "moonAlt": "The full moon"
     },
@@ -437,7 +437,7 @@
       "guide": [
         "The box at the top is house 1. It holds your rising sign, {lagna}, so every other house is counted from here.",
         "Houses count anticlockwise: 2 and 3 are in the top left corner, 4 is on the left, and so on round to 12 at the top right.",
-        "Each short name is a planet in that house. The Moon is in house {house}, which is why your Moon sign is {moon}.",
+        "Each short name is a planet in that box. The Moon is in house {house}, in {moon}, so {moon} is your Moon sign.",
         "Now explore. The table lists each planet's sign, degree, house and star. Houses with no planets are empty on purpose."
       ]
     }
@@ -741,7 +741,7 @@
       {
         "icon": "nothing",
         "title": "Nothing kept by default",
-        "text": "A chart or a match is worked out and sent back. Nothing about it is saved unless you press Save."
+        "text": "A chart or a match is worked out and shown to you. A copy is kept only if you press Save or create a share link."
       },
       {
         "icon": "share",
@@ -766,7 +766,7 @@
         "title": "What is kept",
         "body": [
           "Nothing, unless you press Save on a result or Create link in the Share dialog.",
-          "Then a copy of that result is kept, in Sinhala and English, with the birth date, time and place line, and the name or names unless you chose to hide them. The link code and its delete code are kept only in a scrambled (hashed) form.",
+          "When you create a share link, a copy of that result is kept, in Sinhala and English, with the birth date, time and place line, and the name or names unless you chose to hide them. The link code and its delete code are kept only as hashes, a one-way scramble that cannot be turned back into the codes.",
           "A share link closes after 30 days and is then deleted. The device that made it can delete it sooner.",
           "When you press Save, a copy of that result is kept for My reports, in Sinhala and English, with the details it was made from (name, birth date, time and place), so you can open it, download it and share it again. It belongs to a guest account that holds nothing else about you: no email, no name of yours and no password.",
           "A guest account that is not used for a year is deleted with its reports. You can delete one report, or all of them, from My reports at any time."

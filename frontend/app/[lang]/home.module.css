@@ -75,6 +75,17 @@
   color: var(--gold);
 }
 
+/* The Sinhala tagline: Sinhala fonts, and no letter spacing, which would pull letters apart. */
+.tagline:lang(si) .taglineSky {
+  font-family: var(--font-serif-sinhala), serif;
+  font-size: 22px;
+}
+
+.tagline:lang(si) .taglineCalc {
+  font-family: var(--font-sans-sinhala), sans-serif;
+  letter-spacing: normal;
+}
+
 .heroTitle {
   font-size: clamp(40px, 5vw, 64px);
   line-height: 1.1;

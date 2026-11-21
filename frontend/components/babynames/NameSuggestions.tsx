@@ -140,10 +140,15 @@ export function NameSuggestions({ t, lang, letters, selected, initial = null }: 
                 <span className={styles.nameEn}>{name.en}</span>
                 <span className={styles.tagSoft}>{n.genders[name.gender as "boy" | "girl"] ?? n.both}</span>
               </div>
-              <p>{name.meaning}</p>
-              <p className={styles.small}>
-                {lang === "si" ? name.meaning_en : <span lang="si">{name.meaning_si}</span>}
-              </p>
+              {/* Names whose meaning has no source come with an empty meaning: show none. */}
+              {name.meaning && (
+                <>
+                  <p>{name.meaning}</p>
+                  <p className={styles.small}>
+                    {lang === "si" ? name.meaning_en : <span lang="si">{name.meaning_si}</span>}
+                  </p>
+                </>
+              )}
               <a className={styles.source} href={name.url} target="_blank" rel="noopener noreferrer">
                 {name.source === "wikipedia_name" ? n.sourceName : n.sourcePerson}
               </a>

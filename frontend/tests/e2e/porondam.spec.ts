@@ -197,7 +197,7 @@ test("the Sinhala result uses Sinhala names", async ({ page }) => {
     await card.getByRole("combobox").fill("kandy");
     await card.getByRole("option").first().click();
   }
-  await page.getByRole("button", { name: "කේන්දර ගළපන්න" }).click();
+  await page.getByRole("button", { name: "පොරොන්දම් ගළපන්න" }).click();
   await expect(page.locator('[data-factor="dina"]')).toContainText("නැකත්");
   await expect(page.locator('[data-factor="weekday"]')).toContainText("දින");
   await expect(page.locator('[data-check="rajju"]')).toContainText("රජ්ජු");
