@@ -38,6 +38,16 @@
   color: var(--gold);
 }
 
+/* The Sinhala tagline: Sinhala fonts, and no letter spacing, which would pull letters apart. */
+.tagline:lang(si) {
+  font-family: var(--font-serif-sinhala), serif;
+}
+
+.tagline:lang(si) .taglineCalc {
+  font-family: var(--font-sans-sinhala), sans-serif;
+  letter-spacing: normal;
+}
+
 .disclaimer {
   max-width: 620px;
 }

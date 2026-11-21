@@ -13,7 +13,7 @@ test("the footer links to the privacy page, which is marked as a draft", async (
 test("the terms page in Sinhala", async ({ page }) => {
   await page.goto("/si/terms");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("භාවිත නියම");
-  await expect(page.getByRole("heading", { name: "මාර්ගෝපදේශය සඳහා පමණි" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "මඟපෙන්වීමක් සඳහා පමණයි" })).toBeVisible();
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "පෞද්ගලිකත්වය" })).toBeVisible();
 });
 

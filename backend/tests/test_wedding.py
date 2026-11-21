@@ -140,7 +140,7 @@ def test_the_finder_in_english(client: TestClient) -> None:
 
 def test_the_finder_in_sinhala(client: TestClient) -> None:
     body = client.post("/v1/wedding-nakath", json={**BODY, "lang": "si"}).json()
-    assert body["ceremonies"][0]["name"] == "පෝරුව චාරිත්‍රය"
+    assert body["ceremonies"][0]["name"] == "පෝරුවේ චාරිත්‍ර"
     assert body["ceremonies"][0]["suggestions"][0]["passes"][0].startswith("චන්ද්‍රයා")
 
 

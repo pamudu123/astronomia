@@ -13,9 +13,10 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
       <div className={`container ${styles.inner}`}>
         <p className={styles.brandBlock}>
           <span className={styles.brand}>Sidera</span>
-          <span className={styles.tagline} lang="en">
+          <span className={styles.tagline} lang={lang}>
             {dict.hero.tagline.sky}
-            <span className="visually-hidden">,</span> <span className={styles.taglineCalc}>{dict.hero.tagline.calculated}</span>
+            {lang === "en" && <span className="visually-hidden">,</span>}{" "}
+            <span className={styles.taglineCalc}>{dict.hero.tagline.calculated}</span>
           </span>
         </p>
         <p className={styles.disclaimer}>{dict.footer.disclaimer}</p>

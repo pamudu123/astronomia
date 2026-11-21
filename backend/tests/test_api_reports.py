@@ -245,8 +245,8 @@ def test_no_reading_no_section(client: TestClient) -> None:
 def test_the_match_report_takes_a_reading_too(client: TestClient) -> None:
     body = {**porondam(NIMALI, KASUN, lang="si"), "reading": READING[:1]}
     printed = text(post(client, body))
-    # "AI reading" in Sinhala; PDF text extraction splits conjunct letters, so one plain word.
-    assert "කියවීම" in printed
+    # The Sinhala heading keeps "AI" in Latin letters, and only the reading section prints it.
+    assert "AI" in printed
     assert "Your nature" in printed
 
 

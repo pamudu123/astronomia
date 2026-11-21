@@ -66,7 +66,7 @@ test("the Moon sign changes the list, and a row opens the quick match", async ({
 test("a star page in Sinhala", async ({ page }) => {
   await mockBackend(page);
   await page.goto("/si/porondam/stars/krittika");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("කැති: ගැළපෙන නැකැත්");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("කැති: ගැළපෙන නැකත්");
   await expect(page.locator("[data-star]")).toHaveCount(36);
   await expect(page.getByRole("button", { name: "මනාලයාට" })).toBeVisible();
 });
