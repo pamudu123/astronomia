@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { type Page, expect, test } from "@playwright/test";
 
+import { SUPABASE, standInSupabase } from "./supabase";
+
 /** The backend is not running in these tests: its answers are saved real responses. */
 const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
 const json = (name: string) => ({ contentType: "application/json", body: fixture(name) });
@@ -55,22 +57,26 @@ async function showHadahan(page: Page) {
   await expect(page.locator('[data-card="lagna"]')).toBeVisible();
 }
 
-test("a hadahan is saved quietly, with no sign in, and My reports appears", async ({ page }) => {
+test("a hadahan is saved quietly as a guest, and My reports appears", async ({ page }) => {
   await mockTools(page);
+  const supabase = await standInSupabase(page);
   const posted: string[] = [];
+  const tokens: (string | null)[] = [];
   let answer = 201;
-  await page.route("**/api/v1/saved", (route) => {
+  await page.route("**/api/v1/saved", async (route) => {
     posted.push(route.request().postData() ?? "");
+    tokens.push(await route.request().headerValue("x-sidera-token"));
     const created = answer === 201;
     answer = 200;
     return route.fulfill(reply(created ? 201 : 200, { ...hadahanItem, created }, { "set-cookie": HINT }));
   });
   await showHadahan(page);
 
-  // Nothing about accounts shows before Save.
+  // Nothing about accounts happens before Save: no sign in, no Google.
   await expect(page.locator("[data-my-reports]")).toHaveCount(0);
-  await expect(page.getByText(/sign in/i)).toHaveCount(0);
+  await expect(page.locator("[data-google]")).toHaveCount(0);
   expect(posted).toHaveLength(0);
+  expect(supabase.calls).toEqual([]);
 
   const save = page.locator("[data-save]");
   await save.getByRole("button", { name: "Save" }).click();
@@ -81,6 +87,9 @@ test("a hadahan is saved quietly, with no sign in, and My reports appears", asyn
     name: "Nimali",
     birth: { date: "1995-04-19", time: "14:35", lang: "en" },
   });
+  // The first Save signed this browser in as a guest, and the save carried its token.
+  expect(supabase.guests()).toBe(1);
+  expect(tokens[0]).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/);
 
   // The header now offers My reports, on phones too.
   await expect(page.locator("[data-my-reports]")).toBeVisible();
@@ -88,31 +97,31 @@ test("a hadahan is saved quietly, with no sign in, and My reports appears", asyn
   await expect(page).toHaveURL(/\/en\/my$/);
 });
 
-test("two tabs saving at once share one guest account", async ({ context }) => {
+test("two tabs saving at once share one guest", async ({ context }) => {
+  const supabase = await standInSupabase(context);
   const tabs = [await context.newPage(), await context.newPage()];
   for (const tab of tabs) {
     await mockTools(tab);
     await showHadahan(tab);
   }
-  // The first save is held open; a second save sent meanwhile would carry no cookie.
-  const cookies: (string | null)[] = [];
+  // The first save is held open; a second save sent meanwhile would sign in a second guest.
+  const tokens: (string | null)[] = [];
   let release = () => {};
   const held = new Promise<void>((resolve) => (release = resolve));
   await context.route("**/api/v1/saved", async (route) => {
-    cookies.push(await route.request().headerValue("cookie"));
-    if (cookies.length === 1) await held;
-    const first = cookies.length === 1;
-    const headers: Record<string, string> = first ? { "set-cookie": "sid=one; Path=/; HttpOnly; SameSite=Lax" } : {};
-    return route.fulfill(reply(201, { ...hadahanItem, created: true }, headers));
+    tokens.push(await route.request().headerValue("x-sidera-token"));
+    if (tokens.length === 1) await held;
+    return route.fulfill(reply(201, { ...hadahanItem, created: true }));
   });
 
   for (const tab of tabs) await tab.locator("[data-save]").getByRole("button", { name: "Save" }).click();
-  await expect.poll(() => cookies.length).toBe(1);
+  await expect.poll(() => tokens.length).toBe(1);
   await tabs[1].waitForTimeout(300);
-  expect(cookies).toHaveLength(1); // the second tab waits for the first answer
+  expect(tokens).toHaveLength(1); // the second tab waits for the first answer
   release();
-  await expect.poll(() => cookies.length).toBe(2);
-  expect(cookies[1]).toContain("sid=one");
+  await expect.poll(() => tokens.length).toBe(2);
+  expect(tokens[1]).toBe(tokens[0]);
+  expect(supabase.guests()).toBe(1);
   for (const tab of tabs) {
     await expect(tab.locator("[data-save]").getByRole("status")).toContainText("Saved to My reports.");
   }
@@ -120,6 +129,7 @@ test("two tabs saving at once share one guest account", async ({ context }) => {
 
 test("saving the same result again says it is already there", async ({ page }) => {
   await mockTools(page);
+  await standInSupabase(page);
   await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { ...hadahanItem, created: false })));
   await showHadahan(page);
   const save = page.locator("[data-save]");
@@ -129,6 +139,7 @@ test("saving the same result again says it is already there", async ({ page }) =
 
 test("a full My reports shows the reason", async ({ page }) => {
   await mockTools(page);
+  await standInSupabase(page);
   await page.route("**/api/v1/saved", (route) => route.fulfill(reply(409, { detail: "saved report limit reached" })));
   await showHadahan(page);
   const save = page.locator("[data-save]");
@@ -156,7 +167,7 @@ test("My reports lists, renames and deletes", async ({ page }) => {
   const chart = page.locator('[data-saved-report="hadahan"]');
   await expect(chart).toContainText("Nimali's birth chart");
   await expect(chart).toContainText("Lagna Simha · Rashi Vrischika · Jyeshtha");
-  await expect(page.getByText("kept for this browser only")).toBeVisible();
+  await expect(page.getByText("Your reports are kept on this browser.")).toBeVisible();
 
   await chart.getByRole("button", { name: "Rename" }).click();
   await chart.getByLabel("Name for this report").fill("Amma");
@@ -184,6 +195,51 @@ test("everything can be deleted at once", async ({ page }) => {
   await page.getByRole("button", { name: "Yes, delete everything" }).click();
   await expect(page.getByText("Everything is deleted. Nothing from it is kept.")).toBeVisible();
   expect(wiped).toEqual(["DELETE"]);
+});
+
+test("My reports offers Google to someone who saved on another device", async ({ page }) => {
+  await standInSupabase(page);
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { reports: [] })));
+  await page.goto("/en");
+  await page.locator("[data-footer-sign-in]").click();
+  await expect(page).toHaveURL(/\/en\/my#sign-in$/);
+  const box = page.locator("#sign-in");
+  await expect(box).toContainText("Saved reports on another device?");
+  await box.getByRole("button", { name: "Continue with Google" }).click();
+  // Nobody is signed in here, so this is a plain Google sign in, coming back to the callback page.
+  await expect(page).toHaveURL((url) => url.href.startsWith(`${SUPABASE}/auth/v1/authorize?`));
+  const url = new URL(page.url());
+  expect(url.searchParams.get("provider")).toBe("google");
+  expect(url.searchParams.get("redirect_to")).toContain("/en/auth/callback?next=%2Fen%2Fmy");
+});
+
+test("a guest who continues with Google links it to the same account", async ({ page }) => {
+  const supabase = await standInSupabase(page);
+  await mockTools(page);
+  await page.route("**/api/v1/saved", (route) =>
+    route.fulfill(route.request().method() === "POST" ? reply(201, { ...hadahanItem, created: true }) : reply(200, { reports: [hadahanItem] })),
+  );
+  await showHadahan(page);
+  await page.locator("[data-save]").getByRole("button", { name: "Save" }).click();
+  await expect(page.locator("[data-save]").getByRole("status")).toContainText("Saved to My reports.");
+
+  await page.goto("/en/my");
+  const box = page.locator("#sign-in");
+  await expect(box.getByRole("heading", { name: "Keep your reports on any device" })).toBeVisible();
+  await expect(box).toContainText("Any Google account works");
+  await box.getByRole("button", { name: "Continue with Google" }).click();
+  await expect(page).toHaveURL((url) => url.href.startsWith(`${SUPABASE}/google?`));
+  expect(supabase.calls).toContain("GET /auth/v1/user/identities/authorize");
+  expect(supabase.guests()).toBe(1);
+});
+
+test("a sign in that fails on the way back says so", async ({ page }) => {
+  await standInSupabase(page);
+  await page.goto("/en/auth/callback?error=access_denied&error_description=cancelled");
+  const main = page.locator("main");
+  await expect(main.getByRole("alert")).toHaveText("Signing in did not finish. Please try again from My reports.");
+  await expect(main.getByRole("link", { name: "My reports" })).toHaveAttribute("href", "/en/my");
 });
 
 test("an empty My reports points to the tools", async ({ page }) => {

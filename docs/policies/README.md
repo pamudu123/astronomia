@@ -53,6 +53,11 @@ changed until then (docs/19, step 5 updates it).
 - **The account id is the Supabase user id.** Supabase Auth holds, for an anonymous user, only the
   id, the time it was made and last signed in, and the network address Supabase logs. Saved
   reports stay in the app's own tables.
+- **Continue with Google.** Optional, offered in My reports and the footer. Supabase Auth then
+  keeps what Google gives with the basic scopes: the Google account id, email, name and picture
+  address, and when the account signed in. The site shows the email in My reports; the backend
+  reads only the user id and whether it is a guest. A guest who continues with Google keeps the
+  same account, so the reports saved on that browser stay with it.
 - **Where.** The database and Supabase Auth are in Singapore (Supabase project on AWS
   ap-southeast-1). Supabase becomes a processor to name, next to Render and Vercel.
 - **Old guest records.** The migration that removes the old cookie sessions also deletes the guest

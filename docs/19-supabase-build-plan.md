@@ -70,7 +70,8 @@ Browser ── signs in ──▶ Supabase Auth (anonymous, Google)
 | Where | Setting | Secret? |
 |---|---|---|
 | Vercel | `NEXT_PUBLIC_SUPABASE_URL` = `https://ihzvwnwkbcqldhrvsrle.supabase.co` | No |
-| Vercel | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | No (public by design) |
+| Vercel | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` = `sb_publishable_vlBrz647bGurzFAoUhrrxQ_oJlRSgtb` (staging) | No (public by design) |
+| Supabase, Authentication → Sign In / Providers | **Allow manual linking: on.** Without it a guest cannot link Google | No |
 | Render, `astronomia-api` | `ASTRONOMIA_DATABASE_URL` = Supabase session pooler connection string | **Yes.** Owner sets it |
 | Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_URL` = the project address, for the signing keys (`https://ihzvwnwkbcqldhrvsrle.supabase.co` on staging). Without it nobody can sign in | No |
 | Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_SECRET_KEY`, only for deleting accounts | **Yes.** Owner sets it |
@@ -123,6 +124,30 @@ Notes from building each step, for whoever changes it next.
 - Tests make their own ES256 key and sign stand-in tokens with it (`backend/tests/auth.py`), so
   the real checks run: `tests/test_auth.py` for the token rules, `tests/test_api_saved.py` for
   the endpoints.
+
+### Step 3: website sign in
+
+- **`frontend/lib/supabase.ts`** holds the Supabase client, loaded only when an account action
+  first needs it. It signs in anonymously (`signInAnonymously`), and "Continue with Google"
+  calls `linkIdentity` for a guest (same user id, reports stay) or `signInWithOAuth` when nobody
+  is signed in here (a second phone). PKCE flow; Supabase keeps the sign in in local storage and
+  renews it.
+- **Every account call** in `frontend/lib/account.ts` sends the access token. The page puts it
+  in `X-Sidera-Token`, and the `/api` forward (`frontend/proxy.ts`, `lib/forward.ts`) hands it
+  to the backend as `Authorization: Bearer`. Not Authorization from the page itself: on the
+  private staging site that header carries the staging password. A token the backend refuses
+  signs the browser out; a Save then tries once more as a new guest.
+- **Saves wait for each other across tabs** (Web Locks), so two first saves make one guest.
+- **My reports** shows "Continue with Google" (`components/account/GoogleSignIn.tsx`): for a
+  guest with reports, "Keep your reports on any device"; for anyone else, "Saved reports on
+  another device?". Signed in with Google, it names the account. The footer's "Already saved?
+  Sign in" link goes to it (`/<lang>/my#sign-in`).
+- **`/<lang>/auth/callback`** (`app/[lang]/auth/callback`) exchanges the code Supabase sends
+  back and goes on to the page in `next` (only paths on this site). `/auth/callback` without a
+  language is sent to it by the language redirect, query kept. The redirect URLs already allowed
+  in Supabase (`https://sidera.ppwrks.com/**` and the rest) cover it.
+- Browser tests answer Supabase's calls themselves (`frontend/tests/e2e/supabase.ts`); CI builds
+  the site pointed at `https://supabase.e2e.test`.
 
 ## 6. Checks before production
 

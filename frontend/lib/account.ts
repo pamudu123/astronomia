@@ -1,6 +1,7 @@
 /**
- * My reports (docs/16). The first Save makes a quiet guest account: an HttpOnly cookie the
- * backend sets, tied to this browser. Nobody signs up. Google sign in comes later, at payment.
+ * My reports (docs/16, docs/19). The first Save signs this browser in to Supabase as a guest
+ * (lib/supabase.ts); nobody signs up. Every account call then carries the access token, and the
+ * backend finds the account from it. "Continue with Google" keeps the same account on any device.
  */
 import type { components } from "./api-types";
 import type { BirthRequest } from "./hadahan";
@@ -8,6 +9,7 @@ import type { Locale } from "./i18n";
 import type { PersonInput, PorondamRequest } from "./porondam";
 import type { ReportRequest } from "./report";
 import { ensureOk } from "./request";
+import { accessToken, signInConfigured, signedInToken, supabase } from "./supabase";
 
 export type SavedItem = components["schemas"]["SavedOut"];
 export type SavedCreated = components["schemas"]["SavedCreated"];
@@ -15,13 +17,47 @@ export type SavedDetail = components["schemas"]["SavedDetail"];
 
 const API = "/api/v1";
 const JSON_HEADERS = { "content-type": "application/json" };
+/**
+ * The header the access token travels in to the site's /api forward, which hands it on to the
+ * backend as `Authorization: Bearer` (proxy.ts). Not Authorization itself: on a private
+ * staging site that header carries the staging password.
+ */
+export const TOKEN_HEADER = "X-Sidera-Token";
+
+type Call = { method?: string; body?: unknown; signIn?: boolean };
+
+/**
+ * A call to the account API with this browser's access token. With `signIn`, a browser with no
+ * sign in becomes a guest first. A token the backend refuses (a deleted account, a sign in
+ * revoked elsewhere) signs this browser out, and a call that may sign in tries once more.
+ */
+async function call(path: string, { method = "GET", body, signIn = false }: Call = {}): Promise<Response> {
+  for (let attempt = 0; ; attempt++) {
+    const token = signIn ? await signedInToken() : await accessToken();
+    const headers: Record<string, string> = body === undefined ? {} : { ...JSON_HEADERS };
+    if (token) headers[TOKEN_HEADER] = token;
+    const response = await fetch(`${API}${path}`, {
+      method,
+      headers,
+      cache: "no-store",
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+    if (response.status !== 401 || !token) return response;
+    await signOutHere();
+    if (!signIn || attempt > 0) return response;
+  }
+}
+
+/** Forgets the sign in on this browser only. */
+export async function signOutHere(): Promise<void> {
+  if (signInConfigured()) await (await supabase()).auth.signOut({ scope: "local" });
+  announce();
+}
 
 /** Saves a result. Saving one already kept answers with that one (`created` is false). */
 export function saveReport(body: ReportRequest): Promise<SavedCreated> {
   return oneSaveAtATime(async () => {
-    const response = await ensureOk(
-      await fetch(`${API}/saved`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(body) }),
-    );
+    const response = await ensureOk(await call("/saved", { method: "POST", body, signIn: true }));
     announce();
     return (await response.json()) as SavedCreated;
   });
@@ -31,10 +67,9 @@ export const SAVE_LOCK = "sidera-save";
 let saving: Promise<unknown> = Promise.resolve();
 
 /**
- * Saves wait for each other across every tab of this browser. A first save makes the guest
- * account and sets its cookie; a second save sent before that cookie exists would make a
- * second account, and the browser keeps only one of the two cookies. Browsers without Web
- * Locks queue saves within the tab.
+ * Saves wait for each other across every tab of this browser. A first save signs the browser
+ * in as a guest; a second save sent before that sign in is kept would make a second guest, and
+ * the browser keeps only one of the two. Browsers without Web Locks queue saves within the tab.
  */
 function oneSaveAtATime<T>(work: () => Promise<T>): Promise<T> {
   const locks = typeof navigator === "undefined" ? undefined : navigator.locks;
@@ -45,39 +80,34 @@ function oneSaveAtATime<T>(work: () => Promise<T>): Promise<T> {
 }
 
 export async function listSaved(): Promise<SavedItem[]> {
-  const response = await ensureOk(await fetch(`${API}/saved`, { cache: "no-store" }));
+  const response = await ensureOk(await call("/saved"));
   const body = (await response.json()) as { reports: SavedItem[] };
   announce();
   return body.reports;
 }
 
 export async function getSaved(id: string, lang: Locale): Promise<SavedDetail> {
-  const url = `${API}/saved/${encodeURIComponent(id)}?lang=${lang}`;
-  const response = await ensureOk(await fetch(url, { cache: "no-store" }));
+  const response = await ensureOk(await call(`/saved/${encodeURIComponent(id)}?lang=${lang}`));
   return (await response.json()) as SavedDetail;
 }
 
 export async function renameSaved(id: string, title: string): Promise<void> {
-  await ensureOk(
-    await fetch(`${API}/saved/${encodeURIComponent(id)}`, {
-      method: "PATCH",
-      headers: JSON_HEADERS,
-      body: JSON.stringify({ title }),
-    }),
-  );
+  await ensureOk(await call(`/saved/${encodeURIComponent(id)}`, { method: "PATCH", body: { title } }));
 }
 
 export async function deleteSaved(id: string): Promise<void> {
-  const response = await fetch(`${API}/saved/${encodeURIComponent(id)}`, { method: "DELETE" });
+  const response = await call(`/saved/${encodeURIComponent(id)}`, { method: "DELETE" });
   // Already gone counts as deleted.
   if (response.status !== 404) await ensureOk(response);
   announce();
 }
 
-/** Deletes the guest account on this browser and every report in it. */
+/** Deletes the signed in account and every report in it, then signs this browser out. */
 export async function deleteEverything(): Promise<void> {
-  await ensureOk(await fetch(`${API}/me`, { method: "DELETE" }));
-  announce();
+  const response = await call("/me", { method: "DELETE" });
+  // Nobody signed in here: there is nothing to delete.
+  if (response.status !== 401) await ensureOk(response);
+  await signOutHere();
 }
 
 // The backend also sets a small cookie, "sidera_saved=1", while this browser keeps reports. It

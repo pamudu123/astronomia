@@ -234,7 +234,8 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "legal": "About this site",
-    "changes": "Planet changes"
+    "changes": "Planet changes",
+    "signIn": "Already saved? Sign in"
   },
   "soon": {
     "title": "Coming soon",
@@ -713,7 +714,7 @@
     "deleteYes": "Yes, delete",
     "deleting": "Deleting…",
     "actionFailed": "That did not work. Please try again.",
-    "browserOnly": "Your reports are kept for this browser only. If you clear its data or use another device, they will not be there.",
+    "browserOnly": "Your reports are kept on this browser. Continue with Google to keep them if you clear its data or change phone.",
     "deleteAll": "Delete all my saved reports",
     "deleteAllConfirm": "Delete every saved report? This cannot be undone.",
     "deleteAllYes": "Yes, delete everything",
@@ -721,7 +722,19 @@
     "banner": "Saved report",
     "back": "My reports",
     "goneTitle": "This report is not here",
-    "goneText": "It may have been deleted, or it was saved in another browser."
+    "goneText": "It may have been deleted, or it was saved in another browser.",
+    "googleKept": "Your reports are kept with your Google account. Sign in with it on any device to see them.",
+    "googleTitle": "Keep your reports on any device",
+    "googleText": "Continue with Google to open these reports on another phone or computer. Any Google account works, not only Gmail.",
+    "googleElsewhere": "Saved reports on another device? Continue with Google to see them here.",
+    "googleButton": "Continue with Google",
+    "googleOpening": "Opening Google…",
+    "googleFailed": "Google sign in did not work. Please try again.",
+    "signedInAs": "Signed in with Google as {email}.",
+    "signedIn": "Signed in with Google.",
+    "callbackTitle": "Signing you in",
+    "callbackWorking": "Finishing your sign in…",
+    "callbackFailed": "Signing in did not finish. Please try again from My reports."
   },
   "legal": {
     "draft": "Draft: to be reviewed before the site goes public.",
