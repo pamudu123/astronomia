@@ -42,10 +42,11 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
         <section className={`container ${styles.hero}`}>
           <div className={styles.heroText}>
-            {/* The tagline sits on two lines; the hidden comma keeps it reading right aloud. */}
-            <p className={`rise ${styles.tagline}`} lang="en">
+            {/* The tagline sits on two lines. Read aloud, the English needs a comma between them;
+                the Sinhala lines run on as one phrase, so they only need a space. */}
+            <p className={`rise ${styles.tagline}`} lang={lang}>
               <span className={styles.taglineSky}>{dict.hero.tagline.sky}</span>
-              <span className="visually-hidden">, </span>
+              <span className="visually-hidden">{lang === "en" ? ", " : " "}</span>
               <span className={styles.taglineCalc}>{dict.hero.tagline.calculated}</span>
             </p>
             <h1 className={`rise display ${styles.heroTitle}`} style={{ animationDelay: ".1s" }}>

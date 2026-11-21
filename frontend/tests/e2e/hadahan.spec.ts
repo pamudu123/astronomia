@@ -71,7 +71,7 @@ test("the Sinhala result uses Sinhala names", async ({ page }) => {
   await mockBackend(page, "si");
   await page.goto("/si/hadahan");
   await page.getByLabel("උපන් දිනය").fill("1995-04-19");
-  await page.getByLabel("උපන් වේලාව").fill("14:35");
+  await page.getByLabel("උපන් වේලාව", { exact: true }).fill("14:35");
   await page.getByRole("combobox").fill("kandy");
   await page.getByRole("option").first().click();
   await page.getByRole("button", { name: "මගේ හඳහන පෙන්වන්න" }).click();
@@ -145,7 +145,7 @@ test("a failed PDF says so", async ({ page }) => {
   await page.route("**/api/v1/reports/pdf", (route) => route.fulfill({ status: 500, body: "" }));
   await page.goto("/si/hadahan");
   await page.getByLabel("උපන් දිනය").fill("1995-04-19");
-  await page.getByLabel("උපන් වේලාව").fill("14:35");
+  await page.getByLabel("උපන් වේලාව", { exact: true }).fill("14:35");
   await page.getByRole("combobox").fill("kandy");
   await page.getByRole("option").first().click();
   await page.getByRole("button", { name: "මගේ හඳහන පෙන්වන්න" }).click();
@@ -176,7 +176,7 @@ test("the forecast is in Sinhala on the Sinhala page", async ({ page }) => {
   await mockBackend(page, "si");
   await page.goto("/si/hadahan");
   await page.getByLabel("උපන් දිනය").fill("1995-04-19");
-  await page.getByLabel("උපන් වේලාව").fill("14:35");
+  await page.getByLabel("උපන් වේලාව", { exact: true }).fill("14:35");
   await page.getByRole("combobox").fill("kandy");
   await page.getByRole("option").first().click();
   await page.getByRole("button", { name: "මගේ හඳහන පෙන්වන්න" }).click();
@@ -369,7 +369,7 @@ test("the reading guide walks through the chart", async ({ page }) => {
   await expect(guide).toContainText("It holds your rising sign, Simha");
   await guide.getByRole("button", { name: "Next" }).click();
   await guide.getByRole("button", { name: "Next" }).click();
-  await expect(guide).toContainText("The Moon is in house 4, which is why your Moon sign is Vrischika.");
+  await expect(guide).toContainText("The Moon is in house 4, in Vrischika, so Vrischika is your Moon sign.");
   await guide.getByRole("button", { name: "Back" }).click();
   await expect(guide).toContainText("Step 2 of 4");
   await guide.getByRole("button", { name: "Next" }).click();

@@ -96,7 +96,7 @@ test("a birth near a pada change shows the letter next to it", async ({ page }) 
   await expect(result.locator("[data-letter]")).toContainText("චෙ");
   const check = result.locator('[data-card="time-check"]');
   await expect(check).toContainText("මිනිත්තු 3කට පසු සඳු අස්විද නැකතේ 3 වන පාදයට යයි. එයින් ලැබෙන අකුර චො වේ.");
-  await expect(check).toContainText("අසල පාදයේ අකුරද බලන්න");
+  await expect(check).toContainText("යාබද පාදයේ අකුරත් බලන්න");
   await noSidewaysScroll(page);
 });
 

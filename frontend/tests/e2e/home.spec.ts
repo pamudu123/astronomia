@@ -47,7 +47,7 @@ test("the More tab on a phone leads to the tools and is lit on their pages", asy
 test("Sinhala home page shows the Sinhala headline", async ({ page }) => {
   await page.goto("/si");
   await expect(page.locator("html")).toHaveAttribute("lang", "si");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("ඔබේ හඳහන, පැහැදිලිව.");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("ඔබේ හඳහන තේරුම් ගන්න.");
 });
 
 test("the language switch keeps the same page", async ({ page }) => {

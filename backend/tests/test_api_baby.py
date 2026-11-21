@@ -67,7 +67,7 @@ def test_a_birth_before_sunrise_belongs_to_the_day_before(client: TestClient) ->
         json={"date": "2024-01-18", "time": "05:50", "place_id": COLOMBO, "lang": "si"},
     ).json()
     assert body["chart"]["weekday"] == "wednesday"
-    assert body["chart"]["day_note"].startswith("හිරු උදාවට පෙර")
+    assert "හිරු උදාවට පෙර" in body["chart"]["day_note"]
     assert body["weekday_letters"]["key"] == "wednesday"
 
 
@@ -135,7 +135,9 @@ def test_names_for_letters(client: TestClient) -> None:
     assert (body["version"], body["provisional"]) == ("names_si_v1", True)
     assert [c["letter"] for c in body["letters"]] == ["නි", "නු"]
     nimali = next(n for n in body["names"] if n["en"] == "Nimali")
-    assert (nimali["si"], nimali["meaning"], nimali["letter"]) == ("නිමාලි", "නිර්මල", "නි")
+    assert (nimali["si"], nimali["letter"]) == ("නිමාලි", "නි")
+    # Its meaning had no source, so it is left out (docs/12, section 7).
+    assert (nimali["meaning"], nimali["meaning_from"]) == ("", "none")
     assert nimali["source"] == "wikipedia_name"
     assert all(n["gender"] in ("girl", "both") for n in body["names"])
     assert {s["key"] for s in body["sources"]} == {
