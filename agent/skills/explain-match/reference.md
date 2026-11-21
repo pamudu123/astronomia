@@ -63,3 +63,40 @@ Never present this as deciding the marriage. It is one traditional pointer, read
 When both Moon signs are on the page, you can add each person's emotional style from the Moon sign (see the sign table in the `personal-reading` reference, section 2), then say how the two meet. Keep it light and balanced. For example: "With a Kataka Moon you feel things deeply and need a calm home. Her Mesha Moon reacts fast and moves on. That can work well: she brings energy, you bring steadiness, as long as she gives you time to talk it through."
 
 Elements make this easy: fire (Mesha, Simha, Dhanu), earth (Vrishabha, Kanya, Makara), air (Mithuna, Tula, Kumbha), water (Kataka, Vrischika, Meena). Same element: easy understanding. Fire with air, or earth with water: natural support. Fire with water, or earth with air: different energies that need patience.
+
+## Softening (dosha bhanga)
+
+When a factor doesn't agree, Sri Lankan astrologers look for conditions that soften it ("dosha bhanga", the blemish broken). The site checks the ones below and lists those that apply as `softened_by`, with its own sentence. The factor still counts as not agreeing, and the count and summary don't change: softening is a reason for calm, not a pass. Provisional, like the rules.
+
+| Factor | Softened when (the site's rule) | How to say it |
+|---|---|---|
+| Nakath | Rashi and Rashyadhipathi both agree | "the Moon signs and their rulers get on, which tradition says softens this" |
+| Gana | The rulers of the two Moon signs are friends (Rashyadhipathi agrees) | "different temperaments, but the planets behind your emotions are friends" |
+| Mahendra | Vruksha and Nadi both agree | "the other family-growth factors agree" |
+| Stree Deergha | Rashi and Graha both agree | "the sign and planet factors make up for the short star distance" |
+| Rashi | The rulers of the two Moon signs are friends | The classical exception for a 2-12 or 6-8 sign distance |
+| Vashya | Rashi and Yoni both agree | "the attraction factors agree in other ways" |
+| Gothra | The two birth stars, or their padas, are different | "the same lineage, but tradition worries about it only for the very same star and pada" |
+| Pakshi | Gana, Yoni, Rashi and Nadi all agree | "the main factors agree, so this small one matters little" |
+| Linga | Yoni and Rashi both agree | |
+| Dina (birth weekdays) | Graha agrees | |
+| Nadi | The same birth star in a different pada, or the same Moon sign with different stars | The two classical Nadi exceptions |
+| Rajju (essential) | One star ascending and the other descending in the rajju | "many astrologers say this softens a same-rajju result; still talk it over with a human astrologer" |
+
+What Sri Lankan writers add, and the site does not check (mention only as what some astrologers say): a strong 7th house, or Jupiter looking at the 7th, in both charts; friendly rising-sign rulers; a strong wedding nakath (a strong auspicious time is believed to soften many blemishes). Some go as far as saying a Rajju or Nadi result alone means nothing. The site and this assistant don't say that.
+
+## How other astrologers count some factors
+
+The site's rules follow one Sri Lankan method (see the rules file). Others differ, which is worth saying when someone compares two results:
+
+- **Nakath (the star count):** the remainder after dividing by nine has traditional names: 1 Janma, 2 Sampat (wealth), 3 Vipat (danger: say "difficulty"), 4 Kshema (wellbeing), 5 Pratyari (obstacles), 6 Sadhaka (achievement), 7 Vadha (harm: say "difficulty"), 8 Maitri (friendship), 0 Parama Maitri (great friendship). 2, 4, 6, 8 and 0 agree.
+- **Stree Deergha:** the site needs a count above 13; some writers accept above 7 or 9, and call above 14 best.
+- **Dina:** the site uses the order of the two birth weekdays; some astrologers instead ask whether the planets ruling the two weekdays are friends.
+- **Graha:** the site compares the rising-sign and Moon-sign rulers; others weigh the hard planets (Mars, Saturn, Rahu, Ketu) and the 7th house in both charts.
+- **Bhutha:** the same element, earth with water, or fire with air is best; only fire with water is counted against.
+- **Nadi:** writers note it was traditionally a check on family health, and some suggest ordinary blood tests to couples who worry. Never predict anything about children.
+
+**Sources (softening and other methods)**
+- https://lankaastrology.com/porondam-nogalapunoth-vivaha-weema-dosha-bhanga/
+- https://lankaastrology.com/nakshatra-porondama/ (and the matching page for each of the twenty factors, for example https://lankaastrology.com/rajju-porondama/ and https://lankaastrology.com/nadi-porondama/)
+- https://lankaastrology.com/suwisi-vivaha-porondam-sampurna-vigrahaya/

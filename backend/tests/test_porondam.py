@@ -2,6 +2,7 @@ import pytest
 
 from app.engine.porondam import (
     FactorResult,
+    MatchResult,
     Role,
     distance28,
     load_rules,
@@ -364,3 +365,34 @@ def test_graha_counts_four_lord_checks() -> None:
 def test_graha_is_not_checked_without_lagnas() -> None:
     graha_factor = factor("anuradha", "rohini", "graha")
     assert not graha_factor.checked
+
+
+def _failed(result: MatchResult) -> dict[str, tuple[str, ...]]:
+    return {f.id: f.softened_by for f in result.factors if f.checked and not f.passed}
+
+
+def test_softening_never_changes_the_result() -> None:
+    plain = load_rules()
+    for b in ("ashwini", "rohini", "magha", "mula"):
+        for g in ("ashlesha", "rohini", "swati", "revati"):
+            result = match(star_point(b, 1), star_point(g, 3))
+            assert all(f.passed is False for f in result.factors if f.softened_by)
+            assert all(not f.softened_by for f in result.factors if f.passed or not f.checked)
+    assert "softening" in plain
+
+
+def test_rajju_is_softened_when_one_star_ascends_and_the_other_descends() -> None:
+    # Ashwini (ascending) and Ashlesha (descending) are both in the feet rajju.
+    assert _failed(match(star_point("ashwini", 1), star_point("ashlesha", 1)))["rajju"] == (
+        "rajju_direction",
+    )
+    # Ashwini and Magha are both ascending in the feet rajju: not softened.
+    assert _failed(match(star_point("ashwini", 1), star_point("magha", 1)))["rajju"] == ()
+
+
+def test_nadi_is_softened_for_the_same_star_in_another_pada() -> None:
+    same_pada = _failed(match(star_point("rohini", 1), star_point("rohini", 1)))
+    other_pada = _failed(match(star_point("rohini", 1), star_point("rohini", 3)))
+    assert same_pada["nadi"] == ()
+    assert other_pada["nadi"] == ("same_star_different_pada",)
+    assert other_pada["gothra"] == ("different_star_or_pada",)

@@ -104,7 +104,7 @@ Each step is one pull request with tests. "Check" is how the owner can confirm i
 
 - **Chart engine:** Swiss Ephemeris (built-in Moshier mode, no data files needed), Lahiri ayanamsa, mean node, whole sign houses. Planets checked against astropy's independent ephemeris: within 30 arcseconds (90 for Jupiter and Saturn, where astropy's model is less precise). A birth time check flags a lagna or nakshatra change within 5 or 15 minutes.
 - **Dasha:** vimshottari, three levels, years of 365.25 days.
-- **Kuja dosha:** houses 1, 2, 4, 7, 8, 12 from the lagna, Moon and Venus, plus four cancellation checks, from `backend/app/data/rules/kuja_v1.yaml`. Marked provisional until the astrologer confirms them.
+- **Kuja dosha:** houses 1, 2, 4, 7, 8, 12 from the lagna, Moon and Venus, plus seven cancellation checks, from `backend/app/data/rules/kuja_v2.yaml` (version 1, with four, is kept). Marked provisional until the astrologer confirms them. Porondam factors that do not agree also list the traditional exceptions that soften them (`softening` in the porondam rules), without changing the count.
 - **Labels and reasons:** `backend/app/data/labels/si.yaml` and `en.yaml` hold every name and one line reason. The Sinhala needs a native speaker's review.
 - **Pages:** the birth details form (place search, time zone shown for the date, coordinates option, clock change choice) and the result page (key cards, kendara in rashi and navamsha, planets table, dasha timeline, Kuja card, birth time check).
 - **Endpoints:** `POST /v1/charts`, `POST /v1/hadahan`, `GET /v1/labels/{lang}`.

@@ -217,6 +217,8 @@ A graha maru (ග්‍රහ මාරු) is a planet moving into the next sig
 - **Ashtama shani (අෂ්ටම ශනි).** Saturn in the 8th sign from the Moon, about 2.5 years.
 - **Lagna erashtaka (ලග්න ඒරාෂ්ටකය).** The same idea, counted from the lagna.
 - Some traditions also flag Saturn in the 4th from the Moon. Sources differ on whether to count it.
+- **Kantaka shani and ardhashtama.** Some writers call Saturn passing the 4th, 7th or 10th from the Moon or the rising sign *kantaka shani* ("thorn Saturn"), and the 4th alone *ardhashtama* ("half eighth"). They describe pressure at home (4th), in partnerships (7th) or at work (10th). The site does not mark these: mention them only when asked, as what some astrologers say, with the same calm wording as erashtaka.
+- **What helps, in Sri Lankan writing.** Patience, humility and fair, steady work are the advice most often given. Customs mentioned: a bodhi puja on Saturday evening with sesame-oil lamps, almsgiving, helping elderly and poor people, metta meditation. Describe as custom when asked, never as needed.
 - Saturn's backward loops can stretch a period beyond 7.5 years.
 - Saturn returns about every 30 years, so most adults live through an erashtaka two or three times.
 
@@ -275,7 +277,9 @@ A graha maru (ග්‍රහ මාරු) is a planet moving into the next sig
 - Many conditions are said to cancel or soften it. Examples are Jupiter aspecting Mars, Mars in its own sign (Mesha or Vrushchika), and Mars in Makara or Simha.
 - Sri Lankan newspaper astrologers warn against declaring it just because Mars is in the 1st or 7th house. They say hasty readings have caused needless worry and blocked marriages, and that the whole chart must be read.
 
-*Site note:* the site checks those six houses from the lagna, Moon and Venus and applies several cancellations. The rules are marked provisional.
+*Site note:* the site checks those six houses from the lagna, Moon and Venus and applies seven cancellations (rule set `kuja_v2`, listed in the `personal-reading` reference, section 7). The rules are marked provisional.
+
+Sri Lankan writers list many more cancellations (lankaastrology.com lists twenty), among them Mars with the Moon (Chandra-Mangala), Mars in a friend's sign, Mars strong in the navamsa, both partners having it, and the belief that it weakens after about age 28. Some say it is "100% cancelled" by one of these. Don't repeat that certainty.
 
 **Sources (section 6)**
 - https://dailymirror.lk/jyotisha-news/Myths-and-Misconceptions-about-Kuja-Dosha/312-157122 (Daily Mirror, 2018)
@@ -343,6 +347,36 @@ No source publishes full scoring tables, and the exact rules vary between astrol
 - https://www.cambridge.org/core/journals/journal-of-asian-studies/article/abs/sinhalese-astrology-south-asian-caste-systems-and-the-notion-of-individuality/92F0E2F27BB41283BB3B0846B81C6867 (Kemper, 1979)
 - https://archives1.sundayobserver.lk/node/41166 (matrimonial notices)
 - https://www.poruwa.lk/blog/?p=3045
+
+---
+
+## 8. Terms people ask about
+
+Sri Lankan astrology sites, lankaastrology.com among them, write about many terms the site doesn't calculate. People bring them to the chat. Say briefly what each is, that the site doesn't check it, and that a human astrologer can. For the frightening ones, the wording below is the limit.
+
+| Term | What it is | How to answer |
+|---|---|---|
+| Navamsa (D9) | The ninth-division chart, read for marriage and inner strength | The site uses it only for vargottama and one Mars-check rule; it doesn't show it |
+| Other divisional charts (D2, D3, D4, D7, D10, D12, D20, D24, D60) | Finer charts for wealth, siblings, property, children, career, parents, spiritual life, learning, past karma | Not calculated by the site |
+| Yogakaraka | The planet ruling both an angle and a trine for a rising sign | The chart facts mark it (`yoga_karaka`) |
+| Combust (asta) | A planet very close to the Sun | The chart facts mark it (`combust`) |
+| Neecha bhanga | A debilitated planet's weakness cancelled | Found as a combination when it applies |
+| Shadbala, bhava bala, ashtakavarga | Numerical systems of planet and house strength | Not calculated |
+| Chara, yogini, ashtottari dasha | Other timing systems | The site uses the Vimshottari periods only |
+| Kala Sarpa | All planets on one side of Rahu and Ketu | A modern, debated idea, not in the classical texts. Found as a combination when it applies. Never frightening |
+| Kemadruma | No planet beside the Moon | Listed only when nothing cancels it, which is rare |
+| Shrapit, pitru dosha | Saturn with Rahu; "ancestral karmic debt" | Not checked. Present as belief, never as a curse |
+| Gandanta, ganda moola | Birth stars at the joins of water and fire signs (Ashwini, Ashlesha, Magha, Jyeshtha, Mula, Revati) | Not checked. Never alarm parents: some traditions advise a small blessing ceremony, nothing more |
+| Visha kanya | An old label for certain birth combinations of weekday, tithi and star | Never apply it to anyone; say it is an outdated label that harms people |
+| Maraka, mrityu bhaga, balarishta, ayurdaya | Classical ideas about danger periods, sensitive degrees, childhood danger and lifespan | Never discuss, calculate or hint at; say the site doesn't deal in lifespan or death and move on |
+| Pushkara navamsa, vargottama | Especially strong navamsa positions | Vargottama is in the chart facts; pushkara is not calculated |
+| Prashna | Horary astrology: a chart for the moment a question is asked | Not offered by the site |
+
+**Sources (section 8)**
+- https://lankaastrology.com/navamsha/ , https://lankaastrology.com/kalasarpa/ , https://lankaastrology.com/kemadruma/
+- https://lankaastrology.com/shrapit/ , https://lankaastrology.com/pithru-dosha/ , https://lankaastrology.com/ganda-moola/ , https://lankaastrology.com/gandanta/
+- https://lankaastrology.com/visha-kanya/ , https://lankaastrology.com/maraka/ , https://lankaastrology.com/kantaka-shani/
+- https://lankaastrology.com/kuja-dosha-bhanga-sinhala/ , https://lankaastrology.com/sade-sati-erashtaka-apala-nivarana-krama/
 
 ---
 

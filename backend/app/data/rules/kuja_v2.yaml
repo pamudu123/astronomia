@@ -1,0 +1,50 @@
+# Kuja dosha rules, version 2.
+#
+# PROVISIONAL: these rules have not been confirmed by a practising astrologer yet.
+# Sources disagree on the house list and on cancellations (see docs/03-porondam-domain-notes.md).
+# Every result carries this version and the provisional flag, so the page can say so.
+#
+# Version 2 keeps every rule of version 1 and adds three cancellations that Sri Lankan writers
+# list (lankaastrology.com "kuja-dosha" and "kuja-dosha-bhanga-sinhala", November 2026; the
+# Daily Mirror columns in agent/skills/birth-chart/reference.md, section 6, give Simha):
+# Mars with the Moon (Chandra-Mangala), Mars in a friend's sign (Simha, Dhanu, Meena), and Mars
+# in its own or exalted sign in the ninth-division chart. Mars with Jupiter is already covered
+# by jupiter_aspects_mars, which counts Jupiter in the same sign.
+
+version: kuja_v2
+provisional: true
+
+# Mars in one of these houses, counted from each point, counts as Kuja dosha.
+houses: [1, 2, 4, 7, 8, 12]
+points: [lagna, moon, venus]
+
+# Conditions that reduce or cancel the dosha. Each is checked against the chart.
+cancellations:
+  - id: lagna_kataka_simha
+    type: lagna_in_signs
+    signs: [kataka, simha]
+  - id: mars_own_or_exalted
+    type: mars_in_signs
+    signs: [mesha, vrischika, makara]
+  - id: jupiter_aspects_mars
+    type: jupiter_aspects_mars
+  - id: mars_house_sign_exception
+    type: mars_house_sign
+    # House counted from the lagna, and the signs where Mars there is not counted.
+    pairs:
+      - {house: 2, signs: [mithuna, kanya]}
+      - {house: 4, signs: [mesha, vrischika]}
+      - {house: 7, signs: [kataka, makara]}
+      - {house: 8, signs: [dhanu, meena]}
+      - {house: 12, signs: [vrishabha, tula]}
+  - id: mars_with_moon
+    type: mars_with
+    bodies: [moon]
+  - id: mars_friend_sign
+    type: mars_in_signs
+    # The signs of the Sun and Jupiter, Mars's friends. Kataka, the Moon's sign, is left out
+    # because Mars is debilitated there.
+    signs: [simha, dhanu, meena]
+  - id: mars_navamsha_strong
+    type: mars_navamsha_in_signs
+    signs: [mesha, vrischika, makara]

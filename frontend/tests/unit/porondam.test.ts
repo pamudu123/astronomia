@@ -11,7 +11,16 @@ import {
   yearTicks,
 } from "@/lib/porondam";
 
-const factor = (id: string, passed: boolean): Factor => ({ id, passed, hard: false, checked: true, facts: {}, reason: "" });
+const factor = (id: string, passed: boolean): Factor => ({
+  id,
+  passed,
+  hard: false,
+  checked: true,
+  facts: {},
+  reason: "",
+  softened_by: [],
+  softened_text: [],
+});
 
 describe("filterFactors", () => {
   const all = [factor("dina", true), factor("gana", false), factor("yoni", true)];

@@ -73,6 +73,10 @@ class FactorOut(BaseModel):
     checked: bool = True
     facts: dict[str, str | int]
     reason: str
+    # For a factor that does not agree: traditional exceptions that soften it (dosha bhanga),
+    # as ids and as sentences. Information only: the factor still counts as not agreeing.
+    softened_by: list[str] = []
+    softened_text: list[str] = []
 
 
 class ScoreOut(BaseModel):
@@ -119,6 +123,8 @@ def _factor_out(result: FactorResult, lang: Lang) -> FactorOut:
         checked=result.checked,
         facts=result.facts,
         reason=reason(lang, code, result.facts, section="porondam_reason"),
+        softened_by=list(result.softened_by),
+        softened_text=[reason(lang, s, section="porondam_softening") for s in result.softened_by],
     )
 
 

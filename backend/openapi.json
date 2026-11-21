@@ -3281,6 +3281,22 @@
           "reason": {
             "type": "string",
             "title": "Reason"
+          },
+          "softened_by": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Softened By",
+            "default": []
+          },
+          "softened_text": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Softened Text",
+            "default": []
           }
         },
         "type": "object",

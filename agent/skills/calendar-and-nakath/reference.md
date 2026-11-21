@@ -95,7 +95,17 @@ Exact times shift with date and place. Sri Lanka's days stay near 12 hours all y
 
 **Yamaganda and gulika.** Indian almanacs list these two further daily periods, and some Indian-run Sinhala-language websites show them. It could not be confirmed that mainstream Sri Lankan lithas use them (unverified), so do not present them as Sri Lankan custom.
 
+**Other Indian almanac times.** Sinhala-language sites such as lankaastrology.com also explain these. The site calculates none of them. Say what each is, briefly, if asked:
+
+- **Abhijit muhurtha:** about 48 minutes around local midday, held to be good for most beginnings (some say not for travel south).
+- **Choghadiya:** the day and the night each split into eight parts, each rated good, neutral or bad (a North Indian system).
+- **Hora:** each hour of the day ruled by a planet in a fixed order, starting with the weekday's planet at sunrise.
+- **Panchapakshi:** a Tamil system in which five birds, tied to the birth star, take turns ruling the day's activities.
+
+Some of these pages describe yamaganda in frightening terms (accidents, death). Never repeat that. At most say tradition avoids starting new things then.
+
 Sources:
+- https://lankaastrology.com/yamaganda/ , https://lankaastrology.com/abhijit-muhurtha/ , https://lankaastrology.com/choghadiya-muhurtha/ , https://lankaastrology.com/hora/ , https://lankaastrology.com/panchapakshi/
 - https://en.wikipedia.org/wiki/R%C4%81huk%C4%81la
 - https://www.drikpanchang.com/tutorials/panchang-utilities/rahu-kalam.html
 - https://hindutone.com/astrology/rahu-kalam-yamagandam-gulika-kalam-explained/

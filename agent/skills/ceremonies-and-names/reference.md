@@ -29,6 +29,20 @@ Sources:
 **How Sri Lankan practice differs**
 - Not every Sri Lankan astrologer uses the quarter table. One Sri Lankan guide describes three methods: letters suited to the ලග්නය (lagnaya, rising sign), letters from the birth nakatha, and letters from the weekday of birth. It ranks the rising-sign method highest.
 - Some Sinhala astrologers also use syllable groupings (gana) and numerology. Hindu families may use letters tied to the birth sign.
+- **The name gana (අෂ්ට ගණ, ashta gana).** The first three syllables of a name are each light (ලඝු, laghu: short, like අ, ක, ස, වි) or heavy (ගුරු, guru: long, like ආ, කා, සී, නේ, or a short syllable before a consonant cluster or a final consonant). The pattern gives one of eight ganas, from classical prosody:
+
+  | Pattern | Gana | Tradition |
+  |---|---|---|
+  | heavy heavy heavy | ම (ma), earth | Very favourable |
+  | light light light | න (na), heaven | Very favourable |
+  | heavy light light | භ (bha), Moon | Very favourable |
+  | light heavy heavy | ය (ya), water | Favourable |
+  | light heavy light | ජ (ja), Sun | Avoided |
+  | heavy light heavy | ර (ra), fire | Avoided |
+  | light light heavy | ස (sa), air | Avoided |
+  | heavy heavy light | ත (ta), sky | Avoided |
+
+  The last three rows are the usual classical assignment; the source names only the first five (unverified). The site doesn't check a name's gana. Say it is one custom among several, and that a name already given needs no change: Sri Lankan writers themselves say a child's life depends far more on care and upbringing.
 - The astrologer usually suggests a few letters. Parents or elders then pick a name that starts with one of them.
 
 **Why families do it**
@@ -48,6 +62,8 @@ Sources:
 - https://blog.kapruka.com/?p=17221 (commercial source)
 - https://archives.sundayobserver.lk/2003/03/23/fea15.html
 - https://jainqq.org/pagetext/Indian_Antiquary_Vol_31/032523/383 ("Glimpses of Singhalese Social Life", Indian Antiquary, 1902)
+- https://lankaastrology.com/alutha-upan-babata-nama-thiyana-hati-subha-akuru-gana/ (name gana)
+- https://lankaastrology.com/vivaha-nakath-pathraya-poruwa-charithra-sinhala/ (wedding stars)
 
 ---
 
@@ -107,6 +123,7 @@ Sources:
 - **Direction:** The astrologer names the direction the poruwa should face and the direction the couple face when they step onto it.
 - **Colours:** Nakath sheets for the New Year routinely list colours to wear. For weddings, a colour for the bride or groom is commonly said to be included, but this could not be confirmed (unverified).
 - **Avoided days:** One veteran ashtaka reciter says weddings are not held on Tuesdays, which are seen as inauspicious. Treat this as a common belief, not a rule.
+- **Favoured birth stars for a wedding day:** Sinhala sources commonly list Rohini, Mrigashira, Magha, Uttara Phalguni, Hasta, Swati, Anuradha, Mula, Uttara Ashadha, Uttara Bhadrapada and Revati. The site's wedding dates search applies its own rules: give its results, not this list.
 
 Sources:
 - https://www.sjp.ac.lk/blog/poruwa-ceremony-sinhalese-buddhists-marriage-ritual/ (University of Sri Jayewardenepura)
