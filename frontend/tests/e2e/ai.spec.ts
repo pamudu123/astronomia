@@ -15,7 +15,20 @@ const chapter = (id: string) => `Text of ${id}.\n\n**A bold lead**\nA short part
 
 type Calls = string[];
 
-async function mockAll(page: Page, fail: Set<string> = new Set()): Promise<Calls> {
+const PRICE = { amount: 80_000, currency: "LKR" };
+/** What the backend says about the report (docs/18): paid reports switched off, as today. */
+const OPEN = {
+  paid: false,
+  features: ["ai_reading", "ai_explain", "full_detail", "full_pdf"],
+  paid_reports: false,
+  account: null,
+  price: PRICE,
+};
+
+async function mockAll(page: Page, fail: Set<string> = new Set(), access: object = OPEN): Promise<Calls> {
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify(access) }),
+  );
   await page.route("**/api/v1/labels/*", (route) =>
     route.fulfill({ contentType: "application/json", body: fixture("labels-en.json") }),
   );
@@ -105,4 +118,57 @@ test("a chapter that can't be written offers to try again", async ({ page }) => 
   await expect(result).toContainText("This couldn't be written just now.");
   await result.getByRole("button", { name: "Try again" }).click();
   await expect(result.locator('[data-chapter="match.summary"]')).toContainText("Text of match.summary.");
+});
+
+test("with paid reports on, a free match shows the full report form in place of the AI", async ({ page }) => {
+  const calls = await mockAll(page, new Set(), { ...OPEN, features: [], paid_reports: true });
+  await quickMatch(page);
+
+  const result = page.locator('[data-explain="match.summary"]');
+  await result.getByRole("button", { name: "Explain this" }).click();
+  await expect(result).toContainText("Part of the full report");
+  await expect(page.locator('[data-card="full-reading"]')).toContainText("Part of the full report");
+
+  const form = page.locator('[data-card="full-report"]');
+  await expect(form.getByRole("heading", { name: "Get the full report" })).toBeVisible();
+  await expect(form.locator("[data-price]")).toContainText("LKR 800");
+  // Not signed in: the way in is Google, not a coupon box.
+  await expect(form.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  await expect(form.getByRole("button", { name: "Have a coupon?" })).toHaveCount(0);
+  expect(calls).toHaveLength(0);
+});
+
+test("a signed in visitor unlocks the match with a free coupon", async ({ page }) => {
+  const locked = { ...OPEN, features: [], paid_reports: true, account: "google" };
+  await mockAll(page, new Set(), locked);
+  await page.route("**/api/v1/coupons/apply", (route) =>
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({ result: "free", percent_off: 100, price: PRICE, new_price: { ...PRICE, amount: 0 } }),
+    }),
+  );
+  await page.route("**/api/v1/reports/unlock", (route) =>
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        order: { id: "o1", kind: "porondam", price: PRICE, percent_off: 100, amount_paid: { ...PRICE, amount: 0 }, method: "coupon" },
+        saved: null,
+        access: { ...OPEN, paid: true, paid_reports: true, account: "google" },
+      }),
+    }),
+  );
+  await quickMatch(page);
+
+  const form = page.locator('[data-card="full-report"]');
+  await form.getByRole("button", { name: "Have a coupon?" }).click();
+  await form.getByLabel("Coupon code").fill("pamudu");
+  await form.getByRole("button", { name: "Apply" }).click();
+  await expect(form).toContainText("This code makes the report free.");
+  await expect(form.locator("[data-price]")).toContainText("LKR 0");
+  await form.getByRole("button", { name: "Unlock free" }).click();
+
+  await expect(form.getByRole("heading", { name: "This is your full report" })).toBeVisible();
+  const card = page.locator('[data-card="full-reading"]');
+  await card.getByRole("button", { name: "Get the full reading" }).click();
+  await expect(card.locator('[data-chapter="match.people"]')).toContainText("Text of match.people.");
 });

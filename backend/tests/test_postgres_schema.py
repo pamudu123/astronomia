@@ -14,6 +14,7 @@ import pytest
 
 from app.store import accounts, postgres
 from app.store.accounts import NewReport, postgres_accounts
+from app.store.orders import postgres_orders
 from app.store.postgres import MissingTables
 from app.store.shares import PostgresShareStore
 from tests.pg import drop_sidera, migrate, migration_files, need_postgres
@@ -108,6 +109,26 @@ def test_the_share_store_only_touches_sidera_tables(recorder: Recorder) -> None:
     assert not [s for s in recorder.statements if re.search(r"\b(CREATE|ALTER|DROP)\b", s)]
 
 
+def test_the_order_store_only_touches_sidera_tables(recorder: Recorder) -> None:
+    from app.tiers.prices import Price
+
+    store = postgres_orders("postgresql://test")
+    store.list_coupons()
+    store.set_active("pamudu", False)
+    store.misses_last_hour("00000000-0000-0000-0000-000000000000")
+    store.record_miss("00000000-0000-0000-0000-000000000000")
+    store.paid_order("00000000-0000-0000-0000-000000000000", "hadahan", "h")
+    store.void("00000000-0000-0000-0000-000000000000")
+    with pytest.raises(Exception):  # noqa: B017 - the recorder finds no coupon
+        store.redeem("u", "pamudu", "hadahan", "h", Price(250, "USD"))
+
+    queries = [s for s in recorder.statements if "to_regclass" not in s]
+    names = {name for statement in queries for name in TABLE_NAME.findall(statement)}
+    assert names == {"sidera.coupons", "sidera.orders", "sidera.coupon_misses"}
+    assert not [s for s in recorder.statements if re.search(r"(CREATE|ALTER|DROP)", s)]
+    assert not [s for s in queries if "?" in s]
+
+
 def test_a_database_without_the_migrations_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
     db = Recorder(missing=("sidera.saved_reports", "sidera.shares"))
     monkeypatch.setattr(postgres, "connect", lambda url: db)
@@ -160,7 +181,15 @@ def test_the_migrations_make_the_tables_the_stores_use() -> None:
             "SELECT (SELECT count(*) FROM sidera.users), (SELECT count(*) FROM sidera.sessions),"
             " (SELECT count(*) FROM sidera.saved_reports), (SELECT count(*) FROM sidera.shares)"
         ).fetchone()
-    assert [row[0] for row in rows] == ["saved_reports", "sessions", "shares", "users"]
+    assert [row[0] for row in rows] == [
+        "coupon_misses",
+        "coupons",
+        "orders",
+        "saved_reports",
+        "sessions",
+        "shares",
+        "users",
+    ]
     assert counts == (1, 1, 1, 1)
 
 

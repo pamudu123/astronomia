@@ -47,8 +47,9 @@ export function ReportAccessProvider({ report, children }: { report: ReportReque
   const value = useMemo<Value>(() => {
     const parsed = JSON.parse(key) as ReportRequest;
     if (found?.key === key) return { access: { state: "ready", access: found.access }, report: parsed, set };
-    // No answer from the backend: the free result, without the form (there is no price to show).
-    if (failed === key) return { access: { state: "ready", access: FREE }, report: parsed, set };
+    // No answer from the backend: nothing to decide with, so nothing is locked on the page and
+    // no form is shown. The AI route checks the report on the server before writing anyway.
+    if (failed === key) return { access: NO_REPORT, report: parsed, set };
     return { access: { state: "loading" }, report: parsed, set };
   }, [found, failed, key, set]);
 
@@ -89,7 +90,7 @@ function SharedAccess({ kind, children }: { kind: ReportRequest["kind"]; childre
     fetchPaidReportsOn(kind, { signal: controller.signal })
       .then(setOn)
       .catch(() => {
-        if (!controller.signal.aborted) setOn(true);
+        if (!controller.signal.aborted) setOn(false); // as above: the server checks again
       });
     return () => controller.abort();
   }, [kind]);
