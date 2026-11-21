@@ -734,7 +734,16 @@
     "signedIn": "Signed in with Google.",
     "callbackTitle": "Signing you in",
     "callbackWorking": "Finishing your sign in…",
-    "callbackFailed": "Signing in did not finish. Please try again from My reports."
+    "callbackFailed": "Signing in did not finish. Please try again from My reports.",
+    "signOutHere": "Sign out of this phone",
+    "signOutEverywhere": "Sign out everywhere",
+    "signOutNote": "Signing out everywhere ends the sign in on every phone and computer within an hour.",
+    "signingOut": "Signing out…",
+    "mergeWorking": "This Google account already has its own reports. Signing in to it and moving the reports saved on this browser there…",
+    "mergeFailed": "You are signed in with Google, but the reports saved on this browser as a guest could not be moved.",
+    "deleteAccount": "Delete my account",
+    "deleteAccountConfirm": "Delete your account and every saved report? This cannot be undone.",
+    "deleteAccountYes": "Yes, delete my account"
   },
   "legal": {
     "draft": "Draft: to be reviewed before the site goes public.",

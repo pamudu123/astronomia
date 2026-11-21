@@ -6,7 +6,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from app.auth import TokenChecker
+from app.auth import SupabaseAdmin, TokenChecker
 from app.config import Settings, get_settings
 from app.geo.build import ensure_built
 from app.store.accounts import AccountStore, postgres_accounts, sqlite_accounts
@@ -76,3 +76,13 @@ def token_checker(settings: Annotated[Settings, Depends(get_settings)]) -> Token
 
 
 Tokens = Annotated[TokenChecker | None, Depends(token_checker)]
+
+
+def supabase_admin(settings: Annotated[Settings, Depends(get_settings)]) -> SupabaseAdmin | None:
+    """Deletes users from Supabase Auth. None when the secret key is not set."""
+    if not (settings.supabase_url and settings.supabase_secret_key):
+        return None
+    return SupabaseAdmin(settings.supabase_url, settings.supabase_secret_key)
+
+
+Admin = Annotated[SupabaseAdmin | None, Depends(supabase_admin)]

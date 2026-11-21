@@ -651,16 +651,44 @@ export interface paths {
         };
         /**
          * Me
-         * @description The account on this browser, if any, and how many reports it keeps.
+         * @description The signed in account, if any, and how many reports it keeps.
          */
         get: operations["me_v1_me_get"];
         put?: never;
         post?: never;
         /**
          * Delete Me
-         * @description Deletes the account on this browser and every report it keeps.
+         * @description Deletes the signed in account: every report it keeps, then its Supabase sign in.
+         *
+         *     The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
+         *     are already gone and 502 asks the page to try again.
          */
         delete: operations["delete_me_v1_me_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/merge-guest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Merge Guest
+         * @description Moves a guest's reports into the Google account that just signed in, then removes the guest.
+         *
+         *     For a guest who presses "Continue with Google" with a Google account that already exists
+         *     (from another phone): Supabase cannot link it, so the page signs in with Google and calls
+         *     this with both tokens. Both are checked, so only the browser that holds the guest's sign in
+         *     can move its reports.
+         */
+        post: operations["merge_guest_v1_me_merge_guest_post"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -675,13 +703,13 @@ export interface paths {
         };
         /**
          * List Saved
-         * @description Every report this browser's account keeps, newest first.
+         * @description Every report the signed in account keeps, newest first.
          */
         get: operations["list_saved_v1_saved_get"];
         put?: never;
         /**
          * Save Report
-         * @description Saves a hadahan or a match to My reports. Makes a guest account if there is none.
+         * @description Saves a hadahan or a match to My reports. The page signs in (anonymously) first.
          */
         post: operations["save_report_v1_saved_post"];
         delete?: never;
@@ -1247,6 +1275,11 @@ export interface components {
              */
             name: string;
         };
+        /** GuestMerge */
+        GuestMerge: {
+            /** Guest Token */
+            guest_token: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -1648,6 +1681,13 @@ export interface components {
         MeOut: {
             /** Kind */
             kind: ("guest" | "google") | null;
+            /** Saved */
+            saved: number;
+        };
+        /** MergeOut */
+        MergeOut: {
+            /** Moved */
+            moved: number;
             /** Saved */
             saved: number;
         };
@@ -4074,6 +4114,46 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Reports deleted; Supabase could not delete the sign in yet */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    merge_guest_v1_me_merge_guest_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GuestMerge"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };

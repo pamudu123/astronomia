@@ -11,8 +11,10 @@ from fastapi.testclient import TestClient
 from app.api import deps, saved
 from app.config import Settings, get_settings
 from app.main import create_app
+from app.store.accounts import AccountStore
 from app.tiers import save_access
-from tests.auth import bearer, browser, token
+from tests.auth import OTHER_KEY, bearer, browser, token
+from tests.conftest import FakeAdmin
 
 KANDY = 1241622
 NIMALI = {"date": "1995-04-19", "time": "14:35", "place_id": KANDY}
@@ -166,14 +168,127 @@ def test_delete_one_and_the_hint_goes_with_the_last(me: TestClient) -> None:
     assert me.get("/v1/me").json() == {"kind": "guest", "saved": 0}
 
 
-def test_delete_my_account(me: TestClient, client: TestClient) -> None:
-    item = save(me, hadahan())["id"]
-    response = me.delete("/v1/me")
+def test_delete_my_account(client: TestClient, admin: FakeAdmin, accounts: AccountStore) -> None:
+    user = str(uuid.uuid4())
+    google = browser(client, user, anonymous=False)
+    item = save(google, hadahan())["id"]
+    other = browser(client)
+    kept = save(other, hadahan())["id"]
+
+    response = google.delete("/v1/me")
     assert response.status_code == 204
     assert any(c.startswith('sidera_saved=""') for c in response.headers.get_list("set-cookie"))
-    assert me.get(f"/v1/saved/{item}").status_code == 404
-    assert me.get("/v1/me").json() == {"kind": "guest", "saved": 0}  # a fresh, empty account
+    # Every row went, then the Supabase user, with the secret key.
+    assert accounts.find_user(user, "google") is None
+    assert accounts.list_saved(user) == []
+    assert admin.deleted == [user]
+    assert other.get(f"/v1/saved/{kept}").status_code == 200
+    assert google.get(f"/v1/saved/{item}").status_code == 404
     assert client.delete("/v1/me").status_code == 401
+
+
+def test_when_supabase_cannot_delete_the_reports_are_still_gone(
+    me: TestClient, admin: FakeAdmin
+) -> None:
+    item = save(me, hadahan())["id"]
+    admin.fail = True
+    assert me.delete("/v1/me").status_code == 502
+    assert me.get(f"/v1/saved/{item}").status_code == 404
+    admin.fail = False
+    assert me.delete("/v1/me").status_code == 204  # trying again finishes it
+
+
+def test_deleting_needs_the_secret_key_off_a_developer_computer(me: TestClient) -> None:
+    me.app.dependency_overrides[deps.supabase_admin] = lambda: None  # type: ignore[attr-defined]
+    assert me.delete("/v1/me").status_code == 204  # development
+    settings = Settings(environment="staging")
+    me.app.dependency_overrides[get_settings] = lambda: settings  # type: ignore[attr-defined]
+    assert me.delete("/v1/me").status_code == 503
+
+
+# Moving a guest into a Google account that already exists
+
+
+def merge(client: TestClient, google: str, guest_token: str) -> Any:
+    return client.post(
+        "/v1/me/merge-guest",
+        headers=bearer(token(google, anonymous=False)),
+        json={"guest_token": guest_token},
+    )
+
+
+def test_a_guests_reports_move_into_an_existing_google_account(
+    client: TestClient, admin: FakeAdmin, accounts: AccountStore
+) -> None:
+    google_id, guest_id = str(uuid.uuid4()), str(uuid.uuid4())
+    save(browser(client, google_id, anonymous=False), porondam())  # from another phone
+    guest = browser(client, guest_id)
+    save(guest, hadahan())
+    save(guest, porondam())  # the same match: kept once
+    guest_token = token(guest_id)
+
+    response = merge(client, google_id, guest_token)
+    assert response.status_code == 200, response.text
+    assert response.json() == {"moved": 1, "saved": 2}
+    google = browser(client, google_id, anonymous=False)
+    kinds = sorted(item["kind"] for item in google.get("/v1/saved").json()["reports"])
+    assert kinds == ["hadahan", "porondam"]
+    # The guest is gone, here and in Supabase.
+    assert accounts.list_saved(guest_id) == []
+    assert admin.deleted == [guest_id]
+
+
+def test_moving_checks_both_tokens(client: TestClient, accounts: AccountStore) -> None:
+    google_id, guest_id = str(uuid.uuid4()), str(uuid.uuid4())
+    save(browser(client, guest_id), hadahan())
+
+    def guest_reports() -> int:
+        return len(accounts.list_saved(guest_id))
+
+    # The Google token must be good: a forged or expired one is refused.
+    for bad in (token(google_id, anonymous=False, key=OTHER_KEY), token(google_id, lifetime=-600)):
+        response = client.post(
+            "/v1/me/merge-guest", headers=bearer(bad), json={"guest_token": token(guest_id)}
+        )
+        assert response.status_code == 401
+    # The caller must be a Google account, not another guest.
+    response = client.post(
+        "/v1/me/merge-guest",
+        headers=bearer(token(str(uuid.uuid4()))),
+        json={"guest_token": token(guest_id)},
+    )
+    assert response.status_code == 409
+    # The guest token must be good, and a guest's: knowing a guest's id is not enough.
+    for bad in (
+        token(guest_id, key=OTHER_KEY),
+        token(guest_id, lifetime=-600),
+        token(guest_id, iss="https://other.supabase.co/auth/v1"),
+        token(guest_id, anonymous=False),
+        guest_id,
+    ):
+        assert merge(client, google_id, bad).status_code == 409
+    assert guest_reports() == 1
+    # Without any sign in, nothing moves.
+    assert (
+        client.post("/v1/me/merge-guest", json={"guest_token": token(guest_id)}).status_code == 401
+    )
+    assert guest_reports() == 1
+
+
+def test_moving_twice_or_into_itself_changes_nothing(client: TestClient) -> None:
+    google_id, guest_id = str(uuid.uuid4()), str(uuid.uuid4())
+    save(browser(client, guest_id), hadahan())
+    assert merge(client, google_id, token(guest_id)).json() == {"moved": 1, "saved": 1}
+    assert merge(client, google_id, token(guest_id)).json() == {"moved": 0, "saved": 1}
+
+
+def test_a_failed_supabase_delete_does_not_undo_the_move(
+    client: TestClient, admin: FakeAdmin
+) -> None:
+    google_id, guest_id = str(uuid.uuid4()), str(uuid.uuid4())
+    save(browser(client, guest_id), hadahan())
+    admin.fail = True
+    assert merge(client, google_id, token(guest_id)).json() == {"moved": 1, "saved": 1}
 
 
 def test_a_page_on_another_site_cannot_save_or_delete(me: TestClient) -> None:

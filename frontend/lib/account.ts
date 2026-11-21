@@ -54,6 +54,24 @@ export async function signOutHere(): Promise<void> {
   announce();
 }
 
+/** "Sign out everywhere": ends the sign in on every device, this one included. */
+export async function signOutEverywhere(): Promise<void> {
+  if (signInConfigured()) await (await supabase()).auth.signOut({ scope: "global" });
+  announce();
+}
+
+export type Merged = components["schemas"]["MergeOut"];
+
+/**
+ * Moves the reports a guest saved on this browser into the Google account just signed in to
+ * (it existed already, so Supabase could not link it). The backend checks both sign ins.
+ */
+export async function mergeGuest(guestToken: string): Promise<Merged> {
+  const response = await ensureOk(await call("/me/merge-guest", { method: "POST", body: { guest_token: guestToken } }));
+  announce();
+  return (await response.json()) as Merged;
+}
+
 /** Saves a result. Saving one already kept answers with that one (`created` is false). */
 export function saveReport(body: ReportRequest): Promise<SavedCreated> {
   return oneSaveAtATime(async () => {

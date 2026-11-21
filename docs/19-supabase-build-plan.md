@@ -74,7 +74,7 @@ Browser ── signs in ──▶ Supabase Auth (anonymous, Google)
 | Supabase, Authentication → Sign In / Providers | **Allow manual linking: on.** Without it a guest cannot link Google | No |
 | Render, `astronomia-api` | `ASTRONOMIA_DATABASE_URL` = Supabase session pooler connection string | **Yes.** Owner sets it |
 | Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_URL` = the project address, for the signing keys (`https://ihzvwnwkbcqldhrvsrle.supabase.co` on staging). Without it nobody can sign in | No |
-| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_SECRET_KEY`, only for deleting accounts | **Yes.** Owner sets it |
+| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_SECRET_KEY` (`sb_secret_...`), only for deleting users from Supabase Auth (account deletion, moved guests) | **Yes.** Owner sets it |
 | `backend/.env` (local) | The same three, for running against staging | **Yes.** Never committed |
 
 Secrets are typed into the dashboards by the owner, never into chat or the repository.
@@ -148,6 +148,32 @@ Notes from building each step, for whoever changes it next.
   in Supabase (`https://sidera.ppwrks.com/**` and the rest) cover it.
 - Browser tests answer Supabase's calls themselves (`frontend/tests/e2e/supabase.ts`); CI builds
   the site pointed at `https://supabase.e2e.test`.
+
+### Step 4: moving a guest into an existing account, sign out, delete account
+
+- **The Google account already exists** (signed in on another phone): Supabase refuses to link
+  it and sends the browser back to `/<lang>/auth/callback` with `error_code=
+  identity_already_exists`. The callback page renews the guest's sign in, keeps its access token
+  in this tab (`sessionStorage`), and signs in with Google. Back again, it calls
+  `POST /v1/me/merge-guest` with the Google token as usual and the guest token in the body.
+- **The backend checks both tokens** with the same rules: the caller must be a Google account,
+  the body's token a guest's, both good and unexpired. A bad guest token is 409, not 401, so the
+  page does not sign the Google account out. It moves every report the Google account does not
+  already have (the same input is kept once), deletes the guest's rows, then deletes the guest
+  from Supabase with the secret key. If that last call fails the move stands; the clean up job
+  (step 5) removes the empty guest later.
+- **Sign out**: My reports, for a Google account, has "Sign out of this phone"
+  (`signOut({ scope: "local" })`) and "Sign out everywhere" (`scope: "global"`, which revokes
+  every device's sign in; an access token already given out works until it runs out, within an
+  hour). A guest is not offered sign out: it would lose its reports. It can delete them instead.
+- **Delete account**: `DELETE /v1/me` deletes the user's rows first, then the Supabase user with
+  `ASTRONOMIA_SUPABASE_SECRET_KEY` (`DELETE /auth/v1/admin/users/<id>`, the key in `apikey`).
+  If Supabase cannot be reached the rows are already gone and the answer is 502; trying again
+  finishes it. Without the key the answer is 503, except on a developer's own computer. The
+  page then signs the browser out. For a Google account the button says "Delete my account".
+- Tests: `backend/tests/test_api_saved.py` (the move with both tokens checked, every report
+  moved, the guest removed here and in Supabase; delete removes every row and the Supabase
+  user), `frontend/tests/e2e/saved.spec.ts` (the whole trip through a stand-in Google).
 
 ## 6. Checks before production
 

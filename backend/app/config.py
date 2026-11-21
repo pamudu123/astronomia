@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     # Supabase Auth (docs/19): the project address, for the public keys that sign access tokens,
     # for example https://abcd.supabase.co. Empty: nobody can sign in.
     supabase_url: str = ""
+    # Supabase's secret key (sb_secret_...), used only to delete a user from Supabase Auth when
+    # they delete their account. Secret: set in the host's dashboard or backend/.env, never here.
+    supabase_secret_key: str = ""
     # When set, every request except /healthz must carry this key in X-Access-Key.
     # Used to keep a staging backend private. Empty means open, as in local runs.
     access_key: str = ""

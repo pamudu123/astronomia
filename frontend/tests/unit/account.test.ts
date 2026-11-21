@@ -1,6 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { SAVE_LOCK, birthOf, listSaved, matchOf, saveReport } from "@/lib/account";
+import {
+  SAVE_LOCK,
+  birthOf,
+  listSaved,
+  matchOf,
+  mergeGuest,
+  saveReport,
+  signOutEverywhere,
+  signOutHere,
+} from "@/lib/account";
 import type { ReportRequest } from "@/lib/report";
 import en from "@/messages/en.json";
 import si from "@/messages/si.json";
@@ -186,5 +195,32 @@ describe("the sign in goes with every account call", () => {
     await expect(listSaved()).rejects.toThrow();
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(auth.token).toBeNull();
+  });
+});
+
+describe("moving a guest and signing out", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("sends the Google sign in in the header and the guest's in the body", async () => {
+    auth.token = "google.access.token";
+    const fetch = vi.fn<(url: string, init?: RequestInit) => Promise<Response>>(
+      async () => new Response(JSON.stringify({ moved: 2, saved: 5 }), { status: 200 }),
+    );
+    vi.stubGlobal("fetch", fetch);
+    vi.stubGlobal("window", new EventTarget());
+    await expect(mergeGuest("guest.access.token")).resolves.toEqual({ moved: 2, saved: 5 });
+    const [url, init] = fetch.mock.calls[0];
+    expect(url).toBe("/api/v1/me/merge-guest");
+    expect(init?.method).toBe("POST");
+    expect(new Headers(init?.headers).get("X-Sidera-Token")).toBe("google.access.token");
+    expect(JSON.parse(String(init?.body))).toEqual({ guest_token: "guest.access.token" });
+    expect(auth.guests).toBe(0); // never signs in as a new guest
+  });
+
+  it("signs out of this phone, or everywhere", async () => {
+    vi.stubGlobal("window", new EventTarget());
+    await signOutHere();
+    await signOutEverywhere();
+    expect(auth.signOut.mock.calls).toEqual([[{ scope: "local" }], [{ scope: "global" }]]);
   });
 });

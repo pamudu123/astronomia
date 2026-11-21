@@ -1891,11 +1891,56 @@
           "saved"
         ],
         "summary": "Delete Me",
-        "description": "Deletes the signed in account and every report it keeps.",
+        "description": "Deletes the signed in account: every report it keeps, then its Supabase sign in.\n\nThe page signs out of this browser afterwards. If Supabase cannot be reached, the reports\nare already gone and 502 asks the page to try again.",
         "operationId": "delete_me_v1_me_delete",
         "responses": {
           "204": {
             "description": "Successful Response"
+          },
+          "502": {
+            "description": "Reports deleted; Supabase could not delete the sign in yet"
+          }
+        }
+      }
+    },
+    "/v1/me/merge-guest": {
+      "post": {
+        "tags": [
+          "saved"
+        ],
+        "summary": "Merge Guest",
+        "description": "Moves a guest's reports into the Google account that just signed in, then removes the guest.\n\nFor a guest who presses \"Continue with Google\" with a Google account that already exists\n(from another phone): Supabase cannot link it, so the page signs in with Google and calls\nthis with both tokens. Both are checked, so only the browser that holds the guest's sign in\ncan move its reports.",
+        "operationId": "merge_guest_v1_me_merge_guest_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuestMerge"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -3785,6 +3830,21 @@
         ],
         "title": "FullPerson"
       },
+      "GuestMerge": {
+        "properties": {
+          "guest_token": {
+            "type": "string",
+            "maxLength": 8192,
+            "minLength": 1,
+            "title": "Guest Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guest_token"
+        ],
+        "title": "GuestMerge"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -4911,6 +4971,24 @@
           "saved"
         ],
         "title": "MeOut"
+      },
+      "MergeOut": {
+        "properties": {
+          "moved": {
+            "type": "integer",
+            "title": "Moved"
+          },
+          "saved": {
+            "type": "integer",
+            "title": "Saved"
+          }
+        },
+        "type": "object",
+        "required": [
+          "moved",
+          "saved"
+        ],
+        "title": "MergeOut"
       },
       "Meta": {
         "properties": {

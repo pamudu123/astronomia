@@ -58,6 +58,14 @@ changed until then (docs/19, step 5 updates it).
   address, and when the account signed in. The site shows the email in My reports; the backend
   reads only the user id and whether it is a guest. A guest who continues with Google keeps the
   same account, so the reports saved on that browser stay with it.
+- **Moving a guest into an existing account.** When a guest continues with a Google account that
+  already has reports from another device, the guest's reports join that account and the guest
+  is deleted, here and in Supabase Auth. Only the browser holding the guest's sign in can ask for
+  this: the backend checks both sign ins.
+- **Sign out and delete.** "Sign out of this phone" and "Sign out everywhere" (every device
+  within an hour). "Delete my account" deletes every saved report and then the Supabase Auth
+  user. The 12-month inactivity rule in the notice is replaced by docs/18's 7-day rule for free
+  saves once that is built (docs/18, step 2).
 - **Where.** The database and Supabase Auth are in Singapore (Supabase project on AWS
   ap-southeast-1). Supabase becomes a processor to name, next to Render and Vercel.
 - **Old guest records.** The migration that removes the old cookie sessions also deletes the guest

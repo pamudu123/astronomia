@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { type Page, expect, test } from "@playwright/test";
 
-import { SUPABASE, standInSupabase } from "./supabase";
+import { GOOGLE_EMAIL, SUPABASE, standInSupabase } from "./supabase";
 
 /** The backend is not running in these tests: its answers are saved real responses. */
 const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
@@ -232,6 +232,82 @@ test("a guest who continues with Google links it to the same account", async ({ 
   await expect(page).toHaveURL((url) => url.href.startsWith(`${SUPABASE}/google?`));
   expect(supabase.calls).toContain("GET /auth/v1/user/identities/authorize");
   expect(supabase.guests()).toBe(1);
+});
+
+test("a guest whose Google account already exists moves their reports into it", async ({ page }) => {
+  const supabase = await standInSupabase(page, { google: "return" });
+  await mockTools(page);
+  await page.route("**/api/v1/saved", (route) =>
+    route.fulfill(route.request().method() === "POST" ? reply(201, { ...hadahanItem, created: true }) : reply(200, { reports: [hadahanItem] })),
+  );
+  const merges: { token: string | null; body: unknown }[] = [];
+  await page.route("**/api/v1/me/merge-guest", async (route) => {
+    merges.push({ token: await route.request().headerValue("x-sidera-token"), body: route.request().postDataJSON() });
+    return route.fulfill(reply(200, { moved: 1, saved: 3 }));
+  });
+  await showHadahan(page);
+  await page.locator("[data-save]").getByRole("button", { name: "Save" }).click();
+  await expect(page.locator("[data-save]").getByRole("status")).toContainText("Saved to My reports.");
+  const guestToken = await page.evaluate(() => {
+    const key = Object.keys(localStorage).find((name) => name.endsWith("-auth-token"))!;
+    return (JSON.parse(localStorage.getItem(key)!) as { access_token: string }).access_token;
+  });
+
+  // Supabase sends the guest back from linking: that Google account belongs to another user.
+  await page.goto("/en/auth/callback?next=%2Fen%2Fmy&error=server_error&error_code=identity_already_exists");
+  // The page signs in with that account instead, Google sends the browser back, and the
+  // guest's reports are moved, with both sign ins.
+  await expect(page).toHaveURL(/\/en\/my$/);
+  expect(merges).toHaveLength(1);
+  const google = merges[0].token!;
+  expect(JSON.parse(Buffer.from(google.split(".")[1], "base64url").toString()).is_anonymous).toBe(false);
+  expect(merges[0].body).toEqual({ guest_token: expect.stringMatching(/^[\w-]+\.[\w-]+\.[\w-]+$/) });
+  const sent = (merges[0].body as { guest_token: string }).guest_token;
+  expect(JSON.parse(Buffer.from(sent.split(".")[1], "base64url").toString()).sub).toBe(
+    JSON.parse(Buffer.from(guestToken.split(".")[1], "base64url").toString()).sub,
+  );
+  expect(supabase.calls).toContain("POST /auth/v1/token");
+  await expect(page.locator("#sign-in")).toContainText(`Signed in with Google as ${GOOGLE_EMAIL}.`);
+});
+
+test("a Google account can sign out of this phone or everywhere, and delete itself", async ({ page }) => {
+  const supabase = await standInSupabase(page, { google: "return" });
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/saved", async (route) => {
+    const signedIn = Boolean(await route.request().headerValue("x-sidera-token"));
+    return route.fulfill(reply(200, { reports: signedIn ? [hadahanItem] : [] }));
+  });
+  const deleted: (string | null)[] = [];
+  await page.route("**/api/v1/me", async (route) => {
+    deleted.push(await route.request().headerValue("x-sidera-token"));
+    return route.fulfill({ status: 204, body: "" });
+  });
+  const signIn = async () => {
+    await page.goto("/en/my");
+    await page.locator("#sign-in").getByRole("button", { name: "Continue with Google" }).click();
+    await expect(page.locator("#sign-in")).toContainText(`Signed in with Google as ${GOOGLE_EMAIL}.`);
+    await expect(page.locator('[data-saved-report="hadahan"]')).toBeVisible();
+  };
+
+  await signIn();
+  await expect(page.getByText("Your reports are kept with your Google account.")).toBeVisible();
+  await page.getByRole("button", { name: "Sign out of this phone" }).click();
+  await expect(page.locator("[data-saved-empty]")).toBeVisible();
+  await expect(page.locator("#sign-in")).toContainText("Saved reports on another device?");
+
+  await signIn();
+  await page.getByRole("button", { name: "Sign out everywhere" }).click();
+  await expect(page.locator("[data-saved-empty]")).toBeVisible();
+  const logouts = supabase.calls.filter((call) => call === "POST /auth/v1/logout");
+  expect(logouts).toHaveLength(2);
+
+  await signIn();
+  await page.getByRole("button", { name: "Delete my account" }).click();
+  await expect(page.getByText("Delete your account and every saved report?")).toBeVisible();
+  await page.getByRole("button", { name: "Yes, delete my account" }).click();
+  await expect(page.getByText("Everything is deleted. Nothing from it is kept.")).toBeVisible();
+  expect(deleted).toHaveLength(1);
+  expect(deleted[0]).toBeTruthy();
 });
 
 test("a sign in that fails on the way back says so", async ({ page }) => {

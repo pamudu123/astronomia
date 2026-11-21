@@ -22,6 +22,10 @@ services:
       # The Supabase project, whose public keys check sign in tokens (docs/19). Not secret.
       - key: ASTRONOMIA_SUPABASE_URL
         value: https://ihzvwnwkbcqldhrvsrle.supabase.co
+      # Supabase's secret key, only for deleting users from Supabase Auth (docs/19). Secret: set
+      # in the dashboard, never here.
+      - key: ASTRONOMIA_SUPABASE_SECRET_KEY
+        sync: false
       # Shared with the frontend (BACKEND_ACCESS_KEY). Set in the dashboard, never here.
       - key: ASTRONOMIA_ACCESS_KEY
         sync: false

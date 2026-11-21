@@ -97,7 +97,7 @@ export function MyReportsApp({ lang, dict }: Props) {
             </Link>
           </div>
         </section>
-        <GoogleSignIn lang={lang} t={t} who={who} hasReports={false} />
+        <GoogleSignIn lang={lang} t={t} who={who} hasReports={false} onSignedOut={retry} />
       </main>
     );
   }
@@ -134,7 +134,7 @@ export function MyReportsApp({ lang, dict }: Props) {
           </ul>
         </section>
       ))}
-      <GoogleSignIn lang={lang} t={t} who={who} hasReports />
+      <GoogleSignIn lang={lang} t={t} who={who} hasReports onSignedOut={retry} />
       <DeleteEverything t={t} google={who?.kind === "google"} onDone={() => setView({ kind: "wiped" })} />
     </main>
   );
@@ -320,9 +320,9 @@ function DeleteEverything({ t, google, onDone }: DeleteProps) {
       <p className="soft">{google ? t.googleKept : t.browserOnly}</p>
       {confirming ? (
         <div className={styles.actions}>
-          <span className={styles.confirm}>{t.deleteAllConfirm}</span>
+          <span className={styles.confirm}>{google ? t.deleteAccountConfirm : t.deleteAllConfirm}</span>
           <button type="button" className={`${styles.textButton} ${styles.danger}`} disabled={busy} onClick={wipe}>
-            {busy ? t.deleting : t.deleteAllYes}
+            {busy ? t.deleting : google ? t.deleteAccountYes : t.deleteAllYes}
           </button>
           <button type="button" className={styles.textButton} onClick={() => setConfirming(false)}>
             {t.cancel}
@@ -330,7 +330,7 @@ function DeleteEverything({ t, google, onDone }: DeleteProps) {
         </div>
       ) : (
         <button type="button" className={`${styles.textButton} ${styles.danger}`} onClick={() => setConfirming(true)}>
-          {t.deleteAll}
+          {google ? t.deleteAccount : t.deleteAll}
         </button>
       )}
       {failed && (

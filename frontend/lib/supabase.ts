@@ -125,6 +125,47 @@ export async function continueWithGoogle(lang: Locale, next: string): Promise<vo
   if (error) throw new SignInUnavailable(error.message);
 }
 
+/** Supabase's answer when Google is already the sign in of another Sidera account. */
+export const ALREADY_LINKED = "identity_already_exists";
+// The guest's access token, kept for this tab only while it goes to Google and back.
+const GUEST_KEY = "sidera-guest-token";
+
+/**
+ * For a guest whose Google account already has its own Sidera account (from another phone):
+ * linking fails, so this signs in with that Google account instead. The guest's access token,
+ * renewed first so it lasts the trip, is kept in this tab; the callback page then asks the
+ * backend to move the guest's reports into the Google account (lib/account.ts, mergeGuest).
+ */
+export async function signInKeepingGuest(lang: Locale, next: string): Promise<void> {
+  const auth = (await supabase()).auth;
+  const { data } = await auth.refreshSession();
+  const session = data.session ?? (await currentSession());
+  if (session?.user.is_anonymous) {
+    try {
+      sessionStorage.setItem(GUEST_KEY, session.access_token);
+    } catch {
+      // Storage refused (a private window): sign in anyway; the reports stay with the guest.
+    }
+  }
+  const options = { redirectTo: callbackUrl(lang, safeNext(next, lang)) };
+  const { error } = await auth.signInWithOAuth({ provider: "google", options });
+  if (error) {
+    takeGuestToken();
+    throw new SignInUnavailable(error.message);
+  }
+}
+
+/** The guest token kept by signInKeepingGuest, once: it is removed as it is read. */
+export function takeGuestToken(): string | null {
+  try {
+    const token = sessionStorage.getItem(GUEST_KEY);
+    sessionStorage.removeItem(GUEST_KEY);
+    return token;
+  } catch {
+    return null;
+  }
+}
+
 /** Finishes signing in on the callback page, from the code Supabase sent back. */
 export async function finishSignIn(code: string): Promise<void> {
   const { error } = await (await supabase()).auth.exchangeCodeForSession(code);

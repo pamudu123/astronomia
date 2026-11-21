@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { forwardedHeaders } from "@/lib/forward";
-import { callbackParams, safeNext } from "@/lib/supabase";
+import { callbackParams, safeNext, takeGuestToken } from "@/lib/supabase";
 
 const JWT = "eyJhbGciOiJFUzI1NiJ9.eyJzdWIiOiJ4In0.c2lnbmF0dXJl";
 
@@ -51,5 +51,28 @@ describe("coming back from Google", () => {
     for (const bad of [null, "", "https://evil.example", "//evil.example", "/\\evil.example", "my"]) {
       expect(safeNext(bad, "en")).toBe("/en/my");
     }
+  });
+});
+
+describe("the guest's sign in kept for the trip to Google", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("is read once, then gone", () => {
+    const store = new Map<string, string>([["sidera-guest-token", "guest.access.token"]]);
+    vi.stubGlobal("sessionStorage", {
+      getItem: (key: string) => store.get(key) ?? null,
+      removeItem: (key: string) => store.delete(key),
+    });
+    expect(takeGuestToken()).toBe("guest.access.token");
+    expect(takeGuestToken()).toBeNull();
+  });
+
+  it("is simply missing when storage is refused", () => {
+    vi.stubGlobal("sessionStorage", {
+      getItem: () => {
+        throw new Error("denied");
+      },
+    });
+    expect(takeGuestToken()).toBeNull();
   });
 });

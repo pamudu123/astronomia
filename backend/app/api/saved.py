@@ -28,7 +28,7 @@ from typing import Annotated, Any, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, Field, TypeAdapter
 
-from app.api.deps import Accounts, PlacesDb, Tokens
+from app.api.deps import Accounts, Admin, PlacesDb, Tokens
 from app.api.porondam import PorondamResponse
 from app.api.reports import HadahanReport, PorondamReport, ReportRequest
 from app.api.snapshots import (
@@ -330,16 +330,94 @@ def me(session: Current, accounts: Accounts) -> MeOut:
     return MeOut(kind=user.kind, saved=accounts.count_saved(user.id))
 
 
-@router.delete("/v1/me", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(same_site)])
+@router.delete(
+    "/v1/me",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(same_site)],
+    responses={502: {"description": "Reports deleted; Supabase could not delete the sign in yet"}},
+)
 def delete_me(
     me: Annotated[SignedIn, Depends(signed_in)],
     accounts: Accounts,
+    admin: Admin,
     settings: SettingsDep,
     response: Response,
 ) -> None:
-    """Deletes the signed in account and every report it keeps."""
+    """Deletes the signed in account: every report it keeps, then its Supabase sign in.
+
+    The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
+    are already gone and 502 asks the page to try again.
+    """
     accounts.delete_user(me.user.id)
     _set_hint(response, settings, 0)
+    if admin is None:
+        if settings.environment == "development":
+            return  # a developer's own computer, without the secret key
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "account deletion is not set up")
+    try:
+        admin.delete_user(me.user.id)
+    except OSError as error:  # urllib's errors are OSErrors
+        log.warning("could not delete supabase user: %s", error)
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, "try again") from error
+
+
+class GuestMerge(BaseModel):
+    # The access token of the anonymous user this browser was signed in as before Google.
+    guest_token: str = Field(min_length=1, max_length=8192)
+
+
+class MergeOut(BaseModel):
+    moved: int  # reports moved from the guest
+    saved: int  # reports the account keeps now
+
+
+@router.post(
+    "/v1/me/merge-guest",
+    response_model=MergeOut,
+    dependencies=[Depends(same_site)],
+)
+def merge_guest(
+    body: GuestMerge,
+    me: Annotated[SignedIn, Depends(signed_in)],
+    accounts: Accounts,
+    tokens: Tokens,
+    admin: Admin,
+    settings: SettingsDep,
+    response: Response,
+) -> MergeOut:
+    """Moves a guest's reports into the Google account that just signed in, then removes the guest.
+
+    For a guest who presses "Continue with Google" with a Google account that already exists
+    (from another phone): Supabase cannot link it, so the page signs in with Google and calls
+    this with both tokens. Both are checked, so only the browser that holds the guest's sign in
+    can move its reports.
+    """
+    if me.user.kind != "google":
+        raise HTTPException(status.HTTP_409_CONFLICT, "sign in with Google first")
+    # Not 401: that would say the Google sign in itself was refused.
+    if tokens is None:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "sign in is not set up")
+    try:
+        guest = tokens.check(body.guest_token)
+    except BadToken as error:
+        raise HTTPException(status.HTTP_409_CONFLICT, "the guest sign in has expired") from error
+    except KeysUnavailable as error:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE, "sign in is unavailable"
+        ) from error
+    if guest.kind != "guest":
+        raise HTTPException(status.HTTP_409_CONFLICT, "that is not a guest")
+    if guest.id == me.user.id:
+        return MergeOut(moved=0, saved=accounts.count_saved(me.user.id))
+    moved = accounts.move_reports(guest.id, me.user.id)
+    if admin is not None:
+        try:
+            admin.delete_user(guest.id)
+        except OSError as error:  # its reports have moved; the daily clean up removes it later
+            log.warning("could not delete merged guest from supabase: %s", error)
+    saved = accounts.count_saved(me.user.id)
+    _set_hint(response, settings, saved)
+    return MergeOut(moved=moved, saved=saved)
 
 
 @router.post(

@@ -53,8 +53,18 @@ export type StandIn = {
   guests: () => number;
 };
 
-/** Answers Supabase Auth's calls for one page or a whole browser context. */
-export async function standInSupabase(target: Page | BrowserContext): Promise<StandIn> {
+export const GOOGLE_USER = "00000000-0000-4000-8000-0000000000aa";
+export const GOOGLE_EMAIL = "nimali@example.com";
+
+/**
+ * Answers Supabase Auth's calls for one page or a whole browser context. With `google:
+ * "return"`, Google's page sends the browser straight back to the site with a code, which
+ * signs in as GOOGLE_USER.
+ */
+export async function standInSupabase(
+  target: Page | BrowserContext,
+  { google = "stay" }: { google?: "stay" | "return" } = {},
+): Promise<StandIn> {
   const calls: string[] = [];
   let guests = 0;
   await target.route(`${SUPABASE}/**`, async (route) => {
@@ -69,6 +79,18 @@ export async function standInSupabase(target: Page | BrowserContext): Promise<St
       return json(200, session(`00000000-0000-4000-8000-00000000000${guests}`, true));
     }
     if (url.pathname === "/auth/v1/logout") return route.fulfill({ status: 204, headers: CORS });
+    if (url.pathname === "/auth/v1/token") {
+      const grant = url.searchParams.get("grant_type");
+      if (grant === "pkce") return json(200, session(GOOGLE_USER, false, GOOGLE_EMAIL));
+      const body = (request.postDataJSON() ?? {}) as { refresh_token?: string };
+      const userId = (body.refresh_token ?? "").replace(/^refresh-/, "");
+      return json(200, session(userId, userId !== GOOGLE_USER));
+    }
+    if (url.pathname === "/auth/v1/authorize" && google === "return") {
+      const back = new URL(url.searchParams.get("redirect_to") ?? "/");
+      back.searchParams.set("code", "e2e-code");
+      return route.fulfill({ status: 302, headers: { location: back.toString() } });
+    }
     if (url.pathname === "/auth/v1/user/identities/authorize") {
       // Linking Google: Supabase answers with Google's address. Here, a page of the stand-in.
       return json(200, { url: `${SUPABASE}/google?${url.searchParams}` });

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { onSavedChange } from "@/lib/account";
+import { onSavedChange, signOutEverywhere, signOutHere } from "@/lib/account";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { type Who, continueWithGoogle, signInConfigured, whoIsSignedIn } from "@/lib/supabase";
@@ -30,21 +30,59 @@ export function useWho(): Who | undefined {
   return who;
 }
 
-type Props = { lang: Locale; t: Dictionary["saved"]; who: Who | undefined; hasReports: boolean };
+type Props = {
+  lang: Locale;
+  t: Dictionary["saved"];
+  who: Who | undefined;
+  hasReports: boolean;
+  onSignedOut?: () => void;
+};
 
 /**
  * "Continue with Google" in My reports. A guest links Google and keeps every report; someone
  * who saved on another device signs in to see them here. Once signed in, it says with which
- * account. The footer's "Already saved? Sign in" link leads here (#sign-in).
+ * account, with "Sign out of this phone" and "Sign out everywhere". The footer's "Already saved?
+ * Sign in" link leads here (#sign-in).
  */
-export function GoogleSignIn({ lang, t, who, hasReports }: Props) {
-  const [step, setStep] = useState<"idle" | "opening" | "failed">("idle");
+export function GoogleSignIn({ lang, t, who, hasReports, onSignedOut }: Props) {
+  const [step, setStep] = useState<"idle" | "opening" | "signingOut" | "failed">("idle");
   if (!signInConfigured() || who === undefined) return null;
 
+  async function leave(signOut: () => Promise<void>) {
+    setStep("signingOut");
+    try {
+      await signOut();
+      setStep("idle");
+      onSignedOut?.();
+    } catch {
+      setStep("failed");
+    }
+  }
+
   if (who?.kind === "google") {
+    const busy = step === "signingOut";
     return (
       <section id="sign-in" className={styles.signIn} data-signed-in="google">
         <p>{who.email ? fill(t.signedInAs, { email: who.email }) : t.signedIn}</p>
+        <div className={styles.actions}>
+          <button type="button" className={styles.textButton} disabled={busy} onClick={() => leave(signOutHere)}>
+            {busy ? t.signingOut : t.signOutHere}
+          </button>
+          <button
+            type="button"
+            className={styles.textButton}
+            disabled={busy}
+            onClick={() => leave(signOutEverywhere)}
+          >
+            {t.signOutEverywhere}
+          </button>
+        </div>
+        <p className="soft">{t.signOutNote}</p>
+        {step === "failed" && (
+          <p role="alert" className={styles.error}>
+            {t.actionFailed}
+          </p>
+        )}
       </section>
     );
   }
