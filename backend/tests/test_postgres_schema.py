@@ -4,6 +4,7 @@ The first tests need no database: they watch the SQL the stores send. The rest r
 test PostgreSQL built from supabase/migrations/, as on Supabase.
 """
 
+import datetime as dt
 import re
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -35,6 +36,8 @@ class Recorder:
             self._row = (None,) if params[0] in self.missing else (12345,)
         elif "COUNT(*)" in statement:
             self._row = (0,)
+        elif "SELECT kind, last_seen_at" in statement:
+            self._row = ("guest", dt.datetime(2026, 11, 21, tzinfo=dt.UTC))
         return self
 
     def fetchone(self) -> tuple[Any, ...] | None:
@@ -79,20 +82,21 @@ def test_queries_name_the_sidera_schema() -> None:
 
 def test_the_account_store_only_touches_sidera_tables(recorder: Recorder) -> None:
     store = postgres_accounts("postgresql://test")
-    user_id = store.create_guest().user.id
-    store.find_session("code")
+    user_id = "00000000-0000-0000-0000-000000000001"
+    store.find_user(user_id, "guest")
+    store.add_user(user_id, "guest")
     store.save(user_id, report(), limit=5)
     store.list_saved(user_id)
     store.count_saved(user_id)
     store.get_saved(user_id, "00000000-0000-0000-0000-000000000000")
     store.rename(user_id, "00000000-0000-0000-0000-000000000000", "Nimali")
     store.delete_saved(user_id, "00000000-0000-0000-0000-000000000000")
-    store.end_session("code")
+    store.move_reports(user_id, "00000000-0000-0000-0000-000000000002")
     store.delete_user(user_id)
 
     queries = [s for s in recorder.statements if "to_regclass" not in s]
     names = {name for statement in queries for name in TABLE_NAME.findall(statement)}
-    assert names == {"sidera.users", "sidera.sessions", "sidera.saved_reports"}
+    assert names == {"sidera.users", "sidera.saved_reports"}
     assert not [s for s in recorder.statements if re.search(r"\b(CREATE|ALTER|DROP)\b", s)]
     assert not [s for s in queries if "?" in s]
 
@@ -148,8 +152,8 @@ def test_the_migrations_make_the_tables_the_stores_use() -> None:
     url = need_postgres()
     migrate(url)
     store = postgres_accounts(url)
-    session = store.create_guest()
-    store.save(session.user.id, report(), limit=5)
+    user = store.add_user("00000000-0000-0000-0000-000000000001", "guest")
+    store.save(user.id, report(), limit=5)
     PostgresShareStore(url).create("hadahan", {}, days=30)
     with connected() as db:
         rows = db.execute(
@@ -157,11 +161,12 @@ def test_the_migrations_make_the_tables_the_stores_use() -> None:
             "AND relkind = 'r' ORDER BY relname"
         ).fetchall()
         counts = db.execute(
-            "SELECT (SELECT count(*) FROM sidera.users), (SELECT count(*) FROM sidera.sessions),"
+            "SELECT (SELECT count(*) FROM sidera.users),"
             " (SELECT count(*) FROM sidera.saved_reports), (SELECT count(*) FROM sidera.shares)"
         ).fetchone()
-    assert [row[0] for row in rows] == ["saved_reports", "sessions", "shares", "users"]
-    assert counts == (1, 1, 1, 1)
+    # The temporary guest sessions table is gone (20261121130000_drop_guest_sessions.sql).
+    assert [row[0] for row in rows] == ["saved_reports", "shares", "users"]
+    assert counts == (1, 1, 1)
 
 
 def test_every_table_is_locked_to_everyone_but_the_owner() -> None:
@@ -189,12 +194,9 @@ def test_a_deleted_user_takes_their_rows_along() -> None:
     url = need_postgres()
     migrate(url)
     store = postgres_accounts(url)
-    session = store.create_guest()
-    store.save(session.user.id, report(), limit=5)
+    user = store.add_user("00000000-0000-0000-0000-000000000001", "guest")
+    store.save(user.id, report(), limit=5)
     with connected() as db:
-        db.execute("DELETE FROM sidera.users WHERE id = %s", (session.user.id,))
-        left = db.execute(
-            "SELECT (SELECT count(*) FROM sidera.sessions), "
-            "(SELECT count(*) FROM sidera.saved_reports)"
-        ).fetchone()
-    assert left == (0, 0)
+        db.execute("DELETE FROM sidera.users WHERE id = %s", (user.id,))
+        left = db.execute("SELECT count(*) FROM sidera.saved_reports").fetchone()
+    assert left == (0,)

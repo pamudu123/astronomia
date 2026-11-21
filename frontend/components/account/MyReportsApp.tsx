@@ -9,6 +9,7 @@ import { type SavedItem, deleteEverything, deleteSaved, listSaved, renameSaved }
 import { type Labels, fetchLabels, fill, formatDate } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { GoogleSignIn, useWho } from "./GoogleSignIn";
 import styles from "./MyReports.module.css";
 
 type View =
@@ -19,11 +20,12 @@ type View =
 
 type Props = { lang: Locale; dict: Dictionary };
 
-/** My reports: every result this browser saved, grouped by tool. */
+/** My reports: every result saved by whoever is signed in on this browser, grouped by tool. */
 export function MyReportsApp({ lang, dict }: Props) {
   const t = dict.saved;
   const [view, setView] = useState<View>({ kind: "loading" });
   const [attempt, setAttempt] = useState(0);
+  const who = useWho();
 
   useEffect(() => {
     let current = true;
@@ -95,6 +97,7 @@ export function MyReportsApp({ lang, dict }: Props) {
             </Link>
           </div>
         </section>
+        <GoogleSignIn lang={lang} t={t} who={who} hasReports={false} onSignedOut={retry} />
       </main>
     );
   }
@@ -131,7 +134,8 @@ export function MyReportsApp({ lang, dict }: Props) {
           </ul>
         </section>
       ))}
-      <DeleteEverything t={t} onDone={() => setView({ kind: "wiped" })} />
+      <GoogleSignIn lang={lang} t={t} who={who} hasReports onSignedOut={retry} />
+      <DeleteEverything t={t} google={who?.kind === "google"} onDone={() => setView({ kind: "wiped" })} />
     </main>
   );
 }
@@ -292,7 +296,9 @@ function ReportCard({ lang, dict, labels, item, onRenamed, onDeleted }: CardProp
   );
 }
 
-function DeleteEverything({ t, onDone }: { t: Dictionary["saved"]; onDone: () => void }) {
+type DeleteProps = { t: Dictionary["saved"]; google: boolean; onDone: () => void };
+
+function DeleteEverything({ t, google, onDone }: DeleteProps) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -311,12 +317,12 @@ function DeleteEverything({ t, onDone }: { t: Dictionary["saved"]; onDone: () =>
 
   return (
     <footer className={styles.foot}>
-      <p className="soft">{t.browserOnly}</p>
+      <p className="soft">{google ? t.googleKept : t.browserOnly}</p>
       {confirming ? (
         <div className={styles.actions}>
-          <span className={styles.confirm}>{t.deleteAllConfirm}</span>
+          <span className={styles.confirm}>{google ? t.deleteAccountConfirm : t.deleteAllConfirm}</span>
           <button type="button" className={`${styles.textButton} ${styles.danger}`} disabled={busy} onClick={wipe}>
-            {busy ? t.deleting : t.deleteAllYes}
+            {busy ? t.deleting : google ? t.deleteAccountYes : t.deleteAllYes}
           </button>
           <button type="button" className={styles.textButton} onClick={() => setConfirming(false)}>
             {t.cancel}
@@ -324,7 +330,7 @@ function DeleteEverything({ t, onDone }: { t: Dictionary["saved"]; onDone: () =>
         </div>
       ) : (
         <button type="button" className={`${styles.textButton} ${styles.danger}`} onClick={() => setConfirming(true)}>
-          {t.deleteAll}
+          {google ? t.deleteAccount : t.deleteAll}
         </button>
       )}
       {failed && (

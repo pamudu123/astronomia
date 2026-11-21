@@ -1,12 +1,11 @@
-"""Accounts, sessions and saved reports (docs/16).
+"""Accounts and saved reports (docs/16, docs/19).
 
-A guest account is made quietly the first time someone presses Save. It is a random session
-code in a cookie, and nothing personal. Google sign in (later) turns a guest into a Google
-account and keeps its reports.
+Sign in is Supabase Auth's: an anonymous user on the first Save, or a Google account. The
+backend checks the caller's access token (app/auth.py) and keeps one `users` row per Supabase
+user, under the same id, made the first time that user calls. Supabase keeps the sessions, so
+this store keeps none, and nothing personal: names and emails stay in Supabase Auth.
 
-Only a hash of the session code is kept, so a copy of this database cannot be turned back into
-working sessions. Every saved report query filters on the owner, so one account can never read
-another's reports.
+Every saved report query filters on the owner, so one account can never read another's reports.
 
 One class for both databases: SQLite for local runs and tests, PostgreSQL (Supabase) on hosts
 without a lasting disk (set ASTRONOMIA_DATABASE_URL). The few differences are in `_Dialect`.
@@ -15,9 +14,7 @@ made by the migrations in `supabase/migrations/`, never by the app.
 """
 
 import datetime as dt
-import hashlib
 import json
-import secrets
 import sqlite3
 import threading
 import uuid
@@ -34,18 +31,11 @@ from app.store import postgres
 Clock = Callable[[], dt.datetime]
 Kind = Literal["guest", "google"]
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 # The tables this store uses. Queries name them as {users} and so on; see `_Dialect.sql`.
-TABLES = ("users", "sessions", "saved_reports")
-GUEST_SESSION_DAYS = 365
-# A guest account nobody has used for this long is deleted with its reports.
-GUEST_IDLE_DAYS = 365
-# A session is renewed (and its cookie sent again) at most once a day.
-RENEW_AFTER = dt.timedelta(days=1)
-
-
-def _hash(secret: str) -> str:
-    return hashlib.sha256(secret.encode()).hexdigest()
+TABLES = ("users", "saved_reports")
+# When the user was last seen is written at most once a day.
+SEEN_EVERY = dt.timedelta(days=1)
 
 
 def _utc_now() -> dt.datetime:
@@ -56,20 +46,6 @@ def _utc_now() -> dt.datetime:
 class User:
     id: str
     kind: Kind
-
-
-@dataclass(frozen=True)
-class Session:
-    token: str  # goes in the cookie, never stored
-    user: User
-    expires_at: dt.datetime
-
-
-@dataclass(frozen=True)
-class FoundSession:
-    user: User
-    expires_at: dt.datetime
-    renewed: bool  # True when the cookie should be sent again with the new expiry
 
 
 @dataclass(frozen=True)
@@ -135,13 +111,8 @@ _SQLITE_SCHEMA = [
         created_at TEXT NOT NULL,
         last_seen_at TEXT NOT NULL
     )""",
-    """CREATE TABLE IF NOT EXISTS sessions (
-        token_hash TEXT PRIMARY KEY,
-        user_id TEXT NOT NULL,
-        created_at TEXT NOT NULL,
-        expires_at TEXT NOT NULL
-    )""",
-    "CREATE INDEX IF NOT EXISTS sessions_user ON sessions (user_id)",
+    # The guest cookie's sessions, before sign in moved to Supabase Auth.
+    "DROP TABLE IF EXISTS sessions",
     """CREATE TABLE IF NOT EXISTS saved_reports (
         id TEXT PRIMARY KEY,
         user_id TEXT NOT NULL,
@@ -203,98 +174,78 @@ class AccountStore:
     def _run(self, db: Any, statement: str, params: Sequence[Any] = ()) -> Any:
         return db.execute(self._d.sql(statement), tuple(params))
 
-    # Accounts and sessions
+    # Accounts
 
-    def create_guest(self) -> Session:
-        """A new guest account with its first session. Also clears out old guests."""
+    def find_user(self, user_id: str, kind: Kind) -> User | None:
+        """The account of a Supabase user, or None when that user has not called before.
+
+        `kind` is what the user's token says now. A guest who linked Google becomes a Google
+        account, under the same id, so every report stays. A Google account never goes back to
+        guest. When the user was last seen is kept, at most once a day.
+        """
         now = self.clock()
         with self._connect() as db:
-            return self._insert_guest(db, now)
+            return self._find_user(db, user_id, kind, now)
 
-    def create_guest_with(self, report: NewReport, limit: int) -> tuple[Session, SavedSummary]:
-        """A new guest account holding its first report, kept together or not at all.
-
-        A save that fails leaves no empty account behind (and no cookie for one)."""
-        now = self.clock()
-        with self._connect() as db:
-            session = self._insert_guest(db, now)
-            item, _ = self._save(db, session.user.id, report, limit, now)
-        return session, item
-
-    def _insert_guest(self, db: Any, now: dt.datetime) -> Session:
-        user = User(id=str(uuid.uuid4()), kind="guest")
-        token = secrets.token_urlsafe(32)
-        expires = now + dt.timedelta(days=GUEST_SESSION_DAYS)
-        self._purge(db, now)
-        self._run(
-            db,
-            "INSERT INTO {users} (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?)",
-            (user.id, user.kind, self._ts(now), self._ts(now)),
-        )
-        self._run(
-            db,
-            "INSERT INTO {sessions} (token_hash, user_id, created_at, expires_at) "
-            "VALUES (?, ?, ?, ?)",
-            (_hash(token), user.id, self._ts(now), self._ts(expires)),
-        )
-        return Session(token=token, user=user, expires_at=expires)
-
-    def find_session(self, token: str) -> FoundSession | None:
-        """The account behind a session code, renewing the session once a day."""
-        now = self.clock()
-        with self._connect() as db:
-            row = self._run(
+    def _find_user(self, db: Any, user_id: str, kind: Kind, now: dt.datetime) -> User | None:
+        row = self._run(
+            db, "SELECT kind, last_seen_at FROM {users} WHERE id = ?", (user_id,)
+        ).fetchone()
+        if row is None:
+            return None
+        stored, seen = row
+        new_kind: Kind = "google" if "google" in (stored, kind) else "guest"
+        if new_kind != stored or now - self._read_ts(seen) >= SEEN_EVERY:
+            self._run(
                 db,
-                "SELECT u.id, u.kind, s.expires_at FROM {sessions} s "
-                "JOIN {users} u ON u.id = s.user_id WHERE s.token_hash = ?",
-                (_hash(token),),
-            ).fetchone()
-            if row is None:
-                return None
-            user_id, kind, expires_raw = row
-            expires = self._read_ts(expires_raw)
-            if expires <= now:
-                self._run(db, "DELETE FROM {sessions} WHERE token_hash = ?", (_hash(token),))
-                return None
-            renewed_expiry = now + dt.timedelta(days=GUEST_SESSION_DAYS)
-            renew = renewed_expiry - expires >= RENEW_AFTER
-            if renew:
-                expires = renewed_expiry
-                self._run(
-                    db,
-                    "UPDATE {sessions} SET expires_at = ? WHERE token_hash = ?",
-                    (self._ts(expires), _hash(token)),
-                )
-                self._run(
-                    db, "UPDATE {users} SET last_seen_at = ? WHERE id = ?", (self._ts(now), user_id)
-                )
-        user = User(id=self._read_id(user_id), kind=kind)
-        return FoundSession(user=user, expires_at=expires, renewed=renew)
+                "UPDATE {users} SET kind = ?, last_seen_at = ? WHERE id = ?",
+                (new_kind, self._ts(now), user_id),
+            )
+        return User(id=user_id, kind=new_kind)
 
-    def end_session(self, token: str) -> None:
+    def add_user(self, user_id: str, kind: Kind) -> User:
+        """The account of a Supabase user, made now if it is not there yet."""
+        now = self.clock()
         with self._connect() as db:
-            self._run(db, "DELETE FROM {sessions} WHERE token_hash = ?", (_hash(token),))
+            self._run(
+                db,
+                "INSERT INTO {users} (id, kind, created_at, last_seen_at) VALUES (?, ?, ?, ?) "
+                "ON CONFLICT (id) DO NOTHING",
+                (user_id, kind, self._ts(now), self._ts(now)),
+            )
+            user = self._find_user(db, user_id, kind, now)
+        assert user is not None
+        return user
+
+    def move_reports(self, from_user: str, to_user: str) -> int:
+        """Moves every report of one account into another, then deletes the first account.
+
+        For a guest who signs in with a Google account that already exists. A report the second
+        account already keeps (the same input) is not copied twice. Returns how many moved.
+        """
+        if from_user == to_user:
+            return 0
+        with self._connect() as db:
+            cursor = self._run(
+                db,
+                "UPDATE {saved_reports} SET user_id = ?, updated_at = ? WHERE user_id = ? "
+                "AND input_hash NOT IN "
+                "(SELECT input_hash FROM {saved_reports} WHERE user_id = ?)",
+                (to_user, self._ts(self.clock()), from_user, to_user),
+            )
+            moved = int(cursor.rowcount)
+            self._delete_users(db, [from_user])
+        return moved
 
     def delete_user(self, user_id: str) -> None:
-        """The account, every session and every saved report."""
+        """The account and every saved report."""
         with self._connect() as db:
             self._delete_users(db, [user_id])
 
     def _delete_users(self, db: Any, user_ids: list[str]) -> None:
         for user_id in user_ids:
             self._run(db, "DELETE FROM {saved_reports} WHERE user_id = ?", (user_id,))
-            self._run(db, "DELETE FROM {sessions} WHERE user_id = ?", (user_id,))
             self._run(db, "DELETE FROM {users} WHERE id = ?", (user_id,))
-
-    def _purge(self, db: Any, now: dt.datetime) -> None:
-        self._run(db, "DELETE FROM {sessions} WHERE expires_at <= ?", (self._ts(now),))
-        idle_since = now - dt.timedelta(days=GUEST_IDLE_DAYS)
-        rows = self._run(
-            db,
-            "SELECT id FROM {users} WHERE kind = 'guest' AND last_seen_at <= ?",
-            (self._ts(idle_since),),
-        ).fetchall()
-        self._delete_users(db, [self._read_id(row[0]) for row in rows])
 
     # Saved reports
 

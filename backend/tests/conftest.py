@@ -8,6 +8,7 @@ from app.geo.build import build
 from app.main import create_app
 from app.store.accounts import AccountStore, sqlite_accounts
 from app.store.shares import ShareStore
+from tests import auth
 
 
 @pytest.fixture(scope="session")
@@ -28,12 +29,35 @@ def accounts(tmp_path: Path) -> AccountStore:
     return sqlite_accounts(tmp_path / "accounts.sqlite")
 
 
+class FakeAdmin:
+    """Stands in for Supabase's admin API: remembers whom it was asked to delete."""
+
+    def __init__(self) -> None:
+        self.deleted: list[str] = []
+        self.fail = False
+
+    def delete_user(self, user_id: str) -> None:
+        if self.fail:
+            raise OSError("supabase is down")
+        self.deleted.append(user_id)
+
+
 @pytest.fixture
-def client(places_db: Path, shares: ShareStore, accounts: AccountStore) -> TestClient:
+def admin() -> FakeAdmin:
+    return FakeAdmin()
+
+
+@pytest.fixture
+def client(
+    places_db: Path, shares: ShareStore, accounts: AccountStore, admin: FakeAdmin
+) -> TestClient:
     app = create_app()
     app.dependency_overrides[deps.places_db] = lambda: places_db
     app.dependency_overrides[deps.share_store] = lambda: shares
     app.dependency_overrides[deps.account_store] = lambda: accounts
     limit = saved.RateLimit(30)
     app.dependency_overrides[saved.guest_limit] = lambda: limit
+    tokens = auth.checker()  # stand-in Supabase keys (tests/auth.py)
+    app.dependency_overrides[deps.token_checker] = lambda: tokens
+    app.dependency_overrides[deps.supabase_admin] = lambda: admin
     return TestClient(app)

@@ -13,5 +13,6 @@ sys.path.insert(0, str(BACKEND))
 from app.main import create_app  # noqa: E402
 
 out = BACKEND / "openapi.json"
-out.write_text(json.dumps(create_app().openapi(), indent=2) + "\n")
+# LF on every system: the repository is LF, and Windows would otherwise write CRLF.
+out.write_text(json.dumps(create_app().openapi(), indent=2) + "\n", newline="\n")
 print(f"wrote {out}")
