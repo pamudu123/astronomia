@@ -70,10 +70,11 @@ Browser ── signs in ──▶ Supabase Auth (anonymous, Google)
 | Where | Setting | Secret? |
 |---|---|---|
 | Vercel | `NEXT_PUBLIC_SUPABASE_URL` = `https://ihzvwnwkbcqldhrvsrle.supabase.co` | No |
-| Vercel | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | No (public by design) |
+| Vercel | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` = `sb_publishable_vlBrz647bGurzFAoUhrrxQ_oJlRSgtb` (staging) | No (public by design) |
+| Supabase, Authentication → Sign In / Providers | **Allow manual linking: on.** Without it a guest cannot link Google | No |
 | Render, `astronomia-api` | `ASTRONOMIA_DATABASE_URL` = Supabase session pooler connection string | **Yes.** Owner sets it |
-| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_URL` = the project address, for the signing keys | No |
-| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_SECRET_KEY`, only for deleting accounts | **Yes.** Owner sets it |
+| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_URL` = the project address, for the signing keys (`https://ihzvwnwkbcqldhrvsrle.supabase.co` on staging). Without it nobody can sign in | No |
+| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_SECRET_KEY` (`sb_secret_...`), only for deleting users from Supabase Auth (account deletion, moved guests) | **Yes.** Owner sets it |
 | `backend/.env` (local) | The same three, for running against staging | **Yes.** Never committed |
 
 Secrets are typed into the dashboards by the owner, never into chat or the repository.
@@ -92,7 +93,89 @@ Each step is one pull request with its own tests, reviewed before the next.
 
 Then docs/18 continues: 7 day free saves, coupons and the paid check, chat limits.
 
-## 5. Checks before production
+## 5. How it is built
+
+Notes from building each step, for whoever changes it next.
+
+### Step 2: backend sign in (branch `claude/supabase-signin-79c6c3`)
+
+- **`backend/app/auth.py`** checks the token: the signing algorithm must be ES256 or RS256 (the
+  staging project signs with ES256; HS256 and unsigned tokens are refused), the key id must be in
+  the project's JWKS (`<ASTRONOMIA_SUPABASE_URL>/auth/v1/.well-known/jwks.json`), and the claims
+  must have issuer `<ASTRONOMIA_SUPABASE_URL>/auth/v1`, audience `authenticated`, a future expiry
+  (30 seconds of clock difference allowed), an issue time, and a user id that is a uuid.
+  `is_anonymous: true` makes the user a guest; anything else is a Google account.
+- **Keys are cached** for ten minutes. A token with a key id not seen yet fetches the set again
+  (Supabase rotating its keys), at most once a minute, so made-up key ids cannot make the backend
+  fetch on every call. If Supabase cannot be reached, the kept keys go on working.
+- **The current user** comes from `current_session` in `backend/app/api/saved.py` (`Current`):
+  `session.found` is None without a token, else `session.found.user.id` (the Supabase user id)
+  and `session.found.user.kind` (`guest` or `google`). A bad or expired token is 401, so the page
+  signs in again. A good token whose user has no `users` row gets one; new guests are still
+  limited per address (`ASTRONOMIA_GUESTS_PER_HOUR`), on top of Supabase's own limit.
+- **A guest who links Google** keeps the same id; the row's kind turns to `google` on the next
+  call and never back.
+- **Saving needs a sign in.** `POST /v1/saved` without a token is 401: the page signs in
+  anonymously first (step 3). Reading without a token answers as before (no reports).
+- The guest cookie (`sid`) and the backend's sessions are gone. Migration
+  `20261121130000_drop_guest_sessions.sql` drops `sidera.sessions` and deletes the rows of guests
+  made with the old cookie (their ids are not Supabase users, so nobody could reach them). The
+  small `sidera_saved` hint cookie stays: it only tells the header to show "My reports".
+- Tests make their own ES256 key and sign stand-in tokens with it (`backend/tests/auth.py`), so
+  the real checks run: `tests/test_auth.py` for the token rules, `tests/test_api_saved.py` for
+  the endpoints.
+
+### Step 3: website sign in
+
+- **`frontend/lib/supabase.ts`** holds the Supabase client, loaded only when an account action
+  first needs it. It signs in anonymously (`signInAnonymously`), and "Continue with Google"
+  calls `linkIdentity` for a guest (same user id, reports stay) or `signInWithOAuth` when nobody
+  is signed in here (a second phone). PKCE flow; Supabase keeps the sign in in local storage and
+  renews it.
+- **Every account call** in `frontend/lib/account.ts` sends the access token. The page puts it
+  in `X-Sidera-Token`, and the `/api` forward (`frontend/proxy.ts`, `lib/forward.ts`) hands it
+  to the backend as `Authorization: Bearer`. Not Authorization from the page itself: on the
+  private staging site that header carries the staging password. A token the backend refuses
+  signs the browser out; a Save then tries once more as a new guest.
+- **Saves wait for each other across tabs** (Web Locks), so two first saves make one guest.
+- **My reports** shows "Continue with Google" (`components/account/GoogleSignIn.tsx`): for a
+  guest with reports, "Keep your reports on any device"; for anyone else, "Saved reports on
+  another device?". Signed in with Google, it names the account. The footer's "Already saved?
+  Sign in" link goes to it (`/<lang>/my#sign-in`).
+- **`/<lang>/auth/callback`** (`app/[lang]/auth/callback`) exchanges the code Supabase sends
+  back and goes on to the page in `next` (only paths on this site). `/auth/callback` without a
+  language is sent to it by the language redirect, query kept. The redirect URLs already allowed
+  in Supabase (`https://sidera.ppwrks.com/**` and the rest) cover it.
+- Browser tests answer Supabase's calls themselves (`frontend/tests/e2e/supabase.ts`); CI builds
+  the site pointed at `https://supabase.e2e.test`.
+
+### Step 4: moving a guest into an existing account, sign out, delete account
+
+- **The Google account already exists** (signed in on another phone): Supabase refuses to link
+  it and sends the browser back to `/<lang>/auth/callback` with `error_code=
+  identity_already_exists`. The callback page renews the guest's sign in, keeps its access token
+  in this tab (`sessionStorage`), and signs in with Google. Back again, it calls
+  `POST /v1/me/merge-guest` with the Google token as usual and the guest token in the body.
+- **The backend checks both tokens** with the same rules: the caller must be a Google account,
+  the body's token a guest's, both good and unexpired. A bad guest token is 409, not 401, so the
+  page does not sign the Google account out. It moves every report the Google account does not
+  already have (the same input is kept once), deletes the guest's rows, then deletes the guest
+  from Supabase with the secret key. If that last call fails the move stands; the clean up job
+  (step 5) removes the empty guest later.
+- **Sign out**: My reports, for a Google account, has "Sign out of this phone"
+  (`signOut({ scope: "local" })`) and "Sign out everywhere" (`scope: "global"`, which revokes
+  every device's sign in; an access token already given out works until it runs out, within an
+  hour). A guest is not offered sign out: it would lose its reports. It can delete them instead.
+- **Delete account**: `DELETE /v1/me` deletes the user's rows first, then the Supabase user with
+  `ASTRONOMIA_SUPABASE_SECRET_KEY` (`DELETE /auth/v1/admin/users/<id>`, the key in `apikey`).
+  If Supabase cannot be reached the rows are already gone and the answer is 502; trying again
+  finishes it. Without the key the answer is 503, except on a developer's own computer. The
+  page then signs the browser out. For a Google account the button says "Delete my account".
+- Tests: `backend/tests/test_api_saved.py` (the move with both tokens checked, every report
+  moved, the guest removed here and in Supabase; delete removes every row and the Supabase
+  user), `frontend/tests/e2e/saved.spec.ts` (the whole trip through a stand-in Google).
+
+## 6. Checks before production
 
 - A separate Supabase production project on **Pro** (daily backups, no pausing), with the same migrations.
 - Supabase's data processing agreement accepted.

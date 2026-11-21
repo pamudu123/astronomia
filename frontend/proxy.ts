@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { forwardedHeaders } from "@/lib/forward";
 import { hasLocale, pickLocale } from "@/lib/i18n";
 import { stagingAllowed } from "@/lib/staging";
 
@@ -7,7 +8,7 @@ const NOINDEX = "noindex, nofollow";
 
 /**
  * 1. On a private staging site, ask for the staging password first.
- * 2. Calls to /api go on to the backend, with its access key when it needs one.
+ * 2. Calls to /api go on to the backend, with the visitor's sign in and the backend's access key.
  * 3. Every page lives under /si or /en. Anything else is sent to the visitor's language.
  */
 export function proxy(request: NextRequest) {
@@ -24,11 +25,7 @@ export function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
   if (pathname.startsWith("/api/")) {
-    const headers = new Headers(request.headers);
-    headers.delete("authorization"); // the staging password stays here
-    const key = process.env.BACKEND_ACCESS_KEY;
-    if (key) headers.set("X-Access-Key", key);
-    return NextResponse.next({ request: { headers } });
+    return NextResponse.next({ request: { headers: forwardedHeaders(request.headers) } });
   }
 
   const first = pathname.split("/")[1] ?? "";

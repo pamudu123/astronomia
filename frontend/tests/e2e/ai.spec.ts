@@ -140,23 +140,30 @@ test("with paid reports on, a free match shows the full report form in place of 
 
 test("a signed in visitor unlocks the match with a free coupon", async ({ page }) => {
   const locked = { ...OPEN, features: [], paid_reports: true, account: "google" };
+  const unlocked = { ...OPEN, paid: true, paid_reports: true, account: "google" };
   await mockAll(page, new Set(), locked);
+  // The backend's answer once the report is paid for; the page asks again after unlocking.
+  let paid = false;
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify(paid ? unlocked : locked) }),
+  );
   await page.route("**/api/v1/coupons/apply", (route) =>
     route.fulfill({
       contentType: "application/json",
       body: JSON.stringify({ result: "free", percent_off: 100, price: PRICE, new_price: { ...PRICE, amount: 0 } }),
     }),
   );
-  await page.route("**/api/v1/reports/unlock", (route) =>
-    route.fulfill({
+  await page.route("**/api/v1/reports/unlock", (route) => {
+    paid = true;
+    return route.fulfill({
       contentType: "application/json",
       body: JSON.stringify({
         order: { id: "o1", kind: "porondam", price: PRICE, percent_off: 100, amount_paid: { ...PRICE, amount: 0 }, method: "coupon" },
         saved: null,
-        access: { ...OPEN, paid: true, paid_reports: true, account: "google" },
+        access: unlocked,
       }),
-    }),
-  );
+    });
+  });
   await quickMatch(page);
 
   const form = page.locator('[data-card="full-report"]');

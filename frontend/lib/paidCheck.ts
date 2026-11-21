@@ -6,15 +6,14 @@ import { backendHeaders } from "./staging";
 const BACKEND = process.env.BACKEND_URL ?? "http://localhost:8000";
 
 /**
- * The headers that tell the backend whose account this is: the browser's own.
- *
- * TODO(supabase sign in, docs/19 steps 2 to 4): today the account is the session cookie. When
- * sign in moves to Supabase Auth and the browser sends its access token another way, forward
- * that here too (never the staging password in Authorization, which the proxy keeps back).
+ * The headers that tell the backend whose account this is. The page sends its Supabase access
+ * token in X-Sidera-Token, and the site's /api forward (proxy.ts, lib/forward.ts) has already
+ * turned it into `Authorization: Bearer` and dropped any staging password before this route
+ * runs. Only a bearer token is passed on.
  */
 function accountHeaders(request: Request): Record<string, string> {
-  const cookie = request.headers.get("cookie");
-  return cookie ? { cookie } : {};
+  const authorization = request.headers.get("authorization") ?? "";
+  return authorization.startsWith("Bearer ") ? { authorization } : {};
 }
 
 export type PaidCheck = "allowed" | "locked" | "unavailable" | "invalid";

@@ -16,5 +16,5 @@ SQLite, which makes its own tables.
   run the security and performance advisors, and later apply it to production in the same order.
 - The backend's PostgreSQL tests build their database from these files (`backend/tests/pg.py`),
   so CI checks every migration too.
-- `20261121120030_temporary_guest_sessions.sql` keeps the guest cookie working until sign in
-  moves to Supabase Auth (docs/19, step 2). Step 2 drops that table.
+- `20261121120030_temporary_guest_sessions.sql` kept the guest cookie working until sign in
+  moved to Supabase Auth. `20261121130000_drop_guest_sessions.sql` (docs/19, step 2) drops it.

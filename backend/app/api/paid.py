@@ -11,7 +11,6 @@ A report is named by its kind and the hash of its request, the same hash My repo
 (app/api/saved.py), so a report bought here is the same report when it is saved or opened.
 """
 
-import datetime as dt
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -21,8 +20,8 @@ from app.api.deps import Accounts, Orders, PlacesDb
 from app.api.report_requests import HadahanReport, PorondamReport, ReportRequest
 from app.api.saved import (
     Current,
+    CurrentSession,
     SavedOut,
-    SessionCookie,
     SettingsDep,
     _new_report,
     _out,
@@ -147,7 +146,7 @@ def _order(order: Order) -> OrderOut:
     )
 
 
-def _google_user(session: SessionCookie) -> User:
+def _google_user(session: CurrentSession) -> User:
     if session.found is None or session.found.user.kind != "google":
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, SIGN_IN)
     return session.found.user
@@ -160,7 +159,7 @@ def _not_too_many(orders: OrderStore, user: User, settings: Settings) -> None:
 
 def _access(
     orders: OrderStore,
-    session: SessionCookie,
+    session: CurrentSession,
     kind: ReportKind,
     report_hash: str,
     country: str,
@@ -277,9 +276,7 @@ def unlock(
     try:
         item, _ = accounts.save(user.id, report, settings.paid_saved_limit, order.id)
         saved = _out(item)
-        # The "My reports" hint in the header. Not tied to the session's expiry, which goes
-        # when sign in moves to Supabase Auth (docs/19).
-        _set_hint(response, settings, 1, dt.datetime.now(dt.UTC) + dt.timedelta(days=365))
+        _set_hint(response, settings, 1)  # the "My reports" hint in the header
     except LimitReached:
         saved = None
     return Unlocked(

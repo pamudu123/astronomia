@@ -13,6 +13,7 @@ that are known and left open.
 | Endpoints: price, paid check, apply a coupon, unlock with a free coupon | `backend/app/api/paid.py` |
 | The paid check, one place | `report_access()` in `backend/app/tiers/__init__.py` |
 | Website check | `canUse()` in `frontend/lib/entitlements.ts`, `frontend/components/paid/` |
+| Sign in for a report | `signInForReport()` in `frontend/lib/paid.ts`: saves the report (as a guest if needed), then "Continue with Google" brings the visitor back to it in My reports |
 | AI route check (chart and match chapters) | `frontend/app/api/explain/route.ts`, `frontend/lib/paidCheck.ts` |
 | The owner's coupon script | `backend/scripts/coupons.py` (create, list, on, off, void) |
 
@@ -38,8 +39,9 @@ after the Google sign in PR (#67), so visitors can sign in and use a coupon from
   policies, which is intended; no primary key on `coupon_misses`; new indexes not yet used).
 - The coupon `pamudu` is made: 100% off any report, 10 uses per account, 200 in total, works until
   the end of 2027-06-30 Sri Lanka time.
-- Not applied yet: #67's `drop_guest_sessions` migration. It drops `sidera.sessions`, which the
-  backend needs until the sign in PR is deployed. Apply it when #67 deploys.
+- Not applied yet: #67's `drop_guest_sessions` migration (#67 is merged). It drops the old
+  `sidera.sessions` table, which the code no longer uses, and deletes guest accounts that are not
+  Supabase users. Harmless to leave for now; it needs the owner's approval to apply.
 
 ## Known gaps (recorded 2026-11-21)
 

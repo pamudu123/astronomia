@@ -29,6 +29,9 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           <Link href={`/${lang}/litha`}>{dict.litha.footer}</Link>
           <Link href={`/${lang}/baby-names`}>{dict.babyNames.footer}</Link>
           <Link href={`/${lang}/first-letters`}>{dict.firstLetters.footer}</Link>
+          <Link href={`/${lang}/my#sign-in`} data-footer-sign-in>
+            {dict.footer.signIn}
+          </Link>
           <Link href={`/${lang}/privacy`}>{dict.footer.privacy}</Link>
           <Link href={`/${lang}/terms`}>{dict.footer.terms}</Link>
         </nav>

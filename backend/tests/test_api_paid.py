@@ -7,25 +7,20 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
-from app.api import reports, saved
+from app.api import reports
 from app.config import Settings, get_settings
-from app.store.accounts import FoundSession, User
 from app.store.orders import OrderStore
+from tests.auth import bearer, token
 from tests.test_api_saved import hadahan, porondam
 
 PAID = ["ai_reading", "ai_explain", "full_detail", "full_pdf"]
 
 
 def sign_in(client: TestClient, kind: str = "google") -> str:
-    """Stands in for Google sign in (another step builds it): this browser's account."""
-    user = User(id=str(uuid.uuid4()), kind=kind)  # type: ignore[arg-type]
-    found = FoundSession(
-        user=user, expires_at=dt.datetime(2027, 11, 21, tzinfo=dt.UTC), renewed=False
-    )
-    client.app.dependency_overrides[saved.current_session] = (  # type: ignore[attr-defined]
-        lambda: saved.SessionCookie("token", found)
-    )
-    return user.id
+    """Signs this browser in to Supabase (stand-in keys, tests/auth.py): a new account."""
+    user_id = str(uuid.uuid4())
+    client.headers.update(bearer(token(user_id, anonymous=kind == "guest")))
+    return user_id
 
 
 def paid_reports(client: TestClient, on: bool = True, **more: Any) -> None:
@@ -230,6 +225,8 @@ def test_with_paid_reports_off_everyone_has_everything(client: TestClient) -> No
 
 def test_with_paid_reports_on_free_users_keep_the_free_result(client: TestClient) -> None:
     paid_reports(client)
+    assert access(client)["features"] == []
+    sign_in(client, kind="guest")
     assert access(client)["features"] == []
     # Saving, sharing and the result itself work as before.
     assert client.post("/v1/saved", json=hadahan()).status_code == 201

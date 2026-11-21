@@ -57,7 +57,8 @@ describe("prices", () => {
 });
 
 describe("the AI route's paid check", () => {
-  const request = new Request("http://site/api/explain", { headers: { cookie: "sid=abc" } });
+  // As the route sees it after the site's /api forward: the page's token as a bearer token.
+  const request = new Request("http://site/api/explain", { headers: { authorization: "Bearer a.b.c" } });
   const report = { kind: "hadahan", name: "Nimali", birth: { date: "1995-04-19" } };
 
   function answering(status: number, body: unknown) {
@@ -77,7 +78,15 @@ describe("the AI route's paid check", () => {
     expect(url).toMatch(/\/v1\/reports\/access$/);
     expect(init.method).toBe("POST");
     expect(JSON.parse(String(init.body))).toEqual(report);
-    expect((init.headers as Record<string, string>).cookie).toBe("sid=abc");
+    expect((init.headers as Record<string, string>).authorization).toBe("Bearer a.b.c");
+  });
+
+  it("never passes on a staging password", async () => {
+    const staging = new Request("http://site/api/explain", { headers: { authorization: "Basic eDpw" } });
+    const send = answering(200, PAID);
+    await paidCheck(staging, "chart.nature", report, send);
+    const [, init] = send.mock.calls[0] as unknown as [string, RequestInit];
+    expect((init.headers as Record<string, string>).authorization).toBeUndefined();
   });
 
   it("locks a report that was not paid for", async () => {

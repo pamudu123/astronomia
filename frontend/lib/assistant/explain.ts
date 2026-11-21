@@ -14,6 +14,7 @@
 import type { Locale } from "@/lib/i18n";
 import type { SpotName } from "@/lib/spots";
 
+import { accountHeaders } from "@/lib/paid";
 import type { ReportRequest } from "@/lib/report";
 
 import type { PageContext } from "./context";
@@ -280,9 +281,11 @@ export async function requestChapter(
   set(key, { status: "writing", text: "" });
   let text = "";
   try {
+    // A report's chapters are checked against the account that paid for it (lib/paidCheck.ts).
+    const account = report ? await accountHeaders() : {};
     const response = await send("/api/explain", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...account },
       body: JSON.stringify(report ? { id, language, facts, report } : { id, language, facts }),
     });
     if (!response.ok || !response.body) throw new Error(`explain: ${response.status}`);

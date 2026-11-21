@@ -58,7 +58,7 @@ export function FullReport({ lang }: { lang: Locale }) {
   const [code, setCode] = useState("");
   const [quote, setQuote] = useState<CouponQuote | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
-  const [busy, setBusy] = useState<"apply" | "unlock" | null>(null);
+  const [busy, setBusy] = useState<"apply" | "unlock" | "google" | null>(null);
 
   if (!t || !report || access.state !== "ready" || !access.access.paid_reports) return null;
   const { paid, account, price } = access.access;
@@ -94,6 +94,19 @@ export function FullReport({ lang }: { lang: Locale }) {
     } catch (caught) {
       setProblem(problemOf(caught));
     } finally {
+      setBusy(null);
+    }
+  }
+
+  async function google() {
+    if (!report) return;
+    setBusy("google");
+    setProblem(null);
+    try {
+      await signInForReport(lang, report);
+      // The browser is on its way to Google.
+    } catch {
+      setProblem("signInFailed");
       setBusy(null);
     }
   }
@@ -145,10 +158,22 @@ export function FullReport({ lang }: { lang: Locale }) {
 
       {!signedIn ? (
         <div className={styles.signIn}>
-          <button type="button" className="btn btn-primary lift" onClick={signInForReport} data-sign-in>
-            {t.continueGoogle}
+          <button
+            type="button"
+            className="btn btn-primary lift"
+            onClick={google}
+            disabled={busy !== null}
+            aria-busy={busy === "google"}
+            data-sign-in
+          >
+            {busy === "google" ? t.opening : t.continueGoogle}
           </button>
           <p className={styles.small}>{t.signInWhy}</p>
+          {problem && (
+            <p role="alert" className={styles.error}>
+              {t.problems[problem]}
+            </p>
+          )}
         </div>
       ) : (
         <div className={styles.coupon}>

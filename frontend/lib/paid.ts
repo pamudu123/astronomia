@@ -4,11 +4,13 @@
  * Prices come from the backend, never from this code, so a changed page cannot change a price.
  * There is no payment provider yet: only a coupon that takes 100% off can unlock a report.
  */
+import { TOKEN_HEADER, saveReport } from "./account";
 import type { components } from "./api-types";
 import type { Access } from "./entitlements";
 import type { Locale } from "./i18n";
 import type { ReportRequest } from "./report";
 import { ensureOk } from "./request";
+import { accessToken, continueWithGoogle, signInConfigured } from "./supabase";
 
 export type Price = components["schemas"]["PriceOut"];
 export type CouponQuote = components["schemas"]["CouponQuote"];
@@ -17,12 +19,40 @@ export type Unlocked = components["schemas"]["Unlocked"];
 const API = "/api/v1";
 const JSON_HEADERS = { "content-type": "application/json" };
 
+/** True when Supabase has kept a sign in in this browser, read without loading its script. */
+function maybeSignedIn(): boolean {
+  try {
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const key = window.localStorage.key(i) ?? "";
+      if (key.startsWith("sb-") && key.endsWith("-auth-token")) return true;
+    }
+  } catch {
+    // Storage blocked: nobody can be signed in here either.
+  }
+  return false;
+}
+
+/**
+ * This browser's Supabase access token, in the header the site's /api forward hands on to the
+ * backend (lib/account.ts, proxy.ts). Empty when nobody is signed in: then the Supabase script
+ * is not even loaded.
+ */
+export async function accountHeaders(): Promise<Record<string, string>> {
+  if (!signInConfigured() || !maybeSignedIn()) return {};
+  try {
+    const token = await accessToken();
+    return token ? { [TOKEN_HEADER]: token } : {};
+  } catch {
+    return {};
+  }
+}
+
 /** Which features this account has on the report, and its price. */
 export async function fetchAccess(report: ReportRequest, init: RequestInit = {}): Promise<Access> {
   const response = await ensureOk(
     await fetch(`${API}/reports/access`, {
       method: "POST",
-      headers: JSON_HEADERS,
+      headers: { ...JSON_HEADERS, ...(await accountHeaders()) },
       body: JSON.stringify(report),
       cache: "no-store",
       ...init,
@@ -43,7 +73,7 @@ export async function applyCoupon(kind: ReportRequest["kind"], code: string): Pr
   const response = await ensureOk(
     await fetch(`${API}/coupons/apply`, {
       method: "POST",
-      headers: JSON_HEADERS,
+      headers: { ...JSON_HEADERS, ...(await accountHeaders()) },
       body: JSON.stringify({ kind, code }),
     }),
   );
@@ -55,7 +85,7 @@ export async function unlockReport(report: ReportRequest, code: string): Promise
   const response = await ensureOk(
     await fetch(`${API}/reports/unlock`, {
       method: "POST",
-      headers: JSON_HEADERS,
+      headers: { ...JSON_HEADERS, ...(await accountHeaders()) },
       body: JSON.stringify({ report, code }),
     }),
   );
@@ -79,15 +109,20 @@ export function cleanCode(text: string): string {
   return text.trim().slice(0, 100);
 }
 
-export const SIGN_IN_EVENT = "sidera:sign-in";
-
 /**
- * Asks the visitor to continue with Google, so a report can be unlocked into their account.
+ * "Continue with Google" from a result, so the report can be unlocked into a Google account.
  *
- * TODO(supabase sign in, docs/19 steps 2 to 4): the sign in session builds the real Google
- * button and its action in lib/account.ts. Replace this body with a call to that action.
- * Until then it only announces the wish, so a listener can start sign in once it exists.
+ * A result page lives only in this tab, and Google sends the browser back by address. So the
+ * report is saved first (as a guest, if nobody is signed in), and Google brings the visitor back
+ * to it in My reports. Linking Google keeps the guest's reports (lib/supabase.ts).
  */
-export function signInForReport(): void {
-  window.dispatchEvent(new Event(SIGN_IN_EVENT));
+export async function signInForReport(lang: Locale, report: ReportRequest): Promise<void> {
+  let back = typeof window === "undefined" ? `/${lang}/my` : window.location.pathname;
+  try {
+    const saved = await saveReport(report);
+    back = `/${lang}/my/${saved.id}`;
+  } catch {
+    // My reports is full or saving failed: come back to this page instead.
+  }
+  await continueWithGoogle(lang, back);
 }

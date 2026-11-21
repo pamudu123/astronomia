@@ -4,6 +4,7 @@ import { type ReactNode, createContext, useCallback, useContext, useEffect, useM
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { type Access, type AccessState, NO_REPORT, type Feature, canUse } from "@/lib/entitlements";
+import { onSavedChange } from "@/lib/account";
 import { fetchAccess, fetchPaidReportsOn } from "@/lib/paid";
 import type { ReportRequest } from "@/lib/report";
 
@@ -32,6 +33,10 @@ export function ReportAccessProvider({ report, children }: { report: ReportReque
   const key = JSON.stringify(report);
   const [found, setFound] = useState<{ key: string; access: Access } | null>(null);
   const [failed, setFailed] = useState<string | null>(null);
+  // Asked again when the sign in changes (back from Google, signed out), which lib/account.ts
+  // announces, and when the tab comes back into view.
+  const [asked, setAsked] = useState(0);
+  useEffect(() => onSavedChange(() => setAsked((count) => count + 1)), []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -41,7 +46,7 @@ export function ReportAccessProvider({ report, children }: { report: ReportReque
         if (!controller.signal.aborted) setFailed(key);
       });
     return () => controller.abort();
-  }, [key]);
+  }, [key, asked]);
 
   const set = useCallback((access: Access) => setFound({ key, access }), [key]);
   const value = useMemo<Value>(() => {
