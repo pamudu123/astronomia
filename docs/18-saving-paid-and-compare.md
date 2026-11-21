@@ -1,6 +1,6 @@
 # Saving, paid reports, coupons, chat limits and compare
 
-Date: 2026-11-21. Updated the same day with the owner's changes.
+Date: 2026-11-21. Updated the same day with the owner's changes: pay per report only (no passes or plans), LKR 800 or USD 2.50 a report, and coupons that give a percentage off or make a report free.
 
 The agreed plan for how people are recognised, what free and paid users can save, the coupon that
 stands in for payments, the Astro chat limits, what paid users get, and the compare feature. It
@@ -18,10 +18,13 @@ updates `docs/16-accounts-and-saved-reports.md`: where the two differ, this file
 | Free saving | Free results can be saved for 7 days, on this browser |
 | Paid saving | Paid results are saved without limit and kept for as long as the account exists |
 | Mixed accounts | One account can hold paid and free reports. Each is labelled |
-| Payments | Later. No gateway yet (PayHere does not accept astrology, docs/15). A coupon stands in: the code `pamudu` counts as paid |
-| Astro chat, free | 2 questions a week per browser (cookie). When they are used, show the option to buy |
-| Astro chat, paid | More chat, limited by measured usage (section 5) |
-| Compare | To be built: compare saved reports, with the AI analysing them. Detailed plan later (section 7) |
+| What is sold | **Only single reports.** Each hadahan or porondam report is paid for on its own. No monthly or yearly plans, no passes |
+| Price | **LKR 800** a report for buyers in Sri Lanka, **USD 2.50** a report for buyers abroad |
+| Payments | Later. No gateway yet (PayHere does not accept astrology, docs/15). Coupons stand in until then |
+| Coupons | A coupon gives a **percentage off** a report or makes it **free** (100% off). Until a payment provider is connected, only free (100%) coupons can unlock a report. The code `pamudu` makes a report free |
+| Astro chat, free | 2 questions a week per browser (cookie). When they are used, show the option to buy a report |
+| Astro chat, paid | Each paid report comes with its own chat allowance, limited by measured usage (section 5) |
+| Compare | To be built: compare saved paid reports, with the AI analysing them. Detailed plan later (section 7) |
 
 ## 2. How people are recognised
 
@@ -69,36 +72,57 @@ Until compare is built, drop the last sentence or say "coming soon".
 
 **Wording rule:** never "find the best match" or "the right partner". The terms say the site never tells anyone whom to marry, so compare shows scores under the traditional rules and leaves the decision to the family.
 
-## 4. Coupons, in place of payment
+## 4. Prices and coupons
 
-Until a payment provider approves astrology reports, a coupon is the only way to become paid. Later the same path records real payments, so nothing is thrown away.
+### Prices
+
+**Only single reports are sold.** Each hadahan or porondam report is paid for on its own. There are no monthly or yearly plans and no passes.
+
+| Buyer | Price of one report |
+|---|---|
+| In Sri Lanka | **LKR 800** |
+| Abroad | **USD 2.50** |
+
+- **Which price a buyer sees** follows their country at checkout: LKR in Sri Lanka, USD everywhere else. The payment provider, once there is one, settles which currencies it can take.
+- The two prices are close in value (USD 2.50 is roughly LKR 750 at about 300 rupees to the dollar), so neither group pays much more than the other.
+- Prices live on the server, never in the website code, so a changed page cannot change a price.
+- Each paid report records the price, currency and any coupon used, so receipts and refunds are exact.
+
+### Coupons
+
+Until a payment provider approves astrology reports, coupons are the only way to unlock a paid report. Later the same records carry real payments, so nothing is thrown away.
+
+**What a coupon does:** it takes a **percentage off** the price of one report. 100% off makes the report **free**.
+
+| Coupon | Example | Works now? |
+|---|---|---|
+| Free (100% off) | `pamudu` | **Yes.** Nothing is left to pay |
+| Discount (for example 20% off) | `SIDERA20`: LKR 640 or USD 2.00 | **Only once payments exist.** Something is still left to pay, and there is nothing to take the payment with yet |
+
+So the build includes percentage coupons from the start, but only 100% coupons are switched on until checkout exists.
 
 **How it works for the user**
 
-1. On a result, "Get the full report" (or "Buy more chat" when the free questions run out) opens a short form.
+1. On a result, "Get the full report" opens a short form showing the price.
 2. Continue with Google, if not signed in already.
-3. "Have a coupon?": they type `pamudu` and press Unlock.
-4. The account becomes paid at once. The receipt goes to the Google email.
+3. "Have a coupon?": they type the code and press Apply. The form shows the new price.
+4. At 100% off, the button says "Unlock free" and the report becomes paid at once. The receipt goes to the Google email.
 
-**Rules for the coupon** (all on the server)
+**Rules for coupons** (all on the server)
 
 | Rule | Why |
 |---|---|
-| Codes live in the database or server settings, never in the website code or the repository | Anyone can read the website's code in their browser. A code there is public |
-| Each code has: what it unlocks, how many times it can be used, an end date, and on/off | `pamudu` can be stopped at once if it spreads |
+| Codes live in the database, never in the website code or the repository | Anyone can read the website's code in their browser. A code there is public |
+| Each code has: the percentage off (1 to 100), which reports it applies to (hadahan, porondam or both), how many times it can be used in total, how many times one account can use it, an end date, and on/off | `pamudu` can be stopped at once if it spreads |
+| One use unlocks one report | A free code cannot unlock everything at once |
 | Not case sensitive, spaces ignored | People type on phones |
 | Wrong guesses are limited, for example 10 an hour per account | Stops people trying codes until one works |
-| Every use is recorded: code, account, what it unlocked, time | Shows who used it, and lets you undo misuse |
-| A coupon use is recorded as an order with price 0 and method "coupon" | When payments arrive, a paid order is the same record with a price, so the rest of the site does not change |
+| Every use is recorded: code, account, report, price before and after, time | Shows who used it, and lets you undo misuse |
+| Every unlock is recorded as an order: price, currency, coupon, amount paid (0 for a free coupon), method | When payments arrive, a paid order is the same record with an amount paid, so the rest of the site does not change |
 
-**What a coupon unlocks:** two kinds of code, so both ways of selling can be tested:
+Suggested: `pamudu` is 100% off any report, up to 10 uses per account and 200 in total, ending 2027-06-30, for testers, friends and family. Make new codes for any promotion rather than reusing it.
 
-- **Report code:** makes one hadahan or porondam result paid.
-- **Pass code:** makes the whole account paid for a set time (for example 30 days or 1 year), covering every result, compare and the paid chat allowance in that time.
-
-Suggested: make `pamudu` a pass code with an end date and a use limit, for testers, friends and family. Make new codes for any promotion rather than reusing it.
-
-**Legal:** no money changes hands, so refund and tax rules do not apply yet. The privacy notice needs a line on Google sign in: the account id and email are kept to recognise the paid user and send receipts, nothing else.
+**Legal:** no money changes hands while only free coupons work, so refund and tax rules do not apply yet. The privacy notice needs a line on Google sign in: the account id and email are kept to recognise the paid user and send receipts, nothing else. Discount coupons and real prices bring in the refunds policy (`docs/policies/refunds.md`) once payments exist.
 
 ## 5. Astro chat limits
 
@@ -106,21 +130,21 @@ Suggested: make `pamudu` a pass code with an end date and a use limit, for teste
 
 - Counted per browser, by the cookie. The week starts on the first question and lasts 7 days.
 - The chat shows what is left: "1 free question left this week".
-- When both are used, the chat box is replaced by: "You've used this week's 2 free questions. They come back on [date]. Get more with a paid report or pass." with the buy (or coupon) button.
-- **Explain buttons and the full reading** are paid features (section 6), so they do not use the free questions.
+- When both are used, the chat box is replaced by: "You've used this week's 2 free questions. They come back on [date]. Get a full report to keep asking." with the "Get the full report" (or coupon) button.
+- **Explain buttons and the full reading** are part of a paid report (section 6), so they do not use the free questions.
 
 **A known gap:** clearing the cookie or opening a private window gives 2 more questions. For 2 questions this is acceptable. To stop heavy abuse, also keep a quiet limit per network address (for example 10 free questions a week) and add bot protection before the chat goes public (docs/09).
 
-### Paid users: limited by measured usage
+### Paid reports: an allowance for each report, measured by usage
 
-Paid users get much more chat, but not unlimited, because every AI answer costs money.
+Every AI answer costs money, so paid chat has a limit, but a generous one.
 
-- **Measure each answer's real cost:** the AI provider reports the tokens used for every reply, and the AI service records them against the account.
-- **Each plan has an allowance per period,** set in money or tokens on the server. For example, a pass might allow about 1 US dollar of AI use a month. The exact figure follows the prices.
-- **People see plain words, not tokens:** "About 40 questions left this month" or a bar that fills up, worked out from the average cost of an answer.
-- **Close to the limit:** a gentle note at 80%. At the limit: "You've reached this month's chat allowance. It renews on [date]." A long full reading and a short question cost different amounts, which is why usage is measured, not counted.
-- **A single report** includes a small chat allowance for questions about that report, for example 10 questions.
-- **A hard ceiling** on the server stops any one account running up a large bill, whatever the plan says.
+- **Each paid report adds a chat allowance** to the account, for example about 20 questions' worth. Two paid reports give twice as much. The allowance stays until it is used.
+- **Measure each answer's real cost:** the AI provider reports the tokens used for every reply, and the AI service records them against the account. A long answer uses more of the allowance than a short one.
+- **People see plain words, not tokens:** "About 15 questions left" or a bar that empties, worked out from the average cost of an answer.
+- **Close to the end:** a gentle note at 80%. At the end: "You've used the chat that came with your reports. Get another full report to keep asking."
+- **The full reading and Explain buttons** of a paid report do not use the chat allowance. They are part of what the report includes.
+- **A hard ceiling** on the server stops any one account running up a large bill, whatever happens.
 - **Usage records keep only numbers** (account, date, tokens, cost), never the question text. This matches the privacy promise that chat text is not logged.
 
 ## 6. What paid users get
@@ -136,30 +160,34 @@ The rule from docs/07 stays: **free shows the facts and a one line reason, paid 
 - Save for 7 days, on this browser
 - Astro chat: 2 questions a week
 
-### Paid: a single report
+### Paid: one report, LKR 800 or USD 2.50
 
-For one hadahan or one porondam result:
+**Hadahan report** (one person's chart):
 
 | What | Detail |
 |---|---|
 | Keep it | Saved without limit, on any device through Google sign in |
-| Full AI reading | The 12 chapter chart reading or the 10 chapter match reading (docs/17) |
-| Explain buttons | On every place in that result |
-| Full detail | Kuja dosha with every cancellation rule and the couple comparison; all dasha sub periods and what each means for this chart; each porondam factor explained |
+| Full AI reading | The 12 chapter chart reading (docs/17) |
+| Explain buttons | On every place in the result |
+| Full detail | Kuja dosha with every cancellation rule; all dasha sub periods and what each means for this chart |
+| Forecast | The 12 month personal forecast and key dates for this chart |
 | Full PDF | Everything above, in Sinhala and English in one file |
 | Full share | The share link shows the paid result, so the family and their astrologer see it without paying again |
-| Chat about it | A small chat allowance for this report |
+| Chat | The chat allowance that comes with each report (section 5) |
+| Compare | Can be used in compare (section 7) |
 
-### Paid: a pass (all of the above for every result, plus)
+**Porondam report** (one couple's match):
 
 | What | Detail |
 |---|---|
-| Every result paid | Every chart and match made while the pass lasts |
-| Compare | Compare saved reports, with the AI's analysis (section 7) |
-| Forecasts | The 12 month personal forecast and key dates |
+| Keep it | Saved without limit, on any device through Google sign in |
+| Full AI reading | The 10 chapter match reading (docs/17) |
+| Explain buttons | On every place in the result |
+| Full detail | Each porondam factor explained; Kuja dosha with every cancellation rule and the couple comparison |
 | Wedding nakath | The full list of dates for engagement, poruwa and homecoming |
-| More chat | The monthly chat allowance (section 5) |
-| Later | Email reminders before key dates (opt in) |
+| Full PDF | Everything above, in Sinhala and English in one file |
+| Full share | The share link shows the paid result |
+| Chat | The chat allowance that comes with each report (section 5) |
 
 **Never paid for, at any level:** remedies, gems or pujas; telling anyone whether to marry; AI readings of a child's chart.
 
@@ -169,19 +197,19 @@ For one hadahan or one porondam result:
 
 **Outline**
 
-1. In My reports, choose a saved hadahan as "This is me", with bride or groom chosen once.
-2. Choose the other saved charts to compare.
+1. In My reports, choose a saved paid hadahan as "This is me", with bride or groom chosen once.
+2. Choose the other saved paid charts to compare.
 3. The engine works out the porondam for each pair: the score, Rajju and Vedha, Kuja dosha for both. These are the facts, the same as on the match page.
 4. The AI then analyses them: what each pair has in common, where they differ, the strengths and areas to work on in each, in plain words. It uses only the engine's results, as the full reading does.
 5. Tapping one opens the full porondam result for that pair.
 
 **Rules to carry into the detailed plan**
 
-- **Paid only:** the charts must be paid reports, or the account has a pass.
+- **Paid reports only:** every chart in a comparison must be a paid hadahan report. There is no separate charge for comparing; paying for the charts is what unlocks it.
 - **Full birth details** for both, since Dina, Graha and Kuja dosha need them. Charts with only a birth star say which factors they leave out.
 - **Consent:** each other person's chart needs the "both adults agreed" confirmation from the launch list before it is compared.
 - **The AI explains, it does not choose.** The order comes from the engine's score. The AI may describe each pair and the trade-offs, but never names one person as the one to marry. This is the same rule as the match reading (docs/17) and the terms.
-- **Costs:** an analysis of several pairs is a long AI answer, so it uses the paid chat allowance (section 5) or has its own allowance.
+- **Costs:** an analysis of several pairs is a long AI answer, so it uses the account's chat allowance (section 5).
 
 **Open for the detailed plan:** comparing other kinds of report (two match results side by side, two dates), how many charts at once, and whether the comparison can be saved and shared.
 
@@ -190,25 +218,26 @@ For one hadahan or one porondam result:
 | # | Step | Needs a payment provider? |
 |---|---|---|
 | 1 | **Supabase database and sign in:** the database on Supabase, anonymous users for guests, Continue with Google, the guest's reports moving into an existing Google account, sign out, delete account (docs/19, steps 1 to 5) | No |
-| 2 | Long-lived sign in that renews on each visit; free saves expire after 7 days (deleted); labels "Free" and "Paid"; the note at the bottom of My reports; the 20 free report limit | No |
-| 3 | Orders and coupons: the coupon table, the unlock form, recording a coupon as a price 0 order, report codes and pass codes, the wrong guess limit | No |
-| 4 | The paid check: `save_access()` and `canUse()` read the account's paid reports and pass, so paid content shows only when unlocked, on the website and in the AI service | No |
-| 5 | Astro chat limits: 2 free questions a week by cookie, the "buy more" prompt, usage measuring and allowances for paid accounts, the hard ceiling | No |
-| 6 | Privacy notice and terms updated for Google sign in, the 7 day rule, coupons, passes and chat limits | No |
+| 2 | Free saves expire after 7 days (deleted); labels "Free" and "Paid"; the note at the bottom of My reports; the 20 free report limit | No |
+| 3 | Prices and coupons: the price list (LKR 800, USD 2.50), the orders and coupons tables, the "Get the full report" form with Apply coupon, percentage and free coupons (only 100% switched on), the wrong guess limit | No |
+| 4 | The paid check: `save_access()` and `canUse()` read which reports the account has paid for, so paid content shows only for those reports, on the website and in the AI service | No |
+| 5 | Astro chat limits: 2 free questions a week by cookie, the "Get the full report" prompt, the chat allowance added by each paid report, usage measuring, the hard ceiling | No |
+| 6 | Privacy notice and terms updated for Google sign in, the 7 day rule, coupons and chat limits | No |
 | 7 | Compare reports, after its detailed plan | No |
-| 8 | Real payments through an approved provider, recorded as orders with a price | Yes |
+| 8 | Real payments through an approved provider: checkout at LKR 800 or USD 2.50, discount coupons switched on, receipts and refunds | Yes |
 
-Steps 1 to 5 give the full free and paid experience with coupons, before any payment provider.
+Steps 1 to 5 give the full free and paid experience with free coupons, before any payment provider.
 
-## 9. Decisions still needed
+## 9. Decisions
 
-| # | Question | Suggested |
+**Decided (2026-11-21):** pay per report only; LKR 800 in Sri Lanka and USD 2.50 abroad; coupons give a percentage off or make a report free.
+
+| # | Still to decide | Suggested |
 |---|---|---|
-| 1 | What `pamudu` unlocks: one report, or a pass? For how long, and how many uses? | A pass for 1 year, 50 uses, ending 2027-06-30 |
-| 2 | Free report limit at one time | 20 |
-| 3 | The paid chat allowance: per month, and how much for a pass and for a single report | Set once prices are known. Measure real costs with coupon users first |
-| 4 | The quiet per-network limit on free chat | 10 free questions a week per address |
-| 5 | What happens to a paid account nobody opens for years? | Keep it. Delete only on request, or after 3 years unused with an email warning 30 days before |
-| 6 | Single report first, or the pass first, once payments exist | Single report first |
-| 7 | Prices for the single report and the pass, in LKR and USD | Open |
-| 8 | Is an email sending service needed now? | Only for receipts, and for Supabase's sign in emails if email codes are added. Google sign in removes the need for recovery emails, so this can wait until payments |
+| 1 | The limits for `pamudu` | 100% off any report, 10 uses per account, 200 in total, ending 2027-06-30 |
+| 2 | The largest discount a paid coupon may give, once payments exist | 50%, except free codes made on purpose |
+| 3 | The chat allowance each paid report adds | About 20 questions' worth. Measure real costs with `pamudu` users first, then adjust |
+| 4 | Free report limit at one time | 20 |
+| 5 | The quiet per-network limit on free chat | 10 free questions a week per address |
+| 6 | What happens to a paid account nobody opens for years? | Keep it. Delete only on request, or after 3 years unused with an email warning 30 days before |
+| 7 | Is an email sending service needed now? | Only for receipts, and for Supabase's sign in emails if email codes are added. It can wait until payments |
