@@ -22,6 +22,8 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [16-accounts-and-saved-reports.md](16-accounts-and-saved-reports.md) | Saving results to "My reports": quiet guest accounts, Google sign in only at payment, data, API, security, screens and build steps |
 | [17-ai-explain-buttons.md](17-ai-explain-buttons.md) | AI explanations: a full detailed reading in chapters at the top of the chart and match results (modelled on competitor premium reports, only where we have the data), and collapsible "Explain" buttons on the 15 main places (small questions stay in the chat), the facts each sends, one set of skills shared with the Astro chat, the paid switch and build steps |
 
+| [18-saving-paid-and-compare.md](18-saving-paid-and-compare.md) | The agreed account plan: cookies for free users, Google sign in for paid users, free saves for 7 days and paid saves without limit, the coupon in place of payments, Astro chat limits (2 free questions a week, measured usage for paid), what paid users get, and comparing saved reports with AI analysis |
+| [19-supabase-build-plan.md](19-supabase-build-plan.md) | Supabase for the database and sign in (anonymous guests and Google), Vercel for the website, Render for the backend: where each part runs, what is already set up, the design, settings and the five build steps |
 | [policies/](policies/README.md) | The reviewed privacy notice, terms of use and refunds policy from the 2026-11-20 legal review, the placeholders still to fill, and what must be built before they go live |
 | [reviews/](reviews/) | Material for outside reviewers: the Sinhala wording spreadsheet |
 

@@ -1,0 +1,101 @@
+# Supabase: database and sign in, build plan
+
+Date: 2026-11-21
+
+How Sidera moves its database to Supabase and uses Supabase Auth for sign in. It replaces the
+Render PostgreSQL database and the "Sign in with Google" design in docs/16, section 6. What users
+get (free and paid saving, coupons, chat limits) stays as in docs/18.
+
+## 1. Where everything runs
+
+| Part | Host | Plan now |
+|---|---|---|
+| Website (Next.js) | Vercel, project `astronomia`, at `https://sidera.ppwrks.com` | Hobby (free). Pro before the first sale |
+| Backend (FastAPI): calculations, PDFs, saved reports, shares | Render, `astronomia-api`, Singapore | Free. Starter before launch |
+| AI service | Render, `astronomia-agent`, Singapore | Free. Starter before launch |
+| Database | **Supabase**, project `ihzvwnwkbcqldhrvsrle` (staging), Singapore | Free. A separate production project on Pro at launch |
+| Sign in | **Supabase Auth**: anonymous users and Google | Included |
+| Company website | Squarespace, at `ppwrks.com` | Owner's |
+
+The Render PostgreSQL database is retired. It only holds test data, so nothing is moved.
+
+## 2. Already done (2026-11-21)
+
+- Supabase project created in Singapore. Empty: no tables, no users.
+- Google Cloud OAuth client "Sidera web", published (any Google account can sign in). Basic scopes only.
+- Supabase: Google provider on, anonymous sign ins on. Site URL `https://sidera.ppwrks.com`. Redirect URLs: `https://sidera.ppwrks.com/**`, `http://localhost:3000/**`, `https://astronomia-ten.vercel.app/**`, `https://*-pamudu-ranasinghes-projects.vercel.app/**`.
+- Domain `sidera.ppwrks.com` on Vercel, `SITE_URL` updated and redeployed.
+- The Supabase MCP server is in `.mcp.json`, so a session started in this folder can manage the project.
+
+## 3. The design
+
+### Who talks to what
+
+```
+Browser ── signs in ──▶ Supabase Auth (anonymous, Google)
+   │                         │ gives an access token (JWT)
+   └── /api/* with the token ▶ Vercel ──▶ Render backend ──▶ Supabase Postgres
+                                            checks the token     (only the backend
+                                            with Supabase's       reads and writes)
+                                            public keys
+```
+
+- **The browser uses Supabase only to sign in.** It never reads or writes app tables.
+- **Only the backend reads and writes data**, as today. It connects to Supabase Postgres with the database connection string.
+- **Each call to the backend carries the user's Supabase access token** in an `Authorization: Bearer` header, sent by `frontend/lib/account.ts`. The backend checks it with Supabase's public signing keys (the JWKS address), so it needs no shared secret for this.
+- The token gives the backend the user id and whether the user is anonymous. The backend keeps its own `users` row for that id.
+
+### Tables
+
+- **In a private schema named `sidera`,** not in `public`. Supabase's Data API publishes `public` to anyone holding the publishable key; a private schema is not published.
+- **Row level security on, with no policies,** on every table, as a second lock. The backend connects as the database owner and is not affected.
+- **Created by migrations kept in the repository** (`supabase/migrations/`), applied to the staging project, and later to production in the same order. The app stops creating tables at start up on PostgreSQL. SQLite for local runs and tests keeps creating its own.
+- **Tables:** `users` (id is the Supabase user id), `saved_reports` and `shares`, as today. The `sessions` table goes: Supabase keeps sessions. Later steps add `orders`, `coupons` and chat usage (docs/18).
+- **No birth details or names in Supabase Auth.** Sign in holds only what Google gives (account id, email, name). Reports stay in `saved_reports`.
+
+### Accounts
+
+| Moment | What happens |
+|---|---|
+| A visitor uses any tool | Nothing. No sign in, nothing stored |
+| First Save | The page signs in anonymously with Supabase, then saves. The backend creates the `users` row |
+| Continue with Google | Supabase links Google to the same anonymous user. Same id, so every saved report stays |
+| Google account already used on another device | Linking fails. The page signs in with Google, then asks the backend to move the guest's reports into that account. The backend checks both tokens first, so only the browser holding the guest session can move them |
+| Sign out | "Sign out of this phone" (this device) and "Sign out everywhere" |
+| Delete account | The backend deletes the user's rows, then deletes the Supabase user with the secret key |
+| A guest nobody uses | Anonymous users with nothing saved, unused for 7 days, are deleted by a daily job |
+
+### Settings
+
+| Where | Setting | Secret? |
+|---|---|---|
+| Vercel | `NEXT_PUBLIC_SUPABASE_URL` = `https://ihzvwnwkbcqldhrvsrle.supabase.co` | No |
+| Vercel | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | No (public by design) |
+| Render, `astronomia-api` | `ASTRONOMIA_DATABASE_URL` = Supabase session pooler connection string | **Yes.** Owner sets it |
+| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_URL` = the project address, for the signing keys | No |
+| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_SECRET_KEY`, only for deleting accounts | **Yes.** Owner sets it |
+| `backend/.env` (local) | The same three, for running against staging | **Yes.** Never committed |
+
+Secrets are typed into the dashboards by the owner, never into chat or the repository.
+
+## 4. Build steps
+
+Each step is one pull request with its own tests, reviewed before the next.
+
+| # | Step | Done when |
+|---|---|---|
+| 1 | **Database.** Migrations for the `sidera` schema, `users`, `saved_reports`, `shares`, row level security on. Revoke the open call permission on `public.rls_auto_enable()`. The backend uses the schema on PostgreSQL and stops creating tables there. Owner switches `ASTRONOMIA_DATABASE_URL` on Render to Supabase | Saving, opening and sharing work on staging against Supabase. Supabase's security checker shows no warnings. Existing tests pass on SQLite |
+| 2 | **Backend sign in.** Check Supabase tokens (signature, issuer, audience, expiry) with the JWKS keys, cached. Find or create the `users` row. The guest cookie code is removed, and a migration drops the temporary `sidera.sessions` table that step 1 kept for it | Tests with stand-in tokens: a valid token works, an expired, wrong-issuer or tampered one is refused, one user never sees another's reports |
+| 3 | **Website sign in.** Supabase client in the site. First Save signs in anonymously. Every account call sends the token. "Continue with Google" in My reports and an "Already saved? Sign in" link in the footer. The `/auth/callback` page | On staging: save as a guest, continue with Google, the reports stay. Sign in on a second browser, the reports are there |
+| 4 | **Moving a guest into an existing account, sign out, delete account** | Tests for the move (both tokens checked, every report moved, guest removed). Delete removes every row and the Supabase user |
+| 5 | **Clean up.** Daily job for idle anonymous users. Privacy notice and docs updated for Supabase (data processor, Singapore, what Google sign in keeps). Render database deleted | The notice names Supabase. Nothing points at the Render database |
+
+Then docs/18 continues: 7 day free saves, coupons and the paid check, chat limits.
+
+## 5. Checks before production
+
+- A separate Supabase production project on **Pro** (daily backups, no pausing), with the same migrations.
+- Supabase's data processing agreement accepted.
+- Cloudflare Turnstile on anonymous sign ins, if bots appear (Supabase supports it).
+- Google brand verification once the staging password is removed and the reviewed privacy page is live.
+- An email sending service connected to Supabase, before email login codes are added.

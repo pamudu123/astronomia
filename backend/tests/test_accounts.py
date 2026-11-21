@@ -1,12 +1,10 @@
 """The account store: guest accounts, sessions and saved reports, in SQLite and PostgreSQL."""
 
 import datetime as dt
-import os
 import sqlite3
 from collections.abc import Iterator
 from pathlib import Path
 
-import psycopg
 import pytest
 
 from app.api.deps import account_store
@@ -18,10 +16,7 @@ from app.store.accounts import (
     postgres_accounts,
     sqlite_accounts,
 )
-
-# PostgreSQL tests run when a test database is given (CI always gives one).
-PG_URL = os.environ.get("ASTRONOMIA_TEST_DATABASE_URL", "")
-TABLES = ("saved_reports", "sessions", "users", "accounts_schema")
+from tests.pg import migrate, need_postgres
 
 START = dt.datetime(2026, 11, 15, 8, 0, tzinfo=dt.UTC)
 
@@ -47,12 +42,9 @@ def store(request: pytest.FixtureRequest, tmp_path: Path, clock: Clock) -> Itera
     if request.param == "sqlite":
         yield sqlite_accounts(tmp_path / "var" / "accounts.sqlite", clock)
         return
-    if not PG_URL:
-        pytest.skip("no test PostgreSQL (set ASTRONOMIA_TEST_DATABASE_URL)")
-    with psycopg.connect(PG_URL) as db:
-        for table in TABLES:
-            db.execute(f"DROP TABLE IF EXISTS {table}")
-    yield postgres_accounts(PG_URL, clock)
+    url = need_postgres()
+    migrate(url)
+    yield postgres_accounts(url, clock)
 
 
 def report(name: str = "Nimali", key: str = "a") -> NewReport:
@@ -202,11 +194,9 @@ def test_reopening_keeps_the_data(tmp_path: Path, clock: Clock) -> None:
 def test_the_database_setting_picks_postgres(tmp_path: Path) -> None:
     settings = Settings(accounts_db=tmp_path / "a.sqlite")
     assert isinstance(account_store(settings), AccountStore)
-    if not PG_URL:
-        pytest.skip("no test PostgreSQL (set ASTRONOMIA_TEST_DATABASE_URL)")
-    assert account_store(Settings(database_url=PG_URL)) is account_store(
-        Settings(database_url=PG_URL)
-    )
+    url = need_postgres()
+    migrate(url)
+    assert account_store(Settings(database_url=url)) is account_store(Settings(database_url=url))
 
 
 def test_a_first_report_and_its_guest_are_kept_together(store: AccountStore) -> None:
@@ -220,6 +210,6 @@ def test_a_first_save_that_fails_leaves_no_account(store: AccountStore) -> None:
     with pytest.raises(LimitReached):
         store.create_guest_with(report(), limit=0)
     with store._connect() as db:
-        (users,) = store._run(db, "SELECT COUNT(*) FROM users").fetchone()
-        (sessions,) = store._run(db, "SELECT COUNT(*) FROM sessions").fetchone()
+        (users,) = store._run(db, "SELECT COUNT(*) FROM {users}").fetchone()
+        (sessions,) = store._run(db, "SELECT COUNT(*) FROM {sessions}").fetchone()
     assert (users, sessions) == (0, 0)

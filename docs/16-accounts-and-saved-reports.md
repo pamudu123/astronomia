@@ -1,5 +1,11 @@
 # Accounts and Saved Reports
 
+> **Updated 2026-11-21:** two later files change this plan, and win where they differ.
+> - `docs/18-saving-paid-and-compare.md`: what free and paid users get. Free saves last 7 days, paid saves are unlimited, a coupon stands in for payments, the Astro chat has a weekly free limit.
+> - `docs/19-supabase-build-plan.md`: how it is built. The database moves to **Supabase**, and **Supabase Auth** replaces the guest cookie (guests become anonymous users) and the Google sign in design in section 6. The `sessions` table goes. Section 6 and the line about avoiding Supabase are out of date.
+>
+> Phase A below (Save, My reports, snapshots) is built and stays; its storage and sign in change as file 19 describes.
+
 Date: 2026-11-15
 
 How a visitor saves a result (a porondam match, a hadahan and later the other tools) and finds it again in a "My reports" page, and how Google sign in comes in only when it is needed.

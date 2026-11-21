@@ -6,10 +6,15 @@ How the site is hosted, how staging is kept private, and what is left before it 
 
 | Part | Host | Plan now | Defined in |
 |---|---|---|---|
-| Frontend (Next.js) | Vercel, project `astronomia`, region Singapore (`sin1`) | Hobby (free) | `frontend/vercel.json`, Vercel settings |
+| Frontend (Next.js) | Vercel, project `astronomia`, region Singapore (`sin1`), at `https://sidera.ppwrks.com` | Hobby (free) | `frontend/vercel.json`, Vercel settings |
 | Backend (FastAPI, Docker) | Render, web service `astronomia-api`, Singapore | Free | `render.yaml`, `backend/Dockerfile` |
-| Database (share links) | Render PostgreSQL `astronomia-db`, Singapore | Free | `render.yaml` |
+| Database (saved reports, share links) | **Moving to Supabase** (project `ihzvwnwkbcqldhrvsrle`, Singapore, free) in docs/19, step 1. Until then: Render PostgreSQL `astronomia-db`, which is retired afterwards | Free | `supabase/migrations/` (from docs/19), `render.yaml` |
+| Sign in | **Supabase Auth**: anonymous users and Google (docs/19) | Free | Supabase and Google Cloud settings |
 | AI assistant (FastAPI, Docker) | Render, web service `astronomia-agent`, Singapore | Free | `render.yaml`, `agent/Dockerfile` |
+
+The domain `ppwrks.com` is registered at Squarespace, which also hosts the company website on
+`ppwrks.com` and `www.ppwrks.com`. Only `sidera.ppwrks.com` points at Vercel (a CNAME record at
+Squarespace). Each later app gets its own address under `ppwrks.com`.
 
 All deploy automatically from `main`. The frontend sends `/api/*` to the backend, and the chat's
 `/api/copilotkit` to the assistant, so the browser only ever talks to one site.
@@ -21,7 +26,8 @@ Backend (Render):
 | Variable | Meaning |
 |---|---|
 | `ASTRONOMIA_ENVIRONMENT` | `staging` or `production` |
-| `ASTRONOMIA_DATABASE_URL` | PostgreSQL for share links and saved reports. Without it, SQLite under `backend/var/` is used. **Required when `ASTRONOMIA_ENVIRONMENT` is `production`**: the backend refuses to start without it |
+| `ASTRONOMIA_DATABASE_URL` | PostgreSQL for share links and saved reports: the Supabase **session pooler** connection string once docs/19 step 1 is done. Without it, SQLite under `backend/var/` is used. **Required when `ASTRONOMIA_ENVIRONMENT` is `production`**: the backend refuses to start without it. Secret: set it in the dashboard only |
+| `ASTRONOMIA_SUPABASE_URL`, `ASTRONOMIA_SUPABASE_SECRET_KEY` | Planned in docs/19: the Supabase project address (for checking sign in tokens) and the secret key (only for deleting accounts). The key is secret |
 | `ASTRONOMIA_SITE_ORIGINS` | Optional. The site's own addresses as a JSON list, for example `["https://sidera.lk"]`. Saving, renaming and deleting are refused from any other page. When empty, the address the request was forwarded from is used |
 | `ASTRONOMIA_ACCESS_KEY` | When set, every request except `/healthz` needs it in `X-Access-Key`. Keeps staging private |
 | `ASTRONOMIA_SHARE_DAYS` | How long a share link stays open. Default 30 |
@@ -101,8 +107,10 @@ on staging only people with the staging password can use it (docs/14, section 11
   minute while it wakes. The assistant sleeps the same way: the first chat message after a quiet
   spell can take up to a minute, or fail and need sending again. Its conversations are kept in
   memory, so they are lost each time it sleeps.
-- The free PostgreSQL is deleted 30 days after it is created, with its share links. It has no
-  backups.
+- The free Render PostgreSQL is deleted 30 days after it is created, with its share links. It
+  has no backups. It is being replaced by Supabase.
+- The free Supabase project pauses after a week without activity (restore it from the
+  dashboard; the data is kept) and has no backups. Export the data now and then while on Free.
 - Fine for staging. Production needs paid plans (see below).
 
 ## Before going public
@@ -117,7 +125,7 @@ describes them.
 |---|---|
 | Ephemeris licence | **Blocks launch, even for a free site.** Buy the Swiss Ephemeris professional licence in the operator's name: CHF 700, valid 6 years, then renewable at no more than the original fee adjusted for Swiss inflation (contract edition September 2026, update 9 Nov 2026, §§4, 16). It covers software on our own server (§2). Giving another business API access needs its own licence (§3). pyswisseph is listed as covered but "currently unsupported" (§13). Keep the signed contract, proof of payment and the pyswisseph version. The contract also forbids naming Astrodienst or its authors in promotion (§9). Publishing the backend under the AGPL is the alternative |
 | Operator details | Decide who runs the site (a person trading as Sidera, or a company). Fill in legal name, registration number if any, address, business phone, privacy and support email, domain and effective date. Register the business name and get a tax number (TIN) to match |
-| Domain name | Then add it in Vercel and set `SITE_URL` |
+| Domain name | Done (2026-11-21): `sidera.ppwrks.com` on Vercel, `SITE_URL` set |
 | Vendor agreements | Accept and keep the data processing terms of Render, Vercel and OpenAI. Record each one's role, locations, subprocessors and deletion terms |
 | Sri Lankan data protection | The legal review reports that the main parts of the Act start on 1 January 2027 (gazette 2498/16; not checked by us). Name a privacy lead, keep the data map and records of consent. Recheck the authority's rules before that date |
 | Artwork provenance | Record which tool made the site images, the account tier and its terms, and keep the source files |
@@ -130,7 +138,7 @@ describes them.
 
 | Item | Notes |
 |---|---|
-| Paid plans: backend (no sleep) and PostgreSQL (kept, with backups) | Render Starter plans. Find out how long backups keep deleted rows, for the privacy notice |
+| Paid plans | Render Starter for the backend and AI service (no sleep). A Supabase production project on Pro (daily backups, no pausing). Vercel Pro before the first sale (Hobby is non-commercial). Find out how long Supabase backups keep deleted rows, for the privacy notice |
 | Error monitoring | Must be set up so no birth details, names, chat text or share codes are sent. Test with real payloads; session replay off |
 
 **Build: product changes the reviewed policies depend on**

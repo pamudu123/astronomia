@@ -15,10 +15,10 @@ services:
     envVars:
       - key: ASTRONOMIA_ENVIRONMENT
         value: staging
+      # Supabase's session pooler connection string (docs/19). Secret: set in the dashboard,
+      # never here. The tables come from supabase/migrations/, not from the app.
       - key: ASTRONOMIA_DATABASE_URL
-        fromDatabase:
-          name: astronomia-db
-          property: connectionString
+        sync: false
       # Shared with the frontend (BACKEND_ACCESS_KEY). Set in the dashboard, never here.
       - key: ASTRONOMIA_ACCESS_KEY
         sync: false
