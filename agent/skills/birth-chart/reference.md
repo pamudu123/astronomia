@@ -277,9 +277,9 @@ A graha maru (ග්‍රහ මාරු) is a planet moving into the next sig
 - Many conditions are said to cancel or soften it. Examples are Jupiter aspecting Mars, Mars in its own sign (Mesha or Vrushchika), and Mars in Makara or Simha.
 - Sri Lankan newspaper astrologers warn against declaring it just because Mars is in the 1st or 7th house. They say hasty readings have caused needless worry and blocked marriages, and that the whole chart must be read.
 
-*Site note:* the site checks those six houses from the lagna, Moon and Venus and applies seven cancellations (rule set `kuja_v2`, listed in the `personal-reading` reference, section 7). The rules are marked provisional.
+*Site note:* the site checks those six houses from the lagna, Moon and Venus and applies seven cancellations (rule set `kuja_v2`, with three from B. V. Raman's *Muhurtha*, listed in the `personal-reading` reference, section 7). The rules are marked provisional.
 
-Sri Lankan writers list many more cancellations (lankaastrology.com lists twenty), among them Mars with the Moon (Chandra-Mangala), Mars in a friend's sign, Mars strong in the navamsa, both partners having it, and the belief that it weakens after about age 28. Some say it is "100% cancelled" by one of these. Don't repeat that certainty.
+Sri Lankan writers list many more cancellations (lankaastrology.com lists twenty), among them Mars in a friend's sign, Mars strong in the navamsa, both partners having it, and the belief that it weakens after about age 28. Some say it is "100% cancelled" by one of these. Don't repeat that certainty.
 
 **Sources (section 6)**
 - https://dailymirror.lk/jyotisha-news/Myths-and-Misconceptions-about-Kuja-Dosha/312-157122 (Daily Mirror, 2018)

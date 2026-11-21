@@ -82,11 +82,9 @@ def _check(rule: dict[str, Any], chart: Chart) -> Cancellation:
     if kind == "mars_with":
         with_mars = [b for b in rule["bodies"] if _sign(chart, Body(b)) == mars]
         return Cancellation(rule["id"], bool(with_mars), {"sign": RASHI[mars]})
-    if kind == "mars_navamsha_in_signs":
-        navamsha = chart.planets[Body.MARS].point.navamsha_sign
-        return Cancellation(
-            rule["id"], RASHI[navamsha] in rule["signs"], {"navamsha_sign": RASHI[navamsha]}
-        )
+    if kind == "bodies_in_lagna":
+        found = [b for b in rule["bodies"] if _sign(chart, Body(b)) == chart.lagna.sign]
+        return Cancellation(rule["id"], bool(found), {"sign": RASHI[chart.lagna.sign]})
     if kind == "mars_house_sign":
         house = chart.planets[Body.MARS].house
         applies = any(

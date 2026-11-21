@@ -4,17 +4,23 @@
 # Sources disagree on the house list and on cancellations (see docs/03-porondam-domain-notes.md).
 # Every result carries this version and the provisional flag, so the page can say so.
 #
-# Version 2 keeps every rule of version 1 and adds three cancellations that Sri Lankan writers
-# list (lankaastrology.com "kuja-dosha" and "kuja-dosha-bhanga-sinhala", November 2026; the
-# Daily Mirror columns in agent/skills/birth-chart/reference.md, section 6, give Simha):
-# Mars with the Moon (Chandra-Mangala), Mars in a friend's sign (Simha, Dhanu, Meena), and Mars
-# in its own or exalted sign in the ninth-division chart. Mars with Jupiter is already covered
-# by jupiter_aspects_mars, which counts Jupiter in the same sign.
+# Version 2 keeps the four rules of version 1 and adds three that B. V. Raman gives (Muhurtha,
+# pp. 53-54): Mars in Simha or Kumbha ("In Aquarius and Leo, Mars produces no dosha
+# whatsoever"), Mars with the Moon ("conjunction of Mars and Jupiter or Mars and the Moon"),
+# and Jupiter or Venus in the lagna. Mars with Jupiter is covered by jupiter_aspects_mars,
+# which counts Jupiter in the same sign.
+#
+# Open questions for the astrologer, where Raman and the Sri Lankan Daily Mirror columns
+# (agent/skills/birth-chart/reference.md, section 6) disagree: Raman has no cancellation for
+# Mars in its own or exalted sign, counts Jupiter by conjunction only (not aspect), and has no
+# lagna Kataka/Simha rule; the Daily Mirror gives own sign, Makara, Simha and Jupiter's aspect.
 
 version: kuja_v2
 provisional: true
 
 # Mars in one of these houses, counted from each point, counts as Kuja dosha.
+# Raman counts only 2, 4, 7, 8 and 12, weakest from the lagna and strongest from Venus. The
+# 1st house stays until the astrologer decides.
 houses: [1, 2, 4, 7, 8, 12]
 points: [lagna, moon, venus]
 
@@ -40,11 +46,9 @@ cancellations:
   - id: mars_with_moon
     type: mars_with
     bodies: [moon]
-  - id: mars_friend_sign
+  - id: mars_simha_kumbha
     type: mars_in_signs
-    # The signs of the Sun and Jupiter, Mars's friends. Kataka, the Moon's sign, is left out
-    # because Mars is debilitated there.
-    signs: [simha, dhanu, meena]
-  - id: mars_navamsha_strong
-    type: mars_navamsha_in_signs
-    signs: [mesha, vrischika, makara]
+    signs: [simha, kumbha]
+  - id: benefic_in_lagna
+    type: bodies_in_lagna
+    bodies: [jupiter, venus]

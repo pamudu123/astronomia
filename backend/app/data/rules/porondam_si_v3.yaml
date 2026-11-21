@@ -237,9 +237,10 @@ softening:
 
 # Each rajju runs up from the feet to the head and back down in three rounds of nine stars:
 # feet, waist, navel, neck, head (ascending), then neck, navel, waist, feet (descending).
-# A couple in the same rajju with one star ascending and the other descending is softened
-# (lankaastrology.com "rajju-porondama"). Which stars ascend is not given by that site; this
-# follows the usual order of the rajju table above. (unverified)
+# A named variant, not the default rule: a couple in the same rajju with one star ascending
+# and the other descending is softened (lankaastrology.com "rajju-porondama"). It is a
+# display note only and never changes the Rajju result. Which stars ascend is not given by
+# that site; this follows the usual order of the rajju table above. (unverified)
 rajju_direction:
   ascending: [ashwini, bharani, krittika, rohini, mrigashira, magha, purva_phalguni, uttara_phalguni, hasta, chitra, mula, purva_ashadha, uttara_ashadha, shravana, dhanishta]
   descending: [ardra, punarvasu, pushya, ashlesha, swati, vishakha, anuradha, jyeshtha, shatabhisha, purva_bhadrapada, uttara_bhadrapada, revati]

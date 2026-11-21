@@ -81,7 +81,7 @@ When a factor doesn't agree, Sri Lankan astrologers look for conditions that sof
 | Linga | Yoni and Rashi both agree | |
 | Dina (birth weekdays) | Graha agrees | |
 | Nadi | The same birth star in a different pada, or the same Moon sign with different stars | The two classical Nadi exceptions |
-| Rajju (essential) | One star ascending and the other descending in the rajju | "many astrologers say this softens a same-rajju result; still talk it over with a human astrologer" |
+| Rajju (essential) | One star ascending and the other descending in the rajju (a named variant, not the usual rule) | "some astrologers follow a variant that softens a same-rajju result in this case; it isn't the usual rule, so talk it over with a human astrologer" |
 
 What Sri Lankan writers add, and the site does not check (mention only as what some astrologers say): a strong 7th house, or Jupiter looking at the 7th, in both charts; friendly rising-sign rulers; a strong wedding nakath (a strong auspicious time is believed to soften many blemishes). Some go as far as saying a Rajju or Nadi result alone means nothing. The site and this assistant don't say that.
 

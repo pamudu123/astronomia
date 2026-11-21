@@ -71,17 +71,16 @@ def test_mars_with_the_moon_softens_it() -> None:
     assert not by_id(kuja_dosha(fake_chart("tula", mars="mesha", moon="kanya")), "mars_with_moon")
 
 
-def test_mars_in_a_friendly_sign() -> None:
-    for mars in ("simha", "dhanu", "meena"):
-        assert by_id(kuja_dosha(fake_chart("mesha", mars=mars)), "mars_friend_sign")
-    # Kataka is the Moon's sign, but Mars is debilitated there.
-    assert not by_id(kuja_dosha(fake_chart("mesha", mars="kataka")), "mars_friend_sign")
+def test_mars_in_simha_or_kumbha() -> None:
+    for mars in ("simha", "kumbha"):
+        assert by_id(kuja_dosha(fake_chart("mesha", mars=mars)), "mars_simha_kumbha")
+    assert not by_id(kuja_dosha(fake_chart("mesha", mars="dhanu")), "mars_simha_kumbha")
 
 
-def test_mars_strong_in_the_ninth_division() -> None:
-    # 15 degrees of a sign is its 5th navamsha: Mesha 15 is in Simha, Kataka 15 in Vrischika.
-    assert by_id(kuja_dosha(fake_chart("mesha", mars="kataka")), "mars_navamsha_strong")
-    assert not by_id(kuja_dosha(fake_chart("mesha", mars="mesha")), "mars_navamsha_strong")
+def test_jupiter_or_venus_in_the_lagna() -> None:
+    assert by_id(kuja_dosha(fake_chart("tula", jupiter="tula")), "benefic_in_lagna")
+    assert by_id(kuja_dosha(fake_chart("tula", venus="tula")), "benefic_in_lagna")
+    assert not by_id(kuja_dosha(fake_chart("tula")), "benefic_in_lagna")
 
 
 def test_version_one_still_loads_without_the_new_rules() -> None:

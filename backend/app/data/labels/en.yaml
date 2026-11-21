@@ -72,10 +72,10 @@ reason:
   kuja_not_mars_house_sign_exception: "This exception does not cover Mars in the {house} house in {sign}."
   kuja_cancel_mars_with_moon: "Mars is with the Moon in {sign}."
   kuja_not_mars_with_moon: "Mars in {sign} is not with the Moon."
-  kuja_cancel_mars_friend_sign: "Mars is in {sign}, a friendly sign."
-  kuja_not_mars_friend_sign: "{sign} is not a friendly sign for Mars."
-  kuja_cancel_mars_navamsha_strong: "Navamsha Mars is in {navamsha_sign}, a strong sign."
-  kuja_not_mars_navamsha_strong: "Navamsha Mars is in {navamsha_sign}, not a strong sign."
+  kuja_cancel_mars_simha_kumbha: "Mars is in {sign}, where it gives no dosha."
+  kuja_not_mars_simha_kumbha: "Mars is in {sign}, not Simha or Kumbha."
+  kuja_cancel_benefic_in_lagna: "Jupiter or Venus is in the lagna, {sign}."
+  kuja_not_benefic_in_lagna: "Neither Jupiter nor Venus is in the lagna, {sign}."
   time_stable: "The lagna and birth star stay the same even if the time is off by 15 minutes."
   time_lagna: "The lagna changes if the birth time is off by {minutes} minutes. Check the time."
   time_nakshatra: "The birth star changes if the birth time is off by {minutes} minutes."
@@ -86,8 +86,8 @@ kuja_rule:
   jupiter_aspects_mars: Jupiter looks at Mars
   mars_house_sign_exception: Mars is in a sign that is excused for its house
   mars_with_moon: Mars is with the Moon
-  mars_friend_sign: Mars is in a friendly sign
-  mars_navamsha_strong: Mars is strong in the navamsha
+  mars_simha_kumbha: Mars is in Simha or Kumbha
+  benefic_in_lagna: Jupiter or Venus is in the lagna
 
 # Ordinal house numbers, 1 to 12.
 house: [1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, 11th, 12th]
@@ -217,7 +217,7 @@ porondam_softening:
   graha_agrees: "Tradition softens this because the Graha factor agrees."
   same_star_different_pada: "Tradition softens this because, although the birth star is the same, the padas are different."
   same_sign_different_star: "Tradition softens this because the Moon sign is the same but the birth stars are different."
-  rajju_direction: "Tradition softens this because one star is ascending and the other descending in the rajju."
+  rajju_direction: "Some astrologers soften this because one star is ascending and the other descending in the rajju. This is a named variant, not the usual rule."
 
 # Month names for dates in the PDF report.
 month: [January, February, March, April, May, June, July, August, September, October, November, December]

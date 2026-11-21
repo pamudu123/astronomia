@@ -73,10 +73,10 @@ reason:
   kuja_not_mars_house_sign_exception: "මෙම ව්‍යතිරේකය {sign} රාශියේ {house} භාවයේ කුජට අදාළ නොවේ."
   kuja_cancel_mars_with_moon: "කුජ {sign} රාශියේ චන්ද්‍රයා සමඟ සිටී."
   kuja_not_mars_with_moon: "{sign} රාශියේ කුජ චන්ද්‍රයා සමඟ නොසිටී."
-  kuja_cancel_mars_friend_sign: "කුජ මිත්‍ර රාශියක් වන {sign} රාශියේ සිටී."
-  kuja_not_mars_friend_sign: "{sign} කුජට මිත්‍ර රාශියක් නොවේ."
-  kuja_cancel_mars_navamsha_strong: "නවාංශකයේ කුජ බලවත් {navamsha_sign} රාශියේ සිටී."
-  kuja_not_mars_navamsha_strong: "නවාංශකයේ කුජ {navamsha_sign} රාශියේ, බලවත් නොවේ."
+  kuja_cancel_mars_simha_kumbha: "කුජ {sign} රාශියේ සිටී. එහිදී කුජ දෝෂයක් ඇති නොකරයි."
+  kuja_not_mars_simha_kumbha: "කුජ {sign} රාශියේ සිටී. එය සිංහ හෝ කුම්භ නොවේ."
+  kuja_cancel_benefic_in_lagna: "{sign} ලග්නයේ ගුරු හෝ සිකුරු සිටී."
+  kuja_not_benefic_in_lagna: "{sign} ලග්නයේ ගුරු හෝ සිකුරු නොසිටී."
   time_stable: "උපන් වේලාව විනාඩි 15 කින් වෙනස් වුවත් ලග්නය සහ නැකත එලෙසම පවතී."
   time_lagna: "උපන් වේලාව විනාඩි {minutes} කින් වෙනස් වුවහොත් ලග්නය වෙනස් වේ. වේලාව පරීක්ෂා කරන්න."
   time_nakshatra: "උපන් වේලාව විනාඩි {minutes} කින් වෙනස් වුවහොත් නැකත වෙනස් වේ."
@@ -87,8 +87,8 @@ kuja_rule:
   jupiter_aspects_mars: "කුජට ගුරුගේ දෘෂ්ටිය ලැබීම"
   mars_house_sign_exception: "කුජ සිටින භාවය සහ රාශිය අනුව දෝෂය අඩු වීම"
   mars_with_moon: කුජ චන්ද්‍රයා සමඟ සිටීම
-  mars_friend_sign: කුජ මිත්‍ර රාශියක සිටීම
-  mars_navamsha_strong: නවාංශකයේ කුජ බලවත් වීම
+  mars_simha_kumbha: කුජ සිංහ හෝ කුම්භ රාශියේ සිටීම
+  benefic_in_lagna: ලග්නයේ ගුරු හෝ සිකුරු සිටීම
 
 house: ["1 වැනි", "2 වැනි", "3 වැනි", "4 වැනි", "5 වැනි", "6 වැනි", "7 වැනි", "8 වැනි", "9 වැනි", "10 වැනි", "11 වැනි", "12 වැනි"]
 
@@ -552,4 +552,4 @@ porondam_softening:
   graha_agrees: "ග්‍රහ පොරොන්දම ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
   same_star_different_pada: "උපන් නැකත එකම වුවත් පාද වෙනස් නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
   same_sign_different_star: "චන්ද්‍ර රාශිය එකම වුවත් උපන් නැකැත් වෙනස් නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
-  rajju_direction: "රජ්ජුවේ එක් නැකතක් ආරෝහණ (ඉහළට යන) සහ අනෙක අවරෝහණ (පහළට එන) නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+  rajju_direction: "රජ්ජුවේ එක් නැකතක් ආරෝහණ (ඉහළට යන) සහ අනෙක අවරෝහණ (පහළට එන) නිසා සමහර ජ්‍යොතිෂවේදීන් මෙම දෝෂය අඩු කොට සලකයි. මෙය සාමාන්‍ය නීතිය නොව, නම් කළ ප්‍රභේදයකි."
