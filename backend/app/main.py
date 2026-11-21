@@ -13,6 +13,7 @@ from app.api import (
     journey,
     kendara,
     meta,
+    paid,
     panchanga,
     places,
     porondam,
@@ -61,6 +62,7 @@ def create_app() -> FastAPI:
     app.include_router(reports.router)
     app.include_router(shares.router)
     app.include_router(saved.router)
+    app.include_router(paid.router)
     return app
 
 

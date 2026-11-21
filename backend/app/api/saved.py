@@ -28,9 +28,9 @@ from typing import Annotated, Any, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, Field, TypeAdapter
 
-from app.api.deps import Accounts, Admin, PlacesDb, Tokens
+from app.api.deps import Accounts, Admin, Orders, PlacesDb, Tokens
 from app.api.porondam import PorondamResponse
-from app.api.reports import HadahanReport, PorondamReport, ReportRequest
+from app.api.report_requests import HadahanReport, PorondamReport, ReportRequest
 from app.api.snapshots import (
     SnapshotHadahan,
     hadahan_snapshot,
@@ -42,7 +42,7 @@ from app.auth import BadToken, Caller, KeysUnavailable, TokenChecker, bearer_tok
 from app.config import Settings, get_settings
 from app.explain.labels import Lang
 from app.store.accounts import LimitReached, NewReport, SavedSummary, User
-from app.tiers import save_access
+from app.tiers import report_access, save_access
 
 router = APIRouter(tags=["saved"])
 log = logging.getLogger(__name__)
@@ -229,6 +229,7 @@ class SavedOut(BaseModel):
     kind: Literal["hadahan", "porondam"]
     title: str  # empty: the page names it from the people in it
     created_at: dt.datetime
+    paid: bool = False  # unlocked with an order (docs/18): kept in the account, with every feature
     hadahan: HadahanCard | None = None
     porondam: PorondamCard | None = None
 
@@ -262,6 +263,7 @@ def _out(item: SavedSummary) -> SavedOut:
         kind="hadahan" if item.kind == "hadahan" else "porondam",
         title=item.title,
         created_at=item.created_at,
+        paid=item.paid,
     )
     if item.kind == "hadahan":
         out.hadahan = HadahanCard.model_validate(item.summary)
@@ -270,7 +272,7 @@ def _out(item: SavedSummary) -> SavedOut:
     return out
 
 
-def _input_hash(request: dict[str, Any]) -> str:
+def input_hash(request: dict[str, Any]) -> str:
     """The same result saved again has the same hash. The language it was viewed in is left
     out: the report is kept in both."""
 
@@ -311,7 +313,7 @@ def _new_report(body: HadahanReport | PorondamReport, db: Path) -> NewReport:
     return NewReport(
         kind=body.kind,
         input=request,
-        input_hash=_input_hash(request),
+        input_hash=input_hash(request),
         snapshot=snapshot,
         summary=summary,
         rules=rules,
@@ -434,11 +436,15 @@ def save_report(
     accounts: Accounts,
     db: PlacesDb,
     settings: SettingsDep,
+    orders: Orders,
 ) -> SavedCreated:
     """Saves a hadahan or a match to My reports. The page signs in (anonymously) first."""
     report = _new_report(body, db)
+    # A report this account paid for is kept as paid (docs/18, section 3).
+    access = report_access(orders, me.user, body.kind, report.input_hash, settings.paid_reports)
+    limit = settings.paid_saved_limit if access.paid else settings.guest_saved_limit
     try:
-        item, created = accounts.save(me.user.id, report, settings.guest_saved_limit)
+        item, created = accounts.save(me.user.id, report, limit, access.order_id)
     except LimitReached as error:
         raise HTTPException(status.HTTP_409_CONFLICT, "saved report limit reached") from error
     _set_hint(response, settings, 1)
@@ -477,7 +483,9 @@ def open_saved(
     found = accounts.get_saved(_owned(session), str(report_id))
     if found is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_FOUND, headers=PRIVATE)
-    out = _out(SavedSummary(found.id, found.kind, found.title, found.summary, found.created_at))
+    out = _out(
+        SavedSummary(found.id, found.kind, found.title, found.summary, found.created_at, found.paid)
+    )
     detail = SavedDetail(**out.model_dump(), request=_REQUEST.validate_python(found.input))
     if found.kind == "hadahan":
         detail.hadahan_result = open_hadahan(found.snapshot, lang)

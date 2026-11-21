@@ -29,6 +29,10 @@ services:
       # Shared with the frontend (BACKEND_ACCESS_KEY). Set in the dashboard, never here.
       - key: ASTRONOMIA_ACCESS_KEY
         sync: false
+      # Paid reports (docs/18, docs/20): the AI reading, explain buttons, full detail and full
+      # PDF only on reports the account unlocked, with a coupon until payments exist.
+      - key: ASTRONOMIA_PAID_REPORTS
+        value: "true"
 
   # The AI assistant behind the website's chat (agent/). The chat stays off until Vercel has
   # AGENT_URL, so this service can run before anyone can reach it.

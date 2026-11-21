@@ -13,7 +13,7 @@ from pydantic import BaseModel
 
 from app.api.deps import PlacesDb, Shares
 from app.api.porondam import PorondamResponse
-from app.api.reports import HadahanReport, PorondamReport
+from app.api.report_requests import HadahanReport, PorondamReport
 from app.api.snapshots import (
     SnapshotHadahan,
     hadahan_snapshot,
