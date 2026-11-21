@@ -9,6 +9,7 @@ from fastapi import Depends
 from app.config import Settings, get_settings
 from app.geo.build import ensure_built
 from app.store.accounts import AccountStore, postgres_accounts, sqlite_accounts
+from app.store.orders import OrderStore, postgres_orders, sqlite_orders
 from app.store.shares import PostgresShareStore, ShareStore, Store
 
 
@@ -60,3 +61,22 @@ def account_store(settings: Annotated[Settings, Depends(get_settings)]) -> Accou
 
 
 Accounts = Annotated[AccountStore, Depends(account_store)]
+
+
+@lru_cache
+def _sqlite_orders(path: Path) -> OrderStore:
+    return sqlite_orders(path)
+
+
+@lru_cache
+def _postgres_orders(url: str) -> OrderStore:
+    return postgres_orders(url)
+
+
+def order_store(settings: Annotated[Settings, Depends(get_settings)]) -> OrderStore:
+    if settings.database_url:
+        return _postgres_orders(settings.database_url)
+    return _sqlite_orders(settings.orders_db)
+
+
+Orders = Annotated[OrderStore, Depends(order_store)]

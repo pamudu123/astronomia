@@ -25,9 +25,9 @@ from typing import Annotated, Any, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, Field, TypeAdapter
 
-from app.api.deps import Accounts, PlacesDb
+from app.api.deps import Accounts, Orders, PlacesDb
 from app.api.porondam import PorondamResponse
-from app.api.reports import HadahanReport, PorondamReport, ReportRequest
+from app.api.report_requests import HadahanReport, PorondamReport, ReportRequest
 from app.api.snapshots import (
     SnapshotHadahan,
     hadahan_snapshot,
@@ -38,7 +38,7 @@ from app.api.snapshots import (
 from app.config import Settings, get_settings
 from app.explain.labels import Lang
 from app.store.accounts import FoundSession, LimitReached, NewReport, SavedSummary
-from app.tiers import save_access
+from app.tiers import report_access, save_access
 
 router = APIRouter(tags=["saved"])
 
@@ -203,6 +203,7 @@ class SavedOut(BaseModel):
     kind: Literal["hadahan", "porondam"]
     title: str  # empty: the page names it from the people in it
     created_at: dt.datetime
+    paid: bool = False  # unlocked with an order (docs/18): kept in the account, with every feature
     hadahan: HadahanCard | None = None
     porondam: PorondamCard | None = None
 
@@ -236,6 +237,7 @@ def _out(item: SavedSummary) -> SavedOut:
         kind="hadahan" if item.kind == "hadahan" else "porondam",
         title=item.title,
         created_at=item.created_at,
+        paid=item.paid,
     )
     if item.kind == "hadahan":
         out.hadahan = HadahanCard.model_validate(item.summary)
@@ -244,7 +246,7 @@ def _out(item: SavedSummary) -> SavedOut:
     return out
 
 
-def _input_hash(request: dict[str, Any]) -> str:
+def input_hash(request: dict[str, Any]) -> str:
     """The same result saved again has the same hash. The language it was viewed in is left
     out: the report is kept in both."""
 
@@ -285,7 +287,7 @@ def _new_report(body: HadahanReport | PorondamReport, db: Path) -> NewReport:
     return NewReport(
         kind=body.kind,
         input=request,
-        input_hash=_input_hash(request),
+        input_hash=input_hash(request),
         snapshot=snapshot,
         summary=summary,
         rules=rules,
@@ -330,6 +332,7 @@ def save_report(
     db: PlacesDb,
     settings: SettingsDep,
     limiter: Annotated[RateLimit, Depends(guest_limit)],
+    orders: Orders,
 ) -> SavedCreated:
     """Saves a hadahan or a match to My reports. Makes a guest account if there is none."""
     report = _new_report(body, db)  # first, so a refused request makes no account
@@ -337,7 +340,14 @@ def save_report(
     try:
         if session.found is not None:
             expires = session.found.expires_at
-            item, created = accounts.save(session.found.user.id, report, limit)
+            user = session.found.user
+            # A report this account paid for is kept as paid (docs/18, section 3).
+            access = report_access(
+                orders, user, body.kind, report.input_hash, settings.paid_reports
+            )
+            if access.paid:
+                limit = settings.paid_saved_limit
+            item, created = accounts.save(user.id, report, limit, access.order_id)
         else:
             if not limiter.allow(_client_address(request)):
                 raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "too many new accounts")
@@ -385,7 +395,9 @@ def open_saved(
     found = accounts.get_saved(_owned(session), str(report_id))
     if found is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_FOUND, headers=PRIVATE)
-    out = _out(SavedSummary(found.id, found.kind, found.title, found.summary, found.created_at))
+    out = _out(
+        SavedSummary(found.id, found.kind, found.title, found.summary, found.created_at, found.paid)
+    )
     detail = SavedDetail(**out.model_dump(), request=_REQUEST.validate_python(found.input))
     if found.kind == "hadahan":
         detail.hadahan_result = open_hadahan(found.snapshot, lang)

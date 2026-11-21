@@ -7,6 +7,7 @@ from app.api import deps, saved
 from app.geo.build import build
 from app.main import create_app
 from app.store.accounts import AccountStore, sqlite_accounts
+from app.store.orders import OrderStore, sqlite_orders
 from app.store.shares import ShareStore
 
 
@@ -29,11 +30,20 @@ def accounts(tmp_path: Path) -> AccountStore:
 
 
 @pytest.fixture
-def client(places_db: Path, shares: ShareStore, accounts: AccountStore) -> TestClient:
+def orders(tmp_path: Path) -> OrderStore:
+    """A fresh coupon and order store for each test, in a temporary folder."""
+    return sqlite_orders(tmp_path / "orders.sqlite")
+
+
+@pytest.fixture
+def client(
+    places_db: Path, shares: ShareStore, accounts: AccountStore, orders: OrderStore
+) -> TestClient:
     app = create_app()
     app.dependency_overrides[deps.places_db] = lambda: places_db
     app.dependency_overrides[deps.share_store] = lambda: shares
     app.dependency_overrides[deps.account_store] = lambda: accounts
+    app.dependency_overrides[deps.order_store] = lambda: orders
     limit = saved.RateLimit(30)
     app.dependency_overrides[saved.guest_limit] = lambda: limit
     return TestClient(app)

@@ -79,6 +79,7 @@ class SavedSummary:
     title: str
     summary: dict[str, Any]
     created_at: dt.datetime
+    paid: bool = False  # kept with an order (docs/18): a paid report
 
 
 @dataclass(frozen=True)
@@ -90,6 +91,7 @@ class SavedReport:
     created_at: dt.datetime
     input: dict[str, Any]
     snapshot: dict[str, Any]
+    paid: bool = False
 
 
 @dataclass(frozen=True)
@@ -298,26 +300,42 @@ class AccountStore:
 
     # Saved reports
 
-    def save(self, user_id: str, report: NewReport, limit: int) -> tuple[SavedSummary, bool]:
+    def save(
+        self, user_id: str, report: NewReport, limit: int, purchase_id: str | None = None
+    ) -> tuple[SavedSummary, bool]:
         """Keeps a report. Saving the same input again returns the one already kept.
 
-        The second value is True when a new report was kept. Raises LimitReached when the
-        account is full.
+        `purchase_id` is the order that paid for it (app/store/orders.py), if any. A report
+        kept free and saved again with one becomes paid. The second value is True when a new
+        report was kept. Raises LimitReached when the account is full.
         """
         now = self.clock()
         with self._connect() as db:
-            return self._save(db, user_id, report, limit, now)
+            return self._save(db, user_id, report, limit, now, purchase_id)
 
     def _save(
-        self, db: Any, user_id: str, report: NewReport, limit: int, now: dt.datetime
+        self,
+        db: Any,
+        user_id: str,
+        report: NewReport,
+        limit: int,
+        now: dt.datetime,
+        purchase_id: str | None = None,
     ) -> tuple[SavedSummary, bool]:
         existing = self._run(
             db,
-            "SELECT id, kind, title, summary, created_at FROM {saved_reports} "
+            "SELECT id, kind, title, summary, created_at, purchase_id FROM {saved_reports} "
             "WHERE user_id = ? AND input_hash = ?",
             (user_id, report.input_hash),
         ).fetchone()
         if existing is not None:
+            if purchase_id is not None and existing[5] != purchase_id:
+                self._run(
+                    db,
+                    "UPDATE {saved_reports} SET purchase_id = ?, updated_at = ? WHERE id = ?",
+                    (purchase_id, self._ts(now), existing[0]),
+                )
+                return self._summary((*existing[:5], purchase_id)), False
             return self._summary(existing), False
         (count,) = self._run(
             db, "SELECT COUNT(*) FROM {saved_reports} WHERE user_id = ?", (user_id,)
@@ -328,8 +346,8 @@ class AccountStore:
         self._run(
             db,
             "INSERT INTO {saved_reports} (id, user_id, kind, title, input, input_hash, "
-            "snapshot, summary, rules, created_at, updated_at) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "snapshot, summary, rules, purchase_id, created_at, updated_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 report_id,
                 user_id,
@@ -340,23 +358,32 @@ class AccountStore:
                 self._json(report.snapshot),
                 self._json(report.summary),
                 report.rules,
+                purchase_id,
                 self._ts(now),
                 self._ts(now),
             ),
         )
-        return SavedSummary(report_id, report.kind, "", report.summary, now), True
+        summary = SavedSummary(
+            report_id, report.kind, "", report.summary, now, purchase_id is not None
+        )
+        return summary, True
 
     def _summary(self, row: Sequence[Any]) -> SavedSummary:
-        report_id, kind, title, summary, created = row
+        report_id, kind, title, summary, created, purchase_id = row
         return SavedSummary(
-            self._read_id(report_id), kind, title, self._read_json(summary), self._read_ts(created)
+            self._read_id(report_id),
+            kind,
+            title,
+            self._read_json(summary),
+            self._read_ts(created),
+            purchase_id is not None,
         )
 
     def list_saved(self, user_id: str) -> list[SavedSummary]:
         with self._connect() as db:
             rows = self._run(
                 db,
-                "SELECT id, kind, title, summary, created_at FROM {saved_reports} "
+                "SELECT id, kind, title, summary, created_at, purchase_id FROM {saved_reports} "
                 "WHERE user_id = ? ORDER BY created_at DESC, id",
                 (user_id,),
             ).fetchall()
@@ -373,21 +400,22 @@ class AccountStore:
         with self._connect() as db:
             row = self._run(
                 db,
-                "SELECT id, kind, title, summary, created_at, input, snapshot "
+                "SELECT id, kind, title, summary, created_at, purchase_id, input, snapshot "
                 "FROM {saved_reports} WHERE user_id = ? AND id = ?",
                 (user_id, report_id),
             ).fetchone()
         if row is None:
             return None
-        summary = self._summary(row[:5])
+        summary = self._summary(row[:6])
         return SavedReport(
             id=summary.id,
             kind=summary.kind,
             title=summary.title,
             summary=summary.summary,
             created_at=summary.created_at,
-            input=self._read_json(row[5]),
-            snapshot=self._read_json(row[6]),
+            input=self._read_json(row[6]),
+            snapshot=self._read_json(row[7]),
+            paid=summary.paid,
         )
 
     def rename(self, user_id: str, report_id: str, title: str) -> bool:
