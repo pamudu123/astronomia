@@ -230,6 +230,11 @@ export function PorondamResult({
                   <span className={styles.small}>{factorName(check).meaning}</span>
                   <FactorVisual factor={check} labels={labels} />
                   <span className={styles.small}>{check.reason}</span>
+                  {(check.softened_text ?? []).map((text) => (
+                    <span key={text} className={styles.small} data-softened>
+                      {text}
+                    </span>
+                  ))}
                 </li>
               ))}
             </ul>
@@ -316,6 +321,12 @@ export function PorondamResult({
               <span className={styles.meaning}>{factorName(factor).meaning}</span>
               {counted && <FactorVisual factor={factor} labels={labels} />}
               <p className={styles.small}>{factor.reason}</p>
+              {counted &&
+                (factor.softened_text ?? []).map((text) => (
+                  <p key={text} className={styles.small} data-softened>
+                    {text}
+                  </p>
+                ))}
             </li>
             );
           })}

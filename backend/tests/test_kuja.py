@@ -64,3 +64,27 @@ def test_house_sign_exception() -> None:
     assert by_id(kuja_dosha(fake_chart("mithuna", mars="vrishabha")), "mars_house_sign_exception")
     # Mars in the 12th from a Simha lagna is Kataka: not excused.
     assert not by_id(kuja_dosha(fake_chart("simha", mars="kataka")), "mars_house_sign_exception")
+
+
+def test_mars_with_the_moon_softens_it() -> None:
+    assert by_id(kuja_dosha(fake_chart("tula", mars="mesha", moon="mesha")), "mars_with_moon")
+    assert not by_id(kuja_dosha(fake_chart("tula", mars="mesha", moon="kanya")), "mars_with_moon")
+
+
+def test_mars_in_simha_or_kumbha() -> None:
+    for mars in ("simha", "kumbha"):
+        assert by_id(kuja_dosha(fake_chart("mesha", mars=mars)), "mars_simha_kumbha")
+    assert not by_id(kuja_dosha(fake_chart("mesha", mars="dhanu")), "mars_simha_kumbha")
+
+
+def test_jupiter_or_venus_in_the_lagna() -> None:
+    assert by_id(kuja_dosha(fake_chart("tula", jupiter="tula")), "benefic_in_lagna")
+    assert by_id(kuja_dosha(fake_chart("tula", venus="tula")), "benefic_in_lagna")
+    assert not by_id(kuja_dosha(fake_chart("tula")), "benefic_in_lagna")
+
+
+def test_version_one_still_loads_without_the_new_rules() -> None:
+    old = kuja_dosha(fake_chart("tula", mars="mesha", moon="mesha"), version="kuja_v1")
+    assert old.rule_set == "kuja_v1"
+    assert "mars_with_moon" not in {c.id for c in old.cancellations}
+    assert kuja_dosha(fake_chart("tula", mars="mesha")).rule_set == "kuja_v2"

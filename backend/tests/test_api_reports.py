@@ -83,7 +83,7 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
     last = reader.pages[-1].extract_text()
     assert "For guidance and cultural interest" in last
     assert "Lahiri ayanamsa" in last
-    assert "kuja_v1" in last
+    assert "kuja_v2" in last
     assert "provisional" in last
     assert "Made on 12 November 2026." in last
 
@@ -154,7 +154,7 @@ def test_full_porondam_report(client: TestClient) -> None:
         "Nimali: Present, reduced",
         "Kasun: Not present",
         "Rashi charts",
-        "porondam_si_v3, kuja_v1",
+        "porondam_si_v3, kuja_v2",
         "not a decision",
     ):
         assert expected in content, expected

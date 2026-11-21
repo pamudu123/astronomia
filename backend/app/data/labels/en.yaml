@@ -70,6 +70,12 @@ reason:
   kuja_not_mars_own_or_exalted: "Mars is in {sign}, which is neither its own nor its exalted sign."
   kuja_not_jupiter_aspects_mars: "Jupiter in {jupiter_sign} does not look at Mars in {mars_sign}."
   kuja_not_mars_house_sign_exception: "This exception does not cover Mars in the {house} house in {sign}."
+  kuja_cancel_mars_with_moon: "Mars is with the Moon in {sign}."
+  kuja_not_mars_with_moon: "Mars in {sign} is not with the Moon."
+  kuja_cancel_mars_simha_kumbha: "Mars is in {sign}, where it gives no dosha."
+  kuja_not_mars_simha_kumbha: "Mars is in {sign}, not Simha or Kumbha."
+  kuja_cancel_benefic_in_lagna: "Jupiter or Venus is in the lagna, {sign}."
+  kuja_not_benefic_in_lagna: "Neither Jupiter nor Venus is in the lagna, {sign}."
   time_stable: "The lagna and birth star stay the same even if the time is off by 15 minutes."
   time_lagna: "The lagna changes if the birth time is off by {minutes} minutes. Check the time."
   time_nakshatra: "The birth star changes if the birth time is off by {minutes} minutes."
@@ -79,6 +85,9 @@ kuja_rule:
   mars_own_or_exalted: Mars is in its own or exalted sign
   jupiter_aspects_mars: Jupiter looks at Mars
   mars_house_sign_exception: Mars is in a sign that is excused for its house
+  mars_with_moon: Mars is with the Moon
+  mars_simha_kumbha: Mars is in Simha or Kumbha
+  benefic_in_lagna: Jupiter or Venus is in the lagna
 
 # Ordinal house numbers, 1 to 12.
 house: [1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, 9th, 10th, 11th, 12th]
@@ -194,6 +203,22 @@ porondam_reason:
   kuja_bride_only: "The bride's chart shows Kuja dosha and the groom's does not. This is something to review."
   kuja_groom_only: "The groom's chart shows Kuja dosha and the bride's does not. This is something to review."
 
+# Traditional exceptions that soften a factor that does not agree (dosha bhanga). Information
+# only: the factor still counts as not agreeing. Provisional, like the rules.
+porondam_softening:
+  rashi_and_lords_agree: "Tradition softens this because the Rashi and Rashyadhipathi factors agree."
+  lords_friendly: "Tradition softens this because the rulers of the two Moon signs are friendly (Rashyadhipathi agrees)."
+  vruksha_and_nadi_agree: "Tradition softens this for family growth because the Vruksha and Nadi factors agree."
+  rashi_and_graha_agree: "Tradition softens this because the Rashi and Graha factors agree."
+  rashi_and_yoni_agree: "Tradition softens this because the Rashi and Yoni factors agree."
+  different_star_or_pada: "Tradition softens this because the two birth stars, or their padas, are different."
+  main_factors_agree: "Tradition softens this because Gana, Yoni, Rashi and Nadi all agree."
+  yoni_and_rashi_agree: "Tradition softens this because the Yoni and Rashi factors agree."
+  graha_agrees: "Tradition softens this because the Graha factor agrees."
+  same_star_different_pada: "Tradition softens this because, although the birth star is the same, the padas are different."
+  same_sign_different_star: "Tradition softens this because the Moon sign is the same but the birth stars are different."
+  rajju_direction: "Some astrologers soften this because one star is ascending and the other descending in the rajju. This is a named variant, not the usual rule."
+
 # Month names for dates in the PDF report.
 month: [January, February, March, April, May, June, July, August, September, October, November, December]
 
@@ -241,6 +266,7 @@ report:
   result: Result
   applies: Applies
   not_applies: Does not apply
+  kuja_checks_others: "{count} other conditions were checked and do not apply."
   time_check: Birth time check
   porondam_title: "{bride} and {groom}"
   bride: Bride

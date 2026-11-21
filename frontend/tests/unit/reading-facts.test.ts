@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { type Placement, combinations, relation, seventhLord } from "@/lib/assistant/chartFacts";
+import { type Placement, combinations, combust, isYogaKaraka, relation, seventhLord } from "@/lib/assistant/chartFacts";
 import {
   chartExtrasContext,
   chartReadingContext,
@@ -74,6 +74,84 @@ describe("the new combinations", () => {
     expect(hard).toContainEqual({ name: "Papa Kartari", based_on: "hard planets on both sides of the 7th house (marriage and partnership)" });
     const gentle = names(placed({ venus: 6, jupiter: 8, moon: 10 }));
     expect(gentle).toContain("Shubha Kartari");
+  });
+});
+
+const SIGN_ORDER = ["mesha", "vrishabha", "mithuna", "kataka", "simha", "kanya", "tula", "vrischika", "dhanu", "makara", "kumbha", "meena"];
+
+/** A chart from a rising sign and each planet's house; signs follow from the houses. Planets
+ * not given sit in house 1. */
+function chartOf(rising: string, houses: Record<string, number>): Placement[] {
+  const start = SIGN_ORDER.indexOf(rising);
+  const bodies = ["sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "rahu", "ketu"];
+  return bodies.map((body) => {
+    const house = houses[body] ?? 1;
+    return { body, sign: SIGN_ORDER[(start + house - 1) % 12], house };
+  });
+}
+
+describe("the combinations from the yoga articles", () => {
+  it("finds Neecha Bhanga when the debilitated planet's sign ruler is in an angle", () => {
+    // Mesha rising: Saturn debilitated in Mesha (house 1), Mars (ruler of Mesha) in house 4.
+    const found = names(chartOf("mesha", { saturn: 1, mars: 4, moon: 2, rahu: 3, ketu: 9 }));
+    expect(found).toContain("Neecha Bhanga Raja yoga");
+    // Mars and the Sun (exalted in Mesha) in house 3: not an angle from house 1 or the Moon in 2.
+    expect(names(chartOf("mesha", { saturn: 1, mars: 3, sun: 3, moon: 2, rahu: 3, ketu: 9 }))).not.toContain(
+      "Neecha Bhanga Raja yoga",
+    );
+  });
+
+  it("finds Raja and Dhana yoga from the house rulers sitting together", () => {
+    // Mesha rising: the Moon rules the 4th and Jupiter the 9th, together in house 5.
+    const raja = combinations({ planets: chartOf("mesha", { moon: 5, jupiter: 5, rahu: 3, ketu: 9 }) }, labels);
+    expect(raja).toContainEqual({
+      name: "Raja yoga",
+      based_on: "Moon (ruler of house 4) and Jupiter (ruler of house 9 and 12) together in house 5",
+    });
+    // Venus rules the 2nd, Jupiter the 9th.
+    expect(names(chartOf("mesha", { venus: 11, jupiter: 11, rahu: 3, ketu: 9 }))).toContain("Dhana yoga");
+  });
+
+  it("finds Vipareeta Raja yoga for a ruler of a hard house in a hard house", () => {
+    // Mesha rising: Mercury rules the 3rd and 6th, and sits in the 8th.
+    expect(names(chartOf("mesha", { mercury: 8, rahu: 3, ketu: 9 }))).toContain("Vipareeta Raja yoga (Harsha)");
+  });
+
+  it("finds the named pairs", () => {
+    const found = names(chartOf("tula", { jupiter: 4, rahu: 4, ketu: 10, mars: 10 }));
+    expect(found).toContain("Guru-Chandala yoga");
+    expect(found).toContain("Guru-Mangala yoga"); // Jupiter and Mars face each other
+    expect(names(chartOf("tula", { mars: 6, rahu: 6, ketu: 12 }))).toContain("Angaraka yoga");
+  });
+
+  it("finds Kala Sarpa only when every planet is on one side of the nodes", () => {
+    const hemmed = chartOf("mesha", { rahu: 1, ketu: 7, sun: 2, moon: 3, mars: 4, mercury: 5, jupiter: 6, venus: 2, saturn: 3 });
+    expect(names(hemmed)).toContain("Kala Sarpa (Anantha)");
+    const open = chartOf("mesha", { rahu: 1, ketu: 7, sun: 2, moon: 3, mars: 4, mercury: 5, jupiter: 9, venus: 2, saturn: 3 });
+    expect(names(open).some((n) => n.startsWith("Kala Sarpa"))).toBe(false);
+  });
+
+  it("finds Amala for a gentle planet alone in the 10th", () => {
+    expect(names(chartOf("mesha", { jupiter: 10, moon: 2, rahu: 3, ketu: 9 }))).toContain("Amala yoga");
+    expect(names(chartOf("mesha", { jupiter: 10, saturn: 10, moon: 2, rahu: 3, ketu: 9 }))).not.toContain("Amala yoga");
+  });
+
+  it("finds Kemadruma only when nothing cancels it", () => {
+    // Moon in house 2; the true planets only in houses 6, 9 and 12: not beside the Moon, not
+    // with it, and not in an angle from the rising sign or the Moon.
+    const alone = { moon: 2, sun: 3, rahu: 3, ketu: 9, mars: 6, mercury: 12, jupiter: 9, venus: 12, saturn: 6 };
+    expect(names(chartOf("mesha", alone))).toContain("Kemadruma yoga");
+    // Jupiter in house 5 is an angle from the Moon, which cancels it.
+    expect(names(chartOf("mesha", { ...alone, jupiter: 5 }))).not.toContain("Kemadruma yoga");
+  });
+
+  it("knows the yoga karaka and combust planets", () => {
+    expect(isYogaKaraka([9, 10])).toBe(true); // Saturn for Vrishabha rising
+    expect(isYogaKaraka([1, 8])).toBe(false); // Mars for Mesha rising
+    expect(combust("mercury", 100, 110)).toBe(true);
+    expect(combust("mercury", 100, 113, true)).toBe(false); // 13 degrees, retrograde orb is 12
+    expect(combust("venus", 355, 3)).toBe(true); // across 0 degrees
+    expect(combust("rahu", 100, 100)).toBe(false);
   });
 });
 

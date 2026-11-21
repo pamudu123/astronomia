@@ -4,7 +4,7 @@ All rules and tables come from a versioned YAML file. The result holds facts and
 fail flags, never sentences: words come from the label files.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Literal
@@ -27,6 +27,9 @@ class FactorResult:
     # False when the factor needs something this match does not have, such as the birth
     # weekdays in a birth star only match. It is then left out of the count.
     checked: bool = True
+    # Traditional exceptions that soften a factor that does not agree (dosha bhanga), by id.
+    # Information only: they never change `passed` or the count.
+    softened_by: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -199,6 +202,46 @@ def _factor(
     raise ValueError(f"unknown porondam rule type: {kind}")
 
 
+def _softening(
+    rule: dict[str, Any],
+    rules: dict[str, Any],
+    bride: Point,
+    groom: Point,
+    by_id: dict[str, FactorResult],
+) -> bool:
+    kind = rule["type"]
+    if kind == "factors_agree":
+        found = [by_id.get(f) for f in rule["factors"]]
+        return all(f is not None and f.checked and f.passed for f in found)
+    if kind == "same_star_different_pada":
+        return bride.nakshatra == groom.nakshatra and bride.pada != groom.pada
+    if kind == "same_sign_different_star":
+        return bride.sign == groom.sign and bride.nakshatra != groom.nakshatra
+    if kind == "different_star_or_pada":
+        return (bride.nakshatra, bride.pada) != (groom.nakshatra, groom.pada)
+    if kind == "rajju_direction":
+        table = rules["rajju_direction"]
+        b_dir = _group(table, NAKSHATRA[bride.nakshatra])
+        return b_dir != _group(table, NAKSHATRA[groom.nakshatra])
+    raise ValueError(f"unknown porondam softening type: {kind}")
+
+
+def _soften(
+    factors: list[FactorResult], rules: dict[str, Any], bride: Point, groom: Point
+) -> list[FactorResult]:
+    """Each checked factor that does not agree, with the exceptions that soften it."""
+    by_id = {f.id: f for f in factors}
+    table = rules.get("softening", {})
+    out = []
+    for f in factors:
+        if f.checked and not f.passed and f.id in table:
+            ids = tuple(r["id"] for r in table[f.id] if _softening(r, rules, bride, groom, by_id))
+            if ids:
+                f = replace(f, softened_by=ids)
+        out.append(f)
+    return out
+
+
 def match(
     bride: Point,
     groom: Point,
@@ -210,10 +253,11 @@ def match(
     birth weekdays, and lagnas their lagna signs (0 = Mesha), when the birth details are known.
     A factor that needs one of them is left unchecked without it."""
     rules = load_rules(version)
+    factors = [_factor(rule, rules, bride, groom, weekdays, lagnas) for rule in rules["factors"]]
     return MatchResult(
         rule_set=rules["version"],
         provisional=bool(rules["provisional"]),
-        factors=[_factor(rule, rules, bride, groom, weekdays, lagnas) for rule in rules["factors"]],
+        factors=_soften(factors, rules, bride, groom),
         same_star=bride.nakshatra == groom.nakshatra,
     )
 

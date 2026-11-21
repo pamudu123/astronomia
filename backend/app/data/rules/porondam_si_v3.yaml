@@ -190,3 +190,57 @@ factors:
       - [mrigashira, dhanishta]
       - [mrigashira, chitra]
       - [chitra, dhanishta]
+
+# Softening (dosha bhanga): traditional exceptions that soften a factor that does not agree.
+# They never change whether a factor agrees, the count or the summary, which follow the rules
+# above. A factor that does not agree lists the exceptions that apply, so the page and the
+# assistant can say "this is not counted as agreeing, but tradition softens it because...".
+# PROVISIONAL, like the rest of this file.
+#
+# Sources: lankaastrology.com's twenty factor articles and "porondam-nogalapunoth-vivaha-weema-
+# dosha-bhanga" (November 2026). The Nadi, Gana and Rashi exceptions are also the classical ones
+# (same star with a different pada, or the same Moon sign with a different star, for Nadi; the
+# Moon sign lords being friends for Gana and Rashi). The others are as that site gives them.
+#
+# Types:
+# - factors_agree: every factor listed was checked and agrees.
+# - same_star_different_pada: the same birth star, in a different pada.
+# - same_sign_different_star: the same Moon sign, but a different birth star.
+# - different_star_or_pada: not the same star and the same pada.
+# - rajju_direction: one star ascends and the other descends (rajju_direction below).
+softening:
+  dina:
+    - {id: rashi_and_lords_agree, type: factors_agree, factors: [rashi, rashyadhipathi]}
+  gana:
+    - {id: lords_friendly, type: factors_agree, factors: [rashyadhipathi]}
+  mahendra:
+    - {id: vruksha_and_nadi_agree, type: factors_agree, factors: [vruksha, nadi]}
+  stree_deergha:
+    - {id: rashi_and_graha_agree, type: factors_agree, factors: [rashi, graha]}
+  rashi:
+    - {id: lords_friendly, type: factors_agree, factors: [rashyadhipathi]}
+  vashya:
+    - {id: rashi_and_yoni_agree, type: factors_agree, factors: [rashi, yoni]}
+  gothra:
+    - {id: different_star_or_pada, type: different_star_or_pada}
+  pakshi:
+    - {id: main_factors_agree, type: factors_agree, factors: [gana, yoni, rashi, nadi]}
+  linga:
+    - {id: yoni_and_rashi_agree, type: factors_agree, factors: [yoni, rashi]}
+  weekday:
+    - {id: graha_agrees, type: factors_agree, factors: [graha]}
+  nadi:
+    - {id: same_star_different_pada, type: same_star_different_pada}
+    - {id: same_sign_different_star, type: same_sign_different_star}
+  rajju:
+    - {id: rajju_direction, type: rajju_direction}
+
+# Each rajju runs up from the feet to the head and back down in three rounds of nine stars:
+# feet, waist, navel, neck, head (ascending), then neck, navel, waist, feet (descending).
+# A named variant, not the default rule: a couple in the same rajju with one star ascending
+# and the other descending is softened (lankaastrology.com "rajju-porondama"). It is a
+# display note only and never changes the Rajju result. Which stars ascend is not given by
+# that site; this follows the usual order of the rajju table above. (unverified)
+rajju_direction:
+  ascending: [ashwini, bharani, krittika, rohini, mrigashira, magha, purva_phalguni, uttara_phalguni, hasta, chitra, mula, purva_ashadha, uttara_ashadha, shravana, dhanishta]
+  descending: [ardra, punarvasu, pushya, ashlesha, swati, vishakha, anuradha, jyeshtha, shatabhisha, purva_bhadrapada, uttara_bhadrapada, revati]

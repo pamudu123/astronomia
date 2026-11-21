@@ -1099,6 +1099,16 @@ export interface components {
             };
             /** Reason */
             reason: string;
+            /**
+             * Softened By
+             * @default []
+             */
+            softened_by: string[];
+            /**
+             * Softened Text
+             * @default []
+             */
+            softened_text: string[];
         };
         /** FirstLettersRequest */
         FirstLettersRequest: {

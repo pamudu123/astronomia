@@ -104,6 +104,7 @@
 </table>
 
 <h2>{{ r.kuja_checks }}</h2>
+{% if kuja.checks %}
 <table class="table">
   <thead>
     <tr>
@@ -122,5 +123,7 @@
     {% endfor %}
   </tbody>
 </table>
+{% endif %}
+<p class="soft small">{{ kuja.others }}</p>
 {% include "reading.html" %}
 {% endblock %}

@@ -16,6 +16,7 @@ from app.engine.chart import Chart
 from app.engine.zodiac import RASHI, Body, whole_sign_house
 
 RULES_DIR = Path(__file__).resolve().parents[1] / "data" / "rules"
+DEFAULT_RULES = "kuja_v2"
 
 
 @dataclass(frozen=True)
@@ -47,7 +48,7 @@ class KujaResult:
 
 
 @lru_cache
-def load_rules(version: str = "kuja_v1") -> dict[str, Any]:
+def load_rules(version: str = DEFAULT_RULES) -> dict[str, Any]:
     with (RULES_DIR / f"{version}.yaml").open(encoding="utf-8") as handle:
         rules: dict[str, Any] = yaml.safe_load(handle)
     return rules
@@ -78,6 +79,12 @@ def _check(rule: dict[str, Any], chart: Chart) -> Cancellation:
             _jupiter_aspects(jupiter, mars),
             {"jupiter_sign": RASHI[jupiter], "mars_sign": RASHI[mars]},
         )
+    if kind == "mars_with":
+        with_mars = [b for b in rule["bodies"] if _sign(chart, Body(b)) == mars]
+        return Cancellation(rule["id"], bool(with_mars), {"sign": RASHI[mars]})
+    if kind == "bodies_in_lagna":
+        found = [b for b in rule["bodies"] if _sign(chart, Body(b)) == chart.lagna.sign]
+        return Cancellation(rule["id"], bool(found), {"sign": RASHI[chart.lagna.sign]})
     if kind == "mars_house_sign":
         house = chart.planets[Body.MARS].house
         applies = any(
@@ -87,7 +94,7 @@ def _check(rule: dict[str, Any], chart: Chart) -> Cancellation:
     raise ValueError(f"unknown kuja rule type: {kind}")
 
 
-def kuja_dosha(chart: Chart, version: str = "kuja_v1") -> KujaResult:
+def kuja_dosha(chart: Chart, version: str = DEFAULT_RULES) -> KujaResult:
     rules = load_rules(version)
     mars = _sign(chart, Body.MARS)
     bases = {

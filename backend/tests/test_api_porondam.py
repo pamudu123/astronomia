@@ -200,3 +200,22 @@ def test_timeline_with_an_unclear_clock_time_says_whose(client: TestClient) -> N
     assert body["status"] == "ambiguous"
     assert body["waiting_for"] == "groom"
     assert body["timeline"] is None
+
+
+def test_a_factor_that_does_not_agree_says_what_softens_it(client: TestClient) -> None:
+    # Ashwini and Ashlesha share the feet rajju, one ascending and one descending.
+    for lang, word in (("en", "ascending"), ("si", "ආරෝහණ")):
+        body = client.post(
+            "/v1/porondam",
+            json={
+                "bride": {"nakshatra": "ashwini", "pada": 1},
+                "groom": {"nakshatra": "ashlesha", "pada": 1},
+                "lang": lang,
+            },
+        ).json()
+        rajju = next(f for f in body["match"]["hard_checks"] if f["id"] == "rajju")
+        assert rajju["passed"] is False
+        assert rajju["softened_by"] == ["rajju_direction"]
+        assert word in rajju["softened_text"][0]
+        agreeing = [f for f in body["match"]["factors"] if f["passed"]]
+        assert all(f["softened_by"] == [] for f in agreeing)

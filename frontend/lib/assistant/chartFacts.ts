@@ -150,6 +150,7 @@ export function houseFacts(chart: Chart, labels: Labels): Json[] {
 export function planetFacts(chart: Chart, labels: Labels): Json[] {
   const names = namesFrom(labels);
   const start = SIGNS.indexOf(chart.lagna.sign as (typeof SIGNS)[number]);
+  const sun = chart.planets.find((p) => p.body === "sun");
   return chart.planets.map((p) => {
     const ruled =
       start < 0
@@ -165,8 +166,10 @@ export function planetFacts(chart: Chart, labels: Labels): Json[] {
       house: p.house,
       ...(power && { strength: power }),
       ...(ruled.length && { rules_houses: ruled }),
+      ...(isYogaKaraka(ruled) && { yoga_karaka: true }),
       ...(p.retrograde && { retrograde: true }),
       ...(p.navamsha_sign === p.sign && { vargottama: true }),
+      ...(sun && p.body !== "sun" && combust(p.body, p.longitude, sun.longitude, p.retrograde) && { combust: true }),
     };
   });
 }
@@ -316,7 +319,244 @@ export function combinations(chart: { planets: Placement[] }, labels: Labels): J
       });
     }
   }
+  found.push(...moreCombinations(chart.planets, names));
   return found;
+}
+
+// Combinations added from the lankaastrology.com yoga articles (November 2026), checked against
+// the classical definitions. Provisional until the astrologer review, like the ones above. The
+// personal-reading reference (section 14) says what each means and how to word it.
+
+const SEVEN = ["sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"];
+const TRUE_PLANETS = ["mars", "mercury", "jupiter", "venus", "saturn"];
+
+/** Kala Sarpa names by the house Rahu is in, 1 to 12. */
+const KALA_SARPA = [
+  "Anantha",
+  "Kulika",
+  "Vasuki",
+  "Shankhapala",
+  "Padma",
+  "Mahapadma",
+  "Takshaka",
+  "Karkotaka",
+  "Shankhachuda",
+  "Ghataka",
+  "Vishadhara",
+  "Sheshanaga",
+];
+
+/** Vipareeta Raja yoga's three kinds, by the house whose ruler forms it. */
+const VIPAREETA: Record<number, string> = { 6: "Harsha", 8: "Sarala", 12: "Vimala" };
+
+/** The rising sign, worked back from any placement: house 1 is `house - 1` signs before it. */
+function risingIndex(planets: Placement[]): number {
+  const p = planets.find((q) => SIGNS.includes(q.sign as (typeof SIGNS)[number]));
+  return p ? (SIGNS.indexOf(p.sign as (typeof SIGNS)[number]) - (p.house - 1) + 12) % 12 : -1;
+}
+
+/** Houses counted from one house to another, both included: the same house is 1. */
+function countFrom(from: number, to: number): number {
+  return ((to - from + 12) % 12) + 1;
+}
+
+function moreCombinations(planets: Placement[], names: Names): Json[] {
+  const found: Json[] = [];
+  const at = new Map<string, Placement>(planets.map((p) => [p.body, p]));
+  const rising = risingIndex(planets);
+  const moon = at.get("moon");
+  const together = (a: string, b: string) => !!at.get(a) && at.get(a)?.house === at.get(b)?.house;
+  const lordOf = (house: number) => (rising < 0 ? null : SIGN_LORD[SIGNS[(rising + house - 1) % 12]]);
+  const ruled = (body: string) =>
+    rising < 0 ? [] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].filter((h) => lordOf(h) === body);
+  const where = (body: string) => `${names.planet(body)} in house ${at.get(body)?.house}`;
+  const kendraFromLagnaOrMoon = (p: Placement) =>
+    ANGULAR.has(p.house) || (!!moon && ANGULAR.has(countFrom(moon.house, p.house)));
+
+  // Neecha Bhanga: a debilitated planet whose sign's ruler, or the planet exalted in that sign,
+  // is in an angle from the rising sign or the Moon.
+  for (const [body, sign] of Object.entries(DEBILITATED)) {
+    const p = at.get(body);
+    if (!p || p.sign !== sign) continue;
+    const helpers = [SIGN_LORD[sign], ...Object.keys(EXALTED).filter((b) => EXALTED[b] === sign)]
+      .filter((b) => b !== body)
+      .filter((b, i, all) => all.indexOf(b) === i);
+    const helper = helpers.find((b) => {
+      const h = at.get(b);
+      return h && kendraFromLagnaOrMoon(h);
+    });
+    if (helper) {
+      found.push({
+        name: "Neecha Bhanga Raja yoga",
+        based_on: `${names.planet(body)} debilitated in ${names.sign(sign)}, helped by ${where(helper)}, an angle from the rising sign or the ${names.planet("moon")}`,
+      });
+    }
+  }
+
+  // Two planets joined by sitting together or by being in each other's signs (exchange).
+  const linked = (a: string, b: string) => {
+    const pa = at.get(a);
+    const pb = at.get(b);
+    if (!pa || !pb || a === b) return null;
+    if (pa.house === pb.house) return `together in house ${pa.house}`;
+    if (SIGN_LORD[pa.sign] === b && SIGN_LORD[pb.sign] === a) return "in each other's signs";
+    return null;
+  };
+  const pairs = (first: number[], second: number[], name: string) => {
+    if (rising < 0) return;
+    const seen = new Set<string>();
+    for (const h1 of first) {
+      for (const h2 of second) {
+        const a = lordOf(h1);
+        const b = lordOf(h2);
+        if (!a || !b || a === b) continue;
+        const key = [a, b].sort().join("+");
+        const how = linked(a, b);
+        if (!how || seen.has(key)) continue;
+        seen.add(key);
+        found.push({
+          name,
+          based_on: `${names.planet(a)} (ruler of house ${ruled(a).join(" and ")}) and ${names.planet(b)} (ruler of house ${ruled(b).join(" and ")}) ${how}`,
+        });
+      }
+    }
+  };
+  // Raja yoga: a ruler of an angle with a ruler of a trine. Dhana yoga: a ruler of the 2nd or
+  // 11th (money) with a ruler of the 1st, 5th or 9th (fortune).
+  pairs([1, 4, 7, 10], [1, 5, 9], "Raja yoga");
+  pairs([2, 11], [1, 5, 9], "Dhana yoga");
+
+  // Vipareeta Raja yoga: the ruler of the 6th, 8th or 12th sitting in the 6th, 8th or 12th.
+  for (const house of [6, 8, 12]) {
+    const lord = lordOf(house);
+    const p = lord ? at.get(lord) : undefined;
+    if (lord && p && [6, 8, 12].includes(p.house)) {
+      found.push({
+        name: `Vipareeta Raja yoga (${VIPAREETA[house]})`,
+        based_on: `${names.planet(lord)}, ruler of house ${house}, in house ${p.house}`,
+      });
+    }
+  }
+
+  // Pairs that tradition names.
+  const named: [string, string, string][] = [
+    ["jupiter", "rahu", "Guru-Chandala yoga"],
+    ["mars", "rahu", "Angaraka yoga"],
+  ];
+  for (const [a, b, name] of named) {
+    if (together(a, b)) found.push({ name, based_on: `${names.planet(a)} and ${names.planet(b)} together in house ${at.get(a)?.house}` });
+  }
+  const mars = at.get("mars");
+  const jupiter = at.get("jupiter");
+  if (mars && jupiter && [1, 7].includes(countFrom(mars.house, jupiter.house))) {
+    found.push({
+      name: "Guru-Mangala yoga",
+      based_on:
+        mars.house === jupiter.house
+          ? `${names.planet("jupiter")} and ${names.planet("mars")} together in house ${mars.house}`
+          : `${names.planet("jupiter")} in house ${jupiter.house} and ${names.planet("mars")} in house ${mars.house}, facing each other`,
+    });
+  }
+
+  // Kala Sarpa: all seven planets on one side of the Rahu-Ketu line (signs of the nodes included).
+  const rahu = at.get("rahu");
+  const seven = SEVEN.map((b) => at.get(b)).filter((p): p is Placement => !!p);
+  if (rahu && seven.length === 7) {
+    const side = seven.map((p) => countFrom(rahu.house, p.house) - 1); // 0 is Rahu's house, 6 Ketu's
+    if (side.every((d) => d <= 6) || side.every((d) => d === 0 || d >= 6)) {
+      found.push({
+        name: `Kala Sarpa (${KALA_SARPA[rahu.house - 1]})`,
+        based_on: `all seven planets on one side of ${names.planet("rahu")} in house ${rahu.house} and ${names.planet("ketu")}`,
+      });
+    }
+  }
+
+  // Amala: a gentle planet in the 10th from the rising sign or the Moon, with no hard planet there.
+  for (const [from, label] of [
+    [1, "the rising sign"],
+    [moon?.house, `the ${names.planet("moon")}`],
+  ] as const) {
+    if (!from) continue;
+    const tenth = houseFrom(from, 10);
+    const inside = planets.filter((p) => p.house === tenth);
+    const gentle = inside.filter((p) => GENTLE.includes(p.body));
+    if (gentle.length && !inside.some((p) => HARD.includes(p.body))) {
+      found.push({
+        name: "Amala yoga",
+        based_on: `${gentle.map((p) => names.planet(p.body)).join(" and ")} in house ${tenth}, the 10th from ${label}`,
+      });
+      break;
+    }
+  }
+
+  // Saraswati: Mercury, Jupiter and Venus all in angles, trines or the 2nd, with Jupiter in its
+  // own, exalted or a friend's sign.
+  const good = new Set([1, 2, 4, 5, 7, 9, 10]);
+  const friendSigns = ["simha", "kataka", "mesha", "vrischika"]; // signs of the Sun, Moon, Mars
+  if (
+    jupiter &&
+    GENTLE.every((b) => at.get(b) && good.has(at.get(b)!.house)) &&
+    (strength("jupiter", jupiter.sign) === "own sign" ||
+      strength("jupiter", jupiter.sign) === "exalted" ||
+      friendSigns.includes(jupiter.sign))
+  ) {
+    found.push({
+      name: "Saraswati yoga",
+      based_on: `${GENTLE.map(where).join(", ")}, with ${names.planet("jupiter")} well placed in ${names.sign(jupiter.sign)}`,
+    });
+  }
+
+  // Vasumathi: Mercury, Jupiter and Venus all in houses of growth (3, 6, 10, 11) from the
+  // rising sign or the Moon.
+  const growth = [3, 6, 10, 11];
+  for (const [from, label] of [
+    [1, "the rising sign"],
+    [moon?.house, `the ${names.planet("moon")}`],
+  ] as const) {
+    if (!from) continue;
+    if (GENTLE.every((b) => at.get(b) && growth.includes(countFrom(from, at.get(b)!.house)))) {
+      found.push({
+        name: "Vasumathi yoga",
+        based_on: `${GENTLE.map((b) => names.planet(b)).join(", ")} in houses of growth from ${label}`,
+      });
+      break;
+    }
+  }
+
+  // Kemadruma: no planet but the Sun, Rahu or Ketu beside the Moon. Only listed when nothing
+  // cancels it: no planet with the Moon, and none in an angle from the rising sign or the Moon.
+  if (moon) {
+    const beside = planets.some(
+      (p) => [houseFrom(moon.house, 2), houseFrom(moon.house, 12)].includes(p.house) && TRUE_PLANETS.includes(p.body),
+    );
+    const cancelled = planets.some(
+      (p) => TRUE_PLANETS.includes(p.body) && (p.house === moon.house || kendraFromLagnaOrMoon(p)),
+    );
+    if (!beside && !cancelled) {
+      found.push({
+        name: "Kemadruma yoga",
+        based_on: `no planet beside the ${names.planet("moon")} in house ${moon.house}, and nothing that cancels it`,
+      });
+    }
+  }
+  return found;
+}
+
+/** Degrees from the Sun within which a planet counts as combust (asta), the usual figures. */
+const COMBUST_ORB: Record<string, number> = { moon: 12, mars: 17, mercury: 14, jupiter: 11, venus: 10, saturn: 15 };
+const COMBUST_ORB_RETROGRADE: Record<string, number> = { mercury: 12, venus: 8 };
+
+/** Whether a planet is combust: close enough to the Sun that tradition says its light is hidden. */
+export function combust(body: string, longitude: number, sunLongitude: number, retrograde = false): boolean {
+  const orb = (retrograde && COMBUST_ORB_RETROGRADE[body]) || COMBUST_ORB[body];
+  if (!orb) return false;
+  const gap = Math.abs(longitude - sunLongitude) % 360;
+  return Math.min(gap, 360 - gap) <= orb;
+}
+
+/** The planet that rules both an angle (4, 7 or 10) and a trine (5 or 9) for this rising sign. */
+export function isYogaKaraka(ruledHouses: number[]): boolean {
+  return ruledHouses.some((h) => [4, 7, 10].includes(h)) && ruledHouses.some((h) => [5, 9].includes(h));
 }
 
 const day = (iso: string) => iso.slice(0, 10);

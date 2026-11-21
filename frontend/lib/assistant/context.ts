@@ -101,6 +101,16 @@ function factorSummary(factor: Factor, labels: Labels) {
 }
 
 /**
+ * The traditional exceptions that soften a factor that does not agree (dosha bhanga), in the
+ * page's language. The factor still counts as not agreeing. A result saved before the field
+ * existed has none.
+ */
+function softening(factor: Factor): { softened_by?: string[] } {
+  const text = factor.softened_text ?? [];
+  return text.length ? { softened_by: text } : {};
+}
+
+/**
  * What the wedding dates search under a match needs. It works from the birth stars alone, so a
  * quick match can use it too (QA ASTRO-02: Astro asked for full birth charts instead).
  */
@@ -141,10 +151,11 @@ export function matchContext(
         ...factorSummary(f, labels),
         passes: f.passed,
         reason: f.reason,
+        ...softening(f),
       })),
       factors_not_agreeing: counted
         .filter((f) => !f.passed)
-        .map((f) => ({ ...factorSummary(f, labels), reason: f.reason })),
+        .map((f) => ({ ...factorSummary(f, labels), reason: f.reason, ...softening(f) })),
       // With the reason too, so the assistant can say why a factor agrees ("both stars are
       // in the same temperament group"), not only that it does.
       factors_agreeing: counted

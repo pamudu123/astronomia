@@ -97,4 +97,18 @@ describe("matchContext", () => {
     expect(s.factors_not_counted).toEqual([]);
     expect(s.factors_agreeing.length + s.factors_not_agreeing.length).toBe(legacy.match!.factors.length);
   });
+
+  it("passes on what softens a factor that does not agree, and nothing for an older result", () => {
+    const softened = structuredClone(fullResult);
+    const failing = softened.match!.factors.find((f) => f.checked !== false && !f.passed)!;
+    failing.softened_by = ["lords_friendly"];
+    failing.softened_text = ["Tradition softens this because the rulers of the two Moon signs are friendly."];
+    const rajju = softened.match!.hard_checks.find((f) => f.id === "rajju")!;
+    rajju.softened_text = ["Tradition softens this because one star is ascending and the other descending."];
+    const s = matchContext(softened, labels, "en").result as Record<string, { id: string; softened_by?: string[] }[]>;
+    expect(s.factors_not_agreeing.find((f) => f.id === failing.id)!.softened_by).toEqual(failing.softened_text);
+    expect(s.essential_checks.find((f) => f.id === "rajju")!.softened_by).toEqual(rajju.softened_text);
+    // A result saved before the field existed has no softening, and says nothing about it.
+    expect(JSON.stringify(summary(fullResult))).not.toContain("softened_by");
+  });
 });

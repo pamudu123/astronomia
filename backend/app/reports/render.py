@@ -200,11 +200,18 @@ def render_hadahan(
                 {
                     "rule": table["kuja_rule"][c.id],
                     "applies": c.applies,
-                    "result": report["applies"] if c.applies else report["not_applies"],
+                    "result": report["applies"],
                     "reason": c.reason,
                 }
+                # Only the conditions that apply get a row, and one line counts the rest, so
+                # the report stays on two pages as the rule list grows. The page and the
+                # assistant still show every condition.
                 for c in kuja.cancellations
+                if c.applies
             ],
+            "others": report["kuja_checks_others"].format(
+                count=sum(not c.applies for c in kuja.cancellations)
+            ),
         },
         "time_check": chart.time_check.reason,
         "dasha": _two_columns(

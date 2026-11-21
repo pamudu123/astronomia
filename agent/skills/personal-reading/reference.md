@@ -17,7 +17,7 @@ Practitioners and teaching sites describe the same order of work:
 5. **Timing**: the running life period (dasha) and sub-period, then the slow planets' current position (transits, called gochara).
 6. **Judge the whole chart**, not one placement. Newspaper astrologers in Sri Lanka warn against reading a single feature in isolation (the Mars check is the classic case).
 
-Many astrologers also read the ninth-division chart (navamsa) for marriage and inner strength. The site does not show it, so never refer to it.
+Many astrologers also read the ninth-division chart (navamsa) for marriage and inner strength. The site does not show it. It uses it only for `vargottama` and for one Mars check rule (Mars strong in the ninth-division chart), so mention it only when one of those facts does.
 
 How the readings are delivered matters as much as the method. Practitioner guidance (consultation ethics articles, readings advertised by working astrologers) agrees on a few things: speak in plain language and explain the terms, treat chart indications as tendencies and timing windows, keep the focus on the questions the person came with, and end with something practical. Sri Lankan newspaper columns tend to state rules as settled and categorical. **Do not copy that tone.** The assistant should be more careful than the columns.
 
@@ -176,6 +176,168 @@ Take the planet's theme (section 3) and the house's life area (section 4). Fit t
 
 These are illustrations of the method, not a complete list. Build new ones the same way for any other placement, and keep the wording tentative.
 
+### Every planet in every house
+
+What Sri Lankan writers traditionally say about each planet in each house, in short. Use it as the starting point for "planet X in house Y", then add the sign's flavour, the planet's strength and the houses it rules. Wording for houses 6, 8 and 12 follows section 4: no illness names, never death or lifespan. A house marked *Mars check* is one of the Mars check houses (section 7).
+
+**Sun (Ravi)**
+
+| House | Traditional reading |
+|---|---|
+| 1 | Confident, stands out, a natural leader who speaks up against unfairness; the stretch is pride or a quick temper |
+| 2 | Persuasive speech; earns through authority, finance or business; patience is needed in family talk |
+| 3 | Courage and effort that overcome obstacles; suits creative and self-driven work; keep sibling ties warm |
+| 4 | Home, land and vehicles come with effort; views can differ from parents'; inner calm needs looking after |
+| 5 | A bright mind for study and research; devoted to children's future |
+| 6 | Wins in competition, exams and disputes; a well-known placement for government service; steady health routines help |
+| 7 | A strong-minded partner or business partner; give and take keeps two prides from clashing |
+| 8 | Interest in research and hidden matters; sudden gains are possible; eyes, energy and regular check-ups deserve care |
+| 9 | Principled; respect for father and teachers; luck through higher learning and faith |
+| 10 | Recognition at work, authority, government or leadership roles; one of the best placements for career |
+| 11 | Gains through influential friends and seniors; income rises with status |
+| 12 | Spending on good causes, time abroad or away, spiritual interest; does well in behind-the-scenes or foreign roles |
+
+**Moon (Chandra)**
+
+| House | Traditional reading |
+|---|---|
+| 1 | Attractive, sensitive and caring; feelings show easily; emotional balance is the work |
+| 2 | Gentle speech, family-centred; money is steadier when the mind is settled |
+| 3 | Artistic, enjoys travel, close to siblings |
+| 4 | A strong bond with mother, happiness at home, property; peace at home matters most |
+| 5 | Imaginative and creative, loving toward children, a good memory for study |
+| 6 | The mind can get restless or worried; service-minded; routine and rest help |
+| 7 | A warm, affectionate partner; partnerships are emotionally central; suits public-facing work |
+| 8 | Deep feelings and intuition, drawn to the spiritual; moods ask for care |
+| 9 | Fortunate; enjoys long journeys and pilgrimages; devoted to faith and parents |
+| 10 | Public-facing careers, service and care work; reputation moves with the public |
+| 11 | Gains through many friends and the public; wishes tend to be fulfilled |
+| 12 | A pull toward foreign places and spiritual peace; needs rest and quiet time |
+
+**Mars (Kuja)**
+
+| House | Traditional reading |
+|---|---|
+| 1 | Energetic, brave, a doer; the stretch is temper and haste. *Mars check* |
+| 2 | Direct, firm speech; earns by effort; care with money and words. *Mars check* |
+| 3 | Courage, sport and competitive spirit; a strong placement; protective of siblings |
+| 4 | Land, property and vehicles; energy at home; calm in family disagreements. *Mars check* |
+| 5 | A sharp, competitive mind; technical or sporting talent |
+| 6 | Beats rivals; good in competition, security, medicine and engineering; one of Mars's best houses |
+| 7 | A passionate, driven partnership; patience in arguments. *Mars check* |
+| 8 | Sudden changes or gains, research, calm in a crisis; care with haste and safety. *Mars check* |
+| 9 | Effort for beliefs, long journeys; may debate with father or teachers |
+| 10 | Career drive and leadership: engineering, defence, police, surgery, business |
+| 11 | Gains and growing property through effort; help from elder siblings |
+| 12 | Spending, work or travel abroad, effort behind the scenes; rest and sleep need care. *Mars check* |
+
+**Mercury (Budha)**
+
+| House | Traditional reading |
+|---|---|
+| 1 | Sharp intelligence, a youthful, witty way of speaking |
+| 2 | Pleasant speech and business sense; earns through words, numbers or teaching |
+| 3 | Writing, media and communication skills |
+| 4 | A good base in education and a peaceful mind |
+| 5 | Higher studies, an analytical or mathematical mind, clever children |
+| 6 | Wins through intelligence; good with accounts, law and analysis; overthinking is the stretch |
+| 7 | An understanding, talkative partner; business partnerships and trade |
+| 8 | Research, investigation and hidden knowledge, including astrology |
+| 9 | Higher learning, travel for study, a philosophical mind |
+| 10 | Success through intelligence: business, IT, accounting, media, teaching |
+| 11 | Gains through clever networks and friends |
+| 12 | Careful spending; writing, research or work abroad; spiritual study |
+
+**Jupiter (Guru)**
+
+| House | Traditional reading |
+|---|---|
+| 1 | Very favourable: dignified, respected, a teacher's nature and a healthy outlook |
+| 2 | Luck with wealth, wise speech, good family values |
+| 3 | Success by effort; writing and the arts; helpful siblings |
+| 4 | A peaceful family life, home and vehicles, good education, a mother's blessings |
+| 5 | Jupiter's favourite house: intelligence, children, studies, past merit |
+| 6 | Wins over rivals and disputes; service, healing and teaching; diet and weight need watching |
+| 7 | Very auspicious for marriage: a wise, cultured partner and good partnerships |
+| 8 | Unexpected gains; deep study, research and interest in astrology |
+| 9 | Fortune, faith, higher studies and long journeys; a strong placement |
+| 10 | High posts and respect: teaching, law, finance, advisory roles |
+| 11 | Many streams of income, good friends, wishes fulfilled |
+| 12 | Spending on charity, stays abroad, spiritual growth |
+
+**Venus (Sikuru)**
+
+| House | Traditional reading |
+|---|---|
+| 1 | Attractive, a charming smile, artistic, comfort-loving |
+| 2 | Luck with money, pleasant speech, good food and family life |
+| 3 | Music, dance, art and creative writing |
+| 4 | A comfortable home, vehicles, peace of mind |
+| 5 | Romance, creativity, children and enjoyment; love tends to go well |
+| 6 | Friendly even with rivals; overspending and comfort habits are the stretch |
+| 7 | Very auspicious for marriage: a loving partner; relationships are central to life |
+| 8 | Gains through a partner or shared money; relationships go through tests |
+| 9 | Fortune, travel, a refined and cultured life |
+| 10 | Work in fashion, beauty, the arts, design, hospitality or wedding services |
+| 11 | Steady gains, many friends, social success |
+| 12 | Spending on comfort, travel abroad, generosity |
+
+**Saturn (Senasuru, Shani)**
+
+| House | Traditional reading |
+|---|---|
+| 1 | Serious and mature; builds life by their own effort; early struggle, later stability |
+| 2 | Saving takes hard work; measured speech; wealth builds slowly |
+| 3 | Very favourable: perseverance wins through any challenge |
+| 4 | Delays in house or property matters; home life asks for patience |
+| 5 | Studies need extra effort; thoughtful about children |
+| 6 | Strong against rivals and in disputes; hard work pays; one of Saturn's best houses |
+| 7 | Marriage may come later or with a mature partner; patience and talking help |
+| 8 | Unexpected challenges that bring deep insight; research; care with health and safety |
+| 9 | Success through their own dedication more than others' help |
+| 10 | A strong placement for work: a slow, steady rise to responsibility and respect |
+| 11 | Large gains through long-term work and investment; property |
+| 12 | Unexpected spending to manage; hard work abroad; solitude and spiritual practice |
+
+**Rahu**
+
+| House | Traditional reading |
+|---|---|
+| 1 | An unusual personality with a strong drive to win and independent ideas |
+| 2 | Sudden gains and sudden spending; a gift with words; care with speech |
+| 3 | Very favourable: bold, with technical or media skills |
+| 4 | Moving house or living away from home; home life asks for attention |
+| 5 | Talent for computers, science and invention; unconventional thinking |
+| 6 | Very strong: wins in disputes and competition |
+| 7 | Patience and understanding matter in marriage; a partner from a different background |
+| 8 | Sudden gains or sudden challenges; research and hidden matters |
+| 9 | Going abroad, long travel, a wide view of the world; unconventional beliefs |
+| 10 | Rising in foreign, technology or multinational work; strong ambition |
+| 11 | Sudden gains, business profit, wishes fulfilled quickly |
+| 12 | Settling or working abroad, international links; spending and sleep need care |
+
+**Ketu**
+
+| House | Traditional reading |
+|---|---|
+| 1 | A different, independent personality who likes time alone |
+| 2 | Care with money and with words |
+| 3 | More courage and effort; patience with siblings |
+| 4 | Keeping peace at home; care for mother's wellbeing; detached from comforts |
+| 5 | Early obstacles in study, then deep higher or spiritual learning |
+| 6 | The strength to overcome rivals; digestion deserves care |
+| 7 | Patience and understanding in marriage |
+| 8 | Very good for research and astrology; unusual, sudden gains |
+| 9 | Love of merit-making and religion; pilgrimages |
+| 10 | Unusual ways of working; challenges come before promotion |
+| 11 | Early delays in income, gains in the long run |
+| 12 | Excellent for spiritual growth and meditation; peace of mind |
+
+A Sri Lankan rule of thumb for Ketu: in an angle (1, 4, 7, 10) it brings some restlessness in personal life but strong self-discipline; in a trine (5, 9) early obstacles in study but a high intelligence; in 8 or 12 spiritual depth.
+
+**Sources (planets in houses)**
+- https://lankaastrology.com/sun-in-12-houses-sinhala/ (and the matching moon, mars, mercury, jupiter, venus, saturn, rahu and ketu pages)
+
 ---
 
 ## 7. The Mars check (Kuja dosha) in a personal reading
@@ -186,6 +348,8 @@ The site shows whether Mars is in one of the traditional houses (1, 2, 4, 7, 8, 
 - If `present` is false: say nothing alarming; don't bring it up unless asked.
 - If `reduced` is true: say conditions soften it.
 - Never say it will harm a marriage or the partner. Sri Lankan newspaper astrologers themselves say hasty readings of this have caused needless worry and blocked marriages. Remind that the whole chart matters and that charts of both partners are compared.
+- The cancelling conditions the site checks (rule set `kuja_v2`): the rising sign is Kataka or Simha; Mars in its own or exalted sign (Mesha, Vrischika, Makara); Jupiter with Mars or looking at it; Mars in a sign excused for its house; Mars with the Moon; Mars in Simha or Kumbha; Jupiter or Venus in the lagna. The last three follow B. V. Raman (Muhurtha). Raman counts the dosha from the 2nd, 4th, 7th, 8th and 12th only (the site also counts the 1st), weakest from the lagna and strongest from Venus. Sri Lankan writers list many more (one site lists twenty), including both partners having it, the lagna lord strong in an angle or trine, and the belief that it weakens after about age 28. Those are not checked: mention them only as what some astrologers say.
+- Sri Lankan writers commonly suggest a bodhi puja on Tuesdays and patience with the partner. Describe it as custom if asked, never as needed.
 
 ---
 
@@ -423,7 +587,33 @@ A planet in the same sign in the main chart and the ninth-division chart. Tradit
 | Papa Kartari | Hard planets (Sun, Mars, Saturn, Rahu, Ketu) on both sides of a house: the 1st, the 7th or the Moon's | That area feels pressed from both sides: more effort, more responsibility | "this part of life asks for extra patience and support, and grows stronger with it" |
 | Shubha Kartari | Gentle planets (Mercury, Jupiter, Venus) on both sides of the same houses | That area is protected and supported | "this part of life is well supported: help tends to come from around you" |
 
-The last eight rows were added on 2026-11-18 and are provisional until the astrologer review, like the rest of this table. Papa Kartari and Shani-Mangala are traditionally called doshas: say what they ask for and what helps, never that they doom an area. Never mention Kemadruma (no planets beside the Moon); the site doesn't look for it.
+| Neecha Bhanga Raja | A debilitated planet whose sign's ruler, or the planet exalted in that sign, is in an angle from the rising sign or the Moon | The weakness is "cancelled" and can turn into a strength: early struggle in that planet's area, a rise later | "what starts as a struggle in this area can become one of your strengths; many people with this rise after early difficulty" |
+| Raja yoga | A ruler of an angle (1, 4, 7, 10) and a ruler of a trine (1, 5, 9), together in one house or in each other's signs | Rising in life, status, recognition; strongest in the periods of the two planets | "a combination for rising in life and being recognised, most active in the periods of these two planets" |
+| Dhana yoga | A ruler of the 2nd or 11th (money) and a ruler of the 1st, 5th or 9th (fortune), together or in each other's signs | Potential to earn and to build savings | "potential for building wealth through steady effort". Never investment advice |
+| Vipareeta Raja (Harsha, Sarala, Vimala) | The ruler of the 6th, 8th or 12th sitting in the 6th, 8th or 12th (Harsha: the 6th's ruler, Sarala: the 8th's, Vimala: the 12th's) | "Two negatives make a positive": success that comes out of difficulty. Harsha: winning over rivals, good resilience; Sarala: fearless, steady in a crisis; Vimala: careful with money, independent | "difficulties tend to turn in your favour; setbacks often become the start of something better" |
+| Guru-Chandala | Jupiter and Rahu in the same house | Questioning tradition and received wisdom; unconventional beliefs; can also give original thinking | "you may question what you are taught; choose teachers and advice carefully, and your own fresh thinking becomes a strength". Traditionally called a dosha: never "evil" or "bad luck" |
+| Angaraka | Mars and Rahu in the same house | Intense energy, boldness, impatience; haste and anger are the stretch | "a lot of energy and boldness; slow down before reacting, and take care with speed and risk" |
+| Guru-Mangala | Jupiter and Mars together, or facing each other (7th from each other) | Courage guided by good judgement; leadership, property, technical or legal fields | "drive with good judgement behind it" |
+| Kala Sarpa (Anantha, Kulika, ...) | All seven planets on one side of the Rahu-Ketu line, named by Rahu's house | A modern idea, not found in the classical texts; believed to bring ups and downs, delays and then sudden rises | Say calmly that it is a debated, modern idea; many successful people have it; nothing needs to be done or bought. Never frighten |
+| Amala | A gentle planet (Mercury, Jupiter, Venus) in the 10th from the rising sign or the Moon, with no hard planet there | A clean reputation, ethical work, a lasting good name | "a good name and respected work" |
+| Saraswati | Mercury, Jupiter and Venus all in angles, trines or the 2nd, with Jupiter in its own, exalted or a friend's sign | Learning, the arts, speech, scholarship | "a gift for learning, the arts and words" |
+| Vasumathi | Mercury, Jupiter and Venus all in the houses of growth (3, 6, 10, 11) from the rising sign or the Moon | Resources and prosperity that grow over time | "resources that grow steadily with time" |
+| Kemadruma | No planet beside the Moon (the Sun, Rahu and Ketu don't count), and nothing that cancels it: no planet with the Moon or in an angle from the rising sign or the Moon | Feeling one has to stand alone; self-made progress; a need for emotional support | "you may often feel you have to manage on your own; a circle of support helps, and many people with this become very self-reliant". Never poverty, loneliness as a fate, or "bad luck" |
+
+The last eight rows of the first block were added on 2026-11-18, and the twelve rows from Neecha Bhanga on were added on 2026-11-21 from Sri Lankan articles checked against the classical definitions. All of them are provisional until the astrologer review. Papa Kartari, Shani-Mangala, Guru-Chandala, Angaraka, Kala Sarpa and Kemadruma are traditionally called doshas: say what they ask for and what helps, never that they doom an area. Kemadruma is only listed when nothing cancels it, which is rare; Sri Lankan writers stress that most charts have a cancellation, so never bring it up when it isn't listed.
+
+### Two more planet facts
+
+- **`yoga_karaka`**: the planet rules both an angle (4, 7 or 10) and a trine (5 or 9) for this rising sign: Saturn for Vrishabha and Tula, Mars for Kataka and Simha, Venus for Makara and Kumbha. Tradition treats it as the chart's most helpful planet; its life period and sub-periods are watched for progress. "Saturn is the yoga karaka for your rising sign, the planet tradition counts as your chart's best friend, so its periods tend to bring solid progress."
+- **`combust`**: the planet is within a few degrees of the Sun (Moon 12, Mars 17, Mercury 14 or 12 when retrograde, Jupiter 11, Venus 10 or 8 when retrograde, Saturn 15). Tradition says its light is hidden by the Sun: its themes show less openly, or work through the person's own will and ego. Mercury is close to the Sun very often and tradition gives a combust Mercury little weight (it is also how Budhaditya yoga forms). Say "works more quietly", never "destroyed" or "weak".
+
+**Sources (section 14 additions)**
+- https://lankaastrology.com/neecha-bhanga/ , https://lankaastrology.com/neecha-bhanga-raja-yoga-sinhala/
+- https://lankaastrology.com/raja-yoga/ , https://lankaastrology.com/dhana-yoga/ , https://lankaastrology.com/vipareeta/
+- https://lankaastrology.com/guru-chandal/ , https://lankaastrology.com/angaraka/ , https://lankaastrology.com/guru-mangala-yoga/
+- https://lankaastrology.com/kalasarpa/ , https://lankaastrology.com/kala-sarpa-yoga-sinhala/
+- https://lankaastrology.com/amala/ , https://lankaastrology.com/saraswati/ , https://lankaastrology.com/vasumathi/
+- https://lankaastrology.com/kemadruma/ , https://lankaastrology.com/yoga-karaka/ , https://lankaastrology.com/combust/
 
 Rules for using them:
 
@@ -433,9 +623,37 @@ Rules for using them:
 
 ---
 
+## 15. Rising sign by rising sign: work and relationships
+
+What Sri Lankan writers traditionally link to each rising sign. Use it as the flavour for the rising sign in a career or marriage chapter, then read the actual 10th and 7th houses (section 4) and their rulers (section 5). The work list is a set of fields the tradition suggests, never a recommendation to choose one.
+
+| Rising sign | Ruler | Nature | Work tradition links to it | Relationships | Yoga karaka |
+|---|---|---|---|---|---|
+| Mesha | Mars | Active, likes to lead, takes on any challenge | Government posts, defence and security, engineering, running a business, medicine | Earns and spends quickly; careful money management helps | none |
+| Vrishabha | Venus | Patient, steady, loyal, works toward set goals | Finance and banking, business, property, the arts, fashion, food | Slow to fall in love but deeply loyal | Saturn |
+| Mithuna | Mercury | Quick mind, many interests, sociable | Education, media, IT, research, trade | Needs a partner to talk with | none |
+| Kataka | Moon | Sensitive, caring, home-loving | Care work, hospitality, public service, property, food | Loves deeply; overthinking can bring needless worry | Mars |
+| Simha | Sun | A natural leader with dignity | Government, management, politics, performing arts | Does well when pride is kept in check and the partner is appreciated | Mars |
+| Kanya | Mercury | Intelligent, analytical, careful | Accounting, health, analysis, writing, service | Expecting perfection causes small rows; letting go of small things helps | none |
+| Tula | Venus | Charming, fair, seeks balance | Law, the arts, design, diplomacy, partnership businesses | Works for balance and understanding at home | Saturn |
+| Vrischika | Mars | Intense, private, deeply loyal | Medicine, security, research, administration, financial management | Wants a deep bond; matching matters to this sign's families | none |
+| Dhanu | Jupiter | Honest, optimistic, loves learning | Teaching, law, religion, travel, advisory roles | A marriage built on honesty and respect | none |
+| Makara | Saturn | Disciplined, responsible, ambitious | Administration, engineering, government, management | Committed and serious; marriage often comes later | Venus |
+| Kumbha | Saturn | Independent, original, community-minded | Technology, science, social work, research | Friendship first; needs space in the relationship | Venus |
+| Meena | Jupiter | Gentle, intuitive, imaginative | The arts, healing, teaching, spiritual work | Very happy with patience and understanding | none |
+
+Sri Lankan writers also give a day and an offering for each ruling planet (Friday flowers at a bodhi tree for Venus, for example). Describe these only as custom when asked (section 13, remedies).
+
+**Sources (section 15)**
+- https://lankaastrology.com/mesha-lagna-marriage-career-sinhala/ (and the matching page for each rising sign)
+- https://lankaastrology.com/yoga-karaka/
+
+---
+
 ## Main caveats
 
 1. Traditions differ on many details (which planets are significators, how to count the Mars check, which transits count). Prefer the common core given here, and say "astrologers differ" when it matters.
 2. The sources behind this file are practitioner and newspaper columns, not independent evidence that astrology predicts events. Most of them are written with more certainty than is wise.
 3. No chart reading replaces a human astrologer, a doctor, a lawyer or a financial adviser.
 4. The nakshatra keywords and the planet-in-house patterns are a teaching summary, not a quotation from a classical text. An astrologer should review them before launch.
+5. lankaastrology.com, the source of the November 2026 additions, writes with great certainty ("100% cancelled", "will bring wealth") and some of its pages use frightening wording about timing and health. Only the traditional content was taken, reworded. Never copy that tone.
