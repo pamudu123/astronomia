@@ -65,7 +65,7 @@ test("the full match reading writes its first chapters and opens the rest one by
   await expect(card).toContainText("AI reading · for guidance only");
 
   // Another chapter is written when it is opened.
-  await card.getByRole("button", { name: "Summing up" }).click();
+  await card.getByRole("heading", { name: "Summing up" }).getByRole("button").click();
   await expect(card.locator('[data-chapter="match.summary"]')).toContainText("Text of match.summary.");
   expect(calls).toHaveLength(3);
 });
@@ -90,7 +90,8 @@ test("an explain button reuses the reading's chapters and hides without losing t
   // The full reading shows the same chapter without asking again.
   const card = page.locator('[data-card="full-reading"]');
   await card.getByRole("button", { name: "Get the full reading" }).click();
-  await card.getByRole("button", { name: "The serious checks" }).click();
+  // The chapter row's own button; "Next: The serious checks" under the open chapter before it matches too.
+  await card.getByRole("heading", { name: "The serious checks" }).getByRole("button").click();
   await expect(card.locator('[data-chapter="match.checks"]')).toContainText("Text of match.checks.");
   expect(calls.filter((id) => id === "match.checks")).toHaveLength(1);
 });
