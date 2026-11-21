@@ -107,14 +107,53 @@ on staging only people with the staging password can use it (docs/14, section 11
 
 ## Before going public
 
-| Item | Who | Notes |
-|---|---|---|
-| Ephemeris licence: buy it, or publish the backend under AGPL | Owner | Blocks launch |
-| Domain name | Owner | Then add it in Vercel and set `SITE_URL` |
-| Paid plans: backend (no sleep) and PostgreSQL (kept, with backups) | Owner | Render Starter plans |
-| Error monitoring | Owner, then build | Must be set up so no birth details or names are sent |
-| Privacy and terms pages: legal review, contact address | Owner | Both pages are marked as drafts |
-| Astrologer review of rules and golden charts | Owner | Steps 3 and 20 in docs/08 |
-| Sinhala wording review | Owner | All label and message files |
-| Remove `STAGING_PASSWORD`, and keep the backend reachable only through the site | Build | Only after the licence is settled |
-| Chat: usage limits, bot protection and lasting conversation storage | Build | Before the chat is on without the staging password (docs/14, section 11) |
+Updated 2026-11-21 with the legal review's findings. The reviewed policy text is in
+`docs/policies/`. It must not go live until the product changes below are built, because it
+describes them.
+
+**Owner: business and licences**
+
+| Item | Notes |
+|---|---|
+| Ephemeris licence | **Blocks launch, even for a free site.** Buy the Swiss Ephemeris professional licence in the operator's name: CHF 700, valid 6 years, then renewable at no more than the original fee adjusted for Swiss inflation (contract edition September 2026, update 9 Nov 2026, §§4, 16). It covers software on our own server (§2). Giving another business API access needs its own licence (§3). pyswisseph is listed as covered but "currently unsupported" (§13). Keep the signed contract, proof of payment and the pyswisseph version. The contract also forbids naming Astrodienst or its authors in promotion (§9). Publishing the backend under the AGPL is the alternative |
+| Operator details | Decide who runs the site (a person trading as Sidera, or a company). Fill in legal name, registration number if any, address, business phone, privacy and support email, domain and effective date. Register the business name and get a tax number (TIN) to match |
+| Domain name | Then add it in Vercel and set `SITE_URL` |
+| Vendor agreements | Accept and keep the data processing terms of Render, Vercel and OpenAI. Record each one's role, locations, subprocessors and deletion terms |
+| Sri Lankan data protection | The legal review reports that the main parts of the Act start on 1 January 2027 (gazette 2498/16; not checked by us). Name a privacy lead, keep the data map and records of consent. Recheck the authority's rules before that date |
+| Artwork provenance | Record which tool made the site images, the account tier and its terms, and keep the source files |
+| Trademark search | Search "Sidera" and its Sinhala spelling in Sri Lanka (NIPO) and in the main overseas markets before spending on publicity |
+| Privacy and terms in Sinhala | A Sri Lankan lawyer checks the Sinhala text and the business details before either language is called final |
+| Astrologer review of rules and golden charts | Steps 3 and 20 in docs/08. Brief sent separately |
+| Sinhala wording review | All label and message files. Brief and spreadsheet in `docs/reviews/` |
+
+**Owner then build: hosting**
+
+| Item | Notes |
+|---|---|
+| Paid plans: backend (no sleep) and PostgreSQL (kept, with backups) | Render Starter plans. Find out how long backups keep deleted rows, for the privacy notice |
+| Error monitoring | Must be set up so no birth details, names, chat text or share codes are sent. Test with real payloads; session replay off |
+
+**Build: product changes the reviewed policies depend on**
+
+| Item | Notes |
+|---|---|
+| Child tools (baby names, first letters, and any chart or match with a child's birth date) | A parent or guardian consent box before the calculation, recorded with minimal evidence. As few fields as possible, no name needed. No AI explanation or chat context, no share link and no automatic save on child results |
+| Partner match | A confirmation that both adults agreed. Offer the stars-only match when that cannot be confirmed. Calculation permission is not sharing permission |
+| Share links | Names and birth details hidden by default, with a preview of every field the recipient will see. Share pages not indexed and not publicly cached, and the link code not leaked through referrers. Explain that deleting a saved report and revoking its share link are separate |
+| AI notice | A short notice before the first chat message and before the first Explain button: the message and chart facts go to OpenAI, leave out names, children's details and sensitive information, and AI can be wrong |
+| AI conversation time limit | Conversations kept in memory need a fixed idle timeout. A restart is not a retention limit |
+| Credits page | Public page for GeoNames (CC BY 4.0, with the changes made), the fonts (SIL Open Font License), the Wikipedia names (CC BY-SA 4.0, per name) and the official Avurudu source |
+| Cookies | Keep the guest key cookie (needed for Save). Drop the My reports marker cookie if it is only a convenience |
+| Retention jobs | Check that share links really close after 30 days and guest accounts are deleted after 12 months unused |
+| Policy pages | Put the reviewed privacy and terms text on the site in both languages, with an effective date, a contact address and an archive of old versions |
+| End to end check | On a production-like setup, trace one calculation, save, share, delete, PDF, AI message, error and support request, and check the policy promises hold |
+
+**Build: going public**
+
+| Item | Notes |
+|---|---|
+| Remove `STAGING_PASSWORD`, and keep the backend reachable only through the site | Only after the licence is settled |
+| Chat: usage limits, bot protection and lasting conversation storage | Before the chat is on without the staging password (docs/14, section 11) |
+
+**Payments stay off.** PayHere does not accept astrology services. Paid features wait for a
+provider that approves the product in writing (docs/15, section 0).
