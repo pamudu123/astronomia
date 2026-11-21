@@ -7008,13 +7008,18 @@
           },
           "price": {
             "$ref": "#/components/schemas/PriceOut"
+          },
+          "paid_reports": {
+            "type": "boolean",
+            "title": "Paid Reports"
           }
         },
         "type": "object",
         "required": [
           "kind",
           "country",
-          "price"
+          "price",
+          "paid_reports"
         ],
         "title": "ReportPrice"
       },

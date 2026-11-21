@@ -65,6 +65,7 @@ def test_the_price_follows_the_buyers_country(client: TestClient) -> None:
         "kind": "hadahan",
         "country": "LK",
         "price": {"amount": 80_000, "currency": "LKR"},
+        "paid_reports": False,
     }
     abroad = client.get(
         "/v1/price", params={"kind": "porondam"}, headers={"x-vercel-ip-country": "au"}
@@ -77,7 +78,9 @@ def test_the_price_follows_the_buyers_country(client: TestClient) -> None:
     )
     assert unknown.json()["price"]["currency"] == "LKR"
     paid_reports(client, default_country="US")
-    assert client.get("/v1/price", params={"kind": "hadahan"}).json()["price"]["currency"] == "USD"
+    switched_on = client.get("/v1/price", params={"kind": "hadahan"}).json()
+    assert switched_on["price"]["currency"] == "USD"
+    assert switched_on["paid_reports"] is True
 
 
 def test_only_reports_have_a_price(client: TestClient) -> None:

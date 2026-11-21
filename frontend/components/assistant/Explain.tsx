@@ -21,8 +21,8 @@ import {
   subscribe,
   tone,
 } from "@/lib/assistant/explain";
+import { useCanUse, useReportAccess } from "@/components/paid/ReportAccess";
 import { askAssistant } from "@/lib/assistant/panel";
-import { canUse } from "@/lib/entitlements";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
@@ -165,10 +165,11 @@ function Chapter({
 }) {
   const state = useChapter(id, lang, facts);
   const title = t.chapters[id];
+  const { report } = useReportAccess();
   useEffect(() => {
-    if (facts) void requestChapter(id, lang, facts);
+    if (facts) void requestChapter(id, lang, facts, fetch, report);
     // The key covers id, language and facts; asking again for a written chapter does nothing.
-  }, [id, lang, facts]);
+  }, [id, lang, facts, report]);
 
   return (
     <div className={styles.chapter} data-chapter={id} data-status={state.status} aria-busy={state.status === "writing"}>
@@ -179,7 +180,7 @@ function Chapter({
           <button
             type="button"
             className={styles.linkButton}
-            onClick={() => facts && void requestChapter(id, lang, facts)}
+            onClick={() => facts && void requestChapter(id, lang, facts, fetch, report)}
           >
             {t.retry}
           </button>
@@ -239,8 +240,8 @@ export function AiExplain({
   // Pages pass a new summary on every render; keep it by content, so a chapter is asked once.
   const factsKey = JSON.stringify(facts);
   const stable = useMemo(() => facts, [factsKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  const allowed = useCanUse("ai_explain");
   if (!t || !stable) return null;
-  const allowed = canUse("ai_explain");
 
   return (
     <div className={`${styles.place} ${className ?? ""}`} data-explain={chapters.join(" ")}>
@@ -306,9 +307,9 @@ export function FullReading({
   const [started, setStarted] = useState(false);
   const [open, setOpen] = useState<Set<ChapterId>>(new Set());
   const base = useId();
+  const allowed = useCanUse("ai_reading");
   if (!t || !facts) return null;
   const words = t[reading];
-  const allowed = canUse("ai_reading");
 
   const toggle = (id: ChapterId) =>
     setOpen((current) => {
@@ -433,8 +434,8 @@ export function TopicChips({
   const t = useExplainText();
   const [picked, setPicked] = useState<ChapterId | null>(null);
   const base = useId();
+  const allowed = useCanUse("ai_explain");
   if (!t || !facts) return null;
-  const allowed = canUse("ai_explain");
 
   return (
     <section className={`rise ${styles.topics}`} aria-labelledby={`${base}-title`} data-card="topics">

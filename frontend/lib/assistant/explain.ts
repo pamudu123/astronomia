@@ -14,6 +14,8 @@
 import type { Locale } from "@/lib/i18n";
 import type { SpotName } from "@/lib/spots";
 
+import type { ReportRequest } from "@/lib/report";
+
 import type { PageContext } from "./context";
 
 export type ChapterId =
@@ -269,6 +271,8 @@ export async function requestChapter(
   language: Locale,
   facts: PageContext,
   send: typeof fetch = fetch,
+  /** The report on the page: chart and match chapters are written only for a paid one. */
+  report: ReportRequest | null = null,
 ): Promise<void> {
   const key = chapterKey(id, language, facts);
   const current = chapterState(key);
@@ -279,7 +283,7 @@ export async function requestChapter(
     const response = await send("/api/explain", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, language, facts }),
+      body: JSON.stringify(report ? { id, language, facts, report } : { id, language, facts }),
     });
     if (!response.ok || !response.body) throw new Error(`explain: ${response.status}`);
     const reader = response.body.getReader();

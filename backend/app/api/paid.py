@@ -11,6 +11,7 @@ A report is named by its kind and the hash of its request, the same hash My repo
 (app/api/saved.py), so a report bought here is the same report when it is saved or opened.
 """
 
+import datetime as dt
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -72,6 +73,8 @@ class ReportPrice(BaseModel):
     kind: ReportKind
     country: str
     price: PriceOut
+    # Off: paid features are switched off on the server and everyone has every feature.
+    paid_reports: bool
 
 
 class AccessOut(BaseModel):
@@ -178,9 +181,16 @@ def _access(
 
 
 @router.get("/v1/price", response_model=ReportPrice)
-def report_price(kind: Annotated[ReportKind, Query()], country: Country) -> ReportPrice:
+def report_price(
+    kind: Annotated[ReportKind, Query()], country: Country, settings: SettingsDep
+) -> ReportPrice:
     """The price of one report for this buyer: LKR in Sri Lanka, USD everywhere else."""
-    return ReportPrice(kind=kind, country=country, price=_price(price_for(kind, country)))
+    return ReportPrice(
+        kind=kind,
+        country=country,
+        price=_price(price_for(kind, country)),
+        paid_reports=settings.paid_reports,
+    )
 
 
 @router.post("/v1/reports/access", response_model=AccessOut)
@@ -267,8 +277,9 @@ def unlock(
     try:
         item, _ = accounts.save(user.id, report, settings.paid_saved_limit, order.id)
         saved = _out(item)
-        if session.found is not None:
-            _set_hint(response, settings, 1, session.found.expires_at)
+        # The "My reports" hint in the header. Not tied to the session's expiry, which goes
+        # when sign in moves to Supabase Auth (docs/19).
+        _set_hint(response, settings, 1, dt.datetime.now(dt.UTC) + dt.timedelta(days=365))
     except LimitReached:
         saved = None
     return Unlocked(

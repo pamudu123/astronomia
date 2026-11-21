@@ -2395,6 +2395,8 @@ export interface components {
             /** Country */
             country: string;
             price: components["schemas"]["PriceOut"];
+            /** Paid Reports */
+            paid_reports: boolean;
         };
         /** SaturnOut */
         SaturnOut: {
