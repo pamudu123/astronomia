@@ -19,6 +19,9 @@ services:
       # never here. The tables come from supabase/migrations/, not from the app.
       - key: ASTRONOMIA_DATABASE_URL
         sync: false
+      # The Supabase project, whose public keys check sign in tokens (docs/19). Not secret.
+      - key: ASTRONOMIA_SUPABASE_URL
+        value: https://ihzvwnwkbcqldhrvsrle.supabase.co
       # Shared with the frontend (BACKEND_ACCESS_KEY). Set in the dashboard, never here.
       - key: ASTRONOMIA_ACCESS_KEY
         sync: false

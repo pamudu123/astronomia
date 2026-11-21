@@ -72,7 +72,7 @@ Browser ── signs in ──▶ Supabase Auth (anonymous, Google)
 | Vercel | `NEXT_PUBLIC_SUPABASE_URL` = `https://ihzvwnwkbcqldhrvsrle.supabase.co` | No |
 | Vercel | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | No (public by design) |
 | Render, `astronomia-api` | `ASTRONOMIA_DATABASE_URL` = Supabase session pooler connection string | **Yes.** Owner sets it |
-| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_URL` = the project address, for the signing keys | No |
+| Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_URL` = the project address, for the signing keys (`https://ihzvwnwkbcqldhrvsrle.supabase.co` on staging). Without it nobody can sign in | No |
 | Render, `astronomia-api` | `ASTRONOMIA_SUPABASE_SECRET_KEY`, only for deleting accounts | **Yes.** Owner sets it |
 | `backend/.env` (local) | The same three, for running against staging | **Yes.** Never committed |
 
@@ -92,7 +92,39 @@ Each step is one pull request with its own tests, reviewed before the next.
 
 Then docs/18 continues: 7 day free saves, coupons and the paid check, chat limits.
 
-## 5. Checks before production
+## 5. How it is built
+
+Notes from building each step, for whoever changes it next.
+
+### Step 2: backend sign in (branch `claude/supabase-signin-79c6c3`)
+
+- **`backend/app/auth.py`** checks the token: the signing algorithm must be ES256 or RS256 (the
+  staging project signs with ES256; HS256 and unsigned tokens are refused), the key id must be in
+  the project's JWKS (`<ASTRONOMIA_SUPABASE_URL>/auth/v1/.well-known/jwks.json`), and the claims
+  must have issuer `<ASTRONOMIA_SUPABASE_URL>/auth/v1`, audience `authenticated`, a future expiry
+  (30 seconds of clock difference allowed), an issue time, and a user id that is a uuid.
+  `is_anonymous: true` makes the user a guest; anything else is a Google account.
+- **Keys are cached** for ten minutes. A token with a key id not seen yet fetches the set again
+  (Supabase rotating its keys), at most once a minute, so made-up key ids cannot make the backend
+  fetch on every call. If Supabase cannot be reached, the kept keys go on working.
+- **The current user** comes from `current_session` in `backend/app/api/saved.py` (`Current`):
+  `session.found` is None without a token, else `session.found.user.id` (the Supabase user id)
+  and `session.found.user.kind` (`guest` or `google`). A bad or expired token is 401, so the page
+  signs in again. A good token whose user has no `users` row gets one; new guests are still
+  limited per address (`ASTRONOMIA_GUESTS_PER_HOUR`), on top of Supabase's own limit.
+- **A guest who links Google** keeps the same id; the row's kind turns to `google` on the next
+  call and never back.
+- **Saving needs a sign in.** `POST /v1/saved` without a token is 401: the page signs in
+  anonymously first (step 3). Reading without a token answers as before (no reports).
+- The guest cookie (`sid`) and the backend's sessions are gone. Migration
+  `20261121130000_drop_guest_sessions.sql` drops `sidera.sessions` and deletes the rows of guests
+  made with the old cookie (their ids are not Supabase users, so nobody could reach them). The
+  small `sidera_saved` hint cookie stays: it only tells the header to show "My reports".
+- Tests make their own ES256 key and sign stand-in tokens with it (`backend/tests/auth.py`), so
+  the real checks run: `tests/test_auth.py` for the token rules, `tests/test_api_saved.py` for
+  the endpoints.
+
+## 6. Checks before production
 
 - A separate Supabase production project on **Pro** (daily backups, no pausing), with the same migrations.
 - Supabase's data processing agreement accepted.

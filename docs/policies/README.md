@@ -39,6 +39,25 @@ Text in square brackets needs a real value before publishing. Never publish a br
 | [credits page] | The credits page address, once built |
 | [working cancellation link], [working withdrawal link], [email/address], [total], [amount], [period] | The checkout, once a payment provider approves |
 
+## Changes since the review: Supabase sign in (docs/19)
+
+The privacy notice was reviewed when Save made a guest cookie on Render's database. Sign in is
+moving to Supabase. These notes are for the next legal review; the reviewed text above is not
+changed until then (docs/19, step 5 updates it).
+
+- **No guest cookie.** Save signs the browser in to Supabase Auth as an anonymous user. Supabase's
+  script keeps the sign in (an access token and a refresh token) in the browser's local storage,
+  not in a cookie. The backend keeps no session and no key hash: it checks the access token with
+  Supabase's public keys on each call. The "private browser-key cookie" and "We store a hash of
+  the key" sentences no longer apply. The `sidera_saved` marker cookie stays (no id in it).
+- **The account id is the Supabase user id.** Supabase Auth holds, for an anonymous user, only the
+  id, the time it was made and last signed in, and the network address Supabase logs. Saved
+  reports stay in the app's own tables.
+- **Where.** The database and Supabase Auth are in Singapore (Supabase project on AWS
+  ap-southeast-1). Supabase becomes a processor to name, next to Render and Vercel.
+- **Old guest records.** The migration that removes the old cookie sessions also deletes the guest
+  accounts made with them, with their reports. Only staging had any; no real visitors.
+
 ## Not decided by this text
 
 - **Payments.** PayHere does not accept astrology services. The paid terms and the refunds policy wait for a provider that approves the product in writing (`docs/15-payments.md`, section 0).

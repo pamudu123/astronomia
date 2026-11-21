@@ -6,6 +6,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from app.auth import TokenChecker
 from app.config import Settings, get_settings
 from app.geo.build import ensure_built
 from app.store.accounts import AccountStore, postgres_accounts, sqlite_accounts
@@ -60,3 +61,18 @@ def account_store(settings: Annotated[Settings, Depends(get_settings)]) -> Accou
 
 
 Accounts = Annotated[AccountStore, Depends(account_store)]
+
+
+@lru_cache
+def _token_checker(supabase_url: str) -> TokenChecker:
+    return TokenChecker(supabase_url)
+
+
+def token_checker(settings: Annotated[Settings, Depends(get_settings)]) -> TokenChecker | None:
+    """Checks Supabase access tokens. None when Supabase is not set up (local runs)."""
+    if not settings.supabase_url:
+        return None
+    return _token_checker(settings.supabase_url)
+
+
+Tokens = Annotated[TokenChecker | None, Depends(token_checker)]

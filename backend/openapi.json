@@ -1871,7 +1871,7 @@
           "saved"
         ],
         "summary": "Me",
-        "description": "The account on this browser, if any, and how many reports it keeps.",
+        "description": "The signed in account, if any, and how many reports it keeps.",
         "operationId": "me_v1_me_get",
         "responses": {
           "200": {
@@ -1891,7 +1891,7 @@
           "saved"
         ],
         "summary": "Delete Me",
-        "description": "Deletes the account on this browser and every report it keeps.",
+        "description": "Deletes the signed in account and every report it keeps.",
         "operationId": "delete_me_v1_me_delete",
         "responses": {
           "204": {
@@ -1906,7 +1906,7 @@
           "saved"
         ],
         "summary": "List Saved",
-        "description": "Every report this browser's account keeps, newest first.",
+        "description": "Every report the signed in account keeps, newest first.",
         "operationId": "list_saved_v1_saved_get",
         "responses": {
           "200": {
@@ -1926,7 +1926,7 @@
           "saved"
         ],
         "summary": "Save Report",
-        "description": "Saves a hadahan or a match to My reports. Makes a guest account if there is none.",
+        "description": "Saves a hadahan or a match to My reports. The page signs in (anonymously) first.",
         "operationId": "save_report_v1_saved_post",
         "requestBody": {
           "content": {

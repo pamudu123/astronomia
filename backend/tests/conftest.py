@@ -8,6 +8,7 @@ from app.geo.build import build
 from app.main import create_app
 from app.store.accounts import AccountStore, sqlite_accounts
 from app.store.shares import ShareStore
+from tests import auth
 
 
 @pytest.fixture(scope="session")
@@ -36,4 +37,6 @@ def client(places_db: Path, shares: ShareStore, accounts: AccountStore) -> TestC
     app.dependency_overrides[deps.account_store] = lambda: accounts
     limit = saved.RateLimit(30)
     app.dependency_overrides[saved.guest_limit] = lambda: limit
+    tokens = auth.checker()  # stand-in Supabase keys (tests/auth.py)
+    app.dependency_overrides[deps.token_checker] = lambda: tokens
     return TestClient(app)
