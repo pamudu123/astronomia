@@ -18,6 +18,31 @@ def test_icons_on_bold_leads_are_left_out_of_the_pdf() -> None:
     ]
 
 
+def test_a_small_table_prints_as_a_table_with_every_row_as_wide_as_its_header() -> None:
+    text = (
+        "Three stretches.\n| Period | Dates |\n|---|:--:|\n"
+        "| **Mercury** | 2026 to 2028 |\n| Ketu |\n\nAfter."
+    )
+    assert blocks(text) == [
+        Block("paragraph", (("Three stretches.", False),)),
+        Block(
+            "table",
+            rows=(
+                ((("Period", False),), (("Dates", False),)),
+                ((("Mercury", True),), (("2026 to 2028", False),)),
+                ((("Ketu", False),), ()),
+            ),
+        ),
+        Block("paragraph", (("After.", False),)),
+    ]
+
+
+def test_lines_that_only_look_like_a_table_stay_text() -> None:
+    assert blocks("| Period | Dates |") == [Block("paragraph", (("| Period | Dates |", False),))]
+    table = blocks("| a | b |\n|---|---|\n| x \\| y | z |")[0]
+    assert table.rows[1][0] == (("x | y", False),)
+
+
 def test_joined_emoji_go_whole_and_sinhala_keeps_its_joiner() -> None:
     assert without_icons("👨‍👩‍👧 Family") == "Family"
     # ශ්‍රී is joined with a zero-width joiner, which must stay.

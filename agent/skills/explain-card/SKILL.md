@@ -30,17 +30,38 @@ The chart fact is the proof, not the point. Never open a part, or a paragraph, w
 
 The chapter is read on a phone, so it must break into small, separate pieces the eye can find.
 
-- **Open with the answer**: one or two plain sentences about this person or couple, the main thing the chapter has to say. No bold lead and no icon before it.
+- **Open with the answer**: one or two plain sentences about this person or couple, the main thing the chapter has to say, at most 35 words. No bold lead and no icon before it. The page shows it in an "In short" card beside a picture, so it must make sense on its own: someone who reads only this knows the main point.
 - **Then two to four parts.** Each part starts with a bold lead of two to five words on its own line, with one icon at its start, inside the bold: `**💼 Work that suits you**`. The lead says what the part is about in plain words, never a technical term alone ("**🪐 Mercury**" is wrong; "**💬 How you think and speak**" is right).
 - **Small paragraphs.** Under each lead, one to three paragraphs. **Each paragraph holds one idea, in one or two sentences, never more than 40 words.** When a thought needs a third sentence, start a new paragraph. Put a blank line between every paragraph, and between a lead and what follows it.
-- **Separate the details.** Keep the meaning, the reason and what helps in separate paragraphs when each needs more than a clause, so the person can skip to the piece they want. Two or more time windows, dates, factors or steps go in a short list, one per item, never strung together in a paragraph: "- **Mercury sub-period** (31 January to 6 December 2028): business and communication come forward". Three to six items, one line each. No tables, no lists inside lists, no headings with `#`.
+- **Separate the details.** Keep the meaning, the reason and what helps in separate paragraphs when each needs more than a clause, so the person can skip to the piece they want. Two or more time windows, dates, factors or steps go in a short list, one per item, never strung together in a paragraph: "- **Mercury sub-period** (31 January to 6 December 2028): business and communication come forward". Three to six items, one line each. No lists inside lists, no headings with `#`.
+- **A small table when things line up side by side.** When three or more items share the same two or three details (periods with their dates and what they bring, factors with their result, checks with pass or not, times with what to do), put them in one small table instead of a list. It is the easiest shape to read at a glance. Rules: at most one table per chapter, two or three columns, three to eight rows, a few words per cell (never a sentence of more than about eight words), plain-word column headers. The first column names the row (a period, a factor, a time). Put a sentence before the table saying what it shows, and the meaning after it in a short paragraph: the table holds the facts, the words around it say what they mean. Standard markdown, with the header rule:
+
+  ```
+  | Period | Dates | What it brings |
+  |---|---|---|
+  | **Mercury** sub-period | 2026 Jan – 2028 Dec | study, business, travel |
+  | **Ketu** sub-period | 2028 Dec – 2029 Nov | a quieter, inward year |
+  ```
+
+  Never a table for a single item or for a chain of reasons. Icons stay out of tables.
 - **Length:** 150 to 350 words. A chapter with little to say ("both essential checks pass") can be shorter. Never pad.
 - **Bold** only the bold leads and, at most once per part, a key name (a factor, a sign, a period).
 - **No closing question or offer.** The page has its own "Ask Astro about this" button under every chapter. Finish on something useful: what helps, or what to look at next.
 
+## Sinhala
+
+Sinhala text looks dense on a phone sooner than English, so be stricter:
+
+- **Short sentences**: about 15 to 20 words each, one idea each. Split a long sentence at "සහ", "නමුත්", "එමෙන්ම" rather than joining clauses with commas.
+- **Paragraphs of one or two sentences**, never three. A blank line between every paragraph.
+- **Spoken words over literary ones** (`sinhala-style`): "ගැළපෙනවා" rather than a heavy formal form, when both say the same.
+- Put English or Sanskrit terms in brackets only when they help, and at most once per part: no "(Vedic Remedies)", "(D10)" after every heading.
+
 ## Icons
 
-One icon at the start of each bold lead, chosen from this set so the readings look alike. Nowhere else: none in the opening, none inside paragraphs or list items, never two in a row.
+One icon at the start of each bold lead, chosen from this set so the readings look alike. Nowhere else: none in the opening, none inside paragraphs, list items or tables, never two in a row.
+
+The page tints three kinds of part so they stand out: 💡 (what helps) in gold, ⚠️ (needs attention) in coral and ✅ (good news) in teal. Use them for what they mean, so the colour is a true signal: a chapter that has practical steps ends with a 💡 part.
 
 | Part about | Icon |
 |---|---|
@@ -106,4 +127,4 @@ Not this, which puts the technique first and packs it together:
 
 ## In the chat
 
-When someone asks the chat for their full reading, or for one chapter by name, write the chapters in the same shape, one after another, with the chapter's title in bold before each. For a whole reading, offer the first two or three chapters and ask whether to go on, since the chat panel is narrow.
+When someone asks the chat for their full reading, or for one chapter by name, write the chapters in the same shape, one after another, with the chapter's title in bold before each. For a whole reading, offer the first two or three chapters and ask whether to go on, since the chat panel is narrow. A table in the chat has at most two or three short columns, so it fits the panel.

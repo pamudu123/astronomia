@@ -302,6 +302,15 @@ html[lang="si"] .score {
   line-height: 1.5;
 }
 
+/* A small table in a chapter (dates, factors, checks): the data table look, with a little air. */
+.reading .reading-table {
+  margin: 2mm 0 3mm;
+}
+
+.reading .reading-table td:first-child {
+  font-weight: 600;
+}
+
 .reading .lead-line {
   margin-top: 2.5mm;
   margin-bottom: 0.5mm;

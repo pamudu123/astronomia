@@ -3,18 +3,23 @@
 import { Fragment, useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 
 import { Lock } from "@/components/Icons";
+import { Spot } from "@/components/Spot";
 import type { PageContext } from "@/lib/assistant/context";
 import {
   type Block,
+  CHAPTER_SPOT,
   type ChapterId,
   OPEN_FIRST,
   type Span,
+  TOPIC_ICON,
   blocks,
   chapterKey,
   chapterState,
   idleState,
+  parts,
   requestChapter,
   subscribe,
+  tone,
 } from "@/lib/assistant/explain";
 import { askAssistant } from "@/lib/assistant/panel";
 import { canUse } from "@/lib/entitlements";
@@ -45,21 +50,97 @@ function Spans({ spans }: { spans: Span[] }) {
 }
 
 function Blocks({ items }: { items: Block[] }) {
-  return items.map((block, index) =>
-    block.kind === "list" ? (
-      <ul key={index}>
-        {block.items.map((item, i) => (
-          <li key={i}>
-            <Spans spans={item} />
-          </li>
-        ))}
-      </ul>
-    ) : (
-      // A paragraph that is only a bold lead sits close to the text it introduces.
-      <p key={index} className={block.spans.length === 1 && block.spans[0].bold ? styles.lead : undefined}>
+  return items.map((block, index) => {
+    if (block.kind === "list") {
+      return (
+        <ul key={index}>
+          {block.items.map((item, i) => (
+            <li key={i}>
+              <Spans spans={item} />
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    if (block.kind === "table") {
+      // Wide tables scroll sideways inside their frame on a phone, never the page.
+      return (
+        <div key={index} className={styles.tableFrame} role="region" tabIndex={0}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                {block.head.map((cell, i) => (
+                  <th key={i} scope="col">
+                    <Spans spans={cell} />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((row, r) => (
+                <tr key={r}>
+                  {row.map((cell, i) => (
+                    <td key={i}>
+                      <Spans spans={cell} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+    return (
+      <p key={index}>
         <Spans spans={block.spans} />
       </p>
-    ),
+    );
+  });
+}
+
+/**
+ * A chapter laid out to read at a glance: the answer it opens with in a card beside its
+ * picture, then each part under its icon and lead. Tips, cautions and good news are tinted.
+ */
+function Reading({ id, text, t }: { id: ChapterId; text: string; t: Text }) {
+  const { answer, parts: sections } = parts(blocks(text));
+  return (
+    <>
+      {answer.length > 0 && (
+        <div className={styles.answer}>
+          <div className={styles.answerText}>
+            <p className={styles.eyebrow}>{t.inShort}</p>
+            <Blocks items={answer} />
+          </div>
+          <Spot name={CHAPTER_SPOT[id]} className={styles.spot} />
+        </div>
+      )}
+      {sections.map((section, index) => (
+        <section key={index} className={styles.part} data-tone={tone(section.lead.icon)}>
+          <p className={styles.partLead}>
+            {section.lead.icon && (
+              <span className={styles.partIcon} aria-hidden="true">
+                {section.lead.icon}
+              </span>
+            )}
+            <strong>{section.lead.text}</strong>
+          </p>
+          <Blocks items={section.blocks} />
+        </section>
+      ))}
+    </>
+  );
+}
+
+/** Grey lines where the text will be, until its first words arrive. */
+function Placeholder() {
+  return (
+    <div className={styles.placeholder} aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </div>
   );
 }
 
@@ -70,6 +151,7 @@ function Chapter({
   facts,
   t,
   heading,
+  next,
 }: {
   id: ChapterId;
   lang: Locale;
@@ -78,6 +160,8 @@ function Chapter({
   t: Text;
   /** Show the chapter's title above it (when a button shows more than one chapter). */
   heading?: boolean;
+  /** In a full reading: the next chapter's title, and what opens it. */
+  next?: { title: string; open: () => void };
 }) {
   const state = useChapter(id, lang, facts);
   const title = t.chapters[id];
@@ -102,7 +186,7 @@ function Chapter({
         </p>
       ) : (
         <div className={styles.text}>
-          <Blocks items={blocks(state.text)} />
+          {state.text.trim() ? <Reading id={id} text={state.text} t={t} /> : state.status !== "done" && <Placeholder />}
           {state.status !== "done" && (
             <p className={styles.writing} role="status">
               <span className={styles.dots} aria-hidden="true" />
@@ -112,13 +196,23 @@ function Chapter({
         </div>
       )}
       {state.status === "done" && (
-        <button
-          type="button"
-          className={styles.ask}
-          onClick={() => askAssistant(fill(t.askQuestion, { title }))}
-        >
-          {t.ask} →
-        </button>
+        <div className={styles.after}>
+          <button
+            type="button"
+            className={styles.ask}
+            onClick={() => askAssistant(fill(t.askQuestion, { title }))}
+          >
+            <span aria-hidden="true" className={styles.spark}>
+              ✦
+            </span>{" "}
+            {t.ask}
+          </button>
+          {next && (
+            <button type="button" className={styles.next} onClick={next.open}>
+              {fill(t.next, { title: next.title })} →
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
@@ -229,6 +323,18 @@ export function FullReading({
     setOpen(new Set(chapters.slice(0, OPEN_FIRST)));
   };
 
+  // "Next: …" under a chapter: opens the next one and brings its title into view.
+  const openNext = (index: number) => {
+    setOpen((current) => new Set(current).add(chapters[index]));
+    window.requestAnimationFrame(() => {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document
+        .getElementById(`${base}-${index}`)
+        ?.closest("li")
+        ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
+  };
+
   return (
     <section className={`rise ${styles.reading}`} aria-labelledby={`${base}-title`} data-card="full-reading">
       <div className={styles.readingHead}>
@@ -284,7 +390,17 @@ export function FullReading({
                   </h3>
                   {isOpen && (
                     <div id={panel}>
-                      <Chapter id={id} lang={lang} facts={extra && id in extra ? (extra[id] ?? null) : facts} t={t} />
+                      <Chapter
+                        id={id}
+                        lang={lang}
+                        facts={extra && id in extra ? (extra[id] ?? null) : facts}
+                        t={t}
+                        next={
+                          index + 1 < chapters.length
+                            ? { title: t.chapters[chapters[index + 1]], open: () => openNext(index + 1) }
+                            : undefined
+                        }
+                      />
                     </div>
                   )}
                 </li>
@@ -342,6 +458,11 @@ export function TopicChips({
             onClick={() => setPicked(picked === id ? null : id)}
             data-topic={id}
           >
+            {TOPIC_ICON[id] && (
+              <span aria-hidden="true" className={styles.chipIcon}>
+                {TOPIC_ICON[id]}
+              </span>
+            )}
             {t.chapters[id]}
           </button>
         ))}
