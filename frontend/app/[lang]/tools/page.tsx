@@ -96,13 +96,17 @@ export default async function ToolsPage({ params }: PageProps<"/[lang]/tools">) 
                 <Link key={tool.item} href={`/${lang}${tool.path}`} className={`lift ${styles.card}`} data-tool={tool.item}>
                   <span className={styles.cardTop}>
                     <span className={`display ${styles.cardName}`}>{fill(item.name, { year: YEARS[0] })}</span>
-                    <span className={styles.free}>{t.free}</span>
                   </span>
                   <span className="soft">{item.text}</span>
                   <span className={styles.cardFoot}>
-                    <span className={styles.need}>
-                      {t.need}: <strong>{t.needs[tool.need]}</strong>
-                    </span>
+                    {/* Said only when the tool needs something; most need nothing at all. */}
+                    {tool.need === "nothing" ? (
+                      <span />
+                    ) : (
+                      <span className={styles.need}>
+                        {t.need}: <strong>{t.needs[tool.need]}</strong>
+                      </span>
+                    )}
                     <ArrowRight size={16} />
                   </span>
                 </Link>

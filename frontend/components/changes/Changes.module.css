@@ -149,6 +149,7 @@
 
 .planet {
   flex: 1;
+  margin: 0;
   font-size: 17px;
   font-weight: 600;
 }
@@ -362,8 +363,59 @@
   background: var(--panel);
 }
 
-.panel h2 {
-  font-size: 26px;
+.panelHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panelTitle {
+  font-size: 22px;
+}
+
+/* From the lagna or from the Moon sign: one view at a time. */
+.view {
+  display: flex;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--night);
+}
+
+.viewOn,
+.viewOff {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.viewOn {
+  background: var(--panel-raised);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.viewOff {
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.more {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .upcoming {

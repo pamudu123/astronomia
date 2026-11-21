@@ -33,9 +33,9 @@ export function DashaTimeline({
   return (
     <section className={`rise ${styles.panel}`} aria-labelledby="dasha-title">
       <div className={styles.panelHead}>
-        <h2 id="dasha-title" className={`display ${styles.panelTitle}`}>
+        <h3 id="dasha-title" className={`display ${styles.cardTitle}`}>
           {t.dasha}
-        </h2>
+        </h3>
         <p className="soft">{t.dashaLead}</p>
         {explain}
       </div>

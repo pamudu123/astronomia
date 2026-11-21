@@ -189,8 +189,8 @@
   background: var(--panel);
 }
 
-.panel h2 {
-  font-size: 26px;
+.panel h3 {
+  font-size: 22px;
 }
 
 @media (max-width: 520px) {

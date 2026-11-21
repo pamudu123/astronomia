@@ -144,14 +144,16 @@ export function HadahanResult({
   const moon = chart.moon;
   const offset = result.time.offset_label ?? "";
 
-  const kujaStatus = !kuja.present ? t.kujaAbsent : kuja.reduced ? t.kujaReduced : t.kujaPresent;
+  // The jump bar: only the parts this page shows. A shared chart has no birth to ask with.
+  const sections: [string, string][] = [
+    ["chart", t.sectionChart],
+    ...(result.dasha || request ? [["periods", t.periodsTitle] as [string, string]] : []),
+    ...(request ? [["coming", t.comingTitle] as [string, string]] : []),
+    ["kuja", t.kuja],
+  ];
+
+  const kujaStatus =!kuja.present ? t.kujaAbsent : kuja.reduced ? t.kujaReduced : t.kujaPresent;
   const title = name ? fill(t.titleNamed, { name }) : t.title;
-  const details = [
-    formatDate(`${date}T00:00:00Z`, lang),
-    fill(t.detailsTime, { time }),
-    placeText,
-    offset ? fill(t.detailsOffset, { offset }) : "",
-  ].filter(Boolean);
 
   // The reading guide: which houses to light up at each step, with the chart in rashi view.
   const moonHouse = chart.planets.find((planet) => planet.body === "moon")?.house ?? 1;
@@ -200,210 +202,236 @@ export function HadahanResult({
                 hasNames={Boolean(name)}
               />
             )}
-            {onAgain && (
-              <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
-                {t.again}
-                <ArrowRight />
-              </button>
-            )}
           </div>
         )}
       </section>
 
       {/* What the chart was worked out from, first, so a wrong time or place is caught early. */}
       <section className={`rise ${styles.details}`} aria-label={t.detailsUsed} data-card="details">
-        <div className={styles.detailsText}>
+        <div className={styles.detailsHead}>
           <span className={styles.detailsLabel}>{t.detailsUsed}</span>
-          <p className={styles.detailsLine}>
-            {details.map((part, index) => (
-              <span key={index} className={styles.detailsPart}>
-                {part}
-              </span>
-            ))}
-          </p>
-          {onEdit && <p className={styles.small}>{t.detailsHint}</p>}
-        </div>
-        {onEdit && (
-          <button type="button" className={styles.outlineButton} onClick={onEdit}>
-            {t.edit}
-          </button>
-        )}
-      </section>
-
-      <SummaryCards
-        lang={lang}
-        t={t}
-        labels={labels}
-        chart={chart}
-        explain={<AiExplain chapters={CHART_PLACES.chart} lang={lang} facts={facts} />}
-      />
-
-      <section className={styles.split}>
-        <div className={`rise ${styles.panel} ${styles.chartPanel}`}>
-          <div className={styles.panelRow}>
-            <h2 className={`display ${styles.panelTitle}`}>{t.kendara}</h2>
-            <div role="group" aria-label={t.chartType} className={styles.toggle}>
-              {(["rashi", "navamsha"] as const).map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  aria-pressed={mode === value}
-                  className={mode === value ? styles.toggleOn : styles.toggleOff}
-                  onClick={() => {
-                    setMode(value);
-                    if (value === "navamsha") setStep(null);
-                  }}
-                >
-                  {value === "rashi" ? t.chartRashi : t.chartNavamsha}
-                </button>
-              ))}
-            </div>
-          </div>
-          <Kendara
-            key={mode}
-            planets={chart.planets}
-            labels={labels}
-            mode={mode}
-            title={mode === "rashi" ? t.chartRashi : t.chartNavamsha}
-            subtitle={formatDate(`${date}T00:00:00Z`, lang)}
-            ariaLabel={fill(t.chartLabel, { chart: mode === "rashi" ? t.chartRashi : t.chartNavamsha })}
-            lagnaMark={t.lagnaMark}
-            highlight={guide ? guide.planet : kuja.present ? "mars" : undefined}
-            houses={guide?.houses}
-            numbered={guide !== null}
-          />
-          {step === null ? (
-            <button
-              type="button"
-              className={styles.guideButton}
-              aria-expanded={false}
-              onClick={() => {
-                setMode("rashi");
-                setStep(0);
-              }}
-            >
-              {t.howToRead}
+          {onEdit && (
+            <button type="button" className={styles.editButton} onClick={onEdit}>
+              {t.edit}
             </button>
-          ) : (
-            <div className={styles.guide} data-card="guide">
-              <p className={styles.guideStep}>{fill(t.guideStep, { n: step + 1, total: t.guide.length })}</p>
-              <p aria-live="polite" className={styles.guideText}>
-                {guideText}
-              </p>
-              <div className={styles.guideActions}>
-                {step > 0 && (
-                  <button type="button" className={styles.linkButton} onClick={() => setStep(step - 1)}>
-                    {t.guideBack}
-                  </button>
-                )}
-                {step < t.guide.length - 1 ? (
-                  <button type="button" className={styles.outlineButton} onClick={() => setStep(step + 1)}>
-                    {t.guideNext}
-                  </button>
-                ) : (
-                  <button type="button" className={styles.outlineButton} onClick={() => setStep(null)}>
-                    {t.guideClose}
-                  </button>
-                )}
-              </div>
+          )}
+        </div>
+        {/* Each detail with its own label, so a wrong date, time or place stands out. */}
+        <dl className={styles.detailsList}>
+          <div className={styles.detailsItem}>
+            <dt>{t.detailsDate}</dt>
+            <dd>{formatDate(`${date}T00:00:00Z`, lang)}</dd>
+          </div>
+          <div className={styles.detailsItem}>
+            <dt>{t.detailsTimeLabel}</dt>
+            <dd>
+              {time}
+              {offset && <span className={styles.detailsSoft}>{fill(t.detailsOffset, { offset })}</span>}
+            </dd>
+          </div>
+          {placeText && (
+            <div className={styles.detailsItem}>
+              <dt>{t.detailsPlace}</dt>
+              <dd>{placeText}</dd>
             </div>
           )}
-          <p className={styles.small}>{t.kendaraNote}</p>
-        </div>
-
-        <div className={`rise ${styles.panel} ${styles.tablePanel}`} style={{ animationDelay: ".15s" }}>
-          <h2 className={`display ${styles.panelTitle}`}>{t.planets}</h2>
-          <div className={styles.tableScroll}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th scope="col">{t.planet}</th>
-                  <th scope="col">{t.sign}</th>
-                  <th scope="col">{t.degree}</th>
-                  <th scope="col">{t.house}</th>
-                  <th scope="col">{t.star}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {chart.planets.map((planet) => (
-                  <tr key={planet.body}>
-                    <th scope="row" className={planet.body === "mars" && kuja.present ? styles.mars : undefined}>
-                      {labels.planet[planet.body].name}
-                    </th>
-                    <td>
-                      {sign(planet.sign).name}
-                      {lang === "en" && <span className="soft"> ({sign(planet.sign).western})</span>}
-                    </td>
-                    <td className={styles.nowrap}>
-                      {formatDegree(planet.degree)}
-                      {planet.retrograde && planet.body !== "rahu" && planet.body !== "ketu" && (
-                        <span className={styles.pill}>{t.retrograde}</span>
-                      )}
-                    </td>
-                    <td>{planet.house}</td>
-                    <td>
-                      {labels.nakshatra[planet.nakshatra]} {planet.pada}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        </dl>
+        {onEdit && <p className={styles.small}>{t.detailsHint}</p>}
       </section>
 
-      <TopicChips chapters={CHART_TOPICS} lang={lang} facts={facts} />
+      {/* A short bar to jump between the parts of a long page. */}
+      <nav className={styles.sections} aria-label={t.sections}>
+        {sections.map(([id, label]) => (
+          <a key={id} href={`#${id}`} className={styles.sectionLink}>
+            {label}
+          </a>
+        ))}
+      </nav>
 
-      {result.dasha && (
-        <DashaTimeline
-          dasha={result.dasha}
-          labels={labels}
+      <div id="chart" className={styles.group}>
+        <SummaryCards
           lang={lang}
           t={t}
-          explain={<AiExplain chapters={CHART_PLACES.periods} lang={lang} facts={facts} />}
+          labels={labels}
+          chart={chart}
+          explain={<AiExplain chapters={CHART_PLACES.chart} lang={lang} facts={facts} />}
         />
+
+        <section className={styles.split}>
+          <div className={`rise ${styles.panel} ${styles.chartPanel}`}>
+            <div className={styles.panelRow}>
+              <h2 className={`display ${styles.panelTitle}`}>{t.kendara}</h2>
+              <div role="group" aria-label={t.chartType} className={styles.toggle}>
+                {(["rashi", "navamsha"] as const).map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    aria-pressed={mode === value}
+                    className={mode === value ? styles.toggleOn : styles.toggleOff}
+                    onClick={() => {
+                      setMode(value);
+                      if (value === "navamsha") setStep(null);
+                    }}
+                  >
+                    {value === "rashi" ? t.chartRashi : t.chartNavamsha}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <Kendara
+              key={mode}
+              planets={chart.planets}
+              labels={labels}
+              mode={mode}
+              title={mode === "rashi" ? t.chartRashi : t.chartNavamsha}
+              subtitle={formatDate(`${date}T00:00:00Z`, lang)}
+              ariaLabel={fill(t.chartLabel, { chart: mode === "rashi" ? t.chartRashi : t.chartNavamsha })}
+              lagnaMark={t.lagnaMark}
+              highlight={guide ? guide.planet : kuja.present ? "mars" : undefined}
+              houses={guide?.houses}
+              numbered={guide !== null}
+            />
+            {step === null ? (
+              <button
+                type="button"
+                className={styles.guideButton}
+                aria-expanded={false}
+                onClick={() => {
+                  setMode("rashi");
+                  setStep(0);
+                }}
+              >
+                {t.howToRead}
+              </button>
+            ) : (
+              <div className={styles.guide} data-card="guide">
+                <p className={styles.guideStep}>{fill(t.guideStep, { n: step + 1, total: t.guide.length })}</p>
+                <p aria-live="polite" className={styles.guideText}>
+                  {guideText}
+                </p>
+                <div className={styles.guideActions}>
+                  {step > 0 && (
+                    <button type="button" className={styles.linkButton} onClick={() => setStep(step - 1)}>
+                      {t.guideBack}
+                    </button>
+                  )}
+                  {step < t.guide.length - 1 ? (
+                    <button type="button" className={styles.outlineButton} onClick={() => setStep(step + 1)}>
+                      {t.guideNext}
+                    </button>
+                  ) : (
+                    <button type="button" className={styles.outlineButton} onClick={() => setStep(null)}>
+                      {t.guideClose}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className={`rise ${styles.panel} ${styles.tablePanel}`} style={{ animationDelay: ".15s" }}>
+            <h2 className={`display ${styles.panelTitle}`}>{t.planets}</h2>
+            <div className={styles.tableScroll}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th scope="col">{t.planet}</th>
+                    <th scope="col">{t.sign}</th>
+                    <th scope="col">{t.degree}</th>
+                    <th scope="col">{t.house}</th>
+                    <th scope="col">{t.star}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {chart.planets.map((planet) => (
+                    <tr key={planet.body}>
+                      <th scope="row" className={planet.body === "mars" && kuja.present ? styles.mars : undefined}>
+                        {labels.planet[planet.body].name}
+                      </th>
+                      <td>{sign(planet.sign).name}</td>
+                      <td className={styles.nowrap}>
+                        {formatDegree(planet.degree)}
+                        {planet.retrograde && planet.body !== "rahu" && planet.body !== "ketu" && (
+                          <span className={styles.pill}>{t.retrograde}</span>
+                        )}
+                      </td>
+                      <td>{planet.house}</td>
+                      <td>
+                        {labels.nakshatra[planet.nakshatra]} {planet.pada}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <TopicChips chapters={CHART_TOPICS} lang={lang} facts={facts} />
+      </div>
+
+      {(result.dasha || request) && (
+        <section id="periods" className={styles.group} aria-labelledby="periods-title">
+          <h2 id="periods-title" className={`display ${styles.groupTitle}`}>
+            {t.periodsTitle}
+          </h2>
+          {result.dasha && (
+            <DashaTimeline
+              dasha={result.dasha}
+              labels={labels}
+              lang={lang}
+              t={t}
+              explain={<AiExplain chapters={CHART_PLACES.periods} lang={lang} facts={facts} />}
+            />
+          )}
+          {request && <LifeRoad lang={lang} t={t} labels={labels} request={request} />}
+        </section>
       )}
 
-      {request && <LifeRoad lang={lang} t={t} labels={labels} request={request} />}
-
-      {request && <Forecast lang={lang} t={t} labels={labels} request={request} />}
-
-      {request && <UpcomingChanges lang={lang} t={t} request={request} />}
-
-      {request && yearly && (
-        <YearlyLink t={yearly} lang={lang} lagna={lagna.sign} lagnaName={sign(lagna.sign).name} />
+      {request && (
+        <section id="coming" className={styles.group} aria-labelledby="coming-title">
+          <h2 id="coming-title" className={`display ${styles.groupTitle}`}>
+            {t.comingTitle}
+          </h2>
+          <Forecast lang={lang} t={t} labels={labels} request={request} />
+          <UpcomingChanges lang={lang} t={t} request={request} />
+          {yearly && <YearlyLink t={yearly} lang={lang} lagna={lagna.sign} lagnaName={sign(lagna.sign).name} />}
+        </section>
       )}
 
-      <section className={styles.pair}>
+      <section id="kuja" className={`${styles.pair} ${styles.anchor}`}>
         <article className={`rise ${styles.panel} ${kuja.present ? styles.kujaPresent : ""}`} data-card="kuja">
           <div className={styles.panelRow}>
             <h2 className={`display ${styles.panelTitle}`}>{t.kuja}</h2>
             <span className={kuja.present ? styles.badgeCoral : styles.badgeTeal}>{kujaStatus}</span>
           </div>
-          {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
-          <KujaDials kuja={kuja} labels={labels} t={t} />
           {kuja.reasons.map((text) => (
             <p key={text}>{text}</p>
           ))}
-          {kuja.present && (
-            <>
-              <h3 className={styles.subTitle}>{t.kujaChecks}</h3>
-              <ul className={styles.checks}>
-                {kuja.cancellations.map((check) => (
-                  <li key={check.id} className={check.applies ? styles.checkOn : styles.checkOff}>
-                    <span className={styles.checkHead}>
-                      <span>{labels.kuja_rule[check.id]}</span>
-                      <span className={check.applies ? styles.checkYes : styles.checkNo}>
-                        {check.applies ? t.applies : t.notApplies}
+          {/* The working is there for whoever wants it, folded away for everyone else. */}
+          <details className={styles.more}>
+            <summary>{t.kujaHow}</summary>
+            {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
+            <KujaDials kuja={kuja} labels={labels} t={t} />
+            {kuja.present && (
+              <>
+                <h3 className={styles.subTitle}>{t.kujaChecks}</h3>
+                <ul className={styles.checks}>
+                  {kuja.cancellations.map((check) => (
+                    <li key={check.id} className={check.applies ? styles.checkOn : styles.checkOff}>
+                      <span className={styles.checkHead}>
+                        <span>{labels.kuja_rule[check.id]}</span>
+                        <span className={check.applies ? styles.checkYes : styles.checkNo}>
+                          {check.applies ? t.applies : t.notApplies}
+                        </span>
                       </span>
-                    </span>
-                    <span className="soft">{check.reason}</span>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-          {kuja.provisional && <p className={styles.small}>{t.provisional}</p>}
+                      <span className="soft">{check.reason}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </details>
           <AiExplain chapters={CHART_PLACES.mars} lang={lang} facts={facts} />
         </article>
 
@@ -415,7 +443,10 @@ export function HadahanResult({
             </span>
           </div>
           <p className="soft">{chart.time_check.reason}</p>
-          <p className={styles.small}>{fill(t.method, { ayanamsa: t.ayanamsaLahiri, offset })}</p>
+          <details className={styles.more}>
+            <summary>{t.methodLabel}</summary>
+            <p className={styles.small}>{fill(t.method, { ayanamsa: t.ayanamsaLahiri, offset })}</p>
+          </details>
         </article>
       </section>
 
@@ -428,6 +459,18 @@ export function HadahanResult({
         reading="chartReading"
         pdf={Boolean(request)}
       />
+
+      {/* One note for the whole page, in place of one under every section. */}
+      <p className={styles.pageNote} data-card="note">
+        {t.pageNote}
+      </p>
+
+      {onAgain && (
+        <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
+          {t.again}
+          <ArrowRight />
+        </button>
+      )}
 
       {request && next && (
         <NextSteps

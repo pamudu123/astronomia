@@ -347,9 +347,8 @@ function PorondamForm({
         </fieldset>
       </form>
 
-      <section className={styles.quickNote}>
-        <h2 className={styles.quickTitle}>{f.quickTitle}</h2>
-        <p className="soft">{f.quickText}</p>
+      {/* The two ways to match already say what each needs, so only the side doors stay here. */}
+      <div className={styles.quickNote}>
         <Link href={`/${lang}/porondam/stars`} className={styles.starsLink}>
           {t.stars.formLink}
           <ArrowRight />
@@ -358,7 +357,7 @@ function PorondamForm({
           {dict.kendara.linkAction}
           <ArrowRight />
         </Link>
-      </section>
+      </div>
     </main>
   );
 }
