@@ -5,9 +5,13 @@
  * A fixed route, like app/api/copilotkit: next.config.ts rewrites /api/* to the backend before
  * dynamic routes are matched.
  */
+import { connection } from "next/server";
+
 import { addressOf, askBackend, browserOf, chatKey } from "@/lib/chatLimits";
 
 export async function GET(request: Request): Promise<Response> {
+  // Every answer is for this visitor: never prerendered when the site is built.
+  await connection();
   if (!chatKey()) return new Response(null, { status: 204 });
   // A browser without the cookie has asked nothing yet: its id does not matter until it asks.
   const { id } = browserOf(request);

@@ -18,6 +18,8 @@ vi.mock("@copilotkit/runtime/v2", () => ({
   },
 }));
 vi.mock("@ag-ui/client", () => ({ HttpAgent: class {} }));
+// Outside a real request there is nothing to wait for.
+vi.mock("next/server", () => ({ connection: async () => undefined }));
 
 const T: LimitText = en.assistant.limits;
 
