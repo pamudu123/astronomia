@@ -228,3 +228,41 @@ def test_a_deleted_user_takes_their_rows_along() -> None:
         db.execute("DELETE FROM sidera.users WHERE id = %s", (user.id,))
         left = db.execute("SELECT count(*) FROM sidera.saved_reports").fetchone()
     assert left == (0,)
+
+
+def test_the_hourly_job_deletes_expired_free_reports() -> None:
+    """sidera.delete_expired_reports() is what pg_cron runs on Supabase, every hour."""
+    url = need_postgres()
+    migrate(url)
+    eight_days_ago = dt.datetime.now(dt.UTC) - dt.timedelta(days=8)
+    old = postgres_accounts(url, clock=lambda: eight_days_ago)
+    user = old.add_user("00000000-0000-0000-0000-000000000001", "guest").id
+    old.save(user, report(), limit=5)  # free, saved 8 days ago
+    paid = NewReport(kind="hadahan", input={}, input_hash="p", snapshot={}, summary={}, rules="")
+    old.save(user, paid, limit=5, purchase_id="order-1")
+    fresh = NewReport(kind="hadahan", input={}, input_hash="f", snapshot={}, summary={}, rules="")
+    postgres_accounts(url).save(user, fresh, limit=5)
+    with connected() as db:
+        assert db.execute("SELECT sidera.delete_expired_reports()").fetchone() == (1,)
+        left = db.execute("SELECT input_hash FROM sidera.saved_reports ORDER BY input_hash")
+        assert left.fetchall() == [("f",), ("p",)]
+        for role in ("anon", "authenticated", "public"):
+            allowed = db.execute(
+                "SELECT has_function_privilege(%s, 'sidera.delete_expired_reports()', 'EXECUTE')",
+                (role,),
+            ).fetchone()
+            assert allowed == (False,), role
+
+
+def test_a_free_report_always_expires_and_a_paid_one_never() -> None:
+    url = need_postgres()
+    migrate(url)
+    user = postgres_accounts(url).add_user("00000000-0000-0000-0000-000000000001", "guest").id
+    insert = (
+        "INSERT INTO sidera.saved_reports (id, user_id, kind, title, input, input_hash, snapshot,"
+        " summary, rules, purchase_id, created_at, updated_at, expires_at) VALUES"
+        " (gen_random_uuid(), %s, 'hadahan', '', '{}', %s, '{}', '{}', '', %s, now(), now(), %s)"
+    )
+    for purchase_id, expires in (("order-1", dt.datetime.now(dt.UTC)), (None, None)):
+        with connected() as db, pytest.raises(psycopg.errors.CheckViolation):
+            db.execute(insert, (user, "x", purchase_id, expires))
