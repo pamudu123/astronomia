@@ -15,6 +15,7 @@
   border-radius: var(--radius-card);
   background: var(--panel);
   color: var(--ink);
+  overflow-y: auto;
   animation: pop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -195,4 +196,74 @@
 .error {
   color: var(--coral);
   font-size: 14px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.fieldsTitle {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.fieldsLead {
+  font-size: 14px;
+}
+
+.fieldList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.fieldRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.fieldRow dt {
+  color: var(--ink-soft);
+}
+
+.fieldRow dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.fieldRow dd.fieldHidden {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.alwaysList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.switches {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+  padding-top: 4px;
+}
+
+.small {
+  color: var(--ink-soft);
+  font-size: 13px;
 }

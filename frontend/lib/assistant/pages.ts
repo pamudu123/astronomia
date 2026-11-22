@@ -1,7 +1,7 @@
 import type { BabyLetters } from "@/lib/babynames";
 import type { PersonalChange, Upcoming } from "@/lib/changes";
 import type { FirstLetters } from "@/lib/firstletters";
-import type { Hadahan, Labels, Place } from "@/lib/hadahan";
+import type { AnyHadahan, Labels, Place } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import type { KendaraResult } from "@/lib/kendara";
 import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/lib/nakath";
@@ -56,7 +56,7 @@ function planet(labels: Labels, key: string): string {
 
 /** The birth chart result: signs, planets, life periods. */
 export function chartContext(
-  result: Hadahan,
+  result: AnyHadahan,
   labels: Labels,
   language: Locale,
   shared = false,
@@ -109,7 +109,7 @@ export function chartContext(
  * birth date, time or place.
  */
 export function chartReadingContext(
-  result: Hadahan,
+  result: AnyHadahan,
   labels: Labels,
   language: Locale,
   shared = false,

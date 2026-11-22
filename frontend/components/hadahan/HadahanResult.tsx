@@ -18,6 +18,7 @@ import {
   type BirthRequest,
   type Hadahan,
   type Labels,
+  type AnyHadahan,
   fill,
   formatDate,
   formatDegree,
@@ -50,11 +51,14 @@ type Props = {
   lang: Locale;
   t: Dictionary["hadahan"]["result"];
   labels: Labels;
-  result: Hadahan;
+  result: AnyHadahan;
   name: string;
-  date: string;
-  time: string;
-  placeText: string;
+  /** The birth details. Null on a shared page whose sender kept them hidden. */
+  date: string | null;
+  time: string | null;
+  placeText: string | null;
+  /** The heading without a name. A shared page says "A hadahan", not "Your birth chart". */
+  anonTitle?: string;
   /** Share text. Left out on a shared page, where nothing can be shared again. */
   share?: Dictionary["share"];
   /** Text for the Save button. Left out where the result is already saved or read only. */
@@ -88,6 +92,7 @@ export function HadahanResult({
   date,
   time,
   placeText,
+  anonTitle,
   share,
   saveText,
   request,
@@ -144,7 +149,13 @@ export function HadahanResult({
   const sign = (key: string) => labels.rashi[key];
   const lagna = chart.lagna;
   const moon = chart.moon;
-  const offset = result.time.offset_label ?? "";
+  const offset = result.time?.offset_label ?? "";
+  // The birth details as a shared page would show them, for the share dialog's list.
+  const birthLine = date
+    ? [formatDate(`${date}T00:00:00Z`, lang), [time, offset && fill(t.detailsOffset, { offset })].filter(Boolean).join(" "), placeText]
+        .filter(Boolean)
+        .join(" · ")
+    : undefined;
 
   // The jump bar: only the parts this page shows. A shared chart has no birth to ask with.
   const sections: [string, string][] = [
@@ -155,7 +166,7 @@ export function HadahanResult({
   ];
 
   const kujaStatus =!kuja.present ? t.kujaAbsent : kuja.reduced ? t.kujaReduced : t.kujaPresent;
-  const title = name ? fill(t.titleNamed, { name }) : t.title;
+  const title = name ? fill(t.titleNamed, { name }) : (anonTitle ?? t.title);
 
   // The reading guide: which houses to light up at each step, with the chart in rashi view.
   const moonHouse = chart.planets.find((planet) => planet.body === "moon")?.house ?? 1;
@@ -203,13 +214,23 @@ export function HadahanResult({
                   star: labels.nakshatra[moon.nakshatra],
                 })}
                 hasNames={Boolean(name)}
+                names={name}
+                birth={birthLine}
+                fields={[
+                  share.fieldChart,
+                  share.fieldTimeCheck,
+                  ...(result.dasha ? [share.fieldDasha] : []),
+                  share.fieldKuja,
+                ]}
               />
             )}
           </div>
         )}
       </section>
 
-      {/* What the chart was worked out from, first, so a wrong time or place is caught early. */}
+      {/* What the chart was worked out from, first, so a wrong time or place is caught early.
+          A shared page whose sender hid the birth details has none to show. */}
+      {date && (
       <section className={`rise ${styles.details}`} aria-label={t.detailsUsed} data-card="details">
         <div className={styles.detailsHead}>
           <span className={styles.detailsLabel}>{t.detailsUsed}</span>
@@ -241,6 +262,7 @@ export function HadahanResult({
         </dl>
         {onEdit && <p className={styles.small}>{t.detailsHint}</p>}
       </section>
+      )}
 
       {/* A short bar to jump between the parts of a long page. */}
       <nav className={styles.sections} aria-label={t.sections}>
@@ -287,7 +309,7 @@ export function HadahanResult({
               labels={labels}
               mode={mode}
               title={mode === "rashi" ? t.chartRashi : t.chartNavamsha}
-              subtitle={formatDate(`${date}T00:00:00Z`, lang)}
+              subtitle={date ? formatDate(`${date}T00:00:00Z`, lang) : undefined}
               ariaLabel={fill(t.chartLabel, { chart: mode === "rashi" ? t.chartRashi : t.chartNavamsha })}
               lagnaMark={t.lagnaMark}
               highlight={guide ? guide.planet : kuja.present ? "mars" : undefined}
@@ -488,7 +510,10 @@ export function HadahanResult({
             { id: "litha", href: `/${lang}/litha`, label: next.hadahan.litha },
           ]}
         >
-          {remember && <RememberChart t={remember} saved={{ name, placeLabel: placeText, request, result }} />}
+          {/* Only on the visitor's own result, which always has its birth details. */}
+          {remember && (
+            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan }} />
+          )}
         </NextSteps>
       )}
     </main>

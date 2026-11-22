@@ -7440,9 +7440,14 @@
           "birth": {
             "$ref": "#/components/schemas/HadahanRequest"
           },
-          "hide_names": {
+          "show_names": {
             "type": "boolean",
-            "title": "Hide Names",
+            "title": "Show Names",
+            "default": false
+          },
+          "show_birth": {
+            "type": "boolean",
+            "title": "Show Birth",
             "default": false
           }
         },
@@ -7477,10 +7482,14 @@
             "type": "boolean",
             "title": "Names Hidden"
           },
+          "birth_hidden": {
+            "type": "boolean",
+            "title": "Birth Hidden"
+          },
           "hadahan": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SnapshotHadahan"
+                "$ref": "#/components/schemas/SharedHadahan"
               },
               {
                 "type": "null"
@@ -7503,7 +7512,8 @@
           "kind",
           "created_at",
           "expires_at",
-          "names_hidden"
+          "names_hidden",
+          "birth_hidden"
         ],
         "title": "ShareOut"
       },
@@ -7517,9 +7527,14 @@
           "match": {
             "$ref": "#/components/schemas/PorondamRequest"
           },
-          "hide_names": {
+          "show_names": {
             "type": "boolean",
-            "title": "Hide Names",
+            "title": "Show Names",
+            "default": false
+          },
+          "show_birth": {
+            "type": "boolean",
+            "title": "Show Birth",
             "default": false
           }
         },
@@ -7529,6 +7544,241 @@
           "match"
         ],
         "title": "SharePorondam"
+      },
+      "SharedChart": {
+        "properties": {
+          "utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Utc"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "lagna": {
+            "$ref": "#/components/schemas/PointOut"
+          },
+          "moon": {
+            "$ref": "#/components/schemas/PointOut"
+          },
+          "planets": {
+            "items": {
+              "$ref": "#/components/schemas/PlanetOut"
+            },
+            "type": "array",
+            "title": "Planets"
+          },
+          "time_check": {
+            "$ref": "#/components/schemas/TimeCheckOut"
+          },
+          "method": {
+            "$ref": "#/components/schemas/MethodOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "utc",
+          "latitude",
+          "longitude",
+          "lagna",
+          "moon",
+          "planets",
+          "time_check",
+          "method"
+        ],
+        "title": "SharedChart",
+        "description": "A shared chart. The birth moment and place are None when birth details are hidden."
+      },
+      "SharedDasha": {
+        "properties": {
+          "system": {
+            "type": "string",
+            "const": "vimshottari",
+            "title": "System",
+            "default": "vimshottari"
+          },
+          "balance_years": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Balance Years"
+          },
+          "periods": {
+            "items": {
+              "$ref": "#/components/schemas/PeriodOut"
+            },
+            "type": "array",
+            "title": "Periods"
+          },
+          "current": {
+            "items": {
+              "$ref": "#/components/schemas/PeriodOut"
+            },
+            "type": "array",
+            "title": "Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "balance_years",
+          "periods",
+          "current"
+        ],
+        "title": "SharedDasha"
+      },
+      "SharedHadahan": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place"
+          },
+          "result": {
+            "$ref": "#/components/schemas/SharedHadahanResult"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "date",
+          "time",
+          "place",
+          "result"
+        ],
+        "title": "SharedHadahan",
+        "description": "A shared hadahan in one language."
+      },
+      "SharedHadahanResult": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeResolveResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "chart": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SharedChart"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dasha": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SharedDasha"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kuja": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/KujaOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "birth_table": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BirthTableOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "chart",
+          "dasha",
+          "kuja"
+        ],
+        "title": "SharedHadahanResult",
+        "description": "A shared hadahan result. With birth details hidden there is no time block (date, clock\ntime, time zone), no birth moment or place in the chart, and no dasha balance."
       },
       "SignLettersOut": {
         "properties": {
