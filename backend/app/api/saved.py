@@ -28,7 +28,7 @@ from typing import Annotated, Any, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, Field, TypeAdapter
 
-from app.api.deps import Accounts, Admin, Orders, PlacesDb, Tokens
+from app.api.deps import Accounts, Admin, Chats, Orders, PlacesDb, Tokens
 from app.api.porondam import PorondamResponse
 from app.api.report_requests import HadahanReport, PorondamReport, ReportRequest
 from app.api.snapshots import (
@@ -341,15 +341,18 @@ def me(session: Current, accounts: Accounts) -> MeOut:
 def delete_me(
     me: Annotated[SignedIn, Depends(signed_in)],
     accounts: Accounts,
+    chats: Chats,
     admin: Admin,
     settings: SettingsDep,
     response: Response,
 ) -> None:
-    """Deletes the signed in account: every report it keeps, then its Supabase sign in.
+    """Deletes the signed in account: every report it keeps and its chat usage, then its
+    Supabase sign in.
 
     The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
     are already gone and 502 asks the page to try again.
     """
+    chats.forget_user(me.user.id)
     accounts.delete_user(me.user.id)
     _set_hint(response, settings, 0)
     if admin is None:

@@ -126,6 +126,8 @@ Suggested: `pamudu` is 100% off any report, up to 10 uses per account and 200 in
 
 ## 5. Astro chat limits
 
+Built (step 5): how it works, where the limits are enforced, the settings and how to turn them on are in `docs/21-chat-limits.md`.
+
 ### Free users: 2 questions a week
 
 - Counted per browser, by the cookie. The week starts on the first question and lasts 7 days.

@@ -1891,7 +1891,7 @@
           "saved"
         ],
         "summary": "Delete Me",
-        "description": "Deletes the signed in account: every report it keeps, then its Supabase sign in.\n\nThe page signs out of this browser afterwards. If Supabase cannot be reached, the reports\nare already gone and 502 asks the page to try again.",
+        "description": "Deletes the signed in account: every report it keeps and its chat usage, then its\nSupabase sign in.\n\nThe page signs out of this browser afterwards. If Supabase cannot be reached, the reports\nare already gone and 502 asks the page to try again.",
         "operationId": "delete_me_v1_me_delete",
         "responses": {
           "204": {
@@ -2369,6 +2369,261 @@
           }
         }
       }
+    },
+    "/v1/chat/status": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Chat Status",
+        "description": "What is left for this browser and account, in questions.",
+        "operationId": "chat_status_v1_chat_status_post",
+        "parameters": [
+          {
+            "name": "X-Chat-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Chat-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Asker"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat/turns": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Ask",
+        "description": "Allows one question, free or paid, and records it; or says which limit stops it.",
+        "operationId": "ask_v1_chat_turns_post",
+        "parameters": [
+          {
+            "name": "X-Chat-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Chat-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ask"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TurnOut"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The message is too long (too_long)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatRefusal"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "A limit says no: the reason and until when",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatRefusal"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat/turns/{turn_id}/start": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Start",
+        "description": "The AI service takes up a question this backend allowed: once for the answer, once for\nits follow-up buttons.",
+        "operationId": "start_v1_chat_turns__turn_id__start_post",
+        "parameters": [
+          {
+            "name": "turn_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Turn Id"
+            }
+          },
+          {
+            "name": "X-Chat-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Chat-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartOut"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Unknown, already taken up, or too old"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat/turns/{turn_id}/usage": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Usage",
+        "description": "What one run (an answer, or its follow-up buttons) cost, as the AI provider reported.",
+        "operationId": "usage_v1_chat_turns__turn_id__usage_post",
+        "parameters": [
+          {
+            "name": "turn_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Turn Id"
+            }
+          },
+          {
+            "name": "X-Chat-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Chat-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsageIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "No question taken up with this id"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2474,6 +2729,53 @@
           "code"
         ],
         "title": "ApplyCoupon"
+      },
+      "Ask": {
+        "properties": {
+          "browser": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9-]{8,64}$",
+            "title": "Browser"
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Address",
+            "default": ""
+          },
+          "length": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Length",
+            "description": "Characters in the message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "browser",
+          "length"
+        ],
+        "title": "Ask"
+      },
+      "Asker": {
+        "properties": {
+          "browser": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9-]{8,64}$",
+            "title": "Browser"
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Address",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "browser"
+        ],
+        "title": "Asker"
       },
       "AvuruduItemOut": {
         "properties": {
@@ -2885,6 +3187,41 @@
         "title": "BirthTableOut",
         "description": "The almanac at the birth moment and the birth star's traditional groups."
       },
+      "Blocked": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": [
+              "burst",
+              "free_used",
+              "paid_used",
+              "network",
+              "busy",
+              "account_day"
+            ],
+            "title": "Reason"
+          },
+          "until": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Until"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason",
+          "until"
+        ],
+        "title": "Blocked",
+        "description": "Why the next question cannot be asked now.\n\n- burst: too many messages in a minute\n- free_used: this week's free questions are used\n- paid_used: the chat that came with the account's reports, and this week's free ones, are used\n- network: the quiet weekly limit for one network\n- busy: the site's free chat has reached today's spending ceiling\n- account_day: the account's daily ceiling"
+      },
       "Body": {
         "type": "string",
         "enum": [
@@ -3249,6 +3586,101 @@
           "chart"
         ],
         "title": "ChartResponse"
+      },
+      "ChatRefusal": {
+        "properties": {
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "burst",
+                  "free_used",
+                  "paid_used",
+                  "network",
+                  "busy",
+                  "account_day"
+                ]
+              },
+              {
+                "type": "string",
+                "const": "too_long"
+              }
+            ],
+            "title": "Reason"
+          },
+          "until": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Until"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ChatStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason",
+          "until",
+          "status"
+        ],
+        "title": "ChatRefusal"
+      },
+      "ChatStatus": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "free",
+              "paid"
+            ],
+            "title": "Mode"
+          },
+          "max_length": {
+            "type": "integer",
+            "title": "Max Length"
+          },
+          "free": {
+            "$ref": "#/components/schemas/FreeOut"
+          },
+          "paid": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PaidOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "None: the account has no paid report"
+          },
+          "blocked": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Blocked"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "max_length",
+          "free",
+          "paid",
+          "blocked"
+        ],
+        "title": "ChatStatus"
       },
       "CheckOut": {
         "properties": {
@@ -4070,6 +4502,38 @@
           "forecast"
         ],
         "title": "ForecastResponse"
+      },
+      "FreeOut": {
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "left": {
+            "type": "integer",
+            "title": "Left"
+          },
+          "resets_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resets At",
+            "description": "When this week's questions come back"
+          }
+        },
+        "type": "object",
+        "required": [
+          "limit",
+          "left",
+          "resets_at"
+        ],
+        "title": "FreeOut"
       },
       "FullPerson": {
         "properties": {
@@ -5949,6 +6413,32 @@
         ],
         "title": "PadaLetterOut"
       },
+      "PaidOut": {
+        "properties": {
+          "questions_left": {
+            "type": "integer",
+            "title": "Questions Left"
+          },
+          "questions_total": {
+            "type": "integer",
+            "title": "Questions Total"
+          },
+          "used_share": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Used Share"
+          }
+        },
+        "type": "object",
+        "required": [
+          "questions_left",
+          "questions_total",
+          "used_share"
+        ],
+        "title": "PaidOut",
+        "description": "The chat that came with the account's paid reports, in questions, never money."
+      },
       "PanchangaPartOut": {
         "properties": {
           "key": {
@@ -7816,6 +8306,44 @@
         ],
         "title": "StarOut"
       },
+      "StartIn": {
+        "properties": {
+          "purpose": {
+            "type": "string",
+            "enum": [
+              "answer",
+              "suggest"
+            ],
+            "title": "Purpose",
+            "default": "answer"
+          }
+        },
+        "type": "object",
+        "title": "StartIn"
+      },
+      "StartOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "free",
+              "paid"
+            ],
+            "title": "Kind"
+          },
+          "max_length": {
+            "type": "integer",
+            "title": "Max Length",
+            "description": "The longest message allowed, in characters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "max_length"
+        ],
+        "title": "StartOut"
+      },
       "StayOut": {
         "properties": {
           "sign": {
@@ -8449,6 +8977,32 @@
         ],
         "title": "TimelineResponse"
       },
+      "TurnOut": {
+        "properties": {
+          "turn": {
+            "type": "string",
+            "title": "Turn"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "free",
+              "paid"
+            ],
+            "title": "Kind"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ChatStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "turn",
+          "kind",
+          "status"
+        ],
+        "title": "TurnOut"
+      },
       "Unlock": {
         "properties": {
           "report": {
@@ -8595,6 +9149,39 @@
           "changes"
         ],
         "title": "UpcomingResponse"
+      },
+      "UsageIn": {
+        "properties": {
+          "input_tokens": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Input Tokens"
+          },
+          "cached_tokens": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Cached Tokens",
+            "default": 0
+          },
+          "output_tokens": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Output Tokens"
+          },
+          "cost_micros": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Cost Micros",
+            "description": "Millionths of a US dollar"
+          }
+        },
+        "type": "object",
+        "required": [
+          "input_tokens",
+          "output_tokens",
+          "cost_micros"
+        ],
+        "title": "UsageIn"
       },
       "ValidationError": {
         "properties": {

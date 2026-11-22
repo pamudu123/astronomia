@@ -33,6 +33,10 @@ services:
       # PDF only on reports the account unlocked, with a coupon until payments exist.
       - key: ASTRONOMIA_PAID_REPORTS
         value: "true"
+      # Astro chat limits (docs/21): shared with the assistant (copied below) and Vercel's
+      # CHAT_KEY. Secret: set in the dashboard, never here. Empty: no chat limits.
+      - key: ASTRONOMIA_CHAT_KEY
+        sync: false
 
   # The AI assistant behind the website's chat (agent/). The chat stays off until Vercel has
   # AGENT_URL, so this service can run before anyone can reach it.
@@ -73,6 +77,12 @@ services:
           type: web
           name: astronomia-api
           envVarKey: ASTRONOMIA_ACCESS_KEY
+      # Chat limits (docs/21): only questions the backend allowed are answered.
+      - key: ASTRONOMIA_AGENT_CHAT_KEY
+        fromService:
+          type: web
+          name: astronomia-api
+          envVarKey: ASTRONOMIA_CHAT_KEY
 
 databases:
   - name: astronomia-db

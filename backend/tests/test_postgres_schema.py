@@ -15,6 +15,7 @@ import pytest
 
 from app.store import accounts, postgres
 from app.store.accounts import NewReport, postgres_accounts
+from app.store.chat import Usage, Who, postgres_chat
 from app.store.orders import postgres_orders
 from app.store.postgres import MissingTables
 from app.store.shares import PostgresShareStore
@@ -35,6 +36,10 @@ class Recorder:
         self._row: tuple[Any, ...] | None = None
         if "to_regclass" in statement:
             self._row = (None,) if params[0] in self.missing else (12345,)
+        elif "COUNT(*), MIN" in statement:
+            self._row = (0, None)
+        elif "COALESCE(SUM" in statement:
+            self._row = (0, 0)
         elif "COUNT(*)" in statement:
             self._row = (0,)
         elif "SELECT kind, last_seen_at" in statement:
@@ -133,6 +138,27 @@ def test_the_order_store_only_touches_sidera_tables(recorder: Recorder) -> None:
     assert not [s for s in queries if "?" in s]
 
 
+def test_the_chat_store_only_touches_sidera_tables(recorder: Recorder) -> None:
+    store = postgres_chat("postgresql://test")
+    who = Who(browser="browser-1", network="n", user_id="00000000-0000-0000-0000-000000000001")
+    day = dt.datetime(2026, 11, 22, tzinfo=dt.UTC)
+    store.counts(who, day, 10_000)
+    store.begin(who, day, 10_000, lambda counts: ("free", None))
+    store.begin(who, day, 10_000, lambda counts: ("paid", None))
+    store.start("00000000-0000-0000-0000-000000000002", "answer")
+    store.start("00000000-0000-0000-0000-000000000002", "suggest")
+    store.record("00000000-0000-0000-0000-000000000002", Usage(1, 0, 1, 1))
+    store.forget_user(who.user_id or "")
+
+    queries = [s for s in recorder.statements if "to_regclass" not in s]
+    names = {name for statement in queries for name in TABLE_NAME.findall(statement)}
+    assert names == {"sidera.chat_turns"}
+    # Two questions sent at once wait for each other: browser, network and account are held.
+    assert sum("pg_advisory_xact_lock" in s for s in queries) == 6
+    assert not [s for s in recorder.statements if re.search(r"(CREATE|ALTER|DROP)", s)]
+    assert not [s for s in queries if "?" in s]
+
+
 def test_a_database_without_the_migrations_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
     db = Recorder(missing=("sidera.saved_reports", "sidera.shares"))
     monkeypatch.setattr(postgres, "connect", lambda url: db)
@@ -187,6 +213,7 @@ def test_the_migrations_make_the_tables_the_stores_use() -> None:
         ).fetchone()
     # The temporary guest sessions table is gone (20261121130000_drop_guest_sessions.sql).
     assert [row[0] for row in rows] == [
+        "chat_turns",
         "coupon_misses",
         "coupons",
         "orders",
@@ -228,3 +255,30 @@ def test_a_deleted_user_takes_their_rows_along() -> None:
         db.execute("DELETE FROM sidera.users WHERE id = %s", (user.id,))
         left = db.execute("SELECT count(*) FROM sidera.saved_reports").fetchone()
     assert left == (0,)
+
+
+def test_the_chat_store_works_on_the_migrated_table() -> None:
+    url = need_postgres()
+    migrate(url)
+    user = postgres_accounts(url).add_user("00000000-0000-0000-0000-000000000001", "google")
+    store = postgres_chat(url)
+    day = dt.datetime(2000, 1, 1, tzinfo=dt.UTC)
+    free = Who(browser="browser-1", network="n1", user_id=None)
+    paid = Who(browser="browser-1", network="n1", user_id=user.id)
+    first, _, _ = store.begin(free, day, 10_000, lambda counts: ("free", None))
+    second, _, _ = store.begin(paid, day, 10_000, lambda counts: ("paid", None))
+    assert first and second
+    assert store.start(first, "answer") == "free"
+    assert store.start(first, "answer") is None
+    assert store.start(first, "suggest") == "free"
+    assert store.record(first, Usage(100, 50, 10, 1234))
+    assert store.start(second, "answer") == "paid"
+    assert store.record(second, Usage(100, 0, 10, 5000))
+    counts = store.counts(paid, day, 10_000)
+    assert (counts.free_in_week, counts.network_in_week, counts.burst) == (1, 1, 2)
+    assert (counts.free_spent_today, counts.paid_spent) == (1234, 5000)
+    # Deleting the account deletes its chat usage; free questions have no account.
+    with connected() as db:
+        db.execute("DELETE FROM sidera.users WHERE id = %s", (user.id,))
+        left = db.execute("SELECT kind FROM sidera.chat_turns").fetchall()
+    assert left == [("free",)]

@@ -34,6 +34,15 @@ class Settings(BaseSettings):
     # When set, every request except /healthz must carry this key in X-Access-Key.
     # The frontend's chat route sends it. Empty means open, as in local runs.
     access_key: SecretStr = SecretStr("")
+    # Chat limits (docs/21): the key shared with the backend (ASTRONOMIA_CHAT_KEY) and the
+    # website (CHAT_KEY). When set, every chat run needs a question the backend allowed, and
+    # what it cost is reported back. Required in production. Empty: no limits (local runs).
+    chat_key: SecretStr = SecretStr("")
+    # What the model costs, in US dollars per million tokens, to measure each answer's real
+    # cost. Set them to the provider's current prices for `model`; they change together.
+    price_input: float = Field(default=0.25, ge=0)
+    price_cached_input: float = Field(default=0.025, ge=0)
+    price_output: float = Field(default=2.0, ge=0)
 
 
 @lru_cache

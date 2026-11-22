@@ -31,6 +31,8 @@ Backend (Render):
 | `ASTRONOMIA_SITE_ORIGINS` | Optional. The site's own addresses as a JSON list, for example `["https://sidera.lk"]`. Saving, renaming and deleting are refused from any other page. When empty, the address the request was forwarded from is used |
 | `ASTRONOMIA_ACCESS_KEY` | When set, every request except `/healthz` needs it in `X-Access-Key`. Keeps staging private |
 | `ASTRONOMIA_SHARE_DAYS` | How long a share link stays open. Default 30 |
+| `ASTRONOMIA_CHAT_KEY` | Astro chat limits (docs/21). A long random value shared with the assistant (Render copies it) and the site (`CHAT_KEY`). Empty: no chat limits. Secret: set it in the dashboard only |
+| `ASTRONOMIA_CHAT_*` | The chat limits and amounts, all optional (defaults in docs/21, section 4): free questions a week, the per-network limit, the burst limit, the longest message, the daily ceiling for free chat, the allowance per paid report, the daily ceiling per account |
 | `PORT` | Set by Render. Default 8000 |
 
 AI assistant (Render):
@@ -42,6 +44,8 @@ AI assistant (Render):
 | `ASTRONOMIA_AGENT_BACKEND_URL` | The backend's public address, the same as `BACKEND_URL`. Set in `render.yaml` |
 | `ASTRONOMIA_AGENT_BACKEND_ACCESS_KEY` | Copied by Render from the backend's `ASTRONOMIA_ACCESS_KEY` |
 | `ASTRONOMIA_AGENT_MODEL` | Optional. Default `openai:gpt-6-luna` |
+| `ASTRONOMIA_AGENT_CHAT_KEY` | Copied by Render from the backend's `ASTRONOMIA_CHAT_KEY`. When set, every chat run needs a question the backend allowed (docs/21). **Required when the environment is `production`** |
+| `ASTRONOMIA_AGENT_PRICE_INPUT`, `..._PRICE_CACHED_INPUT`, `..._PRICE_OUTPUT` | The model's prices in US dollars per million tokens, for measuring each answer's real cost. Set them to the provider's prices for the model in use |
 | `PORT` | Set by Render. Default 8123 |
 
 Frontend (Vercel):
@@ -54,10 +58,11 @@ Frontend (Vercel):
 | `STAGING_PASSWORD` | When set, the whole site asks for this password and is not indexed |
 | `AGENT_URL` | The assistant's address plus `/agent`, for example `https://astronomia-agent.onrender.com/agent`. The chat appears only when it is set: it is the chat's off switch |
 | `AGENT_ACCESS_KEY` | Only if the assistant has a key of its own. Without it, the chat sends `BACKEND_ACCESS_KEY`, which staging uses for both |
+| `CHAT_KEY` | The same value as the backend's `ASTRONOMIA_CHAT_KEY`. Turns on the chat limits (docs/21). Secret |
 | `NEXT_PUBLIC_SUPABASE_URL` | The Supabase project, for sign in (docs/19). Staging: `https://ihzvwnwkbcqldhrvsrle.supabase.co`. Read when the site is built |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | The project's publishable key (`sb_publishable_...`). Public by design: it only lets a browser sign in. Read when the site is built |
 
-Secrets (`*_ACCESS_KEY`, `OPENAI_API_KEY`, `STAGING_PASSWORD`) are set only in the host
+Secrets (`*_ACCESS_KEY`, `*CHAT_KEY`, `OPENAI_API_KEY`, `STAGING_PASSWORD`) are set only in the host
 dashboards, never in the repository. Changing a Vercel variable needs a redeploy. `AGENT_URL` is
 read when the site is built, so it needs a redeploy to take effect.
 
@@ -89,8 +94,8 @@ The assistant runs on Render at `https://astronomia-agent.onrender.com`.
    The chat sends `BACKEND_ACCESS_KEY`, which Vercel already has.
 4. Open the site, then "Ask Astro" at the bottom right.
 
-To turn it off, remove `AGENT_URL` in Vercel and redeploy. The chat has no usage limits yet, so
-on staging only people with the staging password can use it (docs/14, section 11).
+To turn it off, remove `AGENT_URL` in Vercel and redeploy. Turning on the chat limits (2 free
+questions a week, the paid allowance, the cost ceilings) is in docs/21, section 5.
 
 ## Deploy and roll back
 

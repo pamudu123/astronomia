@@ -661,7 +661,8 @@ export interface paths {
         post?: never;
         /**
          * Delete Me
-         * @description Deletes the signed in account: every report it keeps, then its Supabase sign in.
+         * @description Deletes the signed in account: every report it keeps and its chat usage, then its
+         *     Supabase sign in.
          *
          *     The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
          *     are already gone and 502 asks the page to try again.
@@ -833,6 +834,87 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/chat/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chat Status
+         * @description What is left for this browser and account, in questions.
+         */
+        post: operations["chat_status_v1_chat_status_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/chat/turns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask
+         * @description Allows one question, free or paid, and records it; or says which limit stops it.
+         */
+        post: operations["ask_v1_chat_turns_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/chat/turns/{turn_id}/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start
+         * @description The AI service takes up a question this backend allowed: once for the answer, once for
+         *     its follow-up buttons.
+         */
+        post: operations["start_v1_chat_turns__turn_id__start_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/chat/turns/{turn_id}/usage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Usage
+         * @description What one run (an answer, or its follow-up buttons) cost, as the AI provider reported.
+         */
+        post: operations["usage_v1_chat_turns__turn_id__usage_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -870,6 +952,31 @@ export interface components {
             kind: "hadahan" | "porondam";
             /** Code */
             code: string;
+        };
+        /** Ask */
+        Ask: {
+            /** Browser */
+            browser: string;
+            /**
+             * Address
+             * @default
+             */
+            address: string;
+            /**
+             * Length
+             * @description Characters in the message
+             */
+            length: number;
+        };
+        /** Asker */
+        Asker: {
+            /** Browser */
+            browser: string;
+            /**
+             * Address
+             * @default
+             */
+            address: string;
         };
         /** AvuruduItemOut */
         AvuruduItemOut: {
@@ -980,6 +1087,26 @@ export interface components {
             rule_sets: string[];
             /** Provisional */
             provisional: boolean;
+        };
+        /**
+         * Blocked
+         * @description Why the next question cannot be asked now.
+         *
+         *     - burst: too many messages in a minute
+         *     - free_used: this week's free questions are used
+         *     - paid_used: the chat that came with the account's reports, and this week's free ones, are used
+         *     - network: the quiet weekly limit for one network
+         *     - busy: the site's free chat has reached today's spending ceiling
+         *     - account_day: the account's daily ceiling
+         */
+        Blocked: {
+            /**
+             * Reason
+             * @enum {string}
+             */
+            reason: "burst" | "free_used" | "paid_used" | "network" | "busy" | "account_day";
+            /** Until */
+            until: string | null;
         };
         /**
          * Body
@@ -1102,6 +1229,28 @@ export interface components {
             status: string;
             time: components["schemas"]["TimeResolveResponse"];
             chart: components["schemas"]["ChartOut"] | null;
+        };
+        /** ChatRefusal */
+        ChatRefusal: {
+            /** Reason */
+            reason: ("burst" | "free_used" | "paid_used" | "network" | "busy" | "account_day") | "too_long";
+            /** Until */
+            until: string | null;
+            status: components["schemas"]["ChatStatus"];
+        };
+        /** ChatStatus */
+        ChatStatus: {
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "free" | "paid";
+            /** Max Length */
+            max_length: number;
+            free: components["schemas"]["FreeOut"];
+            /** @description None: the account has no paid report */
+            paid: components["schemas"]["PaidOut"] | null;
+            blocked: components["schemas"]["Blocked"] | null;
         };
         /** CheckOut */
         CheckOut: {
@@ -1372,6 +1521,18 @@ export interface components {
             status: string;
             time: components["schemas"]["TimeResolveResponse"];
             forecast: components["schemas"]["ForecastOut"] | null;
+        };
+        /** FreeOut */
+        FreeOut: {
+            /** Limit */
+            limit: number;
+            /** Left */
+            left: number;
+            /**
+             * Resets At
+             * @description When this week's questions come back
+             */
+            resets_at: string | null;
         };
         /** FullPerson */
         FullPerson: {
@@ -2054,6 +2215,18 @@ export interface components {
             from_degree: number;
             /** To Degree */
             to_degree: number;
+        };
+        /**
+         * PaidOut
+         * @description The chat that came with the account's paid reports, in questions, never money.
+         */
+        PaidOut: {
+            /** Questions Left */
+            questions_left: number;
+            /** Questions Total */
+            questions_total: number;
+            /** Used Share */
+            used_share: number;
         };
         /** PanchangaPartOut */
         PanchangaPartOut: {
@@ -2738,6 +2911,28 @@ export interface components {
             start: components["schemas"]["LocalTimeOut"];
             end: components["schemas"]["LocalTimeOut"];
         };
+        /** StartIn */
+        StartIn: {
+            /**
+             * Purpose
+             * @default answer
+             * @enum {string}
+             */
+            purpose: "answer" | "suggest";
+        };
+        /** StartOut */
+        StartOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "free" | "paid";
+            /**
+             * Max Length
+             * @description The longest message allowed, in characters
+             */
+            max_length: number;
+        };
         /** StayOut */
         StayOut: {
             /** Sign */
@@ -2977,6 +3172,17 @@ export interface components {
             time?: components["schemas"]["TimeResolveResponse"] | null;
             timeline?: components["schemas"]["TimelineOut"] | null;
         };
+        /** TurnOut */
+        TurnOut: {
+            /** Turn */
+            turn: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "free" | "paid";
+            status: components["schemas"]["ChatStatus"];
+        };
         /** Unlock */
         Unlock: {
             /** Report */
@@ -3016,6 +3222,23 @@ export interface components {
              * @default []
              */
             sun_months: components["schemas"]["SunStayOut"][];
+        };
+        /** UsageIn */
+        UsageIn: {
+            /** Input Tokens */
+            input_tokens: number;
+            /**
+             * Cached Tokens
+             * @default 0
+             */
+            cached_tokens: number;
+            /** Output Tokens */
+            output_tokens: number;
+            /**
+             * Cost Micros
+             * @description Millionths of a US dollar
+             */
+            cost_micros: number;
         };
         /** ValidationError */
         ValidationError: {
@@ -4674,6 +4897,180 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    chat_status_v1_chat_status_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Chat-Key"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Asker"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_v1_chat_turns_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Chat-Key"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Ask"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TurnOut"];
+                };
+            };
+            /** @description The message is too long (too_long) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatRefusal"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description A limit says no: the reason and until when */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatRefusal"];
+                };
+            };
+        };
+    };
+    start_v1_chat_turns__turn_id__start_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Chat-Key"?: string;
+            };
+            path: {
+                turn_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StartOut"];
+                };
+            };
+            /** @description Unknown, already taken up, or too old */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    usage_v1_chat_turns__turn_id__usage_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Chat-Key"?: string;
+            };
+            path: {
+                turn_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UsageIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No question taken up with this id */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };
