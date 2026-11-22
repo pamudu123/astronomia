@@ -31,6 +31,36 @@ def drop_sidera(url: str) -> None:
         db.execute("DROP SCHEMA IF EXISTS sidera CASCADE")
 
 
+def stand_in_auth(url: str) -> None:
+    """A fresh `auth` schema with the few columns of Supabase Auth's tables the migrations read.
+
+    Refuses a database with a real Supabase Auth in it (its `auth.schema_migrations`).
+    """
+    with psycopg.connect(url) as db:
+        real = db.execute("SELECT to_regclass('auth.schema_migrations')").fetchone()
+        if real != (None,):
+            pytest.fail("this database has a real Supabase Auth: use a throwaway PostgreSQL")
+        db.execute("DROP SCHEMA IF EXISTS auth CASCADE")
+        db.execute("CREATE SCHEMA auth")
+        db.execute(
+            "CREATE TABLE auth.users (id uuid PRIMARY KEY, is_anonymous boolean NOT NULL "
+            "DEFAULT false, created_at timestamptz, updated_at timestamptz, "
+            "last_sign_in_at timestamptz)"
+        )
+        # As in Supabase: sessions go with their user, and refreshed_at has no time zone.
+        db.execute(
+            "CREATE TABLE auth.sessions (id uuid PRIMARY KEY, user_id uuid NOT NULL "
+            "REFERENCES auth.users (id) ON DELETE CASCADE, created_at timestamptz, "
+            "updated_at timestamptz, refreshed_at timestamp)"
+        )
+
+
+def drop_auth(url: str) -> None:
+    with psycopg.connect(url) as db:
+        if db.execute("SELECT to_regclass('auth.schema_migrations')").fetchone() == (None,):
+            db.execute("DROP SCHEMA IF EXISTS auth CASCADE")
+
+
 def migrate(url: str) -> None:
     """A fresh `sidera` schema from the migrations, as on Supabase."""
     drop_sidera(url)

@@ -34,6 +34,7 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           </Link>
           <Link href={`/${lang}/privacy`}>{dict.footer.privacy}</Link>
           <Link href={`/${lang}/terms`}>{dict.footer.terms}</Link>
+          <Link href={`/${lang}/credits`}>{dict.footer.credits}</Link>
         </nav>
       </div>
     </footer>

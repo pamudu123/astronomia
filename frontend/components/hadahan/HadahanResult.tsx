@@ -8,6 +8,8 @@ import { NextSteps } from "@/components/NextSteps";
 import { ArrowRight } from "@/components/Icons";
 import { ReportButton } from "@/components/ReportButton";
 import { SaveButton } from "@/components/account/SaveButton";
+import { DetailLocked, FullReport } from "@/components/paid/FullReport";
+import { PaidOnly, ReportScope } from "@/components/paid/ReportAccess";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
@@ -16,6 +18,7 @@ import {
   type BirthRequest,
   type Hadahan,
   type Labels,
+  type AnyHadahan,
   fill,
   formatDate,
   formatDegree,
@@ -49,11 +52,14 @@ type Props = {
   lang: Locale;
   t: Dictionary["hadahan"]["result"];
   labels: Labels;
-  result: Hadahan;
+  result: AnyHadahan;
   name: string;
-  date: string;
-  time: string;
-  placeText: string;
+  /** The birth details. Null on a shared page whose sender kept them hidden. */
+  date: string | null;
+  time: string | null;
+  placeText: string | null;
+  /** The heading without a name. A shared page says "A hadahan", not "Your birth chart". */
+  anonTitle?: string;
   /** Share text. Left out on a shared page, where nothing can be shared again. */
   share?: Dictionary["share"];
   /** Text for the Save button. Left out where the result is already saved or read only. */
@@ -87,6 +93,7 @@ export function HadahanResult({
   date,
   time,
   placeText,
+  anonTitle,
   share,
   saveText,
   request,
@@ -131,7 +138,7 @@ export function HadahanResult({
   }, [request, extras, facts]);
   // The reading's chapters, then the topic-only ones: what the chat hears about and the PDF
   // prints (the paid PDF writes any not written yet).
-  const { forPdf } = useReading(
+  const { forPdf, aiNotice } = useReading(
     {
       ids: [...CHART_READING, ...CHART_TOPICS.filter((id) => !CHART_READING.includes(id))],
       factsFor: (id: ChapterId) => (extraFacts && id in extraFacts ? (extraFacts[id] ?? null) : facts),
@@ -147,7 +154,13 @@ export function HadahanResult({
   const sign = (key: string) => labels.rashi[key];
   const lagna = chart.lagna;
   const moon = chart.moon;
-  const offset = result.time.offset_label ?? "";
+  const offset = result.time?.offset_label ?? "";
+  // The birth details as a shared page would show them, for the share dialog's list.
+  const birthLine = date
+    ? [formatDate(`${date}T00:00:00Z`, lang), [time, offset && fill(t.detailsOffset, { offset })].filter(Boolean).join(" "), placeText]
+        .filter(Boolean)
+        .join(" · ")
+    : undefined;
 
   // The jump bar: only the parts this page shows. A shared chart has no birth to ask with.
   const sections: [string, string][] = [
@@ -158,7 +171,7 @@ export function HadahanResult({
   ];
 
   const kujaStatus =!kuja.present ? t.kujaAbsent : kuja.reduced ? t.kujaReduced : t.kujaPresent;
-  const title = name ? fill(t.titleNamed, { name }) : t.title;
+  const title = name ? fill(t.titleNamed, { name }) : (anonTitle ?? t.title);
 
   // The reading guide: which houses to light up at each step, with the chart in rashi view.
   const moonHouse = chart.planets.find((planet) => planet.body === "moon")?.house ?? 1;
@@ -169,6 +182,7 @@ export function HadahanResult({
       : fill(t.guide[step], { lagna: sign(lagna.sign).name, moon: sign(moon.sign).name, house: moonHouse });
 
   return (
+    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.top}`}>
         <div className={styles.topText}>
@@ -180,6 +194,7 @@ export function HadahanResult({
             <ReportButton
               request={{ kind: "hadahan", name, birth: { ...request, lang } }}
               reading={forPdf}
+                aiNotice={aiNotice}
               t={t}
             />
             {saveText && (
@@ -205,13 +220,23 @@ export function HadahanResult({
                   star: labels.nakshatra[moon.nakshatra],
                 })}
                 hasNames={Boolean(name)}
+                names={name}
+                birth={birthLine}
+                fields={[
+                  share.fieldChart,
+                  share.fieldTimeCheck,
+                  ...(result.dasha ? [share.fieldDasha] : []),
+                  share.fieldKuja,
+                ]}
               />
             )}
           </div>
         )}
       </section>
 
-      {/* What the chart was worked out from, first, so a wrong time or place is caught early. */}
+      {/* What the chart was worked out from, first, so a wrong time or place is caught early.
+          A shared page whose sender hid the birth details has none to show. */}
+      {date && (
       <section className={`rise ${styles.details}`} aria-label={t.detailsUsed} data-card="details">
         <div className={styles.detailsHead}>
           <span className={styles.detailsLabel}>{t.detailsUsed}</span>
@@ -243,6 +268,7 @@ export function HadahanResult({
         </dl>
         {onEdit && <p className={styles.small}>{t.detailsHint}</p>}
       </section>
+      )}
 
       {/* A short bar to jump between the parts of a long page. */}
       <nav className={styles.sections} aria-label={t.sections}>
@@ -289,7 +315,7 @@ export function HadahanResult({
               labels={labels}
               mode={mode}
               title={mode === "rashi" ? t.chartRashi : t.chartNavamsha}
-              subtitle={formatDate(`${date}T00:00:00Z`, lang)}
+              subtitle={date ? formatDate(`${date}T00:00:00Z`, lang) : undefined}
               ariaLabel={fill(t.chartLabel, { chart: mode === "rashi" ? t.chartRashi : t.chartNavamsha })}
               lagnaMark={t.lagnaMark}
               highlight={guide ? guide.planet : kuja.present ? "mars" : undefined}
@@ -419,7 +445,7 @@ export function HadahanResult({
             {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
             <KujaDials kuja={kuja} labels={labels} t={t} />
             {kuja.present && (
-              <>
+              <PaidOnly feature="full_detail" locked={<DetailLocked />}>
                 <h3 className={styles.subTitle}>{t.kujaChecks}</h3>
                 <ul className={styles.checks}>
                   {kuja.cancellations.map((check) => (
@@ -434,7 +460,7 @@ export function HadahanResult({
                     </li>
                   ))}
                 </ul>
-              </>
+              </PaidOnly>
             )}
           </details>
           <AiExplain chapters={CHART_PLACES.mars} lang={lang} facts={facts} />
@@ -454,6 +480,9 @@ export function HadahanResult({
           </details>
         </article>
       </section>
+
+      {/* Getting the full report, then the reading it unlocks. */}
+      {request && <FullReport lang={lang} />}
 
       {/* The long chapter reading comes last, so the chart itself is what shows first. */}
       <FullReading
@@ -488,9 +517,13 @@ export function HadahanResult({
             { id: "litha", href: `/${lang}/litha`, label: next.hadahan.litha },
           ]}
         >
-          {remember && <RememberChart t={remember} saved={{ name, placeLabel: placeText, request, result }} />}
+          {/* Only on the visitor's own result, which always has its birth details. */}
+          {remember && (
+            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan }} />
+          )}
         </NextSteps>
       )}
     </main>
+    </ReportScope>
   );
 }

@@ -123,6 +123,14 @@ describe("requestChapter", () => {
     expect(send).toHaveBeenCalledTimes(1);
   });
 
+  it("sends the report on the page, for the paid check", async () => {
+    const send = streaming(["Text."]);
+    const report = { kind: "porondam", match: { bride: {}, groom: {}, lang: "en" } } as never;
+    await requestChapter("match.summary", "en", FACTS, send, report);
+    const [, init] = send.mock.calls[0] as unknown as [string, RequestInit];
+    expect(JSON.parse(String(init.body)).report).toEqual(report);
+  });
+
   it("reads a chapter kept on this device without asking", async () => {
     const key = chapterKey("match.people", "en", FACTS);
     storage.set(key, JSON.stringify({ text: "Kept text.", at: Date.now() }));

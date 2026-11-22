@@ -29,6 +29,19 @@ class Settings(BaseSettings):
     guest_saved_limit: int = 100
     # How many new guest accounts one address may make in an hour.
     guests_per_hour: int = 30
+    # Paid reports (docs/18). Off: everyone gets every feature, as before. On: the AI reading,
+    # explain buttons, full detail and full PDF show only on reports the account paid for.
+    # Switch it on once Google sign in is live, since only a Google account can unlock a report.
+    paid_reports: bool = False
+    # Orders and coupons, when SQLite is used.
+    orders_db: Path = VAR_DIR / "orders.sqlite"
+    # The buyer's country, for the price, when the request does not say (local runs, no
+    # Vercel). Sri Lanka, where most buyers are.
+    default_country: str = "LK"
+    # Wrong coupon codes one account may try in an hour.
+    coupon_misses_per_hour: int = 10
+    # How many paid reports one account may keep: a safety limit, not a product one.
+    paid_saved_limit: int = 1000
     # The site's own addresses (for example https://sidera.lk). A request that changes stored
     # data must come from one of these, or from the address it was sent to.
     site_origins: tuple[str, ...] = ()

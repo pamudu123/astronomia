@@ -2,9 +2,13 @@ import type { components } from "./api-types";
 import type { Locale } from "./i18n";
 
 export type Hadahan = components["schemas"]["HadahanResponse"];
-export type Chart = NonNullable<Hadahan["chart"]>;
+/** A shared result: the birth moment, place and time block are null when the sender hid them. */
+export type SharedHadahanResult = components["schemas"]["SharedHadahanResult"];
+/** Either one: the result screens read only what both have. */
+export type AnyHadahan = Hadahan | SharedHadahanResult;
+export type Chart = NonNullable<AnyHadahan["chart"]>;
 export type Planet = Chart["planets"][number];
-export type Dasha = NonNullable<Hadahan["dasha"]>;
+export type Dasha = NonNullable<AnyHadahan["dasha"]>;
 export type Period = Dasha["periods"][number];
 export type Kuja = NonNullable<Hadahan["kuja"]>;
 export type ForecastResult = components["schemas"]["ForecastResponse"];

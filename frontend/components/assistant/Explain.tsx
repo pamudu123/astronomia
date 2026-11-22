@@ -21,11 +21,12 @@ import {
   subscribe,
   tone,
 } from "@/lib/assistant/explain";
+import { useCanUse, useReportAccess } from "@/components/paid/ReportAccess";
 import { askAssistant } from "@/lib/assistant/panel";
-import { canUse } from "@/lib/entitlements";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { AiNoticeGate, useAiAcknowledged } from "./AiNotice";
 import styles from "./Explain.module.css";
 import { useExplainText } from "./PageContext";
 
@@ -169,10 +170,11 @@ function Chapter({
 }) {
   const state = useChapter(id, lang, facts);
   const title = t.chapters[id];
+  const { report } = useReportAccess();
   useEffect(() => {
-    if (facts) void requestChapter(id, lang, facts);
+    if (facts) void requestChapter(id, lang, facts, fetch, report);
     // The key covers id, language and facts; asking again for a written chapter does nothing.
-  }, [id, lang, facts]);
+  }, [id, lang, facts, report]);
 
   return (
     <div className={styles.chapter} data-chapter={id} data-status={state.status} aria-busy={state.status === "writing"}>
@@ -183,7 +185,7 @@ function Chapter({
           <button
             type="button"
             className={styles.linkButton}
-            onClick={() => facts && void requestChapter(id, lang, facts)}
+            onClick={() => facts && void requestChapter(id, lang, facts, fetch, report)}
           >
             {t.retry}
           </button>
@@ -243,8 +245,8 @@ export function AiExplain({
   // Pages pass a new summary on every render; keep it by content, so a chapter is asked once.
   const factsKey = JSON.stringify(facts);
   const stable = useMemo(() => facts, [factsKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  const allowed = useCanUse("ai_explain");
   if (!t || !stable) return null;
-  const allowed = canUse("ai_explain");
 
   return (
     <div className={`${styles.place} ${className ?? ""}`} data-explain={chapters.join(" ")}>
@@ -264,12 +266,12 @@ export function AiExplain({
       {open && (
         <div id={panel} className={styles.panel}>
           {allowed ? (
-            <>
+            <AiNoticeGate>
               {chapters.map((id) => (
                 <Chapter key={id} id={id} lang={lang} facts={stable} t={t} heading={chapters.length > 1} />
               ))}
               <p className={styles.label}>{t.label}</p>
-            </>
+            </AiNoticeGate>
           ) : (
             <p className={styles.locked}>
               <Lock size={16} /> {t.locked}
@@ -313,6 +315,9 @@ export function FullReading({
   const [chosen, setStarted] = useState(false);
   const [open, setOpen] = useState<Set<ChapterId>>(new Set());
   const base = useId();
+  const allowed = useCanUse("ai_reading");
+  const fullPdf = useCanUse("full_pdf");
+  const ok = useAiAcknowledged();
   // A reading written in full earlier (for the paid PDF, or on another visit) shows at once.
   // One chapter opened by an explain button leaves the card closed.
   const allWritten = useSyncExternalStore(
@@ -328,7 +333,6 @@ export function FullReading({
   if (!t || !facts) return null;
   const started = chosen || allWritten;
   const words = t[reading];
-  const allowed = canUse("ai_reading");
 
   const toggle = (id: ChapterId) =>
     setOpen((current) => {
@@ -368,14 +372,17 @@ export function FullReading({
           {!started && <p className="soft">{fill(words.lead, { count: chapters.length })}</p>}
         </div>
         {started ? (
-          <div className={styles.readingActions}>
-            <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set(chapters))}>
-              {words.openAll}
-            </button>
-            <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set())}>
-              {words.hideAll}
-            </button>
-          </div>
+          // "Open all" and "Hide all" wait until the AI notice under the title is acknowledged.
+          ok && (
+            <div className={styles.readingActions}>
+              <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set(chapters))}>
+                {words.openAll}
+              </button>
+              <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set())}>
+                {words.hideAll}
+              </button>
+            </div>
+          )
         ) : allowed ? (
           <button type="button" className="btn btn-primary lift" onClick={start}>
             {words.get}
@@ -388,7 +395,7 @@ export function FullReading({
       </div>
 
       {started && (
-        <>
+        <AiNoticeGate>
           <ol className={styles.chapters}>
             {chapters.map((id, index) => {
               const isOpen = open.has(id);
@@ -430,9 +437,9 @@ export function FullReading({
           </ol>
           <p className={styles.label}>
             {t.readingLabel}
-            {pdf && canUse("ai_report") && ` · ${t.inPdf}`}
+            {pdf && fullPdf && ` · ${t.inPdf}`}
           </p>
-        </>
+        </AiNoticeGate>
       )}
     </section>
   );
@@ -456,8 +463,8 @@ export function TopicChips({
   const t = useExplainText();
   const [picked, setPicked] = useState<ChapterId | null>(null);
   const base = useId();
+  const allowed = useCanUse("ai_explain");
   if (!t || !facts) return null;
-  const allowed = canUse("ai_explain");
 
   return (
     <section className={`rise ${styles.topics}`} aria-labelledby={`${base}-title`} data-card="topics">
@@ -493,10 +500,10 @@ export function TopicChips({
       {picked && (
         <div id={`${base}-panel`} className={styles.panel}>
           {allowed ? (
-            <>
+            <AiNoticeGate>
               <Chapter key={picked} id={picked} lang={lang} facts={facts} t={t} heading diagram={diagram?.(picked)} />
               <p className={styles.label}>{t.label}</p>
-            </>
+            </AiNoticeGate>
           ) : (
             <p className={styles.locked}>
               <Lock size={16} /> {t.locked}

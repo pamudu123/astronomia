@@ -172,8 +172,8 @@ Paid tiers change the first plan in three ways.
 
 | # | Question | Options |
 |---|---|---|
-| 1 | How do people pay? | Pay per report, a subscription, or both. The market check (section 7) suggests both: per report for porondam, subscription for forecast and alerts |
-| 2 | Prices | To be tested. Local software reports were seen around LKR 1,000. Human reports run from LKR 1,900 to LKR 9,900 |
+| 1 | How do people pay? | **Decided (2026-11-21): pay per report only.** No subscriptions or passes. See `docs/18-saving-paid-and-compare.md`, section 4 |
+| 2 | Prices | **Decided (2026-11-21): LKR 800 a report in Sri Lanka, USD 2.50 abroad.** Below local software reports (about LKR 1,000) and far below human reports (LKR 1,900 to 9,900) |
 | 3 | Payment gateways | **Reopened (2026-11-21).** PayHere was chosen on 2026-11-15, but it does not accept astrology services. Paid features stay off until a provider approves the product in writing. See `docs/15-payments.md`, section 0 |
 | 4 | Sign in method | Email link, Google, or phone OTP |
 | 5 | Default life of a share link | 30 days suggested |

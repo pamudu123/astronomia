@@ -4,9 +4,11 @@ import { useMemo, useSyncExternalStore } from "react";
 
 import type { PageContext } from "@/lib/assistant/context";
 import { type ChapterId, chapterKey, chapterState, outline, subscribe, writeAll, writtenChapters } from "@/lib/assistant/explain";
-import { canUse } from "@/lib/entitlements";
 import type { Locale } from "@/lib/i18n";
 
+import { useCanUse, useReportAccess } from "@/components/paid/ReportAccess";
+
+import { useAiAcknowledged } from "./AiNotice";
 import { useAssistantContext, useExplainText } from "./PageContext";
 
 /** The chapters of a reading and the facts each is written from (null while still loading). */
@@ -23,11 +25,14 @@ export type PdfChapter = { id: ChapterId; title: string; text: string };
  * - Tells the chat which chapters are written and what each says in short (the "reading"
  *   slot, under `also_on_page.reading`), so Astro's answers stay in step with them and it can
  *   point to a chapter instead of writing it again.
- * - `forPdf` gives the PDF its chapters. On the paid report (`canUse("ai_report")`) it first
+ * - `forPdf` gives the PDF its chapters. On a paid report (the `full_pdf` feature) it first
  *   writes every chapter not written yet; chapters already written are reused as they are.
  */
 export function useReading(plan: ReadingPlan, lang: Locale, kind: "chart" | "match") {
   const words = useExplainText();
+  const fullPdf = useCanUse("full_pdf");
+  const acknowledged = useAiAcknowledged();
+  const { report } = useReportAccess();
   const { ids, factsFor } = plan;
   // A cheap fingerprint of what is written, so the chat's summary changes only when a
   // chapter is finished.
@@ -68,14 +73,15 @@ export function useReading(plan: ReadingPlan, lang: Locale, kind: "chart" | "mat
 
   const forPdf = async (progress?: (done: number, total: number) => void): Promise<PdfChapter[]> => {
     if (!words) return [];
-    if (canUse("ai_report")) {
+    if (fullPdf) {
       const items = ids.flatMap((id) => {
         const facts = factsFor(id);
         return facts ? [{ id, facts }] : [];
       });
-      await writeAll(items, lang, progress);
+      await writeAll(items, lang, progress, fetch, 4, report);
     }
     return writtenChapters(ids, lang, factsFor).map(({ id, text }) => ({ id, title: words.chapters[id], text }));
   };
-  return { forPdf, aiOn: Boolean(words) };
+  // The paid PDF sends the chapters not written yet to the AI: the AI notice comes first.
+  return { forPdf, aiNotice: Boolean(words) && fullPdf && !acknowledged };
 }

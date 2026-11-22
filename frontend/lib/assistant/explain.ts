@@ -14,6 +14,9 @@
 import type { Locale } from "@/lib/i18n";
 import type { SpotName } from "@/lib/spots";
 
+import { accountHeaders } from "@/lib/paid";
+import type { ReportRequest } from "@/lib/report";
+
 import type { PageContext } from "./context";
 
 export type ChapterId =
@@ -315,6 +318,8 @@ export async function requestChapter(
   language: Locale,
   facts: PageContext,
   send: typeof fetch = fetch,
+  /** The report on the page: chart and match chapters are written only for a paid one. */
+  report: ReportRequest | null = null,
 ): Promise<void> {
   const key = chapterKey(id, language, facts);
   const current = chapterState(key);
@@ -322,10 +327,12 @@ export async function requestChapter(
   set(key, { status: "writing", text: "" });
   let text = "";
   try {
+    // A report's chapters are checked against the account that paid for it (lib/paidCheck.ts).
+    const account = report ? await accountHeaders() : {};
     const response = await send("/api/explain", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, language, facts }),
+      headers: { "Content-Type": "application/json", ...account },
+      body: JSON.stringify(report ? { id, language, facts, report } : { id, language, facts }),
     });
     if (!response.ok || !response.body) throw new Error(`explain: ${response.status}`);
     const reader = response.body.getReader();
@@ -393,6 +400,8 @@ export async function writeAll(
   progress: (done: number, total: number) => void = () => undefined,
   send: typeof fetch = fetch,
   parallel = 4,
+  /** The report on the page, which the AI route checks is paid (requestChapter). */
+  report: ReportRequest | null = null,
 ): Promise<void> {
   const total = items.length;
   let done = 0;
@@ -401,7 +410,7 @@ export async function writeAll(
   const one = async ({ id, facts }: { id: ChapterId; facts: PageContext }) => {
     const key = chapterKey(id, language, facts);
     for (let attempt = 0; attempt < 2; attempt += 1) {
-      await requestChapter(id, language, facts, send);
+      await requestChapter(id, language, facts, send, report);
       if ((await settled(key)).status === "done") break;
     }
     done += 1;

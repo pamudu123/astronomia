@@ -590,6 +590,9 @@ export interface paths {
         /**
          * Report Pdf
          * @description A print ready A4 report, in the language of the request (`lang`).
+         *
+         *     The AI reading prints only in the full PDF of a paid report (docs/18, section 6); for any
+         *     other report it is left out and the rest prints as before.
          */
         post: operations["report_pdf_v1_reports_pdf_post"];
         delete?: never;
@@ -746,10 +749,109 @@ export interface paths {
         patch: operations["rename_saved_v1_saved__report_id__patch"];
         trace?: never;
     };
+    "/v1/price": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Report Price
+         * @description The price of one report for this buyer: LKR in Sri Lanka, USD everywhere else.
+         */
+        get: operations["report_price_v1_price_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Access
+         * @description Whether this browser's account has paid for this report, and what it may use on it.
+         *
+         *     A POST, so the birth details stay out of the address.
+         */
+        post: operations["access_v1_reports_access_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/coupons/apply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Apply Coupon
+         * @description The price of one report after a coupon. Uses nothing up: Unlock does that.
+         */
+        post: operations["apply_coupon_v1_coupons_apply_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/unlock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Unlock
+         * @description Unlocks one report with a free coupon and keeps it in My reports as paid.
+         *
+         *     A report already paid for gives back its order and uses nothing.
+         */
+        post: operations["unlock_v1_reports_unlock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AccessOut
+         * @description What the person may use on one report, and what it costs to unlock.
+         */
+        AccessOut: {
+            /** Paid */
+            paid: boolean;
+            /** Features */
+            features: ("ai_reading" | "ai_explain" | "full_detail" | "full_pdf")[];
+            /** Paid Reports */
+            paid_reports: boolean;
+            /** Account */
+            account: ("guest" | "google") | null;
+            price: components["schemas"]["PriceOut"];
+        };
         /** AllLettersResponse */
         AllLettersResponse: {
             /** Rule Set */
@@ -758,6 +860,16 @@ export interface components {
             provisional: boolean;
             /** Stars */
             stars: components["schemas"]["StarLettersOut"][];
+        };
+        /** ApplyCoupon */
+        ApplyCoupon: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /** Code */
+            code: string;
         };
         /** AvuruduItemOut */
         AvuruduItemOut: {
@@ -1049,6 +1161,26 @@ export interface components {
             time?: components["schemas"]["TimeResolveResponse"] | null;
             bride?: components["schemas"]["JourneyOut"] | null;
             groom?: components["schemas"]["JourneyOut"] | null;
+        };
+        /**
+         * CouponQuote
+         * @description The price after a coupon, or why the coupon does not work.
+         *
+         *     - free: 100% off, the report can be unlocked now
+         *     - payment_not_available: a discount, but there is no way to pay the rest yet
+         *     - unknown: no such code (counts as a wrong guess)
+         *     - ended: switched off or past its end date
+         *     - wrong_report: not for this kind of report
+         *     - used_up: no uses left in total
+         *     - account_limit: this account has used it as many times as it may
+         */
+        CouponQuote: {
+            /** Result */
+            result: ("free" | "payment_not_available") | ("unknown" | "ended" | "wrong_report" | "used_up" | "account_limit");
+            /** Percent Off */
+            percent_off?: number | null;
+            price: components["schemas"]["PriceOut"];
+            new_price?: components["schemas"]["PriceOut"] | null;
         };
         /** DashaMainOut */
         DashaMainOut: {
@@ -1875,6 +2007,25 @@ export interface components {
             /** Abbreviation */
             abbreviation: string;
         };
+        /** OrderOut */
+        OrderOut: {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            price: components["schemas"]["PriceOut"];
+            /** Percent Off */
+            percent_off: number;
+            amount_paid: components["schemas"]["PriceOut"];
+            /**
+             * Method
+             * @enum {string}
+             */
+            method: "coupon" | "payment";
+        };
         /** OtherOut */
         OtherOut: {
             body: components["schemas"]["Body"];
@@ -2224,6 +2375,19 @@ export interface components {
             match?: components["schemas"]["MatchOut"] | null;
             kuja?: components["schemas"]["KujaPairOut"] | null;
         };
+        /** PriceOut */
+        PriceOut: {
+            /**
+             * Amount
+             * @description In the smallest unit of the currency: cents
+             */
+            amount: number;
+            /**
+             * Currency
+             * @enum {string}
+             */
+            currency: "LKR" | "USD";
+        };
         /** QualityOut */
         QualityOut: {
             /** Step Days */
@@ -2265,6 +2429,19 @@ export interface components {
         Rename: {
             /** Title */
             title: string;
+        };
+        /** ReportPrice */
+        ReportPrice: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /** Country */
+            country: string;
+            price: components["schemas"]["PriceOut"];
+            /** Paid Reports */
+            paid_reports: boolean;
         };
         /** SaturnOut */
         SaturnOut: {
@@ -2309,6 +2486,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Created */
@@ -2333,6 +2515,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Request */
@@ -2364,6 +2551,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
         };
@@ -2400,10 +2592,15 @@ export interface components {
             name: string;
             birth: components["schemas"]["HadahanRequest"];
             /**
-             * Hide Names
+             * Show Names
              * @default false
              */
-            hide_names: boolean;
+            show_names: boolean;
+            /**
+             * Show Birth
+             * @default false
+             */
+            show_birth: boolean;
         };
         /** ShareOut */
         ShareOut: {
@@ -2424,7 +2621,9 @@ export interface components {
             expires_at: string;
             /** Names Hidden */
             names_hidden: boolean;
-            hadahan?: components["schemas"]["SnapshotHadahan"] | null;
+            /** Birth Hidden */
+            birth_hidden: boolean;
+            hadahan?: components["schemas"]["SharedHadahan"] | null;
             porondam?: components["schemas"]["PorondamResponse"] | null;
         };
         /** SharePorondam */
@@ -2436,10 +2635,77 @@ export interface components {
             kind: "porondam";
             match: components["schemas"]["PorondamRequest"];
             /**
-             * Hide Names
+             * Show Names
              * @default false
              */
-            hide_names: boolean;
+            show_names: boolean;
+            /**
+             * Show Birth
+             * @default false
+             */
+            show_birth: boolean;
+        };
+        /**
+         * SharedChart
+         * @description A shared chart. The birth moment and place are None when birth details are hidden.
+         */
+        SharedChart: {
+            /** Utc */
+            utc: string | null;
+            /** Latitude */
+            latitude: number | null;
+            /** Longitude */
+            longitude: number | null;
+            lagna: components["schemas"]["PointOut"];
+            moon: components["schemas"]["PointOut"];
+            /** Planets */
+            planets: components["schemas"]["PlanetOut"][];
+            time_check: components["schemas"]["TimeCheckOut"];
+            method: components["schemas"]["MethodOut"];
+        };
+        /** SharedDasha */
+        SharedDasha: {
+            /**
+             * System
+             * @default vimshottari
+             * @constant
+             */
+            system: "vimshottari";
+            /** Balance Years */
+            balance_years: number | null;
+            /** Periods */
+            periods: components["schemas"]["PeriodOut"][];
+            /** Current */
+            current: components["schemas"]["PeriodOut"][];
+        };
+        /**
+         * SharedHadahan
+         * @description A shared hadahan in one language.
+         */
+        SharedHadahan: {
+            /** Name */
+            name: string;
+            /** Date */
+            date: string | null;
+            /** Time */
+            time: string | null;
+            /** Place */
+            place: string | null;
+            result: components["schemas"]["SharedHadahanResult"];
+        };
+        /**
+         * SharedHadahanResult
+         * @description A shared hadahan result. With birth details hidden there is no time block (date, clock
+         *     time, time zone), no birth moment or place in the chart, and no dasha balance.
+         */
+        SharedHadahanResult: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"] | null;
+            chart: components["schemas"]["SharedChart"] | null;
+            dasha: components["schemas"]["SharedDasha"] | null;
+            kuja: components["schemas"]["KujaOut"] | null;
+            birth_table?: components["schemas"]["BirthTableOut"] | null;
         };
         /** SignLettersOut */
         SignLettersOut: {
@@ -2789,6 +3055,19 @@ export interface components {
             waiting_for?: ("bride" | "groom") | null;
             time?: components["schemas"]["TimeResolveResponse"] | null;
             timeline?: components["schemas"]["TimelineOut"] | null;
+        };
+        /** Unlock */
+        Unlock: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /** Code */
+            code: string;
+        };
+        /** Unlocked */
+        Unlocked: {
+            order: components["schemas"]["OrderOut"];
+            saved: components["schemas"]["SavedOut"] | null;
+            access: components["schemas"]["AccessOut"];
         };
         /** UpcomingChange */
         UpcomingChange: {
@@ -4316,6 +4595,164 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    report_price_v1_price_get: {
+        parameters: {
+            query: {
+                kind: "hadahan" | "porondam";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportPrice"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    access_v1_reports_access_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    apply_coupon_v1_coupons_apply_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplyCoupon"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CouponQuote"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unlock_v1_reports_unlock_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Unlock"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Unlocked"];
+                };
+            };
+            /** @description Not signed in with Google */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The coupon leaves something to pay (payment_not_available) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The coupon was refused: the reason, as in CouponQuote */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Too many wrong codes in the last hour */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

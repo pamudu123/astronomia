@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { Assistant } from "@/components/assistant/Assistant";
+import { PaidTextProvider } from "@/components/paid/ReportAccess";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { type Locale, hasLocale, locales } from "@/lib/i18n";
@@ -83,11 +84,13 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         <a className="skip-link" href="#main">
           {dict.nav.skip}
         </a>
-        <Page lang={lang} dict={dict}>
-          <SiteHeader lang={lang} dict={dict} />
-          {children}
-          <SiteFooter lang={lang} dict={dict} />
-        </Page>
+        <PaidTextProvider value={dict.paid}>
+          <Page lang={lang} dict={dict}>
+            <SiteHeader lang={lang} dict={dict} />
+            {children}
+            <SiteFooter lang={lang} dict={dict} />
+          </Page>
+        </PaidTextProvider>
       </body>
     </html>
   );

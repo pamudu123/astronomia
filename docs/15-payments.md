@@ -304,7 +304,7 @@ This meets the check for step 18: test payments unlock exactly what was bought, 
 
 | # | Question | Who |
 |---|---|---|
-| 1 | Prices for the single report and the passes, in LKR and USD | Owner |
+| 1 | ~~Prices for the single report and the passes~~ Decided (2026-11-21): single reports only, LKR 800 in Sri Lanka and USD 2.50 abroad; no passes (docs/18, section 4) | Done |
 | 2 | Does Lite include recurring payments, and what are the Lite limits today? | Owner, ask PayHere |
 | 3 | Guest checkout for a single report, or sign in always? | Owner. Sign in is assumed above (step 17 comes before step 18) |
 

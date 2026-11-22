@@ -1658,7 +1658,7 @@
           "reports"
         ],
         "summary": "Report Pdf",
-        "description": "A print ready A4 report, in the language of the request (`lang`).",
+        "description": "A print ready A4 report, in the language of the request (`lang`).\n\nThe AI reading prints only in the full PDF of a paid report (docs/18, section 6); for any\nother report it is left out and the rest prints as before.",
         "operationId": "report_pdf_v1_reports_pdf_post",
         "requestBody": {
           "content": {
@@ -2169,10 +2169,263 @@
           }
         }
       }
+    },
+    "/v1/price": {
+      "get": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Report Price",
+        "description": "The price of one report for this buyer: LKR in Sri Lanka, USD everywhere else.",
+        "operationId": "report_price_v1_price_get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "hadahan",
+                "porondam"
+              ],
+              "type": "string",
+              "title": "Kind"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportPrice"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/access": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Access",
+        "description": "Whether this browser's account has paid for this report, and what it may use on it.\n\nA POST, so the birth details stay out of the address.",
+        "operationId": "access_v1_reports_access_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/HadahanReport"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PorondamReport"
+                  }
+                ],
+                "title": "Body",
+                "discriminator": {
+                  "propertyName": "kind",
+                  "mapping": {
+                    "hadahan": "#/components/schemas/HadahanReport",
+                    "porondam": "#/components/schemas/PorondamReport"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coupons/apply": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Apply Coupon",
+        "description": "The price of one report after a coupon. Uses nothing up: Unlock does that.",
+        "operationId": "apply_coupon_v1_coupons_apply_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplyCoupon"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponQuote"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/unlock": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Unlock",
+        "description": "Unlocks one report with a free coupon and keeps it in My reports as paid.\n\nA report already paid for gives back its order and uses nothing.",
+        "operationId": "unlock_v1_reports_unlock_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Unlock"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unlocked"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not signed in with Google"
+          },
+          "402": {
+            "description": "The coupon leaves something to pay (payment_not_available)"
+          },
+          "409": {
+            "description": "The coupon was refused: the reason, as in CouponQuote"
+          },
+          "429": {
+            "description": "Too many wrong codes in the last hour"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AccessOut": {
+        "properties": {
+          "paid": {
+            "type": "boolean",
+            "title": "Paid"
+          },
+          "features": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "ai_reading",
+                "ai_explain",
+                "full_detail",
+                "full_pdf"
+              ]
+            },
+            "type": "array",
+            "title": "Features"
+          },
+          "paid_reports": {
+            "type": "boolean",
+            "title": "Paid Reports"
+          },
+          "account": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "guest",
+                  "google"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "paid",
+          "features",
+          "paid_reports",
+          "account",
+          "price"
+        ],
+        "title": "AccessOut",
+        "description": "What the person may use on one report, and what it costs to unlock."
+      },
       "AllLettersResponse": {
         "properties": {
           "rule_set": {
@@ -2198,6 +2451,29 @@
           "stars"
         ],
         "title": "AllLettersResponse"
+      },
+      "ApplyCoupon": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "code"
+        ],
+        "title": "ApplyCoupon"
       },
       "AvuruduItemOut": {
         "properties": {
@@ -3173,6 +3449,63 @@
           "status"
         ],
         "title": "CoupleJourneyResponse"
+      },
+      "CouponQuote": {
+        "properties": {
+          "result": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "free",
+                  "payment_not_available"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "unknown",
+                  "ended",
+                  "wrong_report",
+                  "used_up",
+                  "account_limit"
+                ]
+              }
+            ],
+            "title": "Result"
+          },
+          "percent_off": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent Off"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "new_price": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "result",
+          "price"
+        ],
+        "title": "CouponQuote",
+        "description": "The price after a coupon, or why the coupon does not work.\n\n- free: 100% off, the report can be unlocked now\n- payment_not_available: a discount, but there is no way to pay the rest yet\n- unknown: no such code (counts as a wrong guess)\n- ended: switched off or past its end date\n- wrong_report: not for this kind of report\n- used_up: no uses left in total\n- account_limit: this account has used it as many times as it may"
       },
       "DashaMainOut": {
         "properties": {
@@ -5494,6 +5827,50 @@
         ],
         "title": "OffsetOption"
       },
+      "OrderOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "percent_off": {
+            "type": "integer",
+            "title": "Percent Off"
+          },
+          "amount_paid": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "coupon",
+              "payment"
+            ],
+            "title": "Method"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "price",
+          "percent_off",
+          "amount_paid",
+          "method"
+        ],
+        "title": "OrderOut"
+      },
       "OtherOut": {
         "properties": {
           "body": {
@@ -6584,6 +6961,29 @@
         ],
         "title": "PorondamResponse"
       },
+      "PriceOut": {
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "title": "Amount",
+            "description": "In the smallest unit of the currency: cents"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "LKR",
+              "USD"
+            ],
+            "title": "Currency"
+          }
+        },
+        "type": "object",
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "title": "PriceOut"
+      },
       "QualityOut": {
         "properties": {
           "step_days": {
@@ -6683,6 +7083,37 @@
         ],
         "title": "Rename"
       },
+      "ReportPrice": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "paid_reports": {
+            "type": "boolean",
+            "title": "Paid Reports"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "country",
+          "price",
+          "paid_reports"
+        ],
+        "title": "ReportPrice"
+      },
       "SaturnOut": {
         "properties": {
           "start": {
@@ -6751,6 +7182,11 @@
             "format": "date-time",
             "title": "Created At"
           },
+          "paid": {
+            "type": "boolean",
+            "title": "Paid",
+            "default": false
+          },
           "hadahan": {
             "anyOf": [
               {
@@ -6809,6 +7245,11 @@
             "type": "string",
             "format": "date-time",
             "title": "Created At"
+          },
+          "paid": {
+            "type": "boolean",
+            "title": "Paid",
+            "default": false
           },
           "hadahan": {
             "anyOf": [
@@ -6919,6 +7360,11 @@
             "format": "date-time",
             "title": "Created At"
           },
+          "paid": {
+            "type": "boolean",
+            "title": "Paid",
+            "default": false
+          },
           "hadahan": {
             "anyOf": [
               {
@@ -7007,9 +7453,14 @@
           "birth": {
             "$ref": "#/components/schemas/HadahanRequest"
           },
-          "hide_names": {
+          "show_names": {
             "type": "boolean",
-            "title": "Hide Names",
+            "title": "Show Names",
+            "default": false
+          },
+          "show_birth": {
+            "type": "boolean",
+            "title": "Show Birth",
             "default": false
           }
         },
@@ -7044,10 +7495,14 @@
             "type": "boolean",
             "title": "Names Hidden"
           },
+          "birth_hidden": {
+            "type": "boolean",
+            "title": "Birth Hidden"
+          },
           "hadahan": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SnapshotHadahan"
+                "$ref": "#/components/schemas/SharedHadahan"
               },
               {
                 "type": "null"
@@ -7070,7 +7525,8 @@
           "kind",
           "created_at",
           "expires_at",
-          "names_hidden"
+          "names_hidden",
+          "birth_hidden"
         ],
         "title": "ShareOut"
       },
@@ -7084,9 +7540,14 @@
           "match": {
             "$ref": "#/components/schemas/PorondamRequest"
           },
-          "hide_names": {
+          "show_names": {
             "type": "boolean",
-            "title": "Hide Names",
+            "title": "Show Names",
+            "default": false
+          },
+          "show_birth": {
+            "type": "boolean",
+            "title": "Show Birth",
             "default": false
           }
         },
@@ -7096,6 +7557,241 @@
           "match"
         ],
         "title": "SharePorondam"
+      },
+      "SharedChart": {
+        "properties": {
+          "utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Utc"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "lagna": {
+            "$ref": "#/components/schemas/PointOut"
+          },
+          "moon": {
+            "$ref": "#/components/schemas/PointOut"
+          },
+          "planets": {
+            "items": {
+              "$ref": "#/components/schemas/PlanetOut"
+            },
+            "type": "array",
+            "title": "Planets"
+          },
+          "time_check": {
+            "$ref": "#/components/schemas/TimeCheckOut"
+          },
+          "method": {
+            "$ref": "#/components/schemas/MethodOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "utc",
+          "latitude",
+          "longitude",
+          "lagna",
+          "moon",
+          "planets",
+          "time_check",
+          "method"
+        ],
+        "title": "SharedChart",
+        "description": "A shared chart. The birth moment and place are None when birth details are hidden."
+      },
+      "SharedDasha": {
+        "properties": {
+          "system": {
+            "type": "string",
+            "const": "vimshottari",
+            "title": "System",
+            "default": "vimshottari"
+          },
+          "balance_years": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Balance Years"
+          },
+          "periods": {
+            "items": {
+              "$ref": "#/components/schemas/PeriodOut"
+            },
+            "type": "array",
+            "title": "Periods"
+          },
+          "current": {
+            "items": {
+              "$ref": "#/components/schemas/PeriodOut"
+            },
+            "type": "array",
+            "title": "Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "balance_years",
+          "periods",
+          "current"
+        ],
+        "title": "SharedDasha"
+      },
+      "SharedHadahan": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place"
+          },
+          "result": {
+            "$ref": "#/components/schemas/SharedHadahanResult"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "date",
+          "time",
+          "place",
+          "result"
+        ],
+        "title": "SharedHadahan",
+        "description": "A shared hadahan in one language."
+      },
+      "SharedHadahanResult": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeResolveResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "chart": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SharedChart"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dasha": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SharedDasha"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kuja": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/KujaOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "birth_table": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BirthTableOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "time",
+          "chart",
+          "dasha",
+          "kuja"
+        ],
+        "title": "SharedHadahanResult",
+        "description": "A shared hadahan result. With birth details hidden there is no time block (date, clock\ntime, time zone), no birth moment or place in the chart, and no dasha balance."
       },
       "SignLettersOut": {
         "properties": {
@@ -8015,6 +8711,66 @@
           "status"
         ],
         "title": "TimelineResponse"
+      },
+      "Unlock": {
+        "properties": {
+          "report": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Report",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report",
+          "code"
+        ],
+        "title": "Unlock"
+      },
+      "Unlocked": {
+        "properties": {
+          "order": {
+            "$ref": "#/components/schemas/OrderOut"
+          },
+          "saved": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SavedOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "access": {
+            "$ref": "#/components/schemas/AccessOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "order",
+          "saved",
+          "access"
+        ],
+        "title": "Unlocked"
       },
       "UpcomingChange": {
         "properties": {

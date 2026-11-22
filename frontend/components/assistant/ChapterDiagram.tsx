@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 import { type ChapterId } from "@/lib/assistant/explain";
 import { CHAPTER_VISUAL, WHEEL, barLayout, point, wheelLayout } from "@/lib/assistant/visuals";
-import { type Hadahan, type Labels, fill } from "@/lib/hadahan";
+import { type AnyHadahan, type Chart, type Dasha, type Kuja, type Labels, fill } from "@/lib/hadahan";
 import { type Porondam, isCounted } from "@/lib/porondam";
 import { RASHI } from "@/lib/rashi";
 
@@ -50,7 +50,7 @@ function Flow({ cards }: { cards: { label: string; value: string; note?: ReactNo
   );
 }
 
-function SkyWheel({ chart, labels, t }: { chart: NonNullable<Hadahan["chart"]>; labels: Labels; t: Words }) {
+function SkyWheel({ chart, labels, t }: { chart: Chart; labels: Labels; t: Words }) {
   const layout = wheelLayout(
     chart.lagna.longitude,
     chart.planets.map((p) => ({ key: p.body, label: labels.planet[p.body]?.short ?? p.body, longitude: p.longitude })),
@@ -109,7 +109,7 @@ function SkyWheel({ chart, labels, t }: { chart: NonNullable<Hadahan["chart"]>; 
   );
 }
 
-function Houses({ chart, labels, t, on = [] }: { chart: NonNullable<Hadahan["chart"]>; labels: Labels; t: Words; on?: number[] }) {
+function Houses({ chart, labels, t, on = [] }: { chart: Chart; labels: Labels; t: Words; on?: number[] }) {
   const first = chart.lagna.sign_number - 1;
   return (
     <ol className={styles.houses}>
@@ -129,7 +129,7 @@ function Houses({ chart, labels, t, on = [] }: { chart: NonNullable<Hadahan["cha
   );
 }
 
-function PeriodsBar({ dasha, birth, labels, t }: { dasha: NonNullable<Hadahan["dasha"]>; birth: string; labels: Labels; t: Words }) {
+function PeriodsBar({ dasha, birth, labels, t }: { dasha: Dasha; birth: string; labels: Labels; t: Words }) {
   const main = dasha.current[0];
   const layout = barLayout(
     birth,
@@ -173,7 +173,7 @@ function PeriodsBar({ dasha, birth, labels, t }: { dasha: NonNullable<Hadahan["d
   );
 }
 
-function MarsFlow({ kuja, labels, t }: { kuja: NonNullable<Hadahan["kuja"]>; labels: Labels; t: Words }) {
+function MarsFlow({ kuja, labels, t }: { kuja: Kuja; labels: Labels; t: Words }) {
   const applying = kuja.cancellations.filter((c) => c.applies);
   const status = !kuja.present ? t.kujaAbsent : kuja.reduced ? t.kujaReduced : t.kujaPresent;
   return (
@@ -205,7 +205,18 @@ function MarsFlow({ kuja, labels, t }: { kuja: NonNullable<Hadahan["kuja"]>; lab
 }
 
 /** The chart chapter's diagram, or nothing for a chapter without one or a result without the data. */
-export function ChartDiagram({ id, result, labels, birth }: { id: ChapterId; result: Hadahan; labels: Labels; birth?: string }) {
+export function ChartDiagram({
+  id,
+  result,
+  labels,
+  birth,
+}: {
+  id: ChapterId;
+  /** Only the parts drawn, so a shared result (with less in it) fits too. */
+  result: Pick<AnyHadahan, "chart" | "dasha" | "kuja">;
+  labels: Labels;
+  birth?: string | null;
+}) {
   const t = useExplainText()?.diagram;
   const found = CHAPTER_VISUAL[id];
   const { chart, dasha, kuja } = result;

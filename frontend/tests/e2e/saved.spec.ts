@@ -168,6 +168,10 @@ test("My reports lists, renames and deletes", async ({ page }) => {
   await expect(chart).toContainText("Nimali's birth chart");
   await expect(chart).toContainText("Lagna Simha · Rashi Vrischika · Jyeshtha");
   await expect(page.getByText("Your reports are kept on this browser.")).toBeVisible();
+  // Deleting a report and deleting its share link are separate, and the page says so.
+  await expect(page.locator("[data-shares-separate]")).toContainText(
+    "Deleting a report here does not delete a share link made from it",
+  );
 
   await chart.getByRole("button", { name: "Rename" }).click();
   await chart.getByLabel("Name for this report").fill("Amma");
@@ -194,6 +198,7 @@ test("everything can be deleted at once", async ({ page }) => {
   await page.getByRole("button", { name: "Delete all my saved reports" }).click();
   await page.getByRole("button", { name: "Yes, delete everything" }).click();
   await expect(page.getByText("Everything is deleted. Nothing from it is kept.")).toBeVisible();
+  await expect(page.locator("[data-shares-separate]")).toContainText("Share links are separate from saved reports");
   expect(wiped).toEqual(["DELETE"]);
 });
 

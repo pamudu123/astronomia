@@ -12,6 +12,8 @@ import { KujaDials } from "@/components/KujaDials";
 import { NextSteps } from "@/components/NextSteps";
 import { ReportButton } from "@/components/ReportButton";
 import { SaveButton } from "@/components/account/SaveButton";
+import { FullReport } from "@/components/paid/FullReport";
+import { ReportScope } from "@/components/paid/ReportAccess";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { type PageContext, matchContext } from "@/lib/assistant/context";
@@ -125,7 +127,7 @@ export function PorondamResult({
     "match.years": yearsFacts,
     "match.wedding": weddingFacts,
   };
-  const { forPdf } = useReading(
+  const { forPdf, aiNotice } = useReading(
     { ids: chapters, factsFor: (id) => (id in extraFor ? (extraFor[id] ?? null) : facts) },
     lang,
     "match",
@@ -148,6 +150,7 @@ export function PorondamResult({
   );
 
   return (
+    <ReportScope report={request ? { kind: "porondam", match: { ...request, lang } } : null} kind="porondam">
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.couple}`}>
         <h1 className={`display ${styles.title}`}>
@@ -398,6 +401,9 @@ export function PorondamResult({
         />
       )}
 
+      {/* Getting the full report, then the reading it unlocks. */}
+      {request && <FullReport lang={lang} />}
+
       {/* The long chapter reading comes last, so the match result itself is what shows first. */}
       <FullReading
         chapters={chapters}
@@ -420,6 +426,7 @@ export function PorondamResult({
               <ReportButton
                 request={{ kind: "porondam", match: { ...request, lang } }}
                 reading={forPdf}
+                aiNotice={aiNotice}
                 t={t}
               />
               {saveText && (
@@ -444,6 +451,13 @@ export function PorondamResult({
                     total: match.score.total,
                   })}
                   hasNames={Boolean(bride.name || groom.name)}
+                  names={fill(t.title, { bride: nameOf(bride, f.bride), groom: nameOf(groom, f.groom) })}
+                  plural
+                  fields={[
+                    share.fieldStars,
+                    share.fieldFactors,
+                    ...(result.kuja ? [share.fieldKujaPair] : []),
+                  ]}
                 />
               )}
               {onAgain && (
@@ -470,5 +484,6 @@ export function PorondamResult({
         />
       )}
     </main>
+    </ReportScope>
   );
 }

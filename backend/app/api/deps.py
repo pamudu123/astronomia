@@ -10,6 +10,7 @@ from app.auth import SupabaseAdmin, TokenChecker
 from app.config import Settings, get_settings
 from app.geo.build import ensure_built
 from app.store.accounts import AccountStore, postgres_accounts, sqlite_accounts
+from app.store.orders import OrderStore, postgres_orders, sqlite_orders
 from app.store.shares import PostgresShareStore, ShareStore, Store
 
 
@@ -86,3 +87,22 @@ def supabase_admin(settings: Annotated[Settings, Depends(get_settings)]) -> Supa
 
 
 Admin = Annotated[SupabaseAdmin | None, Depends(supabase_admin)]
+
+
+@lru_cache
+def _sqlite_orders(path: Path) -> OrderStore:
+    return sqlite_orders(path)
+
+
+@lru_cache
+def _postgres_orders(url: str) -> OrderStore:
+    return postgres_orders(url)
+
+
+def order_store(settings: Annotated[Settings, Depends(get_settings)]) -> OrderStore:
+    if settings.database_url:
+        return _postgres_orders(settings.database_url)
+    return _sqlite_orders(settings.orders_db)
+
+
+Orders = Annotated[OrderStore, Depends(order_store)]

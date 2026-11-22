@@ -2,7 +2,8 @@ import type { components } from "./api-types";
 import type { Locale } from "./i18n";
 import type { ReportRequest } from "./report";
 
-/** The same body as the PDF report. The dialog adds the "hide names" choice. */
+/** The same body as the PDF report. The dialog adds what to show: names and birth details
+ *  stay hidden unless the visitor turns them on. */
 export type ShareRequest = ReportRequest;
 export type ShareCreated = components["schemas"]["ShareCreated"];
 export type Shared = components["schemas"]["ShareOut"];
@@ -15,7 +16,7 @@ function failed(response: Response): Error & { status: number } {
 
 /** Birth details go in the POST body. The link holds only a random code. */
 export async function createShare(
-  body: ShareRequest & { hide_names: boolean },
+  body: ShareRequest & { show_names: boolean; show_birth: boolean },
 ): Promise<ShareCreated> {
   const response = await fetch("/api/v1/shares", {
     method: "POST",
