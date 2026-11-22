@@ -152,7 +152,7 @@ function Welcome({ input, suggestionView }: { input: ReactElement; suggestionVie
         </>
       ) : (
         <div className="sidera-welcome-notice">
-          <AiNotice onAccept={focusInput} />
+          <AiNotice onAccept={focusInput} autoFocus={false} />
         </div>
       )}
     </div>
@@ -399,8 +399,8 @@ export default function Chat({
   const onIdleReset = useCallback(() => setFresh(true), []);
   const launcher = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
-  // Keyboard: Escape closes; opening moves focus to the input (laptops only, so phones don't
-  // pop up the keyboard); closing returns focus to the launcher.
+  // Keyboard: Escape closes; opening moves focus to the input, or to the AI notice in its place
+  // (laptops only, so phones don't pop up the keyboard); closing returns focus to the launcher.
   useEffect(() => {
     if (!open) {
       if (wasOpen.current) launcher.current?.focus();
@@ -413,7 +413,8 @@ export default function Chat({
     window.addEventListener("keydown", onKey);
     const focus = window.setTimeout(() => {
       if (window.matchMedia("(min-width: 768px)").matches) {
-        document.querySelector<HTMLElement>(".copilotKitSidebar textarea")?.focus();
+        // The input, or the AI notice in its place until that is acknowledged.
+        document.querySelector<HTMLElement>(".copilotKitSidebar textarea, .copilotKitSidebar [data-ai-notice]")?.focus();
       }
     }, 50);
     return () => {

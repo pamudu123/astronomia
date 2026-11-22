@@ -33,16 +33,19 @@ export function useAiAcknowledged(): boolean {
   return useSyncExternalStore(subscribe, acknowledged, () => false);
 }
 
-export function AiNotice({ onAccept }: { onAccept?: () => void }) {
+/**
+ * `autoFocus` (the default) suits a notice that appears after a tap. The chat's notice is drawn
+ * with the closed panel when the page loads, so the panel focuses it when it opens instead.
+ */
+export function AiNotice({ onAccept, autoFocus = true }: { onAccept?: () => void; autoFocus?: boolean }) {
   const words = useContext(NoticeText);
   const box = useRef<HTMLElement>(null);
   const title = useId();
   const text = useId();
-  // It appears after a tap ("Explain this", opening the chat): bring it to the screen reader
-  // and the keyboard at once.
+  // It appears after a tap ("Explain this"): bring it to the screen reader and the keyboard.
   useEffect(() => {
-    box.current?.focus({ preventScroll: true });
-  }, []);
+    if (autoFocus) box.current?.focus({ preventScroll: true });
+  }, [autoFocus]);
   if (!words) return null;
   const { t, lang } = words;
 

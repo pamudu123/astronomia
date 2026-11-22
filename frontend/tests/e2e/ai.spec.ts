@@ -225,14 +225,16 @@ test("the AI notice comes before the first explanation, and nothing is sent unti
   await expect(card.locator('[data-chapter="match.people"]')).toContainText("Text of match.people.");
   await expect(page.locator("[data-ai-notice]")).toHaveCount(0);
 
-  // Remembered in this browser: a later visit doesn't ask again.
-  await quickMatch(page);
+  // Remembered in this browser: a later visit (the page keeps the match) doesn't ask again.
+  await page.reload();
   await page.locator('[data-explain="match.checks match.mars"]').getByRole("button", { name: "Explain this" }).click();
   await expect(page.locator('[data-chapter="match.checks"]')).toContainText("Text of match.checks.");
   await expect(page.locator("[data-ai-notice]")).toHaveCount(0);
 });
 
-test("the AI notice comes before the first chat message, in place of the input", async ({ page }) => {
+test("the AI notice comes before the first chat message, in place of the input (on a phone)", async ({ page }) => {
+  // A phone screen, where the chat covers the page.
+  await page.setViewportSize({ width: 390, height: 844 });
   await mockAll(page, new Set(), OPEN, { notice: "new" });
   const runs: string[] = [];
   page.on("request", (request) => {
@@ -250,6 +252,7 @@ test("the AI notice comes before the first chat message, in place of the input",
   await expect(panel.locator("textarea")).toHaveCount(0);
   await expect(panel.getByRole("button", { name: "Explain my match result" })).toHaveCount(0);
 
+  await expect(notice.getByRole("button", { name: "I understand" })).toBeInViewport();
   await notice.getByRole("button", { name: "I understand" }).click();
   await expect(panel.locator("textarea")).toBeVisible();
   await expect(panel.locator("[data-ai-notice]")).toHaveCount(0);
