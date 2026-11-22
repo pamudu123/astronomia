@@ -9,6 +9,9 @@ Run with `uvicorn app.main:create_app --factory`. The app is built when the serv
 not on import, so importing this module (tests, CI) needs no OpenAI key.
 """
 
+import asyncio
+import contextlib
+import datetime as dt
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -22,6 +25,7 @@ from app import __version__
 from app.config import Settings, get_settings
 from app.explain import ExplainRequest, stream_chapter
 from app.graph import build_agent, build_model
+from app.memory import ExpiringMemorySaver, run_sweeper
 from app.security import AccessKeyMiddleware
 from app.suggest import build_suggester
 from app.tools import EngineClient, engine_tools
@@ -36,12 +40,21 @@ def create_app(
     """`explain_model` can be swapped in tests."""
     settings = settings or get_settings()
     engine = EngineClient(settings.backend_url, settings.backend_access_key.get_secret_value())
-    graph = build_agent(settings, engine_tools(engine))
+    # Each graph keeps its conversations in memory, deleted after a fixed idle time.
+    idle = dt.timedelta(minutes=settings.conversation_idle_minutes)
+    memories = (ExpiringMemorySaver(idle), ExpiringMemorySaver(idle))
+    graph = build_agent(settings, engine_tools(engine), checkpointer=memories[0])
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-        yield
-        await engine.aclose()
+        sweeper = asyncio.create_task(run_sweeper(memories))
+        try:
+            yield
+        finally:
+            sweeper.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await sweeper
+            await engine.aclose()
 
     app = FastAPI(
         title="Astronomia Agent",
@@ -49,6 +62,7 @@ def create_app(
         description="The AI assistant, served over AG-UI.",
         lifespan=lifespan,
     )
+    app.state.memories = memories
     if key := settings.access_key.get_secret_value():
         app.add_middleware(AccessKeyMiddleware, key=key)
 
@@ -72,7 +86,7 @@ def create_app(
         LangGraphAGUIAgent(
             name=SUGGEST_NAME,
             description="Writes the follow-up questions shown under each answer.",
-            graph=build_suggester(settings),
+            graph=build_suggester(settings, checkpointer=memories[1]),
             emit_raw_events=False,
         ),
         "/agent/suggest",

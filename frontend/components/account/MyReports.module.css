@@ -246,6 +246,11 @@
   opacity: 0.7;
 }
 
+.separate {
+  max-width: 64ch;
+  font-size: 14px;
+}
+
 /* How long a report is kept: "Paid", or "Free · deleted in N days" (docs/18, section 3). */
 .keep {
   align-self: flex-start;

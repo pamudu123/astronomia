@@ -1,16 +1,17 @@
 # Accounts and Saved Reports
 
-> **Updated 2026-11-21:** two later files change this plan, and win where they differ.
+> **Updated 2026-11-22:** three later files change this plan, and win where they differ.
 > - `docs/18-saving-paid-and-compare.md`: what free and paid users get. Free saves last 7 days, paid saves are unlimited, a coupon stands in for payments, the Astro chat has a weekly free limit.
-> - `docs/19-supabase-build-plan.md`: how it is built. The database moves to **Supabase**, and **Supabase Auth** replaces the guest cookie (guests become anonymous users) and the Google sign in design in section 6. The `sessions` table goes. Section 6 and the line about avoiding Supabase are out of date.
+> - `docs/19-supabase-build-plan.md`: how it is built, and **built** (2026-11-21). The database is on **Supabase** (private `sidera` schema, tables made by `supabase/migrations/`). **Supabase Auth** replaced the guest cookie: the first Save signs the browser in as an anonymous user, "Continue with Google" links Google to it, and the browser sends the Supabase access token with each account call. The `sessions` table and the `sid` cookie are gone. Guests with nothing saved are deleted after 7 days unused.
+> - `docs/20-paid-reports.md`: prices, coupons, orders and the paid check, built.
 >
-> Phase A below (Save, My reports, snapshots) is built and stays; its storage and sign in change as file 19 describes.
+> Phase A below (Save, My reports, snapshots) is built and stays. Phase B (Google sign in, sign out, delete account) is built as file 19 describes, not as section 6 below. Sections marked *(replaced)* are kept as history.
 
 Date: 2026-11-15
 
 How a visitor saves a result (a porondam match, a hadahan and later the other tools) and finds it again in a "My reports" page, and how Google sign in comes in only when it is needed.
 
-**Status (2026-11-15):** the owner chose guest first (decision 1 in section 11). Phase A, build steps 1 to 4, is built: guest accounts, Save on hadahan and porondam, My reports, the saved report page and the privacy page text. Where the build differs from the first design, the sections below say so. Phases B to D are not started.
+**Status (2026-11-15):** the owner chose guest first (decision 1 in section 11). Phase A, build steps 1 to 4, is built: guest accounts, Save on hadahan and porondam, My reports, the saved report page and the privacy page text. Where the build differs from the first design, the sections below say so. Phases B to D are not started. *(Out of date: see the note at the top. Phase B is built with Supabase Auth, and the guest cookie in sections 2 and 5 is now a Supabase anonymous sign in kept in the browser.)*
 
 ## 1. What the owner asked for
 
@@ -63,6 +64,10 @@ Four tables. Same pattern as share links today: SQLite for local runs and tests,
 
 ### 4.1 `users`
 
+As built (docs/19): `id` (the Supabase Auth user id), `kind` (`guest` or `google`), `created_at`, `last_seen_at`. No Google id, email or name: those stay in Supabase Auth. `last_seen_at` is one of the signs the idle guest clean up reads.
+
+*(replaced)* The first design:
+
 | Column | Notes |
 |---|---|
 | `id` | Random UUID |
@@ -71,7 +76,7 @@ Four tables. Same pattern as share links today: SQLite for local runs and tests,
 | `email`, `name` | From Google. Empty for guests |
 | `created_at`, `last_seen_at` | `last_seen_at` drives guest clean up |
 
-### 4.2 `sessions`
+### 4.2 `sessions` *(replaced: Supabase Auth keeps the sessions; the table was dropped)*
 
 | Column | Notes |
 |---|---|
@@ -95,7 +100,7 @@ Four tables. Same pattern as share links today: SQLite for local runs and tests,
 | `purchase_id` | Empty in phases A and B |
 | `created_at`, `updated_at` | |
 
-### 4.4 `purchases` (phase C)
+### 4.4 `purchases` (phase C) *(replaced by `orders` and `coupons`, docs/20)*
 
 `id`, `user_id`, `product`, `saved_report_id`, `amount`, `currency`, `gateway`, `gateway_ref`, `status` (`pending`, `paid`, `refunded`), `created_at`. What a user may do is worked out from paid purchases. There is no separate entitlement table to keep in step.
 
@@ -111,15 +116,15 @@ All under `/v1`, reached by the browser through the frontend's `/api` forward, s
 | Method and path | Does |
 |---|---|
 | `GET /v1/me` | The account on this browser (`guest`, later `google`) and the number of saved reports. `kind` is null when there is no account |
-| `POST /v1/saved` | Body: the same body as the PDF report. Rebuilds the result on the server, saves it, returns it (201). **Makes a guest account and sets the cookie if there is none.** Returns the existing report (200) when the input was already saved, in either language |
+| `POST /v1/saved` | Body: the same body as the PDF report. Rebuilds the result on the server, saves it, returns it (201). *(Now: needs a Supabase access token; the page signs in anonymously first, and the backend makes the account on the first call.)* Returns the existing report (200) when the input was already saved, in either language |
 | `GET /v1/saved` | The list (summary fields only), newest first |
 | `GET /v1/saved/{id}?lang=` | One report in one language, with the request it was made from |
 | `PATCH /v1/saved/{id}` | Rename. An empty name goes back to the names in the report |
 | `DELETE /v1/saved/{id}` | Delete |
 | `POST /v1/saved/{id}/refresh` | Rebuild with the current rules. **Not built yet**: needed only when a rule set changes |
-| `POST /v1/auth/google` | Body: the Google ID token. Checks it, claims or merges the guest, starts a Google session (phase B) |
-| `POST /v1/auth/logout` | Ends the session. A signed out device starts with no account |
-| `DELETE /v1/me` | Deletes the account, its sessions and every saved report |
+| `POST /v1/me/merge-guest` | Built instead of `POST /v1/auth/google`: Google linking happens in Supabase; this moves a guest's reports into a Google account that already existed (docs/19, step 4) |
+| Sign out | Built in the browser with Supabase (`signOut`), not as a backend endpoint |
+| `DELETE /v1/me` | Deletes the account, every saved report, and the Supabase user |
 | `POST /v1/checkout`, `POST /v1/billing/webhook/{gateway}`, `GET /v1/purchases` | Phase C |
 
 The save check lives in one place, `save_access()` in `backend/app/tiers/`, like `yearly_access()` and `wedding_access()` today. In phases A and B it lets everyone through. In phase C it asks "is there a paid purchase for this report?". A test proves that turning it on blocks Save for free results and leaves the existing saved reports readable.
@@ -134,12 +139,12 @@ The save check lives in one place, `save_access()` in `backend/app/tiers/`, like
 | Part | File |
 |---|---|
 | Store (one class for SQLite and PostgreSQL) | `backend/app/store/accounts.py` |
-| Endpoints, cookies, the Origin check, the guest rate limit | `backend/app/api/saved.py` |
+| Endpoints, the token check (`app/auth.py`), the hint cookie, the Origin check, the guest rate limit | `backend/app/api/saved.py` |
 | The paid check | `save_access()` in `backend/app/tiers/__init__.py` |
 | Frontend client | `frontend/lib/account.ts` |
 | Save button, its gate, header link, My reports, saved report page | `frontend/components/account/`, `frontend/app/[lang]/my/` |
 
-## 6. Sign in with Google (phase B)
+## 6. Sign in with Google (phase B) *(replaced: built with Supabase Auth, docs/19)*
 
 - **Google Identity Services** button, loaded only on the pages that show it (checkout, the footer sign in page, My reports). No Google script on any other page.
 - The button returns a signed **ID token**. The browser posts it to `POST /v1/auth/google`. The backend checks the signature against Google's public keys, the audience (our client id), the issuer, the expiry and that the email is verified, using the `google-auth` library.
@@ -152,14 +157,14 @@ Set up needed from the owner: a Google Cloud project, the OAuth consent screen (
 
 | Topic | Rule |
 |---|---|
-| Session cookie | Random 32 bytes. `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`. Only its hash is stored. Named `__Host-sid` where the site runs on https |
+| Sign in | *(replaced)* No session cookie any more. Supabase keeps the sign in in the browser's local storage; each account call carries the access token, which the backend checks with Supabase's public keys (docs/19) |
 | Forged requests from other sites | `SameSite=Lax`, plus the backend refuses any POST, PATCH or DELETE whose `Origin` is neither listed in `ASTRONOMIA_SITE_ORIGINS` nor the host the request was sent to (through the frontend's forward, the forwarded host) |
 | Someone else's report | Every query filters on the session's user. A wrong id is 404 |
 | Birth details | Stored only when Save is pressed. Never in addresses or logs (as today) |
 | Limits | 20 free reports at a time per account (`ASTRONOMIA_FREE_SAVED_LIMIT`), each deleted 7 days after saving (docs/18, section 3); 1,000 paid reports (`ASTRONOMIA_PAID_SAVED_LIMIT`). One address may make 30 new guest accounts an hour (`ASTRONOMIA_GUESTS_PER_HOUR`), counted in memory |
 | Delete | Every report can be deleted. "Delete my account" deletes everything at once |
-| Guest clean up | A guest account not used for 12 months is deleted with its reports |
-| Privacy page | Updated before phase A ships: what Save stores, the guest cookie, how to delete, Google sign in |
+| Guest clean up | A guest with nothing saved and not used for 7 days is deleted, here and in Supabase Auth, by a daily job (docs/19, step 5). Free reports themselves expire after 7 days (docs/18) |
+| Privacy page | Must say what Save stores, that sign in is kept in the browser by Supabase, how to delete, Google sign in, and the 7 day guest clean up (with the policy pages) |
 
 ### Cold starts
 
@@ -209,8 +214,8 @@ Each step is one pull request with its own tests.
 | 2 | **Built.** Users, sessions and saved reports in the store (SQLite and PostgreSQL), with a schema version table for later changes | Store tests on both. Production refuses to start without PostgreSQL |
 | 3 | **Built.** `/v1/me` and `/v1/saved*` with guest accounts, the Origin check, limits, `save_access()` | One user cannot see another's report. Saving twice returns one report. Delete works. Cross site POST refused |
 | 4 | **Built.** Save button on hadahan and porondam, My reports, one report page, header link, privacy page | Playwright: save a match, find it in My reports, open it in the other language, download the PDF, delete it |
-| 5 | Google sign in, claim and merge, sign out, delete account, footer link | Token checks tested with fake tokens. Merging moves every report. Delete removes everything |
-| 6 | Payments (separate design once gateways and prices are chosen) | |
+| 5 | **Built** with Supabase Auth (docs/19, steps 2 to 4). Google sign in, claim and merge, sign out, delete account, footer link | Token checks tested with stand-in tokens. Merging moves every report. Delete removes everything |
+| 6 | Payments. Prices, coupons and the paid check are built (docs/20); a payment provider is not | |
 | 7 | Save for the other tools, one tool per step | |
 
 The session cookie was checked through the frontend's `/api` forward with `next dev` on 2026-11-15: saving, listing, opening, renaming and deleting all worked, and the HttpOnly cookie stayed hidden from page scripts. **Still to check on the Vercel staging site** after merging: save a result, reload, and see it in My reports.
@@ -222,5 +227,5 @@ The session cookie was checked through the frontend's `/api` forward with `next 
 | 1 | Guest first (section 2) or Google sign in when Save is pressed? | Guest first |
 | 2 | When paid only saving starts, do reports saved for free stay? | Yes, they stay. Only new free results lose Save |
 | 3 | Name of the dashboard | "My reports" / "මගේ වාර්තා" |
-| 4 | How long an unused guest account is kept | 12 months |
+| 4 | How long an unused guest account is kept | Decided 2026-11-21: 7 days once it holds nothing (docs/18, docs/19) |
 | 5 | Which tools get Save first | Hadahan and porondam, then the others in phase D |

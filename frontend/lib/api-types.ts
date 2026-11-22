@@ -2602,10 +2602,15 @@ export interface components {
             name: string;
             birth: components["schemas"]["HadahanRequest"];
             /**
-             * Hide Names
+             * Show Names
              * @default false
              */
-            hide_names: boolean;
+            show_names: boolean;
+            /**
+             * Show Birth
+             * @default false
+             */
+            show_birth: boolean;
         };
         /** ShareOut */
         ShareOut: {
@@ -2626,7 +2631,9 @@ export interface components {
             expires_at: string;
             /** Names Hidden */
             names_hidden: boolean;
-            hadahan?: components["schemas"]["SnapshotHadahan"] | null;
+            /** Birth Hidden */
+            birth_hidden: boolean;
+            hadahan?: components["schemas"]["SharedHadahan"] | null;
             porondam?: components["schemas"]["PorondamResponse"] | null;
         };
         /** SharePorondam */
@@ -2638,10 +2645,77 @@ export interface components {
             kind: "porondam";
             match: components["schemas"]["PorondamRequest"];
             /**
-             * Hide Names
+             * Show Names
              * @default false
              */
-            hide_names: boolean;
+            show_names: boolean;
+            /**
+             * Show Birth
+             * @default false
+             */
+            show_birth: boolean;
+        };
+        /**
+         * SharedChart
+         * @description A shared chart. The birth moment and place are None when birth details are hidden.
+         */
+        SharedChart: {
+            /** Utc */
+            utc: string | null;
+            /** Latitude */
+            latitude: number | null;
+            /** Longitude */
+            longitude: number | null;
+            lagna: components["schemas"]["PointOut"];
+            moon: components["schemas"]["PointOut"];
+            /** Planets */
+            planets: components["schemas"]["PlanetOut"][];
+            time_check: components["schemas"]["TimeCheckOut"];
+            method: components["schemas"]["MethodOut"];
+        };
+        /** SharedDasha */
+        SharedDasha: {
+            /**
+             * System
+             * @default vimshottari
+             * @constant
+             */
+            system: "vimshottari";
+            /** Balance Years */
+            balance_years: number | null;
+            /** Periods */
+            periods: components["schemas"]["PeriodOut"][];
+            /** Current */
+            current: components["schemas"]["PeriodOut"][];
+        };
+        /**
+         * SharedHadahan
+         * @description A shared hadahan in one language.
+         */
+        SharedHadahan: {
+            /** Name */
+            name: string;
+            /** Date */
+            date: string | null;
+            /** Time */
+            time: string | null;
+            /** Place */
+            place: string | null;
+            result: components["schemas"]["SharedHadahanResult"];
+        };
+        /**
+         * SharedHadahanResult
+         * @description A shared hadahan result. With birth details hidden there is no time block (date, clock
+         *     time, time zone), no birth moment or place in the chart, and no dasha balance.
+         */
+        SharedHadahanResult: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"] | null;
+            chart: components["schemas"]["SharedChart"] | null;
+            dasha: components["schemas"]["SharedDasha"] | null;
+            kuja: components["schemas"]["KujaOut"] | null;
+            birth_table?: components["schemas"]["BirthTableOut"] | null;
         };
         /** SignLettersOut */
         SignLettersOut: {

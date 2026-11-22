@@ -102,6 +102,11 @@ export function MyReportsApp({ lang, dict }: Props) {
             {view.kind === "wiped" ? t.deletedAll : t.emptyTitle}
           </h2>
           {view.kind !== "wiped" && <p className="soft">{t.emptyText}</p>}
+          {view.kind === "wiped" && (
+            <p className="soft" data-shares-separate>
+              {t.sharesSeparate}
+            </p>
+          )}
           <div className={styles.links}>
             <Link href={`/${lang}/hadahan`} className="btn btn-primary lift">
               {t.makeHadahan}
@@ -156,6 +161,10 @@ export function MyReportsApp({ lang, dict }: Props) {
         </section>
       ))}
       <GoogleSignIn lang={lang} t={t} who={who} hasReports onSignedOut={retry} />
+      {/* Deleting here never touches share links: say so where the delete buttons are. */}
+      <p className={`soft ${styles.separate}`} data-shares-separate>
+        {t.sharesSeparate}
+      </p>
       <DeleteEverything
         t={t}
         google={who?.kind === "google"}

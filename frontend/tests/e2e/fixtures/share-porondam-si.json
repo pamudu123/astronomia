@@ -3,6 +3,7 @@
   "created_at": "2026-11-12T08:00:00Z",
   "expires_at": "2026-12-12T08:00:00Z",
   "names_hidden": false,
+  "birth_hidden": false,
   "hadahan": null,
   "porondam": {
     "status": "ok",
