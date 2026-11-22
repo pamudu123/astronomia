@@ -233,6 +233,7 @@
     "disclaimer": "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer.",
     "privacy": "Privacy",
     "terms": "Terms",
+    "credits": "Credits",
     "legal": "About this site",
     "changes": "Planet changes",
     "signIn": "Already saved? Sign in"
@@ -1709,5 +1710,53 @@
     "note": "Stays in this browser only.",
     "saved": "Remembered on this device.",
     "forget": "Forget"
+  },
+  "credits": {
+    "title": "Credits",
+    "metaDescription": "The data, fonts and calculations Sidera uses, where they come from and the licences they are shared under.",
+    "lead": "Sidera stands on other people's work. Here are the data, fonts and calculations we use, where they come from and the licences they are shared under.",
+    "updated": "Last updated: 22 November 2026",
+    "licence": "Licence",
+    "places": {
+      "title": "Places",
+      "text": "Place names, coordinates and time zones come from GeoNames, shared under the Creative Commons Attribution 4.0 licence. The data is provided \"as is\", without warranty.",
+      "changesTitle": "What we changed",
+      "changes": [
+        "For Sri Lanka we keep only the populated places from the GeoNames file for the country. Places in other countries are those with 1,000 or more people.",
+        "We leave out Sinhala names that are not written correctly, such as those with a vowel sign before the consonant or with letters from another script.",
+        "We use our own list of province names in place of the GeoNames ones, which have errors.",
+        "We put the places into a search index that lists larger places first."
+      ]
+    },
+    "fonts": {
+      "title": "Fonts",
+      "text": "The site uses five font families. Each is under the SIL Open Font License 1.1, which allows them to be used on websites and shared.",
+      "licence": "SIL Open Font License 1.1"
+    },
+    "names": {
+      "title": "Baby names",
+      "text": "The name suggestions on the baby name pages draw on Wikipedia, shared under the Creative Commons Attribution-ShareAlike 4.0 licence.",
+      "wikipedia": "From Wikipedia: the names in its Sinhalese given names categories, whether each is a boy's or a girl's name, and the meanings of a few names, taken from their Wikipedia pages.",
+      "people": "Names we added: each links a Wikipedia article about a Sri Lankan person with that name, to show the name is in real use. We take nothing else from those articles.",
+      "ours": "Our own work: the Sinhala spellings of the names we added, and all the other meanings, written from the Sanskrit, Pali or Sinhala root words.",
+      "where": "Every suggested name links the Wikipedia page it comes from. Pick a birth star on the baby names page to see them.",
+      "link": "Baby name letters",
+      "category": "Wikipedia: Sinhalese given names"
+    },
+    "avurudu": {
+      "title": "Avurudu times",
+      "text": "We calculate only the dawn of the new year and the punya kalaya. Every other Avurudu time is published exactly as the official list for that year gives it.",
+      "via": "Ada Derana report",
+      "bodies": {
+        "culturalAffairs": "Department of Cultural Affairs",
+        "astrologersCommittee": "State Astrologers' Committee",
+        "ministry": "Ministry of Buddhasasana, Religious and Cultural Affairs"
+      }
+    },
+    "planets": {
+      "title": "Planet positions",
+      "text": "Planet positions: Swiss Ephemeris.",
+      "how": "Calculated on our own server, through the pyswisseph library."
+    }
   }
 }
