@@ -73,7 +73,7 @@ The allowance is worked out when it is read (paid orders x the setting), so chan
 
 ## 5. Turning it on
 
-1. Apply `supabase/migrations/20261122090000_chat_turns.sql` to the Supabase project (needs the owner's approval). After applying with MCP, rename the file to the recorded version.
+1. Apply `supabase/migrations/20261122090500_chat_turns.sql` to the Supabase project (needs the owner's approval). After applying with MCP, rename the file to the recorded version.
 2. Make one long random value. Set it as `ASTRONOMIA_CHAT_KEY` on the backend in Render (the assistant copies it on its next deploy) and as `CHAT_KEY` in Vercel. Do both together and redeploy both: between the two, the chat refuses every question.
 3. Set the model's prices on the assistant.
 4. Check: the chat shows "2 free questions this week"; after two questions it shows the message with the date.
