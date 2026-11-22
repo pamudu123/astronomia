@@ -8,8 +8,9 @@ How the site is hosted, how staging is kept private, and what is left before it 
 |---|---|---|---|
 | Frontend (Next.js) | Vercel, project `astronomia`, region Singapore (`sin1`), at `https://sidera.ppwrks.com` | Hobby (free) | `frontend/vercel.json`, Vercel settings |
 | Backend (FastAPI, Docker) | Render, web service `astronomia-api`, Singapore | Free | `render.yaml`, `backend/Dockerfile` |
-| Database (saved reports, share links) | **Moving to Supabase** (project `ihzvwnwkbcqldhrvsrle`, Singapore, free) in docs/19, step 1. Until then: Render PostgreSQL `astronomia-db`, which is retired afterwards | Free | `supabase/migrations/` (from docs/19), `render.yaml` |
-| Sign in | **Supabase Auth**: anonymous users and Google (docs/19) | Free | Supabase and Google Cloud settings |
+| Database (accounts, saved reports, share links, orders, coupons) | **Supabase**, project `ihzvwnwkbcqldhrvsrle` (staging), Singapore. Private `sidera` schema, only the backend reads and writes it | Free | `supabase/migrations/` (docs/19) |
+| Sign in | **Supabase Auth**: an anonymous user on the first Save, Google for paid reports (docs/19) | Free | Supabase and Google Cloud settings |
+| Daily clean up of idle guests | **Supabase**, pg_cron job `sidera-delete-idle-guests`, 02:00 Sri Lanka time | Free | `supabase/migrations/20261122021500_delete_idle_guests.sql` |
 | AI assistant (FastAPI, Docker) | Render, web service `astronomia-agent`, Singapore | Free | `render.yaml`, `agent/Dockerfile` |
 
 The domain `ppwrks.com` is registered at Squarespace, which also hosts the company website on
@@ -26,8 +27,11 @@ Backend (Render):
 | Variable | Meaning |
 |---|---|
 | `ASTRONOMIA_ENVIRONMENT` | `staging` or `production` |
-| `ASTRONOMIA_DATABASE_URL` | PostgreSQL for share links and saved reports: the Supabase **session pooler** connection string once docs/19 step 1 is done. Without it, SQLite under `backend/var/` is used. **Required when `ASTRONOMIA_ENVIRONMENT` is `production`**: the backend refuses to start without it. Secret: set it in the dashboard only |
-| `ASTRONOMIA_SUPABASE_URL`, `ASTRONOMIA_SUPABASE_SECRET_KEY` | Planned in docs/19: the Supabase project address (for checking sign in tokens) and the secret key (only for deleting accounts). The key is secret |
+| `ASTRONOMIA_DATABASE_URL` | The Supabase **session pooler** connection string, for accounts, saved reports, share links, orders and coupons. The tables come from `supabase/migrations/`; the backend stops at start up if they are missing. Without it, SQLite under `backend/var/` is used. **Required when `ASTRONOMIA_ENVIRONMENT` is `production`**: the backend refuses to start without it. Secret: set it in the dashboard only |
+| `ASTRONOMIA_SUPABASE_URL` | The Supabase project address, for the public keys that check sign in tokens. In `render.yaml`. Without it nobody can sign in |
+| `ASTRONOMIA_SUPABASE_SECRET_KEY` | Supabase's secret key (`sb_secret_...`), only for deleting a user from Supabase Auth (account deletion, a guest moved into a Google account). Secret: set it in the dashboard only |
+| `ASTRONOMIA_PAID_REPORTS` | `true` turns on paid reports (docs/20): the AI reading, explain buttons, full detail and full PDF only on reports the account unlocked, with a coupon until payments exist. On for staging in `render.yaml` |
+| `ASTRONOMIA_DEFAULT_COUNTRY` | Optional. The buyer's country for the price when Vercel does not say. Default `LK` |
 | `ASTRONOMIA_SITE_ORIGINS` | Optional. The site's own addresses as a JSON list, for example `["https://sidera.lk"]`. Saving, renaming and deleting are refused from any other page. When empty, the address the request was forwarded from is used |
 | `ASTRONOMIA_ACCESS_KEY` | When set, every request except `/healthz` needs it in `X-Access-Key`. Keeps staging private |
 | `ASTRONOMIA_SHARE_DAYS` | How long a share link stays open. Default 30 |
@@ -57,7 +61,8 @@ Frontend (Vercel):
 | `NEXT_PUBLIC_SUPABASE_URL` | The Supabase project, for sign in (docs/19). Staging: `https://ihzvwnwkbcqldhrvsrle.supabase.co`. Read when the site is built |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | The project's publishable key (`sb_publishable_...`). Public by design: it only lets a browser sign in. Read when the site is built |
 
-Secrets (`*_ACCESS_KEY`, `OPENAI_API_KEY`, `STAGING_PASSWORD`) are set only in the host
+Secrets (`*_ACCESS_KEY`, `OPENAI_API_KEY`, `STAGING_PASSWORD`, `ASTRONOMIA_DATABASE_URL`,
+`ASTRONOMIA_SUPABASE_SECRET_KEY`) are set only in the host
 dashboards, never in the repository. Changing a Vercel variable needs a redeploy. `AGENT_URL` is
 read when the site is built, so it needs a redeploy to take effect.
 
@@ -109,10 +114,10 @@ on staging only people with the staging password can use it (docs/14, section 11
   minute while it wakes. The assistant sleeps the same way: the first chat message after a quiet
   spell can take up to a minute, or fail and need sending again. Its conversations are kept in
   memory, so they are lost each time it sleeps.
-- The free Render PostgreSQL is deleted 30 days after it is created, with its share links. It
-  has no backups. It is being replaced by Supabase.
 - The free Supabase project pauses after a week without activity (restore it from the
   dashboard; the data is kept) and has no backups. Export the data now and then while on Free.
+  While it is paused the daily clean up does not run either; it catches up on the first run
+  after it is restored.
 - Fine for staging. Production needs paid plans (see below).
 
 ## Before going public
@@ -128,7 +133,7 @@ describes them.
 | Ephemeris licence | **Blocks launch, even for a free site.** Buy the Swiss Ephemeris professional licence in the operator's name: CHF 700, valid 6 years, then renewable at no more than the original fee adjusted for Swiss inflation (contract edition September 2026, update 9 Nov 2026, §§4, 16). It covers software on our own server (§2). Giving another business API access needs its own licence (§3). pyswisseph is listed as covered but "currently unsupported" (§13). Keep the signed contract, proof of payment and the pyswisseph version. The contract also forbids naming Astrodienst or its authors in promotion (§9). Publishing the backend under the AGPL is the alternative |
 | Operator details | Decide who runs the site (a person trading as Sidera, or a company). Fill in legal name, registration number if any, address, business phone, privacy and support email, domain and effective date. Register the business name and get a tax number (TIN) to match |
 | Domain name | Done (2026-11-21): `sidera.ppwrks.com` on Vercel, `SITE_URL` set |
-| Vendor agreements | Accept and keep the data processing terms of Render, Vercel and OpenAI. Record each one's role, locations, subprocessors and deletion terms |
+| Vendor agreements | Accept and keep the data processing terms of Supabase, Render, Vercel and OpenAI. Record each one's role, locations, subprocessors and deletion terms |
 | Sri Lankan data protection | The legal review reports that the main parts of the Act start on 1 January 2027 (gazette 2498/16; not checked by us). Name a privacy lead, keep the data map and records of consent. Recheck the authority's rules before that date |
 | Artwork provenance | Record which tool made the site images, the account tier and its terms, and keep the source files |
 | Trademark search | Search "Sidera" and its Sinhala spelling in Sri Lanka (NIPO) and in the main overseas markets before spending on publicity |
@@ -153,8 +158,8 @@ describes them.
 | AI notice | A short notice before the first chat message and before the first Explain button: the message and chart facts go to OpenAI, leave out names, children's details and sensitive information, and AI can be wrong |
 | AI conversation time limit | Conversations kept in memory need a fixed idle timeout. A restart is not a retention limit |
 | Credits page | Public page for GeoNames (CC BY 4.0, with the changes made), the fonts (SIL Open Font License), the Wikipedia names (CC BY-SA 4.0, per name) and the official Avurudu source |
-| Cookies | Keep the guest key cookie (needed for Save). Drop the My reports marker cookie if it is only a convenience |
-| Retention jobs | Check that share links really close after 30 days and guest accounts are deleted after 12 months unused |
+| Cookies and browser storage | The guest cookie is gone: Supabase keeps the sign in (anonymous or Google) in the browser's local storage. Only the My reports hint cookie (`sidera_saved`) is left; drop it if it is only a convenience |
+| Retention jobs | Check that share links really close after 30 days, free saved reports go after 7 days (docs/18), and guests with nothing saved go after 7 days unused (the pg_cron job `sidera-delete-idle-guests`, docs/19) |
 | Policy pages | Put the reviewed privacy and terms text on the site in both languages, with an effective date, a contact address and an archive of old versions |
 | End to end check | On a production-like setup, trace one calculation, save, share, delete, PDF, AI message, error and support request, and check the policy promises hold |
 

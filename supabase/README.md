@@ -18,3 +18,21 @@ SQLite, which makes its own tables.
   so CI checks every migration too.
 - `20261121120030_temporary_guest_sessions.sql` kept the guest cookie working until sign in
   moved to Supabase Auth. `20261121130000_drop_guest_sessions.sql` (docs/19, step 2) drops it.
+- `20261122021500_delete_idle_guests.sql` (docs/19, step 5) adds `sidera.delete_idle_guests()`
+  and turns on pg_cron to run it daily (job `sidera-delete-idle-guests`, 20:30 UTC). See the
+  jobs below.
+
+## Scheduled jobs
+
+Jobs run inside the database with pg_cron, so they work while the free backend sleeps and need
+no key outside the database.
+
+| Job | When | Does |
+|---|---|---|
+| `sidera-delete-idle-guests` | Daily, 20:30 UTC (02:00 Sri Lanka) | Deletes anonymous users with nothing saved and unused for 7 days, from `auth.users` and `sidera.users` |
+
+- See them: `select jobname, schedule, active from cron.job;` and the last runs:
+  `select * from cron.job_run_details order by start_time desc limit 20;`
+- Run one now: `select sidera.delete_idle_guests();` (returns how many went).
+- A new table that points at `sidera.users` needs `on delete cascade` (or `set null` for
+  records that must stay), or the clean up fails for a guest with a row in it.
