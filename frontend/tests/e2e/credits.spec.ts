@@ -14,7 +14,7 @@ test("the footer links to the credits page, which names every source", async ({ 
   await expect(page.getByRole("link", { name: "CC BY-SA 4.0" })).toBeVisible();
   await expect(page.locator("[data-year='2027']")).toContainText("Department of Cultural Affairs");
   await expect(page.getByText("Planet positions: Swiss Ephemeris.")).toBeVisible();
-  await expect(page.locator("main")).not.toContainText(/astrodienst/i);
+  await expect(page.getByRole("main")).not.toContainText(/astrodienst/i);
 });
 
 test("the credits page in Sinhala", async ({ page }) => {
