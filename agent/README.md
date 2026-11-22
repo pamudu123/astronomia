@@ -27,6 +27,8 @@ The rule: **the AI talks, the engine calculates.** Facts come from the page the 
 
 **Helpers cost extra model calls.** One question can start at most `ASTRONOMIA_AGENT_MAX_SUBAGENT_CALLS` (default 4). Set it to 0 to switch helpers off.
 
+**Conversations are deleted after 30 idle minutes.** The service keeps each chat in memory so the guide remembers earlier messages, and deletes it once nobody has used it for `ASTRONOMIA_AGENT_CONVERSATION_IDLE_MINUTES` (default 30), checked on every request and once a minute (`app/memory.py`). The next message on that chat starts afresh. The website starts a new chat after the same time (`frontend/lib/assistant/idle.ts`), and the privacy notice states the number: change all three together.
+
 ## Run it locally
 
 You need Python 3.12 or newer with [uv](https://docs.astral.sh/uv/), and an OpenAI API key.

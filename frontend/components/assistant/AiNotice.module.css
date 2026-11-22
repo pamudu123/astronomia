@@ -1,0 +1,87 @@
+/* The AI notice (AiNotice.tsx): in the chat panel and in place of an explanation or reading. */
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-field);
+  background: var(--panel);
+  color: var(--ink);
+  text-align: left;
+}
+
+.notice:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Focus is moved here by script, not by the person: no ring for a mouse or touch. */
+.notice:focus:not(:focus-visible),
+.after:focus {
+  outline: none;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.spark {
+  color: var(--gold);
+}
+
+.text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  margin-top: 4px;
+}
+
+.accept {
+  min-height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gold-fill);
+  color: var(--on-gold);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.accept:hover {
+  background: var(--gold-fill-hover);
+}
+
+.accept:focus-visible,
+.link:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.link {
+  color: var(--gold);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* On a phone the button takes the whole width, easy to reach with a thumb. */
+@media (max-width: 480px) {
+  .accept {
+    width: 100%;
+  }
+}

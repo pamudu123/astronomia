@@ -15,6 +15,16 @@ const chapter = (id: string) => `Text of ${id}.\n\n**A bold lead**\nA short part
 
 type Calls = string[];
 
+/** The reviewed AI notice (docs/policies/refunds.md), shown before anything goes to the AI. */
+const NOTICE =
+  "This is an AI helper. Your message and selected chart facts go to OpenAI. Please leave out names, " +
+  "children's details, and health or other sensitive information. AI can make mistakes.";
+
+/** Marks the AI notice as acknowledged in this browser, as after an earlier visit. */
+async function acknowledgeNotice(page: Page) {
+  await page.addInitScript(() => window.localStorage.setItem("sidera.ai-notice", "2026-11-20"));
+}
+
 const PRICE = { amount: 80_000, currency: "LKR" };
 /** What the backend says about the report (docs/18): paid reports switched off, as today. */
 const OPEN = {
@@ -25,7 +35,13 @@ const OPEN = {
   price: PRICE,
 };
 
-async function mockAll(page: Page, fail: Set<string> = new Set(), access: object = OPEN): Promise<Calls> {
+async function mockAll(
+  page: Page,
+  fail: Set<string> = new Set(),
+  access: object = OPEN,
+  { notice = "acknowledged" }: { notice?: "acknowledged" | "new" } = {},
+): Promise<Calls> {
+  if (notice === "acknowledged") await acknowledgeNotice(page);
   await page.route("**/api/v1/reports/access", (route) =>
     route.fulfill({ contentType: "application/json", body: JSON.stringify(access) }),
   );
@@ -178,4 +194,64 @@ test("a signed in visitor unlocks the match with a free coupon", async ({ page }
   const card = page.locator('[data-card="full-reading"]');
   await card.getByRole("button", { name: "Get the full reading" }).click();
   await expect(card.locator('[data-chapter="match.people"]')).toContainText("Text of match.people.");
+});
+
+test("the AI notice comes before the first explanation, and nothing is sent until it is acknowledged", async ({
+  page,
+}) => {
+  const calls = await mockAll(page, new Set(), OPEN, { notice: "new" });
+  await quickMatch(page);
+
+  const result = page.locator('[data-explain="match.summary"]');
+  await result.getByRole("button", { name: "Explain this" }).click();
+  const notice = result.getByRole("region", { name: "Before you use the AI helper" });
+  await expect(notice).toBeVisible();
+  await expect(notice).toContainText(NOTICE);
+  await expect(notice).toBeFocused();
+  await expect(notice.getByRole("link", { name: /How we handle your information/ })).toHaveAttribute(
+    "href",
+    "/en/privacy",
+  );
+  // The full reading waits for the same notice.
+  const card = page.locator('[data-card="full-reading"]');
+  await card.getByRole("button", { name: "Get the full reading" }).click();
+  await expect(card.locator("[data-ai-notice]")).toBeVisible();
+  await expect(page.locator("[data-chapter]")).toHaveCount(0);
+  expect(calls).toHaveLength(0);
+
+  // One "I understand" lets every explanation on the page through.
+  await notice.getByRole("button", { name: "I understand" }).click();
+  await expect(result.locator('[data-chapter="match.summary"]')).toContainText("Text of match.summary.");
+  await expect(card.locator('[data-chapter="match.people"]')).toContainText("Text of match.people.");
+  await expect(page.locator("[data-ai-notice]")).toHaveCount(0);
+
+  // Remembered in this browser: a later visit doesn't ask again.
+  await quickMatch(page);
+  await page.locator('[data-explain="match.checks match.mars"]').getByRole("button", { name: "Explain this" }).click();
+  await expect(page.locator('[data-chapter="match.checks"]')).toContainText("Text of match.checks.");
+  await expect(page.locator("[data-ai-notice]")).toHaveCount(0);
+});
+
+test("the AI notice comes before the first chat message, in place of the input", async ({ page }) => {
+  await mockAll(page, new Set(), OPEN, { notice: "new" });
+  const runs: string[] = [];
+  page.on("request", (request) => {
+    if (!request.url().includes("/api/copilotkit")) return;
+    const body = request.postData() ?? "";
+    // The chat's start-up asks which agents exist; a message would be a run.
+    if (/"method":"agent\/(run|connect)"|"messages":\[\{/.test(body)) runs.push(body);
+  });
+  await page.goto("/en/porondam");
+  await page.getByRole("button", { name: "Ask Astro" }).click();
+
+  const panel = page.locator(".copilotKitSidebar");
+  const notice = panel.getByRole("region", { name: "Before you use the AI helper" });
+  await expect(notice).toContainText(NOTICE);
+  await expect(panel.locator("textarea")).toHaveCount(0);
+  await expect(panel.getByRole("button", { name: "Explain my match result" })).toHaveCount(0);
+
+  await notice.getByRole("button", { name: "I understand" }).click();
+  await expect(panel.locator("textarea")).toBeVisible();
+  await expect(panel.locator("[data-ai-notice]")).toHaveCount(0);
+  expect(runs).toEqual([]);
 });
