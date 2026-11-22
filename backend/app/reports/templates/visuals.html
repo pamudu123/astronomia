@@ -1,0 +1,174 @@
+{#
+  The pictures drawn for a report (app/reports/visuals.py), shared by the results pages and the
+  AI chapters. Shapes are SVG; words are text placed over them, so Sinhala joins correctly.
+#}
+
+{% macro star(size="3.4mm", color="#e8b84b") -%}
+<svg class="star" style="width: {{ size }}; height: {{ size }}" viewBox="0 0 24 24"><path fill="{{ color }}" d="M12 1.5c.5 4.9 2.4 8.4 9.9 10.5-7.5 2.1-9.4 5.6-9.9 10.5-.5-4.9-2.4-8.4-9.9-10.5 7.5-2.1 9.4-5.6 9.9-10.5Z"/></svg>
+{%- endmacro %}
+
+{% macro arrow() -%}
+<svg class="arrow" viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="#8a6212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+{%- endmacro %}
+
+{% macro medallion(art, size="big") -%}
+<div class="medallion medallion-{{ size }}">
+  {% if art.uri %}<img src="{{ art.uri }}" alt="">{% else %}<div class="medallion-glyph">{{ art.glyph }}</div>{% endif %}
+</div>
+{%- endmacro %}
+
+{# Lagna -> Moon sign -> birth star -> the period now, as a flow of four cards. #}
+{% macro pillars(items) -%}
+<table class="flow">
+  <tbody>
+    <tr>
+      {% for item in items %}
+      <td class="flow-card">
+        <p class="flow-step">{{ loop.index }}</p>
+        {% if item.glyph %}<div class="flow-glyph">{{ item.glyph }}</div>{% endif %}
+        <p class="eyebrow">{{ item.label }}</p>
+        <p class="flow-value">{{ item.value }}</p>
+        <p class="small soft">{{ item.note }}</p>
+      </td>
+      {% if not loop.last %}<td class="flow-arrow">{{ arrow() }}</td>{% endif %}
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{%- endmacro %}
+
+{% macro wheel(w, legend, size="86mm") -%}
+<div class="wheel" style="width: {{ size }}; height: {{ size }}">
+  {{ w.svg }}
+  {% for tag in w.tags %}
+  <span class="wheel-tag {{ tag.kind }}" style="left: {{ tag.left }}%; top: {{ tag.top }}%">{{ tag.text }}</span>
+  {% endfor %}
+</div>
+{% if legend %}<p class="small soft wheel-legend">{{ legend }}</p>{% endif %}
+{%- endmacro %}
+
+{# The twelve houses as a 4 x 3 grid; `highlight` lights up the ones a chapter is about. #}
+{% macro houses(items, highlight=()) -%}
+<table class="houses">
+  <tbody>
+    {% for row in items | batch(4) %}
+    <tr>
+      {% for h in row %}
+      <td class="house{% if h.number == 1 %} house-lagna{% endif %}{% if h.number in highlight %} house-on{% endif %}">
+        <div class="house-glyph">{{ h.glyph }}</div>
+        <p class="house-number">{{ h.label }}</p>
+        <p class="house-sign">{{ h.sign }}</p>
+        <p class="house-theme">{{ h.theme }}</p>
+        {% if h.planets %}<p class="house-planets">{{ h.planets | join(" · ") }}</p>{% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{%- endmacro %}
+
+{% macro periods(bar) -%}
+<div class="bar">
+  {{ bar.svg }}
+  {% for tag in bar.tags %}
+  <span class="bar-tag {{ tag.kind }}" style="left: {{ tag.left }}%; top: {{ tag.top }}%">{{ tag.text }}</span>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{# The Kuja dosha check as a flow: where Mars sits -> what reduces it -> the result. #}
+{% macro mars(m, r) -%}
+<table class="flow">
+  <tbody>
+    <tr>
+      <td class="flow-card" style="width: 34%">
+        <p class="eyebrow">{{ r.mars_where }}</p>
+        {% for point in m.points %}
+        <p class="mars-point{% if point.counts %} counts{% endif %}">
+          <span class="dot"></span>{{ point.text }}
+          <span class="small soft">· {{ r.mars_counts if point.counts else r.mars_not_counts }}</span>
+        </p>
+        {% endfor %}
+      </td>
+      <td class="flow-arrow">{{ arrow() }}</td>
+      <td class="flow-card" style="width: 34%">
+        <p class="eyebrow">{{ r.mars_rules }}</p>
+        <p class="flow-value">{{ m.rules }}</p>
+        {% for name in m.rule_names %}<p class="small soft">{{ name }}</p>{% endfor %}
+      </td>
+      <td class="flow-arrow">{{ arrow() }}</td>
+      <td class="flow-card flow-result{% if not m.present %} flow-clear{% endif %}">
+        <p class="eyebrow">{{ r.mars_result }}</p>
+        <p class="flow-value">{{ m.status }}</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+{%- endmacro %}
+
+{# The match: one segment per factor round the score, with the legend beside it. #}
+{% macro ring(svg, passed, total, r, score) -%}
+<table class="ring-row">
+  <tbody>
+    <tr>
+      <td style="width: 62mm">
+        <div class="ring">
+          {{ svg }}
+          <span class="ring-count">{{ passed }}</span>
+          <span class="ring-of">/ {{ total }}</span>
+        </div>
+      </td>
+      <td>
+        <p class="score">{{ score }}</p>
+        <p class="legend"><span class="key key-pass"></span>{{ r.pass }}</p>
+        <p class="legend"><span class="key key-fail"></span>{{ r.fail }}</p>
+        <p class="legend"><span class="key key-off"></span>{{ r.not_counted }}</p>
+        <p class="small soft" style="margin-top: 2mm">{{ r.ring_note }}</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+{%- endmacro %}
+
+{% macro people(items, r) -%}
+<table class="duo">
+  <tbody>
+    <tr>
+      {% for person in items %}
+      <td class="duo-person">
+        {{ medallion(person.art, "small") }}
+        <p class="eyebrow" style="margin-top: 2.5mm">{{ person.role }}</p>
+        <h3>{{ person.name }}</h3>
+        <p>{{ person.star }}</p>
+        <p class="small soft">{{ person.detail }}</p>
+      </td>
+      {% if loop.first %}<td class="duo-link">{{ star("6mm", "#8a6212") }}</td>{% endif %}
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{%- endmacro %}
+
+{% macro checks(items, kuja, r) -%}
+<table class="checks">
+  <tbody>
+    <tr>
+      {% for row in items %}
+      <td class="check {{ 'check-pass' if row.passed else 'check-fail' }}">
+        <div class="check-mark">{% if row.passed %}<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>{% else %}<svg viewBox="0 0 24 24"><path d="M12 6v8M12 18v.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>{% endif %}</div>
+        <p class="flow-value">{{ row.name }}</p>
+        <p class="small soft">{{ row.meaning }}</p>
+        <p class="check-result">{{ row.result }}</p>
+      </td>
+      {% endfor %}
+      <td class="check check-mars">
+        <div class="check-mark"><svg viewBox="0 0 24 24"><circle cx="10" cy="14" r="5" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M14 10l5-5M14.5 5H19v4.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p class="flow-value">{{ r.kuja }}</p>
+        {% if kuja %}{% for line in kuja.people %}<p class="small">{{ line }}</p>{% endfor %}
+        {% else %}<p class="small soft">{{ r.kuja_quick }}</p>{% endif %}
+      </td>
+    </tr>
+  </tbody>
+</table>
+{%- endmacro %}

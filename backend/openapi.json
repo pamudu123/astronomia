@@ -6635,6 +6635,19 @@
       },
       "ReadingChapter": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^[a-z]+\\.[a-z]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "title": {
             "type": "string",
             "maxLength": 120,
@@ -6654,7 +6667,7 @@
           "text"
         ],
         "title": "ReadingChapter",
-        "description": "One AI chapter as the person read it. Long enough for the longest chapter."
+        "description": "One AI chapter as the person read it. Long enough for the longest chapter.\n\nThe id (`chart.periods`) picks the chapter's picture and diagram; a chapter without one\nprints with a general picture."
       },
       "Rename": {
         "properties": {

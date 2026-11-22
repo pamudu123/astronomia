@@ -9,7 +9,9 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from app.api.charts import ChartOut, HadahanBuild, HadahanRequest, KujaOut, chart_out
 from app.api.porondam import FactorOut, PersonOut, PorondamBuild
+from app.engine.zodiac import RASHI
 from app.explain.labels import Lang, labels
+from app.reports.artwork import glyph, hero_uri, rashi_uri, spot
 from app.reports.format import (
     coordinates_line,
     format_date,
@@ -19,7 +21,8 @@ from app.reports.format import (
 )
 from app.reports.kendara import LINES, planet_labels
 from app.reports.pdf import REPORTS_DIR, html_to_pdf
-from app.reports.reading import blocks
+from app.reports.reading import blocks, parts
+from app.reports.visuals import Placed, Span, factor_ring, periods_bar, sky_wheel
 
 TEMPLATES = REPORTS_DIR / "templates"
 
@@ -117,9 +120,59 @@ def _about(lang: Lang, method: str, rule_sets: list[str], made_on: dt.date) -> l
     ]
 
 
-def _reading(chapters: Sequence[tuple[str, str]]) -> list[dict[str, Any]]:
-    """The AI chapters the person read, as blocks for reading.html."""
-    return [{"title": title, "blocks": blocks(text)} for title, text in chapters]
+# The diagram each AI chapter prints under its short answer, and the houses it lights up. The
+# website's reading draws the same ones (frontend/lib/assistant/visuals.ts).
+CHAPTER_VISUAL: dict[str, tuple[str, tuple[int, ...]]] = {
+    "chart.summary": ("pillars", ()),
+    "chart.nature": ("pillars", ()),
+    "chart.planets": ("wheel", ()),
+    "chart.combinations": ("wheel", ()),
+    "chart.houses": ("houses", ()),
+    "chart.work": ("houses", (2, 10, 11)),
+    "chart.love": ("houses", (7,)),
+    "chart.family": ("houses", (4,)),
+    "chart.studies": ("houses", (4, 5, 9)),
+    "chart.abroad": ("houses", (9, 12)),
+    "chart.periods": ("periods", ()),
+    "chart.care": ("periods", ()),
+    "chart.mars": ("mars", ()),
+    "match.people": ("people", ()),
+    "match.styles": ("people", ()),
+    "match.factors": ("ring", ()),
+    "match.summary": ("ring", ()),
+    "match.checks": ("checks", ()),
+    "match.mars": ("checks", ()),
+}
+
+
+Chapter = tuple[str | None, str, str]  # id, title, text
+
+
+def _reading(chapters: Sequence[Chapter], available: set[str]) -> list[dict[str, Any]]:
+    """The AI chapters in pieces for reading.html: the short answer, the parts, the picture and
+    the diagram (only one this report can draw)."""
+    result = []
+    for number, (chapter_id, title, text) in enumerate(chapters, start=1):
+        answer, sections = parts(blocks(text))
+        visual, highlight = CHAPTER_VISUAL.get(chapter_id or "", ("", ()))
+        result.append(
+            {
+                "number": number,
+                "anchor": f"chapter-{number}",
+                "title": title,
+                "spot": spot(chapter_id),
+                "answer": answer,
+                "parts": sections,
+                "visual": visual if visual in available else "",
+                "highlight": highlight,
+            }
+        )
+    return result
+
+
+def _art(sign: str) -> dict[str, Any]:
+    """A sign's artwork for a dark medallion, or its gold symbol where there is none yet."""
+    return {"uri": rashi_uri(sign), "glyph": glyph(sign, "#e8b84b", ring=True)}
 
 
 def render_hadahan(
@@ -127,7 +180,7 @@ def render_hadahan(
     request: HadahanRequest,
     name: str,
     today: dt.date,
-    reading: Sequence[tuple[str, str]] = (),
+    reading: Sequence[Chapter] = (),
 ) -> bytes:
     response = build.response
     assert response.chart and response.dasha and response.kuja, "only a finished chart prints"
@@ -155,6 +208,92 @@ def render_hadahan(
     else:
         dasha_now = report["dasha_now_none"]
     kuja_status = _kuja_status(kuja, lang)
+    shorts = {key: value["short"] for key, value in table["planet"].items()}
+    rashi_name = {key: value["name"] for key, value in table["rashi"].items()}
+    star_line = report["star_pada"].format(
+        star=table["nakshatra"][chart.moon.nakshatra], pada=chart.moon.pada
+    )
+
+    # Pictures drawn from this chart.
+    wheel = sky_wheel(
+        chart.lagna.longitude,
+        [Placed(p.body.value, shorts[p.body.value], p.longitude) for p in chart.planets],
+    )
+    lagna_sign = chart.lagna.sign_number - 1
+    in_house: dict[int, list[str]] = {}
+    for p in chart.planets:
+        in_house.setdefault(p.house, []).append(planet[p.body.value])
+    houses = []
+    for house in range(1, 13):
+        sign = RASHI[(lagna_sign + house - 1) % 12]
+        houses.append(
+            {
+                "number": house,
+                "label": report["house_number"].format(number=house),
+                "sign": rashi_name[sign],
+                "glyph": glyph(sign),
+                "planets": in_house.get(house, []),
+                "theme": table["house_theme"][house - 1],
+            }
+        )
+    bar = periods_bar(
+        request.date,
+        [
+            Span(
+                planet[p.lord.value],
+                p.start.date(),
+                p.end.date(),
+                now=main is not None and p.lord == main.lord and p.start == main.start,
+            )
+            for p in dasha.periods
+        ],
+        today,
+        report["now"],
+    )
+    pillars = [
+        {
+            "label": report["lagna"],
+            "value": rashi_name[chart.lagna.sign],
+            "note": report["pillar_lagna"],
+            "glyph": glyph(chart.lagna.sign),
+        },
+        {
+            "label": report["rashi"],
+            "value": rashi_name[chart.moon.sign],
+            "note": report["pillar_rashi"],
+            "glyph": glyph(chart.moon.sign),
+        },
+        {
+            "label": report["nakath"],
+            "value": star_line,
+            "note": report["pillar_star"],
+            "glyph": None,
+        },
+        {
+            "label": report["dasha_now"],
+            "value": dasha_now,
+            "note": report["pillar_period"],
+            "glyph": None,
+        },
+    ]
+    applying = [c for c in kuja.cancellations if c.applies]
+    mars = {
+        "points": [
+            {
+                "text": report["mars_point"].format(
+                    point=table["point"][point.point], house=point.house
+                ),
+                "counts": point.counts,
+            }
+            for point in kuja.points
+        ],
+        "rules": report["mars_rules_count"].format(
+            count=len(applying), total=len(kuja.cancellations)
+        ),
+        "rule_names": [table["kuja_rule"][c.id] for c in applying],
+        "status": kuja_status,
+        "present": kuja.present,
+    }
 
     context = {
         "r": report,
@@ -164,6 +303,26 @@ def render_hadahan(
         "born": report["born"].format(
             date=format_date(request.date, lang), time=format_time(request.time), place=where
         ),
+        "cover": {
+            "eyebrow": report["cover_hadahan"],
+            "art": _art(chart.moon.sign),
+            "signs": [
+                (report["lagna"], rashi_name[chart.lagna.sign]),
+                (report["rashi"], rashi_name[chart.moon.sign]),
+                (report["nakath"], table["nakshatra"][chart.moon.nakshatra]),
+            ],
+            "made": report["cover_made"].format(date=format_date(today, lang)),
+            "sky": hero_uri(),
+        },
+        "pillars": pillars,
+        "wheel": wheel,
+        "wheel_legend": " · ".join(
+            f"{shorts[p.body.value]} {planet[p.body.value]}" for p in chart.planets
+        ),
+        "houses": houses,
+        "bar": bar,
+        "mars": mars,
+        "chapters": _reading(reading, {"pillars", "wheel", "houses", "periods", "mars"}),
         "time_zone": report["time_zone"].format(offset=response.time.offset_label),
         "facts": [
             (report["lagna"], _sign(table, chart.lagna.sign, lang)),
@@ -231,7 +390,6 @@ def render_hadahan(
             [kuja.rule_set],
             today,
         ),
-        "reading": _reading(reading),
     }
     return _render("hadahan.html", lang, report["hadahan_kind"], context)
 
@@ -268,7 +426,9 @@ def _person(person: PersonOut, role: str, table: dict[str, Any], lang: Lang) -> 
         "role": report[role],
         "name": person.name or report[role],
         "star": f"{star} · {rashi}",
+        "sign": rashi,
         "detail": detail,
+        "art": _art(person.rashi),
     }
 
 
@@ -276,7 +436,7 @@ def render_porondam(
     build: PorondamBuild,
     lang: Lang,
     today: dt.date,
-    reading: Sequence[tuple[str, str]] = (),
+    reading: Sequence[Chapter] = (),
 ) -> bytes:
     response = build.response
     assert response.bride and response.groom and response.match, "only a finished match prints"
@@ -304,7 +464,20 @@ def render_porondam(
         for person, found in ((people[0], b_chart), (people[1], g_chart)):
             charts.append(_chart(chart_out(found, lang), lang, "rashi", person["name"]))
 
+    factors = [_factor(f, table) for f in result.factors]
+    ring = factor_ring(
+        ["unchecked" if not f["checked"] else "pass" if f["passed"] else "fail" for f in factors]
+    )
     context = {
+        "cover": {
+            "eyebrow": report["cover_porondam"],
+            "made": report["cover_made"].format(date=format_date(today, lang)),
+            "sky": hero_uri(),
+        },
+        "passed": result.score.passed,
+        "total": result.score.total,
+        "ring": ring,
+        "chapters": _reading(reading, {"people", "ring", "checks"}),
         "r": report,
         "title": report["porondam_title"].format(bride=people[0]["name"], groom=people[1]["name"]),
         "people": people,
@@ -312,12 +485,11 @@ def render_porondam(
         "summary": result.summary_text,
         "same_star": result.same_star_text,
         "hard_checks": [_factor(f, table) for f in result.hard_checks],
-        "factors": [_factor(f, table) for f in result.factors],
+        "factors": factors,
         "kuja": kuja,
         "charts": charts,
         "about": _about(
             lang, f"{report['method_porondam']} {report['porondam_provisional']}", rule_sets, today
         ),
-        "reading": _reading(reading),
     }
     return _render("porondam.html", lang, report["porondam_kind"], context)

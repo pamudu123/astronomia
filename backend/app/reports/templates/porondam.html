@@ -1,72 +1,86 @@
 {% extends "base.html" %}
 {% from "kendara.html" import kendara %}
+{% import "visuals.html" as v %}
+
+{% block cover %}
+<table class="cover-pair">
+  <tbody>
+    <tr>
+      <td>{{ v.medallion(people[0].art, "mid") }}<p class="cover-value">{{ people[0].name }}</p><p class="cover-label">{{ people[0].star }}</p></td>
+      <td class="cover-join">{{ v.star("8mm") }}</td>
+      <td>{{ v.medallion(people[1].art, "mid") }}<p class="cover-value">{{ people[1].name }}</p><p class="cover-label">{{ people[1].star }}</p></td>
+    </tr>
+  </tbody>
+</table>
+<p class="cover-score">{{ score }}</p>
+{% endblock %}
+
 {% block content %}
-<h1>{{ title }}</h1>
+<section id="glance">
+  <p class="eyebrow">{{ r.porondam_kind }}</p>
+  <h1>{{ title }}</h1>
 
-<table class="people">
-  <tbody>
-    <tr>
-      {% for person in people %}
-      <td>
-        <p class="small soft">{{ person.role }}</p>
-        <h3 style="margin-top: 0.5mm">{{ person.name }}</h3>
-        <p>{{ person.star }}</p>
-        <p class="soft">{{ person.detail }}</p>
-      </td>
+  <nav class="contents">
+    <h3>{{ r.contents }}</h3>
+    <a class="toc" href="#glance">{{ r.people_title }}</a>
+    <a class="toc" href="#checks">{{ r.checks_title }}</a>
+    <a class="toc" href="#factors">{{ r.factors }}</a>
+    {% if chapters %}
+    <a class="toc" href="#reading">{{ r.reading_title }}</a>
+    {% for chapter in chapters %}<a class="toc toc-sub" href="#{{ chapter.anchor }}">{{ chapter.number }}. {{ chapter.title }}</a>{% endfor %}
+    {% endif %}
+  </nav>
+
+  <h2>{{ r.people_title }}</h2>
+  {{ v.people(people, r) }}
+
+  <h2>{{ r.ring_title }}</h2>
+  {{ v.ring(ring, passed, total, r, score) }}
+  <p class="lead">{{ summary }}</p>
+  {% if same_star %}<p class="soft lead">{{ same_star }}</p>{% endif %}
+</section>
+
+<section id="checks" class="page-break">
+  <h2 class="section-title">{{ r.checks_title }}</h2>
+  {{ v.checks(hard_checks, kuja, r) }}
+  <table class="table" style="margin-top: 4mm">
+    <tbody>
+      {% for row in hard_checks %}
+      <tr>
+        <td class="row-name" style="width: 24%">{{ row.name }}</td>
+        <td class="nowrap {{ 'pass' if row.passed else 'fail' }}" style="width: 16%">{{ row.result }}</td>
+        <td>{{ row.reason }}</td>
+      </tr>
       {% endfor %}
-    </tr>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+  {% if kuja %}<p class="soft" style="margin-top: 2mm">{{ kuja.reason }}</p>{% endif %}
+</section>
 
-<p class="score">{{ score }}</p>
-<p class="lead">{{ summary }}</p>
-{% if same_star %}<p class="soft lead">{{ same_star }}</p>{% endif %}
-
-<h2>{{ r.essential }}</h2>
-<table class="table">
-  <tbody>
-    {% for row in hard_checks %}
-    <tr>
-      <td class="row-name" style="width: 24%">{{ row.name }}<br><span class="small soft" style="font-weight: 400">{{ row.meaning }}</span></td>
-      <td class="nowrap {{ 'pass' if row.passed else 'fail' }}" style="width: 16%">{{ row.result }}</td>
-      <td>{{ row.reason }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<h2>{{ r.factors }}</h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">{{ r.factor }}</th>
-      <th scope="col">{{ r.result }}</th>
-      <th scope="col">{{ r.reason }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in factors %}
-    <tr>
-      <td class="row-name" style="width: 24%">{{ row.name }}<br><span class="small soft" style="font-weight: 400">{{ row.meaning }}</span></td>
-      <td class="nowrap {{ 'soft' if not row.checked else 'pass' if row.passed else 'fail' }}" style="width: 16%">{{ row.result }}</td>
-      <td>{{ row.reason }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<section class="box">
-  <h3>{{ r.kuja }}</h3>
-  {% if kuja %}
-  {% for line in kuja.people %}<p>{{ line }}</p>{% endfor %}
-  <p class="soft">{{ kuja.reason }}</p>
-  {% else %}
-  <p class="soft">{{ r.kuja_quick }}</p>
-  {% endif %}
+<section id="factors">
+  <h2 class="section-title">{{ r.factors }}</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">{{ r.factor }}</th>
+        <th scope="col">{{ r.result }}</th>
+        <th scope="col">{{ r.reason }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in factors %}
+      <tr>
+        <td class="row-name" style="width: 24%">{{ row.name }}<br><span class="small soft" style="font-weight: 400">{{ row.meaning }}</span></td>
+        <td class="nowrap" style="width: 18%"><span class="pill {{ 'pill-off' if not row.checked else 'pill-pass' if row.passed else 'pill-fail' }}">{{ row.result }}</span></td>
+        <td>{{ row.reason }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </section>
 
 {% if charts %}
-<section style="break-inside: avoid">
+<section class="keep">
   <h2>{{ r.charts }}</h2>
   <table class="columns" style="margin-top: 0">
     <tbody>

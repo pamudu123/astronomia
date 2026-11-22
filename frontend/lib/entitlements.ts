@@ -10,7 +10,12 @@ export type Feature =
   /** The full reading in chapters at the top of a chart or match result. */
   | "ai_reading"
   /** The explain buttons on the main places of a page. */
-  | "ai_explain";
+  | "ai_explain"
+  /**
+   * The paid PDF report: every chapter of the full reading is written, if it is not yet, and
+   * printed with its picture and diagram. Without it the PDF holds the results only.
+   */
+  | "ai_report";
 
 export function canUse(feature: Feature): boolean {
   void feature;

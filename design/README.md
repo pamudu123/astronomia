@@ -43,6 +43,8 @@ The logo story, for an About page: the two rings are great circles of the sky. W
 
 Rashi numbering: 01 Mesha, 02 Vrishabha, 03 Mithuna, 04 Kataka, 05 Simha, 06 Kanya, 07 Tula, 08 Vrischika, 09 Dhanu, 10 Makara, 11 Kumbha, 12 Meena.
 
+The PDF report keeps its own copies of the cover sky, the rashi artwork, the line symbols and the light spots in `backend/app/reports/art/`. After rebuilding any of them, copy them there too.
+
 ## Known gaps
 
 - **Simha (Leo) artwork is missing.** There is no `rashi-05-simha.webp`. The design uses `glyphs/rashi-05-simha.svg` in its place until the artwork is made.

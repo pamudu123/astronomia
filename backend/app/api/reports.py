@@ -25,8 +25,13 @@ NEEDS_CHOICE = "the birth time happened twice or not at all on that date: choose
 
 
 class ReadingChapter(BaseModel):
-    """One AI chapter as the person read it. Long enough for the longest chapter."""
+    """One AI chapter as the person read it. Long enough for the longest chapter.
 
+    The id (`chart.periods`) picks the chapter's picture and diagram; a chapter without one
+    prints with a general picture.
+    """
+
+    id: str | None = Field(default=None, max_length=40, pattern=r"^[a-z]+\.[a-z]+$")
     title: str = Field(min_length=1, max_length=120)
     text: str = Field(min_length=1, max_length=8000)
 
@@ -86,12 +91,12 @@ def report_pdf(body: PdfRequest, db: PlacesDb) -> Response:
         if hadahan.response.status != "ok":
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, NEEDS_CHOICE)
         made_on = body.birth.as_of.date() if body.birth.as_of else today
-        chapters = [(c.title, c.text) for c in body.reading]
+        chapters = [(c.id, c.title, c.text) for c in body.reading]
         pdf = render_hadahan(hadahan, body.birth, body.name.strip(), made_on, chapters)
         return _pdf(pdf, "hadahan")
 
     match = build_porondam(body.match, db)
     if match.response.status != "ok":
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, NEEDS_CHOICE)
-    chapters = [(c.title, c.text) for c in body.reading]
+    chapters = [(c.id, c.title, c.text) for c in body.reading]
     return _pdf(render_porondam(match, body.match.lang, today, chapters), "porondam")

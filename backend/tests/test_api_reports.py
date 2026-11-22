@@ -34,6 +34,11 @@ def text(reader: PdfReader) -> str:
     return "\n".join(page.extract_text() for page in reader.pages)
 
 
+def flat(reader: PdfReader) -> str:
+    """The text on one line, so a phrase that wraps inside a narrow card still matches."""
+    return " ".join(text(reader).split())
+
+
 def fonts(reader: PdfReader) -> set[str]:
     found = set()
     for page in reader.pages:
@@ -58,25 +63,37 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
         'attachment; filename="astronomia-hadahan.pdf"'
     )
     reader = read(response.content)
-    assert len(reader.pages) == 2
+    # The cover, then at a glance, the sky, the houses, the life periods and the Kuja dosha.
+    assert len(reader.pages) == 6
     for page in reader.pages:
         assert (round(float(page.mediabox.width)), round(float(page.mediabox.height))) == A4
 
-    content = text(reader)
+    cover = reader.pages[0].extract_text()
+    assert "PREMIUM BIRTH CHART REPORT" in cover
+    assert "Nimali's hadahan" in cover
+    assert "Page" not in cover  # the cover has no header or footer
+
+    content = flat(reader)
     for expected in (
         "Nimali's hadahan",
         "Born 19 April 1995 at 14:35",
         "Kandy",
         "Simha (Leo)",
         "Jyeshtha, pada 4",
+        "In this report",
+        "Your chart in four steps",
         "Rashi chart",
         "Navamsha chart",
+        "Your sky at birth",
         "The nine planets",
-        "Main dasha periods",
+        "The 12 houses",
+        "partnership and marriage",
+        "Your life periods",
         "Running now",
-        "Cancellation checks",
+        "How the Kuja dosha check works out",
+        "From the lagna: house 12",
         "Mars is in the 12th house counted from the lagna.",
-        "Page 1 of 2",
+        "Page 2 of 6",
     ):
         assert expected in content, expected
 
@@ -90,7 +107,7 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
 
 def test_hadahan_report_in_sinhala_uses_sinhala_fonts(client: TestClient) -> None:
     reader = post(client, hadahan("si", name="නිමාලි"))
-    assert len(reader.pages) == 2
+    assert len(reader.pages) == 6
     assert {"Noto-Sans-Sinhala", "Noto-Sans-Sinhala-Semi-Bold"} <= fonts(reader)
     assert "Simha" not in text(reader)
 
@@ -142,11 +159,13 @@ def test_full_porondam_report(client: TestClient) -> None:
         'attachment; filename="astronomia-porondam.pdf"'
     )
     reader = read(response.content)
-    content = text(reader)
+    assert "PREMIUM MATCH REPORT" in reader.pages[0].extract_text()
+    content = flat(reader)
     for expected in (
         "Nimali and Kasun",
         "9 of 18 factors agree",
-        "Essential checks",
+        "The factors at a glance",
+        "The serious checks",
         "Rajju",
         "Vedha",
         "Factor by factor",
@@ -168,7 +187,7 @@ def test_quick_porondam_report(client: TestClient) -> None:
             {"name": "", "nakshatra": "rohini", "pada": 1},
         ),
     )
-    content = text(reader)
+    content = flat(reader)
     assert "Bride and Groom" in content
     assert "Matched by birth star only" in content
     assert "Kuja dosha needs the full birth details of both people." in content
@@ -220,6 +239,7 @@ def test_bad_requests(client: TestClient, body: dict[str, Any]) -> None:
 
 READING = [
     {
+        "id": "chart.nature",
         "title": "Your nature",
         "text": "You meet life warmly.\n\n**Where it shows**\n- **Work**: steady\n- Home: calm",
     },
@@ -229,9 +249,17 @@ READING = [
 
 def test_the_ai_reading_prints_in_its_own_labelled_section(client: TestClient) -> None:
     """The chapters the person read come back with the request (docs/17, step 6)."""
-    printed = text(post(client, {**hadahan(), "reading": READING}))
-    assert "AI reading" in printed
+    reader = post(client, {**hadahan(), "reading": READING})
+    printed = flat(reader)
+    # Small capitals are letter-spaced, so the extracted text has a space between letters.
+    squeezed = printed.replace(" ", "")
+    assert "AIREADING" in squeezed
+    assert "Your full reading" in printed
     assert "Written by AI from the results above" in printed
+    # The opening page and one page per chapter, after the six pages of results.
+    assert len(reader.pages) == 9
+    assert "CHAPTER1" in squeezed and "CHAPTER2" in squeezed
+    assert "INSHORT" in squeezed
     assert "Your nature" in printed and "Saturn periods" in printed
     assert "Where it shows" in printed and "steady" in printed
     # Text is escaped, never markup: the tag prints as written.
@@ -239,7 +267,30 @@ def test_the_ai_reading_prints_in_its_own_labelled_section(client: TestClient) -
 
 
 def test_no_reading_no_section(client: TestClient) -> None:
-    assert "AI reading" not in text(post(client, hadahan()))
+    printed = flat(post(client, hadahan()))
+    assert "AIREADING" not in printed.replace(" ", "")
+    assert "Your full reading" not in printed
+
+
+def test_a_chapter_prints_its_diagram(client: TestClient) -> None:
+    """The "Work and money" chapter lights up its houses; "Your nature" shows the four steps."""
+    work = [{"id": "chart.work", "title": "Work and money", "text": "Steady work suits you."}]
+    printed = flat(post(client, {**hadahan(), "reading": work}))
+    # The houses grid prints twice: on its own page and in the chapter.
+    assert printed.count("Vrishabha") >= 2
+    nature = [{"id": "chart.nature", "title": "Your nature", "text": "Warm."}]
+    assert flat(post(client, {**hadahan(), "reading": nature})).count("How you meet the world") == 2
+
+
+@pytest.mark.parametrize("chapter_id", ["Chart.Work", "chart.work.x", "<b>", "x" * 41])
+def test_a_chapter_id_must_look_like_one(client: TestClient, chapter_id: str) -> None:
+    body = {**hadahan(), "reading": [{"id": chapter_id, "title": "A", "text": "B"}]}
+    assert client.post("/v1/reports/pdf", json=body).status_code == 422
+
+
+def test_an_unknown_chapter_id_prints_with_a_general_picture(client: TestClient) -> None:
+    body = {**hadahan(), "reading": [{"id": "chart.future", "title": "Later", "text": "Text."}]}
+    assert "Later" in flat(post(client, body))
 
 
 def test_the_match_report_takes_a_reading_too(client: TestClient) -> None:

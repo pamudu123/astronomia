@@ -2249,8 +2249,13 @@ export interface components {
         /**
          * ReadingChapter
          * @description One AI chapter as the person read it. Long enough for the longest chapter.
+         *
+         *     The id (`chart.periods`) picks the chapter's picture and diagram; a chapter without one
+         *     prints with a general picture.
          */
         ReadingChapter: {
+            /** Id */
+            id?: string | null;
             /** Title */
             title: string;
             /** Text */

@@ -1,6 +1,7 @@
 """The PDF report helpers: dates, degrees, the kendara layout and the page header text."""
 
 import datetime as dt
+import itertools
 
 import pytest
 
@@ -71,3 +72,54 @@ def test_header_and_footer_text_is_a_safe_css_string() -> None:
     assert css_string('Say "hi" \\ there') == '"Say \\"hi\\" \\\\ there"'
     assert page_counter("Page {page} of {pages}") == ('"Page " counter(page) " of " counter(pages)')
     assert page_counter("{page} / {pages}") == 'counter(page) " / " counter(pages)'
+
+
+def test_crowded_planets_fan_out_around_where_they_are() -> None:
+    from app.reports.visuals import spread
+
+    shown = spread([55, 60.5, 62.2, 200], 15)
+    assert shown[0] < shown[1] < shown[2]
+    assert round(shown[1] - shown[0], 6) == round(shown[2] - shown[1], 6) == 15
+    assert shown[3] == 200
+    # Across 0 degrees, and a full circle shared evenly.
+    assert [round(a, 1) for a in spread([350, 355, 2], 15)] == [340.7, 355.7, 10.7]
+    full = sorted(spread([90.0] * 30, 15))
+    assert all(round(b - a, 6) == 12 for a, b in itertools.pairwise(full))
+
+
+def test_the_sky_wheel_puts_each_planet_name_over_it() -> None:
+    from app.reports.visuals import Placed, sky_wheel
+
+    wheel = sky_wheel(130.0, [Placed("sun", "Su", 130.0), Placed("moon", "Mo", 310.0)])
+    tags = wheel.tags
+    assert [tag.text for tag in tags] == ["Su", "Mo"]
+    # The lagna is on the left, so a planet on it sits left of the centre, the Moon right.
+    assert tags[0].left < 50 < tags[1].left
+    assert tags[1].kind == "moon"
+    assert "<text" in wheel.svg  # only numbers go inside the SVG
+
+
+def test_the_periods_bar_marks_today_inside_it() -> None:
+    from app.reports.visuals import Span, periods_bar
+
+    birth = dt.date(2000, 1, 1)
+    spans = [
+        Span("Ketu", dt.date(1995, 1, 1), dt.date(2005, 1, 1)),
+        Span("Venus", dt.date(2005, 1, 1), dt.date(2025, 1, 1), now=True),
+    ]
+    bar = periods_bar(birth, spans, dt.date(2020, 1, 1), "Today")
+    today = [tag for tag in bar.tags if tag.kind == "now"]
+    assert len(today) == 1 and 75 < today[0].left < 85
+    gone = periods_bar(birth, spans, dt.date(2040, 1, 1), "Today")
+    assert not [tag for tag in gone.tags if tag.kind == "now"]
+
+
+def test_every_chapter_picture_and_rashi_picture_exists() -> None:
+    from app.engine.zodiac import RASHI
+    from app.reports.artwork import ART_DIR, CHAPTER_SPOT, art_files, rashi_uri
+
+    for name in CHAPTER_SPOT.values():
+        assert (ART_DIR / "spots" / f"{name}.svg").exists(), name
+    missing = [sign for sign in RASHI if rashi_uri(sign) is None]
+    assert missing == ["simha"]  # its line symbol stands in until the artwork exists
+    assert all(path.exists() for path in art_files().values())

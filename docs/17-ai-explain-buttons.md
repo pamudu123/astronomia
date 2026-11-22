@@ -221,6 +221,17 @@ Same privacy rule as the chat: **no names, birth dates, birth times or birth pla
 - **Paid reports are saved:** a bought full reading is kept in "My reports" (file 16), so it isn't written again.
 - **Cost:** a full chart reading is about 11 model calls. Each chapter is cached by its facts hash, so reopening or downloading the PDF costs nothing. Places 9 and 10 are the same for everyone in a city on a day, so they are cached on the agent side.
 
+## 6a. The premium PDF report (built 2026-11-22)
+
+The paid PDF holds the whole AI reading, whether or not the person opened it on the page.
+
+- **Every chapter is written first.** Pressing Download PDF writes each chapter of the reading not written yet (four at a time, a failed one asked for once more), with "Writing your full reading: 5 of 12…" on the button, then makes the PDF. Chart: the 12 reading chapters and the 3 topic-only ones (family, studies, abroad), 15 in all. Match: the reading's chapters, with the years ahead and wedding dates when the page has them. Behind `canUse("ai_report")` in `frontend/lib/entitlements.ts`: with it off, the PDF prints only the chapters already read. The free simple PDF and the paid check are built apart from this.
+- **Written once, reused everywhere.** Chapters are kept on the device for 30 days (`KEEP_DAYS` in `frontend/lib/assistant/explain.ts`, at most 240, oldest dropped first), keyed by the chapter, the language and a hash of the facts. The reading card, the explain buttons, the topic chips, the next PDF and the chat all reuse them. A chapter written for the PDF shows in the reading card at once.
+- **The chat knows.** The written chapters go to Astro under `also_on_page.reading`: each chapter's title, its short answer and the headings of its parts (`useReading` in `frontend/components/assistant/useReading.ts`). `guide.md` tells Astro to stay in step with them and point to the chapter rather than write it again.
+- **The design** (`backend/app/reports/`): a night-sky cover with the Moon sign's artwork; a contents page with page numbers; diagrams drawn from the person's own results (`visuals.py`): the chart in four steps, the sky wheel, the 12 houses, the life periods bar, the Kuja dosha flow, and for a match the two people, the factor ring and the serious checks; then the reading, one chapter a page, each with its spot picture, its short answer, its diagram and its parts tinted like the page. Artwork is copied into `backend/app/reports/art/` (its README says from where).
+- **The same diagrams on the website.** Each reading chapter on the page shows the same diagram under its short answer (`components/assistant/ChapterDiagram.tsx`). Which chapter shows which is one table on each side, kept in step: `CHAPTER_VISUAL` in `frontend/lib/assistant/visuals.ts` and in `backend/app/reports/render.py`.
+- The PDF request sends each chapter's `id` with its title and text, so the report picks its picture and diagram.
+
 ## 7. Build steps
 
 Each step is one pull request, like file 14.
