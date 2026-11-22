@@ -17,6 +17,28 @@ update sidera.saved_reports
   set expires_at = created_at + interval '7 days'
   where purchase_id is null;
 
+-- The database keeps the rule whoever writes the row, so the backend running before this
+-- change (which does not know the column) keeps working until the new one is deployed: a free
+-- report gets its expiry, and a report with an order has none.
+create function sidera.saved_report_expiry() returns trigger
+  language plpgsql
+  set search_path = ''
+as $$
+begin
+  if new.purchase_id is not null then
+    new.expires_at := null;
+  elsif new.expires_at is null then
+    new.expires_at := new.created_at + interval '7 days';
+  end if;
+  return new;
+end;
+$$;
+revoke all on function sidera.saved_report_expiry() from public, anon, authenticated, service_role;
+
+create trigger saved_reports_expiry
+  before insert or update of purchase_id, expires_at on sidera.saved_reports
+  for each row execute function sidera.saved_report_expiry();
+
 -- A free report always expires; a paid one never does.
 alter table sidera.saved_reports
   add constraint saved_reports_free_expire check ((purchase_id is null) = (expires_at is not null));

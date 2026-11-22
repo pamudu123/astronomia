@@ -254,15 +254,34 @@ def test_the_hourly_job_deletes_expired_free_reports() -> None:
             assert allowed == (False,), role
 
 
-def test_a_free_report_always_expires_and_a_paid_one_never() -> None:
+def test_the_database_keeps_the_expiry_rule_for_any_writer() -> None:
+    """The backend from before this change writes no expiry: the database adds it, and clears it
+    when an order is set, so deploying the migration first breaks nothing."""
     url = need_postgres()
     migrate(url)
     user = postgres_accounts(url).add_user("00000000-0000-0000-0000-000000000001", "guest").id
+    saved_at = dt.datetime(2026, 11, 15, 8, 0, tzinfo=dt.UTC)
     insert = (
         "INSERT INTO sidera.saved_reports (id, user_id, kind, title, input, input_hash, snapshot,"
-        " summary, rules, purchase_id, created_at, updated_at, expires_at) VALUES"
-        " (gen_random_uuid(), %s, 'hadahan', '', '{}', %s, '{}', '{}', '', %s, now(), now(), %s)"
+        " summary, rules, purchase_id, created_at, updated_at) VALUES"
+        " (gen_random_uuid(), %s, 'hadahan', '', '{}', %s, '{}', '{}', '', %s, %s, %s)"
+        " RETURNING id, expires_at"
     )
-    for purchase_id, expires in (("order-1", dt.datetime.now(dt.UTC)), (None, None)):
-        with connected() as db, pytest.raises(psycopg.errors.CheckViolation):
-            db.execute(insert, (user, "x", purchase_id, expires))
+    with connected() as db:
+        free_id, expires = db.execute(insert, (user, "free", None, saved_at, saved_at)).fetchone()
+        assert expires == saved_at + dt.timedelta(days=7)
+        paid = db.execute(insert, (user, "paid", "order-1", saved_at, saved_at)).fetchone()
+        assert paid[1] is None
+        # The old backend's unlock sets only the order.
+        upgraded = db.execute(
+            "UPDATE sidera.saved_reports SET purchase_id = 'order-2' WHERE id = %s"
+            " RETURNING expires_at",
+            (free_id,),
+        ).fetchone()
+        assert upgraded == (None,)
+        # Without the trigger, the check still refuses a paid report with an expiry.
+        db.execute("ALTER TABLE sidera.saved_reports DISABLE TRIGGER saved_reports_expiry")
+        with pytest.raises(psycopg.errors.CheckViolation):
+            db.execute(
+                "UPDATE sidera.saved_reports SET expires_at = now() WHERE id = %s", (free_id,)
+            )
