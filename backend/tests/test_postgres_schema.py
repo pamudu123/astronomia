@@ -241,7 +241,10 @@ def test_the_hourly_job_deletes_expired_free_reports() -> None:
     paid = NewReport(kind="hadahan", input={}, input_hash="p", snapshot={}, summary={}, rules="")
     old.save(user, paid, limit=5, purchase_id="order-1")
     fresh = NewReport(kind="hadahan", input={}, input_hash="f", snapshot={}, summary={}, rules="")
-    postgres_accounts(url).save(user, fresh, limit=5)
+    # Another account: the store deletes an account's own expired reports when it saves.
+    now = postgres_accounts(url)
+    other = now.add_user("00000000-0000-0000-0000-000000000002", "guest").id
+    now.save(other, fresh, limit=5)
     with connected() as db:
         assert db.execute("SELECT sidera.delete_expired_reports()").fetchone() == (1,)
         left = db.execute("SELECT input_hash FROM sidera.saved_reports ORDER BY input_hash")
