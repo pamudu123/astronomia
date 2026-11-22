@@ -743,7 +743,16 @@
     "mergeFailed": "You are signed in with Google, but the reports saved on this browser as a guest could not be moved.",
     "deleteAccount": "Delete my account",
     "deleteAccountConfirm": "Delete your account and every saved report? This cannot be undone.",
-    "deleteAccountYes": "Yes, delete my account"
+    "deleteAccountYes": "Yes, delete my account",
+    "limitFree": "My reports already holds the most free reports you can keep at one time. Delete one there to save this one. Each free report is deleted 7 days after saving.",
+    "freeCount": "{count} of {limit} free reports kept.",
+    "labelPaid": "Paid",
+    "labelFree": "Free · deleted in {days} days",
+    "labelFreeOne": "Free · deleted in 1 day",
+    "expiring": "Deleted in {days} days. Get the full report to keep it.",
+    "expiringOne": "Deleted in 1 day. Get the full report to keep it.",
+    "keep": "Get the full report",
+    "keepNote": "Free reports are kept for 7 days. Paid reports are kept for as long as you have your account, on any device. Comparing paid reports with each other is coming soon."
   },
   "paid": {
     "title": "Get the full report",

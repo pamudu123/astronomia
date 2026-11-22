@@ -5,7 +5,18 @@ import Link from "next/link";
 import { type FormEvent, useEffect, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { type SavedItem, deleteEverything, deleteSaved, listSaved, renameSaved } from "@/lib/account";
+import { FULL_REPORT } from "@/components/paid/FullReport";
+import {
+  type Keep,
+  type SavedItem,
+  deleteEverything,
+  deleteSaved,
+  keepLabel,
+  keepOf,
+  keepReminder,
+  listSaved,
+  renameSaved,
+} from "@/lib/account";
 import { type Labels, fetchLabels, fill, formatDate } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
@@ -15,7 +26,7 @@ import styles from "./MyReports.module.css";
 type View =
   | { kind: "loading" }
   | { kind: "error" }
-  | { kind: "ok"; reports: SavedItem[]; labels: Labels }
+  | { kind: "ok"; reports: SavedItem[]; labels: Labels; freeLimit: number; paidReports: boolean }
   | { kind: "wiped" };
 
 type Props = { lang: Locale; dict: Dictionary };
@@ -30,8 +41,11 @@ export function MyReportsApp({ lang, dict }: Props) {
   useEffect(() => {
     let current = true;
     Promise.all([listSaved(), fetchLabels(lang)])
-      .then(([reports, labels]) => {
-        if (current) setView({ kind: "ok", reports, labels });
+      .then(([list, labels]) => {
+        if (current) {
+          const { reports, free_limit: freeLimit, paid_reports: paidReports } = list;
+          setView({ kind: "ok", reports, labels, freeLimit, paidReports });
+        }
       })
       .catch(() => {
         if (current) setView({ kind: "error" });
@@ -98,12 +112,17 @@ export function MyReportsApp({ lang, dict }: Props) {
           </div>
         </section>
         <GoogleSignIn lang={lang} t={t} who={who} hasReports={false} onSignedOut={retry} />
+        <p className={`soft ${styles.keepNote}`} data-keep-note>
+          {t.keepNote}
+        </p>
       </main>
     );
   }
 
-  const { reports, labels } = view;
-  const update = (next: SavedItem[]) => setView({ kind: "ok", reports: next, labels });
+  const { reports, labels, freeLimit, paidReports } = view;
+  const update = (next: SavedItem[]) => setView({ ...view, reports: next });
+  const now = new Date();
+  const freeCount = reports.filter((item) => keepOf(item, now).kind === "free").length;
   const groups = [
     { id: "porondam", title: t.groupPorondam, items: reports.filter((item) => item.kind === "porondam") },
     { id: "hadahan", title: t.groupHadahan, items: reports.filter((item) => item.kind === "hadahan") },
@@ -125,6 +144,8 @@ export function MyReportsApp({ lang, dict }: Props) {
                 dict={dict}
                 labels={labels}
                 item={item}
+                keep={keepOf(item, now)}
+                canKeep={paidReports}
                 onRenamed={(title) =>
                   update(reports.map((other) => (other.id === item.id ? { ...other, title } : other)))
                 }
@@ -135,7 +156,12 @@ export function MyReportsApp({ lang, dict }: Props) {
         </section>
       ))}
       <GoogleSignIn lang={lang} t={t} who={who} hasReports onSignedOut={retry} />
-      <DeleteEverything t={t} google={who?.kind === "google"} onDone={() => setView({ kind: "wiped" })} />
+      <DeleteEverything
+        t={t}
+        google={who?.kind === "google"}
+        freeCount={freeCount > 0 ? fill(t.freeCount, { count: freeCount, limit: freeLimit }) : null}
+        onDone={() => setView({ kind: "wiped" })}
+      />
     </main>
   );
 }
@@ -174,11 +200,13 @@ type CardProps = {
   dict: Dictionary;
   labels: Labels;
   item: SavedItem;
+  keep: Keep;
+  canKeep: boolean; // "Get the full report" is offered
   onRenamed: (title: string) => void;
   onDeleted: () => void;
 };
 
-function ReportCard({ lang, dict, labels, item, onRenamed, onDeleted }: CardProps) {
+function ReportCard({ lang, dict, labels, item, keep, canKeep, onRenamed, onDeleted }: CardProps) {
   const t = dict.saved;
   const [mode, setMode] = useState<"view" | "rename" | "confirm">("view");
   const [busy, setBusy] = useState(false);
@@ -187,6 +215,7 @@ function ReportCard({ lang, dict, labels, item, onRenamed, onDeleted }: CardProp
   const title = savedTitle(item, dict);
   const href = `/${lang}/my/${item.id}`;
   const inputId = `rename-${item.id}`;
+  const reminder = keepReminder(keep, t);
 
   async function act(action: () => Promise<void>, after: () => void) {
     setBusy(true);
@@ -220,6 +249,19 @@ function ReportCard({ lang, dict, labels, item, onRenamed, onDeleted }: CardProp
       </Link>
       <span className={styles.summary}>{summaryOf(item, dict, labels)}</span>
       <span className={styles.date}>{fill(t.savedOn, { date: formatDate(item.created_at, lang) })}</span>
+      <span className={`${styles.keep} ${keep.kind === "paid" ? styles.keepPaid : ""}`} data-keep={keep.kind}>
+        {keepLabel(keep, t)}
+      </span>
+      {reminder && (
+        <div className={styles.reminder} data-keep-reminder>
+          <p>{reminder}</p>
+          {canKeep && (
+            <Link href={`${href}#${FULL_REPORT}`} className={`btn btn-primary lift ${styles.open}`}>
+              {t.keep}
+            </Link>
+          )}
+        </div>
+      )}
 
       {mode === "rename" ? (
         <form className={styles.renameForm} onSubmit={rename}>
@@ -296,9 +338,9 @@ function ReportCard({ lang, dict, labels, item, onRenamed, onDeleted }: CardProp
   );
 }
 
-type DeleteProps = { t: Dictionary["saved"]; google: boolean; onDone: () => void };
+type DeleteProps = { t: Dictionary["saved"]; google: boolean; freeCount: string | null; onDone: () => void };
 
-function DeleteEverything({ t, google, onDone }: DeleteProps) {
+function DeleteEverything({ t, google, freeCount, onDone }: DeleteProps) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -317,6 +359,10 @@ function DeleteEverything({ t, google, onDone }: DeleteProps) {
 
   return (
     <footer className={styles.foot}>
+      <p className="soft" data-keep-note>
+        {t.keepNote}
+      </p>
+      {freeCount && <p className="soft">{freeCount}</p>}
       <p className="soft">{google ? t.googleKept : t.browserOnly}</p>
       {confirming ? (
         <div className={styles.actions}>

@@ -148,6 +148,59 @@ test("a full My reports shows the reason", async ({ page }) => {
   await expect(save.getByRole("button", { name: "Save" })).toBeEnabled();
 });
 
+test("a save past the 20 free reports says what to do", async ({ page }) => {
+  await mockTools(page);
+  await standInSupabase(page);
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(409, { detail: "free_limit" })));
+  await showHadahan(page);
+  const save = page.locator("[data-save]");
+  await save.getByRole("button", { name: "Save" }).click();
+  await expect(save.getByRole("alert")).toHaveText(
+    "My reports already holds the most free reports you can keep at one time. Delete one there to save this one. Each free report is deleted 7 days after saving.",
+  );
+});
+
+test("My reports labels free and paid reports, and asks to keep one about to go", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-11-20T20:00:00Z")); // 5 days after SAVED_AT
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  const paidMatch = { ...matchItem, paid: true, expires_at: null };
+  const soon = { ...hadahanItem, paid: false, expires_at: "2026-11-22T08:00:00Z" }; // 1.5 days left
+  const later = {
+    ...hadahanItem,
+    id: "5b7e9c10-2a4f-4e6d-8b1c-9d0e1f2a3b4c",
+    created_at: "2026-11-19T08:00:00Z",
+    paid: false,
+    expires_at: "2026-11-26T08:00:00Z", // 5.5 days left
+    hadahan: { ...hadahanItem.hadahan, name: "Kasun" },
+  };
+  await page.route("**/api/v1/saved", (route) =>
+    route.fulfill(reply(200, { reports: [later, paidMatch, soon], free_limit: 20, paid_reports: true })),
+  );
+  await page.goto("/en/my");
+
+  const match = page.locator('[data-saved-report="porondam"]');
+  await expect(match.locator("[data-keep]")).toHaveText("Paid");
+  await expect(match.locator("[data-keep-reminder]")).toHaveCount(0);
+
+  const kasun = page.locator('[data-saved-report="hadahan"]', { hasText: "Kasun" });
+  await expect(kasun.locator("[data-keep]")).toHaveText("Free · deleted in 6 days");
+  await expect(kasun.locator("[data-keep-reminder]")).toHaveCount(0);
+
+  const nimali = page.locator('[data-saved-report="hadahan"]', { hasText: "Nimali" });
+  await expect(nimali.locator("[data-keep]")).toHaveText("Free · deleted in 2 days");
+  const reminder = nimali.locator("[data-keep-reminder]");
+  await expect(reminder).toContainText("Deleted in 2 days. Get the full report to keep it.");
+  await expect(reminder.getByRole("link", { name: "Get the full report" })).toHaveAttribute(
+    "href",
+    `/en/my/${ID}#full-report`,
+  );
+
+  await expect(page.getByText("2 of 20 free reports kept.")).toBeVisible();
+  await expect(page.locator("[data-keep-note]")).toHaveText(
+    "Free reports are kept for 7 days. Paid reports are kept for as long as you have your account, on any device. Comparing paid reports with each other is coming soon.",
+  );
+});
+
 test("My reports lists, renames and deletes", async ({ page }) => {
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
   const calls: string[] = [];

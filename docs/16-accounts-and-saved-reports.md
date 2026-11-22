@@ -156,7 +156,7 @@ Set up needed from the owner: a Google Cloud project, the OAuth consent screen (
 | Forged requests from other sites | `SameSite=Lax`, plus the backend refuses any POST, PATCH or DELETE whose `Origin` is neither listed in `ASTRONOMIA_SITE_ORIGINS` nor the host the request was sent to (through the frontend's forward, the forwarded host) |
 | Someone else's report | Every query filters on the session's user. A wrong id is 404 |
 | Birth details | Stored only when Save is pressed. Never in addresses or logs (as today) |
-| Limits | 100 saved reports per guest (`ASTRONOMIA_GUEST_SAVED_LIMIT`), later 1,000 per Google account. One address may make 30 new guest accounts an hour (`ASTRONOMIA_GUESTS_PER_HOUR`), counted in memory |
+| Limits | 20 free reports at a time per account (`ASTRONOMIA_FREE_SAVED_LIMIT`), each deleted 7 days after saving (docs/18, section 3); 1,000 paid reports (`ASTRONOMIA_PAID_SAVED_LIMIT`). One address may make 30 new guest accounts an hour (`ASTRONOMIA_GUESTS_PER_HOUR`), counted in memory |
 | Delete | Every report can be deleted. "Delete my account" deletes everything at once |
 | Guest clean up | A guest account not used for 12 months is deleted with its reports |
 | Privacy page | Updated before phase A ships: what Save stores, the guest cookie, how to delete, Google sign in |
