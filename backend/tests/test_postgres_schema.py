@@ -268,9 +268,12 @@ def test_the_database_keeps_the_expiry_rule_for_any_writer() -> None:
         " RETURNING id, expires_at"
     )
     with connected() as db:
-        free_id, expires = db.execute(insert, (user, "free", None, saved_at, saved_at)).fetchone()
+        free = db.execute(insert, (user, "free", None, saved_at, saved_at)).fetchone()
+        assert free is not None
+        free_id, expires = free
         assert expires == saved_at + dt.timedelta(days=7)
         paid = db.execute(insert, (user, "paid", "order-1", saved_at, saved_at)).fetchone()
+        assert paid is not None
         assert paid[1] is None
         # The old backend's unlock sets only the order.
         upgraded = db.execute(
