@@ -1362,6 +1362,14 @@
     "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
     "close": "Close the chat",
     "resize": "Resize the chat. Drag, or use the arrow keys",
+    "notice": {
+      "title": "Before you use the AI helper",
+      "text": "This is an AI helper. Your message and selected chart facts go to OpenAI. Please leave out names, children's details, and health or other sensitive information. AI can make mistakes.",
+      "accept": "I understand",
+      "privacy": "How we handle your information",
+      "newTab": "(opens in a new tab)",
+      "fresh": "Your earlier chat was cleared after {minutes} minutes without use. This is a fresh start."
+    },
     "explain": {
       "label": "AI explanation · for guidance only",
       "readingLabel": "AI reading · for guidance only",

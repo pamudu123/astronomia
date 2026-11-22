@@ -232,6 +232,15 @@ html[lang="si"] .sidera-welcome-hero h3 {
   padding: 0 16px 10px;
 }
 
+/* The AI notice, where the suggestions and the input go once it is acknowledged (AiNotice.tsx). */
+.sidera-welcome-notice {
+  padding: 0 16px 16px;
+}
+
+.sidera-welcome-hero p.sidera-welcome-fresh {
+  color: var(--ink);
+}
+
 /*
  * Suggestions stack on the left, one per line, like a browser assistant's: the page's own
  * questions on the welcome screen, and the follow-ups under each answer.
