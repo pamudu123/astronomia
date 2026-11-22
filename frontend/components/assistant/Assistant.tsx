@@ -7,6 +7,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { PageContext } from "@/lib/assistant/context";
 import type { Locale } from "@/lib/i18n";
 
+import { NoticeText } from "./AiNotice";
 import { AssistantOn, ExplainText, PageContextSetter, type Slot } from "./PageContext";
 
 // CopilotKit reads the clock while rendering, which server prerendering does not allow, and
@@ -55,12 +56,15 @@ export function Assistant({
     });
   }, []);
   const page = useMemo(() => combine(slots), [slots]);
+  const notice = useMemo(() => ({ t: t.notice, lang }), [t.notice, lang]);
   return (
     <PageContextSetter value={set}>
-      <AssistantOn value>
-        <ExplainText value={t.explain}>{children}</ExplainText>
-      </AssistantOn>
-      <Chat lang={lang} t={t} tools={tools} page={page} />
+      <NoticeText value={notice}>
+        <AssistantOn value>
+          <ExplainText value={t.explain}>{children}</ExplainText>
+        </AssistantOn>
+        <Chat lang={lang} t={t} tools={tools} page={page} />
+      </NoticeText>
     </PageContextSetter>
   );
 }

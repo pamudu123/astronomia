@@ -34,6 +34,8 @@ import {
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { CONTEXT_DESCRIPTION, type PageContext, type PageKey, pageFromPath, pageKey } from "@/lib/assistant/context";
 import { pickFollowUps } from "@/lib/assistant/followups";
+import { CONVERSATION_IDLE_MINUTES } from "@/lib/assistant/idle";
+import { acknowledged } from "@/lib/assistant/notice";
 import {
   ASK_EVENT,
   PANEL_MAX,
@@ -47,6 +49,8 @@ import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { accountHeaders } from "@/lib/paid";
 
+import { AiNotice, useAiAcknowledged } from "./AiNotice";
+import { IdleReset } from "./IdleReset";
 import { ToolCards } from "./ToolCards";
 
 // The agents' names, shared with app/api/copilotkit/route.ts: the guide answers, the
@@ -75,6 +79,9 @@ type Panel = {
   page: PageContext;
   fixed: ReadonlySet<string>;
   limits: Limits;
+  /** True after an idle chat was cleared (IdleReset), to say why the panel is empty. */
+  fresh: boolean;
+  onIdleReset: () => void;
 };
 const PanelContext = createContext<Panel | null>(null);
 
@@ -108,9 +115,10 @@ function Sparkle({ size = 20 }: { size?: number }) {
 
 /** Name, what the assistant is reading, and close. Replaces CopilotKit's header. */
 function Header() {
-  const { t, reading, close } = usePanel();
+  const { t, reading, close, onIdleReset } = usePanel();
   return (
     <div className="sidera-panel-header">
+      <IdleReset agentId={AGENT_ID} onReset={onIdleReset} />
       <Sparkle size={22} />
       <div className="sidera-panel-heading">
         <h2>{t.title}</h2>
@@ -125,18 +133,41 @@ function Header() {
   );
 }
 
-/** Before the first message: a greeting in the middle, suggestions, then the input. */
+/** The chat's text box, once it is on the screen. */
+function focusInput() {
+  window.setTimeout(() => document.querySelector<HTMLElement>(".copilotKitSidebar textarea")?.focus(), 50);
+}
+
+/**
+ * Before the first message: a greeting in the middle, suggestions, then the input. Until the AI
+ * notice is acknowledged it takes the place of the suggestions and the input, so nothing can be
+ * sent before (AiNotice.tsx).
+ */
 function Welcome({ input, suggestionView }: { input: ReactElement; suggestionView: ReactElement }) {
-  const { t, limits } = usePanel();
+  const { t, fresh, limits } = usePanel();
+  const ok = useAiAcknowledged();
   return (
     <div className="sidera-welcome">
       <div className="sidera-welcome-hero">
         <Sparkle size={40} />
         <h3>{t.greeting}</h3>
         <p>{t.welcome}</p>
+        {fresh && (
+          <p className="sidera-welcome-fresh" role="status">
+            {fill(t.notice.fresh, { minutes: CONVERSATION_IDLE_MINUTES })}
+          </p>
+        )}
       </div>
-      {!limits.status?.blocked && <div className="sidera-welcome-chips">{suggestionView}</div>}
-      <div className="sidera-welcome-input">{input}</div>
+      {ok ? (
+        <>
+          {!limits.status?.blocked && <div className="sidera-welcome-chips">{suggestionView}</div>}
+          <div className="sidera-welcome-input">{input}</div>
+        </>
+      ) : (
+        <div className="sidera-welcome-notice">
+          <AiNotice onAccept={focusInput} autoFocus={false} />
+        </div>
+      )}
     </div>
   );
 }
@@ -246,21 +277,39 @@ function ContextBridge({
 function AskBridge({ onOpen, limits }: { onOpen: () => void; limits: Limits }) {
   const { copilotkit } = useCopilotKit();
   const { refresh } = limits;
-  useEffect(() => {
-    const onAsk = async (event: Event) => {
-      const question = (event as CustomEvent<string>).detail;
-      onOpen();
+  const ok = useAiAcknowledged();
+  // A question asked before the AI notice was acknowledged waits here and is sent after.
+  const waiting = useRef<string | null>(null);
+  const send = useCallback(
+    async (question: string) => {
       const agent = copilotkit.getAgent(AGENT_ID);
-      if (!agent || !question) return;
-      // A question the limits would refuse stays unsent; the panel says why (LimitedInput).
+      if (!agent) return;
+      // Then the limits: a question they would refuse stays unsent; the panel says why
+      // (LimitedInput).
       const status = await refresh();
       if (status?.blocked) return;
       agent.addMessage({ id: crypto.randomUUID(), role: "user", content: question });
       void copilotkit.runAgent({ agent });
+    },
+    [copilotkit, refresh],
+  );
+  useEffect(() => {
+    const onAsk = (event: Event) => {
+      const question = (event as CustomEvent<string>).detail;
+      onOpen();
+      if (!question) return;
+      if (acknowledged()) void send(question);
+      else waiting.current = question;
     };
     window.addEventListener(ASK_EVENT, onAsk);
     return () => window.removeEventListener(ASK_EVENT, onAsk);
-  }, [copilotkit, onOpen, refresh]);
+  }, [send, onOpen]);
+  useEffect(() => {
+    if (!ok || !waiting.current) return;
+    const question = waiting.current;
+    waiting.current = null;
+    void send(question);
+  }, [ok, send]);
   return null;
 }
 
@@ -512,10 +561,12 @@ export default function Chat({
   }, []);
   const openPanel = useCallback(() => setOpen(true), []);
   const limits = useChatLimits(open);
+  const [fresh, setFresh] = useState(false);
+  const onIdleReset = useCallback(() => setFresh(true), []);
   const launcher = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
-  // Keyboard: Escape closes; opening moves focus to the input (laptops only, so phones don't
-  // pop up the keyboard); closing returns focus to the launcher.
+  // Keyboard: Escape closes; opening moves focus to the input, or to the AI notice in its place
+  // (laptops only, so phones don't pop up the keyboard); closing returns focus to the launcher.
   useEffect(() => {
     if (!open) {
       if (wasOpen.current) launcher.current?.focus();
@@ -528,7 +579,8 @@ export default function Chat({
     window.addEventListener("keydown", onKey);
     const focus = window.setTimeout(() => {
       if (window.matchMedia("(min-width: 768px)").matches) {
-        document.querySelector<HTMLElement>(".copilotKitSidebar textarea")?.focus();
+        // The input, or the AI notice in its place until that is acknowledged.
+        document.querySelector<HTMLElement>(".copilotKitSidebar textarea, .copilotKitSidebar [data-ai-notice]")?.focus();
       }
     }, 50);
     return () => {
@@ -549,8 +601,10 @@ export default function Chat({
       // The site's own page questions, shown before the first message: never filtered.
       fixed: new Set(Object.values(t.chips).flat()),
       limits,
+      fresh,
+      onIdleReset,
     }),
-    [t, lang, tools, key, value, limits],
+    [t, lang, tools, key, value, limits, fresh, onIdleReset],
   );
 
   return (

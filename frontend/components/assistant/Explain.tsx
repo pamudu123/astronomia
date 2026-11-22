@@ -26,6 +26,7 @@ import { askAssistant } from "@/lib/assistant/panel";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { AiNoticeGate, useAiAcknowledged } from "./AiNotice";
 import styles from "./Explain.module.css";
 import { useExplainText } from "./PageContext";
 
@@ -261,12 +262,12 @@ export function AiExplain({
       {open && (
         <div id={panel} className={styles.panel}>
           {allowed ? (
-            <>
+            <AiNoticeGate>
               {chapters.map((id) => (
                 <Chapter key={id} id={id} lang={lang} facts={stable} t={t} heading={chapters.length > 1} />
               ))}
               <p className={styles.label}>{t.label}</p>
-            </>
+            </AiNoticeGate>
           ) : (
             <p className={styles.locked}>
               <Lock size={16} /> {t.locked}
@@ -308,6 +309,7 @@ export function FullReading({
   const [open, setOpen] = useState<Set<ChapterId>>(new Set());
   const base = useId();
   const allowed = useCanUse("ai_reading");
+  const ok = useAiAcknowledged();
   if (!t || !facts) return null;
   const words = t[reading];
 
@@ -349,14 +351,17 @@ export function FullReading({
           {!started && <p className="soft">{fill(words.lead, { count: chapters.length })}</p>}
         </div>
         {started ? (
-          <div className={styles.readingActions}>
-            <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set(chapters))}>
-              {words.openAll}
-            </button>
-            <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set())}>
-              {words.hideAll}
-            </button>
-          </div>
+          // "Open all" and "Hide all" wait until the AI notice under the title is acknowledged.
+          ok && (
+            <div className={styles.readingActions}>
+              <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set(chapters))}>
+                {words.openAll}
+              </button>
+              <button type="button" className={styles.smallButton} onClick={() => setOpen(new Set())}>
+                {words.hideAll}
+              </button>
+            </div>
+          )
         ) : allowed ? (
           <button type="button" className="btn btn-primary lift" onClick={start}>
             {words.get}
@@ -369,7 +374,7 @@ export function FullReading({
       </div>
 
       {started && (
-        <>
+        <AiNoticeGate>
           <ol className={styles.chapters}>
             {chapters.map((id, index) => {
               const isOpen = open.has(id);
@@ -412,7 +417,7 @@ export function FullReading({
             {t.readingLabel}
             {pdf && ` · ${t.inPdf}`}
           </p>
-        </>
+        </AiNoticeGate>
       )}
     </section>
   );
@@ -471,10 +476,10 @@ export function TopicChips({
       {picked && (
         <div id={`${base}-panel`} className={styles.panel}>
           {allowed ? (
-            <>
+            <AiNoticeGate>
               <Chapter key={picked} id={picked} lang={lang} facts={facts} t={t} heading />
               <p className={styles.label}>{t.label}</p>
-            </>
+            </AiNoticeGate>
           ) : (
             <p className={styles.locked}>
               <Lock size={16} /> {t.locked}

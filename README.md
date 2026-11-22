@@ -13,6 +13,7 @@ A website for **hadahan** (Sri Lankan birth charts) and **porondam** (marriage m
 | `frontend/` | Next.js website (TypeScript). Pages in `si` and `en` |
 | `agent/` | The AI assistant behind the chat (Python, Deep Agents, AG-UI). See [`agent/README.md`](agent/README.md) |
 | `design/` | Artwork and the scripts that prepare it for the web |
+| `supabase/` | Database migrations for Supabase. See [`supabase/README.md`](supabase/README.md) |
 | `docs/` | Research and plans |
 
 ## Run it locally
@@ -36,6 +37,8 @@ npm run dev
 ```
 
 The frontend forwards `/api/*` to the backend at `BACKEND_URL` (default `http://localhost:8000`).
+
+Locally the backend keeps accounts, saved reports, share links and orders in SQLite under `backend/var/`, and needs no settings. Saving and signing in need a Supabase project: put `ASTRONOMIA_SUPABASE_URL` in `backend/.env` and `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `frontend/.env.local` (values in [`docs/19-supabase-build-plan.md`](docs/19-supabase-build-plan.md), section 3). To run against the staging database, also set `ASTRONOMIA_DATABASE_URL`. Never commit either file.
 
 **AI assistant** (http://localhost:8123, optional): needs an OpenAI key in `agent/.env`. See [`agent/README.md`](agent/README.md).
 
@@ -61,7 +64,7 @@ When the API changes, run `uv run python scripts/export_openapi.py` in `backend/
 
 ## Hosting
 
-Staging runs privately on Render (backend and PostgreSQL) and Vercel (frontend). See [`docs/09-launch.md`](docs/09-launch.md) for the settings and what is left before launch.
+Staging runs privately on Vercel (frontend), Render (backend and AI assistant) and Supabase (database and sign in: anonymous guests and Google). See [`docs/09-launch.md`](docs/09-launch.md) for the settings and what is left before launch, and [`docs/19-supabase-build-plan.md`](docs/19-supabase-build-plan.md) for the database and sign in. Prices, coupons and paid reports are in [`docs/20-paid-reports.md`](docs/20-paid-reports.md).
 
 ## Data credits
 

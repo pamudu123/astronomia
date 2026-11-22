@@ -1,5 +1,5 @@
-# Render blueprint for the backend, its database and the AI assistant (staging for now).
-# The frontend runs on Vercel. See docs/09-launch.md.
+# Render blueprint for the backend and the AI assistant (staging for now).
+# The frontend runs on Vercel and the database on Supabase (docs/19). See docs/09-launch.md.
 services:
   - type: web
     name: astronomia-api
@@ -83,9 +83,3 @@ services:
           type: web
           name: astronomia-api
           envVarKey: ASTRONOMIA_CHAT_KEY
-
-databases:
-  - name: astronomia-db
-    plan: free
-    region: singapore
-    postgresMajorVersion: "16"

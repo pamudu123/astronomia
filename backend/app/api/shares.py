@@ -1,8 +1,9 @@
 """Share links: a snapshot of one result, created only when the visitor presses Share.
 
 The server works the result out again from the birth details, then keeps the finished result
-in both languages. The request itself (place, coordinates, time zone) is not kept, and names
-are left out entirely when the visitor hides them.
+in both languages. The request itself (place id, coordinates, time zone) is not kept. Names and
+birth details (date, time, place) are left out unless the visitor chooses to show them: what is
+hidden is removed before the snapshot is stored, so it never reaches the store or the recipient.
 """
 
 import datetime as dt
@@ -15,10 +16,10 @@ from app.api.deps import PlacesDb, Shares
 from app.api.porondam import PorondamResponse
 from app.api.report_requests import HadahanReport, PorondamReport
 from app.api.snapshots import (
-    SnapshotHadahan,
+    SharedHadahan,
     hadahan_snapshot,
-    open_hadahan,
     open_porondam,
+    open_shared_hadahan,
     porondam_snapshot,
 )
 from app.config import get_settings
@@ -28,16 +29,25 @@ from app.store.shares import DeleteRefused
 router = APIRouter(tags=["shares"])
 
 Code = Annotated[str, Path(pattern=r"^[A-Za-z0-9_-]{16,64}$")]
-PRIVATE = {"Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow"}
+# Shares must not be indexed, kept by a shared cache or CDN, or leak their code in a referrer.
+PRIVATE = {
+    "Cache-Control": "private, no-store",
+    "X-Robots-Tag": "noindex, nofollow",
+    "Referrer-Policy": "no-referrer",
+}
 GONE = "this link has expired or was deleted"
 
 
+# Names and birth details (date, time, place) stay hidden unless the visitor turns them on
+# (legal review, docs/09-launch.md "Before going public").
 class ShareHadahan(HadahanReport):
-    hide_names: bool = False
+    show_names: bool = False
+    show_birth: bool = False
 
 
 class SharePorondam(PorondamReport):
-    hide_names: bool = False
+    show_names: bool = False
+    show_birth: bool = False
 
 
 ShareRequest = Annotated[ShareHadahan | SharePorondam, Body(discriminator="kind")]
@@ -54,7 +64,8 @@ class ShareOut(BaseModel):
     created_at: dt.datetime
     expires_at: dt.datetime
     names_hidden: bool
-    hadahan: SnapshotHadahan | None = None
+    birth_hidden: bool
+    hadahan: SharedHadahan | None = None
     porondam: PorondamResponse | None = None
 
 
@@ -64,11 +75,13 @@ def create_share(
 ) -> ShareCreated:
     """Keep a snapshot of a hadahan or a match and return its link code."""
     response.headers.update(PRIVATE)
+    hide_names, hide_birth = not body.show_names, not body.show_birth
     if isinstance(body, ShareHadahan):
-        snapshot = hadahan_snapshot(body, db, body.hide_names)
+        snapshot = hadahan_snapshot(body, db, hide_names, hide_birth)
     else:
-        snapshot = porondam_snapshot(body, db, body.hide_names)
-    snapshot["names_hidden"] = body.hide_names
+        snapshot = porondam_snapshot(body, db, hide_names, hide_birth)
+    snapshot["names_hidden"] = hide_names
+    snapshot["birth_hidden"] = hide_birth
     created = shares.create(body.kind, snapshot, get_settings().share_days)
     return ShareCreated(
         code=created.code, delete_token=created.delete_token, expires_at=created.expires_at
@@ -90,9 +103,11 @@ def open_share(
         created_at=found.created_at,
         expires_at=found.expires_at,
         names_hidden=bool(payload["names_hidden"]),
+        # Links made before birth details could be hidden kept them.
+        birth_hidden=bool(payload.get("birth_hidden", False)),
     )
     if found.kind == "hadahan":
-        out.hadahan = open_hadahan(payload, lang)
+        out.hadahan = open_shared_hadahan(payload, lang)
     else:
         out.porondam = open_porondam(payload, lang)
     return out
@@ -108,7 +123,9 @@ def delete_share(
     try:
         deleted = shares.delete(code, delete_token)
     except DeleteRefused as error:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "wrong delete token") from error
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN, "wrong delete token", headers=PRIVATE
+        ) from error
     if not deleted:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, GONE)
+        raise HTTPException(status.HTTP_404_NOT_FOUND, GONE, headers=PRIVATE)
     return Response(status_code=status.HTTP_204_NO_CONTENT, headers=PRIVATE)
