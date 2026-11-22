@@ -6,10 +6,24 @@ import { stagingAllowed } from "@/lib/staging";
 
 const NOINDEX = "noindex, nofollow";
 
+/** A share page (/en/s/<code>): the code in its address must stay private. */
+const SHARE_PAGE = /^\/(?:en|si)\/s\/[^/]+\/?$/;
+
+/**
+ * Share pages are not indexed, not kept by a shared cache or CDN, and never send their address
+ * (with the code) to another site as a referrer.
+ */
+const SHARE_HEADERS: Record<string, string> = {
+  "X-Robots-Tag": NOINDEX,
+  "Cache-Control": "private, no-store, max-age=0",
+  "Referrer-Policy": "no-referrer",
+};
+
 /**
  * 1. On a private staging site, ask for the staging password first.
  * 2. Calls to /api go on to the backend, with the visitor's sign in and the backend's access key.
  * 3. Every page lives under /si or /en. Anything else is sent to the visitor's language.
+ * 4. Share pages get private headers (SHARE_HEADERS).
  */
 export function proxy(request: NextRequest) {
   const password = process.env.STAGING_PASSWORD;
@@ -29,6 +43,11 @@ export function proxy(request: NextRequest) {
   }
 
   const first = pathname.split("/")[1] ?? "";
+  if (SHARE_PAGE.test(pathname)) {
+    const response = NextResponse.next();
+    for (const [name, value] of Object.entries(SHARE_HEADERS)) response.headers.set(name, value);
+    return response;
+  }
   if (hasLocale(first)) {
     if (!password) return;
     const response = NextResponse.next();

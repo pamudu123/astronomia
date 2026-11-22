@@ -450,6 +450,13 @@ export function PorondamResult({
                     total: match.score.total,
                   })}
                   hasNames={Boolean(bride.name || groom.name)}
+                  names={fill(t.title, { bride: nameOf(bride, f.bride), groom: nameOf(groom, f.groom) })}
+                  plural
+                  fields={[
+                    share.fieldStars,
+                    share.fieldFactors,
+                    ...(result.kuja ? [share.fieldKujaPair] : []),
+                  ]}
                 />
               )}
               {onAgain && (

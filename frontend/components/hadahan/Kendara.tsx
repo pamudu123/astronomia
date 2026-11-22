@@ -73,7 +73,8 @@ type Props = {
   houses?: number[];
   /** Write each house number in its box, for the reading guide. */
   numbered?: boolean;
-  subtitle: string;
+  /** The birth date under the title. Left out when a shared chart hides it. */
+  subtitle?: string;
 };
 
 export function Kendara({
@@ -145,9 +146,11 @@ export function Kendara({
       <text x="150" y="146" className={styles.centreTitle}>
         {title}
       </text>
-      <text x="150" y="166" className={styles.centreSub}>
-        {subtitle}
-      </text>
+      {subtitle && (
+        <text x="150" y="166" className={styles.centreSub}>
+          {subtitle}
+        </text>
+      )}
     </svg>
   );
 }
