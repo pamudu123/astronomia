@@ -50,6 +50,9 @@ jobs:
         env:
           NEXT_DIST_DIR: .next-ai
           AGENT_URL: http://127.0.0.1:9/agent
+          # The same stand-in Supabase: unlocking a report signs the browser in as a guest.
+          NEXT_PUBLIC_SUPABASE_URL: https://supabase.e2e.test
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_e2e
       - name: Browser tests
         run: npx playwright test --trace off
       - name: Keep test results when browser tests fail
