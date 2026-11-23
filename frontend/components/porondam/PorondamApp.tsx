@@ -140,6 +140,17 @@ function PorondamForm({
       .catch(() => saveSession(PORONDAM_KEY, null));
   }, [lang, fresh]);
 
+  function person(role: Role): PersonInput | null {
+    if (mode === "quick") {
+      const q = quick[role];
+      return q.nakshatra
+        ? { name: q.name.trim(), nakshatra: q.nakshatra, pada: q.pada }
+        : null;
+    }
+    const request = toRequest(full[role]);
+    return request ? { ...request, name: full[role].name.trim() } : null;
+  }
+
   // Take someone who came for wedding dates to the search, once the match is drawn.
   const toWedding = forWedding && view.kind === "result" && labels !== null;
   useEffect(() => {
@@ -153,17 +164,6 @@ function PorondamForm({
     });
     return () => cancelAnimationFrame(frame);
   }, [toWedding]);
-
-  function person(role: Role): PersonInput | null {
-    if (mode === "quick") {
-      const q = quick[role];
-      return q.nakshatra
-        ? { name: q.name.trim(), nakshatra: q.nakshatra, pada: q.pada }
-        : null;
-    }
-    const request = toRequest(full[role]);
-    return request ? { ...request, name: full[role].name.trim() } : null;
-  }
 
   async function run(request: PorondamRequest) {
     setBusy(true);
