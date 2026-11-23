@@ -394,7 +394,7 @@ def upcoming_changes(body: HadahanRequest, db: PlacesDb) -> UpcomingResponse:
             changes=[],
         )
     chart = compute_chart(EPHEMERIS, birth.utc, birth.latitude, birth.longitude)
-    now = (body.as_of or dt.datetime.now(dt.UTC)).astimezone(dt.UTC)
+    now = body.as_of or dt.datetime.now(dt.UTC)
     lagna, moon = chart.lagna.sign, chart.moon.sign
     return UpcomingResponse(
         status="ok",

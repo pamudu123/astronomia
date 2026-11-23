@@ -186,6 +186,14 @@ describe("other pages", () => {
     expect(String(summary.rahu_kalaya)).toMatch(/^\d\d:\d\d to \d\d:\d\d/);
   });
 
+  it("says when the date never happened at the place", () => {
+    const day = panchanga as unknown as Panchanga;
+    const note = "This date did not happen here.";
+    const skipped = { ...day, sunrise: null, sunset: null, rahu_kalaya: null, thithi: [], nakatha: [], skipped: true, skipped_note: note };
+    expect(dayContext(skipped, null, "en").result).toMatchObject({ skipped_date: note, sunrise: null });
+    expect(dayContext(day, null, "en").result).not.toHaveProperty("skipped_date");
+  });
+
   it("names the day's own place and time zone, not a place picked but not loaded yet", () => {
     // QA follow-up: the picker held London while Colombo's day was still on screen.
     const day = panchanga as unknown as Panchanga;

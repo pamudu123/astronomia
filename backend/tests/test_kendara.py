@@ -1,15 +1,18 @@
 """The old horoscope search: draw known births from our own engine, then search backwards."""
 
+import itertools
 import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from types import SimpleNamespace
+from typing import Any
 
 import pytest
 
 from app.engine.chart import Chart, compute_chart
 from app.engine.ephemeris import SwissEphemeris, julian_day
 from app.engine.zodiac import BODIES, RASHI, Body
-from app.kendara.search import Drawing, ImpossibleChart, Query, check_drawing, search
+from app.kendara.search import Drawing, ImpossibleChart, Query, check_drawing, load_rules, search
 from app.kendara.table import FIRST_DAY, load
 
 EPHEMERIS = SwissEphemeris()
@@ -143,3 +146,50 @@ def test_utc_of_the_window_is_aware() -> None:
     match = search(EPHEMERIS, load(), Query(rashi, end=NOW)).matches[0]
     assert match.start.tzinfo is not None
     assert match.start.utcoffset() == timedelta(0)
+
+
+# ---------- the limits ----------
+
+# The Sun is in Mesha for a month every year, so this drawing fits a part of every day of it.
+# The Moon is in any one star for about a day of each such month.
+SUN_IN_MESHA = Drawing(RASHI.index("mesha"), {Body.SUN: RASHI.index("mesha")})
+
+
+def april_to(end: datetime, nakshatra: int | None = None) -> Query:
+    start = datetime(1990, 1, 1, tzinfo=UTC)
+    return Query(SUN_IN_MESHA, start=start, end=end, nakshatra=nakshatra)
+
+
+def limits(matches: int, seconds: float = 600) -> dict[str, Any]:
+    return {**load_rules(), "max_matches": matches, "time_limit_seconds": seconds}
+
+
+def test_windows_without_the_star_do_not_use_up_the_limit() -> None:
+    end = datetime(1993, 1, 1, tzinfo=UTC)
+    everything = search(EPHEMERIS, load(), april_to(end), limits(1000))
+    star = everything.matches[-1].stars[-1].nakshatra
+    wanted = [m for m in everything.matches if star in {s.nakshatra for s in m.stars}]
+    assert len(everything.matches) > 10 * len(wanted)
+    # Every one of these comes after more starless windows than the limit.
+    assert everything.matches.index(wanted[-1]) > len(wanted)
+
+    found = search(EPHEMERIS, load(), april_to(end, star), limits(len(wanted)))
+    assert not found.cut_off and found.stopped_at is None
+    assert len(found.matches) == len(wanted)
+    assert all(s.nakshatra == star for m in found.matches for s in m.stars)
+
+    # One fewer allowed: really more than the limit, and still the oldest ones.
+    fewer = search(EPHEMERIS, load(), april_to(end, star), limits(len(wanted) - 1))
+    assert fewer.cut_off and fewer.stopped_at is None
+    assert fewer.matches == found.matches[:-1]
+
+
+def test_the_time_limit_says_how_far_the_search_got(monkeypatch: pytest.MonkeyPatch) -> None:
+    clock = itertools.count(0.0, 4.0)  # each look at the clock is 4 seconds later
+    monkeypatch.setattr("app.kendara.search.time", SimpleNamespace(monotonic=lambda: next(clock)))
+    end = datetime(1995, 1, 1, tzinfo=UTC)
+    result = search(EPHEMERIS, load(), april_to(end), limits(1000, seconds=5))
+    assert result.cut_off
+    assert result.matches
+    assert result.stopped_at is not None and result.stopped_at.year == 1991
+    assert all(m.end <= result.stopped_at for m in result.matches)

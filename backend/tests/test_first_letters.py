@@ -4,6 +4,7 @@ import datetime as dt
 import json
 import zoneinfo
 from pathlib import Path
+from typing import Any
 
 import pytest
 from fastapi import HTTPException
@@ -256,3 +257,51 @@ def test_locking_the_finder_leaves_the_letters_open(client: TestClient) -> None:
     assert client.post("/v1/first-letters", json={"child": child}).status_code == 402
     assert client.get("/v1/baby/letters/ashwini").status_code == 200
     assert client.get("/v1/baby/names", params={"letters": "අ"}).status_code == 200
+
+
+def search_for(client: TestClient, **changes: Any) -> dict[str, Any]:
+    body = {
+        "child": {"nakshatra": "ashwini", "pada": 1},
+        "months": 1,
+        "as_of": "2026-07-01",
+        **changes,
+    }
+    answer: dict[str, Any] = client.post("/v1/first-letters", json=body).json()
+    return answer
+
+
+def test_no_dates_before_the_child_is_born(client: TestClient) -> None:
+    body = search_for(client, birth_date="2027-01-01")
+    assert body["status"] == "ok"
+    assert body["suggestions"] == []
+    assert body["none_text"].startswith("The child is born after the last day searched.")
+    assert "උපදින්නේ" in search_for(client, birth_date="2027-01-01", lang="si")["none_text"]
+
+
+def test_a_search_that_crosses_the_birth_starts_after_it(client: TestClient) -> None:
+    assert search_for(client)["suggestions"][0]["date"] < "2026-07-10"
+    body = search_for(client, birth_date="2026-07-10")
+    assert (body["first"], body["last"]) == ("2026-07-11", "2026-07-31")
+    assert body["suggestions"]
+    assert all(i["date"] > "2026-07-10" for i in body["suggestions"])
+    assert all("-" not in i["age"] for i in body["suggestions"])
+
+
+def test_a_birth_on_the_first_or_last_day_searched(client: TestClient) -> None:
+    assert search_for(client, birth_date="2026-07-01")["first"] == "2026-07-02"
+    assert search_for(client, birth_date="2026-06-30")["first"] == "2026-07-01"
+    last = search_for(client, birth_date="2026-07-31")
+    assert last["suggestions"] == [] and "born after" in last["none_text"]
+
+
+def test_a_full_birth_bounds_the_search_too(client: TestClient) -> None:
+    child = {"date": "2026-07-10", "time": "23:30", "place_id": KANDY}
+    assert search_for(client, child=child)["first"] == "2026-07-11"
+    # By then it is already the 11th in Auckland, so the search there starts on the 12th.
+    auckland = {"latitude": -36.85, "longitude": 174.76, "timezone": "Pacific/Auckland"}
+    assert search_for(client, child=child, **auckland)["first"] == "2026-07-12"
+
+
+def test_no_birth_date_searches_the_whole_range(client: TestClient) -> None:
+    body = search_for(client)
+    assert body["first"] == "2026-07-01" and body["suggestions"]

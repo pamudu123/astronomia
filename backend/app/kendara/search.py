@@ -104,6 +104,7 @@ class Result:
     matches: list[Match]
     cut_off: bool  # more matches exist than were returned, or the time limit was reached
     candidate_days: int
+    stopped_at: datetime | None = None  # UTC: how far it got, when the time limit stopped it
 
 
 class ImpossibleChart(ValueError):
@@ -283,12 +284,30 @@ def search(
     def status_at(at: datetime) -> _Moment:
         return _moment(ephemeris, query, at, rules)
 
-    found: list[Match] = []
-    cut_off = False
+    def starred(found: list[Match]) -> list[Match]:
+        """The windows with their stars, cut to the birth star asked for, when there is one."""
+        kept = []
+        for match in found:
+            stars = _star_spans(ephemeris, match.start, match.end, step)
+            start, end = match.start, match.end
+            if query.nakshatra is not None:
+                stars = [span for span in stars if span.nakshatra == query.nakshatra]
+                if not stars:
+                    continue
+                start, end = stars[0].start, stars[-1].end
+            kept.append(Match(start, end, match.grade, match.near, tuple(stars)))
+        return kept
+
+    matches: list[Match] = []
+    stopped_at = None
     for first, last in _runs(days):
-        if time.monotonic() > deadline or len(found) > limit:
-            cut_off = True
+        # Only windows that hold the birth star count towards the limit.
+        if len(matches) > limit:
             break
+        if time.monotonic() > deadline:
+            stopped_at = max(table.day_start(first), query.start)
+            break
+        found: list[Match] = []
         lower = max(table.day_start(first), query.start)
         upper = min(table.day_start(last + 1), query.end)
         # Step through the run, collecting stretches of moments that fit.
@@ -304,20 +323,11 @@ def search(
             at += step
         if stretch:
             found.extend(_windows(stretch, step, status_at, lower, upper))
+        matches.extend(starred(found))
 
-    matches = []
-    for match in found:
-        stars = _star_spans(ephemeris, match.start, match.end, step)
-        if query.nakshatra is not None:
-            stars = [span for span in stars if span.nakshatra == query.nakshatra]
-            if not stars:
-                continue
-            match = Match(stars[0].start, stars[-1].end, match.grade, match.near, ())
-        matches.append(Match(match.start, match.end, match.grade, match.near, tuple(stars)))
     matches.sort(key=lambda m: m.start)
-    if len(matches) > limit:
-        matches, cut_off = matches[:limit], True
-    return Result(matches, cut_off, len(days))
+    over = len(matches) > limit
+    return Result(matches[:limit], over or stopped_at is not None, len(days), stopped_at)
 
 
 def _windows(

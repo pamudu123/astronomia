@@ -11,6 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.api.birth import BirthInput, resolve_birth
 from app.api.charts import EPHEMERIS, KujaOut, kuja_out
 from app.api.deps import PlacesDb
+from app.api.instant import Instant
 from app.api.timeresolve import TimeResolveResponse
 from app.engine import couple
 from app.engine.chart import Chart, Point, compute_chart
@@ -321,7 +322,7 @@ def porondam_stars(
 
 
 class TimelineRequest(PorondamRequest):
-    as_of: dt.datetime | None = None  # "today"; for tests
+    as_of: Instant | None = None  # "today"; for tests
 
 
 class SpanOut(BaseModel):
@@ -454,7 +455,7 @@ def porondam_timeline(body: TimelineRequest, db: PlacesDb) -> TimelineResponse:
         if isinstance(found, PorondamResponse):
             return TimelineResponse(status=found.status, waiting_for=role, time=found.time)
         people[role] = found
-    today = (body.as_of or dt.datetime.now(dt.UTC)).astimezone(dt.UTC).date()
+    today = (body.as_of or dt.datetime.now(dt.UTC)).date()
     start, end = couple.window(today)
     stays = couple.saturn_stays(EPHEMERIS, today)
     saturn = {role: couple.saturn_periods(stays, people[role][0].sign) for role in people}
