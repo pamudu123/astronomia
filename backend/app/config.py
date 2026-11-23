@@ -25,8 +25,9 @@ class Settings(BaseSettings):
     share_days: int = 30
     # Accounts and saved reports (docs/16), when SQLite is used.
     accounts_db: Path = VAR_DIR / "accounts.sqlite"
-    # How many reports a guest account may keep.
-    guest_saved_limit: int = 100
+    # How many free reports one account (guest or Google) may keep at a time (docs/18, section
+    # 3). Each is deleted 7 days after saving; paid reports count against paid_saved_limit.
+    free_saved_limit: int = 20
     # How many new guest accounts one address may make in an hour.
     guests_per_hour: int = 30
     # Paid reports (docs/18). Off: everyone gets every feature, as before. On: the AI reading,

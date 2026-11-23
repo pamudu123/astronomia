@@ -245,3 +245,41 @@
   cursor: progress;
   opacity: 0.7;
 }
+
+.separate {
+  max-width: 64ch;
+  font-size: 14px;
+}
+
+/* How long a report is kept: "Paid", or "Free · deleted in N days" (docs/18, section 3). */
+.keep {
+  align-self: flex-start;
+  padding: 2px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.keepPaid {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.reminder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--coral);
+  border-radius: var(--radius-field);
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.keepNote {
+  max-width: 640px;
+  margin-top: 24px;
+  font-size: 15px;
+}

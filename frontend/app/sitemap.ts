@@ -37,6 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/kendara",
     "/privacy",
     "/terms",
+    "/credits",
   ];
   return paths.flatMap((path) =>
     locales.map((lang) => ({

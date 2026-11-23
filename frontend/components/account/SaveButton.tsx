@@ -17,7 +17,7 @@ type Props = {
   request: ReportRequest;
 };
 
-type Step = "idle" | "saving" | "saved" | "already" | "failed" | "full";
+type Step = "idle" | "saving" | "saved" | "already" | "failed" | "full" | "freeFull";
 
 /**
  * Saves the result on the page to My reports. The first save signs this browser in to Supabase
@@ -33,9 +33,10 @@ export function SaveButton({ lang, t, request }: Props) {
       const saved = await saveReport(request);
       setStep(saved.created ? "saved" : "already");
     } catch (caught) {
-      setStep(caught instanceof RequestError && caught.status === 409 ? "full" : "failed");
+      setStep(fullStep(caught));
     }
   }
+  const problem = step === "failed" ? t.failed : step === "full" ? t.limit : step === "freeFull" ? t.limitFree : null;
 
   return (
     <div className={styles.wrap} data-save>
@@ -59,13 +60,19 @@ export function SaveButton({ lang, t, request }: Props) {
           </>
         )}
       </p>
-      {(step === "failed" || step === "full") && (
-        <p role="alert" className={styles.error}>
-          {step === "full" ? t.limit : t.failed}
+      {problem && (
+        <p role="alert" className={styles.error} data-save-problem={step}>
+          {problem}
         </p>
       )}
     </div>
   );
+}
+
+/** Why a save was refused: the free reports are full (20 at a time), My reports is full, or it failed. */
+function fullStep(caught: unknown): Step {
+  if (!(caught instanceof RequestError) || caught.status !== 409) return "failed";
+  return caught.detail === "free_limit" ? "freeFull" : "full";
 }
 
 function Bookmark({ filled }: { filled: boolean }) {

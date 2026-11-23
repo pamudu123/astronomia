@@ -233,6 +233,7 @@
     "disclaimer": "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer.",
     "privacy": "Privacy",
     "terms": "Terms",
+    "credits": "Credits",
     "legal": "About this site",
     "changes": "Planet changes",
     "signIn": "Already saved? Sign in"
@@ -651,7 +652,23 @@
     "button": "Share",
     "title": "Share this result",
     "close": "Close",
-    "hideNames": "Hide names on the shared page",
+    "showNames": "Show names",
+    "showBirth": "Show birth date, time and place",
+    "fieldsLead": "Anyone with the link can see and forward the fields below for up to 30 days. Revoking the link stops future access. It cannot recall copies.",
+    "fieldsTitle": "What the link shows",
+    "fieldName": "Name",
+    "fieldNames": "Names",
+    "fieldBirth": "Birth date, time and place",
+    "hidden": "Hidden",
+    "notIncluded": "Not included",
+    "fieldChart": "The chart: lagna, rashi, birth star, and each planet's sign, house and degree",
+    "fieldTimeCheck": "How much the chart depends on the exact birth time",
+    "fieldDasha": "Life periods (dasha) with their dates",
+    "fieldKuja": "The kuja dosha (Mars) check",
+    "fieldStars": "Each person's birth star and rashi, and the lagna and planet signs when full birth details were used",
+    "fieldFactors": "The porondam factors, the score and the summary",
+    "fieldKujaPair": "The kuja dosha (Mars) check for both",
+    "separate": "A saved report and its share links are separate. Deleting the report does not delete the link, and deleting the link does not delete the report.",
     "saveNote": "Creating the link saves a copy of this result for 30 days. Nothing is saved before you press Create link, and you can delete it at any time.",
     "create": "Create link",
     "creating": "Creating the link…",
@@ -711,6 +728,7 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "deleteConfirm": "Delete this report?",
+    "sharesSeparate": "Share links are separate from saved reports. Deleting a report here does not delete a share link made from it, and deleting a link does not delete the report. A link can be deleted on the device that made it, and it closes by itself after 30 days.",
     "deleteYes": "Yes, delete",
     "deleting": "Deleting…",
     "actionFailed": "That did not work. Please try again.",
@@ -743,7 +761,16 @@
     "mergeFailed": "You are signed in with Google, but the reports saved on this browser as a guest could not be moved.",
     "deleteAccount": "Delete my account",
     "deleteAccountConfirm": "Delete your account and every saved report? This cannot be undone.",
-    "deleteAccountYes": "Yes, delete my account"
+    "deleteAccountYes": "Yes, delete my account",
+    "limitFree": "My reports already holds the most free reports you can keep at one time. Delete one there to save this one. Each free report is deleted 7 days after saving.",
+    "freeCount": "{count} of {limit} free reports kept.",
+    "labelPaid": "Paid",
+    "labelFree": "Free · deleted in {days} days",
+    "labelFreeOne": "Free · deleted in 1 day",
+    "expiring": "Deleted in {days} days. Get the full report to keep it.",
+    "expiringOne": "Deleted in 1 day. Get the full report to keep it.",
+    "keep": "Get the full report",
+    "keepNote": "Free reports are kept for 7 days. Paid reports are kept for as long as you have your account, on any device. Comparing paid reports with each other is coming soon."
   },
   "paid": {
     "title": "Get the full report",
@@ -1443,6 +1470,14 @@
     "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
     "close": "Close the chat",
     "resize": "Resize the chat. Drag, or use the arrow keys",
+    "notice": {
+      "title": "Before you use the AI helper",
+      "text": "This is an AI helper. Your message and selected chart facts go to OpenAI. Please leave out names, children's details, and health or other sensitive information. AI can make mistakes.",
+      "accept": "I understand",
+      "privacy": "How we handle your information",
+      "newTab": "(opens in a new tab)",
+      "fresh": "Your earlier chat was cleared after {minutes} minutes without use. This is a fresh start."
+    },
     "explain": {
       "label": "AI explanation · for guidance only",
       "readingLabel": "AI reading · for guidance only",
@@ -1791,5 +1826,53 @@
     "note": "Stays in this browser only.",
     "saved": "Remembered on this device.",
     "forget": "Forget"
+  },
+  "credits": {
+    "title": "Credits",
+    "metaDescription": "The data, fonts and calculations Sidera uses, where they come from and the licences they are shared under.",
+    "lead": "Sidera stands on other people's work. Here are the data, fonts and calculations we use, where they come from and the licences they are shared under.",
+    "updated": "Last updated: 22 November 2026",
+    "licence": "Licence",
+    "places": {
+      "title": "Places",
+      "text": "Place names, coordinates and time zones come from GeoNames, shared under the Creative Commons Attribution 4.0 licence. The data is provided \"as is\", without warranty.",
+      "changesTitle": "What we changed",
+      "changes": [
+        "For Sri Lanka we keep only the populated places from the GeoNames file for the country. Places in other countries are those with 1,000 or more people.",
+        "We leave out Sinhala names that are not written correctly, such as those with a vowel sign before the consonant or with letters from another script.",
+        "We use our own list of province names in place of the GeoNames ones, which have errors.",
+        "We put the places into a search index that lists larger places first."
+      ]
+    },
+    "fonts": {
+      "title": "Fonts",
+      "text": "The site uses five font families. Each is under the SIL Open Font License 1.1, which allows them to be used on websites and shared.",
+      "licence": "SIL Open Font License 1.1"
+    },
+    "names": {
+      "title": "Baby names",
+      "text": "The name suggestions on the baby name pages draw on Wikipedia, shared under the Creative Commons Attribution-ShareAlike 4.0 licence.",
+      "wikipedia": "From Wikipedia: the names in its Sinhalese given names categories, whether each is a boy's or a girl's name, and the meanings of a few names, taken from their Wikipedia pages.",
+      "people": "Names we added: each links a Wikipedia article about a Sri Lankan person with that name, to show the name is in real use. We take nothing else from those articles.",
+      "ours": "Our own work: the Sinhala spellings of the names we added, and all the other meanings, written from the Sanskrit, Pali or Sinhala root words.",
+      "where": "Every suggested name links the Wikipedia page it comes from. Pick a birth star on the baby names page to see them.",
+      "link": "Baby name letters",
+      "category": "Wikipedia: Sinhalese given names"
+    },
+    "avurudu": {
+      "title": "Avurudu times",
+      "text": "We calculate only the dawn of the new year and the punya kalaya. Every other Avurudu time is published exactly as the official list for that year gives it.",
+      "via": "Ada Derana report",
+      "bodies": {
+        "culturalAffairs": "Department of Cultural Affairs",
+        "astrologersCommittee": "State Astrologers' Committee",
+        "ministry": "Ministry of Buddhasasana, Religious and Cultural Affairs"
+      }
+    },
+    "planets": {
+      "title": "Planet positions",
+      "text": "Planet positions: Swiss Ephemeris.",
+      "how": "Calculated on our own server, through the pyswisseph library."
+    }
   }
 }

@@ -230,6 +230,8 @@ class SavedOut(BaseModel):
     title: str  # empty: the page names it from the people in it
     created_at: dt.datetime
     paid: bool = False  # unlocked with an order (docs/18): kept in the account, with every feature
+    # When a free report is deleted (7 days after saving). None for a paid report: it is kept.
+    expires_at: dt.datetime | None = None
     hadahan: HadahanCard | None = None
     porondam: PorondamCard | None = None
 
@@ -240,6 +242,9 @@ class SavedCreated(SavedOut):
 
 class SavedList(BaseModel):
     reports: list[SavedOut]
+    free_limit: int  # how many free reports the account may keep at a time
+    # Whether "Get the full report" is offered, so a free report can be kept for good.
+    paid_reports: bool
 
 
 class SavedDetail(SavedOut):
@@ -264,6 +269,7 @@ def _out(item: SavedSummary) -> SavedOut:
         title=item.title,
         created_at=item.created_at,
         paid=item.paid,
+        expires_at=item.expires_at,
     )
     if item.kind == "hadahan":
         out.hadahan = HadahanCard.model_validate(item.summary)
@@ -427,7 +433,10 @@ def merge_guest(
     response_model=SavedCreated,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(same_site), Depends(save_access)],
-    responses={200: {"model": SavedCreated, "description": "Already saved"}},
+    responses={
+        200: {"model": SavedCreated, "description": "Already saved"},
+        409: {"description": "free_limit: free reports are full; paid_limit: the safety limit"},
+    },
 )
 def save_report(
     body: ReportRequest,
@@ -438,15 +447,20 @@ def save_report(
     settings: SettingsDep,
     orders: Orders,
 ) -> SavedCreated:
-    """Saves a hadahan or a match to My reports. The page signs in (anonymously) first."""
+    """Saves a hadahan or a match to My reports. The page signs in (anonymously) first.
+
+    A free result is deleted 7 days after saving, and an account keeps at most
+    `free_saved_limit` of them at a time. A report this account paid for is kept as paid, for
+    as long as the account exists (docs/18, section 3).
+    """
     report = _new_report(body, db)
-    # A report this account paid for is kept as paid (docs/18, section 3).
     access = report_access(orders, me.user, body.kind, report.input_hash, settings.paid_reports)
-    limit = settings.paid_saved_limit if access.paid else settings.guest_saved_limit
+    limit = settings.paid_saved_limit if access.paid else settings.free_saved_limit
     try:
         item, created = accounts.save(me.user.id, report, limit, access.order_id)
     except LimitReached as error:
-        raise HTTPException(status.HTTP_409_CONFLICT, "saved report limit reached") from error
+        full = "paid_limit" if access.paid else "free_limit"
+        raise HTTPException(status.HTTP_409_CONFLICT, full) from error
     _set_hint(response, settings, 1)
     if not created:
         response.status_code = status.HTTP_200_OK
@@ -457,13 +471,15 @@ def save_report(
 def list_saved(
     session: Current, accounts: Accounts, settings: SettingsDep, response: Response
 ) -> SavedList:
-    """Every report the signed in account keeps, newest first."""
-    if session.found is None:
-        _set_hint(response, settings, 0)  # a stale hint goes
-        return SavedList(reports=[])
-    items = accounts.list_saved(session.found.user.id)
-    _set_hint(response, settings, len(items))
-    return SavedList(reports=[_out(item) for item in items])
+    """Every report the signed in account keeps, newest first. Free reports past their 7 days
+    are deleted, not listed."""
+    items = [] if session.found is None else accounts.list_saved(session.found.user.id)
+    _set_hint(response, settings, len(items))  # with nobody signed in, a stale hint goes
+    return SavedList(
+        reports=[_out(item) for item in items],
+        free_limit=settings.free_saved_limit,
+        paid_reports=settings.paid_reports,
+    )
 
 
 def _owned(session: CurrentSession) -> str:
@@ -484,7 +500,15 @@ def open_saved(
     if found is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_FOUND, headers=PRIVATE)
     out = _out(
-        SavedSummary(found.id, found.kind, found.title, found.summary, found.created_at, found.paid)
+        SavedSummary(
+            found.id,
+            found.kind,
+            found.title,
+            found.summary,
+            found.created_at,
+            found.paid,
+            found.expires_at,
+        )
     )
     detail = SavedDetail(**out.model_dump(), request=_REQUEST.validate_python(found.input))
     if found.kind == "hadahan":

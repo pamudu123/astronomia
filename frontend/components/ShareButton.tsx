@@ -27,6 +27,15 @@ type Props = {
   anonTitle: string;
   summary: string;
   hasNames: boolean;
+  /** The names as the recipient would see them, e.g. "Nimali" or "Nimali and Kasun". */
+  names: string;
+  /** Two people (a match) or one: "Names" or "Name" in the list. */
+  plural?: boolean;
+  /** The birth date, time and place as the shared page shows them. Left out where the shared
+   *  page never shows them (a match): the list then says they are not included. */
+  birth?: string;
+  /** Everything else the shared page always shows, one line each. */
+  fields: string[];
 };
 
 type Step =
@@ -36,15 +45,20 @@ type Step =
   | { kind: "deleted" };
 
 /** The Share button and its dialog. Nothing is saved until "Create link" is pressed. */
-export function ShareButton({ lang, t, request, title, anonTitle, summary, hasNames }: Props) {
+export function ShareButton(props: Props) {
+  const { lang, t, request, title, anonTitle, summary, hasNames, names, plural, birth, fields } = props;
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [step, setStep] = useState<Step>({ kind: "options" });
-  const [hideNames, setHideNames] = useState(false);
+  // Names and birth details are hidden until the visitor chooses to show them.
+  const [showNames, setShowNames] = useState(false);
+  const [showBirth, setShowBirth] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const shownTitle = hideNames || !hasNames ? anonTitle : title;
+  const namesShown = showNames && hasNames;
+  const shownTitle = namesShown ? title : anonTitle;
+  const choosing = step.kind === "options" || step.kind === "creating";
 
   function open() {
     if (step.kind === "deleted") setStep({ kind: "options" });
@@ -57,7 +71,11 @@ export function ShareButton({ lang, t, request, title, anonTitle, summary, hasNa
     setStep({ kind: "creating" });
     setError(null);
     try {
-      const share = await createShare({ ...request, hide_names: hideNames });
+      const share = await createShare({
+        ...request,
+        show_names: namesShown,
+        show_birth: showBirth && birth !== undefined,
+      });
       setStep({ kind: "created", share, url: shareUrl(window.location.origin, lang, share.code) });
     } catch {
       setStep({ kind: "options" });
@@ -119,19 +137,61 @@ export function ShareButton({ lang, t, request, title, anonTitle, summary, hasNa
           </div>
         </div>
 
-        {(step.kind === "options" || step.kind === "creating") && (
-          <>
+        {/* Every field the recipient will see, before anything is saved. */}
+        <section className={styles.fields} aria-labelledby={`${titleId}-fields`} data-share-fields>
+          <h3 id={`${titleId}-fields`} className={styles.fieldsTitle}>
+            {t.fieldsTitle}
+          </h3>
+          <p className={styles.fieldsLead}>{t.fieldsLead}</p>
+          <dl className={styles.fieldList}>
             {hasNames && (
-              <label className={styles.switch}>
-                <span>{t.hideNames}</span>
-                <input
-                  type="checkbox"
-                  checked={hideNames}
-                  onChange={(event) => setHideNames(event.target.checked)}
-                  disabled={step.kind === "creating"}
-                />
-              </label>
+              <div className={styles.fieldRow} data-share-field="names">
+                <dt>{plural ? t.fieldNames : t.fieldName}</dt>
+                <dd className={namesShown ? undefined : styles.fieldHidden}>{namesShown ? names : t.hidden}</dd>
+              </div>
             )}
+            <div className={styles.fieldRow} data-share-field="birth">
+              <dt>{t.fieldBirth}</dt>
+              <dd className={birth !== undefined && showBirth ? undefined : styles.fieldHidden}>
+                {birth === undefined ? t.notIncluded : showBirth ? birth : t.hidden}
+              </dd>
+            </div>
+          </dl>
+          <ul className={styles.alwaysList}>
+            {fields.map((field) => (
+              <li key={field}>{field}</li>
+            ))}
+          </ul>
+          {choosing && (
+            <div className={styles.switches}>
+              {hasNames && (
+                <label className={styles.switch}>
+                  <span>{t.showNames}</span>
+                  <input
+                    type="checkbox"
+                    checked={showNames}
+                    onChange={(event) => setShowNames(event.target.checked)}
+                    disabled={step.kind === "creating"}
+                  />
+                </label>
+              )}
+              {birth !== undefined && (
+                <label className={styles.switch}>
+                  <span>{t.showBirth}</span>
+                  <input
+                    type="checkbox"
+                    checked={showBirth}
+                    onChange={(event) => setShowBirth(event.target.checked)}
+                    disabled={step.kind === "creating"}
+                  />
+                </label>
+              )}
+            </div>
+          )}
+        </section>
+
+        {choosing && (
+          <>
             <p className={styles.note}>{t.saveNote}</p>
             <button
               type="button"
@@ -198,6 +258,10 @@ export function ShareButton({ lang, t, request, title, anonTitle, summary, hasNa
             {error}
           </p>
         )}
+
+        <p className={styles.small} data-share-separate>
+          {t.separate}
+        </p>
       </dialog>
     </>
   );

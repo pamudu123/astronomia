@@ -6,6 +6,10 @@ How Sidera moves its database to Supabase and uses Supabase Auth for sign in. It
 Render PostgreSQL database and the "Sign in with Google" design in docs/16, section 6. What users
 get (free and paid saving, coupons, chat limits) stays as in docs/18.
 
+**Status (2026-11-22):** steps 1 to 4 are built and merged (#65, #67), with prices, coupons and
+the paid check (#66, docs/20). Step 5 adds the daily clean up of idle guests and retires the
+Render database; the privacy notice part of step 5 is done with the policy pages.
+
 ## 1. Where everything runs
 
 | Part | Host | Plan now |
@@ -14,10 +18,12 @@ get (free and paid saving, coupons, chat limits) stays as in docs/18.
 | Backend (FastAPI): calculations, PDFs, saved reports, shares | Render, `astronomia-api`, Singapore | Free. Starter before launch |
 | AI service | Render, `astronomia-agent`, Singapore | Free. Starter before launch |
 | Database | **Supabase**, project `ihzvwnwkbcqldhrvsrle` (staging), Singapore | Free. A separate production project on Pro at launch |
+| Scheduled jobs | **Supabase** pg_cron, inside the database (`supabase/README.md`) | Included |
 | Sign in | **Supabase Auth**: anonymous users and Google | Included |
 | Company website | Squarespace, at `ppwrks.com` | Owner's |
 
-The Render PostgreSQL database is retired. It only holds test data, so nothing is moved.
+The Render PostgreSQL database `astronomia-db` is retired: it only held test data, so nothing
+was moved. It is gone from `render.yaml`; the owner deletes it in the Render dashboard.
 
 ## 2. Already done (2026-11-21)
 
@@ -50,7 +56,7 @@ Browser ── signs in ──▶ Supabase Auth (anonymous, Google)
 - **In a private schema named `sidera`,** not in `public`. Supabase's Data API publishes `public` to anyone holding the publishable key; a private schema is not published.
 - **Row level security on, with no policies,** on every table, as a second lock. The backend connects as the database owner and is not affected.
 - **Created by migrations kept in the repository** (`supabase/migrations/`), applied to the staging project, and later to production in the same order. The app stops creating tables at start up on PostgreSQL. SQLite for local runs and tests keeps creating its own.
-- **Tables:** `users` (id is the Supabase user id), `saved_reports` and `shares`, as today. The `sessions` table goes: Supabase keeps sessions. Later steps add `orders`, `coupons` and chat usage (docs/18).
+- **Tables:** `users` (id is the Supabase user id), `saved_reports`, `shares`, and for paid reports `orders`, `coupons` and `coupon_misses` (docs/20). The old `sessions` table is gone: Supabase keeps sessions. Chat usage comes later (docs/18).
 - **No birth details or names in Supabase Auth.** Sign in holds only what Google gives (account id, email, name). Reports stay in `saved_reports`.
 
 ### Accounts
@@ -63,7 +69,7 @@ Browser ── signs in ──▶ Supabase Auth (anonymous, Google)
 | Google account already used on another device | Linking fails. The page signs in with Google, then asks the backend to move the guest's reports into that account. The backend checks both tokens first, so only the browser holding the guest session can move them |
 | Sign out | "Sign out of this phone" (this device) and "Sign out everywhere" |
 | Delete account | The backend deletes the user's rows, then deletes the Supabase user with the secret key |
-| A guest nobody uses | Anonymous users with nothing saved, unused for 7 days, are deleted by a daily job |
+| A guest nobody uses | Anonymous users with nothing saved, unused for 7 days, are deleted by a daily job (section 5, step 5) |
 
 ### Settings
 
@@ -89,7 +95,7 @@ Each step is one pull request with its own tests, reviewed before the next.
 | 2 | **Backend sign in.** Check Supabase tokens (signature, issuer, audience, expiry) with the JWKS keys, cached. Find or create the `users` row. The guest cookie code is removed, and a migration drops the temporary `sidera.sessions` table that step 1 kept for it | Tests with stand-in tokens: a valid token works, an expired, wrong-issuer or tampered one is refused, one user never sees another's reports |
 | 3 | **Website sign in.** Supabase client in the site. First Save signs in anonymously. Every account call sends the token. "Continue with Google" in My reports and an "Already saved? Sign in" link in the footer. The `/auth/callback` page | On staging: save as a guest, continue with Google, the reports stay. Sign in on a second browser, the reports are there |
 | 4 | **Moving a guest into an existing account, sign out, delete account** | Tests for the move (both tokens checked, every report moved, guest removed). Delete removes every row and the Supabase user |
-| 5 | **Clean up.** Daily job for idle anonymous users. Privacy notice and docs updated for Supabase (data processor, Singapore, what Google sign in keeps). Render database deleted | The notice names Supabase. Nothing points at the Render database |
+| 5 | **Clean up.** Daily job for idle anonymous users. Privacy notice and docs updated for Supabase (data processor, Singapore, what Google sign in keeps). Render database deleted | The notice names Supabase (with the policy pages). Nothing points at the Render database |
 
 Then docs/18 continues: 7 day free saves, coupons and the paid check, chat limits.
 
@@ -174,6 +180,37 @@ Notes from building each step, for whoever changes it next.
 - Tests: `backend/tests/test_api_saved.py` (the move with both tokens checked, every report
   moved, the guest removed here and in Supabase; delete removes every row and the Supabase
   user), `frontend/tests/e2e/saved.spec.ts` (the whole trip through a stand-in Google).
+
+### Step 5: clean up
+
+- **Idle guests** are deleted by `sidera.delete_idle_guests()`
+  (`supabase/migrations/20261122021500_delete_idle_guests.sql`), run by pg_cron every day at
+  20:30 UTC (02:00 in Sri Lanka) as job `sidera-delete-idle-guests`. It deletes an anonymous
+  user when all of these hold: nothing in `saved_reports`, no order, and no use for 7 days:
+  not made, signed in or changed in `auth.users`, no sign in renewed in `auth.sessions` (the
+  browser renews its token hourly while the site is open), and not seen by the backend
+  (`sidera.users.last_seen_at`, written at most once a day). It deletes the `sidera.users` row
+  (its `coupon_misses` go too) and the `auth.users` row, which takes the user's identities,
+  sessions and refresh tokens with it. Guest rows left without their Supabase user go on the
+  same terms. A user who linked Google is never touched.
+- **Why pg_cron, not the backend.** The free Render backend sleeps after 15 minutes, so a timer
+  inside it would not run, and Render's cron jobs are paid. pg_cron is in every Supabase plan,
+  runs next to the data, deletes both rows in one transaction, and needs no secret key outside
+  the database. Supabase's own guide to anonymous sign ins suggests this SQL delete. While a free
+  project is paused nothing runs, and nothing new arrives either.
+- **With the 7 day expiry of free reports (docs/18).** That job deletes reports; this one never
+  does, and never deletes a user who still has one. A guest whose last free report expired has
+  nothing saved, so this job deletes them once they have also been idle 7 days, on the same night
+  or the next. If both jobs run in pg_cron, the expiry job should run first (before 20:30 UTC).
+- **A guest coming back exactly as the job runs.** Coming back renews the sign in and the
+  backend writes `last_seen_at` before any Save, so a returning guest is not idle any more. Only
+  a Save in the same second as the job could fail; the page then signs in as a new guest.
+- **New tables** that point at `sidera.users` need `on delete cascade` (or `set null` for records
+  that must stay), or the job fails for a guest with a row in them.
+- Tests: `backend/tests/test_idle_guests.py`, against PostgreSQL built from the migrations with a
+  stand-in for Supabase's `auth` tables (`tests/pg.py`).
+- **The Render database** `astronomia-db` is gone from `render.yaml`. Removing it from the
+  blueprint does not delete it: the owner deletes it in the Render dashboard.
 
 ## 6. Checks before production
 

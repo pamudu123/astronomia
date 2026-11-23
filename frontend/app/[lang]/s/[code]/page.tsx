@@ -32,7 +32,11 @@ const rashiName = (key: string, lang: Locale) => {
   return rashi ? rashi[lang] : key;
 };
 
-/** The link preview (WhatsApp and others): a title, one line and the share picture. */
+/**
+ * The link preview (WhatsApp and others): a title, one line and the share picture. It never
+ * holds names or birth details, even when the sender chose to show them on the page: a preview
+ * is copied into chats and caches the sender cannot revoke.
+ */
 export async function generateMetadata({ params }: PageProps<"/[lang]/s/[code]">): Promise<Metadata> {
   const { lang, code } = await params;
   const hidden: Metadata = { robots: { index: false, follow: false }, referrer: "no-referrer" };
@@ -43,21 +47,15 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/s/[code]">
   let title = dict.share.banner;
   let description = dict.share.goneText;
   if (shared?.hadahan) {
-    const { name, result } = shared.hadahan;
-    title = name ? fill(dict.hadahan.result.titleNamed, { name }) : dict.share.anonHadahan;
+    const { result } = shared.hadahan;
+    title = dict.share.anonHadahan;
     description = fill(dict.share.metaHadahan, {
       lagna: rashiName(result.chart?.lagna.sign ?? "", lang),
       rashi: rashiName(result.chart?.moon.sign ?? "", lang),
     });
   } else if (shared?.porondam?.match) {
-    const { bride, groom, match } = shared.porondam;
-    title =
-      bride?.name || groom?.name
-        ? fill(dict.porondam.result.title, {
-            bride: bride?.name || dict.porondam.form.bride,
-            groom: groom?.name || dict.porondam.form.groom,
-          })
-        : dict.share.anonPorondam;
+    const { match } = shared.porondam;
+    title = dict.share.anonPorondam;
     description = `${fill(dict.share.summaryPorondam, {
       passed: match.score.passed,
       total: match.score.total,

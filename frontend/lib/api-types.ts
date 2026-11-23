@@ -706,13 +706,18 @@ export interface paths {
         };
         /**
          * List Saved
-         * @description Every report the signed in account keeps, newest first.
+         * @description Every report the signed in account keeps, newest first. Free reports past their 7 days
+         *     are deleted, not listed.
          */
         get: operations["list_saved_v1_saved_get"];
         put?: never;
         /**
          * Save Report
          * @description Saves a hadahan or a match to My reports. The page signs in (anonymously) first.
+         *
+         *     A free result is deleted 7 days after saving, and an account keeps at most
+         *     `free_saved_limit` of them at a time. A report this account paid for is kept as paid, for
+         *     as long as the account exists (docs/18, section 3).
          */
         post: operations["save_report_v1_saved_post"];
         delete?: never;
@@ -2486,6 +2491,8 @@ export interface components {
              * @default false
              */
             paid: boolean;
+            /** Expires At */
+            expires_at?: string | null;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Created */
@@ -2515,6 +2522,8 @@ export interface components {
              * @default false
              */
             paid: boolean;
+            /** Expires At */
+            expires_at?: string | null;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Request */
@@ -2526,6 +2535,10 @@ export interface components {
         SavedList: {
             /** Reports */
             reports: components["schemas"]["SavedOut"][];
+            /** Free Limit */
+            free_limit: number;
+            /** Paid Reports */
+            paid_reports: boolean;
         };
         /** SavedOut */
         SavedOut: {
@@ -2551,6 +2564,8 @@ export interface components {
              * @default false
              */
             paid: boolean;
+            /** Expires At */
+            expires_at?: string | null;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
         };
@@ -2587,10 +2602,15 @@ export interface components {
             name: string;
             birth: components["schemas"]["HadahanRequest"];
             /**
-             * Hide Names
+             * Show Names
              * @default false
              */
-            hide_names: boolean;
+            show_names: boolean;
+            /**
+             * Show Birth
+             * @default false
+             */
+            show_birth: boolean;
         };
         /** ShareOut */
         ShareOut: {
@@ -2611,7 +2631,9 @@ export interface components {
             expires_at: string;
             /** Names Hidden */
             names_hidden: boolean;
-            hadahan?: components["schemas"]["SnapshotHadahan"] | null;
+            /** Birth Hidden */
+            birth_hidden: boolean;
+            hadahan?: components["schemas"]["SharedHadahan"] | null;
             porondam?: components["schemas"]["PorondamResponse"] | null;
         };
         /** SharePorondam */
@@ -2623,10 +2645,77 @@ export interface components {
             kind: "porondam";
             match: components["schemas"]["PorondamRequest"];
             /**
-             * Hide Names
+             * Show Names
              * @default false
              */
-            hide_names: boolean;
+            show_names: boolean;
+            /**
+             * Show Birth
+             * @default false
+             */
+            show_birth: boolean;
+        };
+        /**
+         * SharedChart
+         * @description A shared chart. The birth moment and place are None when birth details are hidden.
+         */
+        SharedChart: {
+            /** Utc */
+            utc: string | null;
+            /** Latitude */
+            latitude: number | null;
+            /** Longitude */
+            longitude: number | null;
+            lagna: components["schemas"]["PointOut"];
+            moon: components["schemas"]["PointOut"];
+            /** Planets */
+            planets: components["schemas"]["PlanetOut"][];
+            time_check: components["schemas"]["TimeCheckOut"];
+            method: components["schemas"]["MethodOut"];
+        };
+        /** SharedDasha */
+        SharedDasha: {
+            /**
+             * System
+             * @default vimshottari
+             * @constant
+             */
+            system: "vimshottari";
+            /** Balance Years */
+            balance_years: number | null;
+            /** Periods */
+            periods: components["schemas"]["PeriodOut"][];
+            /** Current */
+            current: components["schemas"]["PeriodOut"][];
+        };
+        /**
+         * SharedHadahan
+         * @description A shared hadahan in one language.
+         */
+        SharedHadahan: {
+            /** Name */
+            name: string;
+            /** Date */
+            date: string | null;
+            /** Time */
+            time: string | null;
+            /** Place */
+            place: string | null;
+            result: components["schemas"]["SharedHadahanResult"];
+        };
+        /**
+         * SharedHadahanResult
+         * @description A shared hadahan result. With birth details hidden there is no time block (date, clock
+         *     time, time zone), no birth moment or place in the chart, and no dasha balance.
+         */
+        SharedHadahanResult: {
+            /** Status */
+            status: string;
+            time: components["schemas"]["TimeResolveResponse"] | null;
+            chart: components["schemas"]["SharedChart"] | null;
+            dasha: components["schemas"]["SharedDasha"] | null;
+            kuja: components["schemas"]["KujaOut"] | null;
+            birth_table?: components["schemas"]["BirthTableOut"] | null;
         };
         /** SignLettersOut */
         SignLettersOut: {
@@ -4412,6 +4501,13 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SavedCreated"];
                 };
+            };
+            /** @description free_limit: free reports are full; paid_limit: the safety limit */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {

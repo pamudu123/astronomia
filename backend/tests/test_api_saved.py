@@ -1,5 +1,6 @@
 """My reports: /v1/me and /v1/saved, for users signed in with Supabase (stand-in tokens)."""
 
+import datetime as dt
 import uuid
 from collections.abc import Iterator
 from typing import Any
@@ -123,7 +124,7 @@ def test_saving_again_in_the_other_language_keeps_one(me: TestClient) -> None:
 
 def test_without_an_account_there_is_nothing(client: TestClient) -> None:
     some_id = uuid.uuid4()
-    assert client.get("/v1/saved").json() == {"reports": []}
+    assert client.get("/v1/saved").json()["reports"] == []
     assert client.get(f"/v1/saved/{some_id}").status_code == 404
     assert client.patch(f"/v1/saved/{some_id}", json={"title": "x"}).status_code == 404
     assert client.delete(f"/v1/saved/{some_id}").status_code == 404
@@ -133,7 +134,7 @@ def test_without_an_account_there_is_nothing(client: TestClient) -> None:
 def test_another_user_never_sees_my_report(me: TestClient, client: TestClient) -> None:
     mine = save(me, hadahan())["id"]
     for theirs in (browser(client), browser(client, anonymous=False)):
-        assert theirs.get("/v1/saved").json() == {"reports": []}
+        assert theirs.get("/v1/saved").json()["reports"] == []
         assert theirs.get(f"/v1/saved/{mine}").status_code == 404
         assert theirs.patch(f"/v1/saved/{mine}", json={"title": "x"}).status_code == 404
         assert theirs.delete(f"/v1/saved/{mine}").status_code == 404
@@ -331,7 +332,7 @@ def test_the_paid_check_blocks_saving_but_not_reading(me: TestClient) -> None:
 
 
 def test_the_limit(me: TestClient) -> None:
-    settings = Settings(guest_saved_limit=1)
+    settings = Settings(free_saved_limit=1)
     me.app.dependency_overrides[get_settings] = lambda: settings  # type: ignore[attr-defined]
     save(me, hadahan())
     response = me.post("/v1/saved", json=porondam())
@@ -339,8 +340,38 @@ def test_the_limit(me: TestClient) -> None:
     save(me, hadahan(), status=200)
 
 
+def test_twenty_free_reports_at_a_time(me: TestClient) -> None:
+    assert Settings().free_saved_limit == 20  # docs/18, section 3
+    settings = Settings(free_saved_limit=2)
+    me.app.dependency_overrides[get_settings] = lambda: settings  # type: ignore[attr-defined]
+    save(me, hadahan(name="One"))
+    save(me, hadahan(name="Two"))
+    response = me.post("/v1/saved", json=porondam())
+    assert response.status_code == 409
+    assert response.json()["detail"] == "free_limit"  # the page says what to do
+    assert me.get("/v1/saved").json()["free_limit"] == 2
+
+
+def test_a_free_report_says_when_it_is_deleted_and_goes(
+    me: TestClient, accounts: AccountStore
+) -> None:
+    saved_at = dt.datetime(2026, 11, 15, 8, 0, tzinfo=dt.UTC)
+    accounts.clock = lambda: saved_at
+    item = save(me, hadahan())
+    assert item["paid"] is False
+    assert item["expires_at"] == "2026-11-22T08:00:00Z"
+    listed = me.get("/v1/saved").json()
+    assert listed["reports"][0]["expires_at"] == "2026-11-22T08:00:00Z"
+    assert me.get(f"/v1/saved/{item['id']}").json()["expires_at"] == "2026-11-22T08:00:00Z"
+
+    accounts.clock = lambda: saved_at + dt.timedelta(days=7)
+    assert me.get("/v1/saved").json()["reports"] == []
+    assert me.get(f"/v1/saved/{item['id']}").status_code == 404
+    assert me.get("/v1/me").json() == {"kind": "guest", "saved": 0}
+
+
 def test_a_failed_save_keeps_nothing(me: TestClient) -> None:
-    settings = Settings(guest_saved_limit=0)
+    settings = Settings(free_saved_limit=0)
     me.app.dependency_overrides[get_settings] = lambda: settings  # type: ignore[attr-defined]
     response = me.post("/v1/saved", json=hadahan())
     assert response.status_code == 409

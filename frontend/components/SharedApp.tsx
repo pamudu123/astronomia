@@ -125,6 +125,7 @@ export function SharedApp({ lang, code, dict }: Props) {
           date={shared.hadahan.date}
           time={shared.hadahan.time}
           placeText={shared.hadahan.place}
+          anonTitle={t.anonHadahan}
         />
       )}
       {shared.porondam && (

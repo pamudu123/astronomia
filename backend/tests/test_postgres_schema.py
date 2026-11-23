@@ -228,3 +228,66 @@ def test_a_deleted_user_takes_their_rows_along() -> None:
         db.execute("DELETE FROM sidera.users WHERE id = %s", (user.id,))
         left = db.execute("SELECT count(*) FROM sidera.saved_reports").fetchone()
     assert left == (0,)
+
+
+def test_the_hourly_job_deletes_expired_free_reports() -> None:
+    """sidera.delete_expired_reports() is what pg_cron runs on Supabase, every hour."""
+    url = need_postgres()
+    migrate(url)
+    eight_days_ago = dt.datetime.now(dt.UTC) - dt.timedelta(days=8)
+    old = postgres_accounts(url, clock=lambda: eight_days_ago)
+    user = old.add_user("00000000-0000-0000-0000-000000000001", "guest").id
+    old.save(user, report(), limit=5)  # free, saved 8 days ago
+    paid = NewReport(kind="hadahan", input={}, input_hash="p", snapshot={}, summary={}, rules="")
+    old.save(user, paid, limit=5, purchase_id="order-1")
+    fresh = NewReport(kind="hadahan", input={}, input_hash="f", snapshot={}, summary={}, rules="")
+    # Another account: the store deletes an account's own expired reports when it saves.
+    now = postgres_accounts(url)
+    other = now.add_user("00000000-0000-0000-0000-000000000002", "guest").id
+    now.save(other, fresh, limit=5)
+    with connected() as db:
+        assert db.execute("SELECT sidera.delete_expired_reports()").fetchone() == (1,)
+        left = db.execute("SELECT input_hash FROM sidera.saved_reports ORDER BY input_hash")
+        assert left.fetchall() == [("f",), ("p",)]
+        for role in ("anon", "authenticated", "public"):
+            allowed = db.execute(
+                "SELECT has_function_privilege(%s, 'sidera.delete_expired_reports()', 'EXECUTE')",
+                (role,),
+            ).fetchone()
+            assert allowed == (False,), role
+
+
+def test_the_database_keeps_the_expiry_rule_for_any_writer() -> None:
+    """The backend from before this change writes no expiry: the database adds it, and clears it
+    when an order is set, so deploying the migration first breaks nothing."""
+    url = need_postgres()
+    migrate(url)
+    user = postgres_accounts(url).add_user("00000000-0000-0000-0000-000000000001", "guest").id
+    saved_at = dt.datetime(2026, 11, 15, 8, 0, tzinfo=dt.UTC)
+    insert = (
+        "INSERT INTO sidera.saved_reports (id, user_id, kind, title, input, input_hash, snapshot,"
+        " summary, rules, purchase_id, created_at, updated_at) VALUES"
+        " (gen_random_uuid(), %s, 'hadahan', '', '{}', %s, '{}', '{}', '', %s, %s, %s)"
+        " RETURNING id, expires_at"
+    )
+    with connected() as db:
+        free = db.execute(insert, (user, "free", None, saved_at, saved_at)).fetchone()
+        assert free is not None
+        free_id, expires = free
+        assert expires == saved_at + dt.timedelta(days=7)
+        paid = db.execute(insert, (user, "paid", "order-1", saved_at, saved_at)).fetchone()
+        assert paid is not None
+        assert paid[1] is None
+        # The old backend's unlock sets only the order.
+        upgraded = db.execute(
+            "UPDATE sidera.saved_reports SET purchase_id = 'order-2' WHERE id = %s"
+            " RETURNING expires_at",
+            (free_id,),
+        ).fetchone()
+        assert upgraded == (None,)
+        # Without the trigger, the check still refuses a paid report with an expiry.
+        db.execute("ALTER TABLE sidera.saved_reports DISABLE TRIGGER saved_reports_expiry")
+        with pytest.raises(psycopg.errors.CheckViolation):
+            db.execute(
+                "UPDATE sidera.saved_reports SET expires_at = now() WHERE id = %s", (free_id,)
+            )
