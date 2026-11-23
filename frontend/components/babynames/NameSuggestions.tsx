@@ -43,19 +43,26 @@ export function NameSuggestions({ t, lang, letters, selected, initial = null }: 
       .catch((error: unknown) => {
         if ((error as Error).name !== "AbortError") setFailedKey(key);
       });
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+      setFailedKey(null); // the filters moved on: coming back to these asks again
+    };
   }, [key, picked, gender, length, lang, useInitial]);
 
-  // While a new answer loads, the last one stays on screen.
-  const data = useInitial ? initial : (fetched?.data ?? null);
-  const failed = failedKey === key && fetched?.key !== key;
+  // The answer to the filters as they are now, once it is here.
+  const data = useInitial ? initial : fetched?.key === key ? fetched.data : null;
+  const failed = data === null && failedKey === key;
+  // While it loads, the last names stay on screen, marked as the earlier ones. A failed request
+  // takes them away: they would never match the filters.
+  const loading = picked.length > 0 && data === null && !failed;
+  const last = loading ? (fetched?.data ?? initial) : null;
 
   const toggle = (letter: string) =>
     setPicked((current) =>
       current.includes(letter) ? current.filter((l) => l !== letter) : letters.filter((l) => l === letter || current.includes(l)),
     );
   const counts = new Map(data?.letters.map((c) => [c.letter, c.count]) ?? []);
-  const shown = picked.length === 0 ? [] : (data?.names ?? []);
+  const shown = picked.length === 0 ? [] : ((data ?? last)?.names ?? []);
 
   return (
     <section className={styles.panel} aria-labelledby="names-title" data-card="names">
@@ -123,14 +130,14 @@ export function NameSuggestions({ t, lang, letters, selected, initial = null }: 
         </p>
       )}
       {picked.length === 0 && <p className={styles.small}>{n.pickLetter}</p>}
-      {picked.length > 0 && data && !failed && (
+      {picked.length > 0 && !failed && (
         <p className={styles.small} aria-live="polite">
-          {fill(n.count, { count: shown.length })}
+          {data ? fill(n.count, { count: shown.length }) : n.loading}
         </p>
       )}
-      {picked.length > 0 && data && shown.length === 0 && !failed && <p className={styles.small}>{n.none}</p>}
+      {picked.length > 0 && data && shown.length === 0 && <p className={styles.small}>{n.none}</p>}
       {shown.length > 0 && (
-        <ul className={styles.names}>
+        <ul className={loading ? `${styles.names} ${styles.namesBefore}` : styles.names} aria-busy={loading}>
           {shown.map((name) => (
             <li key={name.en} className={styles.name} data-name={name.en}>
               <div className={styles.nameHead}>

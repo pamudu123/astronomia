@@ -96,7 +96,8 @@ export function CoupleTimeline({
   brideName,
   groomName,
   explain,
-}: Props & { explain?: ReactNode }) {
+  note,
+}: Props & { explain?: ReactNode; note?: ReactNode }) {
   const [timeline, setTimeline] = useState<Timeline | null>(null);
 
   useEffect(() => {
@@ -127,6 +128,7 @@ export function CoupleTimeline({
           {t.title}
         </h2>
         <p className="soft">{t.lead}</p>
+        {note}
         {explain}
       </div>
 

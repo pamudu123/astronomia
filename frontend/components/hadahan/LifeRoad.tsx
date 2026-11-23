@@ -1,6 +1,6 @@
 "use client";
 
-import { type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type PointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { useAssistantOn } from "@/components/assistant/PageContext";
@@ -14,6 +14,7 @@ import {
   type RoadStop,
   buildRoad,
   fetchJourney,
+  hasToday,
   mistAt,
   periodAt,
   qualityAt,
@@ -35,6 +36,8 @@ type Props = {
   t: Dictionary["hadahan"]["result"];
   labels: Labels;
   request: BirthRequest;
+  /** On a saved report: says the road is worked out today, not when it was saved. */
+  note?: ReactNode;
 };
 
 /** What the card and the header show. It changes only when the road passes a stop or a period. */
@@ -43,7 +46,7 @@ type View = { key: string; age: number; stop: RoadStop | null };
 const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(high, value));
 
 /** The life road: the dasha periods as a road to travel along, the same length for everyone. */
-export function LifeRoad({ lang, t, labels, request }: Props) {
+export function LifeRoad({ lang, t, labels, request, note }: Props) {
   const text = t.road;
   const [journey, setJourney] = useState<Journey | null>(null);
 
@@ -73,7 +76,7 @@ export function LifeRoad({ lang, t, labels, request }: Props) {
   }, [journey, labels, text]);
 
   if (!journey || !road) return null;
-  return <RoadView lang={lang} t={t} labels={labels} road={road} />;
+  return <RoadView lang={lang} t={t} labels={labels} road={road} note={note} />;
 }
 
 function RoadView({
@@ -81,6 +84,7 @@ function RoadView({
   t,
   labels,
   road,
+  note,
 }: Omit<Props, "request"> & { road: Road }) {
   const text = t.road;
   const marker = useRef<HTMLDivElement>(null);
@@ -158,6 +162,7 @@ function RoadView({
             {text.title}
           </h3>
           <p className="soft">{text.lead}</p>
+          {note}
         </div>
         <p className={styles.age}>
           <b>{Math.floor(age)}</b>
@@ -247,9 +252,11 @@ function RoadView({
         <button type="button" className={styles.button} onClick={() => go(stopBeside(road, target.current, -1)?.y ?? 0)}>
           ‹ {text.prev}
         </button>
-        <button type="button" className={styles.buttonMain} onClick={() => go(road.today)}>
-          {text.today}
-        </button>
+        {hasToday(road) && (
+          <button type="button" className={styles.buttonMain} onClick={() => go(road.today)}>
+            {text.today}
+          </button>
+        )}
         <button
           type="button"
           className={styles.button}
@@ -302,7 +309,9 @@ function RoadView({
             <polyline points={wave} />
           </svg>
           <div className={styles.mapFade} />
-          <div className={styles.todayMark} style={{ left: `${(road.today / ROAD_YEARS) * 100}%` }} />
+          {hasToday(road) && (
+            <div className={styles.todayMark} style={{ left: `${(road.today / ROAD_YEARS) * 100}%` }} />
+          )}
           <div ref={marker} className={styles.marker} style={{ left: `${(road.today / ROAD_YEARS) * 100}%` }} />
         </div>
         <div className={styles.scale} aria-hidden="true">

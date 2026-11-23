@@ -24,6 +24,20 @@ export function monthPath(year: number, month: number, placeId: number, lang: Lo
 /** "2026-11" for a month page address. */
 export const isMonth = (value: string) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
 
+/** The years with litha and daily nakath pages. Astro's month lookup takes the same ones. */
+export const NAKATH_YEARS = { first: 1900, last: 2100 };
+
+const hasNakathYear = (value: string) => {
+  const year = Number(value.slice(0, 4));
+  return year >= NAKATH_YEARS.first && year <= NAKATH_YEARS.last;
+};
+
+/** Is there a litha page for this month? */
+export const hasLithaMonth = (value: string) => isMonth(value) && hasNakathYear(value);
+
+/** Is there a daily nakath page for this date? */
+export const hasNakathDay = (value: string) => isIsoDate(value) && hasNakathYear(value);
+
 /** The month before or after a "YYYY-MM" month. */
 export function shiftMonth(month: string, by: number): string {
   const [year, number] = month.split("-").map(Number);

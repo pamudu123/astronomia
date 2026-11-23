@@ -720,6 +720,10 @@
     "groupPorondam": "Porondam matches",
     "groupHadahan": "Hadahan charts",
     "savedOn": "Saved {date}",
+    "frozen": "As it was when saved, on {date}",
+    "live": "Worked out today, {date}. It can differ from the saved part.",
+    "savedNoteHadahan": "The chart and its life periods are kept as they were that day. The life road, the forecast and the planet changes ahead are worked out today, and a new PDF or share link is made fresh too.",
+    "savedNotePorondam": "The score and its checks are kept as they were that day. The years ahead and the couple's road are worked out today, and a new PDF or share link is made fresh too.",
     "quick": "Quick match by birth star",
     "openReport": "Open",
     "rename": "Rename",
@@ -1346,6 +1350,7 @@
         "long": "4 or more"
       },
       "count": "{count} names",
+      "loading": "Finding names…",
       "none": "No names in our list start with these letters yet. Some letters are rare at the start of a name.",
       "pickLetter": "Pick at least one letter.",
       "sourceName": "Wikipedia name page",

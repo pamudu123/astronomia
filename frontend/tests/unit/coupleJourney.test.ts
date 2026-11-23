@@ -5,6 +5,7 @@ import {
   ageOf,
   bothFull,
   buildCouple,
+  coupleHasToday,
   coupleYear,
   mistOf,
   periodOf,
@@ -92,6 +93,39 @@ describe("the couple's road", () => {
 
   it("has nothing to draw when today is past the end of the elder's road", () => {
     expect(buildCouple(bride, journey(1920, "moon", 0, [1950, 1957]), WORDS)).toBeNull();
+  });
+
+  it("has no today while one of them is still to be born, and opens where the road begins (A-06)", () => {
+    const unborn = buildCouple(journey(2000, "venus", 0.6, [2040, 2047]), journey(2030, "rahu", 0, [2060, 2067]), WORDS)!;
+    expect(unborn.today).toBeCloseTo(26, 1);
+    expect(unborn.start).toBeCloseTo(30, 1);
+    expect(unborn.open).toBe(unborn.start);
+    expect(coupleHasToday(unborn)).toBe(false);
+    expect(unborn.stops.map((stop) => stop.kind)).not.toContain("today");
+    expect(unborn.stops.every((stop) => stop.y >= unborn.start)).toBe(true);
+  });
+
+  it("has no today when both are still to be born", () => {
+    const both = buildCouple(journey(2030, "venus", 0.6, [2040, 2047]), journey(2032, "rahu", 0, [2060, 2067]), WORDS)!;
+    expect(coupleHasToday(both)).toBe(false);
+    expect(both.open).toBeCloseTo(2, 1);
+  });
+
+  it("has a today on the day the younger one is born", () => {
+    const now = "2030-01-01T00:00:00Z";
+    const born = buildCouple(journey(2000, "venus", 0.6, [2040, 2047], now), journey(2030, "rahu", 0, [2060, 2067], now), WORDS)!;
+    expect(coupleHasToday(born)).toBe(true);
+    expect(born.open).toBe(born.today);
+    expect(born.stops[0].kind).toBe("today");
+  });
+
+  it("has nothing to draw when the two share no years", () => {
+    expect(buildCouple(journey(2000, "venus", 0.6, [2040, 2047]), journey(2110, "rahu", 0, [2140, 2147]), WORDS)).toBeNull();
+  });
+
+  it("opens at today when both are born", () => {
+    expect(coupleHasToday(couple)).toBe(true);
+    expect(couple.open).toBe(couple.today);
   });
 
   it("needs a birth time for both people", () => {

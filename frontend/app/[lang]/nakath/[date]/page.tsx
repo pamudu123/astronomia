@@ -8,7 +8,7 @@ import { dayText } from "@/components/nakath/format";
 import { backendJson } from "@/lib/backend";
 import { fill } from "@/lib/hadahan";
 import { type Locale, hasLocale } from "@/lib/i18n";
-import { COLOMBO, FEATURED_YEAR, type Panchanga, isIsoDate, panchangaPath } from "@/lib/nakath";
+import { COLOMBO, FEATURED_YEAR, type Panchanga, hasNakathDay, panchangaPath } from "@/lib/nakath";
 
 import { getDictionary } from "../../dictionaries";
 
@@ -19,11 +19,9 @@ export function generateStaticParams() {
   return [{ date: `${FEATURED_YEAR}-04-14` }];
 }
 
-const valid = (value: string) => isIsoDate(value) && Number(value.slice(0, 4)) >= 1900 && Number(value.slice(0, 4)) <= 2100;
-
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { lang, date } = await params;
-  if (!hasLocale(lang) || !valid(date)) return {};
+  if (!hasLocale(lang) || !hasNakathDay(date)) return {};
   const t = (await getDictionary(lang)).nakath;
   const values = { date: dayText(date, lang) };
   return {
@@ -40,7 +38,7 @@ async function Loaded({ lang, t, day }: { lang: Locale; t: Awaited<ReturnType<ty
 
 export default async function DatePage({ params }: Params) {
   const { lang, date } = await params;
-  if (!hasLocale(lang) || !valid(date)) notFound();
+  if (!hasLocale(lang) || !hasNakathDay(date)) notFound();
   const t = (await getDictionary(lang)).nakath;
   return (
     <main id="main" className={`container ${styles.page}`}>
