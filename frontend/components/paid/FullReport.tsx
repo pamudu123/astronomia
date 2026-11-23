@@ -34,6 +34,14 @@ const PROBLEMS = {
   account_limit: true,
 } as const;
 
+/** The card's id: My reports links a free report's "Get the full report" here, to keep it. */
+export const FULL_REPORT = "full-report";
+
+/** The card shows only after the paid check answers, too late for the browser's own jump. */
+function scrollIfAsked(node: HTMLElement | null) {
+  if (node && window.location.hash === `#${FULL_REPORT}`) node.scrollIntoView({ block: "start" });
+}
+
 /** In place of detail that only the full report shows. */
 export function DetailLocked() {
   const t = useContext(PaidText);
@@ -65,7 +73,12 @@ export function FullReport({ lang }: { lang: Locale }) {
 
   if (paid) {
     return (
-      <section className={`rise ${styles.card} ${styles.paid}`} aria-labelledby={`${base}-title`} data-card="full-report">
+      <section
+        id={FULL_REPORT}
+        className={`rise ${styles.card} ${styles.paid}`}
+        aria-labelledby={`${base}-title`}
+        data-card="full-report"
+      >
         <span className={styles.badge}>{t.paidBadge}</span>
         <h2 id={`${base}-title`} className={`display ${styles.title}`}>
           {t.paidTitle}
@@ -130,7 +143,13 @@ export function FullReport({ lang }: { lang: Locale }) {
   const free = quote?.result === "free";
 
   return (
-    <section className={`rise ${styles.card}`} aria-labelledby={`${base}-title`} data-card="full-report">
+    <section
+      id={FULL_REPORT}
+      ref={scrollIfAsked}
+      className={`rise ${styles.card}`}
+      aria-labelledby={`${base}-title`}
+      data-card="full-report"
+    >
       <div className={styles.head}>
         <div>
           <h2 id={`${base}-title`} className={`display ${styles.title}`}>

@@ -3,8 +3,10 @@
  * (lib/supabase.ts); nobody signs up. Every account call then carries the access token, and the
  * backend finds the account from it. "Continue with Google" keeps the same account on any device.
  */
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+
 import type { components } from "./api-types";
-import type { BirthRequest } from "./hadahan";
+import { type BirthRequest, fill } from "./hadahan";
 import type { Locale } from "./i18n";
 import type { PersonInput, PorondamRequest } from "./porondam";
 import type { ReportRequest } from "./report";
@@ -97,11 +99,45 @@ function oneSaveAtATime<T>(work: () => Promise<T>): Promise<T> {
   return next;
 }
 
-export async function listSaved(): Promise<SavedItem[]> {
+export type SavedList = components["schemas"]["SavedList"];
+
+/** Every report kept, newest first, with how many free ones may be kept at a time. */
+export async function listSaved(): Promise<SavedList> {
   const response = await ensureOk(await call("/saved"));
-  const body = (await response.json()) as { reports: SavedItem[] };
+  const body = (await response.json()) as SavedList;
   announce();
-  return body.reports;
+  return body;
+}
+
+const DAY = 24 * 60 * 60 * 1000;
+/** A free report this close to being deleted asks to be kept (docs/18, section 3). */
+export const REMIND_DAYS = 2;
+
+export type Keep = { kind: "paid" } | { kind: "free"; days: number; soon: boolean };
+
+/**
+ * How long a saved report is kept. A paid one for as long as the account exists; a free one
+ * until it is deleted, 7 days after saving. Days are counted up: "1 day" means within a day.
+ */
+export function keepOf(item: Pick<SavedItem, "paid" | "expires_at">, now: Date = new Date()): Keep {
+  if (item.paid || !item.expires_at) return { kind: "paid" };
+  const left = new Date(item.expires_at).getTime() - now.getTime();
+  const days = Math.max(1, Math.ceil(left / DAY));
+  return { kind: "free", days, soon: days <= REMIND_DAYS };
+}
+
+type KeepText = Dictionary["saved"];
+
+/** "Paid", or "Free · deleted in N days" (docs/18, section 3). */
+export function keepLabel(keep: Keep, t: KeepText): string {
+  if (keep.kind === "paid") return t.labelPaid;
+  return keep.days === 1 ? t.labelFreeOne : fill(t.labelFree, { days: keep.days });
+}
+
+/** The reminder on a free report with 2 days or less left. */
+export function keepReminder(keep: Keep, t: KeepText): string | null {
+  if (keep.kind !== "free" || !keep.soon) return null;
+  return keep.days === 1 ? t.expiringOne : fill(t.expiring, { days: keep.days });
 }
 
 export async function getSaved(id: string, lang: Locale): Promise<SavedDetail> {

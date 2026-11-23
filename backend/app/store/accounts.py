@@ -31,11 +31,17 @@ from app.store import postgres
 Clock = Callable[[], dt.datetime]
 Kind = Literal["guest", "google"]
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 # The tables this store uses. Queries name them as {users} and so on; see `_Dialect.sql`.
 TABLES = ("users", "saved_reports")
 # When the user was last seen is written at most once a day.
 SEEN_EVERY = dt.timedelta(days=1)
+# A free saved report is deleted this long after it was saved (docs/18, section 3). On
+# PostgreSQL an hourly pg_cron job deletes it (supabase/migrations/*_free_reports_expire.sql);
+# this store also hides and deletes an account's expired reports whenever it reads them.
+FREE_KEEP = dt.timedelta(days=7)
+# Not expired yet: kept for good (paid), or its time has not come.
+_LIVE = "(expires_at IS NULL OR expires_at > ?)"
 
 
 def _utc_now() -> dt.datetime:
@@ -56,6 +62,7 @@ class SavedSummary:
     summary: dict[str, Any]
     created_at: dt.datetime
     paid: bool = False  # kept with an order (docs/18): a paid report
+    expires_at: dt.datetime | None = None  # when a free report is deleted; None when paid
 
 
 @dataclass(frozen=True)
@@ -68,6 +75,7 @@ class SavedReport:
     input: dict[str, Any]
     snapshot: dict[str, Any]
     paid: bool = False
+    expires_at: dt.datetime | None = None
 
 
 @dataclass(frozen=True)
@@ -81,7 +89,7 @@ class NewReport:
 
 
 class LimitReached(Exception):
-    """The account already holds as many saved reports as it may."""
+    """The account already holds as many saved reports of this kind (free or paid) as it may."""
 
 
 @dataclass(frozen=True)
@@ -128,6 +136,7 @@ _SQLITE_SCHEMA = [
         purchase_id TEXT,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL,
+        expires_at TEXT,
         UNIQUE (user_id, input_hash)
     )""",
     "CREATE INDEX IF NOT EXISTS saved_reports_user ON saved_reports (user_id, created_at)",
@@ -151,7 +160,11 @@ class AccountStore:
     # Values in and out. SQLite keeps text, PostgreSQL its own types.
 
     def _ts(self, value: dt.datetime) -> Any:
-        return value.isoformat() if self._d is _SQLITE else value
+        # SQLite compares the text: always in UTC, so it sorts in time order.
+        return value.astimezone(dt.UTC).isoformat() if self._d is _SQLITE else value
+
+    def _ts_or_none(self, value: dt.datetime | None) -> Any:
+        return None if value is None else self._ts(value)
 
     def _json(self, value: dict[str, Any]) -> Any:
         return json.dumps(value, ensure_ascii=False) if self._d is _SQLITE else Jsonb(value)
@@ -162,6 +175,10 @@ class AccountStore:
             return dt.datetime.fromisoformat(value)
         stamp: dt.datetime = value
         return stamp.astimezone(dt.UTC)
+
+    @classmethod
+    def _read_ts_or_none(cls, value: Any) -> dt.datetime | None:
+        return None if value is None else cls._read_ts(value)
 
     @staticmethod
     def _read_json(value: Any) -> dict[str, Any]:
@@ -228,6 +245,7 @@ class AccountStore:
         if from_user == to_user:
             return 0
         with self._connect() as db:
+            self._delete_expired(db, from_user, self.clock())
             cursor = self._run(
                 db,
                 "UPDATE {saved_reports} SET user_id = ?, updated_at = ? WHERE user_id = ? "
@@ -251,14 +269,34 @@ class AccountStore:
 
     # Saved reports
 
+    def _delete_expired(self, db: Any, user_id: str, now: dt.datetime) -> None:
+        """Deletes this account's free reports whose time has come."""
+        self._run(
+            db,
+            "DELETE FROM {saved_reports} WHERE user_id = ? AND expires_at <= ?",
+            (user_id, self._ts(now)),
+        )
+
+    def delete_expired(self) -> int:
+        """Deletes every account's expired free reports, as the database's hourly job does.
+        Returns how many."""
+        with self._connect() as db:
+            cursor = self._run(
+                db, "DELETE FROM {saved_reports} WHERE expires_at <= ?", (self._ts(self.clock()),)
+            )
+            return int(cursor.rowcount)
+
     def save(
         self, user_id: str, report: NewReport, limit: int, purchase_id: str | None = None
     ) -> tuple[SavedSummary, bool]:
         """Keeps a report. Saving the same input again returns the one already kept.
 
-        `purchase_id` is the order that paid for it (app/store/orders.py), if any. A report
-        kept free and saved again with one becomes paid. The second value is True when a new
-        report was kept. Raises LimitReached when the account is full.
+        `purchase_id` is the order that paid for it (app/store/orders.py), if any. A free report
+        is deleted FREE_KEEP after saving; a paid one is kept. A report kept free and saved again
+        with an order becomes paid: it stops expiring and keeps its place in the list. `limit`
+        is how many reports of this report's kind (free, or paid) the account may hold. The
+        second value is True when a new report was kept. Raises LimitReached when that kind is
+        full.
         """
         now = self.clock()
         with self._connect() as db:
@@ -273,32 +311,40 @@ class AccountStore:
         now: dt.datetime,
         purchase_id: str | None = None,
     ) -> tuple[SavedSummary, bool]:
+        self._delete_expired(db, user_id, now)
         existing = self._run(
             db,
-            "SELECT id, kind, title, summary, created_at, purchase_id FROM {saved_reports} "
-            "WHERE user_id = ? AND input_hash = ?",
+            "SELECT id, kind, title, summary, created_at, purchase_id, expires_at "
+            "FROM {saved_reports} WHERE user_id = ? AND input_hash = ?",
             (user_id, report.input_hash),
         ).fetchone()
         if existing is not None:
             if purchase_id is not None and existing[5] != purchase_id:
+                # Unlocked: paid from now on, kept for good, in the same place in the list.
                 self._run(
                     db,
-                    "UPDATE {saved_reports} SET purchase_id = ?, updated_at = ? WHERE id = ?",
+                    "UPDATE {saved_reports} SET purchase_id = ?, expires_at = NULL, "
+                    "updated_at = ? WHERE id = ?",
                     (purchase_id, self._ts(now), existing[0]),
                 )
-                return self._summary((*existing[:5], purchase_id)), False
+                return self._summary((*existing[:5], purchase_id, None)), False
             return self._summary(existing), False
+        paid = purchase_id is not None
+        same_kind = "purchase_id IS NOT NULL" if paid else "purchase_id IS NULL"
         (count,) = self._run(
-            db, "SELECT COUNT(*) FROM {saved_reports} WHERE user_id = ?", (user_id,)
+            db,
+            f"SELECT COUNT(*) FROM {{saved_reports}} WHERE user_id = ? AND {same_kind}",
+            (user_id,),
         ).fetchone()
         if count >= limit:
             raise LimitReached
         report_id = str(uuid.uuid4())
+        expires_at = None if paid else now + FREE_KEEP
         self._run(
             db,
             "INSERT INTO {saved_reports} (id, user_id, kind, title, input, input_hash, "
-            "snapshot, summary, rules, purchase_id, created_at, updated_at) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "snapshot, summary, rules, purchase_id, created_at, updated_at, expires_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 report_id,
                 user_id,
@@ -312,15 +358,14 @@ class AccountStore:
                 purchase_id,
                 self._ts(now),
                 self._ts(now),
+                self._ts_or_none(expires_at),
             ),
         )
-        summary = SavedSummary(
-            report_id, report.kind, "", report.summary, now, purchase_id is not None
-        )
+        summary = SavedSummary(report_id, report.kind, "", report.summary, now, paid, expires_at)
         return summary, True
 
     def _summary(self, row: Sequence[Any]) -> SavedSummary:
-        report_id, kind, title, summary, created, purchase_id = row
+        report_id, kind, title, summary, created, purchase_id, expires = row
         return SavedSummary(
             self._read_id(report_id),
             kind,
@@ -328,20 +373,23 @@ class AccountStore:
             self._read_json(summary),
             self._read_ts(created),
             purchase_id is not None,
+            self._read_ts_or_none(expires),
         )
 
     def list_saved(self, user_id: str) -> list[SavedSummary]:
         with self._connect() as db:
+            self._delete_expired(db, user_id, self.clock())
             rows = self._run(
                 db,
-                "SELECT id, kind, title, summary, created_at, purchase_id FROM {saved_reports} "
-                "WHERE user_id = ? ORDER BY created_at DESC, id",
+                "SELECT id, kind, title, summary, created_at, purchase_id, expires_at "
+                "FROM {saved_reports} WHERE user_id = ? ORDER BY created_at DESC, id",
                 (user_id,),
             ).fetchall()
         return [self._summary(row) for row in rows]
 
     def count_saved(self, user_id: str) -> int:
         with self._connect() as db:
+            self._delete_expired(db, user_id, self.clock())
             (count,) = self._run(
                 db, "SELECT COUNT(*) FROM {saved_reports} WHERE user_id = ?", (user_id,)
             ).fetchone()
@@ -351,30 +399,33 @@ class AccountStore:
         with self._connect() as db:
             row = self._run(
                 db,
-                "SELECT id, kind, title, summary, created_at, purchase_id, input, snapshot "
-                "FROM {saved_reports} WHERE user_id = ? AND id = ?",
-                (user_id, report_id),
+                "SELECT id, kind, title, summary, created_at, purchase_id, expires_at, input, "
+                f"snapshot FROM {{saved_reports}} WHERE user_id = ? AND id = ? AND {_LIVE}",
+                (user_id, report_id, self._ts(self.clock())),
             ).fetchone()
         if row is None:
             return None
-        summary = self._summary(row[:6])
+        summary = self._summary(row[:7])
         return SavedReport(
             id=summary.id,
             kind=summary.kind,
             title=summary.title,
             summary=summary.summary,
             created_at=summary.created_at,
-            input=self._read_json(row[6]),
-            snapshot=self._read_json(row[7]),
+            input=self._read_json(row[7]),
+            snapshot=self._read_json(row[8]),
             paid=summary.paid,
+            expires_at=summary.expires_at,
         )
 
     def rename(self, user_id: str, report_id: str, title: str) -> bool:
+        now = self.clock()
         with self._connect() as db:
             cursor = self._run(
                 db,
-                "UPDATE {saved_reports} SET title = ?, updated_at = ? WHERE user_id = ? AND id = ?",
-                (title, self._ts(self.clock()), user_id, report_id),
+                "UPDATE {saved_reports} SET title = ?, updated_at = ? "
+                f"WHERE user_id = ? AND id = ? AND {_LIVE}",
+                (title, self._ts(now), user_id, report_id, self._ts(now)),
             )
             return bool(cursor.rowcount)
 
@@ -404,9 +455,26 @@ def sqlite_accounts(path: Path, clock: Clock = _utc_now) -> AccountStore:
     with connect() as db:
         for statement in _SQLITE_SCHEMA:
             db.execute(statement)
+        _add_expiry(db)
         if db.execute("SELECT version FROM accounts_schema").fetchone() is None:
             db.execute("INSERT INTO accounts_schema VALUES (?)", (SCHEMA_VERSION,))
+        else:
+            db.execute("UPDATE accounts_schema SET version = ?", (SCHEMA_VERSION,))
     return AccountStore(_SQLITE, connect, clock)
+
+
+def _add_expiry(db: sqlite3.Connection) -> None:
+    """A file made before free reports expired gets the column, as the migration does."""
+    columns = {row[1] for row in db.execute("PRAGMA table_info(saved_reports)")}
+    if "expires_at" in columns:
+        return
+    db.execute("ALTER TABLE saved_reports ADD COLUMN expires_at TEXT")
+    rows = db.execute("SELECT id, created_at FROM saved_reports WHERE purchase_id IS NULL")
+    for report_id, created in rows.fetchall():
+        expires = dt.datetime.fromisoformat(created).astimezone(dt.UTC) + FREE_KEEP
+        db.execute(
+            "UPDATE saved_reports SET expires_at = ? WHERE id = ?", (expires.isoformat(), report_id)
+        )
 
 
 def postgres_accounts(url: str, clock: Clock = _utc_now) -> AccountStore:
