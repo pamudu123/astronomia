@@ -517,7 +517,7 @@ function HadahanResultPage({
       </section>
 
       {/* Getting the full report, then the reading it unlocks. */}
-      {request && <FullReport lang={lang} />}
+      {request && <FullReport lang={lang} kujaPresent={kuja.present} />}
 
       {/* The long chapter reading comes last, so the chart itself is what shows first. */}
       <FullReading
