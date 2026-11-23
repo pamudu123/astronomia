@@ -197,3 +197,25 @@
     margin-top: 0;
   }
 }
+
+/* Straight to today. Phones only: on wide screens the whole month is in view. */
+.toToday {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .toToday {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--sky);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--ink);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}

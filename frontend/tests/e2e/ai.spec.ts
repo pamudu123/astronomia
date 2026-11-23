@@ -196,6 +196,36 @@ test("a signed in visitor unlocks the match with a free coupon", async ({ page }
   await expect(card.locator('[data-chapter="match.people"]')).toContainText("Text of match.people.");
 });
 
+test("the chat button leaves the end of the page free, and shrinks once the page is scrolled (NAV-4)", async ({ page }) => {
+  for (const size of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 800 },
+  ]) {
+    await page.setViewportSize(size);
+    for (const path of ["/en/litha/2026-11", "/en/porondam", "/si/tools"]) {
+      await mockAll(page);
+      await page.goto(path);
+      const button = page.locator(".sidera-launcher");
+      await expect(button).toBeVisible();
+      const whole = (await button.boundingBox())!;
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      if (size.width < 860) {
+        await expect(button).toHaveClass(/sidera-launcher-small/);
+        expect((await button.boundingBox())!.width).toBeLessThan(whole.width / 2);
+      }
+      await expect(button).toHaveAccessibleName(path.startsWith("/si") ? /.+/ : "Ask Astro");
+      const covered = await page.evaluate(() => {
+        const box = document.querySelector(".sidera-launcher")!.getBoundingClientRect();
+        return [...document.querySelectorAll("footer a, footer p")].filter((item) => {
+          const at = item.getBoundingClientRect();
+          return at.bottom > box.top && at.top < box.bottom && at.right > box.left && at.left < box.right;
+        }).length;
+      });
+      expect(covered, `${path} at ${size.width}px`).toBe(0);
+    }
+  }
+});
+
 test("the AI notice comes before the first explanation, and nothing is sent until it is acknowledged", async ({
   page,
 }) => {

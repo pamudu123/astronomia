@@ -183,3 +183,10 @@
   border: 0;
   background: none;
 }
+
+/* Until the page is ready. */
+.option:disabled,
+.optionOn:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}

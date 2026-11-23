@@ -98,3 +98,20 @@ test("the page carries a title and description as served", async ({ request }) =
   expect(html).toContain("<title>අකුරු කියවීමේ නැකත් · Sidera</title>");
   expect(html).toContain('<link rel="canonical" href="http://localhost:3000/si/first-letters"/>');
 });
+
+test("the two ways to give the child wait for the page, so a press is never lost (NAV-5)", async ({ page }) => {
+  await mockBackend(page, "first-letters-full-en.json");
+  let release = () => {};
+  const scripts = new Promise<void>((resolve) => (release = resolve));
+  await page.route("**/_next/static/chunks/**/*.js", async (route) => {
+    await scripts;
+    await route.continue();
+  });
+  await page.goto("/en/first-letters", { waitUntil: "commit" });
+  const star = page.getByRole("button", { name: "Birth star only" });
+  await expect(star).toBeDisabled();
+  release();
+  // The press waits until the button is ready, and then works the first time.
+  await star.click();
+  await expect(star).toHaveAttribute("aria-pressed", "true");
+});

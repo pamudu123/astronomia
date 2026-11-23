@@ -566,3 +566,45 @@ test("the result shows the count and the separate checks side by side, with no v
   await page.getByRole("link", { name: "Find ceremony dates" }).click();
   await expect(page.getByRole("heading", { name: "Wedding nakath for this couple" })).toBeInViewport();
 });
+
+test("the wedding card in All tools leads to the wedding dates, through the match (NAV-2)", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await timeline(page, "timeline-quick-en.json");
+  await page.goto("/en/tools");
+  const card = page.locator('[data-tool="wedding"]');
+  await expect(card).toContainText("Two birth stars");
+  await card.click();
+  await expect(page).toHaveURL(/\/en\/porondam\?for=wedding$/);
+  await expect(page.locator("[data-for-wedding]")).toContainText("Birth stars alone are enough.");
+
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+  const title = page.getByRole("heading", { name: "Wedding nakath for this couple" });
+  await expect(title).toBeInViewport();
+  await expect(title).toBeFocused();
+
+  // With a match already in this tab, the card goes straight to the search.
+  await page.goto("/en/tools");
+  await page.locator('[data-tool="wedding"]').click();
+  await expect(title).toBeInViewport();
+  await expect(title).toBeFocused();
+  // It stays there while the page settles, and lets go when the visitor scrolls.
+  await page.waitForTimeout(700);
+  await expect(title).toBeInViewport();
+  await page.evaluate(() => {
+    window.dispatchEvent(new WheelEvent("wheel"));
+    window.scrollTo(0, 0);
+  });
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+});
+
+test("the match page without the wedding link opens at the top, with no wedding note", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await timeline(page, "timeline-quick-en.json");
+  await page.goto("/en/porondam");
+  await expect(page.locator("[data-for-wedding]")).toHaveCount(0);
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
+});

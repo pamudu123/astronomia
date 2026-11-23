@@ -85,6 +85,8 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
               type="button"
               className={option === mode ? styles.optionOn : styles.option}
               aria-pressed={option === mode}
+              // A press before the page is ready would be lost, so wait like the forms do (NAV-5).
+              disabled={!hydrated}
               onClick={() => setMode(option)}
             >
               {t.mode[option]}

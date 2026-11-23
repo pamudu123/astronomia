@@ -512,11 +512,38 @@ html[lang="si"] .assistant-theme .copilotKitAssistantMessage .cpk\:prose {
   }
 }
 
-/* On phones the site has a 72px tab bar at the bottom (MobileTabBar): sit above it. */
+/* Room under the page for the launcher, so it never lies over the last lines (NAV-4). */
+body:has(.assistant-theme) {
+  padding-bottom: 92px;
+}
+
+/*
+ * On phones the site has a 72px tab bar at the bottom (MobileTabBar): sit above it. Once the
+ * page is scrolled, only the star stays, so less of what is being read is covered.
+ */
 @media (max-width: 860px) {
+  body:has(.assistant-theme) {
+    padding-bottom: calc(72px + 76px + env(safe-area-inset-bottom));
+  }
+
   .sidera-launcher {
     right: 16px;
     bottom: calc(72px + 16px + env(safe-area-inset-bottom));
+  }
+
+  .sidera-launcher-small {
+    gap: 0;
+    padding: 13px;
+  }
+
+  /* Out of sight, but still the button's name for a screen reader. */
+  .sidera-launcher-small span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 
