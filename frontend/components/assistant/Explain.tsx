@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Fragment, type ReactNode, useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 
 import { Lock } from "@/components/Icons";
@@ -22,6 +23,7 @@ import {
   tone,
 } from "@/lib/assistant/explain";
 import { useCanUse, useReportAccess } from "@/components/paid/ReportAccess";
+import { chapterPicture } from "@/lib/assistant/chapterArt";
 import { askAssistant } from "@/lib/assistant/panel";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -106,6 +108,7 @@ function Blocks({ items }: { items: Block[] }) {
  */
 function Reading({ id, text, t, diagram }: { id: ChapterId; text: string; t: Text; diagram?: ReactNode }) {
   const { answer, parts: sections } = parts(blocks(text));
+  const picture = chapterPicture(id);
   return (
     <>
       {answer.length > 0 && (
@@ -114,7 +117,11 @@ function Reading({ id, text, t, diagram }: { id: ChapterId; text: string; t: Tex
             <p className={styles.eyebrow}>{t.inShort}</p>
             <Blocks items={answer} />
           </div>
-          <Spot name={CHAPTER_SPOT[id]} className={styles.spot} />
+          {picture ? (
+            <Image src={picture} alt="" width={240} height={160} className={`${styles.spot} ${styles.picture}`} data-picture />
+          ) : (
+            <Spot name={CHAPTER_SPOT[id]} className={styles.spot} />
+          )}
         </div>
       )}
       {diagram && <div className={styles.diagram}>{diagram}</div>}

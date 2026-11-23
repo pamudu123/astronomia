@@ -5,6 +5,7 @@
 {% block cover %}
 <p class="cover-born">{{ born }}</p>
 {{ v.medallion(cover.art) }}
+<div class="cover-signs-place">
 <table class="cover-signs">
   <tbody>
     <tr>
@@ -14,6 +15,7 @@
     </tr>
   </tbody>
 </table>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -71,7 +73,7 @@
 {# ---- The sky wheel and the planets. ---- #}
 <section id="sky"{{ brk | safe }}>
   {% if full %}
-  <h2 class="section-title">{{ r.wheel }}</h2>
+  {{ v.banner(banners.sky, r.wheel) }}
   <table class="columns" style="margin-top: 2mm">
     <tbody>
       <tr>
@@ -114,8 +116,7 @@
 {# ---- The twelve houses. ---- #}
 {% if full %}
 <section id="houses" class="page-break">
-  <h2 class="section-title">{{ r.houses }}</h2>
-  <p class="soft">{{ r.houses_note }}</p>
+  {{ v.banner(banners.houses, r.houses, r.houses_note) }}
   {{ v.houses(houses) }}
 </section>
 {% endif %}
@@ -123,8 +124,7 @@
 {# ---- Life periods: the bar, then the table. ---- #}
 <section id="periods"{{ brk | safe }}>
   <div class="keep">
-  <h2 class="section-title">{{ r.periods_title }}</h2>
-  <p class="soft">{{ r.periods_note }}</p>
+  {{ v.banner(banners.periods, r.periods_title, r.periods_note, not full) }}
   {{ v.periods(bar) }}
   </div>
 
@@ -173,8 +173,8 @@
 </section>
 
 {# ---- Kuja dosha: the flow, then the conditions that apply. ---- #}
-<section id="kuja" class="keep">
-  <h2 class="section-title">{{ r.mars_flow }}</h2>
+<section id="kuja" class="keep{% if full %} page-break{% endif %}">
+  {{ v.banner(banners.kuja, r.mars_flow, "", not full) }}
   {{ v.mars(mars, r) }}
   {% for line in kuja.reasons %}<p class="soft" style="margin-top: 1.5mm">{{ line }}</p>{% endfor %}
   {% if kuja.checks %}

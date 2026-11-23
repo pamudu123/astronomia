@@ -9,7 +9,7 @@
 <body>
 {% if full %}
 {# The cover: the night sky, the brand, the title and the person's artwork. #}
-<section class="cover" style="background-image: linear-gradient(rgba(10, 10, 10, 0.25), rgba(10, 10, 10, 0.88)), url({{ cover.sky }})">
+<section class="cover{% block cover_class %}{% endblock %}" style="background-image: url({{ cover.picture }})">
   <div class="cover-frame">
     <p class="cover-brand">{{ v.star("4.2mm") }} {{ r.brand }}</p>
     <p class="cover-eyebrow">{{ cover.eyebrow }}</p>
@@ -31,5 +31,14 @@
   <p class="small{% if not loop.first %} soft{% endif %}">{{ line }}</p>
   {% endfor %}
 </section>
+
+{% if full %}
+<section class="cover back-cover" style="background-image: url({{ cover.back }})">
+  <div class="back-words">
+    <p class="cover-brand">{{ v.star("4.2mm") }} {{ r.brand }}</p>
+    <p class="cover-tagline">{{ r.tagline }}</p>
+  </div>
+</section>
+{% endif %}
 </body>
 </html>

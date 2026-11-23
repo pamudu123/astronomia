@@ -61,8 +61,9 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
     response = client.post("/v1/reports/pdf", json=hadahan())
     assert response.headers["content-disposition"] == ('attachment; filename="sidera-hadahan.pdf"')
     reader = read(response.content)
-    # The cover, the contents, at a glance, the sky, the houses, the life periods, Kuja dosha.
-    assert len(reader.pages) == 7
+    # The cover, the contents, at a glance, the sky, the houses, the life periods, Kuja dosha,
+    # and the back cover.
+    assert len(reader.pages) == 8
     for page in reader.pages:
         assert (round(float(page.mediabox.width)), round(float(page.mediabox.height))) == A4
 
@@ -91,11 +92,12 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
         "How the Kuja dosha check works out",
         "From the lagna: house 12",
         "Mars is in the 12th house counted from the lagna.",
-        "Page 2 of 7",
+        "Page 2 of 8",
     ):
         assert expected in content, expected
 
-    last = reader.pages[-1].extract_text()
+    assert "The sky calculated" in reader.pages[-1].extract_text()  # the back cover
+    last = reader.pages[-2].extract_text()
     assert "For guidance and cultural interest" in last
     assert "Lahiri ayanamsa" in last
     assert "kuja_v2" in last
@@ -105,7 +107,7 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
 
 def test_hadahan_report_in_sinhala_uses_sinhala_fonts(client: TestClient) -> None:
     reader = post(client, hadahan("si", name="නිමාලි"))
-    assert len(reader.pages) == 7
+    assert len(reader.pages) == 8
     assert {"Noto-Sans-Sinhala", "Noto-Sans-Sinhala-Semi-Bold"} <= fonts(reader)
     assert "Simha" not in text(reader)
 
@@ -252,8 +254,8 @@ def test_the_ai_reading_prints_in_its_own_labelled_section(client: TestClient) -
     assert "AIREADING" in squeezed
     assert "Your full reading" in printed
     assert "Written by AI from the results above" in printed
-    # The opening page and one page per chapter, after the seven before it.
-    assert len(reader.pages) == 10
+    # The opening page and one page per chapter, after the seven before it, and the back cover.
+    assert len(reader.pages) == 11
     assert "CHAPTER1" in squeezed and "CHAPTER2" in squeezed
     assert "INSHORT" in squeezed
     assert "Your nature" in printed and "Saturn periods" in printed

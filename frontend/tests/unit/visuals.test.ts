@@ -1,7 +1,12 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import { CHART_READING, CHART_TOPICS, MATCH_READING } from "@/lib/assistant/explain";
+import { CHAPTER_ART, chapterPicture } from "@/lib/assistant/chapterArt";
 import { CHAPTER_VISUAL, barLayout, spread, wheelLayout } from "@/lib/assistant/visuals";
+import { RASHI } from "@/lib/rashi";
 
 const gapOf = (a: number, b: number) => Math.min(((a - b) % 360 + 360) % 360, ((b - a) % 360 + 360) % 360);
 
@@ -64,5 +69,23 @@ describe("CHAPTER_VISUAL", () => {
   it("names only chapters of the readings", () => {
     const known = new Set([...CHART_READING, ...CHART_TOPICS, ...MATCH_READING]);
     for (const id of Object.keys(CHAPTER_VISUAL)) expect(known.has(id as never)).toBe(true);
+  });
+});
+
+describe("pictures", () => {
+  const web = join(__dirname, "../../../design/assets/web");
+
+  it("has one for every chapter of the readings, on disk", () => {
+    for (const id of new Set([...CHART_READING, ...CHART_TOPICS, ...MATCH_READING])) {
+      expect(existsSync(join(web, "chapters", `${CHAPTER_ART[id]}.webp`)), id).toBe(true);
+    }
+    expect(chapterPicture("nakath.day")).toBeNull();
+  });
+
+  it("has artwork for all twelve signs", () => {
+    for (const rashi of RASHI) {
+      expect(rashi.image).toMatch(/\.webp$/);
+      expect(existsSync(join(web, rashi.image.replace("/images/", ""))), rashi.key).toBe(true);
+    }
   });
 });

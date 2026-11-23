@@ -13,7 +13,7 @@
 
 {% macro medallion(art, size="big") -%}
 <div class="medallion medallion-{{ size }}">
-  {% if art.uri %}<img src="{{ art.uri }}" alt="">{% else %}<div class="medallion-glyph">{{ art.glyph }}</div>{% endif %}
+  <img src="{{ art }}" alt="">
 </div>
 {%- endmacro %}
 
@@ -173,4 +173,19 @@
     </tr>
   </tbody>
 </table>
+{%- endmacro %}
+
+{# The top of a main part: its title on black beside its picture (the free report: a plain title). #}
+{% macro banner(picture, title, note="", plain=False) -%}
+{% if plain %}
+<h2 class="section-title">{{ title }}</h2>
+{% if note %}<p class="soft">{{ note }}</p>{% endif %}
+{% else %}
+<div class="banner" style="background-image: url({{ picture }})">
+  <div class="banner-text">
+    <h2>{{ title }}</h2>
+    {% if note %}<p>{{ note }}</p>{% endif %}
+  </div>
+</div>
+{% endif %}
 {%- endmacro %}

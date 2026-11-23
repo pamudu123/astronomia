@@ -164,8 +164,7 @@ html[lang="si"] .eyebrow {
   width: 210mm;
   height: 297mm;
   background-color: #0a0a0a;
-  background-size: cover;
-  background-position: 78% 50%;
+  background-size: 210mm 297mm;
   color: #f4f1ea;
   break-after: page;
 }
@@ -214,8 +213,14 @@ html[lang="si"] .cover-eyebrow {
   font-size: 9.5pt;
   color: #cfc8b8;
 }
+.cover-signs-place {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 194mm;
+}
 .cover-signs {
-  margin: 10mm auto 0;
+  margin: 0 auto;
   border-collapse: collapse;
 }
 .cover-signs td {
@@ -263,23 +268,112 @@ html[lang="si"] .cover-label {
   margin: 14mm auto 0;
   border-collapse: collapse;
 }
+/* Each circle in one of the two orbits painted on the cover. */
+.cover-pair.orbits {
+  position: absolute;
+  left: 50%;
+  top: 79mm;
+  width: 170mm;
+  margin: 0 0 0 -85mm;
+}
+/* The match cover has its own lotus border, so no frame, and the words stay clear of it. */
+.cover-match .cover-frame {
+  border: none;
+  outline: none;
+}
+.cover-match .cover-foot {
+  bottom: 24mm;
+}
+/* The gold dust of the orbits runs behind the names. */
+.orbits td {
+  vertical-align: top !important;
+}
+.orbits .cover-value,
+.orbits .cover-label {
+  display: inline-block;
+  padding: 0.4mm 2.5mm;
+  border-radius: 3pt;
+  background: rgba(5, 5, 5, 0.82);
+}
+.orbits .cover-value {
+  margin-top: 4mm;
+}
 .cover-pair td {
   vertical-align: middle;
   text-align: center;
-  padding: 0 3mm;
-  width: 62mm;
+  padding: 0 2mm;
+  width: 66mm;
 }
 .cover-pair td.cover-join {
-  width: 12mm;
+  width: 34mm;
 }
 .cover-pair .cover-value {
   margin-top: 4mm;
 }
 .cover-score {
-  margin-top: 12mm;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 186mm;
+  text-align: center;
   font-family: "Marcellus", "Noto Sans Sinhala";
   font-size: 18pt;
   color: #f4f1ea;
+}
+
+.back-cover {
+  break-before: page;
+  break-after: auto;
+}
+.back-words {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 92mm;
+  text-align: center;
+}
+.back-words .cover-tagline {
+  margin-top: 4mm;
+}
+
+/* The top of a main part: the title on black, the picture on the right. */
+.banner {
+  position: relative;
+  height: 46mm;
+  margin-bottom: 5mm;
+  border-radius: 4pt;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+  background-size: auto 46.6mm;
+  color: #f4f1ea;
+  break-inside: avoid;
+  break-after: avoid;
+}
+.banner-text {
+  position: absolute;
+  left: 8mm;
+  top: 8mm;
+  width: 82mm;
+}
+.banner h2 {
+  margin: 0 0 2mm;
+  font-size: 18pt;
+  line-height: 1.2;
+  color: #e8b84b;
+}
+#periods.page-break,
+#checks.page-break,
+#kuja.page-break {
+  margin-top: 0;
+}
+h1 + .banner {
+  margin-top: 5mm;
+}
+.banner p {
+  font-size: 8.4pt;
+  line-height: 1.45;
+  color: #cfc8b8;
 }
 
 /* A sign's artwork in a dark circle with a gold ring: on the cover and beside each person. */
@@ -290,22 +384,19 @@ html[lang="si"] .cover-label {
   border: 1pt solid #e8b84b;
   overflow: hidden;
 }
-.medallion img,
-.medallion-glyph svg {
+.medallion img {
   width: 100%;
   height: 100%;
   display: block;
 }
-.medallion-glyph {
-  width: 100%;
-  height: 100%;
-  padding: 14%;
-  box-sizing: border-box;
-}
+/* In the middle of the zodiac wheel painted on the cover (its centre is 147 mm down). */
 .medallion-big {
+  position: absolute;
+  left: 50%;
+  top: 89mm;
   width: 92mm;
   height: 92mm;
-  margin-top: 12mm;
+  margin-left: -46mm;
   box-shadow: 0 0 0 2.2mm rgba(232, 184, 75, 0.12);
 }
 .medallion-mid {
@@ -699,7 +790,7 @@ html[lang="si"] .table-tight th {
   position: relative;
   width: 100%;
   height: 19mm;
-  margin-top: 6mm;
+  margin-top: 10mm;
 }
 .bar svg {
   display: block;
@@ -870,22 +961,44 @@ html[lang="si"] .table-tight th {
   break-before: page;
 }
 .reading-hero {
-  background-color: #0a0a0a;
-  background-image: linear-gradient(135deg, #17140e 0%, #0a0a0a 60%);
-  color: #f4f1ea;
-  border-radius: 6pt;
+  height: 61mm;
+  box-sizing: border-box;
   padding: 12mm 10mm;
-  text-align: center;
+  border-radius: 6pt;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+  background-size: auto 61.6mm;
+  color: #f4f1ea;
 }
 .reading-hero-title {
   margin-top: 4mm;
-  font-size: 26pt;
+  width: 82mm;
+  font-size: 22pt;
   color: #f4f1ea;
 }
 .reading-hero-lead {
-  margin: 3mm auto 0;
-  width: 120mm;
+  margin-top: 3mm;
+  width: 78mm;
   color: #cfc8b8;
+}
+html[lang="si"] .reading-hero {
+  padding-top: 8mm;
+}
+html[lang="si"] .reading-hero .cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.02em;
+}
+html[lang="si"] .reading-hero-title {
+  margin-top: 2mm;
+  font-size: 17pt;
+}
+html[lang="si"] .reading-hero-lead {
+  font-size: 8.2pt;
+  line-height: 1.5;
+}
+html[lang="si"] .banner h2 {
+  font-size: 15pt;
 }
 .reading-list {
   list-style: none;
@@ -927,13 +1040,13 @@ html[lang="si"] .table-tight th {
   font-size: 22pt;
   line-height: 1.15;
 }
-.chapter-spot {
-  width: 48mm;
+.chapter-picture {
+  width: 60mm;
   text-align: right;
 }
-.chapter-spot svg {
-  width: 48mm;
-  height: 32mm;
+.chapter-picture img {
+  width: 60mm;
+  height: 40mm;
 }
 .answer {
   margin-top: 5mm;

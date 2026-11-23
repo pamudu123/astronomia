@@ -46,7 +46,7 @@
 
 {% if chapters %}
 <section id="reading" class="reading-open">
-  <div class="reading-hero">
+  <div class="reading-hero" style="background-image: url({{ banners.reading }})">
     <p class="cover-brand">{{ v.star("4mm") }} {{ r.ai_reading }}</p>
     <h1 class="reading-hero-title">{{ r.reading_title }}</h1>
     <p class="reading-hero-lead">{{ r.reading_lead.format(count=chapters | length) }}</p>
@@ -68,7 +68,7 @@
           <p class="eyebrow">{{ r.chapter.format(number=chapter.number) }}</p>
           <h2 class="chapter-title">{{ chapter.title }}</h2>
         </td>
-        <td class="chapter-spot">{{ chapter.spot }}</td>
+        <td class="chapter-picture"><img src="{{ chapter.picture }}" alt=""></td>
       </tr>
     </tbody>
   </table>

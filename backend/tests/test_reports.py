@@ -114,12 +114,29 @@ def test_the_periods_bar_marks_today_inside_it() -> None:
     assert not [tag for tag in gone.tags if tag.kind == "now"]
 
 
-def test_every_chapter_picture_and_rashi_picture_exists() -> None:
+def test_every_picture_a_report_prints_exists() -> None:
     from app.engine.zodiac import RASHI
-    from app.reports.artwork import ART_DIR, CHAPTER_SPOT, art_files, rashi_uri
+    from app.reports import artwork
 
-    for name in CHAPTER_SPOT.values():
-        assert (ART_DIR / "spots" / f"{name}.svg").exists(), name
-    missing = [sign for sign in RASHI if rashi_uri(sign) is None]
-    assert set(missing) <= {"simha"}  # its line symbol stands in until the artwork exists
-    assert all(path.exists() for path in art_files().values())
+    allowed = set(artwork.art_files())
+    for chapter in [*artwork.CHAPTER_ART, None, "chart.future"]:
+        assert artwork.chapter_uri(chapter) in allowed, chapter
+    for sign in RASHI:
+        assert artwork.rashi_uri(sign) in allowed, sign
+    for uri in artwork.section_uris().values():
+        assert uri in allowed, uri
+    for name in ("cover-hadahan", "cover-porondam", "back-cover"):
+        assert artwork.cover_uri(name) in allowed, name
+    assert all(path.exists() for path in artwork.art_files().values())
+
+
+def test_a_chapter_picture_is_on_the_paper_colour() -> None:
+    """Laid on the page's own colour, so no box shows around it (report.css)."""
+    from PIL import Image
+
+    from app.reports.artwork import ART_DIR
+
+    for path in sorted((ART_DIR / "chapters").glob("*.jpg")):
+        corner = Image.open(path).convert("RGB").getpixel((3, 3))
+        assert isinstance(corner, tuple)
+        assert all(abs(a - b) <= 2 for a, b in zip(corner, (251, 248, 241), strict=True)), path

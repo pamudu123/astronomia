@@ -1,6 +1,6 @@
 # Images to make for the report
 
-Date: 2026-11-23
+Date: 2026-11-23. **All 34 images arrived and are in use the same day** (`design/assets/source/03_report_set/`, made with OpenAI image generation). Still wanted: a whole `section-match.png` (it arrived cut off at the bottom) and, if you like, a `cover-hadahan.png` without the lion (it is taken out by `design/tools/build_report_art.py`).
 
 The images the owner will generate for the paid PDF (and the matching places on the website). Nothing waits for them: until an image arrives, the report keeps the artwork or line drawing it has now. Send them in any order.
 

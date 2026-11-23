@@ -1,8 +1,7 @@
 """Draw the twelve rashi symbols as simple gold line SVGs.
 
 Run from the repository root:  python3 design/tools/gen_rashi.py
-They are used where the detailed artwork is too fine to read (the zodiac wheel, small icons),
-and rashi-05-simha.svg stands in until the Simha artwork exists.
+They are used where the detailed artwork is too fine to read (the zodiac wheel, small icons).
 """
 import math
 from pathlib import Path

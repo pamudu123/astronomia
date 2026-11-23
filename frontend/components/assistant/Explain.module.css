@@ -360,6 +360,12 @@
   height: auto;
 }
 
+/* The painted picture (lib/assistant/chapterArt.ts): gold on either theme. */
+.picture {
+  height: auto;
+  object-fit: contain;
+}
+
 /* A part: its icon and lead, then the small paragraphs under it. */
 .part {
   --spot-bg: var(--panel);

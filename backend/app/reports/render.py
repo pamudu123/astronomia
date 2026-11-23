@@ -11,7 +11,7 @@ from app.api.charts import ChartOut, HadahanBuild, HadahanRequest, KujaOut, char
 from app.api.porondam import FactorOut, PersonOut, PorondamBuild
 from app.engine.zodiac import RASHI
 from app.explain.labels import Lang, labels
-from app.reports.artwork import glyph, hero_uri, rashi_uri, spot
+from app.reports.artwork import chapter_uri, cover_uri, glyph, rashi_uri, section_uris
 from app.reports.format import (
     coordinates_line,
     format_date,
@@ -160,7 +160,7 @@ def _reading(chapters: Sequence[Chapter], available: set[str]) -> list[dict[str,
                 "number": number,
                 "anchor": f"chapter-{number}",
                 "title": title,
-                "spot": spot(chapter_id),
+                "picture": chapter_uri(chapter_id),
                 "answer": answer,
                 "parts": sections,
                 "visual": visual if visual in available else "",
@@ -168,11 +168,6 @@ def _reading(chapters: Sequence[Chapter], available: set[str]) -> list[dict[str,
             }
         )
     return result
-
-
-def _art(sign: str) -> dict[str, Any]:
-    """A sign's artwork for a dark medallion, or its gold symbol where there is none yet."""
-    return {"uri": rashi_uri(sign), "glyph": glyph(sign, "#e8b84b", ring=True)}
 
 
 def render_hadahan(
@@ -306,6 +301,7 @@ def render_hadahan(
     context = {
         "r": report,
         "full": full,
+        "banners": section_uris(),
         "title": (
             report["hadahan_title_named"].format(name=name) if name else report["hadahan_title"]
         ),
@@ -314,14 +310,15 @@ def render_hadahan(
         ),
         "cover": {
             "eyebrow": report["cover_hadahan"],
-            "art": _art(chart.moon.sign),
+            "art": rashi_uri(chart.moon.sign),
             "signs": [
                 (report["lagna"], rashi_name[chart.lagna.sign]),
                 (report["rashi"], rashi_name[chart.moon.sign]),
                 (report["nakath"], table["nakshatra"][chart.moon.nakshatra]),
             ],
             "made": report["cover_made"].format(date=format_date(today, lang)),
-            "sky": hero_uri(),
+            "picture": cover_uri("cover-hadahan"),
+            "back": cover_uri("back-cover"),
         },
         "pillars": pillars,
         "wheel": wheel,
@@ -440,7 +437,7 @@ def _person(person: PersonOut, role: str, table: dict[str, Any], lang: Lang) -> 
         "star": f"{star} · {rashi}",
         "sign": rashi,
         "detail": detail,
-        "art": _art(person.rashi),
+        "art": rashi_uri(person.rashi),
     }
 
 
@@ -488,12 +485,14 @@ def render_porondam(
         "cover": {
             "eyebrow": report["cover_porondam"],
             "made": report["cover_made"].format(date=format_date(today, lang)),
-            "sky": hero_uri(),
+            "picture": cover_uri("cover-porondam"),
+            "back": cover_uri("back-cover"),
         },
         "passed": result.score.passed,
         "total": result.score.total,
         "ring": ring,
         "full": full,
+        "banners": section_uris(),
         "chapters": _reading(reading if full else (), {"people", "ring", "checks"}),
         "r": report,
         "title": report["porondam_title"].format(bride=people[0]["name"], groom=people[1]["name"]),

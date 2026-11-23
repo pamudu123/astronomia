@@ -2,12 +2,13 @@
 {% from "kendara.html" import kendara %}
 {% import "visuals.html" as v %}
 
+{% block cover_class %} cover-match{% endblock %}
 {% block cover %}
-<table class="cover-pair">
+<table class="cover-pair orbits">
   <tbody>
     <tr>
       <td>{{ v.medallion(people[0].art, "mid") }}<p class="cover-value">{{ people[0].name }}</p><p class="cover-label">{{ people[0].star }}</p></td>
-      <td class="cover-join">{{ v.star("8mm") }}</td>
+      <td class="cover-join"></td>
       <td>{{ v.medallion(people[1].art, "mid") }}<p class="cover-value">{{ people[1].name }}</p><p class="cover-label">{{ people[1].star }}</p></td>
     </tr>
   </tbody>
@@ -33,7 +34,7 @@
   <h1>{{ title }}</h1>
 
 
-  <h2>{{ r.people_title }}</h2>
+  {% if full %}{{ v.banner(banners.match, r.people_title) }}{% else %}<h2>{{ r.people_title }}</h2>{% endif %}
   {{ v.people(people, r) }}
 
   <h2>{{ r.ring_title }}</h2>
@@ -43,7 +44,7 @@
 </section>
 
 <section id="checks"{% if full %} class="page-break"{% endif %}>
-  <h2 class="section-title">{{ r.checks_title }}</h2>
+  {{ v.banner(banners.checks, r.checks_title, "", not full) }}
   {{ v.checks(hard_checks, kuja, r) }}
   <table class="table" style="margin-top: 4mm">
     <tbody>

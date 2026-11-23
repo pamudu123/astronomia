@@ -12,20 +12,24 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC, WEB = ROOT / "assets" / "source", ROOT / "assets" / "web"
 WEB.mkdir(parents=True, exist_ok=True)
 
-# Rashi number and name -> original file. Simha has no original yet (see design/README.md).
+# Rashi number and name -> original file.
 RASHI = {
     "01-mesha": "01_first_set/02_mesha_aries.png",
     "02-vrishabha": "01_first_set/03_vrishabha_taurus.png",
     "03-mithuna": "01_first_set/04_mithuna_gemini.png",
     "04-kataka": "01_first_set/05_karka_cancer.png",
+    "05-simha": "03_report_set/rashi-05-simha.png",
     "06-kanya": "01_first_set/06_kanya_virgo.png",
     "07-tula": "01_first_set/07_tula_libra.png",
     "08-vrischika": "01_first_set/08_vrischika_scorpio.png",
     "09-dhanu": "01_first_set/09_dhanu_sagittarius.png",
-    "10-makara": "02_remaining_set/04_makara_capricorn.png",
-    "11-kumbha": "02_remaining_set/02_kumbha_aquarius_person.png",
-    "12-meena": "02_remaining_set/01_meena_pisces.png",
+    "10-makara": "03_report_set/rashi-10-makara.png",
+    "11-kumbha": "03_report_set/rashi-11-kumbha.png",
+    "12-meena": "03_report_set/rashi-12-meena.png",
 }
+
+# Scraps of a neighbouring picture left at the edge: (left, top, right, bottom).
+SCRAPS = {"10-makara": (260, 40, 345, 105), "11-kumbha": (40, 45, 150, 110)}
 
 # Panels inside the composite image, as (left, top, right, bottom), inside the white divider lines.
 COMPOSITE = "02_remaining_set/07_composite_all_remaining_visuals.png"
@@ -52,7 +56,11 @@ def hero():
 
 def rashi():
     for name, src in RASHI.items():
-        im = Image.open(SRC / src).convert("RGBA").resize((512, 512), Image.LANCZOS)
+        im = Image.open(SRC / src).convert("RGBA")
+        if name in SCRAPS:
+            left, top, right, bottom = SCRAPS[name]
+            im.paste((0, 0, 0, 0), (left, top, right, bottom))
+        im = im.resize((512, 512), Image.LANCZOS)
         im.save(WEB / f"rashi-{name}.webp", quality=88, method=6)
 
 
