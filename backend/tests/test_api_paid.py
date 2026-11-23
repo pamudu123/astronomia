@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 
 from app.api import reports
 from app.config import Settings, get_settings
+from app.store.accounts import AccountStore
 from app.store.orders import OrderStore
 from tests.auth import bearer, token
 from tests.test_api_saved import hadahan, porondam
@@ -204,6 +205,45 @@ def test_a_free_save_becomes_paid_when_unlocked(client: TestClient, pamudu: None
     unlocked = unlock(client, "pamudu", porondam()).json()
     assert unlocked["saved"]["id"] == kept["id"]
     assert unlocked["saved"]["paid"] is True
+
+
+def test_unlocking_a_saved_free_report_stops_it_expiring_and_keeps_its_place(
+    client: TestClient, pamudu: None, accounts: AccountStore
+) -> None:
+    paid_reports(client)
+    sign_in(client)
+    saved_at = dt.datetime(2026, 11, 15, 8, 0, tzinfo=dt.UTC)
+    accounts.clock = lambda: saved_at
+    older = client.post("/v1/saved", json=porondam()).json()
+    accounts.clock = lambda: saved_at + dt.timedelta(minutes=1)
+    newer = client.post("/v1/saved", json=hadahan()).json()
+    assert older["expires_at"] == "2026-11-22T08:00:00Z"
+    listed = client.get("/v1/saved").json()
+    assert listed["paid_reports"] is True
+    assert [item["id"] for item in listed["reports"]] == [newer["id"], older["id"]]
+
+    accounts.clock = lambda: saved_at + dt.timedelta(days=6)  # 1 day left: "Get the full report"
+    unlocked = unlock(client, "pamudu", porondam()).json()
+    assert (unlocked["saved"]["id"], unlocked["saved"]["expires_at"]) == (older["id"], None)
+    listed = client.get("/v1/saved").json()["reports"]
+    assert [(item["id"], item["paid"]) for item in listed] == [
+        (newer["id"], False),
+        (older["id"], True),
+    ]
+    assert listed[1]["created_at"] == older["created_at"]  # the same place in the list
+
+    accounts.clock = lambda: saved_at + dt.timedelta(days=30)
+    listed = client.get("/v1/saved").json()["reports"]
+    assert [(item["id"], item["expires_at"]) for item in listed] == [(older["id"], None)]
+
+
+def test_paid_reports_do_not_take_free_places(client: TestClient, pamudu: None) -> None:
+    paid_reports(client, free_saved_limit=1)
+    sign_in(client)
+    assert unlock(client, "pamudu", porondam()).status_code == 200  # saved as paid
+    assert client.post("/v1/saved", json=hadahan()).status_code == 201  # the one free place
+    full = client.post("/v1/saved", json=hadahan(name="Kasun"))
+    assert (full.status_code, full.json()["detail"]) == (409, "free_limit")
 
 
 def test_saving_a_paid_report_records_it_as_paid(client: TestClient, pamudu: None) -> None:

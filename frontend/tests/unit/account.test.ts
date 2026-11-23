@@ -3,6 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   SAVE_LOCK,
   birthOf,
+  keepLabel,
+  keepOf,
+  keepReminder,
   listSaved,
   matchOf,
   mergeGuest,
@@ -174,7 +177,7 @@ describe("the sign in goes with every account call", () => {
 
   it("reading never signs in, and sends no token when nobody is signed in", async () => {
     const { token } = recordedFetch(200);
-    await expect(listSaved()).resolves.toEqual([]);
+    await expect(listSaved()).resolves.toMatchObject({ reports: [] });
     expect(auth.guests).toBe(0);
     expect(token(0)).toBeNull();
   });
@@ -222,5 +225,43 @@ describe("moving a guest and signing out", () => {
     await signOutHere();
     await signOutEverywhere();
     expect(auth.signOut.mock.calls).toEqual([[{ scope: "local" }], [{ scope: "global" }]]);
+  });
+});
+
+describe("how long a saved report is kept (docs/18, section 3)", () => {
+  const saved = "2026-11-15T08:00:00Z";
+  const expires = "2026-11-22T08:00:00Z"; // 7 days after saving
+  const at = (iso: string) => new Date(iso);
+
+  it("a paid report is kept for good", () => {
+    expect(keepOf({ paid: true, expires_at: null }, at(saved))).toEqual({ kind: "paid" });
+    expect(keepLabel({ kind: "paid" }, en.saved)).toBe("Paid");
+    expect(keepReminder({ kind: "paid" }, en.saved)).toBeNull();
+  });
+
+  it("a free report counts the days left up, and asks to be kept with 2 days or less", () => {
+    const free = { paid: false, expires_at: expires };
+    expect(keepOf(free, at(saved))).toEqual({ kind: "free", days: 7, soon: false });
+    expect(keepOf(free, at("2026-11-17T09:00:00Z"))).toEqual({ kind: "free", days: 5, soon: false });
+    expect(keepOf(free, at("2026-11-19T08:00:00Z"))).toEqual({ kind: "free", days: 3, soon: false });
+    expect(keepOf(free, at("2026-11-20T08:00:00Z"))).toEqual({ kind: "free", days: 2, soon: true });
+    expect(keepOf(free, at("2026-11-22T07:59:00Z"))).toEqual({ kind: "free", days: 1, soon: true });
+    // Past its time (the page was open while it was deleted): never "0 days".
+    expect(keepOf(free, at("2026-11-23T08:00:00Z"))).toEqual({ kind: "free", days: 1, soon: true });
+  });
+
+  it("labels and reminders, in English and Sinhala", () => {
+    const five = { kind: "free", days: 5, soon: false } as const;
+    const two = { kind: "free", days: 2, soon: true } as const;
+    const one = { kind: "free", days: 1, soon: true } as const;
+    expect(keepLabel(five, en.saved)).toBe("Free · deleted in 5 days");
+    expect(keepLabel(one, en.saved)).toBe("Free · deleted in 1 day");
+    expect(keepReminder(five, en.saved)).toBeNull();
+    expect(keepReminder(two, en.saved)).toBe("Deleted in 2 days. Get the full report to keep it.");
+    expect(keepReminder(one, en.saved)).toBe("Deleted in 1 day. Get the full report to keep it.");
+    expect(keepLabel(five, si.saved)).toContain("5");
+    expect(keepReminder(two, si.saved)).toContain("2");
+    expect(en.saved.keepNote).not.toMatch(/match each other|explanation/);
+    expect(en.saved.keepNote).toContain("coming soon");
   });
 });

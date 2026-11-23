@@ -72,6 +72,14 @@ Until compare is built, drop the last sentence or say "coming soon".
 
 **Wording rule:** never "find the best match" or "the right partner". The terms say the site never tells anyone whom to marry, so compare shows scores under the traditional rules and leaves the decision to the family.
 
+### How the 7 days are built (step 2, 2026-11-22)
+
+- Each free saved report has `expires_at`, 7 days after it was saved. A paid one has none; the database refuses a free report without one or a paid report with one. Unlocking a saved free report sets its order and clears `expires_at` in one update, so it keeps its place in the list.
+- **Deletion is done by the database:** an hourly Supabase Cron (`pg_cron`) job runs `sidera.delete_expired_reports()` (migration `20261122090000_free_reports_expire.sql`). Supabase Cron works on every plan. A job inside the backend would not do: Render's free plan puts the backend to sleep when nobody visits.
+- The backend also deletes an account's expired reports whenever it reads them, so nobody sees a report after its time, even in the hour before the job runs.
+- Limits: 20 free reports at a time (`ASTRONOMIA_FREE_SAVED_LIMIT`), counted apart from paid ones (`ASTRONOMIA_PAID_SAVED_LIMIT`, 1,000). Saving the same report again does not restart its 7 days.
+- My reports labels each report "Paid" or "Free · deleted in N days" (days counted up), shows the reminder with a "Get the full report" button at 2 days or less, and the note above, with compare as "coming soon".
+
 ## 4. Prices and coupons
 
 ### Prices
@@ -125,6 +133,8 @@ Suggested: `pamudu` is 100% off any report, up to 10 uses per account and 200 in
 **Legal:** no money changes hands while only free coupons work, so refund and tax rules do not apply yet. The privacy notice needs a line on Google sign in: the account id and email are kept to recognise the paid user and send receipts, nothing else. Discount coupons and real prices bring in the refunds policy (`docs/policies/refunds.md`) once payments exist.
 
 ## 5. Astro chat limits
+
+Built (step 5): how it works, where the limits are enforced, the settings and how to turn them on are in `docs/21-chat-limits.md`.
 
 ### Free users: 2 questions a week
 
