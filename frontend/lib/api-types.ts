@@ -2030,6 +2030,11 @@ export interface components {
             /** Poya */
             poya: boolean;
             full_moon: components["schemas"]["LocalTimeOut"] | null;
+            /**
+             * Skipped
+             * @default false
+             */
+            skipped: boolean;
         };
         /** MonthOut */
         MonthOut: {
@@ -2289,6 +2294,13 @@ export interface components {
             yoga: components["schemas"]["PanchangaPartOut"][];
             /** Karana */
             karana: components["schemas"]["PanchangaPartOut"][];
+            /**
+             * Skipped
+             * @default false
+             */
+            skipped: boolean;
+            /** Skipped Note */
+            skipped_note?: string | null;
         };
         /** PeriodOut */
         PeriodOut: {

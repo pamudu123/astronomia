@@ -58,6 +58,34 @@ async def test_good_times_default_to_colombo_and_mark_times_on_other_days() -> N
     ]
 
 
+async def test_a_date_that_never_happened_says_so() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={
+                "date": "2011-12-30",
+                "weekday_name": "Friday",
+                "place": {"name": "Apia"},
+                "sunrise": None,
+                "sunset": None,
+                "rahu_kalaya": None,
+                "thithi": [],
+                "nakatha": [],
+                "yoga": [],
+                "karana": [],
+                "timezone_note": "Times are in Pacific/Apia.",
+                "provisional": True,
+                "skipped": True,
+                "skipped_note": "This date did not happen here.",
+            },
+        )
+
+    out = await tool_for(handler, "good_times_for_day").ainvoke({"date": "2011-12-30"})
+
+    assert out["skipped_date"] == "This date did not happen here."
+    assert out["sunrise"] is None and out["thithi"] == []
+
+
 async def test_a_bad_date_is_refused_before_calling_the_engine() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         raise AssertionError("the engine should not be called")

@@ -5927,6 +5927,11 @@
                 "type": "null"
               }
             ]
+          },
+          "skipped": {
+            "type": "boolean",
+            "title": "Skipped",
+            "default": false
           }
         },
         "type": "object",
@@ -6621,6 +6626,22 @@
             },
             "type": "array",
             "title": "Karana"
+          },
+          "skipped": {
+            "type": "boolean",
+            "title": "Skipped",
+            "default": false
+          },
+          "skipped_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Skipped Note"
           }
         },
         "type": "object",

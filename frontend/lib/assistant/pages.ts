@@ -393,6 +393,7 @@ export function dayContext(data: Panchanga, place: Place | null, language: Local
       rahu_kalaya: data.rahu_kalaya ? range(data.rahu_kalaya.start, data.rahu_kalaya.end, day) : null,
       thithi: parts(data.thithi),
       nakatha: parts(data.nakatha),
+      ...(data.skipped ? { skipped_date: data.skipped_note ?? null } : {}),
       provisional: data.provisional,
     },
   };

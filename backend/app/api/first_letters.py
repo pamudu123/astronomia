@@ -11,6 +11,7 @@ from typing import Annotated, Literal, Self
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field, model_validator
 
+from app.api.birth import resolve_birth
 from app.api.charts import EPHEMERIS
 from app.api.deps import PlacesDb
 from app.api.panchanga import LocalTimeOut, offset_label, time_out
@@ -166,7 +167,22 @@ def first_letters(body: FirstLettersRequest, db: PlacesDb, _: Access) -> FirstLe
     zone = zoneinfo.ZoneInfo(place.timezone)
     first = body.as_of or dt.datetime.now(zone).date()
     last = _add_months(first, body.months) - dt.timedelta(days=1)
-    items = find_dates(EPHEMERIS, place, first, (last - first).days + 1, moon.nakshatra)
+    # Never a day before the child is born. The birth day itself is left out too: the time of
+    # day may not be known, so part of it can come before the birth.
+    unborn = False
+    if birth is not None:
+        born_on = birth
+        if isinstance(body.child, FullPerson):
+            # The date at the ceremony, which can be a day ahead of the date at the birth place.
+            utc = resolve_birth(body.child, db).utc
+            if utc is not None:
+                born_on = max(birth, utc.astimezone(zone).date())
+        if born_on >= last:
+            unborn = True
+        else:
+            first = max(first, born_on + dt.timedelta(days=1))
+    days = 0 if unborn else (last - first).days + 1
+    items = find_dates(EPHEMERIS, place, first, days, moon.nakshatra)
     rules = load_rules()
     text = labels(body.lang)["first_letters"]
     age_note = None
@@ -194,7 +210,7 @@ def first_letters(body: FirstLettersRequest, db: PlacesDb, _: Access) -> FirstLe
             mode="quick" if isinstance(body.child, QuickPerson) else "full",
         ),
         suggestions=[_suggestion(item, body.lang, zone, birth) for item in items],
-        none_text=None if items else text["none"],
+        none_text=None if items else text["before_birth" if unborn else "none"],
         age_note=age_note,
         note=text["note"],
     )

@@ -139,39 +139,58 @@ export function DailyView({ lang, t, day, initial }: Props) {
           <p className={styles.small} data-card="where">
             {[shown.place.name, shown.weekday_name, shown.timezone_note].filter(Boolean).join(" · ")}
           </p>
-          <AiExplain chapters={PAGE_PLACES.day} lang={lang} facts={context} />
-          <div className={styles.day}>
-            <div className={styles.item} data-card="sun">
-              <p className={styles.itemName}>
-                {t.sunrise} · {t.sunset}
-              </p>
-              {shown.sunrise && shown.sunset ? (
-                <p className={styles.clock}>
-                  {shown.sunrise.clock} · {shown.sunset.clock}
-                </p>
-              ) : (
-                <p>{t.noSunrise}</p>
-              )}
-            </div>
-            <div className={styles.itemKey} data-card="rahu">
-              <p className={styles.itemName}>{t.rahu}</p>
-              {shown.rahu_kalaya ? (
-                <p className={styles.clock}>
-                  {shown.rahu_kalaya.start.clock} · {shown.rahu_kalaya.end.clock}
-                </p>
-              ) : (
-                <p>{t.noSunrise}</p>
-              )}
-              <p className={styles.small}>{t.rahuNote}</p>
-            </div>
-            <Parts title={t.thithi} parts={shown.thithi} day={day} t={t} lang={lang} />
-            <Parts title={t.nakatha} parts={shown.nakatha} day={day} t={t} lang={lang} />
-            <Parts title={t.yoga} parts={shown.yoga} day={day} t={t} lang={lang} />
-            <Parts title={t.karana} parts={shown.karana} day={day} t={t} lang={lang} />
-          </div>
-          <p className={styles.note}>{t.provisional}</p>
+          {shown.skipped ? (
+            <p className={styles.note} role="status" data-skipped>
+              {shown.skipped_note}
+            </p>
+          ) : (
+            <DayDetails lang={lang} t={t} day={day} shown={shown} facts={context} />
+          )}
         </>
       )}
+    </>
+  );
+}
+
+type DetailsProps = Pick<Props, "lang" | "t" | "day"> & {
+  shown: Panchanga;
+  facts: ReturnType<typeof dayContext> | null;
+};
+
+function DayDetails({ lang, t, day, shown, facts }: DetailsProps) {
+  return (
+    <>
+      <AiExplain chapters={PAGE_PLACES.day} lang={lang} facts={facts} />
+      <div className={styles.day}>
+        <div className={styles.item} data-card="sun">
+          <p className={styles.itemName}>
+            {t.sunrise} · {t.sunset}
+          </p>
+          {shown.sunrise && shown.sunset ? (
+            <p className={styles.clock}>
+              {shown.sunrise.clock} · {shown.sunset.clock}
+            </p>
+          ) : (
+            <p>{t.noSunrise}</p>
+          )}
+        </div>
+        <div className={styles.itemKey} data-card="rahu">
+          <p className={styles.itemName}>{t.rahu}</p>
+          {shown.rahu_kalaya ? (
+            <p className={styles.clock}>
+              {shown.rahu_kalaya.start.clock} · {shown.rahu_kalaya.end.clock}
+            </p>
+          ) : (
+            <p>{t.noSunrise}</p>
+          )}
+          <p className={styles.small}>{t.rahuNote}</p>
+        </div>
+        <Parts title={t.thithi} parts={shown.thithi} day={day} t={t} lang={lang} />
+        <Parts title={t.nakatha} parts={shown.nakatha} day={day} t={t} lang={lang} />
+        <Parts title={t.yoga} parts={shown.yoga} day={day} t={t} lang={lang} />
+        <Parts title={t.karana} parts={shown.karana} day={day} t={t} lang={lang} />
+      </div>
+      <p className={styles.note}>{t.provisional}</p>
     </>
   );
 }
