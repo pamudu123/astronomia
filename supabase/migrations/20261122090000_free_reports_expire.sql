@@ -65,11 +65,11 @@ revoke all on function sidera.delete_expired_reports() from public, anon, authen
 
 -- Schedule it. Supabase has pg_cron; a plain PostgreSQL (the test database in CI) does not, and
 -- there the backend's own deletion is what the tests check. cron.schedule with a job name
--- replaces a job of that name, so running this again changes nothing.
+-- replaces a job of that name, so running this again changes nothing. pg_cron must already be
+-- switched on in the Supabase dashboard (see supabase/README.md).
 do $$
 begin
-  if exists (select 1 from pg_available_extensions where name = 'pg_cron') then
-    create extension if not exists pg_cron with schema pg_catalog;
+  if exists (select 1 from pg_extension where extname = 'pg_cron') then
     perform cron.schedule(
       'sidera-expire-free-reports',
       '7 * * * *',  -- every hour, at 7 minutes past
