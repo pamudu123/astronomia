@@ -1,15 +1,15 @@
 "use client";
 
-import { type PointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type PointerEvent, type ReactNode, useCallback, useMemo, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionState } from "@/components/SectionState";
 import { useAssistantOn } from "@/components/assistant/PageContext";
 import { askAssistant } from "@/lib/assistant/panel";
 import { type BirthRequest, type Labels, fill, formatMonthYear } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
   ROAD_YEARS,
-  type Journey,
   type Road,
   type RoadStop,
   buildRoad,
@@ -27,6 +27,7 @@ import {
 } from "@/lib/journey";
 import { type RoadText, drawRoad } from "@/lib/journeyDraw";
 import { type RoadFonts, useRoadTravel } from "@/lib/useRoadTravel";
+import { useSection } from "@/lib/useSection";
 
 import styles from "./LifeRoad.module.css";
 import { RoadArrows } from "./RoadArrows";
@@ -48,20 +49,8 @@ const clamp = (value: number, low: number, high: number) => Math.max(low, Math.m
 /** The life road: the dasha periods as a road to travel along, the same length for everyone. */
 export function LifeRoad({ lang, t, labels, request, note }: Props) {
   const text = t.road;
-  const [journey, setJourney] = useState<Journey | null>(null);
-
-  useEffect(() => {
-    let current = true;
-    fetchJourney(request, lang)
-      .then((result) => {
-        if (current && result.journey) setJourney(result.journey);
-      })
-      // The rest of the hadahan stands without this section.
-      .catch(() => undefined);
-    return () => {
-      current = false;
-    };
-  }, [request, lang]);
+  const section = useSection(fetchJourney, request, lang);
+  const journey = section.status === "ready" ? section.value.journey : null;
 
   const road = useMemo(() => {
     if (!journey) return null;
@@ -75,7 +64,12 @@ export function LifeRoad({ lang, t, labels, request, note }: Props) {
     return withToday(base, text.today, line);
   }, [journey, labels, text]);
 
-  if (!journey || !road) return null;
+  if (section.status !== "ready") {
+    return (
+      <SectionState id="road" title={text.title} status={section.status} t={text.load} onRetry={section.retry} height="tall" />
+    );
+  }
+  if (!road) return null;
   return <RoadView lang={lang} t={t} labels={labels} road={road} note={note} />;
 }
 

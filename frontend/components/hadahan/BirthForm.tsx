@@ -12,6 +12,7 @@ import {
   type FormValues,
   fill,
   resolveTime,
+  todayIn,
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
@@ -38,6 +39,8 @@ type Props = {
   initial: FormValues;
   busy: boolean;
   error: string | null;
+  /** Set when the form's names could not be loaded: says so, with a way to ask again. */
+  onRetry?: () => void;
   onSubmit: (
     request: BirthRequest,
     values: FormValues,
@@ -53,7 +56,7 @@ type Props = {
   onChange?: (values: FormValues) => void;
 };
 
-export type FieldProblem = "latitude" | "longitude" | "timezone";
+export type FieldProblem = "date" | "latitude" | "longitude" | "timezone";
 
 /** The time zone in its standard spelling, or null when it is not a real zone name. */
 export function canonicalTimezone(name: string): string | null {
@@ -71,14 +74,23 @@ const inRange = (text: string, limit: number) => {
   return text.trim() !== "" && Number.isFinite(value) && Math.abs(value) <= limit;
 };
 
+/** Today where the birth was (or where the visitor is, until a place is given). */
+export const latestBirth = (values: FormValues, now?: Date) =>
+  todayIn(canonicalTimezone(values.manual ? values.timezone : (values.place?.timezone ?? "")) ?? undefined, now);
+
+/** A five digit year, which a date box allows, is longer than any real date. */
+const isFuture = (values: FormValues, now?: Date) =>
+  values.date.length > 10 || values.date > latestBirth(values, now);
+
 /**
- * Typed coordinates or time zone that cannot work, so each can be named beside its field
+ * A date still to come, or typed coordinates or time zone that cannot work, so each can be named beside its field
  * instead of one generic failure after submitting (QA report AST-06). Empty fields are not
  * problems here: the form asks for missing details separately.
  */
-export function fieldProblems(values: FormValues): FieldProblem[] {
-  if (!values.manual) return [];
+export function fieldProblems(values: FormValues, now?: Date): FieldProblem[] {
   const problems: FieldProblem[] = [];
+  if (values.date && isFuture(values, now)) problems.push("date");
+  if (!values.manual) return problems;
   if (values.latitude.trim() && !inRange(values.latitude, 90)) problems.push("latitude");
   if (values.longitude.trim() && !inRange(values.longitude, 180)) problems.push("longitude");
   if (values.timezone.trim() && !canonicalTimezone(values.timezone)) problems.push("timezone");
@@ -127,6 +139,7 @@ export function BirthForm({
   initial,
   busy,
   error,
+  onRetry,
   onSubmit,
   embedded,
   kendara,
@@ -148,6 +161,7 @@ export function BirthForm({
     place: `${uid}-place`,
   };
   const problemIds: Record<FieldProblem, string> = {
+    date: `${uid}-date-error`,
     latitude: `${uid}-lat-error`,
     longitude: `${uid}-lon-error`,
     timezone: `${uid}-tz-error`,
@@ -202,6 +216,7 @@ export function BirthForm({
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
+    if (busy || unknownTime) return;
     setChecked(true);
     const wrong = [...missingFields(values), ...fieldProblems(values)];
     const ready = toRequest(values);
@@ -262,12 +277,14 @@ export function BirthForm({
               className={styles.input}
               type="date"
               min="1800-01-01"
-              max="2200-12-31"
+              max={hydrated ? latestBirth(values) : undefined}
               required
               aria-invalid={invalid("date")}
+              aria-describedby={problems.includes("date") ? problemIds.date : undefined}
               value={values.date}
               onChange={(e) => set("date", e.target.value)}
             />
+            {problem("date")}
           </div>
           <div className={styles.field}>
             <label htmlFor={ids.time} className={styles.label}>
@@ -295,9 +312,13 @@ export function BirthForm({
           {f.unknownTime}
         </label>
         {unknownTime && (
-          <p className={styles.note} role="status">
-            {f.unknownTimeNote}
-          </p>
+          <div className={styles.note} role="status" data-unknown-time>
+            <p>{embedded ? f.unknownTimeShort : f.unknownTimeNote}</p>
+            <p className={styles.noteLinks}>
+              {!embedded && <Link href={`/${lang}/porondam?mode=stars`}>{f.unknownTimeStars}</Link>}
+              <Link href={`/${lang}/kendara`}>{f.unknownTimeOld}</Link>
+            </p>
+          </div>
         )}
 
         {values.manual ? (
@@ -386,6 +407,15 @@ export function BirthForm({
         {(missing.length > 0 || error) && (
           <p className={styles.error} role="alert">
             {missing.length > 0 ? fill(t.errors.missing, { fields: missing.map((field) => f[field]).join(", ") }) : error}
+          </p>
+        )}
+
+        {onRetry && (
+          <p className={styles.error} role="alert">
+            {t.errors.loading}{" "}
+            <button type="button" className={styles.linkButton} onClick={onRetry}>
+              {t.errors.retry}
+            </button>
           </p>
         )}
 

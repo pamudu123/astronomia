@@ -137,6 +137,20 @@ export async function fetchForecast(request: BirthRequest, lang: Locale): Promis
   );
 }
 
+/** Today as "YYYY-MM-DD" in a time zone, or where the visitor is when none is given. */
+export function todayIn(timezone?: string, now = new Date()): string {
+  const parts = new Intl.DateTimeFormat("en", {
+    timeZone: timezone,
+    calendar: "gregory",
+    numberingSystem: "latn",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(now);
+  const part = (type: string) => parts.find((item) => item.type === type)?.value ?? "";
+  return `${part("year")}-${part("month")}-${part("day")}`;
+}
+
 /** "{name}'s hadahan" with {name} filled in. */
 export function fill(template: string, values: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (match, key: string) =>

@@ -504,7 +504,8 @@ test("a saved hadahan's label goes when its live parts cannot be loaded", async 
   await page.route("**/api/v1/changes/personal", (route) => route.fulfill({ status: 503, body: "" }));
   await page.reload();
   await expect(page.locator('#periods [data-saved-time="frozen"]')).toBeVisible();
-  await expect(page.locator("#coming")).toBeHidden();
+  // Each part says it could not load and can be tried again, but nothing claims to be worked out.
+  await expect(page.locator("#coming").getByRole("button", { name: /^Try again/ })).toHaveCount(2);
   await expect(page.locator('[data-saved-time="live"]:visible')).toHaveCount(0);
 });
 
