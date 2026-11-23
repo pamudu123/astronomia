@@ -507,3 +507,60 @@ html[lang="si"] .assistant-theme .copilotKitAssistantMessage .cpk\:prose {
     bottom: calc(72px + 16px + env(safe-area-inset-bottom));
   }
 }
+
+/* Chat limits (docs/21): what is left under the input, the character counter, and the message
+   that takes the input's place while the next question has to wait. */
+.assistant-theme .sidera-limited {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.assistant-theme .sidera-limit-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 0.75rem 0.5rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.assistant-theme .sidera-counter {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.assistant-theme .sidera-counter[data-over] {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.assistant-theme .sidera-limit-note {
+  margin: 0;
+  padding: 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+.assistant-theme .sidera-limit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--panel-raised);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.assistant-theme .sidera-limit p {
+  margin: 0;
+}
+
+.assistant-theme .sidera-limit-kept {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}

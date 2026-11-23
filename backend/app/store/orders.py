@@ -407,6 +407,16 @@ class OrderStore:
         with self._connect() as db:
             return self._paid(db, user_id, kind, report_hash)
 
+    def paid_count(self, user_id: str) -> int:
+        """How many reports this account has paid for: each adds a chat allowance (docs/21)."""
+        with self._connect() as db:
+            (count,) = self._run(
+                db,
+                "SELECT COUNT(*) FROM {orders} WHERE user_id = ? AND status = 'paid'",
+                (user_id,),
+            ).fetchone()
+        return int(count)
+
     def void(self, order_id: str) -> bool:
         """Undoes an unlock (misuse): the report is no longer paid and the coupon use comes back."""
         with self._connect() as db:

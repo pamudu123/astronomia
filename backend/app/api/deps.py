@@ -10,6 +10,7 @@ from app.auth import SupabaseAdmin, TokenChecker
 from app.config import Settings, get_settings
 from app.geo.build import ensure_built
 from app.store.accounts import AccountStore, postgres_accounts, sqlite_accounts
+from app.store.chat import ChatStore, postgres_chat, sqlite_chat
 from app.store.orders import OrderStore, postgres_orders, sqlite_orders
 from app.store.shares import PostgresShareStore, ShareStore, Store
 
@@ -106,3 +107,22 @@ def order_store(settings: Annotated[Settings, Depends(get_settings)]) -> OrderSt
 
 
 Orders = Annotated[OrderStore, Depends(order_store)]
+
+
+@lru_cache
+def _sqlite_chat(path: Path) -> ChatStore:
+    return sqlite_chat(path)
+
+
+@lru_cache
+def _postgres_chat(url: str) -> ChatStore:
+    return postgres_chat(url)
+
+
+def chat_store(settings: Annotated[Settings, Depends(get_settings)]) -> ChatStore:
+    if settings.database_url:
+        return _postgres_chat(settings.database_url)
+    return _sqlite_chat(settings.chat_db)
+
+
+Chats = Annotated[ChatStore, Depends(chat_store)]

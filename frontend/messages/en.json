@@ -1381,6 +1381,27 @@
     }
   },
   "assistant": {
+    "limits": {
+      "freeStart": "{count} free questions this week",
+      "freeLeft": "{count} free questions left this week",
+      "freeOne": "1 free question left this week",
+      "paidLeft": "About {count} questions left",
+      "paidOne": "About 1 question left",
+      "paidAlmost": "Nearly used up",
+      "paidNear": "You've used most of the chat that came with your reports.",
+      "paidDone": "You've used the chat that came with your reports.",
+      "counter": "{count} / {max}",
+      "tooLong": "Please keep your message to {max} characters. Your text is kept: shorten it, then send.",
+      "free_used": "You've used this week's {limit} free questions. They come back on {date}. Get a full report to keep asking.",
+      "paid_used": "You've used the chat that came with your reports. Get another full report to keep asking. Your free questions come back on {date}.",
+      "busy": "Astro is very busy today, so free questions are paused until {date}. A full report comes with its own chat.",
+      "network": "Many free questions have come from your network this week. More come back on {date}. A full report comes with its own chat.",
+      "burst": "That's a lot of messages at once. Please wait a minute, then send yours.",
+      "account_day": "You've asked Astro a lot today. Your chat continues on {date}.",
+      "kept": "Your message is kept.",
+      "getReport": "Get the full report",
+      "later": "soon"
+    },
     "open": "Ask Astro",
     "title": "Astro",
     "note": "AI answers, based on what is on your screen. A guide, not a decision.",

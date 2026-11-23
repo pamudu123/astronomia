@@ -1,3 +1,4 @@
+import datetime as dt
 from pathlib import Path
 
 import pytest
@@ -7,6 +8,7 @@ from app.api import deps, saved
 from app.geo.build import build
 from app.main import create_app
 from app.store.accounts import AccountStore, sqlite_accounts
+from app.store.chat import ChatStore, sqlite_chat
 from app.store.orders import OrderStore, sqlite_orders
 from app.store.shares import ShareStore
 from tests import auth
@@ -54,6 +56,31 @@ def orders(tmp_path: Path) -> OrderStore:
     return sqlite_orders(tmp_path / "orders.sqlite")
 
 
+class Clock:
+    """A clock the test moves by hand."""
+
+    def __init__(self, now: dt.datetime) -> None:
+        self.now = now
+
+    def __call__(self) -> dt.datetime:
+        return self.now
+
+    def advance(self, **delta: float) -> None:
+        self.now += dt.timedelta(**delta)
+
+
+@pytest.fixture
+def clock() -> Clock:
+    # 10:00 in Sri Lanka on a Sunday.
+    return Clock(dt.datetime(2026, 11, 22, 4, 30, tzinfo=dt.UTC))
+
+
+@pytest.fixture
+def chats(tmp_path: Path, clock: Clock) -> ChatStore:
+    """A fresh chat usage store for each test, on the test's clock."""
+    return sqlite_chat(tmp_path / "chat.sqlite", clock)
+
+
 @pytest.fixture
 def client(
     places_db: Path,
@@ -61,12 +88,14 @@ def client(
     accounts: AccountStore,
     admin: FakeAdmin,
     orders: OrderStore,
+    chats: ChatStore,
 ) -> TestClient:
     app = create_app()
     app.dependency_overrides[deps.places_db] = lambda: places_db
     app.dependency_overrides[deps.share_store] = lambda: shares
     app.dependency_overrides[deps.account_store] = lambda: accounts
     app.dependency_overrides[deps.order_store] = lambda: orders
+    app.dependency_overrides[deps.chat_store] = lambda: chats
     limit = saved.RateLimit(30)
     app.dependency_overrides[saved.guest_limit] = lambda: limit
     tokens = auth.checker()  # stand-in Supabase keys (tests/auth.py)

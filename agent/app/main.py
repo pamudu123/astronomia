@@ -29,21 +29,32 @@ from app.memory import ExpiringMemorySaver, run_sweeper
 from app.security import AccessKeyMiddleware
 from app.suggest import build_suggester
 from app.tools import EngineClient, engine_tools
+from app.usage import ChatLimitMiddleware, Ledger
 
 AGENT_NAME = "guide"
 SUGGEST_NAME = "suggest"
 
 
 def create_app(
-    settings: Settings | None = None, *, explain_model: BaseChatModel | None = None
+    settings: Settings | None = None,
+    *,
+    explain_model: BaseChatModel | None = None,
+    model: BaseChatModel | None = None,
+    ledger: Ledger | None = None,
 ) -> FastAPI:
-    """`explain_model` can be swapped in tests."""
+    """`explain_model`, `model` (the guide's and the suggester's) and `ledger` (the backend's
+    chat endpoints) can be swapped in tests."""
     settings = settings or get_settings()
+    if settings.environment == "production" and not settings.chat_key.get_secret_value():
+        # Without it anyone who reaches this service could chat without limits (docs/21).
+        raise RuntimeError("ASTRONOMIA_AGENT_CHAT_KEY is required in production")
     engine = EngineClient(settings.backend_url, settings.backend_access_key.get_secret_value())
     # Each graph keeps its conversations in memory, deleted after a fixed idle time.
     idle = dt.timedelta(minutes=settings.conversation_idle_minutes)
     memories = (ExpiringMemorySaver(idle), ExpiringMemorySaver(idle))
-    graph = build_agent(settings, engine_tools(engine), checkpointer=memories[0])
+    graph = build_agent(settings, engine_tools(engine), model=model, checkpointer=memories[0])
+    if ledger is None and settings.chat_key.get_secret_value():
+        ledger = Ledger(settings)
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -55,6 +66,8 @@ def create_app(
             with contextlib.suppress(asyncio.CancelledError):
                 await sweeper
             await engine.aclose()
+            if ledger is not None:
+                await ledger.aclose()
 
     app = FastAPI(
         title="Astronomia Agent",
@@ -63,6 +76,10 @@ def create_app(
         lifespan=lifespan,
     )
     app.state.memories = memories
+    # Added first so it runs inside the access key check: a request without the key never
+    # reaches the backend.
+    if ledger is not None:
+        app.add_middleware(ChatLimitMiddleware, ledger=ledger)
     if key := settings.access_key.get_secret_value():
         app.add_middleware(AccessKeyMiddleware, key=key)
 
@@ -86,7 +103,7 @@ def create_app(
         LangGraphAGUIAgent(
             name=SUGGEST_NAME,
             description="Writes the follow-up questions shown under each answer.",
-            graph=build_suggester(settings, checkpointer=memories[1]),
+            graph=build_suggester(settings, model=model, checkpointer=memories[1]),
             emit_raw_events=False,
         ),
         "/agent/suggest",
