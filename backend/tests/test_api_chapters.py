@@ -1,16 +1,19 @@
 """The AI chapters kept with a paid report, and the free and paid PDFs (docs/17, section 6a)."""
 
 import io
+import json
+from pathlib import Path
 from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
 from pypdf import PdfReader
 
+from app.reports.chapter_titles import CHAPTER_TITLES
 from app.store.chapters import ChapterStore
 from app.store.orders import OrderStore
 from tests.test_api_paid import paid_reports, sign_in, unlock
-from tests.test_api_saved import hadahan, porondam
+from tests.test_api_saved import hadahan, porondam, save
 
 KEY = {"X-Chat-Key": "server-key"}
 
@@ -144,7 +147,89 @@ def test_the_pdf_prints_the_kept_words_not_the_browsers(client: TestClient) -> N
     printed, _ = pdf_text(client, {**hadahan(), "reading": reading})
     assert "The words that were kept." in printed
     assert "Words changed in the browser." not in printed
-    assert "Not kept yet." in printed
+    assert "Not kept yet." not in printed
+
+
+def test_the_pdf_prints_every_kept_chapter_in_order_without_being_sent_any(
+    client: TestClient,
+) -> None:
+    sign_in(client)
+    unlock(client, "pamudu")
+    keep(client, "Words on travel.", "chart.abroad")
+    keep(client, "Words on nature.", "chart.nature")
+    keep(client, "සිංහල.", "chart.love", language="si")  # another language's stay out
+    printed, _ = pdf_text(client, hadahan())
+    assert printed.index("Words on nature.") < printed.index("Words on travel.")
+    assert "Travel and going abroad" in printed
+    assert "Love and marriage" not in printed
+
+
+def test_the_match_pdf_prints_its_kept_chapters(client: TestClient) -> None:
+    sign_in(client)
+    unlock(client, "pamudu", porondam())
+    keep(client, "Words on the match.", "match.summary", report=porondam())
+    printed, _ = pdf_text(client, porondam())
+    assert "Words on the match." in printed
+
+
+def test_where_nothing_can_be_kept_the_pdf_prints_what_the_page_shows(client: TestClient) -> None:
+    """A local run with no server key."""
+    sign_in(client)
+    unlock(client, "pamudu")
+    paid_reports(client, chat_key="")
+    reading = [{"id": "chart.work", "title": "Work and money", "text": "Page words."}]
+    assert "Page words." in pdf_text(client, {**hadahan(), "reading": reading})[0]
+
+
+def test_the_page_is_told_whether_the_report_keeps_its_chapters(client: TestClient) -> None:
+    def keeps() -> bool:
+        body = {"report": hadahan(), "language": "en"}
+        return bool(client.post("/v1/reports/chapters", json=body).json()["keeps"])
+
+    sign_in(client)
+    assert keeps() is False
+    unlock(client, "pamudu")
+    assert keeps() is True
+    paid_reports(client, chat_key="")
+    assert keeps() is False
+
+
+def test_deleting_the_saved_report_deletes_its_chapters_only(
+    client: TestClient, chapters: ChapterStore
+) -> None:
+    sign_in(client)
+    chart = unlock(client, "pamudu").json()["order"]["id"]
+    match = unlock(client, "pamudu", porondam()).json()["order"]["id"]
+    keep(client, "Gone soon.")
+    keep(client, "සිංහල.", language="si")
+    keep(client, "Stays.", "match.summary", report=porondam())
+    item = save(client, hadahan(), status=200)["id"]  # unlocking saved it
+
+    # Another account cannot delete them.
+    owner = client.headers["authorization"]
+    sign_in(client)
+    assert client.delete(f"/v1/saved/{item}").status_code == 404
+    assert chapters.kept(chart, "en") == {"chart.work": "Gone soon."}
+
+    client.headers["authorization"] = owner
+    assert client.delete(f"/v1/saved/{item}").status_code == 204
+    assert chapters.kept(chart, "en") == {}
+    assert chapters.kept(chart, "si") == {}
+    assert chapters.kept(match, "en") == {"match.summary": "Stays."}
+    # Still paid for, so it can be written again.
+    assert keep(client, "New words.").json() == {"text": "New words."}
+
+
+def test_chapter_titles_are_the_websites() -> None:
+    messages = Path(__file__).resolve().parents[2] / "frontend" / "messages"
+    for lang in ("en", "si"):
+        words = json.loads((messages / f"{lang}.json").read_text(encoding="utf-8"))
+        theirs = {
+            chapter: title
+            for chapter, title in words["assistant"]["explain"]["chapters"].items()
+            if chapter.startswith(("chart.", "match."))
+        }
+        assert theirs == {chapter: titles[lang] for chapter, titles in CHAPTER_TITLES.items()}
 
 
 def test_the_free_pdf_shows_what_the_free_page_shows(client: TestClient) -> None:
@@ -169,6 +254,7 @@ def test_the_free_pdf_shows_what_the_free_page_shows(client: TestClient) -> None
 
     sign_in(client)
     unlock(client, "pamudu")
+    keep(client, "AI words.")
     full, full_pages = pdf_text(client, {**hadahan(), "reading": reading})
     assert full_pages > pages
     for shown in ("PREMIUM BIRTH CHART REPORT", "AI words.", "In this report", "The 12 houses"):

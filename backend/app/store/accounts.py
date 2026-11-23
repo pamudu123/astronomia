@@ -429,6 +429,16 @@ class AccountStore:
             )
             return bool(cursor.rowcount)
 
+    def order_of(self, user_id: str, report_id: str) -> str | None:
+        """The order that paid for a saved report, if it is this account's and paid."""
+        with self._connect() as db:
+            row = self._run(
+                db,
+                "SELECT purchase_id FROM {saved_reports} WHERE user_id = ? AND id = ?",
+                (user_id, report_id),
+            ).fetchone()
+        return None if row is None or row[0] is None else self._read_id(row[0])
+
     def delete_saved(self, user_id: str, report_id: str) -> bool:
         with self._connect() as db:
             cursor = self._run(

@@ -543,11 +543,16 @@ def delete_saved(
     report_id: uuid.UUID,
     session: Current,
     accounts: Accounts,
+    chapters: Chapters,
     settings: SettingsDep,
     response: Response,
 ) -> None:
-    """Deletes one saved report."""
+    """Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the
+    same report can be opened and read again."""
     user_id = _owned(session)
+    order_id = accounts.order_of(user_id, str(report_id))
+    if order_id is not None:
+        chapters.forget_order(order_id, user_id)
     if not accounts.delete_saved(user_id, str(report_id)):
         raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_FOUND, headers=PRIVATE)
     _set_hint(response, settings, accounts.count_saved(user_id))

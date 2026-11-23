@@ -744,7 +744,8 @@ export interface paths {
         post?: never;
         /**
          * Delete Saved
-         * @description Deletes one saved report.
+         * @description Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the
+         *     same report can be opened and read again.
          */
         delete: operations["delete_saved_v1_saved__report_id__delete"];
         options?: never;
@@ -1309,6 +1310,8 @@ export interface components {
             chapters: {
                 [key: string]: string;
             };
+            /** Keeps */
+            keeps: boolean;
         };
         /** ChartOut */
         ChartOut: {
