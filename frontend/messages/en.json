@@ -953,7 +953,7 @@
       {
         "title": "Children",
         "body": [
-          "Sidera is for adults aged 18 or over. A parent or legal guardian may use the child tools, such as first letters, for their own child. A child's name is never needed, and child results are never sent to the AI."
+          "Sidera is for adults aged 18 or over. A parent or legal guardian may use the child tools, such as first letters, for their own child. We ask for the guardian's consent first, and record only that it was given and when. A child's name is never needed. Child results are not saved, are never sent to the AI and have no share link. A guardian can withdraw consent by leaving the box unticked, or later by contacting us."
         ]
       },
       {
@@ -1301,7 +1301,7 @@
     "metaTitle": "Baby name letters by birth star (nakatha) · Sidera",
     "metaDescription": "Find the starting letter for a baby's name from the birth time: nakatha, pada, Moon sign and lagna, with the letters for all 27 stars in Sinhala and English.",
     "formTitle": "Letters from the birth time",
-    "formLead": "The Moon's star and pada at the moment of birth give the letter. Birth details stay in this browser tab and are not saved.",
+    "formLead": "The Moon's star and pada at the moment of birth give the letter. Birth details are used for this result and are not saved.",
     "submit": "Find the letters",
     "working": "Working out the letters",
     "useSaved": "Use the saved birth details",
@@ -1370,6 +1370,15 @@
       "note": "Names come from Wikipedia's Sinhalese given names, or were added by us with a person on Wikipedia who has the name. The spellings and meanings are provisional until a native speaker checks them. A long and a short vowel count as the same letter."
     }
   },
+  "guardian": {
+    "consent": {
+      "babyNames": "I am this child's parent or legal guardian and consent to Sidera using these birth details to work out the name letters.",
+      "firstLetters": "I am this child's parent or legal guardian and consent to Sidera using these birth details to find first letters ceremony times."
+    },
+    "note": "The details are used only for this result. They are not saved, shared or sent to the AI. We record that consent was given and when, without the birth details. Untick the box to withdraw it before sending; to withdraw later, see the privacy page.",
+    "privacy": "Privacy",
+    "error": "Tick this box to continue. A parent or legal guardian has to agree first."
+  },
   "firstLetters": {
     "eyebrow": "අකුරු කියවීම",
     "title": "First letters ceremony nakath",
@@ -1382,7 +1391,7 @@
       "star": "Birth star only"
     },
     "formTitle": "The child's birth details",
-    "formLead": "The birth star is worked out from these. They stay in this browser tab and are not saved.",
+    "formLead": "The birth star is worked out from these. They are used for this result and are not saved.",
     "useDetails": "Use these details",
     "useSaved": "Use the saved birth details",
     "useSavedNamed": "Use the birth details for {name}",
@@ -1624,8 +1633,6 @@
         "match.wedding": "Wedding dates",
         "nakath.day": "What kind of day it is",
         "avurudu.times": "The Avurudu timetable",
-        "names.letters": "The name letters",
-        "names.first": "Choosing a time",
         "changes.mine": "What this change means for you",
         "yearly.mine": "Your year ahead",
         "kendara.dates": "Possible birth dates"
@@ -1749,7 +1756,7 @@
         "What is erashtaka?"
       ],
       "babyNames": [
-        "Which letter should the name start with?",
+        "How does a birth star give a name letter?",
         "Show me some names"
       ],
       "firstLetters": [

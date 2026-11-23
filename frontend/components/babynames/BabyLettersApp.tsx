@@ -5,16 +5,12 @@ import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { NextSteps } from "@/components/NextSteps";
+import { GuardianConsent, useGuardianConsent } from "@/components/guardian/GuardianConsent";
 import { BirthForm, EMPTY_FORM, type FormValues } from "@/components/hadahan/BirthForm";
 import { type BabyLetters, fetchBabyLetters } from "@/lib/babynames";
 import { type BirthRequest, fill, loadResult } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
-
-import { AiExplain } from "@/components/assistant/Explain";
-import { useAssistantContext } from "@/components/assistant/PageContext";
-import { PAGE_PLACES } from "@/lib/assistant/explain";
-import { babyLettersContext } from "@/lib/assistant/pages";
 
 import styles from "./BabyNames.module.css";
 import { NameSuggestions } from "./NameSuggestions";
@@ -23,31 +19,34 @@ import { PadaCards } from "./PadaCards";
 type Props = {
   t: Dictionary["babyNames"];
   hadahan: Dictionary["hadahan"];
+  guardian: Dictionary["guardian"];
   lang: Locale;
   /** Next steps under the letters. */
   next?: Dictionary["next"];
 };
 
-/** Birth details in, the birth star, pada and starting letters out. */
-export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
+/**
+ * Birth details in, the birth star, pada and starting letters out. The details are a child's:
+ * nothing is sent without a guardian's consent, and the AI never sees the result (docs/09).
+ */
+export function BabyLettersApp({ t, hadahan, guardian, lang, next }: Props) {
   const hydrated = useHydrated();
   const [form, setForm] = useState<FormValues>(EMPTY_FORM);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [clock, setClock] = useState(false);
   const [result, setResult] = useState<BabyLetters | null>(null);
-  // What the AI assistant sees: this result, with no birth details.
-  const context = result ? babyLettersContext(result, lang) : null;
-  useAssistantContext(context);
+  const consent = useGuardianConsent();
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
 
   async function run(request: BirthRequest) {
+    if (!consent.check()) return;
     setBusy(true);
     setError(null);
     setClock(false);
     try {
-      const answer = await fetchBabyLetters(request, lang);
+      const answer = await fetchBabyLetters(request, lang, true);
       if (answer.status === "ok") setResult(answer);
       else setClock(true);
     } catch {
@@ -67,7 +66,6 @@ export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
         <h2 id="baby-result-title" className={`display ${styles.sectionTitle}`}>
           {t.letter}
         </h2>
-        <AiExplain chapters={PAGE_PLACES.babyLetters} lang={lang} facts={context} />
         <div className={styles.answer}>
           <div className={styles.bigLetter} data-letter={result.letter.letter}>
             <span className={`sinhala ${styles.letter}`} lang="si">
@@ -148,7 +146,14 @@ export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
           <Link href={`/${lang}/baby-names/${chart.star}`} className="btn btn-outline lift">
             {fill(t.starTitle, { star: chart.star_name })}
           </Link>
-          <button type="button" className={styles.linkButton} onClick={() => setResult(null)}>
+          <button
+            type="button"
+            className={styles.linkButton}
+            onClick={() => {
+              setResult(null);
+              consent.reset();
+            }}
+          >
             {t.again}
           </button>
         </div>
@@ -175,6 +180,7 @@ export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
 
   return (
     <section className={styles.panel} data-card="baby-form">
+      <GuardianConsent t={guardian} lang={lang} tool="babyNames" consent={consent} />
       {saved && (
         <div className={styles.actions}>
           <button
@@ -193,6 +199,8 @@ export function BabyLettersApp({ t, hadahan, lang, next }: Props) {
         initial={form}
         busy={busy}
         error={error}
+        askName={false}
+        lookUpTime={consent.given}
         embedded={{ title: t.formTitle, lead: t.formLead, submit: t.submit, working: t.working }}
         onSubmit={(request, values) => {
           setForm(values);

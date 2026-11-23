@@ -2,14 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import { combine } from "@/components/assistant/Assistant";
 import { pageKey } from "@/lib/assistant/context";
-import type { BabyLetters } from "@/lib/babynames";
 import type { Hadahan, Labels, Place } from "@/lib/hadahan";
 import type { KendaraResult } from "@/lib/kendara";
 import type { Avurudu, Panchanga } from "@/lib/nakath";
 import type { Wedding } from "@/lib/wedding";
 import {
   avuruduContext,
-  babyLettersContext,
   chartContext,
   chartReadingContext,
   dayContext,
@@ -18,7 +16,6 @@ import {
   weddingSearchContext,
 } from "@/lib/assistant/pages";
 
-import baby from "../e2e/fixtures/baby-birth-en.json";
 import hadahan from "../e2e/fixtures/hadahan-en.json";
 import avurudu2027London from "../e2e/fixtures/avurudu-2027-london-en.json";
 import avurudu2028 from "../e2e/fixtures/avurudu-2028-colombo-en.json";
@@ -227,15 +224,6 @@ describe("other pages", () => {
     expect(official.source).toBe(data.source);
     expect(official.times).toHaveLength(data.items.length);
     expect(official.times[0].custom).toBe(data.items[0].name);
-  });
-
-  it("shares a baby's star and letter but no birth details", () => {
-    const result = baby as unknown as BabyLetters;
-    const context = babyLettersContext(result, "en");
-    const text = JSON.stringify(context);
-    expect(context.page).toBe("baby_names_result");
-    expect(text).toContain(result.letter!.letter);
-    expect(text).not.toContain(String((result.time as unknown as Record<string, unknown>).local).slice(0, 10));
   });
 
   it("shares only how many old-horoscope birth times fit, not the times", () => {

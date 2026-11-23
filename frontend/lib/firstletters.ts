@@ -21,9 +21,12 @@ export type Child =
   | { mode: "full"; request: BirthRequest }
   | { mode: "star"; nakshatra: string; pada: number; birthDate?: string };
 
-export type FirstLettersOptions = { months: Months; placeId?: number };
+export type FirstLettersOptions = { months: Months; placeId?: number; guardianConsent: boolean };
 
-/** The child's birth details go in the body of a POST, never in the URL. */
+/**
+ * The child's birth details go in the body of a POST, never in the URL. The backend refuses
+ * them, and a birth date, without a guardian's consent.
+ */
 export async function fetchFirstLetters(child: Child, options: FirstLettersOptions, lang: Locale): Promise<FirstLetters> {
   const body =
     child.mode === "full"
@@ -37,6 +40,7 @@ export async function fetchFirstLetters(child: Child, options: FirstLettersOptio
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
       ...body,
+      ...(options.guardianConsent ? { guardian_consent: true } : {}),
       months: options.months,
       ...(options.placeId ? { place_id: options.placeId } : {}),
       lang,

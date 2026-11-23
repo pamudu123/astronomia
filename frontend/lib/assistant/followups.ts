@@ -65,8 +65,6 @@ const ABOUT_THEIR_OWN = [
 const OWN_RESULTS = new Set([
   "chart_result",
   "match_result",
-  "baby_names_result",
-  "first_letters_result",
   "wedding_dates_result",
   "planet_change_personal",
   "year_ahead_personal",

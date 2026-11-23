@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { GuardianConsent, useGuardianConsent } from "@/components/guardian/GuardianConsent";
 import { BirthForm, EMPTY_FORM, type FormValues } from "@/components/hadahan/BirthForm";
 import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
 import { type Child, type FirstLetters, MONTHS, type Months, fetchFirstLetters } from "@/lib/firstletters";
@@ -12,11 +13,6 @@ import { NAKSHATRA } from "@/lib/nakshatra";
 import { failureText } from "@/lib/request";
 import { useHydrated } from "@/lib/useHydrated";
 
-import { AiExplain } from "@/components/assistant/Explain";
-import { useAssistantContext } from "@/components/assistant/PageContext";
-import { PAGE_PLACES } from "@/lib/assistant/explain";
-import { firstLettersContext } from "@/lib/assistant/pages";
-
 import styles from "./FirstLetters.module.css";
 import { FirstLettersGate } from "./FirstLettersGate";
 
@@ -24,10 +20,14 @@ type Props = {
   lang: Locale;
   t: Dictionary["firstLetters"];
   hadahan: Dictionary["hadahan"];
+  guardian: Dictionary["guardian"];
 };
 
-/** Good dates and times for a child's first letters. Searches only when asked. */
-export function FirstLettersFinder({ lang, t, hadahan }: Props) {
+/**
+ * Good dates and times for a child's first letters. Searches only when asked. The child's birth
+ * details are not sent without a guardian's consent, and the AI never sees the result (docs/09).
+ */
+export function FirstLettersFinder({ lang, t, hadahan, guardian }: Props) {
   const hydrated = useHydrated();
   const [mode, setMode] = useState<"full" | "star">("full");
   const [form, setForm] = useState<FormValues>(EMPTY_FORM);
@@ -41,9 +41,9 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FirstLetters | null>(null);
-  // What the AI assistant sees: this result, with no birth details.
-  const context = result ? firstLettersContext(result, lang) : null;
-  useAssistantContext(context);
+  const consent = useGuardianConsent();
+  // A birth star alone does not say when the child was born; a birth date does.
+  const needsConsent = mode === "full" || birthDate !== "";
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
 
@@ -59,10 +59,11 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
       setError(t.needChild);
       return;
     }
+    if (needsConsent && !consent.check()) return;
     setBusy(true);
     setError(null);
     try {
-      const answer = await fetchFirstLetters(found, { months, placeId: place?.id }, lang);
+      const answer = await fetchFirstLetters(found, { months, placeId: place?.id, guardianConsent: needsConsent }, lang);
       if (answer.status === "ok") setResult(answer);
       else setError(t.clock);
     } catch (caught) {
@@ -94,10 +95,18 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
           ))}
         </div>
 
+        {mode === "full" && <GuardianConsent t={guardian} lang={lang} tool="firstLetters" consent={consent} />}
         {mode === "full" && child?.mode === "full" && (
           <div className={styles.child} data-child="full">
             <span>{childText}</span>
-            <button type="button" className={styles.option} onClick={() => setChild(null)}>
+            <button
+              type="button"
+              className={styles.option}
+              onClick={() => {
+                setChild(null);
+                consent.reset();
+              }}
+            >
               {t.change}
             </button>
           </div>
@@ -110,6 +119,7 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
                   type="button"
                   className="btn btn-outline lift"
                   onClick={() => {
+                    if (!consent.check()) return;
                     setChild({ mode: "full", request: saved.request });
                     setChildText(saved.name ? fill(t.savedNamed, { name: saved.name }) : t.saved);
                   }}
@@ -124,8 +134,11 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
               initial={form}
               busy={false}
               error={null}
+              askName={false}
+              lookUpTime={consent.given}
               embedded={{ title: t.formTitle, lead: t.formLead, submit: t.useDetails, working: t.useDetails }}
               onSubmit={(request, values, placeText) => {
+                if (!consent.check()) return;
                 setForm(values);
                 setChild({ mode: "full", request });
                 setChildText(fill(t.childSummary, { date: values.date, time: values.time, place: placeText }));
@@ -166,6 +179,9 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
             </label>
           </div>
         )}
+        {mode === "star" && needsConsent && (
+          <GuardianConsent t={guardian} lang={lang} tool="firstLetters" consent={consent} />
+        )}
       </section>
 
       <section className={styles.panel} aria-labelledby="first-letters-title" data-card="first-letters">
@@ -202,7 +218,6 @@ export function FirstLettersFinder({ lang, t, hadahan }: Props) {
 
         {result?.place && result.first && result.last && (
           <div className={styles.ceremony} data-card="first-letters-result">
-            <AiExplain chapters={PAGE_PLACES.firstLetters} lang={lang} facts={context} />
             <p className={styles.small}>
               {result.child && fill(t.forChild, { star: result.child.star_name })}{" "}
               {fill(t.rangeText, {

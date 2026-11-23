@@ -51,6 +51,10 @@ type Props = {
   notice?: string;
   /** Called as the values change, so a page can keep a draft. */
   onChange?: (values: FormValues) => void;
+  /** False where no name is needed (the child tools). */
+  askName?: boolean;
+  /** False keeps the birth details in the browser until submitted: no time zone lookup. */
+  lookUpTime?: boolean;
 };
 
 export type FieldProblem = "latitude" | "longitude" | "timezone";
@@ -132,6 +136,8 @@ export function BirthForm({
   kendara,
   notice,
   onChange,
+  askName = true,
+  lookUpTime = true,
 }: Props) {
   const hydrated = useHydrated();
   // Unique per form, so two forms on a page (or a page kept alive after navigation)
@@ -181,13 +187,13 @@ export function BirthForm({
   const requestKey = request ? JSON.stringify(request) : "";
 
   useEffect(() => {
-    if (!requestKey) return;
+    if (!requestKey || !lookUpTime) return;
     const controller = new AbortController();
     resolveTime(JSON.parse(requestKey) as BirthRequest, controller.signal)
       .then((result) => setOffset(result.offset_label ?? null))
       .catch(() => setOffset(null));
     return () => controller.abort();
-  }, [requestKey]);
+  }, [requestKey, lookUpTime]);
 
   useEffect(() => {
     onChange?.(values);
@@ -237,20 +243,22 @@ export function BirthForm({
           </p>
         )}
 
-        <div className={styles.field}>
-          <label htmlFor={ids.name} className={styles.label}>
-            {f.name}
-          </label>
-          <input
-            id={ids.name}
-            className={styles.input}
-            type="text"
-            autoComplete="off"
-            maxLength={60}
-            value={values.name}
-            onChange={(e) => set("name", e.target.value)}
-          />
-        </div>
+        {askName && (
+          <div className={styles.field}>
+            <label htmlFor={ids.name} className={styles.label}>
+              {f.name}
+            </label>
+            <input
+              id={ids.name}
+              className={styles.input}
+              type="text"
+              autoComplete="off"
+              maxLength={60}
+              value={values.name}
+              onChange={(e) => set("name", e.target.value)}
+            />
+          </div>
+        )}
 
         <div className={styles.pair}>
           <div className={styles.field}>

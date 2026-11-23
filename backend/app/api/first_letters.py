@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field, model_validator
 from app.api.birth import resolve_birth
 from app.api.charts import EPHEMERIS
 from app.api.deps import PlacesDb
+from app.api.guardian import MISSING, record_consent
 from app.api.panchanga import LocalTimeOut, offset_label, time_out
 from app.api.porondam import FullPerson, PorondamResponse, QuickPerson, _person
 from app.api.timeresolve import TimeResolveResponse
@@ -47,6 +48,8 @@ class FirstLettersRequest(BaseModel):
     child: FullPerson | QuickPerson
     # Needed for the child's age when only the birth star is given.
     birth_date: dt.date | None = None
+    # A parent or guardian agreed. Needed for birth details or a birth date, not a star alone.
+    guardian_consent: bool = False
     # Where the ceremony takes place: its sunrise and lagna. Colombo when not given.
     place_id: int | None = None
     latitude: float | None = Field(default=None, gt=-90, lt=90)
@@ -55,6 +58,16 @@ class FirstLettersRequest(BaseModel):
     months: Literal[1, 3, 6] = 3
     as_of: dt.date | None = None  # the first day to search; today when not given (for tests)
     lang: Lang = "en"
+
+    @property
+    def has_birth_details(self) -> bool:
+        return isinstance(self.child, FullPerson) or self.birth_date is not None
+
+    @model_validator(mode="after")
+    def guardian_agreed(self) -> Self:
+        if self.has_birth_details and not self.guardian_consent:
+            raise ValueError(MISSING)
+        return self
 
     @model_validator(mode="after")
     def one_place(self) -> Self:
@@ -156,6 +169,8 @@ def _count(units: dict[str, str], n: int) -> str:
 @router.post("/v1/first-letters", response_model=FirstLettersResponse)
 def first_letters(body: FirstLettersRequest, db: PlacesDb, _: Access) -> FirstLettersResponse:
     """Good dates and times for a child's first letters, from the child's birth star."""
+    if body.has_birth_details:
+        record_consent("first_letters", body.lang)
     found = _person(body.child, db, "bride")
     if isinstance(found, PorondamResponse):
         return FirstLettersResponse(status=found.status, time=found.time)

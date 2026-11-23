@@ -2,6 +2,7 @@
 
 import datetime as dt
 import json
+import logging
 import zoneinfo
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,7 @@ from fastapi.testclient import TestClient
 
 from app.api.charts import EPHEMERIS
 from app.api.first_letters import first_letters_access
+from app.api.guardian import WORDING
 from app.engine.ephemeris import julian_day
 from app.engine.first_letters import _day, age_on, check, find_dates, load_rules
 from app.engine.panchanga import Place, day_panchanga
@@ -161,7 +163,13 @@ CHILD = {"date": "2023-05-10", "time": "08:15", "place_id": KANDY}
 def test_the_finder_for_a_child(client: TestClient) -> None:
     body = client.post(
         "/v1/first-letters",
-        json={"child": CHILD, "months": 1, "as_of": "2026-07-01", "lang": "en"},
+        json={
+            "child": CHILD,
+            "guardian_consent": True,
+            "months": 1,
+            "as_of": "2026-07-01",
+            "lang": "en",
+        },
     ).json()
     assert body["status"] == "ok"
     assert (body["rule_set"], body["provisional"]) == ("first_letters_si_v1", True)
@@ -205,6 +213,7 @@ def test_an_age_outside_the_usual_range_gets_a_note(client: TestClient) -> None:
         json={
             "child": {"nakshatra": "ashwini", "pada": 1},
             "birth_date": "2026-01-01",
+            "guardian_consent": True,
             "months": 1,
             "as_of": "2026-07-01",
         },
@@ -248,6 +257,27 @@ def test_bad_requests(client: TestClient) -> None:
     )
 
 
+def test_birth_details_need_a_guardians_consent(
+    client: TestClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    star = {"child": {"nakshatra": "ashwini", "pada": 1}, "months": 1, "as_of": "2026-07-01"}
+    details: list[dict[str, Any]] = [{"child": CHILD}, {"birth_date": "2023-05-10"}]
+    with caplog.at_level(logging.INFO, logger="astronomia.consent"):
+        for detail in details:
+            body = {**star, **detail}
+            assert client.post("/v1/first-letters", json=body).status_code == 422
+            refused = client.post("/v1/first-letters", json={**body, "guardian_consent": False})
+            assert refused.status_code == 422
+        # A birth star alone says nothing about when the child was born.
+        assert client.post("/v1/first-letters", json=star).status_code == 200
+        agreed = client.post(
+            "/v1/first-letters", json={**star, "child": CHILD, "guardian_consent": True}
+        )
+    assert agreed.status_code == 200
+    consent = [r.getMessage() for r in caplog.records if r.name == "astronomia.consent"]
+    assert consent == [f"guardian consent tool=first_letters wording={WORDING} lang=en"]
+
+
 def test_locking_the_finder_leaves_the_letters_open(client: TestClient) -> None:
     def locked() -> None:
         raise HTTPException(402, "paid feature")
@@ -262,6 +292,7 @@ def test_locking_the_finder_leaves_the_letters_open(client: TestClient) -> None:
 def search_for(client: TestClient, **changes: Any) -> dict[str, Any]:
     body = {
         "child": {"nakshatra": "ashwini", "pada": 1},
+        "guardian_consent": True,
         "months": 1,
         "as_of": "2026-07-01",
         **changes,
