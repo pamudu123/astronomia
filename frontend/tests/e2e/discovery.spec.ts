@@ -213,3 +213,111 @@ for (const lang of ["en", "si"]) {
     await expect(page.locator(`main a[href="/${lang}/nakath/2101-01-01"]`)).toHaveCount(0);
   });
 }
+
+const MISSING = {
+  en: { title: "This page could not be found.", tab: "Page not found · Sidera", language: "Language" },
+  si: { title: "මෙම පිටුව සොයාගත නොහැක.", tab: "පිටුව හමු නොවීය · Sidera", language: "භාෂාව" },
+};
+
+for (const lang of ["en", "si"] as const) {
+  for (const path of ["/nope", "/nope/deeper", "/plans"]) {
+    test(`an unknown address (/${lang}${path}) is not found inside the site`, async ({ page }) => {
+      const response = await page.goto(`/${lang}${path}`);
+      expect(response?.status()).toBe(404);
+      await expect(page.locator("html")).toHaveAttribute("lang", lang);
+      await expect(page).toHaveTitle(MISSING[lang].tab);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(MISSING[lang].title);
+      const main = page.locator("main");
+      for (const to of ["hadahan", "porondam", "tools"]) {
+        await expect(main.locator(`a[href="/${lang}/${to}"]`)).toBeVisible();
+      }
+      await expect(page.getByRole("group", { name: MISSING[lang].language })).toBeVisible();
+      await expect(page.locator("footer")).toBeVisible();
+    });
+  }
+
+  test(`a bad address under a real page is not found inside the site, in ${lang}`, async ({ page }) => {
+    for (const path of ["/litha/2026-13", "/porondam/stars/nope", "/forecast/1800"]) {
+      await page.goto(`/${lang}${path}`);
+      await expect(page.locator("html")).toHaveAttribute("lang", lang);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(MISSING[lang].title);
+      await expect(page.locator(`main a[href="/${lang}/tools"]`)).toBeVisible();
+    }
+  });
+}
+
+test("the not found page keeps a saved theme", async ({ page }) => {
+  await page.goto("/en");
+  await page.evaluate(() => localStorage.setItem("sidera-theme", "dark"));
+  await page.goto("/en/nope");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
+test("an unknown first part is not found inside the site, in the visitor's language", async ({ page }) => {
+  await page.goto("/nope");
+  await expect(page).toHaveURL(/\/en\/nope$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(MISSING.en.title);
+  await page.goto("/si");
+  await page.getByRole("group", { name: "භාෂාව" }).getByRole("link", { name: "සිංහල" }).click();
+  await page.goto("/nope");
+  await expect(page).toHaveURL(/\/si\/nope$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(MISSING.si.title);
+});
+
+for (const path of ["/nope.html", "/nope.html/deeper"]) {
+  test(`an address with a dot (${path}) is not found inside the site, in English`, async ({ page }) => {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(404);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(MISSING.en.title);
+    await expect(page.locator('main a[href="/en/tools"]')).toBeVisible();
+  });
+}
+
+const TITLES = {
+  en: { hadahan: "Hadahan: your Sri Lankan birth chart · Sidera", porondam: "Porondam: marriage matching from two charts · Sidera" },
+  si: { hadahan: "හඳහන: ඔබේ උපන් කේන්දරය · Sidera", porondam: "පොරොන්දම්: විවාහයට කේන්දර ගැළපීම · Sidera" },
+};
+
+for (const lang of ["en", "si"] as const) {
+  for (const tool of ["hadahan", "porondam"] as const) {
+    test(`/${lang}/${tool} has its own title, description and addresses`, async ({ page }) => {
+      await page.goto(`/${lang}/${tool}`);
+      await expect(page).toHaveTitle(TITLES[lang][tool]);
+      await expect(page.locator('meta[name="description"]')).not.toHaveAttribute("content", /worked out precisely and explained/);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/${lang}/${tool}$`));
+      for (const other of ["si", "en"]) {
+        const alternate = page.locator(`link[rel="alternate"][hreflang="${other}"]`);
+        await expect(alternate).toHaveAttribute("href", new RegExp(`/${other}/${tool}$`));
+      }
+    });
+  }
+}
+
+test("text links and the example arrows have a 44px hit area on a phone", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "tap targets are for phones");
+  const targets = [
+    ["/en/forecast/2027", 'main a[href="/en/changes"]'],
+    ["/en/avurudu/2027", 'main a[href="/en/avurudu"]'],
+    ["/en/porondam/stars/rohini", 'main a[href="/en/porondam/stars"]'],
+    ["/en/baby-names/rohini", 'main a[href="/en/baby-names"]'],
+    ["/en/why-sidera", "figure button >> nth=0"],
+    ["/en/why-sidera", "figure button >> nth=1"],
+  ];
+  for (const [path, selector] of targets) {
+    await page.goto(path);
+    const target = page.locator(selector).first();
+    await target.evaluate((node) => node.scrollIntoView({ block: "center" }));
+    // What a finger 21px above, below or beside the middle lands on.
+    const hits = await target.evaluate((node) => {
+      const box = node.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      return [[0, -21], [0, 21], [-21, 0], [21, 0]].map(([dx, dy]) => {
+        const hit = document.elementFromPoint(x + dx, y + dy);
+        return hit !== null && node.contains(hit);
+      });
+    });
+    expect(hits, `${path} ${selector}`).toEqual([true, true, true, true]);
+  }
+});

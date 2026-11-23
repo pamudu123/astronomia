@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { forwardedHeaders } from "@/lib/forward";
-import { hasLocale, pickLocale } from "@/lib/i18n";
+import { LANGUAGE_COOKIE, hasLocale, preferredLocale } from "@/lib/i18n";
 import { stagingAllowed } from "@/lib/staging";
 
 const NOINDEX = "noindex, nofollow";
@@ -22,7 +22,8 @@ const SHARE_HEADERS: Record<string, string> = {
 /**
  * 1. On a private staging site, ask for the staging password first.
  * 2. Calls to /api go on to the backend, with the visitor's sign in and the backend's access key.
- * 3. Every page lives under /si or /en. Anything else is sent to the visitor's language.
+ * 3. Every page lives under /si or /en. Anything else is sent to the visitor's language
+ *    (the one last chosen, else the browser's).
  * 4. Share pages get private headers (SHARE_HEADERS).
  */
 export function proxy(request: NextRequest) {
@@ -55,7 +56,10 @@ export function proxy(request: NextRequest) {
     return response;
   }
 
-  const locale = pickLocale(request.headers.get("accept-language"));
+  const locale = preferredLocale(
+    request.cookies.get(LANGUAGE_COOKIE)?.value,
+    request.headers.get("accept-language"),
+  );
   request.nextUrl.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
   return NextResponse.redirect(request.nextUrl);
 }

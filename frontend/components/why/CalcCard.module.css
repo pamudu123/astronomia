@@ -300,3 +300,18 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+
+/* The arrows are drawn at 28px. An unseen box around each gives a finger 44px. */
+.arrow {
+  position: relative;
+}
+
+.arrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}

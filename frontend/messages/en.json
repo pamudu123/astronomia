@@ -11,7 +11,6 @@
     "hadahan": "Hadahan",
     "porondam": "Porondam",
     "how": "Why Sidera",
-    "plans": "Plans",
     "tools": "All tools",
     "more": "More",
     "language": "Language",
@@ -238,12 +237,14 @@
     "changes": "Planet changes",
     "signIn": "Already saved? Sign in"
   },
-  "soon": {
-    "title": "Coming soon",
-    "text": "This part of the site is being built.",
-    "back": "Back to home"
+  "notFound": {
+    "metaTitle": "Page not found · Sidera",
+    "title": "This page could not be found.",
+    "text": "The address may be mistyped, or the page may have moved. You can carry on from here."
   },
   "hadahan": {
+    "metaTitle": "Hadahan: your Sri Lankan birth chart · Sidera",
+    "metaDescription": "Make your hadahan from your date, time and place of birth: lagna, rashi, nakatha, the nine planets, your kendara and your life periods, in Sinhala or English.",
     "form": {
       "eyebrow": "හඳහන",
       "title": "Tell us when and where you were born",
@@ -448,6 +449,8 @@
     }
   },
   "porondam": {
+    "metaTitle": "Porondam: marriage matching from two charts · Sidera",
+    "metaDescription": "Match two people's porondam from their birth details or birth stars. See each factor with its reason, with Rajju, Vedha and Kuja dosha shown on their own.",
     "form": {
       "eyebrow": "පොරොන්දම්",
       "title": "Match two charts",
