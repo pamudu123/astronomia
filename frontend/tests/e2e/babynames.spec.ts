@@ -192,3 +192,52 @@ test("names in Sinhala", async ({ page }) => {
   await expect(names.locator('[data-name="Kusal"]')).toContainText("Merit, wholesome deeds");
   await noSidewaysScroll(page);
 });
+
+test("names from an earlier filter go away when the next one fails, and come back when it works (A-10)", async ({ page }) => {
+  await mockBackend(page, "en");
+  let girls: "slow" | "fail" | "ok" = "fail";
+  let release = () => {};
+  await page.route("**/api/v1/baby/names?*gender=girl*", async (route) => {
+    if (girls === "fail") return route.fulfill({ status: 500, body: "down" });
+    if (girls === "slow") await new Promise<void>((resolve) => (release = resolve));
+    return route.fallback();
+  });
+  await page.goto("/en/baby-names/krittika");
+  const names = page.locator('[data-card="names"]');
+  const list = names.locator("[data-name]");
+  const girl = names.getByRole("button", { name: "Girl", exact: true });
+  await expect(list).toHaveCount(26);
+
+  await girl.click();
+  await expect(names.getByRole("alert")).toBeVisible();
+  await expect(girl).toHaveAttribute("aria-pressed", "true");
+  await expect(list).toHaveCount(0);
+  await expect(names).not.toContainText("26 names");
+
+  // Back to a filter that works, then Girl again: slow this time. The old names stay, marked.
+  await names.getByRole("button", { name: "All", exact: true }).click();
+  await expect(list).toHaveCount(26);
+  await expect(names.getByRole("alert")).toHaveCount(0);
+  girls = "slow";
+  await girl.click();
+  await expect(names.locator("ul")).toHaveAttribute("aria-busy", "true");
+  await expect(names).toContainText("Finding names");
+  await expect(names).not.toContainText("26 names");
+  release();
+  await expect(list).toHaveCount(7);
+  await expect(names).toContainText("7 names");
+  await expect(names.locator("ul")).toHaveAttribute("aria-busy", "false");
+});
+
+test("an answer with no names says so, and the earlier ones are gone (A-10)", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.route("**/api/v1/baby/names?*gender=girl*", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify({ letters: [], names: [] }) }),
+  );
+  await page.goto("/en/baby-names/krittika");
+  const names = page.locator('[data-card="names"]');
+  await expect(names.locator("[data-name]")).toHaveCount(26);
+  await names.getByRole("button", { name: "Girl", exact: true }).click();
+  await expect(names.locator("[data-name]")).toHaveCount(0);
+  await expect(names).toContainText("No names in our list");
+});

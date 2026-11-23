@@ -52,7 +52,8 @@ export type RoadStop = {
 
 export type Road = {
   birth: number; // ms
-  today: number; // age now
+  now: number; // age now; negative before the birth, and it can be past the road's end
+  today: number; // where the road opens: the age now, kept on the road
   last: number; // the furthest age the road can be travelled to
   periods: RoadPeriod[];
   subs: RoadSub[];
@@ -128,6 +129,7 @@ export function buildRoad(journey: Journey): Road {
   const last = stops.length ? stops[stops.length - 1].y : ROAD_YEARS - 4;
   return {
     birth,
+    now: age(journey.now),
     today: clamp(age(journey.now), 0, last),
     last,
     periods,
@@ -139,9 +141,12 @@ export function buildRoad(journey: Journey): Road {
   };
 }
 
-/** Adds the "you are here" stop, unless today is past the end of the road. */
+/** Is today a place on the road? Not before the birth, nor past the last stop. */
+export const hasToday = (road: Road) => road.now >= 0 && road.now < road.last;
+
+/** Adds the "you are here" stop, when today is on the road. */
 export function withToday(road: Road, title: string, text: string): Road {
-  if (road.today >= road.last) return road;
+  if (!hasToday(road)) return road;
   const tone = periodAt(road, road.today).tone;
   const today: RoadStop = { kind: "today", y: road.today, tone, lord: null, title, text, helps: null };
   const stops = [...road.stops, today].sort((a, b) => a.y - b.y);

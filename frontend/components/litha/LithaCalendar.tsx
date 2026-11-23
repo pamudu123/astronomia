@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { formatMonthYear } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
-import { type MonthPanchanga, shiftMonth } from "@/lib/nakath";
+import { type MonthPanchanga, hasLithaMonth, shiftMonth } from "@/lib/nakath";
 
 import styles from "./Litha.module.css";
 import { LithaMonth } from "./LithaMonth";
@@ -30,16 +30,27 @@ type Props = {
 /** The litha: one month of nakath in a calendar (a list on phones). */
 export function LithaCalendar({ lang, t, month, today, data }: Props) {
   const current = today.slice(0, 7);
+  const before = shiftMonth(month, -1);
+  const after = shiftMonth(month, 1);
   return (
     <>
       <nav className={styles.monthNav} aria-label={t.indexTitle}>
-        <Link href={`/${lang}/litha/${shiftMonth(month, -1)}`} rel="prev">
-          ← {t.previous}
-        </Link>
+        {/* An empty span keeps the other links in their places at either end of the calendar. */}
+        {hasLithaMonth(before) ? (
+          <Link href={`/${lang}/litha/${before}`} rel="prev">
+            ← {t.previous}
+          </Link>
+        ) : (
+          <span />
+        )}
         {month !== current && <Link href={`/${lang}/litha`}>{t.thisMonth}</Link>}
-        <Link href={`/${lang}/litha/${shiftMonth(month, 1)}`} rel="next">
-          {t.next} →
-        </Link>
+        {hasLithaMonth(after) ? (
+          <Link href={`/${lang}/litha/${after}`} rel="next">
+            {t.next} →
+          </Link>
+        ) : (
+          <span />
+        )}
       </nav>
       {/* Keyed by month, so moving to another month starts from that month's server answer. */}
       <LithaMonth key={month} lang={lang} t={t} month={month} today={today} initial={data} />

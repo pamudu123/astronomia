@@ -122,3 +122,22 @@ test("without a remembered chart the home page shows no welcome", async ({ page 
   await expect(page.getByRole("heading", { name: "Everyday tools" })).toBeVisible();
   await expect(page.locator('[data-card="your-sky"]')).toHaveCount(0);
 });
+
+for (const lang of ["en", "si"]) {
+  test(`the litha and the daily nakath end at 1900 and 2100, with no links past them, in ${lang} (A-05)`, async ({ page }) => {
+    const nav = (rel: string) => page.locator(`main a[rel="${rel}"]`);
+    await page.goto(`/${lang}/litha/1900-01`);
+    await expect(nav("next")).toHaveAttribute("href", `/${lang}/litha/1900-02`);
+    await expect(nav("prev")).toHaveCount(0);
+    await page.goto(`/${lang}/litha/2100-12`);
+    await expect(nav("prev")).toHaveAttribute("href", `/${lang}/litha/2100-11`);
+    await expect(nav("next")).toHaveCount(0);
+
+    await page.goto(`/${lang}/nakath/1900-01-01`);
+    await expect(page.locator(`main a[href="/${lang}/nakath/1900-01-02"]`)).toBeVisible();
+    await expect(page.locator(`main a[href="/${lang}/nakath/1899-12-31"]`)).toHaveCount(0);
+    await page.goto(`/${lang}/nakath/2100-12-31`);
+    await expect(page.locator(`main a[href="/${lang}/nakath/2100-12-30"]`)).toBeVisible();
+    await expect(page.locator(`main a[href="/${lang}/nakath/2101-01-01"]`)).toHaveCount(0);
+  });
+}

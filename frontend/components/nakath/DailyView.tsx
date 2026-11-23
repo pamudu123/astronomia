@@ -9,7 +9,7 @@ import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
 import { type Place, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { failureText } from "@/lib/request";
-import { COLOMBO, type Panchanga, type PanchangaPart, type PlaceChoice, fetchPanchanga } from "@/lib/nakath";
+import { COLOMBO, type Panchanga, type PanchangaPart, type PlaceChoice, fetchPanchanga, hasNakathDay } from "@/lib/nakath";
 
 import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
@@ -114,8 +114,8 @@ export function DailyView({ lang, t, day, initial }: Props) {
       </form>
 
       <div className={styles.links}>
-        <Link href={`/${lang}/nakath/${shift(day, -1)}`}>{t.previous}</Link>
-        <Link href={`/${lang}/nakath/${shift(day, 1)}`}>{t.next}</Link>
+        {hasNakathDay(shift(day, -1)) && <Link href={`/${lang}/nakath/${shift(day, -1)}`}>{t.previous}</Link>}
+        {hasNakathDay(shift(day, 1)) && <Link href={`/${lang}/nakath/${shift(day, 1)}`}>{t.next}</Link>}
       </div>
 
       {!shown ? (

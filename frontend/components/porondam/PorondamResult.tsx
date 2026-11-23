@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { SavedTime, type SavedTimes } from "@/components/account/SavedTime";
 import { AiExplain, FullReading } from "@/components/assistant/Explain";
 import { useAssistantContext, useExplainText } from "@/components/assistant/PageContext";
 import { ArrowRight } from "@/components/Icons";
@@ -57,6 +58,8 @@ type Props = {
   timeline?: Dictionary["porondam"]["timeline"];
   /** Text for the couple's road. That section needs the request too, with both birth times. */
   road?: CoupleRoadText;
+  /** Only on a saved match: labels the parts that are worked out today. */
+  savedTimes?: SavedTimes;
   /** Text for the wedding nakath finder. Needs the request too. */
   wedding?: Dictionary["porondam"]["wedding"];
   /** Next steps under the match. Left out on shared pages. */
@@ -77,6 +80,7 @@ export function PorondamResult({
   request,
   timeline,
   road,
+  savedTimes,
   wedding,
   next,
   onAgain,
@@ -377,6 +381,7 @@ export function PorondamResult({
           brideName={nameOf(bride, f.bride)}
           groomName={nameOf(groom, f.groom)}
           explain={yearsFacts && <AiExplain chapters={MATCH_PLACES.years} lang={lang} facts={yearsFacts} />}
+          note={<SavedTime times={savedTimes} part="live" />}
         />
       )}
 
@@ -389,6 +394,7 @@ export function PorondamResult({
           request={request}
           brideName={nameOf(bride, f.bride)}
           groomName={nameOf(groom, f.groom)}
+          note={<SavedTime times={savedTimes} part="live" />}
         />
       )}
 

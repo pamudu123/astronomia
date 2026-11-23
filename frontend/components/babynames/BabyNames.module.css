@@ -394,3 +394,8 @@
   align-self: flex-start;
   font-size: 13px;
 }
+
+/* The names from before the last filter change, while the new ones load. */
+.namesBefore {
+  opacity: 0.45;
+}

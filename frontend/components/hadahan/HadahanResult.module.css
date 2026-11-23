@@ -233,8 +233,8 @@
   scroll-margin-top: 72px;
 }
 
-/* A part whose cards all failed to load shows nothing, not a lone heading. */
-.group:not(:has(> :not(h2))) {
+/* A part whose cards all failed to load shows nothing, not a lone heading (or its saved label). */
+.group:not(:has(> :not(h2, [data-saved-time]))) {
   display: none;
 }
 

@@ -10,6 +10,7 @@ import { PorondamResult } from "@/components/porondam/PorondamResult";
 import { type SavedDetail, birthOf, getSaved, matchOf } from "@/lib/account";
 import { type Labels, fetchLabels, fill, formatDate } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
+import { SRI_LANKA, todayIn } from "@/lib/nakath";
 
 import styles from "./MyReports.module.css";
 import { savedTitle } from "./MyReportsApp";
@@ -70,6 +71,12 @@ export function SavedReportApp({ lang, id, dict }: Props) {
 
   const { saved, labels } = view;
   const request = saved.request;
+  const savedDay = formatDate(saved.created_at, lang);
+  // Some parts are kept from the day it was saved, others are worked out as the page opens.
+  const times = {
+    frozen: fill(t.frozen, { date: savedDay }),
+    live: fill(t.live, { date: formatDate(todayIn(SRI_LANKA), lang) }),
+  };
 
   return (
     <>
@@ -77,11 +84,14 @@ export function SavedReportApp({ lang, id, dict }: Props) {
         <aside className={`rise ${styles.banner}`} data-saved-banner>
           <span className={styles.pill}>{t.banner}</span>
           <span>{savedTitle(saved, dict)}</span>
-          <span className="soft">{fill(t.savedOn, { date: formatDate(saved.created_at, lang) })}</span>
+          <span className="soft">{fill(t.savedOn, { date: savedDay })}</span>
           <span className={styles.spacer} />
           <Link href={`/${lang}/my`} className={styles.back}>
             {t.back}
           </Link>
+          <p className={styles.bannerNote} data-saved-note>
+            {request.kind === "hadahan" ? t.savedNoteHadahan : t.savedNotePorondam}
+          </p>
         </aside>
       </div>
 
@@ -97,6 +107,7 @@ export function SavedReportApp({ lang, id, dict }: Props) {
           placeText={saved.hadahan_result.place}
           share={dict.share}
           request={birthOf(request.birth)}
+          savedTimes={times}
         />
       )}
       {saved.porondam_result && request.kind === "porondam" && (
@@ -109,6 +120,7 @@ export function SavedReportApp({ lang, id, dict }: Props) {
           share={dict.share}
           request={matchOf(request.match)}
           timeline={dict.porondam.timeline}
+          savedTimes={times}
           road={{ text: dict.porondam.road, words: dict.hadahan.result.road }}
         />
       )}
