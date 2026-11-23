@@ -235,7 +235,7 @@ Same privacy rule as the chat: **no names, birth dates, birth times or birth pla
 - **The design** (`backend/app/reports/`): diagrams drawn from the person's own results (`visuals.py`), then one chapter a page, each with its picture, its short answer, its diagram and its parts tinted like the page. Artwork is in `backend/app/reports/art/`. Images still to be made: `docs/22-report-images.md`.
 - **The same diagrams on the website**, under each reading chapter (`components/assistant/ChapterDiagram.tsx`). Which chapter shows which is one table on each side, kept in step: `CHAPTER_VISUAL` in `frontend/lib/assistant/visuals.ts` and in `backend/app/reports/render.py`.
 
-**Before this goes live:** apply `supabase/migrations/20261123090000_report_chapters.sql` before deploying the backend. The PDF and account deletion need its table. The privacy notice must say that a paid report's AI chapters are stored, and that the device keeps AI text for 30 days (owner: later).
+**Database:** `supabase/migrations/20261123030734_report_chapters.sql`, applied to staging on 2026-11-23. Apply it to production before deploying the backend there: the PDF and account deletion need its table. The privacy notice must say that a paid report's AI chapters are stored, and that the device keeps AI text for 30 days (owner: later).
 
 ## 7. Build steps
 
