@@ -204,5 +204,8 @@ def test_pg_cron_runs_it_every_day_on_supabase() -> None:
     assert name == "sidera-delete-idle-guests"
     assert when.split()[2:] == ["*", "*", "*"]  # every day
     assert command == "select sidera.delete_idle_guests()"
-    # Only where pg_cron is there, so plain PostgreSQL (CI) can run the migrations too.
-    assert "pg_available_extensions where name = 'pg_cron'" in sql
+    # Only where pg_cron is already switched on (in the Supabase dashboard), so plain PostgreSQL
+    # (CI) can run the migrations too. The migration must not create the extension itself: on
+    # Supabase that re-runs Supabase's own set-up and fails (supabase/README.md).
+    assert "pg_extension where extname = 'pg_cron'" in sql
+    assert "create extension" not in sql.lower()
