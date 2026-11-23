@@ -468,3 +468,31 @@
   border-radius: 18px;
   background: var(--night-raised);
 }
+
+/* A text link is one line tall. An unseen box around it gives a finger at least 44px. */
+.links a,
+.card > a,
+.event h2 a,
+.linkButton {
+  position: relative;
+}
+
+.links a::after,
+.card > a::after,
+.event h2 a::after,
+.linkButton::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
+/* Wrapped links are far enough apart that their boxes do not overlap. */
+@media (max-width: 640px) {
+  .links {
+    row-gap: 20px;
+  }
+}

@@ -6,15 +6,23 @@ export function hasLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }
 
-/** The same page in another language: swaps the first path segment. */
-export function switchLocalePath(pathname: string, to: Locale): string {
+/** The same page in another language: swaps the first path segment. `tail` is its query and hash. */
+export function switchLocalePath(pathname: string, to: Locale, tail = ""): string {
   const parts = pathname.split("/");
   if (parts.length > 1 && hasLocale(parts[1])) {
     parts[1] = to;
-    return parts.join("/") || `/${to}`;
+    return parts.join("/") + tail;
   }
   const rest = pathname === "/" ? "" : pathname;
-  return `/${to}${rest}`;
+  return `/${to}${rest}${tail}`;
+}
+
+/** Holds the language last chosen with the language switch, so the site root opens in it. */
+export const LANGUAGE_COOKIE = "sidera_lang";
+
+/** The language for an address without one: the remembered choice, else what the browser asks for. */
+export function preferredLocale(remembered: string | undefined, acceptLanguage: string | null | undefined): Locale {
+  return remembered !== undefined && hasLocale(remembered) ? remembered : pickLocale(acceptLanguage);
 }
 
 /**

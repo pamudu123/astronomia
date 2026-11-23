@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { hasLocale, pickLocale, switchLocalePath } from "@/lib/i18n";
+import { hasLocale, pickLocale, preferredLocale, switchLocalePath } from "@/lib/i18n";
 import en from "@/messages/en.json";
 import si from "@/messages/si.json";
 
@@ -13,6 +13,13 @@ describe("switchLocalePath", () => {
   it("adds a language when the path has none", () => {
     expect(switchLocalePath("/", "si")).toBe("/si");
     expect(switchLocalePath("/porondam", "en")).toBe("/en/porondam");
+  });
+
+  it("keeps the query and hash", () => {
+    const tail = "?bride=anuradha.2&groom=rohini.1#result";
+    expect(switchLocalePath("/en/porondam", "si", tail)).toBe(`/si/porondam${tail}`);
+    expect(switchLocalePath("/si", "en", "?a=1")).toBe("/en?a=1");
+    expect(switchLocalePath("/", "si", "#top")).toBe("/si#top");
   });
 });
 
@@ -29,6 +36,19 @@ describe("pickLocale", () => {
 
   it("keeps English when it is ranked first", () => {
     expect(pickLocale("en-GB,en;q=0.9,si;q=0.5")).toBe("en");
+  });
+});
+
+describe("preferredLocale", () => {
+  it("puts the remembered language before the browser's", () => {
+    expect(preferredLocale("si", "en-GB,en;q=0.9")).toBe("si");
+    expect(preferredLocale("en", "si-LK,si;q=0.9")).toBe("en");
+  });
+
+  it("goes by the browser when nothing usable is remembered", () => {
+    expect(preferredLocale(undefined, "si-LK")).toBe("si");
+    expect(preferredLocale("ta", "si-LK")).toBe("si");
+    expect(preferredLocale("", null)).toBe("en");
   });
 });
 

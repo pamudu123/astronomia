@@ -249,3 +249,18 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* A text link is one line tall. An unseen box around it gives a finger at least 44px. */
+.back {
+  position: relative;
+}
+
+.back::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
