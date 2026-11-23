@@ -19,6 +19,7 @@ import {
   saveSession,
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
+import { holdInView } from "@/lib/holdInView";
 import { useHydrated } from "@/lib/useHydrated";
 import {
   PORONDAM_KEY,
@@ -155,14 +156,11 @@ function PorondamForm({
   const toWedding = forWedding && view.kind === "result" && labels !== null;
   useEffect(() => {
     if (!toWedding) return;
-    const frame = requestAnimationFrame(() => {
-      const title = document.getElementById("wedding-title");
-      if (!title) return;
-      title.tabIndex = -1;
-      title.focus({ preventScroll: true });
-      title.scrollIntoView({ block: "start" });
-    });
-    return () => cancelAnimationFrame(frame);
+    const title = document.getElementById("wedding-title");
+    if (!title) return;
+    title.tabIndex = -1;
+    title.focus({ preventScroll: true });
+    return holdInView(title);
   }, [toWedding]);
 
   async function run(request: PorondamRequest) {

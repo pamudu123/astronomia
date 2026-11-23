@@ -415,6 +415,16 @@ test("the wedding card in All tools leads to the wedding dates, through the matc
   await page.goto("/en/tools");
   await page.locator('[data-tool="wedding"]').click();
   await expect(title).toBeInViewport();
+  await expect(title).toBeFocused();
+  // It stays there while the page settles, and lets go when the visitor scrolls.
+  await page.waitForTimeout(700);
+  await expect(title).toBeInViewport();
+  await page.evaluate(() => {
+    window.dispatchEvent(new WheelEvent("wheel"));
+    window.scrollTo(0, 0);
+  });
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
 });
 
 test("the match page without the wedding link opens at the top, with no wedding note", async ({ page }) => {
