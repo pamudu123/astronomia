@@ -23,7 +23,8 @@ test("the terms page in Sinhala, marked for review", async ({ page }) => {
   await page.goto("/si/terms");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("භාවිත නියම");
   await expect(page.getByRole("heading", { name: "මඟපෙන්වීමක් සඳහා පමණයි" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "සම්පූර්ණ වාර්තා සහ කූපන්" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "සුරැකූ වාර්තා, සම්පූර්ණ වාර්තා සහ කූපන්" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Astro කතාබහ" })).toBeVisible();
   await expect(page.getByText(/නීතිඥයකු සහ සිංහල භාෂා සමාලෝචකයකු/)).toBeVisible();
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "පෞද්ගලිකත්වය" })).toBeVisible();
 });

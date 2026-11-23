@@ -816,7 +816,7 @@
   },
   "legal": {
     "draft": "Draft: to be reviewed before the site goes public.",
-    "updated": "Last updated: 22 November 2026",
+    "updated": "Last updated: 23 November 2026",
     "contactTodo": "A contact address will be added here before launch."
   },
   "privacy": {
@@ -831,7 +831,7 @@
       {
         "icon": "nothing",
         "title": "Nothing kept by default",
-        "text": "A chart or a match is worked out and shown to you. A copy is kept only if you press Save, unlock a full report or create a share link."
+        "text": "A chart or a match is worked out and shown to you. A copy is kept only if you press Save, unlock a full report or create a share link. Free saved reports are deleted after 7 days."
       },
       {
         "icon": "share",
@@ -864,17 +864,19 @@
       {
         "title": "Saved reports and your account",
         "body": [
-          "When you first press Save, this browser signs in to Supabase as a guest. A guest account is an id with no email, name or password. Supabase keeps that sign in in this browser's storage, not in a cookie. Our server also sets one small cookie, sidera_saved, that only shows the My reports link; it holds no id.",
-          "A saved report keeps the result in Sinhala and English, with the details it was made from (names, birth date, time and place), so you can open it, download it and share it again. A guest can keep up to 100 saved reports.",
-          "You can continue with Google to open your reports on another device or to get a full report. Supabase then keeps what Google shares at sign in: your Google account id, email address, name and picture address, and when you signed in. The site shows your email in My reports. Our server reads only your account id and whether you are a guest.",
+          "When you first press Save, this browser signs in to Supabase as a guest. A guest account is an id with no email, name or password. Supabase keeps that sign in in this browser's storage, not in a cookie.",
+          "A saved report keeps the result in Sinhala and English, with the details it was made from (names, birth date, time and place), so you can open it, download it and share it again.",
+          "A report you save without the full report is a free report. It is kept for 7 days from when you saved it and then deleted automatically, within an hour after its 7 days. Saving it again does not restart the 7 days. You can keep up to 20 free reports at a time, and you can delete them sooner in My reports.",
+          "A full report is kept until you delete it or your account. If you get the full report for a free report you saved, it stops expiring and is kept the same way.",
+          "You can continue with Google to open your reports on another device or to get a full report. Supabase then keeps what Google shares at sign in: your Google account id, email address, name and picture address, and when you signed in. The site shows your email in My reports. Our server reads only your account id and whether you are a guest. Free reports in a Google account are still deleted after 7 days.",
           "If you continue with Google on a browser that has guest reports, they move to your Google account. If that Google account already has reports from another device, the guest's reports join them and the guest account is deleted.",
-          "Saved reports stay until you delete them. Clearing this browser's data signs a guest out for good: the reports stay on our server but this browser can no longer open them, so continue with Google first if you want to keep them."
+          "A guest account with nothing saved, no order and no use for 7 days is deleted automatically, once a day. Clearing this browser's data signs a guest out for good: its reports can no longer be opened from this browser, so continue with Google first if you want to keep them."
         ]
       },
       {
         "title": "Full reports and coupons",
         "body": [
-          "A full report needs Google sign in and is kept in your account. Payment is not available yet: for now a full report can be unlocked only with a coupon code that makes it free.",
+          "A full report needs Google sign in and is kept in your account until you delete it or your account. Payment is not available yet: for now a full report can be unlocked only with a coupon code that makes it free.",
           "When a coupon unlocks a report, we keep an order record: the kind of report, its price, the coupon, the amount paid and the time. Instead of the birth details it holds a one-way fingerprint of them, which cannot be turned back into the details. If you delete your account, the order record stays with no link to you.",
           "We note the time of each wrong coupon code, to stop guessing. These notes are deleted with your account."
         ]
@@ -882,9 +884,10 @@
       {
         "title": "Sharing",
         "body": [
-          "When you create a share link, a copy of that result is kept in Sinhala and English, with the birth date, time and place line, and the names unless you choose to hide them. Even with names hidden, a birth date, time and place can identify someone.",
-          "Anyone who has the link can read and forward what it shows. The link code and its delete code are kept only as hashes, a one-way scramble that cannot be turned back into the codes.",
-          "A share link closes after 30 days and is then deleted. The browser that made it keeps the delete code, so you can delete the link sooner with Delete this link.",
+          "When you create a share link, a copy of that result is kept in Sinhala and English. Names and birth details (date, time, place, time zone and coordinates) are left out unless you switch them on, and what you leave out is removed before the copy is stored. A match link never includes birth details.",
+          "Before you create the link, the Share dialog shows every field the other person will see. Even with names and birth details hidden, the chart itself (planet positions, the lagna and the life period dates) can let someone who knows astrology work out roughly when and where a person was born.",
+          "Anyone who has the link can read and forward what it shows. The link's preview in messaging apps never shows names. Share pages ask search engines not to list them, and ask browsers not to store them or pass their address on. The link code and its delete code are kept only as hashes, a one-way scramble that cannot be turned back into the codes.",
+          "A share link closes after 30 days and is then deleted. The browser that made it keeps the delete code, so you can delete the link sooner with Delete this link, but only on that device.",
           "Deleting a saved report does not delete its share links; delete each link too. Deleting a link cannot take back screenshots or downloads someone already made."
         ]
       },
@@ -893,16 +896,20 @@
         "body": [
           "Your last result is kept in this browser tab, so a reload does not lose it. It is cleared when the tab closes.",
           "If you tick Remember my chart on this device, that chart is kept in this browser until you press Forget. It is never kept on our servers.",
+          "When you press I understand on the AI notice, this browser remembers it so the notice does not show again.",
+          "Cookies: sidera_saved, set when you save, only shows the My reports link and holds no id; it lasts up to a year. sidera_chat, set when you ask Astro a question, holds a random id that counts this browser's free questions; it lasts up to a year. sidera_chat_turn links the suggested follow-up questions to the question just asked; it lasts 30 minutes. All three are needed for the site to work, and there are no other cookies.",
           "Other people who use this device may see what it keeps."
         ]
       },
       {
         "title": "The AI helper",
         "body": [
-          "When you ask Astro a question or press an Explain button, our AI server sends the chart facts on the page and your message to OpenAI, which writes the answer.",
+          "Before anything goes to the AI, the site shows a short notice. Nothing is sent until you press I understand.",
+          "When you ask Astro a question or press an Explain button, our AI server sends the chart facts on the page and your message to OpenAI, which writes the answer. AI is switched off for child results.",
           "Sidera does not add names, birth dates, birth times or places of birth to what it sends. Your own message can include them, and chart facts can point to a person in context. Please leave out names, children's details, contact details and sensitive information about yourself or anyone else.",
           "We ask OpenAI not to store the answers. Under OpenAI's API terms, what we send is not used to train its models, but OpenAI may keep it in abuse-monitoring records for up to 30 days.",
-          "Our AI server keeps the conversation only in its memory, so it can follow up on your questions. It is never written to disk or to a database, and it is lost when that server restarts. Our logs do not hold message text.",
+          "Our AI server keeps the conversation only in its memory, so it can follow up on your questions. It is never written to disk or to a database, and it is deleted after 30 minutes without a new message, or sooner if the server restarts. Our logs do not hold message text.",
+          "For each question you ask Astro, we keep when it was asked, how much text (tokens) the answer used and what it cost. We never keep your questions or Astro's answers. For free questions this record is linked to the random id in the sidera_chat cookie and to a scrambled form of your network address that cannot be turned back into the address, and it is deleted after 8 days. For questions that use the chat that came with a full report, it is linked to your account and deleted when you delete your account.",
           "AI explanations can be wrong. Sidera never uses them to make a decision about you."
         ]
       },
@@ -910,7 +917,7 @@
         "title": "Logs",
         "body": [
           "The servers record each request's method, page path, result code and time taken. Share codes are hidden in the path. Logs never hold names, birth details, AI messages or anything you typed.",
-          "The companies that host the site see network details such as IP addresses. We use IP addresses only in memory, to limit misuse."
+          "The companies that host the site see network details such as IP addresses. We use IP addresses in memory to limit misuse. To limit how many free Astro questions can be asked from one network, we keep only a scrambled form of the address, for 8 days."
         ]
       },
       {
@@ -922,7 +929,7 @@
       {
         "title": "Who runs the site",
         "body": [
-          "Vercel serves the pages. Render runs the calculations and the AI server, in Singapore. Supabase runs the database (saved reports, share links, accounts and orders) and sign in, also in Singapore. OpenAI writes the AI answers; its systems may run in the United States and other countries. Google handles Google sign in.",
+          "Vercel serves the pages. Render runs the calculations and the AI server, in Singapore. Supabase runs the database (saved reports, share links, accounts, orders and chat usage) and sign in, also in Singapore. OpenAI writes the AI answers; its systems may run in the United States and other countries. Google handles Google sign in.",
           "Fonts and pictures come from the site itself. Your browser talks to Supabase for sign in and saved reports, and to Google only when you continue with Google.",
           "We share information with these services only to run the site, or where the law requires it."
         ]
@@ -930,7 +937,7 @@
       {
         "title": "Children",
         "body": [
-          "Sidera is for adults aged 18 or over. A parent or legal guardian may use the child tools, such as first letters, for their own child. A child's name is never needed."
+          "Sidera is for adults aged 18 or over. A parent or legal guardian may use the child tools, such as first letters, for their own child. A child's name is never needed, and child results are never sent to the AI."
         ]
       },
       {
@@ -976,7 +983,14 @@
       {
         "title": "AI explanations",
         "body": [
-          "AI explanations are marked as such and can contain mistakes of fact, interpretation or translation. Please check anything important against the calculated result."
+          "Before anything goes to the AI, the site shows a notice, and nothing is sent until you agree. AI explanations are marked as such and can contain mistakes of fact, interpretation or translation. Please check anything important against the calculated result."
+        ]
+      },
+      {
+        "title": "Astro chat",
+        "body": [
+          "Anyone can ask Astro 2 free questions a week on a browser, the week starting at the first question. Each full report adds a chat allowance of about 20 questions, measured by how much the answers use. It is kept until used and has no cash value.",
+          "To keep the chat fair and its cost in hand, there is also a limit per network, a daily limit per account and a limit of 1,000 characters a message, and free questions may pause on very busy days. These limits may change."
         ]
       },
       {
@@ -996,14 +1010,14 @@
         "title": "Your reports",
         "body": [
           "What you enter stays yours. We use it only to give you the features you ask for, as the privacy page describes.",
-          "You may save, print and share your reports privately, with family or an adviser, when you have any permission needed. Sidera keeps its rights in its own software, design and text. Material from others stays under its own licences, and these terms do not reduce what those licences or the law allow."
+          "You may save, print and share your reports privately, with family or an adviser, when you have any permission needed. Sidera keeps its rights in its own software, design and text. Material from others, such as place names, fonts and planet positions, stays under its own licences, listed on the Credits page linked at the foot of every page. These terms do not reduce what those licences or the law allow."
         ]
       },
       {
-        "title": "Full reports and coupons",
+        "title": "Saved reports, full reports and coupons",
         "body": [
-          "A full report needs Google sign in and is kept in your account until you delete it or your account. Payment is not available yet, so for now a full report can be unlocked only with a coupon code that makes it free.",
-          "Each coupon has its own limits, such as an end date, the kinds of report it covers and how many times it can be used. Terms for paid reports will be added here before payment opens."
+          "A free saved report is deleted 7 days after you save it, and you can keep up to 20 at a time. A full report needs Google sign in and is kept in your account until you delete it or your account.",
+          "Payment is not available yet, so for now a full report can be unlocked only with a coupon code that makes it free. Each coupon has its own limits, such as an end date, the kinds of report it covers and how many times it can be used. Terms for paid reports will be added here before payment opens."
         ]
       },
       {
