@@ -554,7 +554,7 @@ function HadahanResultPage({
         >
           {/* Only on the visitor's own result, which always has its birth details. */}
           {remember && (
-            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan }} />
+            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan, lang }} />
           )}
         </NextSteps>
       )}

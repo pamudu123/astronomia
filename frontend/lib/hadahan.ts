@@ -82,6 +82,8 @@ export type SavedResult = {
   result: Hadahan;
   /** The form as submitted. Missing on results saved before it was kept. */
   form?: FormValues;
+  /** The language the result is in. Missing on older saves. */
+  lang?: Locale;
 };
 
 const API = "/api";

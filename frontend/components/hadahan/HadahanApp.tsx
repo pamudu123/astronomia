@@ -102,12 +102,16 @@ function HadahanPage({
     if (!saved) return;
     fetchHadahan(saved.request, lang)
       .then((result) => {
-        if (result.status === "ok") setView({ kind: "result", saved: { ...saved, result } });
+        if (result.status === "ok") setView({ kind: "result", saved: { ...saved, result, lang } });
         else fillForm(formFor(saved));
       })
-      .catch(() => {
-        saveResult(null);
-        fillForm(formFor(saved));
+      .catch((caught: { status?: number }) => {
+        // Refused: these details no longer work. Otherwise the service is only not answering
+        // (it may be waking), so the chart stays, and shows as it was in the same language.
+        const refused = caught.status === 404 || caught.status === 422;
+        if (refused) saveResult(null);
+        if (!refused && saved.lang === lang) setView({ kind: "result", saved });
+        else fillForm(formFor(saved));
       });
   }, [lang, handoff]);
 
@@ -117,7 +121,7 @@ function HadahanPage({
     try {
       const result = await fetchHadahan(request, lang);
       if (result.status === "ok") {
-        const saved = { ...pending, request, result };
+        const saved = { ...pending, request, result, lang };
         saveResult(saved);
         setView({ kind: "result", saved });
         window.scrollTo({ top: 0 });

@@ -543,3 +543,41 @@ test("a birth date still to come is refused", async ({ page }) => {
   await date.fill("1995-04-19");
   await expect(page.getByText("cannot be in the future")).toHaveCount(0);
 });
+
+test("a finished chart stays when the backend does not answer after a reload", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  const lagna = page.locator('[data-card="lagna"]');
+  await expect(lagna).toContainText("Simha");
+  const kept = () => page.evaluate(() => sessionStorage.getItem("astronomia.hadahan"));
+
+  await page.route("**/api/v1/hadahan", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.reload();
+  await expect(lagna).toContainText("Simha");
+
+  // In the other language the English words are not shown: the form has the details instead.
+  await mockBackend(page, "si");
+  await page.route("**/api/v1/hadahan", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.goto("/si/hadahan");
+  await expect(page.locator('input[type="date"]')).toHaveValue("1995-04-19");
+  expect(await kept()).not.toBeNull();
+
+  // Back in English, once the backend answers, the chart is there.
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await expect(lagna).toContainText("Simha");
+});
+
+test("a kept chart whose details are refused goes back to the form", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.locator('[data-card="lagna"]')).toBeVisible();
+  await page.route("**/api/v1/hadahan", (route) => route.fulfill({ status: 404, body: "" }));
+  await page.reload();
+  await expect(page.getByLabel("Date of birth")).toHaveValue("1995-04-19");
+  expect(await page.evaluate(() => sessionStorage.getItem("astronomia.hadahan"))).toBeNull();
+});
