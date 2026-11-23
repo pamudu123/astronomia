@@ -378,6 +378,9 @@ def test_the_chapters_go_with_the_account_and_the_order_stays() -> None:
     assert chapters.keep(order.id, user, "en", "chart.work", "Second.") == "First."
     assert chapters.kept(order.id, "en") == {"chart.work": "First."}
     assert chapters.kept(order.id, "si") == {}
+    chapters.forget_order(order.id, user)
+    assert chapters.kept(order.id, "en") == {}
+    chapters.keep(order.id, user, "en", "chart.work", "Third.")
     accounts_store.delete_user(user)
     assert chapters.kept(order.id, "en") == {}
     with connected() as db:

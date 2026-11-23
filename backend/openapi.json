@@ -2142,7 +2142,7 @@
           "saved"
         ],
         "summary": "Delete Saved",
-        "description": "Deletes one saved report.",
+        "description": "Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the\nsame report can be opened and read again.",
         "operationId": "delete_saved_v1_saved__report_id__delete",
         "parameters": [
           {
@@ -3653,11 +3653,16 @@
             },
             "type": "object",
             "title": "Chapters"
+          },
+          "keeps": {
+            "type": "boolean",
+            "title": "Keeps"
           }
         },
         "type": "object",
         "required": [
-          "chapters"
+          "chapters",
+          "keeps"
         ],
         "title": "ChaptersOut",
         "description": "Chapter texts by id. Empty when the report is not paid for or has none yet."

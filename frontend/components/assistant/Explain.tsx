@@ -17,6 +17,7 @@ import {
   chapterKey,
   chapterState,
   idleState,
+  isKept,
   parts,
   requestChapter,
   subscribe,
@@ -337,8 +338,18 @@ export function FullReading({
       }),
     () => false,
   );
+  // A paid report with chapters kept on the server shows its list, not the "get" button.
+  const someKept = useSyncExternalStore(
+    subscribe,
+    () =>
+      chapters.some((id) => {
+        const own = extra && id in extra ? (extra[id] ?? null) : facts;
+        return own ? isKept(chapterKey(id, lang, own)) : false;
+      }),
+    () => false,
+  );
   if (!t || !facts) return null;
-  const started = chosen || (allowed && allWritten);
+  const started = chosen || (allowed && (allWritten || someKept));
   const words = t[reading];
 
   const toggle = (id: ChapterId) =>

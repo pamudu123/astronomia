@@ -23,6 +23,17 @@ coupon and amount paid (0 for a free coupon), method `coupon`. There is no payme
 only 100% coupons can unlock a report; discount coupons show their price and answer "payment not
 available yet".
 
+## The kept AI reading (2026-11-23)
+
+A paid report's AI chapters are kept on the server per order and language
+(`sidera.report_chapters`, docs/17 section 6a). The website's AI route saves each one after the AI
+has finished it, with the key only the two servers hold, so a browser cannot put words into a report.
+
+- Reopening the report shows the kept chapters; only missing ones are written.
+- The paid PDF prints every kept chapter and nothing the browser sent. Without
+  `ASTRONOMIA_CHAT_KEY` (local runs) nothing is kept and the PDF prints what the page sent.
+- Deleting the saved report or the account deletes its chapters. The order stays.
+
 ## The switch
 
 `ASTRONOMIA_PAID_REPORTS` on the backend. Off: everyone has every feature and the form is hidden.

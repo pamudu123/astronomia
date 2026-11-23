@@ -12,6 +12,8 @@ import {
   blocks,
   chapterKey,
   chapterState,
+  forgetChapter,
+  isKept,
   hash,
   KEEP_DAYS,
   lead,
@@ -207,6 +209,31 @@ describe("requestChapter", () => {
     takeKept(key, "The report's.");
     expect(chapterState(key)).toEqual({ status: "done", text: "The report's." });
     expect(keptText(storage.get(key))).toBe("The report's.");
+  });
+
+  it("shows a chapter the report keeps as done, and never asks for it again", async () => {
+    const key = chapterKey("match.people", "en", FACTS);
+    expect(isKept(key)).toBe(false);
+    takeKept(key, "The report's.");
+    expect(isKept(key)).toBe(true);
+    const send = streaming(["New words."]);
+    await requestChapter("match.people", "en", FACTS, send);
+    expect(send).not.toHaveBeenCalled();
+    expect(chapterState(key)).toEqual({ status: "done", text: "The report's." });
+  });
+
+  it("does not count a chapter only this device holds as kept by the report", async () => {
+    await requestChapter("match.people", "en", FACTS, streaming(["This device's."]));
+    expect(isKept(chapterKey("match.people", "en", FACTS))).toBe(false);
+  });
+
+  it("forgets a chapter so it is asked for again", async () => {
+    const key = chapterKey("match.people", "en", FACTS);
+    await requestChapter("match.people", "en", FACTS, streaming(["Old."]));
+    forgetChapter(key);
+    expect(storage.get(key)).toBeUndefined();
+    await requestChapter("match.people", "en", FACTS, streaming(["New."]));
+    expect(chapterState(key).text).toBe("New.");
   });
 
   it("treats an empty answer as failed", async () => {
