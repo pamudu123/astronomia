@@ -365,6 +365,19 @@ function LimitsBridge({ limits }: { limits: Limits }) {
   return null;
 }
 
+function onScroll(onChange: () => void) {
+  window.addEventListener("scroll", onChange, { passive: true });
+  return () => window.removeEventListener("scroll", onChange);
+}
+
+/** Is the page scrolled down from its top? */
+const useScrolled = () =>
+  useSyncExternalStore(
+    onScroll,
+    () => window.scrollY > 120,
+    () => false,
+  );
+
 /** "Get the full report": the report's own card on this page, or the chart page to make one. */
 function useFullReport(lang: Locale, close: () => void): () => void {
   const router = useRouter();
@@ -561,6 +574,7 @@ export default function Chat({
   }, []);
   const openPanel = useCallback(() => setOpen(true), []);
   const limits = useChatLimits(open);
+  const scrolled = useScrolled();
   const [fresh, setFresh] = useState(false);
   const onIdleReset = useCallback(() => setFresh(true), []);
   const launcher = useRef<HTMLButtonElement>(null);
@@ -627,7 +641,12 @@ export default function Chat({
         <div className="dark assistant-theme" style={{ "--sidera-panel-width": `${width}px` } as CSSProperties}>
           {open && <ResizeHandle width={width} onChange={resize} label={t.resize} />}
           {!open && (
-            <button ref={launcher} type="button" className="sidera-launcher" onClick={() => setOpen(true)}>
+            <button
+              ref={launcher}
+              type="button"
+              className={scrolled ? "sidera-launcher sidera-launcher-small" : "sidera-launcher"}
+              onClick={() => setOpen(true)}
+            >
               <Sparkle size={18} />
               <span>{t.open}</span>
             </button>

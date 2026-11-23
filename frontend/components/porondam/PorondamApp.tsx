@@ -69,8 +69,16 @@ export function PorondamApp(props: { lang: Locale; dict: Dictionary }) {
   // A birth sent from the old horoscope search, for the bride or the groom.
   const raw = useSyncExternalStore(noChanges, handoffSnapshot, () => "");
   const handoff = linked ? null : parseHandoff(raw, "porondam");
+  // Someone who came for wedding dates (?for=wedding, from All tools).
+  const forWedding = new URLSearchParams(search).get("for") === "wedding";
   return (
-    <PorondamForm key={`${search}|${handoff ? raw : ""}`} {...props} linked={linked} handoff={handoff} />
+    <PorondamForm
+      key={`${search}|${handoff ? raw : ""}`}
+      {...props}
+      linked={linked}
+      handoff={handoff}
+      forWedding={forWedding}
+    />
   );
 }
 
@@ -85,11 +93,14 @@ function PorondamForm({
   dict,
   linked,
   handoff,
+  forWedding,
 }: {
   lang: Locale;
   dict: Dictionary;
   linked: Linked | null;
   handoff: Handoff | null;
+  /** The match, once on screen, opens on the wedding dates search. */
+  forWedding: boolean;
 }) {
   const t = dict.porondam;
   const hydrated = useHydrated();
@@ -128,6 +139,20 @@ function PorondamForm({
       })
       .catch(() => saveSession(PORONDAM_KEY, null));
   }, [lang, fresh]);
+
+  // Take someone who came for wedding dates to the search, once the match is drawn.
+  const toWedding = forWedding && view.kind === "result" && labels !== null;
+  useEffect(() => {
+    if (!toWedding) return;
+    const frame = requestAnimationFrame(() => {
+      const title = document.getElementById("wedding-title");
+      if (!title) return;
+      title.tabIndex = -1;
+      title.focus({ preventScroll: true });
+      title.scrollIntoView({ block: "start" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [toWedding]);
 
   function person(role: Role): PersonInput | null {
     if (mode === "quick") {
@@ -263,6 +288,12 @@ function PorondamForm({
           <p className="soft">{f.lead}</p>
         </div>
       </div>
+
+      {forWedding && (
+        <p className={`rise ${formStyles.note}`} data-for-wedding>
+          {t.weddingFirst}
+        </p>
+      )}
 
       {/* Each way of matching says what it compares, before any details are typed. */}
       <div role="group" aria-label={f.mode} className={`rise ${styles.modes}`}>

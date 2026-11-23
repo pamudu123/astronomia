@@ -464,6 +464,7 @@
       "fullText": "Most complete, with Kuja dosha. Needs birth times.",
       "quickText2": "When you don't know the birth times. Kuja dosha is left out."
     },
+    "weddingFirst": "Wedding dates are found from both birth stars, so match the two of you first. Birth stars alone are enough. The date search then opens on this page.",
     "clockFor": "For the {who}:",
     "errors": {
       "missing": "Please fill in the details for both people.",
@@ -1729,6 +1730,7 @@
     "fullMoon": "Full moon {time}",
     "rahu": "Rahu",
     "today": "Today",
+    "toToday": "Go to today",
     "failed": "The calendar could not be loaded just now. Try again in a moment.",
     "retry": "Try again",
     "loading": "Loading the calendar",
@@ -1746,6 +1748,7 @@
       "nothing": "Nothing",
       "birth": "Birth details",
       "two": "Two people's birth details",
+      "stars": "Two birth stars, or birth details",
       "paper": "A paper horoscope"
     },
     "groups": {
@@ -1783,7 +1786,7 @@
       },
       "wedding": {
         "name": "Wedding nakath",
-        "text": "Good times for the wedding ceremonies, found from a porondam match."
+        "text": "Good dates and times for the wedding ceremonies. First match the two of you, then the date search opens."
       },
       "babyNames": {
         "name": "Baby name letters",
@@ -1810,6 +1813,8 @@
         "text": "Enter a paper kendara and find the dates and times it fits."
       }
     },
+    "aboutTitle": "About Sidera",
+    "aboutWhy": "How the results are worked out, and how to check them yourself.",
     "hiddenTitle": "Also inside the results",
     "hidden": [
       {
