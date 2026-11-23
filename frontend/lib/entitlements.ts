@@ -18,15 +18,20 @@ export type Access = components["schemas"]["AccessOut"];
  * - none: the page shows no report (nakath, baby names and the other tools). Their explain
  *   buttons are not part of a paid report, so they stay free.
  * - loading: still asking the backend
+ * - failed: no answer. Nothing paid shows, and the page offers to ask again
  * - ready: the backend's answer
  */
-export type AccessState = { state: "none" } | { state: "loading" } | { state: "ready"; access: Access };
+export type AccessState =
+  | { state: "none" }
+  | { state: "loading" }
+  | { state: "failed" }
+  | { state: "ready"; access: Access };
 
 export const NO_REPORT: AccessState = { state: "none" };
 
 export function canUse(feature: Feature, access: AccessState = NO_REPORT): boolean {
   if (access.state === "none") return true;
-  if (access.state === "loading") return false;
+  if (access.state !== "ready") return false;
   return access.access.features.includes(feature);
 }
 

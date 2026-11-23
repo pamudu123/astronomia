@@ -135,6 +135,19 @@
   font-size: 14px;
 }
 
+.checkFailed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.checkFailed p {
+  margin: 0;
+}
+
 .error {
   margin: 0;
   color: var(--coral);

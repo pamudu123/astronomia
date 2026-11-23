@@ -93,6 +93,22 @@ export async function unlockReport(report: ReportRequest, code: string): Promise
   return (await response.json()) as Unlocked;
 }
 
+export type Include = "reading" | "readingStars" | "explain" | "kuja" | "pdf" | "kept";
+
+/**
+ * What the full report adds to this one (docs/18, section 6; docs/20, gap 3). Only a chart with
+ * Kuja dosha has rules to open on the page: a match has no extra detail there, and one made from
+ * a birth star has no chart on that side to read from.
+ */
+export function fullReportIncludes(report: ReportRequest, kujaPresent = false): Include[] {
+  if (report.kind === "hadahan") {
+    return ["reading", "explain", ...(kujaPresent ? (["kuja"] as const) : []), "pdf", "kept"];
+  }
+  const { bride, groom } = report.match;
+  const stars = "nakshatra" in bride || "nakshatra" in groom;
+  return [stars ? "readingStars" : "reading", "explain", "pdf", "kept"];
+}
+
 /** "LKR 800" or "USD 2.50": whole rupees, dollars with their cents. */
 export function formatPrice(price: Price, lang: Locale): string {
   const major = price.amount / 100;

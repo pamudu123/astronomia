@@ -117,9 +117,14 @@ export function MyReportsApp({ lang, dict }: Props) {
           </div>
         </section>
         <GoogleSignIn lang={lang} t={t} who={who} hasReports={false} onSignedOut={retry} />
-        <p className={`soft ${styles.keepNote}`} data-keep-note>
-          {t.keepNote}
-        </p>
+        {/* A Google account can be deleted with nothing saved in it. */}
+        {view.kind === "ok" && who?.kind === "google" ? (
+          <DeleteEverything t={t} google freeCount={null} onDone={() => setView({ kind: "wiped" })} />
+        ) : (
+          <p className={`soft ${styles.keepNote}`} data-keep-note>
+            {t.keepNote}
+          </p>
+        )}
       </main>
     );
   }

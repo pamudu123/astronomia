@@ -8,15 +8,22 @@ import { onSavedChange } from "@/lib/account";
 import { fetchAccess, fetchPaidReportsOn } from "@/lib/paid";
 import type { ReportRequest } from "@/lib/report";
 
+import styles from "./FullReport.module.css";
+
 type Value = {
   access: AccessState;
   /** The report on the page, for the AI route's paid check. Null where there is none. */
   report: ReportRequest | null;
   /** Takes the answer from an unlock, so the page opens up at once. */
   set: (access: Access) => void;
+  /** Asks the backend again, after a check that failed. */
+  retry: () => void;
+  /** True while that is on its way. */
+  retrying: boolean;
 };
 
-const ReportAccessContext = createContext<Value>({ access: NO_REPORT, report: null, set: () => {} });
+const NOTHING = { set: () => {}, retry: () => {}, retrying: false };
+const ReportAccessContext = createContext<Value>({ ...NOTHING, access: NO_REPORT, report: null });
 
 /** The words of "Get the full report", given once by the layout for every page. */
 export const PaidText = createContext<Dictionary["paid"] | null>(null);
@@ -37,6 +44,11 @@ export function ReportAccessProvider({ report, children }: { report: ReportReque
   // announces, and when the tab comes back into view.
   const [asked, setAsked] = useState(0);
   useEffect(() => onSavedChange(() => setAsked((count) => count + 1)), []);
+  const [retrying, setRetrying] = useState(false);
+  const retry = useCallback(() => {
+    setRetrying(true);
+    setAsked((count) => count + 1);
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -44,6 +56,9 @@ export function ReportAccessProvider({ report, children }: { report: ReportReque
       .then((access) => setFound({ key, access }))
       .catch(() => {
         if (!controller.signal.aborted) setFailed(key);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setRetrying(false);
       });
     return () => controller.abort();
   }, [key, asked]);
@@ -51,12 +66,13 @@ export function ReportAccessProvider({ report, children }: { report: ReportReque
   const set = useCallback((access: Access) => setFound({ key, access }), [key]);
   const value = useMemo<Value>(() => {
     const parsed = JSON.parse(key) as ReportRequest;
-    if (found?.key === key) return { access: { state: "ready", access: found.access }, report: parsed, set };
-    // No answer from the backend: nothing to decide with, so nothing is locked on the page and
-    // no form is shown. The AI route checks the report on the server before writing anyway.
-    if (failed === key) return { access: NO_REPORT, report: parsed, set };
-    return { access: { state: "loading" }, report: parsed, set };
-  }, [found, failed, key, set]);
+    const rest = { report: parsed, set, retry, retrying };
+    if (found?.key === key) return { ...rest, access: { state: "ready", access: found.access } };
+    // No answer from the backend: the free result shows, with a way to ask again (FullReport).
+    // The server would refuse anything paid until it can check.
+    if (failed === key) return { ...rest, access: { state: "failed" } };
+    return { ...rest, access: { state: "loading" } };
+  }, [found, failed, key, set, retry, retrying]);
 
   return <ReportAccessContext value={value}>{children}</ReportAccessContext>;
 }
@@ -73,7 +89,7 @@ const FREE: Access = {
  * A hadahan or porondam result. With its request, the backend says what this account may use
  * on it. A shared result has no request (its viewer cannot unlock it here): it shows every
  * feature while paid reports are switched off on the server, and the free result once they
- * are on.
+ * are on, or while the server cannot say.
  */
 export function ReportScope({
   report,
@@ -89,22 +105,64 @@ export function ReportScope({
 }
 
 function SharedAccess({ kind, children }: { kind: ReportRequest["kind"]; children: ReactNode }) {
-  const [on, setOn] = useState<boolean | null>(null);
+  const [on, setOn] = useState<boolean | "failed" | null>(null);
+  const [asked, setAsked] = useState(0);
+  const [retrying, setRetrying] = useState(false);
+  const retry = useCallback(() => {
+    setRetrying(true);
+    setAsked((count) => count + 1);
+  }, []);
   useEffect(() => {
     const controller = new AbortController();
     fetchPaidReportsOn(kind, { signal: controller.signal })
       .then(setOn)
       .catch(() => {
-        if (!controller.signal.aborted) setOn(false); // as above: the server checks again
+        if (!controller.signal.aborted) setOn("failed"); // as above: the free result
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setRetrying(false);
       });
     return () => controller.abort();
-  }, [kind]);
+  }, [kind, asked]);
   const value = useMemo<Value>(() => {
-    if (on === null) return { access: { state: "loading" }, report: null, set: () => {} };
-    if (!on) return { access: NO_REPORT, report: null, set: () => {} };
-    return { access: { state: "ready", access: FREE }, report: null, set: () => {} };
-  }, [on]);
-  return <ReportAccessContext value={value}>{children}</ReportAccessContext>;
+    const rest = { ...NOTHING, report: null, retry, retrying };
+    if (on === null) return { ...rest, access: { state: "loading" } };
+    if (on === "failed") return { ...rest, access: { state: "failed" } };
+    if (!on) return { ...rest, access: NO_REPORT };
+    return { ...rest, access: { state: "ready", access: FREE } };
+  }, [on, retry, retrying]);
+  return (
+    <ReportAccessContext value={value}>
+      {children}
+      {/* A shared page has no "Get the full report" card to offer it in. */}
+      {on === "failed" && (
+        <div className="container">
+          <CheckFailed />
+        </div>
+      )}
+    </ReportAccessContext>
+  );
+}
+
+/** In place of the paid check's answer when there was none: says so, and asks again. */
+export function CheckFailed() {
+  const t = useContext(PaidText);
+  const { retry, retrying } = useReportAccess();
+  if (!t) return null;
+  return (
+    <div className={styles.checkFailed} data-check-failed>
+      <p role="status">{t.checkFailed}</p>
+      {/* Kept enabled while asking, so the keyboard does not lose its place. */}
+      <button
+        type="button"
+        className={styles.linkButton}
+        onClick={() => !retrying && retry()}
+        aria-busy={retrying}
+      >
+        {retrying ? t.checking : t.checkAgain}
+      </button>
+    </div>
+  );
 }
 
 export const useReportAccess = () => useContext(ReportAccessContext);
