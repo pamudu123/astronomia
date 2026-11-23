@@ -7,7 +7,7 @@ import type { KendaraResult } from "@/lib/kendara";
 import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/lib/nakath";
 import type { Journey } from "@/lib/journey";
 import { type Person, type Porondam, type Timeline, groupFactors } from "@/lib/porondam";
-import type { Wedding } from "@/lib/wedding";
+import type { Ceremony, Wedding, WeddingChoice } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
 import {
@@ -508,6 +508,34 @@ export function firstLettersContext(result: FirstLetters, language: Locale): Pag
       none_found: result.none_text ?? null,
       age_note: result.age_note ?? null,
       provisional: result.provisional ?? null,
+    },
+  };
+}
+
+/**
+ * The wedding dates search while it runs, or after it failed, so Astro does not ask the person
+ * to start a search that is already running (QA-03). Dates still on screen from before it, or
+ * in the page's other language, go along.
+ */
+export function weddingSearchContext(
+  status: "running" | "failed",
+  choice: WeddingChoice,
+  shown: Wedding | null,
+  language: Locale,
+  names: Record<Ceremony, string>,
+): PageContext {
+  return {
+    page: "wedding_dates_search",
+    language,
+    result: {
+      status:
+        status === "running"
+          ? "this search is running now on the page; its dates appear there when it finishes"
+          : "the last search did not finish; the person can press search again",
+      months_ahead: choice.months,
+      ceremonies: choice.ceremonies.map((ceremony) => names[ceremony]),
+      place: choice.place?.name ?? "Colombo (used when no place is chosen)",
+      ...(shown ? { dates_already_on_screen: weddingContext(shown, language).result ?? null } : {}),
     },
   };
 }

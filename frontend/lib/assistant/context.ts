@@ -54,6 +54,7 @@ const BY_RESULT: Record<string, PageKey> = {
   baby_names_result: "babyNames",
   first_letters_result: "firstLetters",
   wedding_dates_result: "wedding",
+  wedding_dates_search: "wedding",
   old_horoscope_result: "kendara",
   planet_change_personal: "changes",
   year_ahead_personal: "forecast",
@@ -117,7 +118,9 @@ function softening(factor: Factor): { softened_by?: string[] } {
 export const WEDDING_SEARCH =
   "on this page, below the match: works with the birth stars alone (quick or full match). " +
   "The person picks the venue and how many months ahead (3, 6, 12 or 24), chooses the " +
-  "ceremonies and presses search; the dates found then appear under also_on_page.wedding";
+  "ceremonies and presses search. While it runs (or if it fails) also_on_page.wedding says so " +
+  "in its status; the dates found then appear there. With no also_on_page.wedding, no search " +
+  "has been made for this match";
 
 /**
  * The match result page: the score, each factor, the essential checks and the Mars check.

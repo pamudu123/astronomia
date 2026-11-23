@@ -255,6 +255,7 @@
       "unknownTimeNote": "The lagna and houses need the birth time. Without it, use Porondam with birth stars, which needs only the nakath.",
       "place": "Place of birth",
       "placeHint": "Type at least two letters of a town or village",
+      "placeChosen": "Chosen: {place} ({timezone})",
       "noPlaces": "No places found. Try another spelling, or enter coordinates.",
       "timezoneOnDate": "Time zone on that date: {offset}",
       "coordinates": "Enter coordinates instead",
@@ -280,7 +281,7 @@
       "choose": "Use this time"
     },
     "errors": {
-      "missing": "Please fill in the date, time and place.",
+      "missing": "Still needed: {fields}.",
       "failed": "We could not work out the chart. Please try again.",
       "notFound": "That place was not found. Please search again.",
       "latitude": "Latitude must be a number from -90 to 90, such as 6.9271.",
@@ -466,7 +467,7 @@
     },
     "clockFor": "For the {who}:",
     "errors": {
-      "missing": "Please fill in the details for both people.",
+      "missing": "Still needed for the {who}: {fields}.",
       "failed": "We could not match the charts. Please try again.",
       "notFound": "A place was not found. Please search again."
     },
@@ -628,7 +629,15 @@
       "placeHint": "Its sunrise and lagna are used. Colombo when left empty.",
       "noPlaces": "No places found",
       "find": "Find dates",
-      "working": "Searching. Two years can take a few seconds.",
+      "working": "Searching…",
+      "progress": {
+        "start": "Searching the next {range} for: {ceremonies}.",
+        "longer": "Still searching the next {range} for: {ceremonies}. A longer range takes longer.",
+        "waking": "Still searching the next {range} for: {ceremonies}. The service may have been asleep, and waking up can take a minute or more. If it has not answered after {limit} seconds, the search stops and you can try again.",
+        "seconds": "{seconds} seconds so far"
+      },
+      "translating": "These dates were found in Sinhala. Getting them in English…",
+      "notTranslated": "These dates are in Sinhala. Press Find dates to get them in English.",
       "pickOne": "Choose at least one ceremony.",
       "time": "{start} to {end}",
       "zone": "Times are in {zone} ({offset}).",

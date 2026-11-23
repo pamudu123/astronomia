@@ -345,6 +345,18 @@ html[lang="si"] .sidera-welcome-hero h3 {
 }
 
 /*
+ * The person's own message. CopilotKit always gives it its dark mode text here (see the top of
+ * this file), which is too pale to read on the light theme's bubble (QA-01).
+ */
+.assistant-theme .copilotKitUserMessage .cpk\:prose {
+  --tw-prose-invert-body: var(--ink);
+  --tw-prose-invert-bold: var(--ink);
+  --tw-prose-invert-links: var(--gold);
+  background: var(--panel-raised);
+  color: var(--ink);
+}
+
+/*
  * Answers come in point form (agent/app/prompts/guide.md): one opening line, then short
  * points. Brass bullets, tight spacing and a bold lead word make them quick to scan.
  */

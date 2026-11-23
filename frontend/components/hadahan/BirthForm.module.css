@@ -277,3 +277,13 @@
 .input[aria-invalid="true"] {
   border-color: var(--coral);
 }
+
+/* The hint once a place is chosen. */
+.hintDone {
+  color: var(--teal);
+  font-size: 14px;
+}
+
+.errorLine {
+  display: block;
+}

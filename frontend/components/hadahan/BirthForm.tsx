@@ -85,6 +85,20 @@ export function fieldProblems(values: FormValues): FieldProblem[] {
   return problems;
 }
 
+export type MissingField = "date" | "time" | "place" | "latitude" | "longitude" | "timezone";
+
+/** The details still empty, in the order the form asks for them (QA-05). */
+export function missingFields(values: FormValues): MissingField[] {
+  const missing: MissingField[] = [];
+  if (!values.date) missing.push("date");
+  if (!values.time) missing.push("time");
+  if (!values.manual) return values.place ? missing : [...missing, "place"];
+  for (const field of ["latitude", "longitude", "timezone"] as const) {
+    if (!values[field].trim()) missing.push(field);
+  }
+  return missing;
+}
+
 export function toRequest(values: FormValues): BirthRequest | null {
   if (!values.date || !values.time) return null;
   const fold = values.fold === undefined ? {} : { fold: values.fold };
@@ -131,23 +145,33 @@ export function BirthForm({
     lon: `${uid}-lon`,
     tz: `${uid}-tz`,
     tzHint: `${uid}-tz-hint`,
+    place: `${uid}-place`,
   };
   const problemIds: Record<FieldProblem, string> = {
     latitude: `${uid}-lat-error`,
     longitude: `${uid}-lon-error`,
     timezone: `${uid}-tz-error`,
   };
-  const fieldIds: Record<FieldProblem, string> = { latitude: ids.lat, longitude: ids.lon, timezone: ids.tz };
+  const fieldIds: Record<FieldProblem | MissingField, string> = {
+    date: ids.date,
+    time: ids.time,
+    place: ids.place,
+    latitude: ids.lat,
+    longitude: ids.lon,
+    timezone: ids.tz,
+  };
   const [values, setValues] = useState<FormValues>(initial);
   const [unknownTime, setUnknownTime] = useState(false);
   const [offset, setOffset] = useState<string | null>(null);
-  const [missing, setMissing] = useState(false);
-  // Field problems show once the visitor has tried to submit, then update as they type.
+  // Problems and missing details show once the visitor has tried to submit, then update as they type.
   const [checked, setChecked] = useState(false);
   const f = t.form;
 
   const request = toRequest(values);
   const problems = checked ? fieldProblems(values) : [];
+  const missing = checked ? missingFields(values) : [];
+  const invalid = (field: MissingField | FieldProblem) =>
+    missing.some((item) => item === field) || problems.some((item) => item === field) || undefined;
   const problem = (field: FieldProblem) =>
     problems.includes(field) ? (
       <p id={problemIds[field]} className={styles.fieldError}>
@@ -179,19 +203,13 @@ export function BirthForm({
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setChecked(true);
-    const found = fieldProblems(values);
-    if (found.length > 0) {
-      setMissing(false);
-      // Take the visitor to the first field to fix; its message is read with it.
-      document.getElementById(fieldIds[found[0]])?.focus();
-      return;
-    }
+    const wrong = [...missingFields(values), ...fieldProblems(values)];
     const ready = toRequest(values);
-    if (!ready) {
-      setMissing(true);
+    if (wrong.length > 0 || !ready) {
+      // Take the visitor to the first field to fix; its message is read with it.
+      if (wrong.length > 0) document.getElementById(fieldIds[wrong[0]])?.focus();
       return;
     }
-    setMissing(false);
     const placeText = values.manual
       ? `${values.latitude}, ${values.longitude}`
       : values.place
@@ -246,6 +264,7 @@ export function BirthForm({
               min="1800-01-01"
               max="2200-12-31"
               required
+              aria-invalid={invalid("date")}
               value={values.date}
               onChange={(e) => set("date", e.target.value)}
             />
@@ -259,6 +278,7 @@ export function BirthForm({
               className={styles.input}
               type="time"
               required
+              aria-invalid={invalid("time")}
               disabled={unknownTime}
               value={values.time}
               onChange={(e) => set("time", e.target.value)}
@@ -292,7 +312,7 @@ export function BirthForm({
                   className={styles.input}
                   inputMode="decimal"
                   placeholder="7.2906"
-                  aria-invalid={problems.includes("latitude") || undefined}
+                  aria-invalid={invalid("latitude")}
                   aria-describedby={problems.includes("latitude") ? problemIds.latitude : undefined}
                   value={values.latitude}
                   onChange={(e) => set("latitude", e.target.value)}
@@ -308,7 +328,7 @@ export function BirthForm({
                   className={styles.input}
                   inputMode="decimal"
                   placeholder="80.6336"
-                  aria-invalid={problems.includes("longitude") || undefined}
+                  aria-invalid={invalid("longitude")}
                   aria-describedby={problems.includes("longitude") ? problemIds.longitude : undefined}
                   value={values.longitude}
                   onChange={(e) => set("longitude", e.target.value)}
@@ -326,7 +346,7 @@ export function BirthForm({
                 autoComplete="off"
                 placeholder="Asia/Colombo"
                 aria-describedby={problems.includes("timezone") ? `${problemIds.timezone} ${ids.tzHint}` : ids.tzHint}
-                aria-invalid={problems.includes("timezone") || undefined}
+                aria-invalid={invalid("timezone")}
                 value={values.timezone}
                 onChange={(e) => set("timezone", e.target.value)}
               />
@@ -344,6 +364,9 @@ export function BirthForm({
             empty={f.noPlaces}
             value={values.place}
             onChange={(place) => set("place", place)}
+            chosen={f.placeChosen}
+            inputId={ids.place}
+            invalid={invalid("place")}
           />
         )}
 
@@ -360,9 +383,9 @@ export function BirthForm({
           </button>
         </div>
 
-        {(missing || error) && (
+        {(missing.length > 0 || error) && (
           <p className={styles.error} role="alert">
-            {missing ? t.errors.missing : error}
+            {missing.length > 0 ? fill(t.errors.missing, { fields: missing.map((field) => f[field]).join(", ") }) : error}
           </p>
         )}
 
