@@ -17,6 +17,7 @@ from app.main import create_app  # noqa: E402
 
 FIXTURES = BACKEND.parent / "frontend" / "tests" / "e2e" / "fixtures"
 KANDY = 1241622
+AGREED = {"guardian_consent": True}
 
 
 def save(name: str, body: object) -> None:
@@ -31,10 +32,10 @@ def main() -> None:
             body = client.get(f"/v1/baby/letters/{star}", params={"lang": lang})
             save(f"baby-letters-{star}-{lang}.json", body.json())
         # The made-up birth the other personal tests use.
-        birth = {"date": "1995-04-19", "time": "14:35", "place_id": KANDY, "lang": lang}
+        birth = {"date": "1995-04-19", "time": "14:35", "place_id": KANDY, "lang": lang, **AGREED}
         save(f"baby-birth-{lang}.json", client.post("/v1/baby/letters", json=birth).json())
         # Three minutes before the Moon moves into the next pada.
-        near = {"date": "2024-01-18", "time": "15:10", "place_id": KANDY, "lang": lang}
+        near = {"date": "2024-01-18", "time": "15:10", "place_id": KANDY, "lang": lang, **AGREED}
         save(f"baby-birth-near-{lang}.json", client.post("/v1/baby/letters", json=near).json())
     # Name lists the tests ask for, keyed as the test looks them up.
     queries = [
@@ -63,7 +64,7 @@ def main() -> None:
     child = {"date": "2023-05-10", "time": "08:15", "place_id": KANDY}
     body = client.post(
         "/v1/first-letters",
-        json={"child": child, "months": 3, "as_of": "2026-12-01", "lang": "en"},
+        json={"child": child, **AGREED, "months": 3, "as_of": "2026-12-01", "lang": "en"},
     )
     save("first-letters-full-en.json", body.json())
     body = client.post(
@@ -71,6 +72,7 @@ def main() -> None:
         json={
             "child": {"nakshatra": "ashwini", "pada": 1},
             "birth_date": "2023-05-10",
+            **AGREED,
             "months": 3,
             "as_of": "2026-12-01",
             "lang": "si",

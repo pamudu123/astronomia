@@ -6,10 +6,8 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import {
   type BirthRequest,
   type Hadahan,
-  type Labels,
   type SavedResult,
   fetchHadahan,
-  fetchLabels,
   fill,
   formFor,
   loadDraft,
@@ -20,6 +18,7 @@ import {
 import type { Locale } from "@/lib/i18n";
 import { clearHandoff, handoffSnapshot, parseHandoff } from "@/lib/kendara";
 import { useHydrated } from "@/lib/useHydrated";
+import { useLabels } from "@/lib/useLabels";
 
 import { BirthForm, EMPTY_FORM, type FormValues } from "./BirthForm";
 import styles from "./BirthForm.module.css";
@@ -68,7 +67,7 @@ function HadahanPage({
   remember,
   handoff,
 }: Props & { handoff: ReturnType<typeof parseHandoff> }) {
-  const [labels, setLabels] = useState<Labels | null>(null);
+  const { labels, failed, retry } = useLabels(lang);
   const [view, setView] = useState<View>({ kind: "form" });
   const [form, setForm] = useState<FormValues>(
     handoff ? { ...EMPTY_FORM, date: handoff.date, time: handoff.time, place: handoff.place } : EMPTY_FORM,
@@ -91,12 +90,6 @@ function HadahanPage({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchLabels(lang)
-      .then(setLabels)
-      .catch(() => setError(t.errors.failed));
-  }, [lang, t.errors.failed]);
-
   function fillForm(values: FormValues) {
     setForm(values);
     setFormKey((key) => key + 1);
@@ -109,12 +102,16 @@ function HadahanPage({
     if (!saved) return;
     fetchHadahan(saved.request, lang)
       .then((result) => {
-        if (result.status === "ok") setView({ kind: "result", saved: { ...saved, result } });
+        if (result.status === "ok") setView({ kind: "result", saved: { ...saved, result, lang } });
         else fillForm(formFor(saved));
       })
-      .catch(() => {
-        saveResult(null);
-        fillForm(formFor(saved));
+      .catch((caught: { status?: number }) => {
+        // Refused: these details no longer work. Otherwise the service is only not answering
+        // (it may be waking), so the chart stays, and shows as it was in the same language.
+        const refused = caught.status === 404 || caught.status === 422;
+        if (refused) saveResult(null);
+        if (!refused && saved.lang === lang) setView({ kind: "result", saved });
+        else fillForm(formFor(saved));
       });
   }, [lang, handoff]);
 
@@ -124,7 +121,7 @@ function HadahanPage({
     try {
       const result = await fetchHadahan(request, lang);
       if (result.status === "ok") {
-        const saved = { ...pending, request, result };
+        const saved = { ...pending, request, result, lang };
         saveResult(saved);
         setView({ kind: "result", saved });
         window.scrollTo({ top: 0 });
@@ -221,6 +218,7 @@ function HadahanPage({
       onChange={draftRead && !filled ? saveDraft : undefined}
       busy={busy || !labels}
       error={error}
+      onRetry={failed ? retry : undefined}
       kendara={kendara}
       notice={filled ? kendara?.handoff.notice : undefined}
       onSubmit={(request, values, placeText) => {

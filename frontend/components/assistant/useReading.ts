@@ -8,6 +8,7 @@ import {
   chapterKey,
   chapterState,
   fetchKept,
+  forgetChapter,
   outline,
   subscribe,
   takeKept,
@@ -15,6 +16,7 @@ import {
   writtenChapters,
 } from "@/lib/assistant/explain";
 import type { Locale } from "@/lib/i18n";
+import type { ReportRequest } from "@/lib/report";
 
 import { useCanUse, useReportAccess } from "@/components/paid/ReportAccess";
 
@@ -31,6 +33,32 @@ export type PdfChapter = { id: ChapterId; title: string; text: string };
 
 // How long the PDF waits for facts still on their way (the Saturn periods, the year ahead).
 const FACTS_WAIT_MS = 20_000;
+
+/**
+ * A paid report's PDF prints only the chapters the server keeps. One this device holds but the
+ * server does not (it could not be kept when it was written) is asked for again, which keeps it.
+ * Throws when chapters are still missing: the paid PDF is never handed over incomplete.
+ */
+async function keepAll(
+  items: { id: ChapterId; facts: PageContext }[],
+  lang: Locale,
+  report: ReportRequest,
+  progress?: (done: number, total: number) => void,
+): Promise<void> {
+  let kept = await fetchKept(report, lang);
+  if (!kept.keeps) return;
+  const missing = items.filter(({ id }) => !kept.chapters[id]);
+  if (missing.length) {
+    missing.forEach(({ id, facts }) => forgetChapter(chapterKey(id, lang, facts)));
+    await writeAll(missing, lang, progress, fetch, 4, report);
+    kept = await fetchKept(report, lang);
+  }
+  for (const { id, facts } of items) {
+    const text = kept.chapters[id];
+    if (!text) throw new Error("the reading is not complete");
+    takeKept(chapterKey(id, lang, facts), text);
+  }
+}
 
 /**
  * The AI reading on a result page, shared by the reading card, the chat and the PDF report:
@@ -63,7 +91,7 @@ export function useReading(plan: ReadingPlan, lang: Locale, kind: "chart" | "mat
     if (!reportKey) return;
     const controller = new AbortController();
     fetchKept(JSON.parse(reportKey), lang, { signal: controller.signal })
-      .then((chapters) => setKept({ key: reportKey + lang, chapters }))
+      .then(({ chapters }) => setKept({ key: reportKey + lang, chapters }))
       .catch(() => undefined);
     return () => controller.abort();
   }, [reportKey, lang]);
@@ -131,6 +159,7 @@ export function useReading(plan: ReadingPlan, lang: Locale, kind: "chart" | "mat
       return facts ? [{ id, facts }] : [];
     });
     await writeAll(items, lang, progress, fetch, 4, report);
+    if (paid && report) await keepAll(items, lang, report, progress);
     const chapters = writtenChapters(now.ids, lang, now.factsFor);
     // A paid report is never handed over with chapters missing. Those written are kept, so
     // trying again only writes the rest.

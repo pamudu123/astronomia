@@ -238,6 +238,11 @@
   display: none;
 }
 
+/* A saved report's label says when a part was worked out, so it goes while none of it has loaded. */
+.group:not(:has(> :not(h2, [data-saved-time], [data-section]))) > [data-saved-time] {
+  display: none;
+}
+
 .anchor {
   scroll-margin-top: 72px;
 }

@@ -1,13 +1,14 @@
 "use client";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import type { FormValues, MissingField } from "@/components/hadahan/BirthForm";
+import { type FormValues, type MissingField, latestBirth } from "@/components/hadahan/BirthForm";
 import formStyles from "@/components/hadahan/BirthForm.module.css";
 import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
 import type { Labels } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { NAKSHATRA } from "@/lib/nakshatra";
 import type { QuickInput } from "@/lib/porondam";
+import { useHydrated } from "@/lib/useHydrated";
 
 import styles from "./Porondam.module.css";
 
@@ -27,6 +28,8 @@ type Props = {
   onQuick: (update: (current: QuickInput) => QuickInput) => void;
   /** The details still needed, once the visitor has tried to match. */
   missing: PersonField[];
+  /** What is wrong with the date, once the visitor has tried to match. */
+  dateError?: string;
 };
 
 export type PersonField = MissingField | "star";
@@ -34,7 +37,8 @@ export type PersonField = MissingField | "star";
 /** The id of one person's field, so the form can take the visitor to it. */
 export const fieldId = (role: "bride" | "groom", field: string) => `${role}-${field}`;
 
-export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull, onQuick, missing }: Props) {
+export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull, onQuick, missing, dateError }: Props) {
+  const hydrated = useHydrated();
   const id = (field: string) => fieldId(role, field);
   const needed = (field: PersonField) => missing.includes(field) || undefined;
   const title = role === "bride" ? t.bride : t.groom;
@@ -73,11 +77,17 @@ export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull
                 className={formStyles.input}
                 type="date"
                 min="1800-01-01"
-                max="2200-12-31"
-                aria-invalid={needed("date")}
+                max={hydrated ? latestBirth(full) : undefined}
+                aria-invalid={needed("date") || Boolean(dateError) || undefined}
+                aria-describedby={dateError ? id("date-error") : undefined}
                 value={full.date}
                 onChange={(e) => setFull("date", e.target.value)}
               />
+              {dateError && (
+                <p id={id("date-error")} className={formStyles.fieldError}>
+                  {dateError}
+                </p>
+              )}
             </div>
             <div className={formStyles.field}>
               <label htmlFor={id("time")} className={formStyles.label}>

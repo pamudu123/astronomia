@@ -6,7 +6,7 @@ what prints always comes from the engine and never from numbers sent by the brow
 The one exception is the AI reading (docs/17): the chapters the person read on the page come
 back with the request and print in their own section, labelled as an AI reading. They are
 text the person already saw, not results. A paid report keeps its chapters (app/api/chapters):
-those words print, whatever the request holds.
+it prints every kept chapter and only those, whatever the request holds.
 """
 
 import datetime as dt
@@ -27,7 +27,9 @@ from app.api.report_requests import (
     ReportRequest,
 )
 from app.api.saved import Current, SettingsDep, input_hash
-from app.reports.render import render_hadahan, render_porondam
+from app.explain.labels import Lang
+from app.reports.chapter_titles import CHAPTER_TITLES
+from app.reports.render import Chapter, render_hadahan, render_porondam
 from app.tiers import report_access
 
 # Kept importable from here, where they used to be defined.
@@ -57,6 +59,15 @@ def _pdf(content: bytes, kind: str) -> Response:
     )
 
 
+def _kept_reading(kept: dict[str, str], lang: Lang) -> list[Chapter]:
+    """Every kept chapter, titled and ordered here. (The agent writes no other ids.)"""
+    return [
+        (chapter_id, titles[lang], kept[chapter_id])
+        for chapter_id, titles in CHAPTER_TITLES.items()
+        if chapter_id in kept
+    ]
+
+
 @router.post(
     "/v1/reports/pdf",
     response_class=Response,
@@ -82,11 +93,12 @@ def report_pdf(
     access = report_access(orders, user, body.kind, report_hash, settings.paid_reports)
     full = access.allows("full_pdf")
     lang = body.birth.lang if isinstance(body, HadahanPdf) else body.match.lang
-    # The words the paid report keeps win over what the browser sent back.
-    kept = kept_chapters.kept(access.order_id, lang) if access.order_id else {}
-    chapters = [
-        (c.id, c.title, kept.get(c.id or "", c.text)) for c in (body.reading if full else [])
-    ]
+    if access.order_id and settings.chat_key:
+        # A paid report: what the server keeps, never what the browser sent.
+        chapters = _kept_reading(kept_chapters.kept(access.order_id, lang), lang)
+    else:
+        # Paid reports are off, or a local run with no key, so no chapter can be kept.
+        chapters = [(c.id, c.title, c.text) for c in (body.reading if full else [])]
     if isinstance(body, HadahanPdf):
         hadahan = build_hadahan(body.birth, db)
         if hadahan.response.status != "ok":

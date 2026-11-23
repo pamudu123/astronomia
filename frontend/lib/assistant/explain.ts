@@ -48,8 +48,6 @@ export type ChapterId =
   | "chart.care"
   | "nakath.day"
   | "avurudu.times"
-  | "names.letters"
-  | "names.first"
   | "changes.mine"
   | "yearly.mine"
   | "kendara.dates";
@@ -83,8 +81,6 @@ export const CHAPTER_SPOT: Record<ChapterId, SpotName> = {
   "chart.care": "lotus",
   "nakath.day": "lamp",
   "avurudu.times": "pot",
-  "names.letters": "cradle",
-  "names.first": "book",
   "changes.mine": "change",
   "yearly.mine": "year",
   "kendara.dates": "search",
@@ -168,10 +164,7 @@ export const PAGE_PLACES = {
   day: ["nakath.day"],
   /** Place 10: "What do we do, and when?" */
   avurudu: ["avurudu.times"],
-  /** Place 11: "Which letter, and why?" */
-  babyLetters: ["names.letters"],
-  /** Place 12: "Which time for akuru kiyaweema?" */
-  firstLetters: ["names.first"],
+  // Places 11 and 12, the child tools, were removed: no AI on child results (docs/09).
   /** Place 13: "How does this planet change affect me?" */
   change: ["changes.mine"],
   /** Place 14: "What does next year look like for me?" */
@@ -310,23 +303,52 @@ export function chapterState(key: string): ChapterState {
 
 export const idleState = (): ChapterState => IDLE;
 
+/** Chapters that came from the server in this visit: the report keeps them. */
+const fromServer = new Set<string>();
+
+/** True for a chapter the paid report keeps on the server (takeKept). */
+export const isKept = (key: string): boolean => fromServer.has(key) && chapterState(key).status === "done";
+
 /**
  * Takes a chapter the paid report keeps on the server. It replaces what this device has, so the
  * words are the same everywhere; a chapter being written is left to finish.
  */
 export function takeKept(key: string, text: string): void {
   const current = chapterState(key);
-  if (current.status === "writing" || (current.status === "done" && current.text === text)) return;
+  if (current.status === "writing") return;
+  fromServer.add(key);
+  if (current.status === "done" && current.text === text) {
+    listeners.forEach((listener) => listener());
+    return;
+  }
   set(key, { status: "done", text });
   store(key, text);
 }
+
+/** Forgets a chapter this device holds, so it is asked for again. One being written is left. */
+export function forgetChapter(key: string): void {
+  if (chapterState(key).status === "writing") return;
+  try {
+    window.localStorage.removeItem(key);
+    window.sessionStorage?.removeItem(key);
+  } catch {
+    // Blocked storage holds nothing.
+  }
+  set(key, IDLE);
+}
+
+export type KeptChapters = {
+  chapters: Partial<Record<ChapterId, string>>;
+  /** True when the server keeps this report's chapters: its PDF prints only those. */
+  keeps?: boolean;
+};
 
 /** The chapters a paid report keeps in one language, by id. Empty for any other report. */
 export async function fetchKept(
   report: ReportRequest,
   language: Locale,
   init: RequestInit = {},
-): Promise<Partial<Record<ChapterId, string>>> {
+): Promise<KeptChapters> {
   const response = await fetch("/api/v1/reports/chapters", {
     method: "POST",
     headers: { "Content-Type": "application/json", ...(await accountHeaders()) },
@@ -335,7 +357,7 @@ export async function fetchKept(
     ...init,
   });
   if (!response.ok) throw new Error(`kept chapters: ${response.status}`);
-  return ((await response.json()) as { chapters: Partial<Record<ChapterId, string>> }).chapters;
+  return (await response.json()) as KeptChapters;
 }
 
 /**
@@ -454,6 +476,7 @@ export async function writeAll(
 /** Forgets every chapter in memory (tests). */
 export function resetChapters(): void {
   entries.clear();
+  fromServer.clear();
 }
 
 // ---- The text: the small part of markdown a chapter uses (explain-card skill). ----

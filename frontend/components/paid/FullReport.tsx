@@ -1,17 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { type FormEvent, useContext, useId, useState } from "react";
+import { type FormEvent, useContext, useId, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Lock } from "@/components/Icons";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
-import { type CouponQuote, applyCoupon, cleanCode, formatPrice, signInForReport, unlockReport } from "@/lib/paid";
+import {
+  type CouponQuote,
+  applyCoupon,
+  cleanCode,
+  formatPrice,
+  fullReportIncludes,
+  signInForReport,
+  unlockReport,
+} from "@/lib/paid";
 import { RequestError } from "@/lib/request";
 
 import styles from "./FullReport.module.css";
-import { PaidText, useReportAccess } from "./ReportAccess";
+import { CheckFailed, PaidText, useReportAccess } from "./ReportAccess";
 
 type Text = Dictionary["paid"];
 type Problem = keyof Text["problems"];
@@ -57,8 +65,9 @@ export function DetailLocked() {
  * "Get the full report" (docs/18, section 4), under a hadahan or porondam result. Shows the
  * price from the server, asks for Google sign in, takes a coupon, and unlocks the report when
  * the coupon makes it free. Nothing shows while paid reports are switched off on the server.
+ * `kujaPresent`: the chart has Kuja dosha, whose rules the full report opens.
  */
-export function FullReport({ lang }: { lang: Locale }) {
+export function FullReport({ lang, kujaPresent = false }: { lang: Locale; kujaPresent?: boolean }) {
   const t = useContext(PaidText);
   const { access, report, set } = useReportAccess();
   const base = useId();
@@ -66,8 +75,16 @@ export function FullReport({ lang }: { lang: Locale }) {
   const [code, setCode] = useState("");
   const [quote, setQuote] = useState<CouponQuote | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
+  const codeInput = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState<"apply" | "unlock" | "google" | null>(null);
 
+  if (t && report && access.state === "failed") {
+    return (
+      <div id={FULL_REPORT} ref={scrollIfAsked} data-card="full-report">
+        <CheckFailed />
+      </div>
+    );
+  }
   if (!t || !report || access.state !== "ready" || !access.access.paid_reports) return null;
   const { paid, account, price } = access.access;
 
@@ -139,6 +156,13 @@ export function FullReport({ lang }: { lang: Locale }) {
     }
   }
 
+  function another() {
+    setCode("");
+    setQuote(null);
+    setProblem(null);
+    codeInput.current?.focus();
+  }
+
   const signedIn = account === "google";
   const free = quote?.result === "free";
 
@@ -170,8 +194,8 @@ export function FullReport({ lang }: { lang: Locale }) {
       </div>
 
       <ul className={styles.includes}>
-        {t.includes.map((line) => (
-          <li key={line}>{line}</li>
+        {fullReportIncludes(report, kujaPresent).map((line) => (
+          <li key={line}>{t.includes[line]}</li>
         ))}
       </ul>
 
@@ -208,6 +232,7 @@ export function FullReport({ lang }: { lang: Locale }) {
               <div className={styles.row}>
                 <input
                   id={`${base}-code`}
+                  ref={codeInput}
                   className={styles.input}
                   value={code}
                   onChange={(event) => {
@@ -255,9 +280,14 @@ export function FullReport({ lang }: { lang: Locale }) {
             </button>
           ) : (
             quote && (
-              <p className={styles.small}>
-                <Lock size={14} /> {t.paymentLater}
-              </p>
+              <>
+                <p className={styles.small}>
+                  <Lock size={14} /> {t.paymentLater}
+                </p>
+                <button type="button" className={styles.linkButton} onClick={another} data-another-code>
+                  {t.anotherCode}
+                </button>
+              </>
             )
           )}
         </div>

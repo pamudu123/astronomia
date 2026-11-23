@@ -744,7 +744,8 @@ export interface paths {
         post?: never;
         /**
          * Delete Saved
-         * @description Deletes one saved report.
+         * @description Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the
+         *     same report can be opened and read again.
          */
         delete: operations["delete_saved_v1_saved__report_id__delete"];
         options?: never;
@@ -1095,6 +1096,48 @@ export interface components {
             offset: string;
             time_check: components["schemas"]["TimeCheckOut"];
         };
+        /** BabyLettersRequest */
+        BabyLettersRequest: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Time
+             * Format: time
+             */
+            time: string;
+            /**
+             * Place Id
+             * @description A place id from /v1/places
+             */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /**
+             * Timezone
+             * @description Needed with latitude and longitude
+             */
+            timezone?: string | null;
+            /** Fold */
+            fold?: (0 | 1) | null;
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+            /** As Of */
+            as_of?: string | null;
+            /**
+             * Guardian Consent
+             * @constant
+             */
+            guardian_consent: true;
+        };
         /** BabyLettersResponse */
         BabyLettersResponse: {
             /** Status */
@@ -1267,6 +1310,8 @@ export interface components {
             chapters: {
                 [key: string]: string;
             };
+            /** Keeps */
+            keeps: boolean;
         };
         /** ChartOut */
         ChartOut: {
@@ -1488,6 +1533,11 @@ export interface components {
             child: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
             /** Birth Date */
             birth_date?: string | null;
+            /**
+             * Guardian Consent
+             * @default false
+             */
+            guardian_consent: boolean;
             /** Place Id */
             place_id?: number | null;
             /** Latitude */
@@ -4403,7 +4453,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["HadahanRequest"];
+                "application/json": components["schemas"]["BabyLettersRequest"];
             };
         };
         responses: {

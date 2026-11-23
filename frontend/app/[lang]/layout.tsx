@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, JetBrains_Mono, Marcellus, Noto_Sans_Sinhala, Noto_Serif_Sinhala } from "next/font/google";
-import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { Assistant } from "@/components/assistant/Assistant";
+import { NotFoundTextProvider } from "@/components/NotFoundPage";
 import { PaidTextProvider } from "@/components/paid/ReportAccess";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { type Locale, hasLocale, locales } from "@/lib/i18n";
+import { type Locale, defaultLocale, hasLocale, locales } from "@/lib/i18n";
 import { THEME_SCRIPT } from "@/lib/theme";
 
 import "../globals.css";
@@ -69,8 +69,10 @@ function Page({ lang, dict, children }: { lang: Locale; dict: Dictionary; childr
 }
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
-  const { lang } = await params;
-  if (!hasLocale(lang)) notFound();
+  const { lang: first } = await params;
+  // An unknown language (an address with a dot, which proxy.ts lets through) is not found: the
+  // page says so, inside the site in the default language.
+  const lang = hasLocale(first) ? first : defaultLocale;
   const dict = await getDictionary(lang);
 
   return (
@@ -87,7 +89,11 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         <PaidTextProvider value={dict.paid}>
           <Page lang={lang} dict={dict}>
             <SiteHeader lang={lang} dict={dict} />
-            {children}
+            <NotFoundTextProvider
+              value={{ lang, t: dict.notFound, hadahan: dict.nav.hadahan, porondam: dict.nav.porondam, tools: dict.nav.tools }}
+            >
+              {children}
+            </NotFoundTextProvider>
             <SiteFooter lang={lang} dict={dict} />
           </Page>
         </PaidTextProvider>

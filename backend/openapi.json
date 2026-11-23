@@ -1384,7 +1384,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/HadahanRequest"
+                "$ref": "#/components/schemas/BabyLettersRequest"
               }
             }
           }
@@ -2142,7 +2142,7 @@
           "saved"
         ],
         "summary": "Delete Saved",
-        "description": "Deletes one saved report.",
+        "description": "Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the\nsame report can be opened and read again.",
         "operationId": "delete_saved_v1_saved__report_id__delete",
         "parameters": [
           {
@@ -3139,6 +3139,118 @@
         ],
         "title": "BabyChartOut"
       },
+      "BabyLettersRequest": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "time": {
+            "type": "string",
+            "format": "time",
+            "title": "Time"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id",
+            "description": "A place id from /v1/places"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "Needed with latitude and longitude"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "guardian_consent": {
+            "type": "boolean",
+            "const": true,
+            "title": "Guardian Consent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "time",
+          "guardian_consent"
+        ],
+        "title": "BabyLettersRequest"
+      },
       "BabyLettersResponse": {
         "properties": {
           "status": {
@@ -3653,11 +3765,16 @@
             },
             "type": "object",
             "title": "Chapters"
+          },
+          "keeps": {
+            "type": "boolean",
+            "title": "Keeps"
           }
         },
         "type": "object",
         "required": [
-          "chapters"
+          "chapters",
+          "keeps"
         ],
         "title": "ChaptersOut",
         "description": "Chapter texts by id. Empty when the report is not paid for or has none yet."
@@ -4294,6 +4411,11 @@
               }
             ],
             "title": "Birth Date"
+          },
+          "guardian_consent": {
+            "type": "boolean",
+            "title": "Guardian Consent",
+            "default": false
           },
           "place_id": {
             "anyOf": [

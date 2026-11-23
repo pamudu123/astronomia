@@ -504,7 +504,8 @@ test("a saved hadahan's label goes when its live parts cannot be loaded", async 
   await page.route("**/api/v1/changes/personal", (route) => route.fulfill({ status: 503, body: "" }));
   await page.reload();
   await expect(page.locator('#periods [data-saved-time="frozen"]')).toBeVisible();
-  await expect(page.locator("#coming")).toBeHidden();
+  // Each part says it could not load and can be tried again, but nothing claims to be worked out.
+  await expect(page.locator("#coming").getByRole("button", { name: /^Try again/ })).toHaveCount(2);
   await expect(page.locator('[data-saved-time="live"]:visible')).toHaveCount(0);
 });
 
@@ -567,4 +568,98 @@ test("a report from another browser is not there", async ({ page }) => {
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
   await page.goto(`/en/my/${ID}`);
   await expect(page.locator("[data-saved-gone]")).toContainText("This report is not here");
+});
+
+test("a Google account with no reports can delete itself", async ({ page }) => {
+  await standInSupabase(page, { google: "return" });
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { reports: [] })));
+  const deleted: (string | null)[] = [];
+  await page.route("**/api/v1/me", async (route) => {
+    deleted.push(await route.request().headerValue("x-sidera-token"));
+    return route.fulfill({ status: 204, body: "" });
+  });
+  await page.goto("/en/my");
+  await expect(page.locator("[data-saved-empty]")).toContainText("Nothing saved yet");
+  // Nobody is signed in yet: there is no account to delete.
+  await expect(page.getByRole("button", { name: "Delete my account" })).toHaveCount(0);
+  await page.locator("#sign-in").getByRole("button", { name: "Continue with Google" }).click();
+  await expect(page.locator("#sign-in")).toContainText(`Signed in with Google as ${GOOGLE_EMAIL}.`);
+
+  await page.getByRole("button", { name: "Delete my account" }).click();
+  await page.getByRole("button", { name: "Yes, delete my account" }).click();
+  await expect(page.getByText("Everything is deleted. Nothing from it is kept.")).toBeVisible();
+  expect(deleted).toHaveLength(1);
+  expect(deleted[0]).toBeTruthy();
+  await expect(page.getByRole("button", { name: "Delete my account" })).toHaveCount(0);
+});
+
+const PAID_ACCESS = {
+  paid: true,
+  features: ["ai_reading", "ai_explain", "full_detail", "full_pdf"],
+  paid_reports: true,
+  account: "google",
+  price: { amount: 80_000, currency: "LKR" },
+};
+
+test("a failed paid check shows the free report, and asks again when told to", async ({ page }) => {
+  let down = true;
+  await page.route("**/api/v1/reports/access", (route) =>
+    down ? route.fulfill({ status: 503, body: "" }) : route.fulfill(reply(200, PAID_ACCESS)),
+  );
+  await openSavedHadahan(page, "en", null);
+  const kuja = page.locator('[data-card="kuja"]');
+  await kuja.locator("summary").click();
+  await expect(kuja.locator('[data-locked="full_detail"]')).toBeVisible();
+  const card = page.locator('[data-card="full-report"]');
+  await expect(card).toContainText("We could not check whether this is a full report");
+  // Asking again while the backend is still away changes nothing.
+  const again = card.getByRole("button", { name: "Check again" });
+  await again.click();
+  await expect(again).toBeVisible();
+
+  down = false;
+  await again.click();
+  await expect(card.getByRole("heading", { name: "This is your full report" })).toBeVisible();
+  await expect(kuja.locator('[data-locked="full_detail"]')).toHaveCount(0);
+  await expect(page.locator("[data-check-failed]")).toHaveCount(0);
+});
+
+test("the full report of a chart with Kuja dosha promises its rules", async ({ page }) => {
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill(reply(200, { ...PAID_ACCESS, paid: false, features: [] })),
+  );
+  await openSavedHadahan(page, "en", null);
+  await expect(page.locator('[data-card="full-report"] li')).toHaveText([
+    "The full AI reading, chapter by chapter",
+    "Explain buttons on every main place",
+    "Every Kuja dosha rule, in full",
+    "The full PDF with the AI reading",
+    "Kept in your account, on any device",
+  ]);
+});
+
+test("the full report of a match made from full details promises no Kuja dosha rules", async ({ page }) => {
+  const shared = JSON.parse(fixture("share-porondam-en.json"));
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill(reply(200, { ...PAID_ACCESS, paid: false, features: [] })),
+  );
+  await page.route(`**/api/v1/saved/${MATCH_ID}?lang=en`, (route) =>
+    route.fulfill(
+      reply(200, {
+        ...matchItem,
+        request: { kind: "porondam", match: { bride: { ...BIRTH, name: "Nimali" }, groom: { ...BIRTH, name: "Kasun" } } },
+        hadahan_result: null,
+        porondam_result: shared.porondam,
+      }),
+    ),
+  );
+  await page.goto(`/en/my/${MATCH_ID}`);
+  await expect(page.locator('[data-card="full-report"] li')).toHaveText([
+    "The full AI reading, chapter by chapter",
+    "Explain buttons on every main place",
+    "The full PDF with the AI reading",
+    "Kept in your account, on any device",
+  ]);
 });

@@ -352,13 +352,36 @@ test("a paid report opened on another device has its kept chapters, and the AI i
   await mockKept(page, { "match.people": "Kept words about the two of you.", "match.checks": "Kept checks." });
   await quickMatch(page);
 
+  // The reading is already there, though not all of it is written: nothing to get first.
   const card = page.locator('[data-card="full-reading"]');
-  await card.getByRole("button", { name: "Get the full reading" }).click();
+  await card.getByRole("heading", { name: "The two of you" }).getByRole("button").click();
   await expect(card.locator('[data-chapter="match.people"]')).toContainText("Kept words about the two of you.");
-  await expect.poll(() => calls).not.toContain("match.people");
   await card.getByRole("heading", { name: "The serious checks" }).getByRole("button").click();
   await expect(card.locator('[data-chapter="match.checks"]')).toContainText("Kept checks.");
-  expect(calls).not.toContain("match.checks");
+  expect(calls).toEqual([]);
+});
+
+test("the paid PDF has a chapter written again that this device holds but the report does not keep", async ({ page }) => {
+  const calls = await mockAll(page, new Set(), PAID_REPORT);
+  // Like the server: a chapter is kept when it is written, except the first time for this one.
+  let failed = false;
+  const kept: Record<string, string> = {};
+  page.on("request", (request) => {
+    if (!request.url().endsWith("/api/explain")) return;
+    const { id } = JSON.parse(request.postData() ?? "{}") as { id: string };
+    if (id === "match.people" && !failed) failed = true;
+    else kept[id] = chapter(id);
+  });
+  await page.route("**/api/v1/reports/chapters", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify({ chapters: kept, keeps: true }) }),
+  );
+  const made = await mockPdf(page);
+  await quickMatch(page);
+
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => made.length, { timeout: 30_000 }).toBe(1);
+  expect(calls.filter((id) => id === "match.people")).toHaveLength(2);
+  expect(new Set(calls).size).toBe(calls.length - 1);
 });
 
 test("a paid PDF with a chapter missing is not handed over, and trying again writes only that one", async ({ page }) => {

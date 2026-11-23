@@ -93,6 +93,15 @@ class ChapterStore:
             ).fetchall()
         return {str(chapter_id): str(text) for chapter_id, text in rows}
 
+    def forget_order(self, order_id: str, user_id: str) -> None:
+        """For a deleted saved report. The order stays: it is a sales record."""
+        with self._connect() as db:
+            self._run(
+                db,
+                "DELETE FROM {report_chapters} WHERE order_id = ? AND user_id = ?",
+                (order_id, user_id),
+            )
+
     def forget_user(self, user_id: str) -> None:
         """For a deleted account. PostgreSQL also does this through the foreign key."""
         with self._connect() as db:

@@ -150,6 +150,7 @@ test("the summary fits a phone screen", async ({ page }) => {
     await card.getByRole("combobox").fill("kandy");
     await card.getByRole("option").first().click();
   }
+  await page.locator("#match-consent").check();
   await page.getByRole("button", { name: "Match the charts" }).click();
   const factors = page.locator('[data-panel="factors"]');
   await expect(factors.locator("[data-ring]")).toBeVisible();
@@ -179,6 +180,7 @@ test("a full match shows Kuja dosha for both", async ({ page }) => {
     await card.getByRole("combobox").fill("kandy");
     await card.getByRole("option").first().click();
   }
+  await page.locator("#match-consent").check();
   await page.getByRole("button", { name: "Match the charts" }).click();
   await expect(page.locator('[data-panel="factors"]')).toContainText("9 of 18 agree");
   await expect(page.locator('[data-factor="graha"]')).toHaveAttribute("data-counted", "true");
@@ -197,6 +199,7 @@ test("the Sinhala result uses Sinhala names", async ({ page }) => {
     await card.getByRole("combobox").fill("kandy");
     await card.getByRole("option").first().click();
   }
+  await page.locator("#match-consent").check();
   await page.getByRole("button", { name: "පොරොන්දම් ගළපන්න" }).click();
   await expect(page.locator('[data-factor="dina"]')).toContainText("නැකත්");
   await expect(page.locator('[data-factor="weekday"]')).toContainText("දින");
@@ -284,6 +287,7 @@ test("years ahead shows the running dasha for a full match, in Sinhala", async (
     await card.getByRole("combobox").fill("kandy");
     await page.getByRole("option").first().click();
   }
+  await page.locator("#match-consent").check();
   await page.locator('button[type="submit"]').click();
 
   const section = page.locator('[data-card="timeline"]');
@@ -302,6 +306,14 @@ test("the match still shows when the years ahead cannot load", async ({ page }) 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
   await expect(page.locator("[data-factor]")).toHaveCount(18);
   await expect(page.locator('[data-card="timeline"]')).toHaveCount(0);
+
+  // It says so in one line, and trying again brings it.
+  const section = page.locator('[data-section="timeline"]');
+  await expect(section).toContainText("We could not load this section.");
+  await timeline(page, "timeline-quick-en.json");
+  await section.getByRole("button", { name: "Try again" }).click();
+  await expect(page.locator('[data-card="timeline"]')).toBeVisible();
+  await expect(section).toHaveCount(0);
 });
 
 test("wedding nakath for the couple, from the match", async ({ page }) => {
@@ -607,4 +619,224 @@ test("the match page without the wedding link opens at the top, with no wedding 
   await quickForm(page);
   await page.getByRole("button", { name: "Match the charts" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
+});
+
+test("a star match's full report lists what it gains, and a discount code is valid for later", async ({ page }) => {
+  const price = { amount: 80_000, currency: "LKR" };
+  const body = (value: object) => ({ contentType: "application/json", body: JSON.stringify(value) });
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill(body({ paid: false, features: [], paid_reports: true, account: "google", price })),
+  );
+  await page.route("**/api/v1/coupons/apply", (route) => {
+    const { code } = route.request().postDataJSON() as { code: string };
+    return route.fulfill(
+      body(
+        code === "pamudu"
+          ? { result: "free", percent_off: 100, price, new_price: { ...price, amount: 0 } }
+          : { result: "payment_not_available", percent_off: 20, price, new_price: { ...price, amount: 64_000 } },
+      ),
+    );
+  });
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await page.getByRole("button", { name: "Match the charts" }).click();
+
+  const form = page.locator('[data-card="full-report"]');
+  await expect(form.locator("li")).toHaveText([
+    "The full AI reading, from the two birth stars",
+    "Explain buttons on every main place",
+    "The full PDF with the AI reading",
+    "Kept in your account, on any device",
+  ]);
+
+  await form.getByRole("button", { name: "Have a coupon?" }).click();
+  const code = form.getByLabel("Coupon code");
+  await code.fill("SIDERA20");
+  await form.getByRole("button", { name: "Apply" }).click();
+  await expect(form).toContainText("20% off: LKR 640 for this report.");
+  await expect(form).toContainText("This code is valid");
+  await expect(form).toContainText("it will work once payment opens");
+  await expect(form.locator("[data-unlock]")).toHaveCount(0);
+
+  await form.getByRole("button", { name: "Use another code" }).click();
+  await expect(code).toBeFocused();
+  await expect(code).toHaveValue("");
+  await expect(form.locator("[data-price]")).toContainText("LKR 800");
+  await code.fill("pamudu");
+  await form.getByRole("button", { name: "Apply" }).click();
+  await expect(form.getByRole("button", { name: "Unlock free" })).toBeVisible();
+});
+
+async function fullForm(page: Page) {
+  for (const [role, date] of [["Bride", "1995-04-19"], ["Groom", "1992-08-03"]]) {
+    const card = page.getByRole("group", { name: role });
+    await card.getByLabel("Date of birth").fill(date);
+    await card.getByLabel("Time of birth").fill("10:00");
+    await card.getByRole("combobox").fill("kandy");
+    await card.getByRole("option").first().click();
+  }
+}
+
+const submitMatch = (page: Page) => page.getByRole("button", { name: "Match the charts" }).click();
+const person = (page: Page, name: string) => page.getByRole("group", { name });
+
+test("a match from full birth details asks that both adults agreed", async ({ page }) => {
+  const requests = await mockBackend(page, "en", "porondam-full-en.json");
+  await page.goto("/en/porondam");
+  await fullForm(page);
+  const consent = page.getByRole("checkbox", { name: /both have agreed/ });
+  await expect(consent).not.toHaveAttribute("aria-invalid", "true");
+  await submitMatch(page);
+  await expect(consent).toBeFocused();
+  await expect(consent).toHaveAttribute("aria-invalid", "true");
+  await expect(consent).toHaveAccessibleDescription(/Please confirm this before matching/);
+  expect(requests).toHaveLength(0);
+
+  // Who cannot confirm is taken to the birth stars, which need no confirmation.
+  await page.getByRole("button", { name: "Match birth stars instead" }).click();
+  await expect(page.locator('[data-mode="quick"]')).toBeFocused();
+  await expect(consent).toHaveCount(0);
+
+  await page.getByRole("button", { name: /Full birth details/ }).click();
+  await consent.check();
+  await expect(page.getByText("Please confirm this before matching")).toHaveCount(0);
+  await submitMatch(page);
+  await expect(page.locator('[data-panel="factors"]')).toContainText("9 of 18 agree");
+  // Asked again for the next match.
+  await page.getByRole("button", { name: "Try another match" }).first().click();
+  await expect(consent).not.toBeChecked();
+});
+
+test("the confirmation is in Sinhala on the Sinhala page", async ({ page }) => {
+  await mockBackend(page, "si", "porondam-full-si.json");
+  await page.goto("/si/porondam");
+  await expect(page.getByRole("checkbox", { name: /දෙදෙනාම එකඟ වී සිටිති/ })).toBeVisible();
+  await page.getByRole("button", { name: "ඒ වෙනුවට උපන් නැකත් ගළපන්න" }).click();
+  await expect(page.locator('[data-mode="quick"]')).toHaveAttribute("aria-pressed", "true");
+});
+
+test("what was typed for both people survives a change of language and a reload, in both modes", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.route("**/api/v1/labels/si", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture("labels-si.json") }),
+  );
+  await page.goto("/en/porondam");
+  await fullForm(page);
+  await quickForm(page);
+
+  await toLanguage(page, "සිංහල");
+  await expect(page).toHaveURL(/\/si\/porondam/);
+  const bride = page.getByRole("group", { name: "මනාලිය" });
+  await expect(page.locator('[data-mode="quick"]:visible')).toHaveAttribute("aria-pressed", "true");
+  await expect(bride.locator("select").first()).toHaveValue("anuradha");
+  await bride.getByRole("textbox").first().fill("Nirmala");
+  await page.locator('[data-mode="full"]:visible').click();
+  await expect(page.getByRole("group", { name: "මනාලයා" }).locator('input[type="date"]')).toHaveValue("1992-08-03");
+  await expect(bride.getByRole("combobox")).toHaveValue(/./);
+
+  // Back in English, the page takes up what was typed in Sinhala, not its own older values.
+  await toLanguage(page, "English");
+  await expect(page).toHaveURL(/\/en\/porondam/);
+  await expect(page.locator('[data-mode="full"]:visible')).toHaveAttribute("aria-pressed", "true");
+  await page.locator('[data-mode="quick"]:visible').click();
+  await expect(person(page, "Bride").getByLabel(/Name/)).toHaveValue("Nirmala");
+  await page.reload();
+  await expect(person(page, "Bride").getByLabel(/Name/)).toHaveValue("Nirmala");
+  await expect(person(page, "Groom").getByLabel("Birth star (nakath)")).toHaveValue("rohini");
+});
+
+test("the draft goes when a match is made, and Try another match keeps the details through a reload", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  const draft = () => page.evaluate(() => sessionStorage.getItem("astronomia.porondam.draft"));
+  expect(await draft()).toContain("anuradha");
+  await submitMatch(page);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
+  expect(await draft()).toBeNull();
+  await page.reload();
+  await page.getByRole("button", { name: "Try another match" }).first().click();
+  await page.reload();
+  await expect(person(page, "Bride").getByLabel("Birth star (nakath)")).toHaveValue("anuradha");
+  await expect(person(page, "Groom").getByLabel(/Name/)).toHaveValue("Kasun");
+});
+
+test("a match made from a star link survives a reload, and a new star link starts a new match", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.goto("/en/porondam?bride=anuradha.2&groom=rohini.1");
+  await submitMatch(page);
+  await expect(page.locator('[data-panel="factors"]')).toBeVisible();
+  await page.reload();
+  await expect(page.locator('[data-panel="factors"]')).toBeVisible();
+
+  await page.goto("/en/porondam?bride=krittika.2&groom=hasta.1");
+  await expect(person(page, "Bride").getByLabel("Birth star (nakath)")).toHaveValue("krittika");
+  await expect(page.locator('[data-panel="factors"]')).toHaveCount(0);
+});
+
+test("a finished match stays when the backend does not answer after a reload", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await submitMatch(page);
+  await expect(page.locator('[data-panel="factors"]')).toBeVisible();
+  await page.route("**/api/v1/porondam", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.reload();
+  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 16 agree");
+});
+
+test("the match form recovers when its names cannot be loaded, keeping what was typed", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.goto("/en/porondam");
+  const alert = page.locator("form").getByRole("alert");
+  await expect(alert).toContainText("What you typed is kept.");
+  await quickForm(page);
+  await expect(page.getByRole("button", { name: "Match the charts" })).toBeDisabled();
+  await page.route("**/api/v1/labels/*", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture("labels-en.json") }),
+  );
+  await alert.getByRole("button", { name: "Try again" }).click();
+  await expect(alert).toHaveCount(0);
+  await expect(person(page, "Bride").getByLabel(/Name/)).toHaveValue("Nimali");
+  await submitMatch(page);
+  await expect(page.locator('[data-panel="factors"]')).toBeVisible();
+});
+
+test("a match refuses a birth date still to come", async ({ page }) => {
+  const requests = await mockBackend(page, "en", "porondam-full-en.json");
+  await page.goto("/en/porondam");
+  await fullForm(page);
+  await page.locator("#match-consent").check();
+  const date = person(page, "Groom").getByLabel("Date of birth");
+  await date.fill("2199-01-01");
+  await submitMatch(page);
+  await expect(date).toBeFocused();
+  await expect(date).toHaveAccessibleDescription("Date of birth cannot be in the future.");
+  expect(requests).toHaveLength(0);
+});
+
+test("the couple's road holds its place while it loads, and can be tried again", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-full-en.json");
+  await timeline(page, "timeline-full-en.json");
+  let release = () => {};
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let calls = 0;
+  await page.route("**/api/v1/journey/couple", async (route) => {
+    calls += 1;
+    if (calls === 1) await held;
+    await route.fulfill({ status: 503, body: "" });
+  });
+  await page.goto("/en/porondam");
+  await fullForm(page);
+  await page.locator("#match-consent").check();
+  await submitMatch(page);
+  const road = page.locator('[data-section="couple-road"]');
+  await expect(road).toHaveAttribute("data-status", "loading");
+  expect((await road.boundingBox())!.height).toBeGreaterThan(600);
+  release();
+  await expect(road).toContainText("We could not load this section.");
+  await road.getByRole("button", { name: "Try again" }).click();
+  await expect.poll(() => calls).toBe(2);
 });

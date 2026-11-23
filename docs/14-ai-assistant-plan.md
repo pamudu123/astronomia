@@ -56,7 +56,7 @@ The greeting and the buttons come from the real result, not a fixed list.
 | Star match (`/porondam/stars`) | The two birth stars, quick result | "Is this enough, or do we need full charts?" |
 | Good times (`/nakath`) | Date, place, the good and bad times shown | "Is 10:30 good for signing a lease?" |
 | Wedding dates | Search inputs and dates found | "Which of these dates is best for us?" |
-| Baby names, first letters | Birth star, letters, names shown | "Which letter is best?" |
+| Baby names, first letters | Only which page is open, never the child's result (docs/09) | "What happens at akuru kiyaweema?" |
 | Old horoscope (`/kendara`) | What was typed from the paper chart, matches found | "Why are there three possible dates?" |
 | Year ahead, changes, forecast | Year, sign, the changes shown | "How does this change affect me?" |
 | Shared result (`/s/[code]`) | That it's someone else's shared result, and its summary | "What does this match mean?" (answers about "this person", not "you") |

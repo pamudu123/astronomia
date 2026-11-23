@@ -1,6 +1,4 @@
-import type { BabyLetters } from "@/lib/babynames";
 import type { PersonalChange, Upcoming } from "@/lib/changes";
-import type { FirstLetters } from "@/lib/firstletters";
 import type { AnyHadahan, Labels, Place } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import type { KendaraResult } from "@/lib/kendara";
@@ -29,6 +27,9 @@ import { type Json, type PageContext, matchContext } from "./context";
  * The rule for every builder: only results the page shows. Never names, birth dates, birth
  * times or birth places. Where a result would reveal a birth date (the old horoscope search,
  * the first life period), it is left out.
+ *
+ * The child tools (baby name letters, first letters) have no builder: the assistant knows which
+ * page is open, never the child's result (docs/09).
  *
  * Pages whose address already says what they show (a month, a sign, a planet change) need no
  * builder: the assistant reads the address and looks the facts up itself.
@@ -460,29 +461,7 @@ export function avuruduContext(data: Avurudu, language: Locale): PageContext {
   };
 }
 
-/** Baby name letters for a birth: the star and its letters. No birth details. */
-export function babyLettersContext(result: BabyLetters, language: Locale): PageContext {
-  const { chart, letter } = result;
-  if (!chart || !letter) return { page: "baby_names", language };
-  return {
-    page: "baby_names_result",
-    language,
-    result: {
-      birth_star: chart.star_name,
-      birth_star_id: chart.star,
-      pada: chart.pada,
-      moon_sign: chart.rashi_name,
-      rising_sign: chart.lagna_name,
-      first_letter: letter.letter,
-      sounds_like: letter.latin,
-      also_used: letter.others,
-      nearby_letters: result.nearby.map((n) => n.letter),
-      provisional: result.provisional,
-    },
-  };
-}
-
-function suggestions(items: FirstLetters["suggestions"] | Wedding["ceremonies"][number]["suggestions"]): Json {
+function suggestions(items: Wedding["ceremonies"][number]["suggestions"]): Json {
   return items.slice(0, 8).map((s) => ({
     date: s.date_text,
     weekday: s.weekday,
@@ -492,24 +471,6 @@ function suggestions(items: FirstLetters["suggestions"] | Wedding["ceremonies"][
     passes: s.passes,
     cautions: s.cautions,
   }));
-}
-
-/** First letters ceremony: the times found. The child's birth details stay out. */
-export function firstLettersContext(result: FirstLetters, language: Locale): PageContext {
-  return {
-    page: "first_letters_result",
-    language,
-    result: {
-      child_birth_star: result.child?.star_name ?? null,
-      searched_from: result.first ?? null,
-      searched_to: result.last ?? null,
-      place: result.place?.name ?? null,
-      times_found: suggestions(result.suggestions),
-      none_found: result.none_text ?? null,
-      age_note: result.age_note ?? null,
-      provisional: result.provisional ?? null,
-    },
-  };
 }
 
 /**

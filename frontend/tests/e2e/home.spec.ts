@@ -57,6 +57,50 @@ test("the language switch keeps the same page", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("කේන්දර දෙකක් ගළපන්න");
 });
 
+test("the language switch keeps the query and hash", async ({ page }) => {
+  const language = page.getByRole("group", { name: "Language" });
+  const tail = "?bride=anuradha.2&groom=rohini.1";
+  await page.goto(`/en/porondam${tail}`);
+  await expect(language.getByRole("link", { name: "සිංහල" })).toHaveAttribute("href", `/si/porondam${tail}`);
+  await language.getByRole("link", { name: "සිංහල" }).click();
+  await expect(page).toHaveURL(`/si/porondam${tail}`);
+  await expect(page.locator("html")).toHaveAttribute("lang", "si");
+  await page.goto("/en/tools#marriage");
+  await language.getByRole("link", { name: "සිංහල" }).click();
+  await expect(page).toHaveURL("/si/tools#marriage");
+});
+
+test("the language switch sees a query added without a page load", async ({ page }) => {
+  await page.goto("/en/porondam");
+  await page.evaluate(() => window.history.replaceState(null, "", "?for=wedding"));
+  await page.getByRole("group", { name: "Language" }).getByRole("link", { name: "සිංහල" }).click();
+  await expect(page).toHaveURL("/si/porondam?for=wedding");
+});
+
+test("the root opens in the language last chosen", async ({ page }) => {
+  await page.goto("/en");
+  await page.getByRole("group", { name: "Language" }).getByRole("link", { name: "සිංහල" }).click();
+  await expect(page).toHaveURL(/\/si$/);
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/si$/);
+  await page.goto("/porondam?for=wedding");
+  await expect(page).toHaveURL(/\/si\/porondam\?for=wedding$/);
+  await page.goto("/si");
+  await page.getByRole("group", { name: "භාෂාව" }).getByRole("link", { name: "English" }).click();
+  await expect(page).toHaveURL(/\/en$/);
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/en$/);
+});
+
+test("the browser icons are there", async ({ page, request }) => {
+  const favicon = await request.get("/favicon.ico");
+  expect(favicon.status()).toBe(200);
+  expect(favicon.headers()["content-type"]).toContain("icon");
+  await page.goto("/en");
+  const apple = await page.locator('link[rel="apple-touch-icon"]').first().getAttribute("href");
+  expect((await request.get(apple ?? "")).status()).toBe(200);
+});
+
 test("the page does not scroll sideways on a phone", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto("/si");

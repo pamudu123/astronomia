@@ -517,7 +517,7 @@ function HadahanResultPage({
       </section>
 
       {/* Getting the full report, then the reading it unlocks. */}
-      {request && <FullReport lang={lang} />}
+      {request && <FullReport lang={lang} kujaPresent={kuja.present} />}
 
       {/* The long chapter reading comes last, so the chart itself is what shows first. */}
       <FullReading
@@ -554,7 +554,7 @@ function HadahanResultPage({
         >
           {/* Only on the visitor's own result, which always has its birth details. */}
           {remember && (
-            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan }} />
+            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan, lang }} />
           )}
         </NextSteps>
       )}

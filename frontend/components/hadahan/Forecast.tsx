@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import {
   type BirthRequest,
@@ -13,6 +11,8 @@ import {
 import type { Locale } from "@/lib/i18n";
 
 import { PlanetIcon } from "@/components/PlanetIcon";
+import { SectionState } from "@/components/SectionState";
+import { useSection } from "@/lib/useSection";
 
 import styles from "./Forecast.module.css";
 import { Kendara } from "./Kendara";
@@ -54,21 +54,13 @@ function MonthTrack({ planet, days, labels }: { planet: PlanetMonth; days: numbe
 
 /** "This month for you": where the slow planets are, counted from the lagna. */
 export function Forecast({ lang, t, labels, request }: Props) {
-  const [forecast, setForecast] = useState<ForecastData | null>(null);
-
-  useEffect(() => {
-    let current = true;
-    fetchForecast(request, lang)
-      .then((result) => {
-        if (current && result.forecast) setForecast(result.forecast);
-      })
-      // The rest of the hadahan stands without this section.
-      .catch(() => undefined);
-    return () => {
-      current = false;
-    };
-  }, [request, lang]);
-
+  const section = useSection(fetchForecast, request, lang);
+  if (section.status !== "ready") {
+    return (
+      <SectionState id="forecast" title={t.forecast} status={section.status} t={t.road.load} onRetry={section.retry} height="medium" />
+    );
+  }
+  const { forecast } = section.value;
   if (!forecast) return null;
 
   const days = Number(forecast.month.end.slice(8, 10));

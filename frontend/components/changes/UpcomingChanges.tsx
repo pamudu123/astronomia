@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { PlanetIcon } from "@/components/PlanetIcon";
-import { type Upcoming, fetchUpcomingChanges, findChange } from "@/lib/changes";
+import { SectionState } from "@/components/SectionState";
+import { fetchUpcomingChanges, findChange } from "@/lib/changes";
 import { type BirthRequest, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
+import { useSection } from "@/lib/useSection";
 
 import styles from "./Changes.module.css";
 
@@ -25,22 +27,17 @@ const FIRST = 2;
  * (gochara) at a tap, with the nearest changes first and the rest a tap away.
  */
 export function UpcomingChanges({ lang, t, request }: Props) {
-  const [data, setData] = useState<Upcoming | null>(null);
+  const section = useSection(fetchUpcomingChanges, request, lang);
   const [from, setFrom] = useState<"lagna" | "moon">("lagna");
   const [all, setAll] = useState(false);
 
-  useEffect(() => {
-    let current = true;
-    fetchUpcomingChanges(request, lang)
-      .then((result) => current && result.status === "ok" && setData(result))
-      // The rest of the hadahan stands without this section.
-      .catch(() => undefined);
-    return () => {
-      current = false;
-    };
-  }, [request, lang]);
-
-  if (!data || data.changes.length === 0) return null;
+  if (section.status !== "ready") {
+    return (
+      <SectionState id="changes" title={t.changesTitle} status={section.status} t={t.road.load} onRetry={section.retry} height="short" />
+    );
+  }
+  const data = section.value;
+  if (data.status !== "ok" || data.changes.length === 0) return null;
 
   const shown = all ? data.changes : data.changes.slice(0, FIRST);
 

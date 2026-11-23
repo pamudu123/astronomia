@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { canonicalTimezone, fieldProblems, toRequest } from "@/components/hadahan/BirthForm";
+import { canonicalTimezone, fieldProblems, latestBirth, toRequest } from "@/components/hadahan/BirthForm";
 import { distinctLabels } from "@/components/hadahan/PlaceSearch";
 import { EMPTY_FORM, type FormValues, type Place, type SavedResult, formFor } from "@/lib/hadahan";
 
@@ -92,5 +92,19 @@ describe("places with the same name can be told apart (QA AST-07)", () => {
       "London, United States · America/Chicago",
     ]);
     expect(new Set(labels).size).toBe(labels.length);
+  });
+});
+
+describe("a birth is today or earlier", () => {
+  const now = new Date("2026-11-23T20:00:00Z"); // already the 24th in Colombo
+  it("counts today where the birth was", () => {
+    expect(latestBirth(filled, now)).toBe("2026-11-24");
+    expect(latestBirth({ ...filled, place: null, manual: true, timezone: "America/New_York" }, now)).toBe("2026-11-23");
+    expect(fieldProblems({ ...filled, date: "2026-11-24" }, now)).toEqual([]);
+    expect(fieldProblems({ ...filled, date: "2026-11-25" }, now)).toEqual(["date"]);
+    expect(fieldProblems({ ...filled, date: "12026-01-01" }, now)).toEqual(["date"]);
+  });
+  it("copes with a place whose zone the browser does not know", () => {
+    expect(() => latestBirth({ ...filled, place: { ...colombo, timezone: "Mars/Olympus" } }, now)).not.toThrow();
   });
 });

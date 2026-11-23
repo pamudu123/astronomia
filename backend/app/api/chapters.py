@@ -18,7 +18,7 @@ from pydantic import BaseModel, Field
 from app.api.chat import chat_key
 from app.api.deps import Chapters, Orders
 from app.api.report_requests import HadahanReport, PorondamReport
-from app.api.saved import PRIVATE, Current, CurrentSession, input_hash
+from app.api.saved import PRIVATE, Current, CurrentSession, SettingsDep, input_hash
 from app.store.orders import Order, OrderStore
 
 router = APIRouter(tags=["paid"])
@@ -33,6 +33,9 @@ class ChaptersOut(BaseModel):
     """Chapter texts by id. Empty when the report is not paid for or has none yet."""
 
     chapters: dict[str, str]
+    # Whether this report keeps its chapters here: it is paid for, and the server's key is set.
+    # Its PDF then prints only these chapters.
+    keeps: bool
 
 
 class KeepIn(ChaptersIn):
@@ -53,12 +56,20 @@ def _order(orders: OrderStore, session: CurrentSession, body: ChaptersIn) -> Ord
 
 @router.post("/v1/reports/chapters", response_model=ChaptersOut)
 def kept_chapters(
-    body: ChaptersIn, session: Current, orders: Orders, chapters: Chapters, response: Response
+    body: ChaptersIn,
+    session: Current,
+    orders: Orders,
+    chapters: Chapters,
+    settings: SettingsDep,
+    response: Response,
 ) -> ChaptersOut:
     """A POST, so the birth details stay out of the address."""
     response.headers.update(PRIVATE)
     order = _order(orders, session, body)
-    return ChaptersOut(chapters=chapters.kept(order.id, body.language) if order else {})
+    return ChaptersOut(
+        chapters=chapters.kept(order.id, body.language) if order else {},
+        keeps=order is not None and bool(settings.chat_key),
+    )
 
 
 @router.post("/v1/reports/chapters/keep", response_model=KeptOut, dependencies=[Depends(chat_key)])
