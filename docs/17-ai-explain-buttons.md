@@ -149,8 +149,8 @@ Each place joins several components that people read together, so one explanatio
 |---|---|---|---|---|
 | 9 | **Today's nakath** | `DailyView`: Rahu kalaya, thithi, nakatha, yoga, karana, sunrise | "What kind of day is today, and what is it good for?" | calendar-and-nakath |
 | 10 | **Avurudu timetable** | `AvuruduView`: every nakath, official vs calculated, times abroad | "What do we do, and when?" | avurudu |
-| 11 | **Baby name letters** | `BabyLettersApp`, `StarLetters`, extra letters, `NameSuggestions` | "Which letter, and why?" | ceremonies-and-names |
-| 12 | **First letters times** | `FirstLettersFinder` result | "Which time for akuru kiyaweema?" | ceremonies-and-names |
+| 11 | **Baby name letters** (removed 2026-11-23: no AI on child results, docs/09) | `BabyLettersApp`, `StarLetters`, extra letters, `NameSuggestions` | "Which letter, and why?" | ceremonies-and-names |
+| 12 | **First letters times** (removed 2026-11-23, same reason) | `FirstLettersFinder` result | "Which time for akuru kiyaweema?" | ceremonies-and-names |
 | 13 | **This change for me** | `ChangeDetail`, Moon sign notes, `PersonalChange` | "How does this planet change affect me?" | birth-chart, personal-reading |
 | 14 | **My year ahead** | `YearView`, `PersonalYearly` | "What does next year look like for me?" | birth-chart, personal-reading |
 | 15 | **Possible birth dates** | `KendaraApp` results | "Why several dates, and how do I find the right one?" | old-horoscope (new) |

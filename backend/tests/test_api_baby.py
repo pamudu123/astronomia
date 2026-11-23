@@ -1,4 +1,9 @@
+import logging
+
+import pytest
 from fastapi.testclient import TestClient
+
+from app.api.guardian import WORDING
 
 COLOMBO = 1248991
 
@@ -41,7 +46,13 @@ def test_all_stars(client: TestClient) -> None:
 def test_letters_for_a_birth(client: TestClient) -> None:
     response = client.post(
         "/v1/baby/letters",
-        json={"date": "2024-01-18", "time": "11:50", "place_id": COLOMBO, "lang": "en"},
+        json={
+            "date": "2024-01-18",
+            "time": "11:50",
+            "place_id": COLOMBO,
+            "lang": "en",
+            "guardian_consent": True,
+        },
     )
     assert response.status_code == 200
     body = response.json()
@@ -64,7 +75,13 @@ def test_letters_for_a_birth(client: TestClient) -> None:
 def test_a_birth_before_sunrise_belongs_to_the_day_before(client: TestClient) -> None:
     body = client.post(
         "/v1/baby/letters",
-        json={"date": "2024-01-18", "time": "05:50", "place_id": COLOMBO, "lang": "si"},
+        json={
+            "date": "2024-01-18",
+            "time": "05:50",
+            "place_id": COLOMBO,
+            "lang": "si",
+            "guardian_consent": True,
+        },
     ).json()
     assert body["chart"]["weekday"] == "wednesday"
     assert "හිරු උදාවට පෙර" in body["chart"]["day_note"]
@@ -74,7 +91,13 @@ def test_a_birth_before_sunrise_belongs_to_the_day_before(client: TestClient) ->
 def test_a_birth_near_a_pada_change(client: TestClient) -> None:
     body = client.post(
         "/v1/baby/letters",
-        json={"date": "2024-01-18", "time": "15:10", "place_id": COLOMBO, "lang": "en"},
+        json={
+            "date": "2024-01-18",
+            "time": "15:10",
+            "place_id": COLOMBO,
+            "lang": "en",
+            "guardian_consent": True,
+        },
     ).json()
     assert body["letter"]["letter"] == "චෙ"
     (near,) = body["nearby"]
@@ -98,6 +121,7 @@ def test_coordinates_and_a_time_zone(client: TestClient) -> None:
             "latitude": 51.5,
             "longitude": -0.12,
             "timezone": "Europe/London",
+            "guardian_consent": True,
         },
     ).json()
     assert body["status"] == "ok"
@@ -113,10 +137,26 @@ def test_a_time_that_does_not_exist(client: TestClient) -> None:
             "latitude": 51.5,
             "longitude": -0.12,
             "timezone": "Europe/London",
+            "guardian_consent": True,
         },
     ).json()
     assert body["status"] != "ok"
     assert body["chart"] is None and body["letter"] is None
+
+
+def test_a_birth_needs_a_guardians_consent(
+    client: TestClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    birth = {"date": "2024-01-18", "time": "11:50", "place_id": COLOMBO, "lang": "en"}
+    with caplog.at_level(logging.INFO, logger="astronomia.consent"):
+        assert client.post("/v1/baby/letters", json=birth).status_code == 422
+        refused = client.post("/v1/baby/letters", json={**birth, "guardian_consent": False})
+        assert refused.status_code == 422
+        agreed = client.post("/v1/baby/letters", json={**birth, "guardian_consent": True})
+    assert agreed.status_code == 200
+    # The evidence: that it was given, where and for which wording. Nothing about the child.
+    consent = [r.getMessage() for r in caplog.records if r.name == "astronomia.consent"]
+    assert consent == [f"guardian consent tool=baby_letters wording={WORDING} lang=en"]
 
 
 def test_birth_details_are_not_accepted_in_the_address(client: TestClient) -> None:

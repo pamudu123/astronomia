@@ -57,12 +57,15 @@ export async function fetchStarLetters(star: string, lang: Locale): Promise<Star
   return (await response.json()) as StarLettersResponse;
 }
 
-/** Birth details go in the body of a POST, never in the URL. */
-export async function fetchBabyLetters(request: BirthRequest, lang: Locale): Promise<BabyLetters> {
+/**
+ * Birth details go in the body of a POST, never in the URL. They are a child's, so a parent or
+ * guardian must have agreed first: the backend refuses them otherwise.
+ */
+export async function fetchBabyLetters(request: BirthRequest, lang: Locale, guardianConsent: true): Promise<BabyLetters> {
   const response = await fetch("/api/v1/baby/letters", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ ...request, lang }),
+    body: JSON.stringify({ ...request, guardian_consent: guardianConsent, lang }),
   });
   if (!response.ok) throw new Error(`request failed: ${response.status}`);
   return (await response.json()) as BabyLetters;

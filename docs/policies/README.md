@@ -43,7 +43,7 @@ in Terms, the whole "Astro chat" section. Merge this PR after #74.
 the account id, email and name (basic scopes), so the page names all four.
 
 **Left off the site because it is not true yet** (each is in drafts A and B, and goes back when
-built): the guardian consent step in the child tools and their no-share rule; the partner match
+built): the partner match
 confirmation; the rights request email and regulator links. The privacy page says requests go to
 "the contact address that will be added below".
 
@@ -74,7 +74,7 @@ Drafts A and B describe more than the site does today. Publishing them whole now
 promises the site does not keep. Each item below must be true first (the build list is in
 `docs/09-launch.md`, "Before going public"):
 
-1. The child tools ask for a parent or guardian's consent and offer no share link. (No name needed and no AI: done.)
+1. ~~The child tools ask for a parent or guardian's consent and offer no share link.~~ Done for baby names and first letters (a hadahan or match with a child's birth date is an open question in `docs/09-launch.md`).
 2. The partner match asks for confirmation that both adults agreed.
 3. ~~Share links hide names and birth details by default and preview what the recipient will see.~~ Done in #75.
 4. ~~The AI helper shows its notice before the first message and the first Explain button, and conversations have a fixed idle time limit.~~ Done in #72 (30 minutes).

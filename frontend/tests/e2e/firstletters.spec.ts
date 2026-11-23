@@ -28,6 +28,9 @@ async function noSidewaysScroll(page: Page) {
   expect(overflow).toBeLessThanOrEqual(0);
 }
 
+const consentBox = (page: Page) =>
+  page.getByRole("checkbox", { name: /(parent or legal guardian|නීත්‍යානුකූල භාරකරු)/ });
+
 test("dates for a child from birth details, sent in a POST", async ({ page }) => {
   const posted = await mockBackend(page, "first-letters-full-en.json");
   await page.goto("/en/first-letters");
@@ -36,6 +39,7 @@ test("dates for a child from birth details, sent in a POST", async ({ page }) =>
   await noSidewaysScroll(page);
 
   const child = page.locator('[data-card="first-letters-child"]');
+  await consentBox(page).check();
   await child.getByRole("textbox", { name: "Date of birth" }).fill("2023-05-10");
   await child.getByRole("textbox", { name: "Time of birth" }).fill("08:15");
   await child.getByRole("combobox").fill("kandy");
@@ -58,7 +62,7 @@ test("dates for a child from birth details, sent in a POST", async ({ page }) =>
   await expect(first).toContainText("a good tara.");
 
   const body = JSON.parse(posted[0]);
-  expect(body).toMatchObject({ child: { date: "2023-05-10", time: "08:15" }, months: 6, lang: "en" });
+  expect(body).toMatchObject({ child: { date: "2023-05-10", time: "08:15" }, guardian_consent: true, months: 6, lang: "en" });
   expect(page.url()).not.toContain("2023");
   await noSidewaysScroll(page);
 });
@@ -71,6 +75,11 @@ test("dates from a birth star only, in Sinhala", async ({ page }) => {
   await child.getByLabel("උපන් නැකත").selectOption("ashwini");
   await child.getByLabel(/උපන් දිනය/).fill("2023-05-10");
   const search = page.locator('[data-card="first-letters"]');
+  // A birth date is a birth detail, so it needs consent too.
+  await search.getByRole("button", { name: "දින සොයන්න", exact: true }).click();
+  await expect(consentBox(page)).toBeFocused();
+  expect(posted).toHaveLength(0);
+  await consentBox(page).check();
   await search.getByRole("button", { name: "දින සොයන්න", exact: true }).click();
   const result = search.locator('[data-card="first-letters-result"]');
   await expect(result).toContainText("අස්විද නැකතින් උපන් දරුවෙකු සඳහා.");
@@ -79,6 +88,7 @@ test("dates from a birth star only, in Sinhala", async ({ page }) => {
   expect(JSON.parse(posted[0])).toMatchObject({
     child: { nakshatra: "ashwini", pada: 1 },
     birth_date: "2023-05-10",
+    guardian_consent: true,
     months: 3,
     lang: "si",
   });
@@ -89,6 +99,7 @@ test("the search asks for the child first", async ({ page }) => {
   await mockBackend(page, "first-letters-full-en.json");
   await page.goto("/en/first-letters");
   const search = page.locator('[data-card="first-letters"]');
+  await consentBox(page).check();
   await search.getByRole("button", { name: "Find dates", exact: true }).click();
   await expect(search.getByRole("alert")).toHaveText("Enter the child's birth details, or choose a birth star.");
 });
@@ -114,4 +125,63 @@ test("the two ways to give the child wait for the page, so a press is never lost
   // The press waits until the button is ready, and then works the first time.
   await star.click();
   await expect(star).toHaveAttribute("aria-pressed", "true");
+});
+
+for (const lang of ["en", "si"] as const) {
+  test(`no birth details leave the page without a guardian's consent (${lang})`, async ({ page }) => {
+    const posted = await mockBackend(page, "first-letters-full-en.json");
+    const sent: string[] = [];
+    page.on("request", (request) => {
+      if (request.method() === "POST") sent.push(`${request.url()} ${request.postData() ?? ""}`);
+    });
+    const words = {
+      en: { use: "Use these details", find: "Find dates", change: "Change", error: /Tick this box to continue/ },
+      si: { use: "මෙම විස්තර භාවිත කරන්න", find: "දින සොයන්න", change: "වෙනස් කරන්න", error: /මෙම කොටුව ලකුණු කරන්න/ },
+    }[lang];
+    await page.goto(`/${lang}/first-letters`);
+    const box = consentBox(page);
+    const child = page.locator('[data-card="first-letters-child"]');
+    const search = page.locator('[data-card="first-letters"]');
+    await expect(box).not.toBeChecked();
+    await expect(child.locator('input[type="text"][maxlength="60"]')).toHaveCount(0);
+
+    await child.locator('input[type="date"]').fill("2023-05-10");
+    await child.locator('input[type="time"]').fill("08:15");
+    await child.getByRole("combobox").fill("kandy");
+    await page.getByRole("option").first().click();
+    await child.getByRole("button", { name: words.use }).click();
+    await expect(box).toBeFocused();
+    await expect(box).toHaveAccessibleDescription(words.error);
+    expect(sent.filter((line) => line.includes("2023-05-10"))).toEqual([]);
+
+    await box.check();
+    await child.getByRole("button", { name: words.use }).click();
+    await expect(child.locator('[data-child="full"]')).toBeVisible();
+    // Withdrawn before the search: nothing is sent.
+    await box.uncheck();
+    await search.getByRole("button", { name: words.find, exact: true }).click();
+    await expect(box).toBeFocused();
+    expect(posted).toHaveLength(0);
+
+    await box.check();
+    await search.getByRole("button", { name: words.find, exact: true }).click();
+    const result = search.locator('[data-card="first-letters-result"]');
+    await expect(result).toBeVisible();
+    expect(posted).toHaveLength(1);
+    // No AI, share or save on a child's result.
+    await expect(result.getByRole("button")).toHaveCount(0);
+    // Another child needs consent again.
+    await child.getByRole("button", { name: words.change }).click();
+    await expect(box).not.toBeChecked();
+  });
+}
+
+test("a birth star alone needs no consent", async ({ page }) => {
+  const posted = await mockBackend(page, "first-letters-star-si.json");
+  await page.goto("/en/first-letters");
+  await page.getByRole("button", { name: "Birth star only" }).click();
+  await expect(consentBox(page)).toHaveCount(0);
+  await page.getByRole("button", { name: "Find dates", exact: true }).click();
+  await expect(page.locator('[data-card="first-letters-result"]')).toBeVisible();
+  expect(JSON.parse(posted[0])).not.toHaveProperty("guardian_consent");
 });

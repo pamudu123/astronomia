@@ -48,8 +48,6 @@ export type ChapterId =
   | "chart.care"
   | "nakath.day"
   | "avurudu.times"
-  | "names.letters"
-  | "names.first"
   | "changes.mine"
   | "yearly.mine"
   | "kendara.dates";
@@ -83,8 +81,6 @@ export const CHAPTER_SPOT: Record<ChapterId, SpotName> = {
   "chart.care": "lotus",
   "nakath.day": "lamp",
   "avurudu.times": "pot",
-  "names.letters": "cradle",
-  "names.first": "book",
   "changes.mine": "change",
   "yearly.mine": "year",
   "kendara.dates": "search",
@@ -168,10 +164,7 @@ export const PAGE_PLACES = {
   day: ["nakath.day"],
   /** Place 10: "What do we do, and when?" */
   avurudu: ["avurudu.times"],
-  /** Place 11: "Which letter, and why?" */
-  babyLetters: ["names.letters"],
-  /** Place 12: "Which time for akuru kiyaweema?" */
-  firstLetters: ["names.first"],
+  // Places 11 and 12, the child tools, were removed: no AI on child results (docs/09).
   /** Place 13: "How does this planet change affect me?" */
   change: ["changes.mine"],
   /** Place 14: "What does next year look like for me?" */
