@@ -1951,7 +1951,7 @@
           "saved"
         ],
         "summary": "List Saved",
-        "description": "Every report the signed in account keeps, newest first.",
+        "description": "Every report the signed in account keeps, newest first. Free reports past their 7 days\nare deleted, not listed.",
         "operationId": "list_saved_v1_saved_get",
         "responses": {
           "200": {
@@ -1971,7 +1971,7 @@
           "saved"
         ],
         "summary": "Save Report",
-        "description": "Saves a hadahan or a match to My reports. The page signs in (anonymously) first.",
+        "description": "Saves a hadahan or a match to My reports. The page signs in (anonymously) first.\n\nA free result is deleted 7 days after saving, and an account keeps at most\n`free_saved_limit` of them at a time. A report this account paid for is kept as paid, for\nas long as the account exists (docs/18, section 3).",
         "operationId": "save_report_v1_saved_post",
         "requestBody": {
           "content": {
@@ -2018,6 +2018,9 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "free_limit: free reports are full; paid_limit: the safety limit"
           },
           "422": {
             "description": "Validation Error",
@@ -7664,6 +7667,18 @@
             "title": "Paid",
             "default": false
           },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
           "hadahan": {
             "anyOf": [
               {
@@ -7727,6 +7742,18 @@
             "type": "boolean",
             "title": "Paid",
             "default": false
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
           },
           "hadahan": {
             "anyOf": [
@@ -7805,11 +7832,21 @@
             },
             "type": "array",
             "title": "Reports"
+          },
+          "free_limit": {
+            "type": "integer",
+            "title": "Free Limit"
+          },
+          "paid_reports": {
+            "type": "boolean",
+            "title": "Paid Reports"
           }
         },
         "type": "object",
         "required": [
-          "reports"
+          "reports",
+          "free_limit",
+          "paid_reports"
         ],
         "title": "SavedList"
       },
@@ -7841,6 +7878,18 @@
             "type": "boolean",
             "title": "Paid",
             "default": false
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
           },
           "hadahan": {
             "anyOf": [

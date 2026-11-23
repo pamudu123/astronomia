@@ -21,6 +21,9 @@ SQLite, which makes its own tables.
 - `20261122021500_delete_idle_guests.sql` (docs/19, step 5) adds `sidera.delete_idle_guests()`
   and turns on pg_cron to run it daily (job `sidera-delete-idle-guests`, 20:30 UTC). See the
   jobs below.
+- `20261122090000_free_reports_expire.sql` (docs/18, step 2) gives each free saved report an
+  `expires_at` (7 days after saving; none when paid), adds `sidera.delete_expired_reports()`
+  and runs it every hour with pg_cron (job `sidera-expire-free-reports`).
 
 ## Scheduled jobs
 
@@ -30,9 +33,11 @@ no key outside the database.
 | Job | When | Does |
 |---|---|---|
 | `sidera-delete-idle-guests` | Daily, 20:30 UTC (02:00 Sri Lanka) | Deletes anonymous users with nothing saved and unused for 7 days, from `auth.users` and `sidera.users` |
+| `sidera-expire-free-reports` | Hourly, 7 minutes past (`7 * * * *`) | Deletes free saved reports 7 days after saving (docs/18, section 3). A guest left with nothing is then removed by the job above once idle 7 days |
 
 - See them: `select jobname, schedule, active from cron.job;` and the last runs:
   `select * from cron.job_run_details order by start_time desc limit 20;`
-- Run one now: `select sidera.delete_idle_guests();` (returns how many went).
+- Run one now: `select sidera.delete_idle_guests();` or `select sidera.delete_expired_reports();`
+  (each returns how many went).
 - A new table that points at `sidera.users` needs `on delete cascade` (or `set null` for
   records that must stay), or the clean up fails for a guest with a row in it.

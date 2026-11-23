@@ -707,13 +707,18 @@ export interface paths {
         };
         /**
          * List Saved
-         * @description Every report the signed in account keeps, newest first.
+         * @description Every report the signed in account keeps, newest first. Free reports past their 7 days
+         *     are deleted, not listed.
          */
         get: operations["list_saved_v1_saved_get"];
         put?: never;
         /**
          * Save Report
          * @description Saves a hadahan or a match to My reports. The page signs in (anonymously) first.
+         *
+         *     A free result is deleted 7 days after saving, and an account keeps at most
+         *     `free_saved_limit` of them at a time. A report this account paid for is kept as paid, for
+         *     as long as the account exists (docs/18, section 3).
          */
         post: operations["save_report_v1_saved_post"];
         delete?: never;
@@ -2659,6 +2664,8 @@ export interface components {
              * @default false
              */
             paid: boolean;
+            /** Expires At */
+            expires_at?: string | null;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Created */
@@ -2688,6 +2695,8 @@ export interface components {
              * @default false
              */
             paid: boolean;
+            /** Expires At */
+            expires_at?: string | null;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
             /** Request */
@@ -2699,6 +2708,10 @@ export interface components {
         SavedList: {
             /** Reports */
             reports: components["schemas"]["SavedOut"][];
+            /** Free Limit */
+            free_limit: number;
+            /** Paid Reports */
+            paid_reports: boolean;
         };
         /** SavedOut */
         SavedOut: {
@@ -2724,6 +2737,8 @@ export interface components {
              * @default false
              */
             paid: boolean;
+            /** Expires At */
+            expires_at?: string | null;
             hadahan?: components["schemas"]["HadahanCard"] | null;
             porondam?: components["schemas"]["PorondamCard"] | null;
         };
@@ -4709,6 +4724,13 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SavedCreated"];
                 };
+            };
+            /** @description free_limit: free reports are full; paid_limit: the safety limit */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
