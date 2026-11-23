@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 
-import { THEMES, THEME_EVENT, THEME_KEY, type ThemeChoice, applyTheme, readTheme } from "@/lib/theme";
+import { THEMES, THEME_EVENT, THEME_KEY, type ThemeChoice, applyTheme, followSavedTheme, readTheme } from "@/lib/theme";
 
 import styles from "./SiteHeader.module.css";
 
@@ -14,9 +14,7 @@ function subscribe(onChange: () => void) {
   const onStorage = (event: StorageEvent) => {
     if (event.key === THEME_KEY) {
       // Another tab changed it: follow along on this page too.
-      const choice = readTheme();
-      if (choice === "system") document.documentElement.removeAttribute("data-theme");
-      else document.documentElement.setAttribute("data-theme", choice);
+      followSavedTheme();
       onChange();
     }
   };

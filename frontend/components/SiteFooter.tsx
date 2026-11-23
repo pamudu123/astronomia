@@ -22,6 +22,7 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         <p className={styles.disclaimer}>{dict.footer.disclaimer}</p>
         <nav className={styles.links} aria-label={dict.footer.legal}>
           <Link href={`/${lang}/tools`}>{dict.nav.tools}</Link>
+          <Link href={`/${lang}/why-sidera`}>{dict.nav.how}</Link>
           <Link href={`/${lang}/changes`}>{dict.footer.changes}</Link>
           <Link href={`/${lang}/forecast/${YEARS[0]}`}>{fill(dict.yearly.footer, { year: YEARS[0] })}</Link>
           <Link href={`/${lang}/avurudu`}>{dict.avurudu.footer}</Link>

@@ -7,6 +7,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import {
   EMPTY_FORM,
   type FormValues,
+  missingFields,
   toRequest,
 } from "@/components/hadahan/BirthForm";
 import formStyles from "@/components/hadahan/BirthForm.module.css";
@@ -19,6 +20,7 @@ import {
   saveSession,
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
+import { holdInView } from "@/lib/holdInView";
 import { useHydrated } from "@/lib/useHydrated";
 import {
   PORONDAM_KEY,
@@ -32,11 +34,12 @@ import {
 import { type Handoff, clearHandoff, handoffSnapshot, parseHandoff } from "@/lib/kendara";
 import { parseStarParam } from "@/lib/starmatch";
 
-import { NAKSHATRA_ORDER, PersonCard } from "./PersonCard";
+import { NAKSHATRA_ORDER, PersonCard, type PersonField, fieldId } from "./PersonCard";
 import styles from "./Porondam.module.css";
 import { PorondamResult } from "./PorondamResult";
 
 type Role = "bride" | "groom";
+const ROLES: readonly Role[] = ["bride", "groom"];
 const EMPTY_QUICK: QuickInput = { name: "", nakshatra: "", pada: 1 };
 
 type View =
@@ -69,8 +72,16 @@ export function PorondamApp(props: { lang: Locale; dict: Dictionary }) {
   // A birth sent from the old horoscope search, for the bride or the groom.
   const raw = useSyncExternalStore(noChanges, handoffSnapshot, () => "");
   const handoff = linked ? null : parseHandoff(raw, "porondam");
+  // Someone who came for wedding dates (?for=wedding, from All tools).
+  const forWedding = new URLSearchParams(search).get("for") === "wedding";
   return (
-    <PorondamForm key={`${search}|${handoff ? raw : ""}`} {...props} linked={linked} handoff={handoff} />
+    <PorondamForm
+      key={`${search}|${handoff ? raw : ""}`}
+      {...props}
+      linked={linked}
+      handoff={handoff}
+      forWedding={forWedding}
+    />
   );
 }
 
@@ -85,11 +96,14 @@ function PorondamForm({
   dict,
   linked,
   handoff,
+  forWedding,
 }: {
   lang: Locale;
   dict: Dictionary;
   linked: Linked | null;
   handoff: Handoff | null;
+  /** The match, once on screen, opens on the wedding dates search. */
+  forWedding: boolean;
 }) {
   const t = dict.porondam;
   const hydrated = useHydrated();
@@ -107,6 +121,8 @@ function PorondamForm({
   const [view, setView] = useState<View>({ kind: "form" });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // What is still needed shows once the visitor has tried to match, then updates as they type.
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     fetchLabels(lang)
@@ -129,6 +145,11 @@ function PorondamForm({
       .catch(() => saveSession(PORONDAM_KEY, null));
   }, [lang, fresh]);
 
+  const missing = (role: Role): PersonField[] =>
+    mode === "quick" ? (quick[role].nakshatra ? [] : ["star"]) : missingFields(full[role]);
+  const fieldName = (field: PersonField) => (field === "star" ? t.form.star : dict.hadahan.form[field]);
+  const stillNeeded = checked ? ROLES.filter((role) => missing(role).length > 0) : [];
+
   function person(role: Role): PersonInput | null {
     if (mode === "quick") {
       const q = quick[role];
@@ -139,6 +160,17 @@ function PorondamForm({
     const request = toRequest(full[role]);
     return request ? { ...request, name: full[role].name.trim() } : null;
   }
+
+  // Take someone who came for wedding dates to the search, once the match is drawn.
+  const toWedding = forWedding && view.kind === "result" && labels !== null;
+  useEffect(() => {
+    if (!toWedding) return;
+    const title = document.getElementById("wedding-title");
+    if (!title) return;
+    title.tabIndex = -1;
+    title.focus({ preventScroll: true });
+    return holdInView(title);
+  }, [toWedding]);
 
   async function run(request: PorondamRequest) {
     setBusy(true);
@@ -165,8 +197,12 @@ function PorondamForm({
     event.preventDefault();
     const bride = person("bride");
     const groom = person("groom");
+    setChecked(true);
     if (!bride || !groom) {
-      setError(t.errors.missing);
+      setError(null);
+      // Take the visitor to the first detail still needed.
+      const role = ROLES.find((one) => missing(one).length > 0);
+      if (role) document.getElementById(fieldId(role, missing(role)[0]))?.focus();
       return;
     }
     clearHandoff();
@@ -264,6 +300,12 @@ function PorondamForm({
         </div>
       </div>
 
+      {forWedding && (
+        <p className={`rise ${formStyles.note}`} data-for-wedding>
+          {t.weddingFirst}
+        </p>
+      )}
+
       {/* Each way of matching says what it compares, before any details are typed. */}
       <div role="group" aria-label={f.mode} className={`rise ${styles.modes}`}>
         {(["full", "quick"] as const).map((value) => (
@@ -308,6 +350,7 @@ function PorondamForm({
                   labels={labels}
                   t={f}
                   h={dict.hadahan.form}
+                  missing={checked ? missing(role) : []}
                   onFull={(update) =>
                     setFull((current) => ({
                       ...current,
@@ -325,9 +368,18 @@ function PorondamForm({
             ))}
           </div>
 
-          {error && (
+          {(stillNeeded.length > 0 || error) && (
             <p className={formStyles.error} role="alert">
-              {error}
+              {stillNeeded.length > 0
+                ? stillNeeded.map((role) => (
+                    <span key={role} className={formStyles.errorLine}>
+                      {fill(t.errors.missing, {
+                        who: t.form[role],
+                        fields: missing(role).map(fieldName).join(", "),
+                      })}
+                    </span>
+                  ))
+                : error}
             </p>
           )}
 

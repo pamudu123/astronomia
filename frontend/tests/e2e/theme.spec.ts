@@ -53,3 +53,24 @@ test("the theme menu closes with Escape and gives focus back", async ({ page }) 
   await expect(page.getByRole("menu")).toHaveCount(0);
   await expect(button).toBeFocused();
 });
+
+test("the menu shows the theme in use when the browser blocks storage (A-07)", async ({ page }) => {
+  await page.addInitScript(() => {
+    const blocked = () => {
+      throw new DOMException("blocked", "SecurityError");
+    };
+    Storage.prototype.getItem = blocked;
+    Storage.prototype.setItem = blocked;
+    Storage.prototype.removeItem = blocked;
+  });
+  await page.goto("/en");
+  await page.getByRole("button", { name: "Theme: System" }).click();
+  await page.getByRole("menuitemradio", { name: "Light" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.getByRole("button", { name: "Theme: Light" }).click();
+  await expect(page.getByRole("menuitemradio", { name: "Light" })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByRole("menuitemradio", { name: "Light" })).toBeFocused();
+  await page.getByRole("menuitemradio", { name: "System" }).click();
+  await expect(page.locator("html")).not.toHaveAttribute("data-theme");
+  await expect(page.getByRole("button", { name: "Theme: System" })).toBeVisible();
+});

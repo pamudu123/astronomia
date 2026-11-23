@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from app.api.birth import BirthInput, ResolvedBirth, resolve_birth
 from app.api.deps import PlacesDb
+from app.api.instant import Instant
 from app.api.timeresolve import TimeResolveResponse
 from app.engine.birthtable import BirthTable, birth_table
 from app.engine.chart import Chart, Point, compute_chart
@@ -157,7 +158,7 @@ class HadahanResponse(ChartResponse):
 
 class HadahanRequest(BirthInput):
     lang: Lang = "en"
-    as_of: dt.datetime | None = None  # "now" for the current dasha; for tests
+    as_of: Instant | None = None  # "now" for the current dasha; for tests
 
 
 # ---------- building responses ----------

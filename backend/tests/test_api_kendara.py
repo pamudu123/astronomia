@@ -1,4 +1,7 @@
+import pytest
 from fastapi.testclient import TestClient
+
+from app.kendara import search as engine
 
 # Nimali's chart (the first golden chart): born 19 April 1995, 14:35 in Kandy.
 # Lagna Simha. Houses counted from Simha.
@@ -101,11 +104,49 @@ def test_no_match_and_a_place_by_coordinates(client: TestClient) -> None:
     assert body["place"]["timezone"] == "Europe/London"
 
 
-def test_a_drawing_with_few_planets_is_cut_off(client: TestClient) -> None:
-    body = post(client, rashi={"lagna": "mesha", "houses": {"sun": 1}})
+SUN_ONLY = {"lagna": "mesha", "houses": {"sun": 1}}
+
+
+def set_limits(monkeypatch: pytest.MonkeyPatch, **limits: float) -> None:
+    rules = {**engine.load_rules(), **limits}
+    monkeypatch.setattr(engine, "load_rules", lambda: rules)
+
+
+def test_a_drawing_with_few_planets_is_cut_off(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Far longer than a slow machine needs, so only the number of matches can stop it.
+    set_limits(monkeypatch, time_limit_seconds=600)
+    body = post(client, rashi=SUN_ONLY)
     assert body["cut_off"] is True
     assert len(body["matches"]) == 50
-    assert "50" in body["note"]
+    assert body["note"] == (
+        "There are more matches than the 50 shown. "
+        "Give a year range or the birth star to narrow them."
+    )
+
+
+def test_too_many_for_one_star_does_not_ask_for_the_star(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    set_limits(monkeypatch, time_limit_seconds=600, max_matches=2)
+    body = post(client, rashi=SUN_ONLY, nakshatra="rohini")
+    assert body["cut_off"] is True
+    assert len(body["matches"]) == 2
+    assert all(s["nakshatra"] == "rohini" for m in body["matches"] for s in m["stars"])
+    assert "or the birth star" not in body["note"]
+    assert "Give a year range" in body["note"]
+
+
+def test_running_out_of_time_says_how_far_it_got(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    set_limits(monkeypatch, time_limit_seconds=-1)
+    body = post(client, rashi=SUN_ONLY)
+    assert body["cut_off"] is True and body["matches"] == []
+    assert body["note"].startswith("The search took too long and stopped at ")
+    assert "1900" in body["note"]
+    assert "සෙවීමට" in post(client, rashi=SUN_ONLY, lang="si")["note"]
 
 
 def test_bad_input_is_refused(client: TestClient) -> None:

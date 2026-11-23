@@ -117,6 +117,6 @@ def forecast(body: HadahanRequest, db: PlacesDb) -> ForecastResponse:
     if birth.utc is None:
         return ForecastResponse(status=birth.time.status, time=birth.time, forecast=None)
     chart = compute_chart(EPHEMERIS, birth.utc, birth.latitude, birth.longitude)
-    today = (body.as_of or dt.datetime.now(dt.UTC)).astimezone(dt.UTC).date()
+    today = (body.as_of or dt.datetime.now(dt.UTC)).date()
     result = month_forecast(EPHEMERIS, chart.lagna.sign, today)
     return ForecastResponse(status="ok", time=birth.time, forecast=forecast_out(result, body.lang))

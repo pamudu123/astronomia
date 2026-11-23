@@ -13,6 +13,9 @@ import { monthContext } from "@/lib/assistant/pages";
 
 import styles from "./Litha.module.css";
 
+/** The id of today's card, to jump to. */
+const TODAY = "today";
+
 const WEEK = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
 type Props = {
@@ -72,6 +75,7 @@ export function LithaMonth({ lang, t, month, today, initial }: Props) {
 
   return (
     <>
+      <ToToday lang={lang} t={t} here={today.startsWith(month)} />
       <Grid lang={lang} t={t} data={current} today={today} />
       <div className={styles.notes}>
         <p>{current.poya_note}</p>
@@ -80,6 +84,35 @@ export function LithaMonth({ lang, t, month, today, initial }: Props) {
       </div>
     </>
   );
+}
+
+/**
+ * On phones the month is a long list, so this goes straight to today: in this list, or in this
+ * month's when another month is open (NAV-3).
+ */
+function ToToday({ lang, t, here }: { lang: Locale; t: Dictionary["litha"]; here: boolean }) {
+  useEffect(() => {
+    // Come from another month for today: the days are here only now, after the page opened.
+    if (here && window.location.hash === `#${TODAY}`) showToday();
+  }, [here]);
+  if (!here) {
+    return (
+      <Link href={`/${lang}/litha#${TODAY}`} className={styles.toToday} data-to-today>
+        {t.toToday}
+      </Link>
+    );
+  }
+  return (
+    <button type="button" className={styles.toToday} onClick={showToday} data-to-today>
+      {t.toToday}
+    </button>
+  );
+}
+
+function showToday() {
+  const day = document.getElementById(TODAY);
+  day?.scrollIntoView({ block: "center" });
+  day?.focus({ preventScroll: true });
 }
 
 function Grid({ lang, t, data, today }: { lang: Locale; t: Dictionary["litha"]; data: MonthPanchanga; today: string }) {
@@ -105,7 +138,13 @@ function Grid({ lang, t, data, today }: { lang: Locale; t: Dictionary["litha"]; 
 function Day({ lang, t, day, today }: { lang: Locale; t: Dictionary["litha"]; day: MonthDay; today: boolean }) {
   const classes = [styles.day, day.poya ? styles.poya : "", today ? styles.today : ""].filter(Boolean).join(" ");
   return (
-    <Link href={`/${lang}/nakath/${day.date}`} className={classes} data-day={day.date} aria-current={today ? "date" : undefined}>
+    <Link
+      id={today ? TODAY : undefined}
+      href={`/${lang}/nakath/${day.date}`}
+      className={classes}
+      data-day={day.date}
+      aria-current={today ? "date" : undefined}
+    >
       <span className={styles.dayHead}>
         <span className={`mono ${styles.dayNumber}`}>{Number(day.date.slice(8))}</span>
         <span className={styles.dayName}>{day.weekday_name}</span>

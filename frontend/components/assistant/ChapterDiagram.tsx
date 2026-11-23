@@ -129,7 +129,19 @@ function Houses({ chart, labels, t, on = [] }: { chart: Chart; labels: Labels; t
   );
 }
 
-function PeriodsBar({ dasha, birth, labels, t }: { dasha: Dasha; birth: string; labels: Labels; t: Words }) {
+function PeriodsBar({
+  dasha,
+  birth,
+  labels,
+  t,
+  saved,
+}: {
+  dasha: Dasha;
+  birth: string;
+  labels: Labels;
+  t: Words;
+  saved?: ReactNode;
+}) {
   const main = dasha.current[0];
   const layout = barLayout(
     birth,
@@ -156,7 +168,8 @@ function PeriodsBar({ dasha, birth, labels, t }: { dasha: Dasha; birth: string; 
             {segment.width >= 5.2 ? segment.label : ""}
           </span>
         ))}
-        {layout.today != null && (
+        {/* A saved report's running period is the one of that day, so today is not marked on it. */}
+        {layout.today != null && !saved && (
           <span className={styles.today} style={{ left: `${layout.today}%` }}>
             {t.today}
           </span>
@@ -211,12 +224,15 @@ export function ChartDiagram({
   result,
   labels,
   birth,
+  saved,
 }: {
   id: ChapterId;
   /** Only the parts drawn, so a shared result (with less in it) fits too. */
   result: Pick<AnyHadahan, "chart" | "dasha" | "kuja">;
   labels: Labels;
   birth?: string | null;
+  /** On a saved report: the line saying this was worked out on the day it was saved. */
+  saved?: ReactNode;
 }) {
   const t = useExplainText()?.diagram;
   const found = CHAPTER_VISUAL[id];
@@ -228,6 +244,8 @@ export function ChartDiagram({
     case "pillars": {
       const [main, sub] = dasha?.current ?? [];
       return (
+        <>
+          {saved}
         <Flow
           cards={[
             { label: t.lagna, value: sign(chart.lagna.sign), note: t.pillarLagna, image: imageOf(chart.lagna.sign) },
@@ -248,6 +266,7 @@ export function ChartDiagram({
               : []),
           ]}
         />
+        </>
       );
     }
     case "wheel":
@@ -255,7 +274,12 @@ export function ChartDiagram({
     case "houses":
       return <Houses chart={chart} labels={labels} t={t} on={found.houses} />;
     case "periods":
-      return dasha ? <PeriodsBar dasha={dasha} birth={birth || dasha.periods[0]?.start} labels={labels} t={t} /> : null;
+      return dasha ? (
+        <>
+          {saved}
+          <PeriodsBar dasha={dasha} birth={birth || dasha.periods[0]?.start} labels={labels} t={t} saved={saved} />
+        </>
+      ) : null;
     case "mars":
       return kuja ? <MarsFlow kuja={kuja} labels={labels} t={t} /> : null;
     default:

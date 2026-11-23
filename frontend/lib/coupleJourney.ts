@@ -30,7 +30,8 @@ export type Couple = {
   /** Years from the elder's birth to each person's: a place minus this is that person's age. */
   offset: Record<Role, number>;
   start: number;
-  today: number;
+  today: number; // can be before the road's start, when one of them is not born yet
+  open: number; // where the road opens: today, or its start when today is before that
   last: number; // the furthest place the road can be travelled to
   /** Stretches where both are in Erashtaka at once. */
   bothMist: [number, number][];
@@ -65,7 +66,13 @@ export const mistOf = (couple: Couple, role: Role, at: number) => mistAt(couple.
 export const periodOf = (couple: Couple, role: Role, at: number) =>
   periodAt(couple.roads[role], Math.max(0, ageOf(couple, role, at)));
 
-/** Null when today is past the end of the road, so there is nothing ahead to draw. */
+/** Is today a place on the shared road? Not while one of them is still to be born. */
+export const coupleHasToday = (couple: Couple) => couple.today >= couple.start;
+
+/**
+ * Null when there is nothing to draw: today is past the end of the road, or one of them is born
+ * only after the elder's road has ended, so the two share no years.
+ */
 export function buildCouple(bride: Journey, groom: Journey, words: CoupleWords): Couple | null {
   const journeys = { bride, groom };
   const births = { bride: new Date(bride.birth).getTime(), groom: new Date(groom.birth).getTime() };
@@ -76,6 +83,7 @@ export function buildCouple(bride: Journey, groom: Journey, words: CoupleWords):
   const last = Math.min(roads.bride.last + offset.bride, roads.groom.last + offset.groom);
   if (today >= last) return null;
   const start = Math.max(today - LOOK_BACK_YEARS, offset.bride, offset.groom);
+  if (start >= last) return null;
 
   const bothMist: [number, number][] = [];
   for (const [a, b] of roads.bride.eras) {
@@ -87,7 +95,8 @@ export function buildCouple(bride: Journey, groom: Journey, words: CoupleWords):
   }
   bothMist.sort((a, b) => a[0] - b[0]);
 
-  const couple: Couple = { origin, roads, offset, start, today, last, bothMist, stops: [] };
+  const open = Math.max(today, start);
+  const couple: Couple = { origin, roads, offset, start, today, open, last, bothMist, stops: [] };
   const stops: CoupleStop[] = [];
   for (const role of ROLES) {
     for (const stop of roads[role].stops) {
@@ -109,7 +118,9 @@ export function buildCouple(bride: Journey, groom: Journey, words: CoupleWords):
       who: "both",
     });
   }
-  stops.push({ kind: "today", y: today, tone: "good", lord: null, ...words.today, helps: null, who: "both" });
+  if (coupleHasToday(couple)) {
+    stops.push({ kind: "today", y: today, tone: "good", lord: null, ...words.today, helps: null, who: "both" });
+  }
   // The elder's road ends first, so its last stop closes the shared road.
   const elder: Role = offset.bride <= offset.groom ? "bride" : "groom";
   const onward = journeys[elder].stops.find((stop) => stop.kind === "onward");

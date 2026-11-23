@@ -119,6 +119,34 @@ test("a day's nakath, and another place", async ({ page }) => {
   await expect(page).toHaveURL(/\/en\/nakath\/2027-04-15$/);
 });
 
+test("a date that never happened at a place says so, with no empty times (A-04)", async ({ page }) => {
+  const note = "This date did not happen here.";
+  await mockBackend(page, "en");
+  await page.route("**/api/v1/panchanga?*", (route) =>
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...JSON.parse(fixture("panchanga-2027-04-14-colombo-en.json")),
+        sunrise: null,
+        sunset: null,
+        next_sunrise: null,
+        rahu_kalaya: null,
+        thithi: [],
+        nakatha: [],
+        yoga: [],
+        karana: [],
+        skipped: true,
+        skipped_note: note,
+      }),
+    }),
+  );
+  await page.goto("/en/nakath/2027-04-14");
+  const main = page.getByRole("main");
+  await expect(main.locator("[data-skipped]")).toHaveText(note);
+  await expect(main.locator('[data-card="rahu"]')).toHaveCount(0);
+  await expect(main.locator("[data-part]")).toHaveCount(0);
+});
+
 test("the daily page in Sinhala", async ({ page }) => {
   await mockBackend(page, "si");
   await page.goto("/si/nakath/2027-04-14");

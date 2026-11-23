@@ -8,7 +8,7 @@ import { LithaCalendar, monthTitle } from "@/components/litha/LithaCalendar";
 import { backendJson } from "@/lib/backend";
 import { fill } from "@/lib/hadahan";
 import { type Locale, hasLocale } from "@/lib/i18n";
-import { COLOMBO, FEATURED_YEAR, type MonthPanchanga, SRI_LANKA, isMonth, monthPath, todayIn } from "@/lib/nakath";
+import { COLOMBO, FEATURED_YEAR, type MonthPanchanga, SRI_LANKA, hasLithaMonth, monthPath, todayIn } from "@/lib/nakath";
 
 import { getDictionary } from "../../dictionaries";
 
@@ -19,12 +19,9 @@ export function generateStaticParams() {
   return [{ month: `${FEATURED_YEAR}-04` }];
 }
 
-const valid = (value: string) =>
-  isMonth(value) && Number(value.slice(0, 4)) >= 1900 && Number(value.slice(0, 4)) <= 2100;
-
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { lang, month } = await params;
-  if (!hasLocale(lang) || !valid(month)) return {};
+  if (!hasLocale(lang) || !hasLithaMonth(month)) return {};
   const t = (await getDictionary(lang)).litha;
   const values = { month: monthTitle(month, lang) };
   return {
@@ -49,7 +46,7 @@ async function Loaded({ lang, t, month }: { lang: Locale; t: T; month: string })
 
 export default async function LithaMonthPage({ params }: Params) {
   const { lang, month } = await params;
-  if (!hasLocale(lang) || !valid(month)) notFound();
+  if (!hasLocale(lang) || !hasLithaMonth(month)) notFound();
   const t = (await getDictionary(lang)).litha;
   return (
     <main id="main" className={`container ${styles.page}`}>

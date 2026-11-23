@@ -426,6 +426,140 @@ test("a saved hadahan opens with its PDF and Share buttons", async ({ page }) =>
   });
 });
 
+/** A road a hundred years long with one period, as the engine sends it. */
+function road(birth: string, now: string) {
+  const year = Number(birth.slice(0, 4));
+  const period = {
+    lord: "venus",
+    start: birth,
+    end: `${year + 101}-01-01T00:00:00Z`,
+    house: 4,
+    theme: "home",
+    tone: "good",
+  };
+  return {
+    rule_set: "journey_v1",
+    provisional: true,
+    birth,
+    end: `${year + 100}-01-01T00:00:00Z`,
+    now,
+    periods: [{ ...period, sub: [period] }],
+    erashtaka: [],
+    erashtaka_lagna: [],
+    guru_returns: [],
+    stops: [
+      { kind: "birth", at: birth, tone: "good", lord: "venus", title: "The road begins", text: "Here." },
+      { kind: "onward", at: `${year + 96}-01-01T00:00:00Z`, tone: "good", title: "The road goes on", text: "On." },
+    ],
+    quality: { step_days: 365.25, values: Array.from({ length: 101 }, () => 0.5) },
+  };
+}
+
+const NOW = "2027-06-01T00:00:00Z";
+const BORN = "1995-04-19T09:05:00Z";
+const BIRTH = { date: "1995-04-19", time: "14:35", place_id: 1241622, latitude: null, lang: "en" };
+
+async function openSavedHadahan(page: Page, lang: "en" | "si", journey: ReturnType<typeof road> | null) {
+  // Opened months after it was saved on 15 November 2026.
+  await page.clock.setFixedTime(new Date(NOW));
+  const shared = JSON.parse(fixture(`share-hadahan-${lang}.json`));
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json(`labels-${lang}.json`)));
+  await page.route("**/api/v1/forecast", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.route("**/api/v1/changes/personal", (route) => route.fulfill(json(`changes-personal-${lang}.json`)));
+  await page.route("**/api/v1/journey", (route) =>
+    journey ? route.fulfill(reply(200, { status: "ok", time: null, journey })) : route.fulfill({ status: 503, body: "" }),
+  );
+  await page.route(`**/api/v1/saved/${ID}?lang=${lang}`, (route) =>
+    route.fulfill(
+      reply(200, {
+        ...hadahanItem,
+        request: { kind: "hadahan", name: "Nimali", birth: { ...BIRTH, lang } },
+        hadahan_result: shared.hadahan,
+        porondam_result: null,
+      }),
+    ),
+  );
+  await page.goto(`/${lang}/my/${ID}`);
+  await expect(page.locator('[data-card="lagna"]')).toBeVisible();
+}
+
+for (const [lang, saved, today] of [
+  ["en", "15 November 2026", "1 June 2027"],
+  ["si", "2026 නොවැම්බර් 15", "2027 ජූනි 1"],
+] as const) {
+  test(`a saved hadahan says what was kept and what is worked out today, in ${lang} (A-08)`, async ({ page }) => {
+    await openSavedHadahan(page, lang, road(BORN, NOW));
+    await expect(page.locator("[data-saved-note]")).toContainText("PDF");
+    const frozen = page.locator('#periods [data-saved-time="frozen"]');
+    await expect(frozen).toHaveCount(1);
+    await expect(frozen).toContainText(saved);
+    await expect(page.locator('[data-card="road"] [data-saved-time="live"]')).toContainText(today);
+    await expect(page.locator('#coming > [data-saved-time="live"]')).toContainText(today);
+  });
+}
+
+test("a saved hadahan's label goes when its live parts cannot be loaded", async ({ page }) => {
+  await openSavedHadahan(page, "en", null);
+  await page.unroute("**/api/v1/changes/personal");
+  await page.route("**/api/v1/changes/personal", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.reload();
+  await expect(page.locator('#periods [data-saved-time="frozen"]')).toBeVisible();
+  await expect(page.locator("#coming")).toBeHidden();
+  await expect(page.locator('[data-saved-time="live"]:visible')).toHaveCount(0);
+});
+
+test("a birth still to come has no Today on its road (A-06)", async ({ page }) => {
+  await openSavedHadahan(page, "en", road("2030-01-01T00:00:00Z", NOW));
+  const panel = page.locator('[data-card="road"]');
+  await expect(panel.locator('[data-card="stop"]')).toContainText("The road begins");
+  await expect(panel.getByRole("button", { name: "Today", exact: true })).toHaveCount(0);
+  await expect(panel.getByText("You are here")).toHaveCount(0);
+  // The road can still be travelled, and the birth reached again, from the keyboard.
+  const map = panel.getByRole("slider");
+  await map.focus();
+  await page.keyboard.press("End");
+  await expect(panel.locator('[data-card="stop"]')).toContainText("The road goes on");
+  await page.keyboard.press("Home");
+  await expect(panel.locator('[data-card="stop"]')).toContainText("The road begins");
+});
+
+test("a birth in the past still has its Today", async ({ page }) => {
+  await openSavedHadahan(page, "en", road(BORN, NOW));
+  await expect(page.locator('[data-card="road"]').getByRole("button", { name: "Today", exact: true })).toBeVisible();
+});
+
+test("a saved match says what was kept and what is worked out today (A-08)", async ({ page }) => {
+  await page.clock.setFixedTime(new Date(NOW));
+  const shared = JSON.parse(fixture("share-porondam-en.json"));
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/porondam/timeline", (route) => route.fulfill(json("timeline-full-en.json")));
+  await page.route("**/api/v1/journey/couple", (route) =>
+    route.fulfill(
+      reply(200, {
+        status: "ok",
+        waiting_for: null,
+        time: null,
+        bride: road(BORN, NOW),
+        groom: road("1992-08-03T04:30:00Z", NOW),
+      }),
+    ),
+  );
+  await page.route(`**/api/v1/saved/${MATCH_ID}?lang=en`, (route) =>
+    route.fulfill(
+      reply(200, {
+        ...matchItem,
+        request: { kind: "porondam", match: { bride: { ...BIRTH, name: "Nimali" }, groom: { ...BIRTH, date: "1992-08-03", name: "Kasun" } } },
+        hadahan_result: null,
+        porondam_result: shared.porondam,
+      }),
+    ),
+  );
+  await page.goto(`/en/my/${MATCH_ID}`);
+  await expect(page.locator("[data-saved-note]")).toContainText("kept as they were that day");
+  await expect(page.locator('[data-card="timeline"] [data-saved-time="live"]')).toContainText("1 June 2027");
+  await expect(page.locator('[data-card="couple-road"] [data-saved-time="live"]')).toContainText("1 June 2027");
+});
+
 test("a report from another browser is not there", async ({ page }) => {
   await page.route(`**/api/v1/saved/${ID}?lang=en`, (route) =>
     route.fulfill(reply(404, { detail: "no such saved report" })),

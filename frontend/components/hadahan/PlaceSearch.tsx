@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 
-import { type Place, searchPlaces } from "@/lib/hadahan";
+import { type Place, fill, searchPlaces } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
 import styles from "./BirthForm.module.css";
@@ -16,6 +16,12 @@ type Props = {
   onChange: (place: Place | null) => void;
   /** Shown in the empty box: the place used when none is chosen, such as Colombo. */
   placeholder?: string;
+  /** Takes the hint's place once a place is chosen: "Chosen: {place} ({timezone})". */
+  chosen?: string;
+  /** The input's id, for a form that takes the visitor to it. */
+  inputId?: string;
+  /** Marks the input as still needed. */
+  invalid?: boolean;
 };
 
 export function placeLabel(place: Place, lang: Locale): string {
@@ -43,15 +49,28 @@ export function distinctLabels(places: Place[], lang: Locale): string[] {
   });
 }
 
-export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeholder }: Props) {
-  const id = useId();
+export function PlaceSearch({
+  lang,
+  label,
+  hint,
+  empty,
+  value,
+  onChange,
+  placeholder,
+  chosen,
+  inputId,
+  invalid,
+}: Props) {
+  const ownId = useId();
+  const id = inputId ?? ownId;
   const listId = `${id}-list`;
   const [query, setQuery] = useState(value ? placeLabel(value, lang) : "");
   const [results, setResults] = useState<Place[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [searched, setSearched] = useState(false);
-  const skipNext = useRef(false);
+  // A place that is already chosen needs no search until its text changes.
+  const skipNext = useRef(value !== null);
   const labels = distinctLabels(results, lang);
 
   useEffect(() => {
@@ -123,6 +142,7 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
           aria-autocomplete="list"
           aria-activedescendant={open && active >= 0 ? `${listId}-${active}` : undefined}
           aria-describedby={`${id}-hint`}
+          aria-invalid={invalid || undefined}
           autoComplete="off"
           placeholder={placeholder}
           value={query}
@@ -140,8 +160,8 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
           onFocus={() => results.length > 0 && !value && setOpen(true)}
         />
       </div>
-      <p id={`${id}-hint`} className={styles.hint}>
-        {hint}
+      <p id={`${id}-hint`} className={value && chosen ? styles.hintDone : styles.hint} data-place-hint>
+        {value && chosen ? fill(chosen, { place: placeLabel(value, lang), timezone: value.timezone }) : hint}
       </p>
       {open && results.length > 0 && (
         <ul id={listId} role="listbox" className={styles.options}>

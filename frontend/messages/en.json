@@ -255,6 +255,7 @@
       "unknownTimeNote": "The lagna and houses need the birth time. Without it, use Porondam with birth stars, which needs only the nakath.",
       "place": "Place of birth",
       "placeHint": "Type at least two letters of a town or village",
+      "placeChosen": "Chosen: {place} ({timezone})",
       "noPlaces": "No places found. Try another spelling, or enter coordinates.",
       "timezoneOnDate": "Time zone on that date: {offset}",
       "coordinates": "Enter coordinates instead",
@@ -280,7 +281,7 @@
       "choose": "Use this time"
     },
     "errors": {
-      "missing": "Please fill in the date, time and place.",
+      "missing": "Still needed: {fields}.",
       "failed": "We could not work out the chart. Please try again.",
       "notFound": "That place was not found. Please search again.",
       "latitude": "Latitude must be a number from -90 to 90, such as 6.9271.",
@@ -465,9 +466,10 @@
       "fullText": "Most complete, with Kuja dosha. Needs birth times.",
       "quickText2": "When you don't know the birth times. Kuja dosha is left out."
     },
+    "weddingFirst": "Wedding dates are found from both birth stars, so match the two of you first. Birth stars alone are enough. The date search then opens on this page.",
     "clockFor": "For the {who}:",
     "errors": {
-      "missing": "Please fill in the details for both people.",
+      "missing": "Still needed for the {who}: {fields}.",
       "failed": "We could not match the charts. Please try again.",
       "notFound": "A place was not found. Please search again."
     },
@@ -630,7 +632,15 @@
       "placeHint": "Its sunrise and lagna are used. Colombo when left empty.",
       "noPlaces": "No places found",
       "find": "Find dates",
-      "working": "Searching. Two years can take a few seconds.",
+      "working": "Searching…",
+      "progress": {
+        "start": "Searching the next {range} for: {ceremonies}.",
+        "longer": "Still searching the next {range} for: {ceremonies}. A longer range takes longer.",
+        "waking": "Still searching the next {range} for: {ceremonies}. The service may have been asleep, and waking up can take a minute or more. If it has not answered after {limit} seconds, the search stops and you can try again.",
+        "seconds": "{seconds} seconds so far"
+      },
+      "translating": "These dates were found in Sinhala. Getting them in English…",
+      "notTranslated": "These dates are in Sinhala. Press Find dates to get them in English.",
       "pickOne": "Choose at least one ceremony.",
       "time": "{start} to {end}",
       "zone": "Times are in {zone} ({offset}).",
@@ -722,6 +732,10 @@
     "groupPorondam": "Porondam matches",
     "groupHadahan": "Hadahan charts",
     "savedOn": "Saved {date}",
+    "frozen": "As it was when saved, on {date}",
+    "live": "Worked out today, {date}. It can differ from the saved part.",
+    "savedNoteHadahan": "The chart and its life periods are kept as they were that day. The life road, the forecast and the planet changes ahead are worked out today, and a new PDF or share link is made fresh too.",
+    "savedNotePorondam": "The score and its checks are kept as they were that day. The years ahead and the couple's road are worked out today, and a new PDF or share link is made fresh too.",
     "quick": "Quick match by birth star",
     "openReport": "Open",
     "rename": "Rename",
@@ -1348,6 +1362,7 @@
         "long": "4 or more"
       },
       "count": "{count} names",
+      "loading": "Finding names…",
       "none": "No names in our list start with these letters yet. Some letters are rare at the start of a name.",
       "pickLetter": "Pick at least one letter.",
       "sourceName": "Wikipedia name page",
@@ -1765,6 +1780,7 @@
     "fullMoon": "Full moon {time}",
     "rahu": "Rahu",
     "today": "Today",
+    "toToday": "Go to today",
     "failed": "The calendar could not be loaded just now. Try again in a moment.",
     "retry": "Try again",
     "loading": "Loading the calendar",
@@ -1782,6 +1798,7 @@
       "nothing": "Nothing",
       "birth": "Birth details",
       "two": "Two people's birth details",
+      "stars": "Two birth stars, or birth details",
       "paper": "A paper horoscope"
     },
     "groups": {
@@ -1819,7 +1836,7 @@
       },
       "wedding": {
         "name": "Wedding nakath",
-        "text": "Good times for the wedding ceremonies, found from a porondam match."
+        "text": "Good dates and times for the wedding ceremonies. First match the two of you, then the date search opens."
       },
       "babyNames": {
         "name": "Baby name letters",
@@ -1846,6 +1863,8 @@
         "text": "Enter a paper kendara and find the dates and times it fits."
       }
     },
+    "aboutTitle": "About Sidera",
+    "aboutWhy": "How the results are worked out, and how to check them yourself.",
     "hiddenTitle": "Also inside the results",
     "hidden": [
       {

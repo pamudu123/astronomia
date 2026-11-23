@@ -12,6 +12,7 @@ import { DetailLocked, FullReport } from "@/components/paid/FullReport";
 import { PaidOnly, ReportScope } from "@/components/paid/ReportAccess";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
+import { SavedTime, type SavedTimes } from "@/components/account/SavedTime";
 import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
 import { YearlyLink } from "@/components/yearly/YearlyLink";
 import {
@@ -74,6 +75,8 @@ type Props = {
   /** Next steps and Remember my chart. Left out on shared pages. */
   next?: Dictionary["next"];
   remember?: Dictionary["remember"];
+  /** Only on a saved report: labels the parts kept from that day and those worked out today. */
+  savedTimes?: SavedTimes;
 };
 
 /** What each step of the reading guide lights up: houses, and a planet to pick out. */
@@ -115,6 +118,7 @@ function HadahanResultPage({
   yearly,
   next,
   remember,
+  savedTimes,
 }: Props) {
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
   // What the AI assistant sees: this result, with no birth details.
@@ -160,7 +164,15 @@ function HadahanResultPage({
     "chart",
   );
   // The diagram under each chapter's short answer; the PDF prints the same ones.
-  const diagram = (id: ChapterId) => <ChartDiagram id={id} result={result} labels={labels} birth={request?.date ?? date} />;
+  const diagram = (id: ChapterId) => (
+    <ChartDiagram
+      id={id}
+      result={result}
+      labels={labels}
+      birth={request?.date ?? date}
+      saved={savedTimes && <SavedTime times={savedTimes} part="frozen" />}
+    />
+  );
   const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;
@@ -426,9 +438,18 @@ function HadahanResultPage({
               lang={lang}
               t={t}
               explain={<AiExplain chapters={CHART_PLACES.periods} lang={lang} facts={facts} />}
+              note={<SavedTime times={savedTimes} part="frozen" />}
             />
           )}
-          {request && <LifeRoad lang={lang} t={t} labels={labels} request={request} />}
+          {request && (
+            <LifeRoad
+              lang={lang}
+              t={t}
+              labels={labels}
+              request={request}
+              note={<SavedTime times={savedTimes} part="live" />}
+            />
+          )}
         </section>
       )}
 
@@ -437,6 +458,7 @@ function HadahanResultPage({
           <h2 id="coming-title" className={`display ${styles.groupTitle}`}>
             {t.comingTitle}
           </h2>
+          <SavedTime times={savedTimes} part="live" />
           <Forecast lang={lang} t={t} labels={labels} request={request} />
           <UpcomingChanges lang={lang} t={t} request={request} />
           {yearly && <YearlyLink t={yearly} lang={lang} lagna={lagna.sign} lagnaName={sign(lagna.sign).name} />}

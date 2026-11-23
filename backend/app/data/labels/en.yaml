@@ -478,6 +478,7 @@ karana:
 panchanga:
   timezone: "Times are in {timezone} ({offset})."
   poya: "Poya days are the calculated full moon days. The official Sri Lankan calendar can differ by a day, so check it for religious observances."
+  skipped: "This date did not happen here. The clocks moved across the date line and skipped it, so it has no sunrise or nakath."
 direction: {north: north, south: south, east: east, west: west, north_east: north east, north_west: north west, south_east: south east, south_west: south west}
 
 # Sinhala and Tamil New Year (Avurudu).
@@ -560,6 +561,7 @@ first_letters:
   months: {one: "1 month", many: "{n} months"}
   age_outside: "Most sources give an age between 2 and 5 for the first letters."
   none: "No time in this range passes every rule. Try a longer range."
+  before_birth: "The child is born after the last day searched. Choose a longer range, or come back closer to the time."
   note: "Each time is for the chosen place and passes every rule listed. Ask a practising astrologer to confirm it before the ceremony."
 
 # Old horoscopes: from a kendara drawn on paper to the births that fit it.
@@ -570,6 +572,8 @@ kendara:
   near: "{names} only fit near the edge of the box drawn. An older horoscope may use another method of calculation."
   none: "No birth from 1900 to now fits this drawing. Please check each planet's box, or allow a wider range."
   cut_off: "There are more matches than the {count} shown. Give a year range or the birth star to narrow them."
+  cut_off_star: "There are more matches for this birth star than the {count} shown. Give a year range to narrow them."
+  time_limit: "The search took too long and stopped at {date}, so later births are not checked. Matches found so far: {count}. Give a year range to check the rest."
   empty_range: "The dates given are outside 1900 to now."
   problem:
     nodes_not_opposite: "Rahu and Ketu are always in opposite boxes. Please check where they are drawn."

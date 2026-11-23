@@ -144,3 +144,17 @@
     padding: 20px;
   }
 }
+
+/* A running search: what it looks for, and how long it has run. */
+.progress {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--night-raised);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}

@@ -125,6 +125,7 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             "karana": parts(body["karana"], date),
             "times_note": body["timezone_note"],
             "provisional": body["provisional"],
+            **({"skipped_date": body["skipped_note"]} if body.get("skipped") else {}),
         }
 
     async def month_calendar(
@@ -151,6 +152,7 @@ def tools(engine: EngineClient) -> list[BaseTool]:
                     "rahu_kalaya": span(d["rahu_kalaya"], d["date"]),
                     "thithi_at_sunrise": (d.get("thithi") or {}).get("name"),
                     "nakatha_at_sunrise": (d.get("nakatha") or {}).get("name"),
+                    **({"skipped_date": True} if d.get("skipped") else {}),
                 }
                 for d in days
             ],

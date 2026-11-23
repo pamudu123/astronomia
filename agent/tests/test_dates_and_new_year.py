@@ -162,6 +162,9 @@ def test_tool_descriptions_say_what_each_needs() -> None:
     assert "# What each tool needs" in prompt
     assert "quick match (birth stars only)" in prompt
     assert "venue" in prompt
+    # QA-03: Astro asked the person to start a search that was already running.
+    assert "a search is **running**" in prompt
+    assert "you can't see a search" in prompt
     description = tool_for(unused, "new_year_times").description
     assert "calculated" in description
     assert "official" in description

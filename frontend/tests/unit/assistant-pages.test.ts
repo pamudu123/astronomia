@@ -15,6 +15,7 @@ import {
   dayContext,
   kendaraContext,
   weddingContext,
+  weddingSearchContext,
 } from "@/lib/assistant/pages";
 
 import baby from "../e2e/fixtures/baby-birth-en.json";
@@ -186,6 +187,14 @@ describe("other pages", () => {
     expect(String(summary.rahu_kalaya)).toMatch(/^\d\d:\d\d to \d\d:\d\d/);
   });
 
+  it("says when the date never happened at the place", () => {
+    const day = panchanga as unknown as Panchanga;
+    const note = "This date did not happen here.";
+    const skipped = { ...day, sunrise: null, sunset: null, rahu_kalaya: null, thithi: [], nakatha: [], skipped: true, skipped_note: note };
+    expect(dayContext(skipped, null, "en").result).toMatchObject({ skipped_date: note, sunrise: null });
+    expect(dayContext(day, null, "en").result).not.toHaveProperty("skipped_date");
+  });
+
   it("names the day's own place and time zone, not a place picked but not loaded yet", () => {
     // QA follow-up: the picker held London while Colombo's day was still on screen.
     const day = panchanga as unknown as Panchanga;
@@ -266,5 +275,36 @@ describe("combine", () => {
   it("uses the page alone when nothing else is open", () => {
     expect(combine({ main: match })).toBe(match);
     expect(combine({})).toBeNull();
+  });
+});
+
+describe("the wedding dates search, for Astro (QA-03)", () => {
+  const names = { engagement: "Engagement", poruwa: "Poruwa ceremony", homecoming: "Homecoming" };
+  const kandy = { id: 1, name: "Kandy", timezone: "Asia/Colombo" } as Place;
+
+  it("says a search is running, and for what", () => {
+    const context = weddingSearchContext("running", { months: 6, ceremonies: ["engagement", "poruwa"], place: kandy }, null, "en", names);
+    expect(pageKey(context.page)).toBe("wedding");
+    expect(context.result).toMatchObject({
+      status: expect.stringContaining("running now"),
+      months_ahead: 6,
+      ceremonies: ["Engagement", "Poruwa ceremony"],
+      place: "Kandy",
+    });
+    expect(context.result).not.toHaveProperty("dates_already_on_screen");
+  });
+
+  it("says a search did not finish, with the dates still on screen", () => {
+    const context = weddingSearchContext(
+      "failed",
+      { months: 24, ceremonies: ["poruwa"], place: null },
+      wedding as unknown as Wedding,
+      "en",
+      names,
+    );
+    const result = context.result as Record<string, unknown>;
+    expect(result.status).toContain("did not finish");
+    expect(result.place).toContain("Colombo");
+    expect(result.dates_already_on_screen).toEqual(weddingContext(wedding as unknown as Wedding, "en").result);
   });
 });
