@@ -30,9 +30,13 @@ services:
       - key: ASTRONOMIA_ACCESS_KEY
         sync: false
       # Paid reports (docs/18, docs/20): the AI reading, explain buttons, full detail and full
-      # PDF only on reports the account unlocked, with a coupon until payments exist.
+      # PDF only on reports the account unlocked, with a coupon or a payment.
       - key: ASTRONOMIA_PAID_REPORTS
         value: "true"
+      # Staging only (owner, 2026-11-24): the mock payment provider, which unlocks reports without
+      # money (docs/23). The backend refuses to start with it when the environment is production.
+      - key: ASTRONOMIA_PAYMENT_PROVIDER
+        value: mock
       # Astro chat limits (docs/21): shared with the assistant (copied below) and Vercel's
       # CHAT_KEY. Secret: set in the dashboard, never here. Empty: no chat limits.
       - key: ASTRONOMIA_CHAT_KEY

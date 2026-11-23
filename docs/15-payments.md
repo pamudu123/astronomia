@@ -52,6 +52,9 @@ Free worldwide access does not mean checkout has to open worldwide. Payments can
 
 Sections 1 to 11 below were written for PayHere and are kept as the record of that plan. The parts that do not depend on PayHere still hold for any provider: one-time payments first (section 3), the `orders` and `entitlements` tables (section 6.4), verifying every payment notice on the server before unlocking anything, never storing card details, and never sending birth details or reading contents to the gateway (section 6.6). The PayHere-specific parts (account setup, fees, hash, field names, status codes) will be replaced once a provider approves.
 
+**2026-11-23:** the buying flow is built with a stand-in provider that takes no money
+(`docs/23-buying-a-report.md`). A real provider plugs into it once one approves.
+
 ## 1. The decision (2026-11-15, superseded by section 0)
 
 Fees and limits below come from PayHere's own pages, but those pages disagree with each other in places.

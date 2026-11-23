@@ -2,7 +2,8 @@
 
 Date: 2026-11-21. Steps 3 and 4 of the build order in `docs/18-saving-paid-and-compare.md`, built in
 PR #66. Docs/18 is the plan; this file records what was built, how it is switched on, and the gaps
-that are known and left open.
+that are known and left open. Since 2026-11-23 a report is bought on its own page, without signing in
+first: see `docs/23-buying-a-report.md`, which replaces the parts here about sign in and the form.
 
 ## What was built
 
@@ -13,7 +14,7 @@ that are known and left open.
 | Endpoints: price, paid check, apply a coupon, unlock with a free coupon | `backend/app/api/paid.py` |
 | The paid check, one place | `report_access()` in `backend/app/tiers/__init__.py` |
 | Website check | `canUse()` in `frontend/lib/entitlements.ts`, `frontend/components/paid/` |
-| Sign in for a report | `signInForReport()` in `frontend/lib/paid.ts`: saves the report (as a guest if needed), then "Continue with Google" brings the visitor back to it in My reports |
+| Buying, and sign in after | `docs/23-buying-a-report.md` |
 | AI route check (chart and match chapters) | `frontend/app/api/explain/route.ts`, `frontend/lib/paidCheck.ts` |
 | The owner's coupon script | `backend/scripts/coupons.py` (create, list, on, off, void) |
 

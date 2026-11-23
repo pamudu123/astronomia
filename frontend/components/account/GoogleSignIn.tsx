@@ -123,7 +123,7 @@ export function GoogleSignIn({ lang, t, who, hasReports, onSignedOut }: Props) {
 }
 
 /** Google's "G", in its colours, as Google's sign in guidance asks. */
-function GoogleMark() {
+export function GoogleMark() {
   return (
     <svg aria-hidden="true" width="18" height="18" viewBox="0 0 48 48">
       <path

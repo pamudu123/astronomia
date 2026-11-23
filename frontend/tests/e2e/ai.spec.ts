@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { type Page, expect, test } from "@playwright/test";
 
+import { standInSupabase } from "./supabase";
+
 /**
  * The AI explanations (docs/17) with the AI switched on: this file runs against its own build
  * (scripts/e2e-ai-server.mjs). The backend and the agent are not running: the backend's answers
@@ -136,28 +138,36 @@ test("a chapter that can't be written offers to try again", async ({ page }) => 
   await expect(result.locator('[data-chapter="match.summary"]')).toContainText("Text of match.summary.");
 });
 
-test("with paid reports on, a free match shows the full report form in place of the AI", async ({ page }) => {
+test("with paid reports on, a free match invites to buy the report in place of the AI", async ({ page }) => {
   const calls = await mockAll(page, new Set(), { ...OPEN, features: [], paid_reports: true });
   await quickMatch(page);
 
   const result = page.locator('[data-explain="match.summary"]');
   await result.getByRole("button", { name: "Explain this" }).click();
-  await expect(result).toContainText("Part of the full report");
-  await expect(page.locator('[data-card="full-reading"]')).toContainText("Part of the full report");
+  await expect(result).toContainText("This is in the full report");
+  await expect(result).toContainText("the AI reading of this match");
+  await expect(result.locator("[data-price]")).toContainText("LKR 800");
+  await expect(result.getByRole("link", { name: "Buy this report" })).toBeVisible();
+  const reading = page.locator('[data-card="full-reading"]');
+  await expect(reading.getByRole("link", { name: "Buy this report" })).toBeVisible();
 
   const form = page.locator('[data-card="full-report"]');
   await expect(form.getByRole("heading", { name: "Get the full report" })).toBeVisible();
   await expect(form.locator("[data-price]")).toContainText("LKR 800");
-  // Not signed in: the way in is Google, not a coupon box.
-  await expect(form.getByRole("button", { name: "Continue with Google" })).toBeVisible();
-  await expect(form.getByRole("button", { name: "Have a coupon?" })).toHaveCount(0);
+  // Buying needs no sign in.
+  await expect(form.getByRole("button", { name: /Google/ })).toHaveCount(0);
   expect(calls).toHaveLength(0);
+
+  await result.getByRole("link", { name: "Buy this report" }).click();
+  await expect(page).toHaveURL(/\/en\/buy$/); // nothing about the match in the address
+  await expect(page.locator("[data-buy-report]")).toContainText("Full porondam report");
 });
 
-test("a signed in visitor unlocks the match with a free coupon", async ({ page }) => {
+test("a match unlocked on the buying page opens its AI reading", async ({ page }) => {
   const locked = { ...OPEN, features: [], paid_reports: true, account: "google" };
   const unlocked = { ...OPEN, paid: true, paid_reports: true, account: "google" };
   await mockAll(page, new Set(), locked);
+  await standInSupabase(page);
   // The backend's answer once the report is paid for; the page asks again after unlocking.
   let paid = false;
   await page.route("**/api/v1/reports/access", (route) =>
@@ -166,7 +176,13 @@ test("a signed in visitor unlocks the match with a free coupon", async ({ page }
   await page.route("**/api/v1/coupons/apply", (route) =>
     route.fulfill({
       contentType: "application/json",
-      body: JSON.stringify({ result: "free", percent_off: 100, price: PRICE, new_price: { ...PRICE, amount: 0 } }),
+      body: JSON.stringify({
+        result: "free",
+        percent_off: 100,
+        price: PRICE,
+        discount: PRICE,
+        new_price: { ...PRICE, amount: 0 },
+      }),
     }),
   );
   await page.route("**/api/v1/reports/unlock", (route) => {
@@ -182,16 +198,16 @@ test("a signed in visitor unlocks the match with a free coupon", async ({ page }
   });
   await quickMatch(page);
 
-  const form = page.locator('[data-card="full-report"]');
-  await form.getByRole("button", { name: "Have a coupon?" }).click();
-  await form.getByLabel("Coupon code").fill("pamudu");
-  await form.getByRole("button", { name: "Apply" }).click();
-  await expect(form).toContainText("This code makes the report free.");
-  await expect(form.locator("[data-price]")).toContainText("LKR 0");
-  await form.getByRole("button", { name: "Unlock free" }).click();
+  await page.locator('[data-card="full-report"]').getByRole("link", { name: "Buy this report" }).click();
+  const order = page.locator("[data-buy-order]");
+  await order.getByLabel("Coupon or discount code").fill("freecode");
+  await order.getByRole("button", { name: "Apply" }).click();
+  await order.getByRole("button", { name: "Unlock the report" }).click();
+  await page.getByRole("link", { name: "Open the report" }).click();
 
+  const form = page.locator('[data-card="full-report"]:visible');
   await expect(form.getByRole("heading", { name: "This is your full report" })).toBeVisible();
-  const card = page.locator('[data-card="full-reading"]');
+  const card = page.locator('[data-card="full-reading"]:visible');
   await card.getByRole("button", { name: "Get the full reading" }).click();
   await expect(card.locator('[data-chapter="match.people"]')).toContainText("Text of match.people.");
 });

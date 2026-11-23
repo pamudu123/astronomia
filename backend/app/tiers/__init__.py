@@ -24,9 +24,6 @@ Feature = Literal["ai_reading", "ai_explain", "full_detail", "full_pdf"]
 # What a paid report adds: the AI reading in chapters, the explain buttons, the full detail
 # (every Kuja dosha cancellation rule) and the PDF with all of it.
 PAID_FEATURES: tuple[Feature, ...] = ("ai_reading", "ai_explain", "full_detail", "full_pdf")
-# There is no checkout yet (no payment provider accepts astrology, docs/15): only coupons that
-# take 100% off can unlock a report. Discount coupons show their price but cannot be used.
-CHECKOUT_AVAILABLE = False
 
 
 @dataclass(frozen=True)

@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from app.api import deps, saved
+from app.api import checkout, deps, paid, saved
 from app.geo.build import build
 from app.main import create_app
 from app.store.accounts import AccountStore, sqlite_accounts
@@ -107,6 +107,9 @@ def client(
     app.dependency_overrides[deps.chapter_store] = lambda: chapters
     limit = saved.RateLimit(30)
     app.dependency_overrides[saved.guest_limit] = lambda: limit
+    misses, payments = saved.RateLimit(30), saved.RateLimit(30)
+    app.dependency_overrides[paid.miss_limit] = lambda: misses
+    app.dependency_overrides[checkout.payment_limit] = lambda: payments
     tokens = auth.checker()  # stand-in Supabase keys (tests/auth.py)
     app.dependency_overrides[deps.token_checker] = lambda: tokens
     app.dependency_overrides[deps.supabase_admin] = lambda: admin
