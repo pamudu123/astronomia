@@ -1,8 +1,9 @@
 "use client";
 
-import { type ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionState } from "@/components/SectionState";
 import type { Labels } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
@@ -13,6 +14,7 @@ import {
   spanPercent,
   yearTicks,
 } from "@/lib/porondam";
+import { useSection } from "@/lib/useSection";
 
 import styles from "./CoupleTimeline.module.css";
 
@@ -98,21 +100,13 @@ export function CoupleTimeline({
   explain,
   note,
 }: Props & { explain?: ReactNode; note?: ReactNode }) {
-  const [timeline, setTimeline] = useState<Timeline | null>(null);
-
-  useEffect(() => {
-    let current = true;
-    fetchTimeline(request, lang)
-      .then((result) => {
-        if (current && result.timeline) setTimeline(result.timeline);
-      })
-      // The match stands without this section.
-      .catch(() => undefined);
-    return () => {
-      current = false;
-    };
-  }, [request, lang]);
-
+  const section = useSection(fetchTimeline, request, lang);
+  if (section.status !== "ready") {
+    return (
+      <SectionState id="timeline" title={t.title} status={section.status} t={t.load} onRetry={section.retry} height="long" />
+    );
+  }
+  const { timeline } = section.value;
   if (!timeline) return null;
 
   const people: [Role, string, PersonTimeline][] = [

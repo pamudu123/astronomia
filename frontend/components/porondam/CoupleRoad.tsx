@@ -1,8 +1,9 @@
 "use client";
 
-import { type PointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type PointerEvent, type ReactNode, useCallback, useMemo, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionState } from "@/components/SectionState";
 import { useAssistantOn } from "@/components/assistant/PageContext";
 import road from "@/components/hadahan/LifeRoad.module.css";
 import { RoadArrows } from "@/components/hadahan/RoadArrows";
@@ -26,9 +27,10 @@ import {
 } from "@/lib/coupleJourney";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
-import { type Journey, ROAD_YEARS, roadWord, stopBeside, stopNear } from "@/lib/journey";
+import { ROAD_YEARS, roadWord, stopBeside, stopNear } from "@/lib/journey";
 import type { PorondamRequest } from "@/lib/porondam";
 import { type RoadFonts, useRoadTravel } from "@/lib/useRoadTravel";
+import { useSection } from "@/lib/useSection";
 
 import styles from "./CoupleRoad.module.css";
 
@@ -59,34 +61,29 @@ const clamp = (value: number, low: number, high: number) => Math.max(low, Math.m
  * It needs a birth time for both people, so a birth star only match does not show it.
  */
 export function CoupleRoad({ lang, text, words, labels, request, brideName, groomName, note }: Props) {
-  const [journeys, setJourneys] = useState<Record<Role, Journey> | null>(null);
   const full = bothFull(request);
-
-  useEffect(() => {
-    if (!full) return;
-    let current = true;
-    fetchCoupleJourney(request, lang)
-      .then((result) => {
-        if (current && result.bride && result.groom) setJourneys({ bride: result.bride, groom: result.groom });
-      })
-      // The match stands without this section.
-      .catch(() => undefined);
-    return () => {
-      current = false;
-    };
-  }, [request, lang, full]);
+  const section = useSection(fetchCoupleJourney, request, lang, full);
+  const bride = section.status === "ready" ? section.value.bride : null;
+  const groom = section.status === "ready" ? section.value.groom : null;
 
   const couple = useMemo(
     () =>
-      journeys &&
-      buildCouple(journeys.bride, journeys.groom, {
+      bride &&
+      groom &&
+      buildCouple(bride, groom, {
         today: { title: text.todayTitle, text: text.todayText },
         bothMist: { title: text.bothMistTitle, text: text.bothMistText, helps: text.bothMistHelps },
       }),
-    [journeys, text],
+    [bride, groom, text],
   );
 
-  if (!full || !journeys || !couple) return null;
+  if (!full) return null;
+  if (section.status !== "ready") {
+    return (
+      <SectionState id="couple-road" title={text.title} status={section.status} t={words.load} onRetry={section.retry} height="tall" />
+    );
+  }
+  if (!bride || !groom || !couple) return null;
   return (
     <CoupleView
       text={text}
@@ -94,7 +91,7 @@ export function CoupleRoad({ lang, text, words, labels, request, brideName, groo
       labels={labels}
       couple={couple}
       names={{ bride: brideName, groom: groomName }}
-      provisional={journeys.bride.provisional || journeys.groom.provisional}
+      provisional={bride.provisional || groom.provisional}
       note={note}
     />
   );

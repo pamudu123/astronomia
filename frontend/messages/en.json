@@ -253,7 +253,10 @@
       "date": "Date of birth",
       "time": "Time of birth",
       "unknownTime": "I don't know the exact time",
-      "unknownTimeNote": "The lagna and houses need the birth time. Without it, use Porondam with birth stars, which needs only the nakath.",
+      "unknownTimeNote": "The lagna and houses need the birth time. Without it, you can still match two birth stars, which needs only the nakath.",
+      "unknownTimeStars": "Match two birth stars",
+      "unknownTimeOld": "Find the time from an old horoscope",
+      "unknownTimeShort": "This needs the birth time.",
       "place": "Place of birth",
       "placeHint": "Type at least two letters of a town or village",
       "placeChosen": "Chosen: {place} ({timezone})",
@@ -285,6 +288,9 @@
       "missing": "Still needed: {fields}.",
       "failed": "We could not work out the chart. Please try again.",
       "notFound": "That place was not found. Please search again.",
+      "loading": "The form could not finish loading. What you typed is kept.",
+      "retry": "Try again",
+      "date": "Date of birth cannot be in the future.",
       "latitude": "Latitude must be a number from -90 to 90, such as 6.9271.",
       "longitude": "Longitude must be a number from -180 to 180, such as 79.8612.",
       "timezone": "That time zone is not recognised. Use a name such as Asia/Colombo or Europe/London."
@@ -320,6 +326,11 @@
       "dashaNow": "Now: {main} main period, {sub} sub period.",
       "dashaSub": "Sub periods of the {main} main period",
       "road": {
+        "load": {
+          "loading": "Loading…",
+          "failed": "We could not load this section.",
+          "retry": "Try again"
+        },
         "title": "Life road",
         "lead": "Your life periods drawn as a road: wide and bright in good times, narrow in hard times.",
         "canvasLabel": "A night road running toward the horizon. Good years are wide and lit with lamps, hard years are narrow, dark and broken. Signposts mark major years.",
@@ -466,6 +477,10 @@
       "submit": "Match the charts",
       "working": "Matching the charts",
       "privacy": "Nothing is stored. Details are used once.",
+      "consent": "Both people are adults, and both have agreed to this match using their birth details.",
+      "consentNeeded": "Please confirm this before matching with full birth details.",
+      "consentOther": "Can't confirm this? A match by birth stars does not need it.",
+      "consentSwitch": "Match birth stars instead",
       "fullText": "Most complete, with Kuja dosha. Needs birth times.",
       "quickText2": "When you don't know the birth times. Kuja dosha is left out."
     },
@@ -563,6 +578,11 @@
       "homeLink": "See which birth stars match yours"
     },
     "timeline": {
+      "load": {
+        "loading": "Loading…",
+        "failed": "We could not load this section.",
+        "retry": "Try again"
+      },
       "title": "Years ahead for the couple",
       "lead": "The next ten years for both of you: Saturn periods and dasha periods.",
       "saturn": "Saturn",

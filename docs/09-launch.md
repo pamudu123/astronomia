@@ -158,7 +158,7 @@ describes them.
 | Item | Notes |
 |---|---|
 | Child tools (baby names, first letters, and any chart or match with a child's birth date) | A parent or guardian consent box before the calculation, recorded with minimal evidence. As few fields as possible, no name needed. No AI explanation or chat context, no share link and no automatic save on child results |
-| Partner match | A confirmation that both adults agreed. Offer the stars-only match when that cannot be confirmed. Calculation permission is not sharing permission |
+| Partner match | A confirmation that both adults agreed. Offer the stars-only match when that cannot be confirmed. Calculation permission is not sharing permission. **Done (2026-11-23)**: the match form asks for it before a match from full birth details, every time, and points to the birth-star match |
 | Share links | Names and birth details hidden by default, with a preview of every field the recipient will see. Share pages not indexed and not publicly cached, and the link code not leaked through referrers. Explain that deleting a saved report and revoking its share link are separate |
 | AI notice | A short notice before the first chat message and before the first Explain button: the message and chart facts go to OpenAI, leave out names, children's details and sensitive information, and AI can be wrong |
 | AI conversation time limit | Conversations kept in memory need a fixed idle timeout. A restart is not a retention limit |

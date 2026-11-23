@@ -1,12 +1,20 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  EMPTY_MATCH,
   type Factor,
+  type MatchDraft,
+  type SavedMatch,
   filterFactors,
   groupFactors,
   isCounted,
+  keepsMatch,
+  linkOf,
+  loadMatchDraft,
+  openingForm,
   ringOffset,
   ringSegments,
+  saveMatchDraft,
   spanPercent,
   yearTicks,
 } from "@/lib/porondam";
@@ -152,5 +160,56 @@ describe("yearTicks", () => {
     expect(ticks[0].left).toBeGreaterThan(0);
     expect(ticks[0].left).toBeLessThan(2);
     expect(ticks.at(-1)!.left).toBeLessThan(100);
+  });
+});
+
+describe("the match form's draft", () => {
+  const star = (nakshatra: string) => ({ name: "", nakshatra, pada: 1 });
+  const draft: MatchDraft = {
+    ...EMPTY_MATCH,
+    quick: { bride: { ...star("rohini"), name: "Nimali" }, groom: star("hasta") },
+    link: "",
+  };
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("is kept in the tab's storage, and an unusable one is ignored", () => {
+    const kept = new Map<string, string>();
+    vi.stubGlobal("sessionStorage", {
+      getItem: (key: string) => kept.get(key) ?? null,
+      setItem: (key: string, value: string) => kept.set(key, value),
+      removeItem: (key: string) => kept.delete(key),
+    });
+    saveMatchDraft(draft);
+    expect(loadMatchDraft()).toEqual(draft);
+    for (const key of kept.keys()) kept.set(key, '{"mode":"full"}');
+    expect(loadMatchDraft()).toBeNull();
+    saveMatchDraft(null);
+    expect(kept.size).toBe(0);
+  });
+
+  it("opens as it was, and empty without one", () => {
+    expect(openingForm(draft, "", null)).toMatchObject({ mode: "full", quick: draft.quick });
+    expect(openingForm(null, "", null)).toEqual(EMPTY_MATCH);
+  });
+
+  it("puts a new link's stars on top, and keeps edits made under the same link", () => {
+    const linked = { bride: { nakshatra: "krittika", pada: 2 } };
+    const link = linkOf(linked, false);
+    expect(link).toBe("bride=krittika.2");
+    const opened = openingForm(draft, link, linked);
+    expect(opened.mode).toBe("quick");
+    expect(opened.quick.bride).toEqual({ name: "", nakshatra: "krittika", pada: 2 });
+    expect(opened.quick.groom).toEqual(draft.quick.groom);
+    expect(openingForm({ ...draft, link }, link, linked).quick.bride.nakshatra).toBe("rohini");
+    expect(linkOf(null, true)).toBe("mode=stars");
+    expect(openingForm(draft, "mode=stars", null).mode).toBe("quick");
+  });
+
+  it("brings a match back unless another link asks for a new one", () => {
+    const saved = { link: "bride=krittika.2" } as SavedMatch;
+    expect(keepsMatch(saved, "bride=krittika.2")).toBe(true);
+    expect(keepsMatch(saved, "")).toBe(true);
+    expect(keepsMatch(saved, "bride=hasta.1")).toBe(false);
+    expect(keepsMatch({} as SavedMatch, "bride=hasta.1")).toBe(false);
   });
 });

@@ -24,6 +24,15 @@ type Props = {
   invalid?: boolean;
 };
 
+/**
+ * Kept here, not in the message files: the box is used by tools that each have their own block
+ * of text, and all of them need these.
+ */
+const SEARCH_TEXT: Record<Locale, { searching: string; failed: string; retry: string }> = {
+  en: { searching: "Searching for places…", failed: "Places could not be searched.", retry: "Try again" },
+  si: { searching: "ස්ථාන සොයමින්…", failed: "ස්ථාන සෙවීමට නොහැකි විය.", retry: "නැවත උත්සාහ කරන්න" },
+};
+
 export function placeLabel(place: Place, lang: Locale): string {
   const name = lang === "si" && place.name_si ? place.name_si : place.name;
   const region = lang === "si" ? (place.region_si ?? place.region) : place.region;
@@ -69,6 +78,9 @@ export function PlaceSearch({
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [searched, setSearched] = useState(false);
+  const [state, setState] = useState<"idle" | "searching" | "failed">("idle");
+  const [attempt, setAttempt] = useState(0);
+  const words = SEARCH_TEXT[lang];
   // A place that is already chosen needs no search until its text changes.
   const skipNext = useRef(value !== null);
   const labels = distinctLabels(results, lang);
@@ -87,20 +99,27 @@ export function PlaceSearch({
           setResults(found);
           setActive(found.length ? 0 : -1);
           setSearched(true);
+          setState("idle");
           setOpen(true);
         })
-        .catch(() => undefined);
+        .catch(() => {
+          if (controller.signal.aborted) return; // a newer search took over
+          setResults([]);
+          setOpen(false);
+          setState("failed");
+        });
     }, 200);
     return () => {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query]);
+  }, [query, attempt]);
 
   function choose(place: Place) {
     skipNext.current = true;
     setQuery(placeLabel(place, lang));
     setOpen(false);
+    setState("idle");
     onChange(place);
   }
 
@@ -147,9 +166,12 @@ export function PlaceSearch({
           placeholder={placeholder}
           value={query}
           onChange={(event) => {
+            const text = event.target.value.trim();
+            skipNext.current = false;
             setQuery(event.target.value);
             setSearched(false);
-            if (event.target.value.trim().length < 2) {
+            setState(text.length < 2 ? "idle" : "searching");
+            if (text.length < 2) {
               setResults([]);
               setOpen(false);
             }
@@ -160,9 +182,38 @@ export function PlaceSearch({
           onFocus={() => results.length > 0 && !value && setOpen(true)}
         />
       </div>
-      <p id={`${id}-hint`} className={value && chosen ? styles.hintDone : styles.hint} data-place-hint>
-        {value && chosen ? fill(chosen, { place: placeLabel(value, lang), timezone: value.timezone }) : hint}
-      </p>
+      {/* One line for the hint and the search's state, so nothing below it moves. */}
+      <div className={styles.hintRow}>
+        <p
+          id={`${id}-hint`}
+          className={value && chosen ? styles.hintDone : styles.hint}
+          aria-live="polite"
+          data-place-hint
+          data-search={state}
+        >
+          {state === "searching"
+            ? words.searching
+            : state === "failed"
+              ? words.failed
+              : value && chosen
+                ? fill(chosen, { place: placeLabel(value, lang), timezone: value.timezone })
+                : hint}
+        </p>
+        {state === "failed" && (
+          <button
+            type="button"
+            className={styles.linkButton}
+            onClick={() => {
+              setState("searching");
+              setAttempt((count) => count + 1);
+              // The button goes while it searches, so the visitor stays in the box.
+              document.getElementById(id)?.focus();
+            }}
+          >
+            {words.retry}
+          </button>
+        )}
+      </div>
       {open && results.length > 0 && (
         <ul id={listId} role="listbox" className={styles.options}>
           {results.map((place, index) => (
