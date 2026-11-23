@@ -15,6 +15,7 @@ import {
   dayContext,
   kendaraContext,
   weddingContext,
+  weddingSearchContext,
 } from "@/lib/assistant/pages";
 
 import baby from "../e2e/fixtures/baby-birth-en.json";
@@ -266,5 +267,36 @@ describe("combine", () => {
   it("uses the page alone when nothing else is open", () => {
     expect(combine({ main: match })).toBe(match);
     expect(combine({})).toBeNull();
+  });
+});
+
+describe("the wedding dates search, for Astro (QA-03)", () => {
+  const names = { engagement: "Engagement", poruwa: "Poruwa ceremony", homecoming: "Homecoming" };
+  const kandy = { id: 1, name: "Kandy", timezone: "Asia/Colombo" } as Place;
+
+  it("says a search is running, and for what", () => {
+    const context = weddingSearchContext("running", { months: 6, ceremonies: ["engagement", "poruwa"], place: kandy }, null, "en", names);
+    expect(pageKey(context.page)).toBe("wedding");
+    expect(context.result).toMatchObject({
+      status: expect.stringContaining("running now"),
+      months_ahead: 6,
+      ceremonies: ["Engagement", "Poruwa ceremony"],
+      place: "Kandy",
+    });
+    expect(context.result).not.toHaveProperty("dates_already_on_screen");
+  });
+
+  it("says a search did not finish, with the dates still on screen", () => {
+    const context = weddingSearchContext(
+      "failed",
+      { months: 24, ceremonies: ["poruwa"], place: null },
+      wedding as unknown as Wedding,
+      "en",
+      names,
+    );
+    const result = context.result as Record<string, unknown>;
+    expect(result.status).toContain("did not finish");
+    expect(result.place).toContain("Colombo");
+    expect(result.dates_already_on_screen).toEqual(weddingContext(wedding as unknown as Wedding, "en").result);
   });
 });

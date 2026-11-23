@@ -258,3 +258,103 @@ test("the AI notice comes before the first chat message, in place of the input (
   await expect(panel.locator("[data-ai-notice]")).toHaveCount(0);
   expect(runs).toEqual([]);
 });
+
+/** Lets the chat reach its own route (the agent behind it is away) and keeps what it sends. */
+async function watchChat(page: Page): Promise<string[]> {
+  await page.unroute("**/api/copilotkit**");
+  const runs: string[] = [];
+  await page.route("**/api/copilotkit**", (route) => {
+    const body = route.request().postData() ?? "";
+    if (body.includes('"agent/run"')) runs.push(body);
+    return route.continue();
+  });
+  return runs;
+}
+
+/** Types a question in the chat panel and sends it, once the chat knows its agents. */
+async function ask(page: Page, question: string) {
+  const panel = page.locator(".copilotKitSidebar");
+  await panel.locator("textarea").fill(question);
+  const send = panel.locator('[data-testid="copilot-send-button"]');
+  await expect(send).toBeEnabled();
+  await send.click();
+}
+
+/** The chat's first call: which agents there are. A question sent before its answer is lost. */
+const chatReady = (page: Page) =>
+  page.waitForResponse((response) => response.url().includes("/api/copilotkit") && response.ok());
+
+/** The contrast between an element's text and the first background behind it (WCAG). */
+const contrast = (page: Page, selector: string) =>
+  page.locator(selector).last().evaluate((element) => {
+    // Any colour the browser can show, as red, green and blue.
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1;
+    const context = canvas.getContext("2d", { willReadFrequently: true })!;
+    const rgba = (colour: string) => {
+      context.clearRect(0, 0, 1, 1);
+      context.fillStyle = colour;
+      context.fillRect(0, 0, 1, 1);
+      return [...context.getImageData(0, 0, 1, 1).data];
+    };
+    let behind: Element | null = element;
+    while (behind && rgba(getComputedStyle(behind).backgroundColor)[3] < 255) behind = behind.parentElement;
+    const light = (colour: string) => {
+      const [r, g, b] = rgba(colour).map((part) => {
+        const value = part / 255;
+        return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const [a, b] = [light(getComputedStyle(element).color), light(getComputedStyle(behind ?? document.body).backgroundColor)];
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  });
+
+for (const theme of ["light", "dark"] as const) {
+  test(`the person's own chat message is easy to read in the ${theme} theme, on a phone (QA-01)`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.emulateMedia({ colorScheme: theme });
+    await mockAll(page);
+    await watchChat(page);
+    const ready = chatReady(page);
+    await page.goto("/en/porondam");
+    await ready;
+    await page.getByRole("button", { name: "Ask Astro" }).click();
+    await ask(page, "Is this easy to read?");
+    const message = ".copilotKitUserMessage .cpk\\:prose";
+    await expect(page.locator(message)).toHaveText("Is this easy to read?");
+    expect(await contrast(page, message)).toBeGreaterThanOrEqual(4.5);
+  });
+}
+
+test("Astro is told of a wedding search that is running, and of one that failed (QA-03)", async ({ page }) => {
+  await mockAll(page);
+  const runs = await watchChat(page);
+  let release = () => {};
+  await page.route("**/api/v1/wedding-nakath", async (route) => {
+    await new Promise<void>((resolve) => (release = resolve));
+    await route.fulfill({ status: 500, body: "" });
+  });
+  const ready = chatReady(page);
+  await quickMatch(page);
+  await ready;
+  const section = page.locator('[data-card="wedding"]');
+  await section.getByLabel("Homecoming").uncheck();
+  await section.getByRole("button", { name: "Find dates" }).click();
+  await expect(section.locator("[data-progress]")).toBeVisible();
+
+  await page.getByRole("button", { name: "Ask Astro" }).click();
+  await ask(page, "Is the wedding search still running?");
+  await expect.poll(() => runs.length).toBeGreaterThan(0);
+  expect(runs.at(-1)).toContain("this search is running now on the page");
+  expect(runs.at(-1)).toContain("Poruwa ceremony");
+  expect(runs.at(-1)).toContain("Colombo (used when no place is chosen)");
+
+  release();
+  await expect(section.getByRole("alert")).toHaveText("We could not search. Please try again.");
+  const before = runs.length;
+  await ask(page, "And now?");
+  await expect.poll(() => runs.length).toBeGreaterThan(before);
+  expect(runs.at(-1)).toContain("the last search did not finish");
+  expect(runs.at(-1)).not.toContain("this search is running now");
+});

@@ -110,10 +110,43 @@ test("a time that happened twice asks which one", async ({ page }) => {
 test("missing details are reported", async ({ page }) => {
   await mockBackend(page, "en");
   await page.goto("/en/hadahan");
-  await page.getByRole("button", { name: "Show my hadahan" }).click();
-  await expect(
-    page.getByRole("alert").filter({ hasText: "Please fill in the date, time and place." }),
-  ).toBeVisible();
+  const alert = page.locator("form").getByRole("alert");
+  const submit = page.getByRole("button", { name: "Show my hadahan" });
+  await submit.click();
+  await expect(alert).toHaveText("Still needed: Date of birth, Time of birth, Place of birth.");
+  await expect(page.getByLabel("Date of birth")).toBeFocused();
+  await expect(page.getByLabel("Date of birth")).toHaveAttribute("aria-invalid", "true");
+
+  // Each one goes as it is filled in (QA-05).
+  await page.getByRole("combobox").fill("kandy");
+  await page.getByRole("option").first().click();
+  await expect(alert).toHaveText("Still needed: Date of birth, Time of birth.");
+  const hint = page.locator("[data-place-hint]");
+  await expect(hint).toContainText("Chosen: Kandy");
+  await expect(hint).toContainText("Asia/Colombo");
+  await expect(page.getByRole("combobox")).not.toHaveAttribute("aria-invalid", "true");
+  await page.getByLabel("Date of birth").fill("1995-04-19");
+  await expect(alert).toHaveText("Still needed: Time of birth.");
+  await submit.click();
+  await expect(page.getByLabel("Time of birth")).toBeFocused();
+  await page.getByLabel("Time of birth").fill("14:35");
+  await expect(alert).toHaveCount(0);
+
+  // Changing the place again needs it again, and the hint says how.
+  await page.getByRole("combobox").fill("k");
+  await expect(alert).toHaveText("Still needed: Place of birth.");
+  await expect(hint).toHaveText("Type at least two letters of a town or village");
+  await page.getByRole("button", { name: /coordinates/i }).click();
+  await expect(alert).toHaveText("Still needed: Latitude, Longitude, Time zone.");
+});
+
+test("missing details are named in Sinhala too", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.goto("/si/hadahan");
+  await page.locator('form button[type="submit"]').click();
+  await expect(page.locator("form").getByRole("alert")).toHaveText(
+    "තව ඇතුළත් කළ යුතු තොරතුරු: උපන් දිනය, උපන් වේලාව, උපන් ස්ථානය.",
+  );
 });
 
 test("the result downloads as a PDF report", async ({ page }) => {
