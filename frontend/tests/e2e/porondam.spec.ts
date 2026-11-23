@@ -621,51 +621,29 @@ test("the match page without the wedding link opens at the top, with no wedding 
   await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
 });
 
-test("a star match's full report lists what it gains, and a discount code is valid for later", async ({ page }) => {
+test("a star match's full report lists what it gains", async ({ page }) => {
   const price = { amount: 80_000, currency: "LKR" };
-  const body = (value: object) => ({ contentType: "application/json", body: JSON.stringify(value) });
   await mockBackend(page, "en", "porondam-quick-en.json");
   await page.route("**/api/v1/reports/access", (route) =>
-    route.fulfill(body({ paid: false, features: [], paid_reports: true, account: "google", price })),
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({ paid: false, features: [], paid_reports: true, account: null, price, checkout: null }),
+    }),
   );
-  await page.route("**/api/v1/coupons/apply", (route) => {
-    const { code } = route.request().postDataJSON() as { code: string };
-    return route.fulfill(
-      body(
-        code === "pamudu"
-          ? { result: "free", percent_off: 100, price, new_price: { ...price, amount: 0 } }
-          : { result: "payment_not_available", percent_off: 20, price, new_price: { ...price, amount: 64_000 } },
-      ),
-    );
-  });
   await page.goto("/en/porondam");
   await quickForm(page);
   await page.getByRole("button", { name: "Match the charts" }).click();
 
-  const form = page.locator('[data-card="full-report"]');
-  await expect(form.locator("li")).toHaveText([
+  const lines = [
     "The full AI reading, from the two birth stars",
     "Explain buttons on every main place",
     "The full PDF with the AI reading",
-    "Kept in your account, on any device",
-  ]);
-
-  await form.getByRole("button", { name: "Have a coupon?" }).click();
-  const code = form.getByLabel("Coupon code");
-  await code.fill("SIDERA20");
-  await form.getByRole("button", { name: "Apply" }).click();
-  await expect(form).toContainText("20% off: LKR 640 for this report.");
-  await expect(form).toContainText("This code is valid");
-  await expect(form).toContainText("it will work once payment opens");
-  await expect(form.locator("[data-unlock]")).toHaveCount(0);
-
-  await form.getByRole("button", { name: "Use another code" }).click();
-  await expect(code).toBeFocused();
-  await expect(code).toHaveValue("");
-  await expect(form.locator("[data-price]")).toContainText("LKR 800");
-  await code.fill("pamudu");
-  await form.getByRole("button", { name: "Apply" }).click();
-  await expect(form.getByRole("button", { name: "Unlock free" })).toBeVisible();
+    "Kept in My reports, and on any device if you sign in",
+  ];
+  const form = page.locator('[data-card="full-report"]');
+  await expect(form.locator("li")).toHaveText(lines);
+  await form.getByRole("link", { name: "Buy this report" }).click();
+  await expect(page.locator("[data-buy-report] li")).toHaveText(lines);
 });
 
 async function fullForm(page: Page) {

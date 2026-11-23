@@ -1,6 +1,6 @@
 # Saving, paid reports, coupons, chat limits and compare
 
-Date: 2026-11-21. Updated the same day with the owner's changes: pay per report only (no passes or plans), LKR 800 or USD 2.50 a report, and coupons that give a percentage off or make a report free.
+Date: 2026-11-21. Updated the same day with the owner's changes: pay per report only (no passes or plans), LKR 800 or USD 2.50 a report, and coupons that give a percentage off or make a report free. Updated 2026-11-23: buying needs no sign in, and Google is offered after, as an option (`docs/23-buying-a-report.md`, which wins where this file says Google comes first).
 
 The agreed plan for how people are recognised, what free and paid users can save, the coupon that
 stands in for payments, the Astro chat limits, what paid users get, and the compare feature. It

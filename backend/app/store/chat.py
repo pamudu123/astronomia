@@ -334,6 +334,14 @@ class ChatStore:
             )
             return bool(cursor.rowcount)
 
+    def move_user(self, from_user: str, to_user: str) -> None:
+        """For a guest who joined a Google account: what the guest's reports' chat used goes
+        with the reports, so joining does not give it back."""
+        with self._connect() as db:
+            self._run(
+                db, "UPDATE {chat_turns} SET user_id = ? WHERE user_id = ?", (to_user, from_user)
+            )
+
     def forget_user(self, user_id: str) -> None:
         """Deletes an account's chat usage (Delete account). PostgreSQL also does this itself."""
         with self._connect() as db:

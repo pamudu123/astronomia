@@ -28,7 +28,7 @@ page shows a square bracket.
 | Google sign in: Supabase keeps account id, email, name, picture address and sign-in time; guest reports move into the Google account; sign out here, sign out everywhere, delete my account | #67 |
 | Free saved reports deleted 7 days after saving (hourly job, never shown after), saving again does not restart it, 20 free reports at a time; full reports kept until deleted; unlocking a free report stops its expiry | #73 |
 | Guests with nothing saved, no order and no use for 7 days deleted once a day | #70 |
-| Full reports need Google; payment not available; only free coupons unlock; order records (price, coupon, amount, time, a one-way hash instead of birth details, kept without the user after account deletion); wrong-code notes deleted with the account | #66, `supabase/migrations/20261121142841_orders_and_coupons.sql` |
+| Full reports need no sign in (guest or Google account); real payment not available; free coupons, or a test payment that takes no money, unlock; a started payment is kept until the account is deleted; wrong codes also counted per address in memory for an hour (docs/23); order records (price, coupon, amount, time, a one-way hash instead of birth details, kept without the user after account deletion); wrong-code notes deleted with the account | #66, `supabase/migrations/20261121142841_orders_and_coupons.sql` |
 | Share links: names and birth details off by default and removed before storing; a match never includes birth details; a preview of every field; link previews never show names; noindex, no-store, no-referrer; 30 days; deleted only on the device that made it; separate from saved reports. Also says the chart itself can point to roughly when and where someone was born (#75, owner question 1) | #75 |
 | AI notice before anything goes to the AI, remembered in this browser; AI off for child results; OpenAI with response storage off; conversation only in memory, deleted after 30 idle minutes or on restart | #72, `agent/app/graph.py` (`"store": False`) |
 | Chat: 2 free questions a week per browser; about 20 questions' allowance per full report, no cash value; per-network, per-account daily and 1,000-character limits; free questions may pause on busy days. Usage records keep time, tokens and cost, never text; free ones linked to the `sidera_chat` id and a keyed hash of the network address, deleted after 8 days; paid ones linked to the account, deleted with it. Cookies `sidera_chat` (1 year) and `sidera_chat_turn` (30 minutes) | #74 |
@@ -49,7 +49,7 @@ confirmation; the rights request email and regulator links. The privacy page say
 
 **Waits for payments:** the paid-purchase terms (the last section of draft B) and the whole refunds
 policy (draft C). The terms page has only a short "Saved reports, full reports and coupons" section:
-the 7-day rule for free reports, Google sign in for full reports, payment not available, free coupons
+the 7-day rule for free reports, no sign in needed for full reports, payment not available, free coupons
 only, each coupon has limits, and "Terms for paid reports will be added here before payment opens."
 
 If a setting changes, change the page with it: `ASTRONOMIA_SHARE_DAYS` (30),

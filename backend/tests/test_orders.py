@@ -1,6 +1,7 @@
 """Coupons and orders (docs/18, section 4), in SQLite and in PostgreSQL."""
 
 import datetime as dt
+import sqlite3
 import uuid
 from collections.abc import Callable, Iterator
 from pathlib import Path
@@ -10,9 +11,14 @@ import pytest
 
 from app.store.accounts import User
 from app.store.orders import (
+    AlreadyPaid,
     CouponRefused,
+    NothingToPay,
     OrderStore,
+    Outcome,
+    Payment,
     PaymentNeeded,
+    WrongPayment,
     normalise_code,
     postgres_orders,
     sqlite_orders,
@@ -258,3 +264,173 @@ def test_the_paid_check(store: OrderStore, new_user: NewUser) -> None:
     assert (on.paid, on.order_id, on.features) == (True, order.id, PAID_FEATURES)
     assert on.allows("ai_reading")
     assert not report_access(store, user, "hadahan", "h2", paid_reports_on=True).paid
+
+
+# Payments
+
+
+def start(store: OrderStore, user: str, code: str | None = None, report: str = "h1") -> Payment:
+    return store.start_payment(user, code, "hadahan", report, LKR, "mock")
+
+
+def settle(store: OrderStore, payment: Payment, outcome: Outcome = "paid") -> Payment:
+    return store.settle("mock", payment.id, outcome, payment.amount, "LKR", "ref-1")
+
+
+def test_a_payment_makes_an_order_only_once_paid(store: OrderStore, new_user: NewUser) -> None:
+    user = new_user()
+    store.create_coupon("sidera20", 20)
+    payment = start(store, user, "SIDERA 20")
+    assert (payment.amount, payment.percent_off, payment.status) == (64_000, 20, "pending")
+    assert store.paid_order(user, "hadahan", "h1") is None
+    assert store.payment(user, payment.id) == payment
+    assert store.payment(new_user(), payment.id) is None
+
+    assert settle(store, payment).status == "paid"
+    order = store.paid_order(user, "hadahan", "h1")
+    assert order is not None
+    assert (order.method, order.provider, order.coupon_code) == ("payment", "mock", "sidera20")
+    assert (order.price, order.amount_paid, order.percent_off) == (LKR, 64_000, 20)
+    # The same notice again makes nothing more.
+    assert settle(store, payment).status == "paid"
+    assert store.paid_count(user) == 1
+    # Nor does a later one take it away.
+    assert settle(store, payment, "failed").status == "paid"
+    with pytest.raises(AlreadyPaid):
+        start(store, user)
+
+
+def test_a_notice_that_does_not_match_changes_nothing(store: OrderStore, new_user: NewUser) -> None:
+    user = new_user()
+    payment = start(store, user)
+    for provider, payment_id, amount, currency in [
+        ("other", payment.id, payment.amount, "LKR"),
+        ("mock", str(uuid.uuid4()), payment.amount, "LKR"),
+        ("mock", payment.id, 1, "LKR"),
+        ("mock", payment.id, payment.amount, "USD"),
+    ]:
+        with pytest.raises(WrongPayment):
+            store.settle(provider, payment_id, "paid", amount, currency, "ref")
+    assert store.paid_order(user, "hadahan", "h1") is None
+    assert store.payment(user, payment.id) == payment
+
+
+@pytest.mark.parametrize("outcome", ["failed", "cancelled"])
+def test_an_unpaid_payment_makes_no_order(
+    store: OrderStore, new_user: NewUser, outcome: Outcome
+) -> None:
+    user = new_user()
+    payment = start(store, user)
+    assert settle(store, payment, outcome).status == outcome
+    assert store.paid_order(user, "hadahan", "h1") is None
+    assert store.paid_count(user) == 0
+
+
+def test_a_free_coupon_is_not_a_payment(store: OrderStore, new_user: NewUser) -> None:
+    user = new_user()
+    store.create_coupon("pamudu", 100)
+    with pytest.raises(NothingToPay):
+        start(store, user, "pamudu")
+    with pytest.raises(CouponRefused):
+        start(store, user, "nope")
+
+
+def test_a_discount_that_rounds_to_nothing_is_free(store: OrderStore, new_user: NewUser) -> None:
+    """The amount decides, not the percentage."""
+    store.create_coupon("almost", 99)
+    tiny = Price(1, "LKR")
+    user = new_user()
+    with pytest.raises(NothingToPay):
+        store.start_payment(user, "almost", "hadahan", "h1", tiny, "mock")
+    order, made = store.redeem(user, "almost", "hadahan", "h1", tiny)
+    assert (made, order.amount_paid) == (True, 0)
+
+
+def test_an_open_payment_holds_its_coupon_use(
+    store: OrderStore, new_user: NewUser, clock: Clock
+) -> None:
+    store.create_coupon("once", 20, max_uses=1)
+    user, other = new_user(), new_user()
+    first = start(store, user, "once")
+    with pytest.raises(CouponRefused, match="used_up"):
+        start(store, other, "once", "h2")
+    # The same buyer may look again, and start again for the same report.
+    assert store.check_coupon(user, "once", "hadahan").code == "once"
+    second = start(store, user, "once")
+    assert store.payment(user, first.id) is not None
+    found = store.payment(user, first.id)
+    assert found is not None
+    assert found.status == "cancelled"
+    # Left open for an hour, it holds nothing any more.
+    clock.advance(minutes=61)
+    third = start(store, other, "once", "h2")
+    settle(store, third)
+    with pytest.raises(CouponRefused, match="used_up"):
+        start(store, user, "once")
+    # Money that arrives late was still paid.
+    assert settle(store, second).status == "paid"
+    assert store.paid_order(user, "hadahan", "h1") is not None
+
+
+def test_one_account_cannot_hold_a_code_past_its_limit(
+    store: OrderStore, new_user: NewUser
+) -> None:
+    store.create_coupon("sidera20", 20, max_uses_per_account=1)
+    user = new_user()
+    start(store, user, "sidera20", "h1")
+    with pytest.raises(CouponRefused, match="account_limit"):
+        start(store, user, "sidera20", "h2")
+
+
+def test_paying_for_what_a_code_unlocked_meanwhile_stays_one_order(
+    store: OrderStore, new_user: NewUser
+) -> None:
+    user = new_user()
+    store.create_coupon("pamudu", 100)
+    payment = start(store, user)
+    order, _ = store.redeem(user, "pamudu", "hadahan", "h1", LKR)
+    assert settle(store, payment).status == "paid"
+    kept = store.paid_order(user, "hadahan", "h1")
+    assert kept is not None
+    assert kept.id == order.id
+    assert store.paid_count(user) == 1
+
+
+def test_a_guests_orders_move(store: OrderStore, new_user: NewUser) -> None:
+    guest, google = new_user(), new_user()
+    store.create_coupon("pamudu", 100, max_uses_per_account=5)
+    store.redeem(google, "pamudu", "hadahan", "both", LKR)
+    store.redeem(guest, "pamudu", "hadahan", "both", LKR)
+    store.redeem(guest, "pamudu", "porondam", "match", LKR)
+    payment = start(store, guest)
+    settle(store, payment)
+    opened = start(store, guest, None, "h2")
+    store.record_miss(guest)
+
+    assert store.move_user(guest, google) == 2
+    assert store.paid_order(google, "hadahan", "h1") is not None
+    assert store.paid_order(google, "porondam", "match") is not None
+    assert store.paid_count(google) == 3
+    assert store.misses_last_hour(google) == 1
+    assert store.move_user(guest, google) == 0
+    assert store.move_user(google, google) == 0
+    # A payment still on its way when the guest joined lands in the account.
+    settle(store, opened)
+    assert store.paid_order(google, "hadahan", "h2") is not None
+
+
+def test_a_file_from_before_payments_gets_the_new_columns(tmp_path: Path) -> None:
+    path = tmp_path / "old.sqlite"
+    with sqlite3.connect(path) as db:
+        db.execute(
+            "CREATE TABLE orders (id TEXT PRIMARY KEY, user_id TEXT, report_kind TEXT NOT NULL, "
+            "report_hash TEXT NOT NULL, price INTEGER NOT NULL, currency TEXT NOT NULL, "
+            "coupon_id TEXT, percent_off INTEGER NOT NULL DEFAULT 0, amount_paid INTEGER NOT "
+            "NULL, method TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'paid', created_at TEXT "
+            "NOT NULL)"
+        )
+    db.close()
+    store = sqlite_orders(path)
+    settle(store, start(store, "someone"))
+    assert store.paid_count("someone") == 1
+    assert sqlite_orders(path).paid_count("someone") == 1

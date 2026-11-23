@@ -102,6 +102,15 @@ class ChapterStore:
                 (order_id, user_id),
             )
 
+    def move_user(self, from_user: str, to_user: str) -> None:
+        """For a guest who joined a Google account: the chapters go with the orders."""
+        with self._connect() as db:
+            self._run(
+                db,
+                "UPDATE {report_chapters} SET user_id = ? WHERE user_id = ?",
+                (to_user, from_user),
+            )
+
     def forget_user(self, user_id: str) -> None:
         """For a deleted account. PostgreSQL also does this through the foreign key."""
         with self._connect() as db:

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { Fragment, type ReactNode, useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 
-import { Lock } from "@/components/Icons";
 import { Spot } from "@/components/Spot";
 import type { PageContext } from "@/lib/assistant/context";
 import {
@@ -23,6 +22,7 @@ import {
   subscribe,
   tone,
 } from "@/lib/assistant/explain";
+import { BuyInvite } from "@/components/paid/BuyInvite";
 import { useCanUse, useReportAccess } from "@/components/paid/ReportAccess";
 import { chapterPicture } from "@/lib/assistant/chapterArt";
 import { askAssistant } from "@/lib/assistant/panel";
@@ -281,9 +281,7 @@ export function AiExplain({
               <p className={styles.label}>{t.label}</p>
             </AiNoticeGate>
           ) : (
-            <p className={styles.locked}>
-              <Lock size={16} /> {t.locked}
-            </p>
+            <BuyInvite lang={lang} />
           )}
         </div>
       )}
@@ -406,9 +404,7 @@ export function FullReading({
             {words.get}
           </button>
         ) : (
-          <p className={styles.locked}>
-            <Lock size={16} /> {t.locked}
-          </p>
+          <BuyInvite lang={lang} compact />
         )}
       </div>
 
@@ -523,9 +519,7 @@ export function TopicChips({
               <p className={styles.label}>{t.label}</p>
             </AiNoticeGate>
           ) : (
-            <p className={styles.locked}>
-              <Lock size={16} /> {t.locked}
-            </p>
+            <BuyInvite lang={lang} />
           )}
         </div>
       )}

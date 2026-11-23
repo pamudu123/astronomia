@@ -2,6 +2,7 @@
 
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -33,15 +34,26 @@ class Settings(BaseSettings):
     guests_per_hour: int = 30
     # Paid reports (docs/18). Off: everyone gets every feature, as before. On: the AI reading,
     # explain buttons, full detail and full PDF show only on reports the account paid for.
-    # Switch it on once Google sign in is live, since only a Google account can unlock a report.
+    # Switch it on once sign in (Supabase) is live: an unlocked report belongs to an account,
+    # which a guest gets without being asked anything.
     paid_reports: bool = False
     # Orders and coupons, when SQLite is used.
     orders_db: Path = VAR_DIR / "orders.sqlite"
     # The buyer's country, for the price, when the request does not say (local runs, no
     # Vercel). Sri Lanka, where most buyers are.
     default_country: str = "LK"
-    # Wrong coupon codes one account may try in an hour.
+    # Wrong coupon codes one account may try in an hour, and one network address: a new guest
+    # is easy to make, so the account limit alone would not stop guessing. The address limit is
+    # higher, since phones on one mobile network can share an address.
     coupon_misses_per_hour: int = 10
+    coupon_misses_per_hour_address: int = 30
+    # Payments one address may start in an hour.
+    payments_per_hour: int = 30
+    # How the part of a price a coupon does not cover is paid. No real provider is connected yet
+    # (docs/15). "mock" is a stand-in that takes no money and lets the buyer choose how the
+    # payment ends; it is refused in production. "off": nothing can be paid, so only a free code
+    # unlocks a report. "auto": mock on a developer's own computer, off everywhere else.
+    payment_provider: Literal["auto", "off", "mock"] = "auto"
     # How many paid reports one account may keep: a safety limit, not a product one.
     paid_saved_limit: int = 1000
     # The AI chapters kept with paid reports (docs/17, section 6a), when SQLite is used.
@@ -85,6 +97,15 @@ class Settings(BaseSettings):
     # When set, every request except /healthz must carry this key in X-Access-Key.
     # Used to keep a staging backend private. Empty means open, as in local runs.
     access_key: str = ""
+
+    @property
+    def checkout(self) -> Literal["mock"] | None:
+        """The payment provider in use, or None when nothing can be paid."""
+        if self.payment_provider == "mock" and self.environment != "production":
+            return "mock"
+        if self.payment_provider == "auto" and self.environment == "development":
+            return "mock"
+        return None
 
     @property
     def secure_cookies(self) -> bool:
