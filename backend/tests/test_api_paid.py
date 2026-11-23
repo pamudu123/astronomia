@@ -281,7 +281,7 @@ def printed(monkeypatch: pytest.MonkeyPatch) -> list[list[tuple[str | None, str,
     """The AI chapters each PDF was asked to print."""
     calls: list[list[tuple[str | None, str, str]]] = []
 
-    def fake(*args: Any) -> bytes:
+    def fake(*args: Any, full: bool) -> bytes:
         calls.append(list(args[-1]))
         return b"%PDF-1.7"
 

@@ -20,6 +20,7 @@ import {
   requestChapter,
   resetChapters,
   spans,
+  takeKept,
   tone,
   writeAll,
   writtenChapters,
@@ -198,6 +199,14 @@ describe("requestChapter", () => {
       [2, 3],
       [3, 3],
     ]);
+  });
+
+  it("takes the words a paid report keeps in place of this device's", async () => {
+    await requestChapter("match.people", "en", FACTS, streaming(["This device's."]));
+    const key = chapterKey("match.people", "en", FACTS);
+    takeKept(key, "The report's.");
+    expect(chapterState(key)).toEqual({ status: "done", text: "The report's." });
+    expect(keptText(storage.get(key))).toBe("The report's.");
   });
 
   it("treats an empty answer as failed", async () => {

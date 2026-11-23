@@ -331,7 +331,7 @@ export function FullReading({
     () => false,
   );
   if (!t || !facts) return null;
-  const started = chosen || allWritten;
+  const started = chosen || (allowed && allWritten);
   const words = t[reading];
 
   const toggle = (id: ChapterId) =>

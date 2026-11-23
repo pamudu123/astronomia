@@ -68,7 +68,20 @@ type Props = {
   readOnlyAction?: React.ReactNode;
 };
 
-export function PorondamResult({
+/**
+ * The result, with what the account may use on this report around all of it: the reading and the
+ * PDF ask for it too, so nothing in the page sits outside.
+ */
+export function PorondamResult(props: Props) {
+  const { lang, request } = props;
+  return (
+    <ReportScope report={request ? { kind: "porondam", match: { ...request, lang } } : null} kind="porondam">
+      <PorondamResultPage {...props} />
+    </ReportScope>
+  );
+}
+
+function PorondamResultPage({
   lang,
   t,
   f,
@@ -150,7 +163,7 @@ export function PorondamResult({
   );
 
   return (
-    <ReportScope report={request ? { kind: "porondam", match: { ...request, lang } } : null} kind="porondam">
+    <>
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.couple}`}>
         <h1 className={`display ${styles.title}`}>
@@ -484,6 +497,6 @@ export function PorondamResult({
         />
       )}
     </main>
-    </ReportScope>
+    </>
   );
 }

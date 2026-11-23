@@ -84,7 +84,20 @@ const GUIDE_FOCUS: ((moonHouse: number) => { houses: number[]; planet?: string }
   () => ({ houses: [] }),
 ];
 
-export function HadahanResult({
+/**
+ * The result, with what the account may use on this report around all of it: the reading and the
+ * PDF ask for it too, so nothing in the page sits outside.
+ */
+export function HadahanResult(props: Props) {
+  const { lang, request, name } = props;
+  return (
+    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
+      <HadahanResultPage {...props} />
+    </ReportScope>
+  );
+}
+
+function HadahanResultPage({
   lang,
   t,
   labels,
@@ -182,7 +195,7 @@ export function HadahanResult({
       : fill(t.guide[step], { lagna: sign(lagna.sign).name, moon: sign(moon.sign).name, house: moonHouse });
 
   return (
-    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
+    <>
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.top}`}>
         <div className={styles.topText}>
@@ -524,6 +537,6 @@ export function HadahanResult({
         </NextSteps>
       )}
     </main>
-    </ReportScope>
+    </>
   );
 }

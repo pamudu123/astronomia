@@ -7,6 +7,7 @@
 <meta name="generator" content="{{ r.brand }}">
 </head>
 <body>
+{% if full %}
 {# The cover: the night sky, the brand, the title and the person's artwork. #}
 <section class="cover" style="background-image: linear-gradient(rgba(10, 10, 10, 0.25), rgba(10, 10, 10, 0.88)), url({{ cover.sky }})">
   <div class="cover-frame">
@@ -20,6 +21,7 @@
     </div>
   </div>
 </section>
+{% endif %}
 
 {% block content %}{% endblock %}
 

@@ -121,5 +121,5 @@ def test_every_chapter_picture_and_rashi_picture_exists() -> None:
     for name in CHAPTER_SPOT.values():
         assert (ART_DIR / "spots" / f"{name}.svg").exists(), name
     missing = [sign for sign in RASHI if rashi_uri(sign) is None]
-    assert missing == ["simha"]  # its line symbol stands in until the artwork exists
+    assert set(missing) <= {"simha"}  # its line symbol stands in until the artwork exists
     assert all(path.exists() for path in art_files().values())

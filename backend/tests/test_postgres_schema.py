@@ -15,6 +15,7 @@ import pytest
 
 from app.store import accounts, postgres
 from app.store.accounts import NewReport, postgres_accounts
+from app.store.chapters import postgres_chapters
 from app.store.chat import Usage, Who, postgres_chat
 from app.store.orders import postgres_orders
 from app.store.postgres import MissingTables
@@ -159,6 +160,19 @@ def test_the_chat_store_only_touches_sidera_tables(recorder: Recorder) -> None:
     assert not [s for s in queries if "?" in s]
 
 
+def test_the_chapter_store_only_touches_sidera_tables(recorder: Recorder) -> None:
+    store = postgres_chapters("postgresql://test")
+    with pytest.raises(TypeError):  # the recorder finds no row to read back
+        store.keep("o", "u", "en", "chart.work", "Text.")
+    store.kept("o", "en")
+    store.forget_user("u")
+
+    queries = [s for s in recorder.statements if "to_regclass" not in s]
+    names = {name for statement in queries for name in TABLE_NAME.findall(statement)}
+    assert names == {"sidera.report_chapters"}
+    assert not [s for s in queries if "?" in s]
+
+
 def test_a_database_without_the_migrations_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
     db = Recorder(missing=("sidera.saved_reports", "sidera.shares"))
     monkeypatch.setattr(postgres, "connect", lambda url: db)
@@ -217,6 +231,7 @@ def test_the_migrations_make_the_tables_the_stores_use() -> None:
         "coupon_misses",
         "coupons",
         "orders",
+        "report_chapters",
         "saved_reports",
         "shares",
         "users",
@@ -345,3 +360,25 @@ def test_the_database_keeps_the_expiry_rule_for_any_writer() -> None:
             db.execute(
                 "UPDATE sidera.saved_reports SET expires_at = now() WHERE id = %s", (free_id,)
             )
+
+
+def test_the_chapters_go_with_the_account_and_the_order_stays() -> None:
+    from app.tiers.prices import Price
+
+    url = need_postgres()
+    migrate(url)
+    user = "00000000-0000-0000-0000-000000000001"
+    accounts_store = postgres_accounts(url)
+    accounts_store.add_user(user, "google")
+    orders = postgres_orders(url)
+    orders.create_coupon("free", 100)
+    order, _ = orders.redeem(user, "free", "hadahan", "h", Price(80_000, "LKR"))
+    chapters = postgres_chapters(url)
+    assert chapters.keep(order.id, user, "en", "chart.work", "First.") == "First."
+    assert chapters.keep(order.id, user, "en", "chart.work", "Second.") == "First."
+    assert chapters.kept(order.id, "en") == {"chart.work": "First."}
+    assert chapters.kept(order.id, "si") == {}
+    accounts_store.delete_user(user)
+    assert chapters.kept(order.id, "en") == {}
+    with connected() as db:
+        assert db.execute("SELECT count(*) FROM sidera.orders").fetchone() == (1,)

@@ -181,7 +181,12 @@ def render_hadahan(
     name: str,
     today: dt.date,
     reading: Sequence[Chapter] = (),
+    *,
+    full: bool = True,
 ) -> bytes:
+    """The chart's report. `full` is the paid one (docs/18): the cover, the contents, the sky
+    wheel, the houses, every Kuja dosha condition and the AI reading. The free one is a short
+    report of what the free page shows, and never holds AI text."""
     response = build.response
     assert response.chart and response.dasha and response.kuja, "only a finished chart prints"
     lang: Lang = request.lang
@@ -287,16 +292,20 @@ def render_hadahan(
             }
             for point in kuja.points
         ],
+        # The conditions are part of the full report, as on the page (PaidOnly full_detail).
         "rules": report["mars_rules_count"].format(
             count=len(applying), total=len(kuja.cancellations)
-        ),
-        "rule_names": [table["kuja_rule"][c.id] for c in applying],
+        )
+        if full
+        else "",
+        "rule_names": [table["kuja_rule"][c.id] for c in applying] if full else [],
         "status": kuja_status,
         "present": kuja.present,
     }
 
     context = {
         "r": report,
+        "full": full,
         "title": (
             report["hadahan_title_named"].format(name=name) if name else report["hadahan_title"]
         ),
@@ -322,7 +331,9 @@ def render_hadahan(
         "houses": houses,
         "bar": bar,
         "mars": mars,
-        "chapters": _reading(reading, {"pillars", "wheel", "houses", "periods", "mars"}),
+        "chapters": _reading(
+            reading if full else (), {"pillars", "wheel", "houses", "periods", "mars"}
+        ),
         "time_zone": report["time_zone"].format(offset=response.time.offset_label),
         "facts": [
             (report["lagna"], _sign(table, chart.lagna.sign, lang)),
@@ -362,15 +373,16 @@ def render_hadahan(
                     "result": report["applies"],
                     "reason": c.reason,
                 }
-                # Only the conditions that apply get a row, and one line counts the rest, so
-                # the report stays on two pages as the rule list grows. The page and the
-                # assistant still show every condition.
-                for c in kuja.cancellations
-                if c.applies
+                # Only the conditions that apply get a row, and one line counts the rest. The
+                # page shows every condition.
+                for c in applying
+                if full
             ],
             "others": report["kuja_checks_others"].format(
                 count=sum(not c.applies for c in kuja.cancellations)
-            ),
+            )
+            if full
+            else "",
         },
         "time_check": chart.time_check.reason,
         "dasha": _two_columns(
@@ -437,7 +449,11 @@ def render_porondam(
     lang: Lang,
     today: dt.date,
     reading: Sequence[Chapter] = (),
+    *,
+    full: bool = True,
 ) -> bytes:
+    """The match's report. `full` is the paid one, with the cover, the contents and the AI
+    reading; the free one is a short report of what the free page shows."""
     response = build.response
     assert response.bride and response.groom and response.match, "only a finished match prints"
     table = labels(lang)
@@ -477,7 +493,8 @@ def render_porondam(
         "passed": result.score.passed,
         "total": result.score.total,
         "ring": ring,
-        "chapters": _reading(reading, {"people", "ring", "checks"}),
+        "full": full,
+        "chapters": _reading(reading if full else (), {"people", "ring", "checks"}),
         "r": report,
         "title": report["porondam_title"].format(bride=people[0]["name"], groom=people[1]["name"]),
         "people": people,

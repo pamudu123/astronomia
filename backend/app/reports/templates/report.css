@@ -5,7 +5,7 @@
 
 @page {
   size: A4;
-  margin: 24mm 18mm 20mm;
+  margin: 29mm 18mm 20mm;
   background: #fbf8f1;
 
   @top-left {
@@ -18,6 +18,7 @@
     vertical-align: bottom;
     padding-bottom: 2.5mm;
     border-bottom: 1.2pt solid #8a6212;
+    margin-bottom: 5mm;
   }
   @top-right {
     content: __KIND__;
@@ -29,6 +30,7 @@
     vertical-align: bottom;
     padding-bottom: 2.5mm;
     border-bottom: 1.2pt solid #8a6212;
+    margin-bottom: 5mm;
   }
   @bottom-left {
     content: __FOOTER__;
@@ -136,6 +138,12 @@ html[lang="si"] .eyebrow {
 }
 .page-break {
   break-before: page;
+}
+#kuja,
+#factors,
+#periods,
+#checks {
+  margin-top: 8mm;
 }
 .keep {
   break-inside: avoid;
@@ -311,28 +319,28 @@ html[lang="si"] .cover-label {
 
 /* ---------- Contents ---------- */
 
+/* A page of its own after the cover. */
 .contents {
-  margin-top: 6mm;
-  padding: 4mm 5mm;
+  padding: 6mm 8mm;
   border: 0.6pt solid #e4dccb;
   border-radius: 4pt;
   background: #fffdf8;
+  font-size: 10.5pt;
 }
-.contents h3 {
-  font-size: 10pt;
-  margin-bottom: 2mm;
+.contents h2 {
+  margin-bottom: 3mm;
 }
 .toc {
   display: block;
-  padding: 0.7mm 0;
+  padding: 1.1mm 0;
 }
 .toc::after {
   content: leader(".") target-counter(attr(href), page);
   color: #8a6212;
 }
 .toc-sub {
-  padding-left: 5mm;
-  font-size: 8.5pt;
+  padding-left: 6mm;
+  font-size: 9.5pt;
   color: #6b6558;
 }
 
@@ -446,6 +454,14 @@ html[lang="si"] .kendara .label {
 .table-tight td {
   padding-top: 0.7mm;
   padding-bottom: 0.7mm;
+}
+html[lang="si"] .table-tight {
+  font-size: 8.2pt;
+}
+html[lang="si"] .table-tight td,
+html[lang="si"] .table-tight th {
+  padding-right: 1.5mm;
+  white-space: nowrap;
 }
 .table tbody tr:last-child td {
   border-bottom: none;
@@ -735,7 +751,7 @@ html[lang="si"] .kendara .label {
   position: absolute;
   left: 0;
   right: 0;
-  top: 17mm;
+  top: 19mm;
   text-align: center;
   font-family: "Marcellus";
   font-size: 30pt;
@@ -746,7 +762,7 @@ html[lang="si"] .kendara .label {
   position: absolute;
   left: 0;
   right: 0;
-  top: 31mm;
+  top: 32mm;
   text-align: center;
   font-size: 10pt;
   color: #6b6558;

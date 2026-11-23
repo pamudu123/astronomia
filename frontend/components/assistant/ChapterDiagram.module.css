@@ -84,6 +84,22 @@
   color: var(--gold);
 }
 
+/* Stacked on a phone: the arrows point down to the next card. */
+@media (max-width: 560px) {
+  .flowItem {
+    flex: 1 1 100%;
+    flex-direction: column;
+  }
+
+  .flowItem .card {
+    width: 100%;
+  }
+
+  .flowItem .arrow {
+    transform: rotate(90deg);
+  }
+}
+
 .points {
   margin: 4px 0 0;
   padding: 0;
@@ -117,6 +133,10 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+.wheel image {
+  filter: var(--glyph-filter, none);
 }
 
 .ring,
@@ -266,11 +286,18 @@
   color: var(--on-gold);
 }
 
+/* Too narrow for its name on a phone: the colour and the title stay. */
+@media (max-width: 560px) {
+  .segment[data-short] {
+    font-size: 0;
+  }
+}
+
 .today {
   position: absolute;
   top: -22px;
   bottom: -6px;
-  transform: translateX(-50%);
+  margin-left: -1px;
   border-left: 2px solid var(--ink);
   padding-left: 4px;
   font-size: 0.65rem;

@@ -17,15 +17,11 @@
 {% endblock %}
 
 {% block content %}
+{% set brk = ' class="page-break"' if full else '' %}
 {# ---- At a glance: contents, the chart in four steps, the kendara and its facts. ---- #}
-<section id="glance">
-  <p class="eyebrow">{{ r.hadahan_kind }}</p>
-  <h1>{{ title }}</h1>
-  <p class="soft lead">{{ born }}</p>
-  <p class="soft small">{{ time_zone }}</p>
-
-  <nav class="contents">
-    <h3>{{ r.contents }}</h3>
+{% if full %}
+<nav class="contents">
+    <h2 class="section-title">{{ r.contents }}</h2>
     <a class="toc" href="#glance">{{ r.glance }}</a>
     <a class="toc" href="#sky">{{ r.wheel }}</a>
     <a class="toc" href="#houses">{{ r.houses }}</a>
@@ -36,9 +32,18 @@
     {% for chapter in chapters %}<a class="toc toc-sub" href="#{{ chapter.anchor }}">{{ chapter.number }}. {{ chapter.title }}</a>{% endfor %}
     {% endif %}
   </nav>
+{% endif %}
+<section id="glance"{% if full %} class="page-break"{% endif %}>
+  <p class="eyebrow">{{ r.hadahan_kind }}</p>
+  <h1>{{ title }}</h1>
+  <p class="soft lead">{{ born }}</p>
+  <p class="soft small">{{ time_zone }}</p>
+
+  {% if full %}
 
   <h2>{{ r.pillars }}</h2>
   {{ v.pillars(pillars) }}
+  {% endif %}
 
   <div class="keep">
   <table class="columns">
@@ -64,7 +69,8 @@
 </section>
 
 {# ---- The sky wheel and the planets. ---- #}
-<section id="sky" class="page-break">
+<section id="sky"{{ brk | safe }}>
+  {% if full %}
   <h2 class="section-title">{{ r.wheel }}</h2>
   <table class="columns" style="margin-top: 2mm">
     <tbody>
@@ -78,6 +84,7 @@
     </tbody>
   </table>
 
+  {% endif %}
   <h2>{{ r.planets }}</h2>
   <table class="table">
     <thead>
@@ -105,17 +112,21 @@
 </section>
 
 {# ---- The twelve houses. ---- #}
+{% if full %}
 <section id="houses" class="page-break">
   <h2 class="section-title">{{ r.houses }}</h2>
   <p class="soft">{{ r.houses_note }}</p>
   {{ v.houses(houses) }}
 </section>
+{% endif %}
 
 {# ---- Life periods: the bar, then the table. ---- #}
-<section id="periods" class="page-break">
+<section id="periods"{{ brk | safe }}>
+  <div class="keep">
   <h2 class="section-title">{{ r.periods_title }}</h2>
   <p class="soft">{{ r.periods_note }}</p>
   {{ v.periods(bar) }}
+  </div>
 
   <table class="table table-tight" style="margin-top: 4mm">
     <thead>
@@ -186,7 +197,7 @@
     </tbody>
   </table>
   {% endif %}
-  <p class="soft small" style="margin-top: 1.5mm">{{ kuja.others }}</p>
+  {% if kuja.others %}<p class="soft small" style="margin-top: 1.5mm">{{ kuja.others }}</p>{% endif %}
 </section>
 
 {% include "reading.html" %}

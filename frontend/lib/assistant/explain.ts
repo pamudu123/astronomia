@@ -8,7 +8,8 @@
  * A chapter is written once: the text is kept in memory and on this device for a month
  * (KEEP_DAYS), keyed by the chapter, the language and a hash of the facts. So a button, the
  * full reading, the PDF report and the chat all share one model call per chapter, and hiding
- * and opening it again costs nothing.
+ * and opening it again costs nothing. A paid report also keeps its chapters on the server
+ * (lib/keptChapters.ts), so they read the same on every device of the account.
  */
 
 import type { Locale } from "@/lib/i18n";
@@ -308,6 +309,34 @@ export function chapterState(key: string): ChapterState {
 }
 
 export const idleState = (): ChapterState => IDLE;
+
+/**
+ * Takes a chapter the paid report keeps on the server. It replaces what this device has, so the
+ * words are the same everywhere; a chapter being written is left to finish.
+ */
+export function takeKept(key: string, text: string): void {
+  const current = chapterState(key);
+  if (current.status === "writing" || (current.status === "done" && current.text === text)) return;
+  set(key, { status: "done", text });
+  store(key, text);
+}
+
+/** The chapters a paid report keeps in one language, by id. Empty for any other report. */
+export async function fetchKept(
+  report: ReportRequest,
+  language: Locale,
+  init: RequestInit = {},
+): Promise<Partial<Record<ChapterId, string>>> {
+  const response = await fetch("/api/v1/reports/chapters", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...(await accountHeaders()) },
+    body: JSON.stringify({ report, language }),
+    cache: "no-store",
+    ...init,
+  });
+  if (!response.ok) throw new Error(`kept chapters: ${response.status}`);
+  return ((await response.json()) as { chapters: Partial<Record<ChapterId, string>> }).chapters;
+}
 
 /**
  * Writes a chapter unless it is written or being written. The text arrives as it is

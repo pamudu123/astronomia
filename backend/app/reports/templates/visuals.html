@@ -82,7 +82,7 @@
 <table class="flow">
   <tbody>
     <tr>
-      <td class="flow-card" style="width: 34%">
+      <td class="flow-card"{% if m.rules %} style="width: 34%"{% endif %}>
         <p class="eyebrow">{{ r.mars_where }}</p>
         {% for point in m.points %}
         <p class="mars-point{% if point.counts %} counts{% endif %}">
@@ -91,14 +91,16 @@
         </p>
         {% endfor %}
       </td>
+      {% if m.rules %}
       <td class="flow-arrow">{{ arrow() }}</td>
       <td class="flow-card" style="width: 34%">
         <p class="eyebrow">{{ r.mars_rules }}</p>
         <p class="flow-value">{{ m.rules }}</p>
         {% for name in m.rule_names %}<p class="small soft">{{ name }}</p>{% endfor %}
       </td>
+      {% endif %}
       <td class="flow-arrow">{{ arrow() }}</td>
-      <td class="flow-card flow-result{% if not m.present %} flow-clear{% endif %}">
+      <td style="width: 26%" class="flow-card flow-result{% if not m.present %} flow-clear{% endif %}">
         <p class="eyebrow">{{ r.mars_result }}</p>
         <p class="flow-value">{{ m.status }}</p>
       </td>

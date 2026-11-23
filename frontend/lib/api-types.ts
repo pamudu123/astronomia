@@ -591,8 +591,9 @@ export interface paths {
          * Report Pdf
          * @description A print ready A4 report, in the language of the request (`lang`).
          *
-         *     The AI reading prints only in the full PDF of a paid report (docs/18, section 6); for any
-         *     other report it is left out and the rest prints as before.
+         *     A paid report gets the full PDF: the cover, the diagrams, every Kuja dosha condition and the
+         *     AI reading (docs/18, section 6). Any other report gets the short free PDF: what the free page
+         *     shows, with no AI text.
          */
         post: operations["report_pdf_v1_reports_pdf_post"];
         delete?: never;
@@ -661,8 +662,8 @@ export interface paths {
         post?: never;
         /**
          * Delete Me
-         * @description Deletes the signed in account: every report it keeps and its chat usage, then its
-         *     Supabase sign in.
+         * @description Deletes the signed in account: every report it keeps with its AI chapters, and its
+         *     chat usage, then its Supabase sign in.
          *
          *     The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
          *     are already gone and 502 asks the page to try again.
@@ -833,6 +834,43 @@ export interface paths {
          *     A report already paid for gives back its order and uses nothing.
          */
         post: operations["unlock_v1_reports_unlock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/chapters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kept Chapters
+         * @description A POST, so the birth details stay out of the address.
+         */
+        post: operations["kept_chapters_v1_reports_chapters_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/chapters/keep": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Keep Chapter */
+        post: operations["keep_chapter_v1_reports_chapters_keep_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1209,6 +1247,26 @@ export interface components {
             when: string;
             /** Moves */
             moves: components["schemas"]["PlanetMoveOut"][];
+        };
+        /** ChaptersIn */
+        ChaptersIn: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "en" | "si";
+        };
+        /**
+         * ChaptersOut
+         * @description Chapter texts by id. Empty when the report is not paid for or has none yet.
+         */
+        ChaptersOut: {
+            /** Chapters */
+            chapters: {
+                [key: string]: string;
+            };
         };
         /** ChartOut */
         ChartOut: {
@@ -1744,6 +1802,20 @@ export interface components {
             time: components["schemas"]["TimeResolveResponse"];
             journey: components["schemas"]["JourneyOut"] | null;
         };
+        /** KeepIn */
+        KeepIn: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "en" | "si";
+            /** Id */
+            id: string;
+            /** Text */
+            text: string;
+        };
         /** KendaraMatchOut */
         KendaraMatchOut: {
             start: components["schemas"]["LocalTimeOut"];
@@ -1843,6 +1915,11 @@ export interface components {
             cut_off: boolean;
             /** Note */
             note?: string | null;
+        };
+        /** KeptOut */
+        KeptOut: {
+            /** Text */
+            text: string;
         };
         /** KeyDateOut */
         KeyDateOut: {
@@ -4998,6 +5075,74 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    kept_chapters_v1_reports_chapters_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChaptersIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChaptersOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    keep_chapter_v1_reports_chapters_keep_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Chat-Key"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KeepIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeptOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };

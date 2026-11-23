@@ -59,12 +59,10 @@ def post(client: TestClient, body: dict[str, Any]) -> PdfReader:
 
 def test_hadahan_report_in_english(client: TestClient) -> None:
     response = client.post("/v1/reports/pdf", json=hadahan())
-    assert response.headers["content-disposition"] == (
-        'attachment; filename="astronomia-hadahan.pdf"'
-    )
+    assert response.headers["content-disposition"] == ('attachment; filename="sidera-hadahan.pdf"')
     reader = read(response.content)
-    # The cover, then at a glance, the sky, the houses, the life periods and the Kuja dosha.
-    assert len(reader.pages) == 6
+    # The cover, the contents, at a glance, the sky, the houses, the life periods, Kuja dosha.
+    assert len(reader.pages) == 7
     for page in reader.pages:
         assert (round(float(page.mediabox.width)), round(float(page.mediabox.height))) == A4
 
@@ -93,7 +91,7 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
         "How the Kuja dosha check works out",
         "From the lagna: house 12",
         "Mars is in the 12th house counted from the lagna.",
-        "Page 2 of 6",
+        "Page 2 of 7",
     ):
         assert expected in content, expected
 
@@ -107,7 +105,7 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
 
 def test_hadahan_report_in_sinhala_uses_sinhala_fonts(client: TestClient) -> None:
     reader = post(client, hadahan("si", name="නිමාලි"))
-    assert len(reader.pages) == 6
+    assert len(reader.pages) == 7
     assert {"Noto-Sans-Sinhala", "Noto-Sans-Sinhala-Semi-Bold"} <= fonts(reader)
     assert "Simha" not in text(reader)
 
@@ -155,9 +153,7 @@ def test_full_porondam_report(client: TestClient) -> None:
         "/v1/reports/pdf",
         json=porondam({**NIMALI, "name": "Nimali"}, {**KASUN, "name": "Kasun"}),
     )
-    assert response.headers["content-disposition"] == (
-        'attachment; filename="astronomia-porondam.pdf"'
-    )
+    assert response.headers["content-disposition"] == ('attachment; filename="sidera-porondam.pdf"')
     reader = read(response.content)
     assert "PREMIUM MATCH REPORT" in reader.pages[0].extract_text()
     content = flat(reader)
@@ -256,8 +252,8 @@ def test_the_ai_reading_prints_in_its_own_labelled_section(client: TestClient) -
     assert "AIREADING" in squeezed
     assert "Your full reading" in printed
     assert "Written by AI from the results above" in printed
-    # The opening page and one page per chapter, after the six pages of results.
-    assert len(reader.pages) == 9
+    # The opening page and one page per chapter, after the seven before it.
+    assert len(reader.pages) == 10
     assert "CHAPTER1" in squeezed and "CHAPTER2" in squeezed
     assert "INSHORT" in squeezed
     assert "Your nature" in printed and "Saturn periods" in printed

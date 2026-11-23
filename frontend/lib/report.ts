@@ -1,4 +1,5 @@
 import type { components } from "./api-types";
+import { accountHeaders } from "./paid";
 
 export type ReportRequest =
   | components["schemas"]["HadahanReport"]
@@ -7,11 +8,14 @@ export type ReportRequest =
 /** What the PDF takes: a report request, plus the AI chapters already read (docs/17). */
 export type PdfRequest = components["schemas"]["HadahanPdf"] | components["schemas"]["PorondamPdf"];
 
-/** The server works the report out again from these details, sent in a POST body. */
+/**
+ * The server works the report out again from these details, sent in a POST body. The sign in goes
+ * with them: the server prints the full report only for the account that paid for it.
+ */
 export async function fetchReport(body: PdfRequest | ReportRequest): Promise<Blob> {
   const response = await fetch("/api/v1/reports/pdf", {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", ...(await accountHeaders()) },
     body: JSON.stringify(body),
   });
   if (!response.ok) {

@@ -16,12 +16,9 @@
 {% endblock %}
 
 {% block content %}
-<section id="glance">
-  <p class="eyebrow">{{ r.porondam_kind }}</p>
-  <h1>{{ title }}</h1>
-
-  <nav class="contents">
-    <h3>{{ r.contents }}</h3>
+{% if full %}
+<nav class="contents">
+    <h2 class="section-title">{{ r.contents }}</h2>
     <a class="toc" href="#glance">{{ r.people_title }}</a>
     <a class="toc" href="#checks">{{ r.checks_title }}</a>
     <a class="toc" href="#factors">{{ r.factors }}</a>
@@ -30,6 +27,11 @@
     {% for chapter in chapters %}<a class="toc toc-sub" href="#{{ chapter.anchor }}">{{ chapter.number }}. {{ chapter.title }}</a>{% endfor %}
     {% endif %}
   </nav>
+{% endif %}
+<section id="glance"{% if full %} class="page-break"{% endif %}>
+  <p class="eyebrow">{{ r.porondam_kind }}</p>
+  <h1>{{ title }}</h1>
+
 
   <h2>{{ r.people_title }}</h2>
   {{ v.people(people, r) }}
@@ -40,7 +42,7 @@
   {% if same_star %}<p class="soft lead">{{ same_star }}</p>{% endif %}
 </section>
 
-<section id="checks" class="page-break">
+<section id="checks"{% if full %} class="page-break"{% endif %}>
   <h2 class="section-title">{{ r.checks_title }}</h2>
   {{ v.checks(hard_checks, kuja, r) }}
   <table class="table" style="margin-top: 4mm">

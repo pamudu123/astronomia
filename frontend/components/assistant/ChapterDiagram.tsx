@@ -149,6 +149,7 @@ function PeriodsBar({ dasha, birth, labels, t }: { dasha: Dasha; birth: string; 
             className={styles.segment}
             data-now={segment.now || undefined}
             data-alt={i % 2 === 1 || undefined}
+            data-short={segment.width < 11 || undefined}
             style={{ left: `${segment.left}%`, width: `${segment.width}%` }}
             title={segment.label}
           >
