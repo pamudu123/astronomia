@@ -297,6 +297,43 @@ report:
   ai_reading: AI reading
   ai_reading_note: "Written by AI from the results above, as read on the site. For guidance and cultural interest only, not professional advice."
   page: "Page {page} of {pages}"
+  brand: Sidera
+  tagline: The sky calculated
+  cover_hadahan: Premium birth chart report
+  cover_porondam: Premium match report
+  cover_made: "Prepared on {date}"
+  contents: In this report
+  glance: At a glance
+  pillars: Your chart in four steps
+  pillar_lagna: How you meet the world
+  pillar_rashi: Your mind and feelings
+  pillar_star: The star you were born under
+  pillar_period: The life period you are in now
+  wheel: Your sky at birth
+  wheel_note: "Each planet where it stood when you were born. The lagna is on the left; the signs and houses run anticlockwise from it. The Moon is in teal."
+  houses: The 12 houses
+  houses_note: "Each house is one part of life. A house's sign and the planets in it colour that part. The lagna's house is marked in gold."
+  house_number: "House {number}"
+  periods_title: Your life periods
+  periods_note: "The bar runs from birth. Each main period is as wide as it is long, the gold one is running now, and the line marks today. Ages are under the bar."
+  now: Today
+  mars_flow: How the Kuja dosha check works out
+  mars_where: Where Mars sits
+  mars_point: "From {point}: house {house}"
+  mars_counts: counts
+  mars_not_counts: does not count
+  mars_rules: Conditions that reduce it
+  mars_rules_count: "{count} of {total} apply"
+  mars_result: Result
+  reading_title: Your full reading
+  reading_lead: "{count} chapters written for this report from your results, each with a picture or diagram to read it at a glance."
+  chapter: "Chapter {number}"
+  in_short: In short
+  ring_title: The factors at a glance
+  ring_note: "One segment per factor, in the order of the table: gold agrees, coral does not, grey was not counted."
+  checks_title: The serious checks
+  people_title: The two of you
+  and: and
 
 # What each house is about, 1 to 12, in a few plain words. PROVISIONAL: for the astrologer.
 house_theme:

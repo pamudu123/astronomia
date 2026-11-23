@@ -7,6 +7,7 @@ from app.api import (
     avurudu,
     baby,
     changes,
+    chapters,
     charts,
     chat,
     first_letters,
@@ -64,6 +65,7 @@ def create_app() -> FastAPI:
     app.include_router(shares.router)
     app.include_router(saved.router)
     app.include_router(paid.router)
+    app.include_router(chapters.router)
     app.include_router(chat.router)
     return app
 

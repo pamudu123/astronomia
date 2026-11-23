@@ -13,12 +13,16 @@ import {
   chapterKey,
   chapterState,
   hash,
+  KEEP_DAYS,
   lead,
+  outline,
   parts,
   requestChapter,
   resetChapters,
   spans,
+  takeKept,
   tone,
+  writeAll,
   writtenChapters,
 } from "@/lib/assistant/explain";
 import { SPOTS } from "@/lib/spots";
@@ -77,18 +81,30 @@ describe("the chapters and their words", () => {
   });
 });
 
+/** A Storage over a map, like the browser's. */
+function memoryStorage(map: Map<string, string>) {
+  return {
+    get length() {
+      return map.size;
+    },
+    key: (index: number) => [...map.keys()][index] ?? null,
+    getItem: (key: string) => map.get(key) ?? null,
+    setItem: (key: string, value: string) => void map.set(key, value),
+    removeItem: (key: string) => void map.delete(key),
+  };
+}
+
+const keptText = (raw: string | undefined) => (raw ? (JSON.parse(raw) as { text: string }).text : undefined);
+
 describe("requestChapter", () => {
   const storage = new Map<string, string>();
+  const tab = new Map<string, string>();
 
   beforeEach(() => {
     resetChapters();
     storage.clear();
-    vi.stubGlobal("window", {
-      sessionStorage: {
-        getItem: (key: string) => storage.get(key) ?? null,
-        setItem: (key: string, value: string) => storage.set(key, value),
-      },
-    });
+    tab.clear();
+    vi.stubGlobal("window", { localStorage: memoryStorage(storage), sessionStorage: memoryStorage(tab) });
   });
 
   afterEach(() => vi.unstubAllGlobals());
@@ -99,7 +115,7 @@ describe("requestChapter", () => {
 
     const key = chapterKey("match.checks", "en", FACTS);
     expect(chapterState(key)).toEqual({ status: "done", text: "Both essential checks pass." });
-    expect(storage.get(key)).toBe("Both essential checks pass.");
+    expect(keptText(storage.get(key))).toBe("Both essential checks pass.");
     const [url, init] = send.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe("/api/explain");
     expect(JSON.parse(String(init.body))).toEqual({ id: "match.checks", language: "en", facts: FACTS });
@@ -116,9 +132,9 @@ describe("requestChapter", () => {
     expect(JSON.parse(String(init.body)).report).toEqual(report);
   });
 
-  it("reads a chapter kept earlier in the visit without asking", async () => {
+  it("reads a chapter kept on this device without asking", async () => {
     const key = chapterKey("match.people", "en", FACTS);
-    storage.set(key, "Kept text.");
+    storage.set(key, JSON.stringify({ text: "Kept text.", at: Date.now() }));
     const send = streaming(["new"]);
     await requestChapter("match.people", "en", FACTS, send);
     expect(send).not.toHaveBeenCalled();
@@ -147,9 +163,63 @@ describe("requestChapter", () => {
     ]);
   });
 
+  it("forgets a chapter kept longer than a month, and reads one an older visit kept in the tab", async () => {
+    const old = chapterKey("match.people", "en", FACTS);
+    storage.set(old, JSON.stringify({ text: "Old.", at: Date.now() - (KEEP_DAYS + 1) * 86_400_000 }));
+    const send = streaming(["Fresh."]);
+    await requestChapter("match.people", "en", FACTS, send);
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(chapterState(old).text).toBe("Fresh.");
+
+    const inTab = chapterKey("match.styles", "en", FACTS);
+    tab.set(inTab, "From the tab.");
+    expect(chapterState(inTab)).toEqual({ status: "done", text: "From the tab." });
+  });
+
+  it("writes every chapter not written yet for the PDF, reusing the rest and retrying a failure once", async () => {
+    await requestChapter("match.people", "en", FACTS, streaming(["Already written."]));
+    let calls = 0;
+    const send = vi.fn(async (_url: string, init?: RequestInit) => {
+      calls += 1;
+      const { id } = JSON.parse(String(init?.body)) as { id: string };
+      // The first try at the Mars chapter fails; the second works.
+      if (id === "match.mars" && calls === 1) return new Response("no", { status: 502 });
+      return streaming([`Text for ${id}.`])();
+    });
+    const seen: [number, number][] = [];
+    const items = (["match.people", "match.mars", "match.summary"] as const).map((id) => ({ id, facts: FACTS }));
+    await writeAll(items, "en", (done, total) => seen.push([done, total]), send as unknown as typeof fetch, 1);
+
+    expect(send).toHaveBeenCalledTimes(3); // the Mars chapter twice and the summary; not the people
+    expect(chapterState(chapterKey("match.mars", "en", FACTS)).text).toBe("Text for match.mars.");
+    expect(chapterState(chapterKey("match.people", "en", FACTS)).text).toBe("Already written.");
+    expect(seen).toEqual([
+      [0, 3],
+      [1, 3],
+      [2, 3],
+      [3, 3],
+    ]);
+  });
+
+  it("takes the words a paid report keeps in place of this device's", async () => {
+    await requestChapter("match.people", "en", FACTS, streaming(["This device's."]));
+    const key = chapterKey("match.people", "en", FACTS);
+    takeKept(key, "The report's.");
+    expect(chapterState(key)).toEqual({ status: "done", text: "The report's." });
+    expect(keptText(storage.get(key))).toBe("The report's.");
+  });
+
   it("treats an empty answer as failed", async () => {
     await requestChapter("match.styles", "en", FACTS, streaming(["  "]));
     expect(chapterState(chapterKey("match.styles", "en", FACTS)).status).toBe("failed");
+  });
+});
+
+describe("outline", () => {
+  it("gives the chat a chapter's short answer and the headings of its parts", () => {
+    const text = "You meet life **warmly**.\n\n**💼 Work that suits you**\nSteady roles.\n\n**⚠️ Take care**\n- Rest";
+    expect(outline(text)).toEqual({ in_short: "You meet life warmly.", parts: ["Work that suits you", "Take care"] });
+    expect(outline("x".repeat(30), 10).in_short).toBe("xxxxxxxxx…");
   });
 });
 

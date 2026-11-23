@@ -1,129 +1,203 @@
 {% extends "base.html" %}
 {% from "kendara.html" import kendara %}
+{% import "visuals.html" as v %}
+
+{% block cover_class %} cover-chart{% endblock %}
+{% block cover %}
+<p class="cover-born">{{ born }}</p>
+{{ v.medallion(cover.art) }}
+<table class="cover-signs">
+  <tbody>
+    <tr>
+      {% for label, value in cover.signs %}
+      <td><p class="cover-label">{{ label }}</p><p class="cover-value">{{ value }}</p></td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
+
 {% block content %}
-<h1>{{ title }}</h1>
-<p class="soft lead">{{ born }}</p>
-<p class="soft">{{ time_zone }}</p>
+{% set brk = ' class="page-break"' if full else '' %}
+{# ---- At a glance: contents, the chart in four steps, the kendara and its facts. ---- #}
+{% if full %}
+<nav class="contents">
+    <h2 class="section-title">{{ r.contents }}</h2>
+    <a class="toc" href="#glance">{{ r.glance }}</a>
+    <a class="toc" href="#sky">{{ r.wheel }}</a>
+    <a class="toc" href="#houses">{{ r.houses }}</a>
+    <a class="toc" href="#periods">{{ r.periods_title }}</a>
+    <a class="toc" href="#kuja">{{ r.kuja }}</a>
+    {% if chapters %}
+    <a class="toc" href="#reading">{{ r.reading_title }}</a>
+    {% for chapter in chapters %}<a class="toc toc-sub" href="#{{ chapter.anchor }}">{{ chapter.number }}. {{ chapter.title }}</a>{% endfor %}
+    {% endif %}
+  </nav>
+{% endif %}
+<section id="glance"{% if full %} class="page-break"{% endif %}>
+  <p class="eyebrow">{{ r.hadahan_kind }}</p>
+  <h1>{{ title }}</h1>
+  <p class="soft lead">{{ born }}</p>
+  <p class="soft small">{{ time_zone }}</p>
 
-<table class="columns">
-  <tbody>
-    <tr>
-      <td style="width: 64mm">
-        <h3 class="chart-title">{{ charts[0].title }}</h3>
-        {{ kendara(charts[0]) }}
-      </td>
-      <td>
-        <table class="facts" aria-label="{{ r.lagna }}">
-          <tbody>
-            {% for label, value in facts %}
-            <tr><th scope="row">{{ label }}</th><td>{{ value }}</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  {% if full %}
 
-<h2>{{ r.planets }}</h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">{{ r.planet }}</th>
-      <th scope="col">{{ r.sign }}</th>
-      <th scope="col">{{ r.degree }}</th>
-      <th scope="col">{{ r.house }}</th>
-      <th scope="col">{{ r.star }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in planets %}
-    <tr>
-      <td class="row-name">{{ row.name }}</td>
-      <td>{{ row.sign }}</td>
-      <td class="nowrap">{{ row.degree }}</td>
-      <td>{{ row.house }}</td>
-      <td>{{ row.star }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% if any_retrograde %}<p class="small soft" style="margin-top: 1.5mm">{{ r.retrograde_note }}</p>{% endif %}
+  <h2>{{ r.pillars }}</h2>
+  {{ v.pillars(pillars) }}
+  {% endif %}
 
-<section class="box">
-  <p class="strong">{{ r.kuja }}: {{ kuja.status }}</p>
-  {% for line in kuja.reasons %}
-  <p class="soft">{{ line }}</p>
-  {% endfor %}
+  <div class="keep">
+  <table class="columns">
+    <tbody>
+      <tr>
+        <td style="width: 64mm">
+          <h3 class="chart-title">{{ charts[0].title }}</h3>
+          {{ kendara(charts[0]) }}
+        </td>
+        <td>
+          <table class="facts" aria-label="{{ r.lagna }}">
+            <tbody>
+              {% for label, value in facts %}
+              <tr><th scope="row">{{ label }}</th><td>{{ value }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
 </section>
 
-<div class="page-break"></div>
+{# ---- The sky wheel and the planets. ---- #}
+<section id="sky"{{ brk | safe }}>
+  {% if full %}
+  {{ v.banner(banners.sky, r.wheel) }}
+  <table class="columns" style="margin-top: 2mm">
+    <tbody>
+      <tr>
+        <td style="width: 88mm">{{ v.wheel(wheel, "") }}</td>
+        <td class="aside">
+          <p>{{ r.wheel_note }}</p>
+          <p class="small soft" style="margin-top: 3mm">{{ wheel_legend }}</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-<table class="columns" style="margin-top: 0">
-  <tbody>
-    <tr>
-      <td style="width: 64mm">
-        <h3 class="chart-title">{{ charts[1].title }}</h3>
-        {{ kendara(charts[1]) }}
-      </td>
-      <td>
-        <h3>{{ r.time_check }}</h3>
-        <p>{{ time_check }}</p>
-        <p class="small soft" style="margin-top: 4mm">{{ r.kendara_note }}</p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>{{ r.dasha }}</h2>
-<table class="table table-tight">
-  <thead>
-    <tr>
-      {% for _ in range(2) %}
-      <th scope="col"{% if loop.last %} class="gap"{% endif %}>{{ r.dasha_lord }}</th>
-      <th scope="col">{{ r.dasha_from }}</th>
-      <th scope="col">{{ r.dasha_to }}</th>
+  {% endif %}
+  <h2>{{ r.planets }}</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">{{ r.planet }}</th>
+        <th scope="col">{{ r.sign }}</th>
+        <th scope="col">{{ r.degree }}</th>
+        <th scope="col">{{ r.house }}</th>
+        <th scope="col">{{ r.star }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in planets %}
+      <tr>
+        <td class="row-name">{{ row.name }}</td>
+        <td>{{ row.sign }}</td>
+        <td class="nowrap">{{ row.degree }}</td>
+        <td>{{ row.house }}</td>
+        <td>{{ row.star }}</td>
+      </tr>
       {% endfor %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for pair in dasha %}
-    <tr>
-      {% for row in pair %}
-      {% if row %}
-      <td class="row-name{% if row.now %} now{% endif %}{% if loop.last %} gap{% endif %}">{{ row.lord }}{% if row.now %}<br><span class="small soft" style="font-weight: 400">{{ r.dasha_running }}</span>{% endif %}</td>
-      <td{% if row.now %} class="now"{% endif %}>{{ row.start }}</td>
-      <td{% if row.now %} class="now"{% endif %}>{{ row.end }}</td>
-      {% else %}
-      <td class="gap"></td><td></td><td></td>
-      {% endif %}
-      {% endfor %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+  {% if any_retrograde %}<p class="small soft" style="margin-top: 1.5mm">{{ r.retrograde_note }}</p>{% endif %}
+</section>
 
-<h2>{{ r.kuja_checks }}</h2>
-{% if kuja.checks %}
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">{{ r.rule }}</th>
-      <th scope="col">{{ r.result }}</th>
-      <th scope="col">{{ r.reason }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in kuja.checks %}
-    <tr>
-      <td style="width: 38%">{{ row.rule }}</td>
-      <td class="nowrap{% if row.applies %} strong{% else %} soft{% endif %}">{{ row.result }}</td>
-      <td class="soft">{{ row.reason }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{# ---- The twelve houses. ---- #}
+{% if full %}
+<section id="houses" class="page-break">
+  {{ v.banner(banners.houses, r.houses, r.houses_note) }}
+  {{ v.houses(houses) }}
+</section>
 {% endif %}
-<p class="soft small">{{ kuja.others }}</p>
+
+{# ---- Life periods: the bar, then the table. ---- #}
+<section id="periods"{{ brk | safe }}>
+  <div class="keep">
+  {{ v.banner(banners.periods, r.periods_title, r.periods_note, not full) }}
+  {{ v.periods(bar) }}
+  </div>
+
+  <table class="table table-tight" style="margin-top: 4mm">
+    <thead>
+      <tr>
+        {% for _ in range(2) %}
+        <th scope="col"{% if loop.last %} class="gap"{% endif %}>{{ r.dasha_lord }}</th>
+        <th scope="col">{{ r.dasha_from }}</th>
+        <th scope="col">{{ r.dasha_to }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for pair in dasha %}
+      <tr>
+        {% for row in pair %}
+        {% if row %}
+        <td class="row-name{% if row.now %} now{% endif %}{% if loop.last %} gap{% endif %}">{{ row.lord }}{% if row.now %}<br><span class="small soft" style="font-weight: 400">{{ r.dasha_running }}</span>{% endif %}</td>
+        <td{% if row.now %} class="now"{% endif %}>{{ row.start }}</td>
+        <td{% if row.now %} class="now"{% endif %}>{{ row.end }}</td>
+        {% else %}
+        <td class="gap"></td><td></td><td></td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="columns">
+    <tbody>
+      <tr>
+        <td style="width: 64mm">
+          <h3 class="chart-title">{{ charts[1].title }}</h3>
+          {{ kendara(charts[1]) }}
+        </td>
+        <td>
+          <h3>{{ r.time_check }}</h3>
+          <p>{{ time_check }}</p>
+          <p class="small soft" style="margin-top: 4mm">{{ r.kendara_note }}</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+{# ---- Kuja dosha: the flow, then the conditions that apply. ---- #}
+<section id="kuja" class="keep{% if full %} page-break{% endif %}">
+  {{ v.banner(banners.kuja, r.mars_flow, "", not full) }}
+  {{ v.mars(mars, r) }}
+  {% for line in kuja.reasons %}<p class="soft" style="margin-top: 1.5mm">{{ line }}</p>{% endfor %}
+  {% if kuja.checks %}
+  <table class="table" style="margin-top: 3mm">
+    <thead>
+      <tr>
+        <th scope="col">{{ r.rule }}</th>
+        <th scope="col">{{ r.result }}</th>
+        <th scope="col">{{ r.reason }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in kuja.checks %}
+      <tr>
+        <td style="width: 38%">{{ row.rule }}</td>
+        <td class="nowrap strong">{{ row.result }}</td>
+        <td class="soft">{{ row.reason }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if kuja.others %}<p class="soft small" style="margin-top: 1.5mm">{{ kuja.others }}</p>{% endif %}
+</section>
+
 {% include "reading.html" %}
 {% endblock %}

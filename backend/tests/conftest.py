@@ -8,6 +8,7 @@ from app.api import deps, saved
 from app.geo.build import build
 from app.main import create_app
 from app.store.accounts import AccountStore, sqlite_accounts
+from app.store.chapters import ChapterStore, sqlite_chapters
 from app.store.chat import ChatStore, sqlite_chat
 from app.store.orders import OrderStore, sqlite_orders
 from app.store.shares import ShareStore
@@ -82,6 +83,12 @@ def chats(tmp_path: Path, clock: Clock) -> ChatStore:
 
 
 @pytest.fixture
+def chapters(tmp_path: Path) -> ChapterStore:
+    """A fresh store of paid reports' AI chapters for each test."""
+    return sqlite_chapters(tmp_path / "chapters.sqlite")
+
+
+@pytest.fixture
 def client(
     places_db: Path,
     shares: ShareStore,
@@ -89,6 +96,7 @@ def client(
     admin: FakeAdmin,
     orders: OrderStore,
     chats: ChatStore,
+    chapters: ChapterStore,
 ) -> TestClient:
     app = create_app()
     app.dependency_overrides[deps.places_db] = lambda: places_db
@@ -96,6 +104,7 @@ def client(
     app.dependency_overrides[deps.account_store] = lambda: accounts
     app.dependency_overrides[deps.order_store] = lambda: orders
     app.dependency_overrides[deps.chat_store] = lambda: chats
+    app.dependency_overrides[deps.chapter_store] = lambda: chapters
     limit = saved.RateLimit(30)
     app.dependency_overrides[saved.guest_limit] = lambda: limit
     tokens = auth.checker()  # stand-in Supabase keys (tests/auth.py)

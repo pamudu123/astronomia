@@ -298,12 +298,12 @@
   list-style: none;
 }
 
-.text li {
+.text li:not(.diagram li) {
   position: relative;
   padding-left: 22px;
 }
 
-.text li::before {
+.text li:not(.diagram li)::before {
   position: absolute;
   top: 0.62em;
   left: 4px;
@@ -314,7 +314,7 @@
   content: "";
 }
 
-:global(html[lang="si"]) .text li::before {
+:global(html[lang="si"]) .text li:not(.diagram li)::before {
   top: 0.7em;
 }
 
@@ -358,6 +358,12 @@
   flex: none;
   width: 120px;
   height: auto;
+}
+
+/* The painted picture (lib/assistant/chapterArt.ts): gold on either theme. */
+.picture {
+  height: auto;
+  object-fit: contain;
 }
 
 /* A part: its icon and lead, then the small paragraphs under it. */
@@ -652,4 +658,9 @@
   .caretUp {
     transition: none;
   }
+}
+
+/* A chapter's diagram (ChapterDiagram.tsx), under its short answer. */
+.diagram {
+  margin: 4px 0 18px;
 }

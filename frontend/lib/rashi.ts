@@ -11,8 +11,7 @@ export const RASHI: Rashi[] = [
   { key: "vrishabha", en: "Vrishabha", si: "වෘෂභ", image: "/images/rashi-02-vrishabha.webp" },
   { key: "mithuna", en: "Mithuna", si: "මිථුන", image: "/images/rashi-03-mithuna.webp" },
   { key: "kataka", en: "Kataka", si: "කටක", image: "/images/rashi-04-kataka.webp" },
-  // No Simha artwork yet: the drawn symbol stands in (see design/README.md).
-  { key: "simha", en: "Simha", si: "සිංහ", image: "/images/glyphs/rashi-05-simha.svg" },
+  { key: "simha", en: "Simha", si: "සිංහ", image: "/images/rashi-05-simha.webp" },
   { key: "kanya", en: "Kanya", si: "කන්‍යා", image: "/images/rashi-06-kanya.webp" },
   { key: "tula", en: "Tula", si: "තුලා", image: "/images/rashi-07-tula.webp" },
   { key: "vrischika", en: "Vrischika", si: "වෘශ්චික", image: "/images/rashi-08-vrischika.webp" },

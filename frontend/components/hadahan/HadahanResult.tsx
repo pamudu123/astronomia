@@ -26,15 +26,16 @@ import {
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { ChartDiagram } from "@/components/assistant/ChapterDiagram";
 import { AiExplain, FullReading, TopicChips } from "@/components/assistant/Explain";
-import { useAssistantContext, useExplainText } from "@/components/assistant/PageContext";
+import { useAssistantContext } from "@/components/assistant/PageContext";
+import { useReading } from "@/components/assistant/useReading";
 import {
   CHART_EXTRA,
   CHART_PLACES,
   CHART_READING,
   CHART_TOPICS,
   type ChapterId,
-  writtenChapters,
 } from "@/lib/assistant/explain";
 import { chartContext, chartExtrasContext, chartReadingContext } from "@/lib/assistant/pages";
 import { type Upcoming, fetchUpcomingChanges } from "@/lib/changes";
@@ -86,7 +87,20 @@ const GUIDE_FOCUS: ((moonHouse: number) => { houses: number[]; planet?: string }
   () => ({ houses: [] }),
 ];
 
-export function HadahanResult({
+/**
+ * The result, with what the account may use on this report around all of it: the reading and the
+ * PDF ask for it too, so nothing in the page sits outside.
+ */
+export function HadahanResult(props: Props) {
+  const { lang, request, name } = props;
+  return (
+    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
+      <HadahanResultPage {...props} />
+    </ReportScope>
+  );
+}
+
+function HadahanResultPage({
   lang,
   t,
   labels,
@@ -139,14 +153,26 @@ export function HadahanResult({
     const withExtras = extras ? chartExtrasContext(facts, extras) : null;
     return Object.fromEntries(CHART_EXTRA.map((id) => [id, withExtras]));
   }, [request, extras, facts]);
-  // The PDF prints the chapters read so far: the reading's, then the topic-only ones.
-  const explainWords = useExplainText();
-  const readingForPdf = () => {
-    if (!explainWords) return [];
-    const ids: ChapterId[] = [...CHART_READING, ...CHART_TOPICS.filter((id) => !CHART_READING.includes(id))];
-    const factsFor = (id: ChapterId) => (extraFacts && id in extraFacts ? (extraFacts[id] ?? null) : facts);
-    return writtenChapters(ids, lang, factsFor).map(({ id, text }) => ({ title: explainWords.chapters[id], text }));
-  };
+  // The reading's chapters, then the topic-only ones: what the chat hears about and the PDF
+  // prints (the paid PDF writes any not written yet).
+  const { forPdf, aiNotice } = useReading(
+    {
+      ids: [...CHART_READING, ...CHART_TOPICS.filter((id) => !CHART_READING.includes(id))],
+      factsFor: (id: ChapterId) => (extraFacts && id in extraFacts ? (extraFacts[id] ?? null) : facts),
+    },
+    lang,
+    "chart",
+  );
+  // The diagram under each chapter's short answer; the PDF prints the same ones.
+  const diagram = (id: ChapterId) => (
+    <ChartDiagram
+      id={id}
+      result={result}
+      labels={labels}
+      birth={request?.date ?? date}
+      saved={savedTimes && <SavedTime times={savedTimes} part="frozen" />}
+    />
+  );
   const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;
@@ -181,7 +207,7 @@ export function HadahanResult({
       : fill(t.guide[step], { lagna: sign(lagna.sign).name, moon: sign(moon.sign).name, house: moonHouse });
 
   return (
-    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
+    <>
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.top}`}>
         <div className={styles.topText}>
@@ -192,7 +218,8 @@ export function HadahanResult({
           <div className={styles.actions}>
             <ReportButton
               request={{ kind: "hadahan", name, birth: { ...request, lang } }}
-              reading={readingForPdf}
+              reading={forPdf}
+                aiNotice={aiNotice}
               t={t}
             />
             {saveText && (
@@ -396,7 +423,7 @@ export function HadahanResult({
           </div>
         </section>
 
-        <TopicChips chapters={CHART_TOPICS} lang={lang} facts={facts} />
+        <TopicChips chapters={CHART_TOPICS} lang={lang} facts={facts} diagram={diagram} />
       </div>
 
       {(result.dasha || request) && (
@@ -499,6 +526,7 @@ export function HadahanResult({
         facts={facts}
         extra={extraFacts}
         reading="chartReading"
+        diagram={diagram}
         pdf={Boolean(request)}
       />
 
@@ -531,6 +559,6 @@ export function HadahanResult({
         </NextSteps>
       )}
     </main>
-    </ReportScope>
+    </>
   );
 }

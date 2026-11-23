@@ -5,10 +5,11 @@
  * Each chapter is written by the agent (POST /api/explain -> agent/app/explain.py) from the
  * same skills the chat uses. The ids are shared with the agent's CHAPTERS table.
  *
- * A chapter is written once per visit: the text is kept in memory and in the tab's session
- * storage, keyed by the chapter, the language and a hash of the facts. So a button and the
- * full reading showing the same chapter share one model call, and hiding and opening it again
- * costs nothing.
+ * A chapter is written once: the text is kept in memory and on this device for a month
+ * (KEEP_DAYS), keyed by the chapter, the language and a hash of the facts. So a button, the
+ * full reading, the PDF report and the chat all share one model call per chapter, and hiding
+ * and opening it again costs nothing. A paid report also keeps its chapters on the server
+ * (lib/keptChapters.ts), so they read the same on every device of the account.
  */
 
 import type { Locale } from "@/lib/i18n";
@@ -233,17 +234,63 @@ function set(key: string, state: ChapterState): void {
   listeners.forEach((listener) => listener());
 }
 
+/**
+ * Written chapters are kept on this device for a month, so a reading made for the PDF is
+ * there again when the person opens the chart, presses an explain button, asks for the PDF
+ * again or comes back another day: the AI is not asked twice for the same chapter. They hold
+ * only results (the facts sent to the AI), never birth details. At most KEEP_MAX are kept;
+ * the oldest go first.
+ */
+export const KEEP_DAYS = 30;
+const KEEP_MAX = 240;
+const DAY = 24 * 60 * 60 * 1000;
+
+type Kept = { text: string; at: number };
+
+function read(raw: string | null): Kept | null {
+  if (raw == null) return null;
+  try {
+    const kept = JSON.parse(raw) as Kept;
+    return typeof kept?.text === "string" && typeof kept.at === "number" ? kept : null;
+  } catch {
+    return null;
+  }
+}
+
 function stored(key: string): string | null {
   try {
-    return window.sessionStorage.getItem(key);
+    const local = window.localStorage;
+    const kept = read(local.getItem(key));
+    if (kept && Date.now() - kept.at < KEEP_DAYS * DAY) return kept.text;
+    if (kept) local.removeItem(key);
+    // Kept in the tab by an earlier version of the site.
+    return window.sessionStorage?.getItem(key) ?? null;
   } catch {
     return null; // private windows and blocked storage: write it again
   }
 }
 
+/** Drops chapters past their month, then the oldest beyond KEEP_MAX. */
+function prune(local: Storage): void {
+  const kept: [string, number][] = [];
+  for (let i = 0; i < local.length; i += 1) {
+    const key = local.key(i);
+    if (!key?.startsWith("explain:")) continue;
+    const entry = read(local.getItem(key));
+    kept.push([key, entry?.at ?? 0]);
+  }
+  const now = Date.now();
+  kept.sort((a, b) => b[1] - a[1]);
+  kept.forEach(([key, at], index) => {
+    if (index >= KEEP_MAX || now - at >= KEEP_DAYS * DAY) local.removeItem(key);
+  });
+}
+
 function store(key: string, text: string): void {
   try {
-    window.sessionStorage.setItem(key, text);
+    const local = window.localStorage;
+    local.setItem(key, JSON.stringify({ text, at: Date.now() } satisfies Kept));
+    prune(local);
   } catch {
     // Full or blocked storage: the text stays in memory for this page.
   }
@@ -262,6 +309,34 @@ export function chapterState(key: string): ChapterState {
 }
 
 export const idleState = (): ChapterState => IDLE;
+
+/**
+ * Takes a chapter the paid report keeps on the server. It replaces what this device has, so the
+ * words are the same everywhere; a chapter being written is left to finish.
+ */
+export function takeKept(key: string, text: string): void {
+  const current = chapterState(key);
+  if (current.status === "writing" || (current.status === "done" && current.text === text)) return;
+  set(key, { status: "done", text });
+  store(key, text);
+}
+
+/** The chapters a paid report keeps in one language, by id. Empty for any other report. */
+export async function fetchKept(
+  report: ReportRequest,
+  language: Locale,
+  init: RequestInit = {},
+): Promise<Partial<Record<ChapterId, string>>> {
+  const response = await fetch("/api/v1/reports/chapters", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...(await accountHeaders()) },
+    body: JSON.stringify({ report, language }),
+    cache: "no-store",
+    ...init,
+  });
+  if (!response.ok) throw new Error(`kept chapters: ${response.status}`);
+  return ((await response.json()) as { chapters: Partial<Record<ChapterId, string>> }).chapters;
+}
 
 /**
  * Writes a chapter unless it is written or being written. The text arrives as it is
@@ -324,6 +399,56 @@ export function writtenChapters(
     if (state.status === "done") written.push({ id, text: state.text });
   }
   return written;
+}
+
+/** Resolves once a chapter is no longer being written (by this call or another component). */
+function settled(key: string): Promise<ChapterState> {
+  return new Promise((resolve) => {
+    const check = () => {
+      const state = chapterState(key);
+      if (state.status === "writing") return false;
+      resolve(state);
+      return true;
+    };
+    if (check()) return;
+    const stop = subscribe(() => {
+      if (check()) stop();
+    });
+  });
+}
+
+/**
+ * Writes every chapter not written yet, a few at a time, for the paid PDF report (docs/17,
+ * section 6). Chapters already written in this visit or kept on this device are used as they
+ * are, so nothing is asked for twice; a chapter that fails is asked for once more. `progress`
+ * hears how many of the chapters are ready.
+ */
+export async function writeAll(
+  items: { id: ChapterId; facts: PageContext }[],
+  language: Locale,
+  progress: (done: number, total: number) => void = () => undefined,
+  send: typeof fetch = fetch,
+  parallel = 4,
+  /** The report on the page, which the AI route checks is paid (requestChapter). */
+  report: ReportRequest | null = null,
+): Promise<void> {
+  const total = items.length;
+  let done = 0;
+  progress(0, total);
+  const queue = [...items];
+  const one = async ({ id, facts }: { id: ChapterId; facts: PageContext }) => {
+    const key = chapterKey(id, language, facts);
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      await requestChapter(id, language, facts, send, report);
+      if ((await settled(key)).status === "done") break;
+    }
+    done += 1;
+    progress(done, total);
+  };
+  const workers = Array.from({ length: Math.min(parallel, total) }, async () => {
+    for (let item = queue.shift(); item; item = queue.shift()) await one(item);
+  });
+  await Promise.all(workers);
 }
 
 /** Forgets every chapter in memory (tests). */
@@ -468,4 +593,30 @@ export function blocks(text: string): Block[] {
     flush();
   }
   return result;
+}
+
+/** Plain text of some blocks, without the bold marks. */
+function plain(items: Block[]): string {
+  return items
+    .map((block) => {
+      if (block.kind === "list") return block.items.map((item) => item.map((s) => s.text).join("")).join("; ");
+      if (block.kind === "table") return "";
+      return block.spans.map((s) => s.text).join("");
+    })
+    .filter(Boolean)
+    .join(" ");
+}
+
+/**
+ * A written chapter in a few lines, for the chat (docs/17): its short answer and the headings
+ * of its parts. Enough for Astro to stay in step with the reading and point to the chapter,
+ * without sending every chapter's full text with each question.
+ */
+export function outline(text: string, limit = 500): { in_short: string; parts: string[] } {
+  const { answer, parts: sections } = parts(blocks(text));
+  const short = plain(answer);
+  return {
+    in_short: short.length > limit ? `${short.slice(0, limit - 1).trimEnd()}…` : short,
+    parts: sections.map((section) => section.lead.text),
+  };
 }

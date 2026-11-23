@@ -1,20 +1,24 @@
-/* Print layout from the design board "PDF report": cream paper, navy ink, dark gold rules. */
+/*
+  The premium report: a night sky cover in black and gold, then ivory pages in near-black ink
+  with bronze rules, teal and coral for results (design/README.md, the light theme).
+*/
 
 @page {
   size: A4;
-  margin: 24mm 18mm 20mm;
-  background: #fbfaf6;
+  margin: 29mm 18mm 20mm;
+  background: #fbf8f1;
 
   @top-left {
-    content: "Astronomia";
+    content: "Sidera";
     font-family: "Marcellus";
     font-size: 13pt;
-    letter-spacing: 0.04em;
-    color: #0b1026;
+    letter-spacing: 0.08em;
+    color: #1b1914;
     width: 50%;
     vertical-align: bottom;
     padding-bottom: 2.5mm;
-    border-bottom: 1.2pt solid #8a6410;
+    border-bottom: 1.2pt solid #8a6212;
+    margin-bottom: 5mm;
   }
   @top-right {
     content: __KIND__;
@@ -22,20 +26,21 @@
     text-align: right;
     font-family: "DM Sans", "Noto Sans Sinhala";
     font-size: 9pt;
-    color: #4a5170;
+    color: #6b6558;
     vertical-align: bottom;
     padding-bottom: 2.5mm;
-    border-bottom: 1.2pt solid #8a6410;
+    border-bottom: 1.2pt solid #8a6212;
+    margin-bottom: 5mm;
   }
   @bottom-left {
     content: __FOOTER__;
     width: 70%;
     font-family: "DM Sans", "Noto Sans Sinhala";
     font-size: 8pt;
-    color: #4a5170;
+    color: #6b6558;
     vertical-align: top;
     padding-top: 2mm;
-    border-top: 0.6pt solid #e6e1d3;
+    border-top: 0.6pt solid #e4dccb;
   }
   @bottom-right {
     content: __PAGE__;
@@ -43,21 +48,35 @@
     text-align: right;
     font-family: "DM Sans", "Noto Sans Sinhala";
     font-size: 8pt;
-    color: #4a5170;
+    color: #6b6558;
     vertical-align: top;
     padding-top: 2mm;
-    border-top: 0.6pt solid #e6e1d3;
+    border-top: 0.6pt solid #e4dccb;
   }
+}
+
+/* The cover and the reading's opening page: edge to edge, no header or footer. */
+@page cover {
+  margin: 0;
+  background: #0a0a0a;
+  @top-left { content: none; border: none; }
+  @top-right { content: none; border: none; }
+  @bottom-left { content: none; border: none; }
+  @bottom-right { content: none; border: none; }
 }
 
 html {
   font-family: "DM Sans", "Noto Sans Sinhala";
   font-size: 9.5pt;
-  line-height: 1.4;
-  color: #0b1026;
+  line-height: 1.45;
+  color: #1b1914;
 }
 html[lang="si"] {
-  line-height: 1.55;
+  line-height: 1.6;
+}
+/* Without it the covers sit 2 mm to the right. */
+body {
+  margin: 0;
 }
 
 h1,
@@ -70,17 +89,21 @@ h3 {
 }
 html[lang="si"] h1,
 html[lang="si"] h2,
-html[lang="si"] h3 {
+html[lang="si"] h3,
+html[lang="si"] .score,
+html[lang="si"] .cover-title,
+html[lang="si"] .reading-hero-title,
+html[lang="si"] .flow-value {
   font-family: "Noto Sans Sinhala", "DM Sans";
   font-weight: 600;
 }
 h1 {
-  font-size: 22pt;
+  font-size: 24pt;
   line-height: 1.2;
 }
 h2 {
-  font-size: 13pt;
-  margin: 5.5mm 0 1.5mm;
+  font-size: 14pt;
+  margin: 6mm 0 2mm;
 }
 h3 {
   font-size: 11pt;
@@ -89,9 +112,13 @@ h3 {
 p {
   margin: 0;
 }
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
 .soft {
-  color: #4a5170;
+  color: #6b6558;
 }
 .small {
   font-size: 8.5pt;
@@ -102,8 +129,341 @@ p {
 .lead {
   margin-top: 1.5mm;
 }
+.eyebrow {
+  font-size: 7.5pt;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8a6212;
+}
+html[lang="si"] .eyebrow {
+  letter-spacing: 0.02em;
+  font-size: 8pt;
+}
+.page-break {
+  break-before: page;
+}
+#kuja,
+#factors,
+#periods,
+#checks {
+  margin-top: 8mm;
+}
+.keep {
+  break-inside: avoid;
+}
+.centred {
+  text-align: center;
+}
+.section-title {
+  margin-top: 0;
+  padding-bottom: 1.5mm;
+  border-bottom: 0.6pt solid #e4dccb;
+}
 
-/* Two columns that never split across pages. */
+/* ---------- The cover ---------- */
+
+.cover {
+  page: cover;
+  width: 210mm;
+  height: 297mm;
+  background-color: #0a0a0a;
+  background-size: 210mm 297mm;
+  color: #f4f1ea;
+  break-after: page;
+}
+.cover-frame {
+  position: absolute;
+  left: 12mm;
+  top: 12mm;
+  width: 186mm;
+  height: 273mm;
+  border: 0.8pt solid rgba(232, 184, 75, 0.7);
+  outline: 0.4pt solid rgba(232, 184, 75, 0.35);
+  outline-offset: 1.6mm;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 18mm 14mm 0;
+}
+.cover-brand {
+  font-family: "Marcellus";
+  font-size: 12pt;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #e8b84b;
+}
+.cover-brand .star {
+  vertical-align: -0.4mm;
+}
+.cover-eyebrow {
+  margin-top: 16mm;
+  font-size: 9pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #d9c79a;
+}
+html[lang="si"] .cover-eyebrow {
+  letter-spacing: 0.04em;
+  font-size: 10pt;
+}
+.cover-title {
+  margin-top: 4mm;
+  font-size: 32pt;
+  line-height: 1.15;
+  color: #f4f1ea;
+}
+.cover-born {
+  margin-top: 3mm;
+  font-size: 9.5pt;
+  color: #cfc8b8;
+}
+.cover-signs {
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+.cover-signs td {
+  padding: 0 7mm;
+  border-left: 0.6pt solid rgba(232, 184, 75, 0.5);
+}
+.cover-signs td:first-child {
+  border-left: none;
+}
+.cover-label {
+  font-size: 7.5pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b9ae94;
+}
+html[lang="si"] .cover-label {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.cover-value {
+  margin-top: 1mm;
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-size: 14pt;
+  color: #e8b84b;
+}
+.cover-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14mm;
+  text-align: center;
+}
+.cover-tagline {
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-size: 11pt;
+  letter-spacing: 0.12em;
+  color: #e8b84b;
+}
+.cover-made {
+  margin-top: 1.5mm;
+  font-size: 8pt;
+  color: #9d9482;
+}
+.cover-pair {
+  margin: 14mm auto 0;
+  border-collapse: collapse;
+}
+/* Each circle in one of the two orbits painted on the cover. */
+.cover-pair.orbits {
+  position: absolute;
+  left: 50%;
+  top: 79mm;
+  width: 170mm;
+  margin: 0 0 0 -85mm;
+}
+/* The match cover has its own lotus border, so no frame, and the words stay clear of it. */
+.cover-match .cover-frame {
+  border: none;
+  outline: none;
+}
+.cover-match .cover-foot {
+  bottom: 24mm;
+}
+/* The gold dust of the orbits runs behind the names. */
+.orbits td {
+  vertical-align: top !important;
+}
+.orbits .cover-value,
+.orbits .cover-label {
+  display: inline-block;
+  padding: 0.4mm 2.5mm;
+  border-radius: 3pt;
+  background: rgba(5, 5, 5, 0.82);
+}
+.orbits .cover-value {
+  margin-top: 4mm;
+}
+.cover-pair td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 2mm;
+  width: 66mm;
+}
+.cover-pair td.cover-join {
+  width: 34mm;
+}
+.cover-pair .cover-value {
+  margin-top: 4mm;
+}
+.cover-score {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 186mm;
+  text-align: center;
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-size: 18pt;
+  color: #f4f1ea;
+}
+
+.back-cover {
+  break-before: page;
+  break-after: auto;
+}
+.back-words {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 92mm;
+  text-align: center;
+}
+.back-words .cover-tagline {
+  margin-top: 4mm;
+}
+
+/* The top of a main part: the title on black, the picture on the right. */
+.banner {
+  position: relative;
+  height: 46mm;
+  margin-bottom: 5mm;
+  border-radius: 4pt;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+  background-size: auto 46.6mm;
+  color: #f4f1ea;
+  break-inside: avoid;
+  break-after: avoid;
+}
+.banner-text {
+  position: absolute;
+  left: 8mm;
+  top: 8mm;
+  width: 82mm;
+}
+.banner h2 {
+  margin: 0 0 2mm;
+  font-size: 18pt;
+  line-height: 1.2;
+  color: #e8b84b;
+}
+#periods.page-break,
+#checks.page-break,
+#kuja.page-break {
+  margin-top: 0;
+}
+h1 + .banner {
+  margin-top: 5mm;
+}
+.banner p {
+  font-size: 8.4pt;
+  line-height: 1.45;
+  color: #cfc8b8;
+}
+
+/* A sign's artwork in a dark circle with a gold ring: on the cover and beside each person. */
+.medallion {
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1d1a14 0%, #0a0a0a 70%);
+  border: 1pt solid #e8b84b;
+  overflow: hidden;
+}
+.medallion img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* The chart cover: the sign inside the painted wheel (its centre is 102 mm down), the words
+   below it, clear of the ornament at the foot of the page. Positions are from the frame. */
+.cover-chart .cover-frame {
+  border: none;
+  outline: none;
+  padding-top: 8mm;
+}
+.cover-chart .cover-words {
+  position: absolute;
+  left: 22mm;
+  right: 22mm;
+  top: 142mm;
+  text-align: center;
+}
+.cover-chart .cover-eyebrow {
+  margin-top: 0;
+}
+.cover-chart .cover-title {
+  margin-top: 3mm;
+  font-size: 27pt;
+}
+/* A long name: smaller, so the signs under it stay clear of the foot. */
+.cover-chart .cover-title.long {
+  font-size: 17pt;
+}
+.cover-chart .cover-signs {
+  margin-top: 7mm;
+}
+.cover-chart .cover-foot {
+  bottom: 51mm;
+}
+.medallion-big {
+  position: absolute;
+  left: 50%;
+  top: -93mm;
+  width: 86mm;
+  height: 86mm;
+  margin-left: -43mm;
+}
+.medallion-mid {
+  width: 54mm;
+  height: 54mm;
+}
+.medallion-small {
+  width: 26mm;
+  height: 26mm;
+}
+
+/* ---------- Contents ---------- */
+
+/* A page of its own after the cover. */
+.contents {
+  padding: 6mm 8mm;
+  border: 0.6pt solid #e4dccb;
+  border-radius: 4pt;
+  background: #fffdf8;
+  font-size: 10.5pt;
+}
+.contents h2 {
+  margin-bottom: 3mm;
+}
+.toc {
+  display: block;
+  padding: 1.1mm 0;
+}
+.toc::after {
+  content: leader(".") target-counter(attr(href), page);
+  color: #8a6212;
+}
+.toc-sub {
+  padding-left: 6mm;
+  font-size: 9.5pt;
+  color: #6b6558;
+}
+
+/* ---------- Key facts and the kendara ---------- */
+
 .columns {
   width: 100%;
   border-collapse: collapse;
@@ -117,8 +477,9 @@ p {
 .columns > tbody > tr > td + td {
   padding-left: 8mm;
 }
-
-/* Key facts beside the chart. */
+.columns .aside {
+  vertical-align: middle;
+}
 .facts {
   width: 100%;
   border-collapse: collapse;
@@ -127,100 +488,26 @@ p {
 .facts th {
   text-align: left;
   font-weight: 400;
-  color: #4a5170;
-  padding: 1.4mm 4mm 1.4mm 0;
+  color: #6b6558;
+  padding: 1.6mm 4mm 1.6mm 0;
   white-space: nowrap;
   vertical-align: top;
+  border-bottom: 0.6pt solid #ece5d6;
 }
 .facts td {
   font-weight: 600;
-  padding: 1.4mm 0;
+  padding: 1.6mm 0;
+  border-bottom: 0.6pt solid #ece5d6;
 }
 
-/* Data tables. */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-.table th {
-  font-weight: 500;
-  color: #4a5170;
-  padding: 1mm 3mm 1.5mm 0;
-  border-bottom: 0.8pt solid #8a6410;
-  vertical-align: bottom;
-}
-.table td {
-  padding: 1mm 3mm 1mm 0;
-  border-bottom: 0.6pt solid #e6e1d3;
-  vertical-align: top;
-}
-.table tr {
-  break-inside: avoid;
-}
-.table-tight td {
-  padding-top: 0.7mm;
-  padding-bottom: 0.7mm;
-}
-.table tbody tr:last-child td {
-  border-bottom: none;
-}
-.table .row-name {
-  font-weight: 600;
-}
-.table td.now {
-  background: #f1ede0;
-}
-.table .gap {
-  padding-left: 5mm;
-  border-left: 0.6pt solid #e6e1d3;
-}
-.nowrap {
-  white-space: nowrap;
-}
-
-/* Bordered boxes. */
-.box {
-  border: 0.8pt solid #8a6410;
-  border-radius: 4pt;
-  padding: 3mm 4mm;
-  margin-top: 4.5mm;
-  margin-break: keep;
-  break-inside: avoid;
-}
-.box-quiet {
-  border-color: #e6e1d3;
-}
-.box p + p {
-  margin-top: 1mm;
-}
-.note {
-  margin-top: 4mm;
-  padding: 2.5mm 4mm;
-  border-radius: 4pt;
-  background: #f1ede0;
-  color: #4a5170;
-  break-inside: avoid;
-}
-
-.pass {
-  font-weight: 600;
-}
-.fail {
-  font-weight: 600;
-  color: #8a3b10;
-}
-
-/* The square kendara: SVG lines with the names placed over them as text. */
 .kendara {
   position: relative;
+  break-inside: avoid;
   width: 64mm;
   height: 64mm;
 }
 .kendara svg {
-  position: absolute;
-  left: 0;
-  top: 0;
+  display: block;
   width: 64mm;
   height: 64mm;
 }
@@ -241,10 +528,10 @@ html[lang="si"] .kendara .label {
   line-height: 4.4mm;
 }
 .kendara .highlight {
-  color: #8a6410;
+  color: #8a6212;
 }
 .kendara .mark {
-  color: #8a6410;
+  color: #8a6212;
   font-weight: 500;
   font-size: 7.5pt;
 }
@@ -254,64 +541,629 @@ html[lang="si"] .kendara .label {
   font-family: "Marcellus", "Noto Sans Sinhala";
   font-weight: 400;
   font-size: 10pt;
-  color: #4a5170;
+  color: #6b6558;
 }
 .chart-title {
   margin-bottom: 2mm;
 }
 
-/* Porondam. */
-.people {
-  width: calc(100% + 8mm);
-  margin: 4mm -4mm 0;
-  border-collapse: separate;
-  border-spacing: 4mm 0;
+/* ---------- Data tables ---------- */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
 }
-.people td {
-  width: 50%;
+.table th {
+  font-weight: 500;
+  color: #6b6558;
+  padding: 1mm 3mm 1.5mm 0;
+  border-bottom: 0.8pt solid #8a6212;
+  vertical-align: bottom;
+}
+.table td {
+  padding: 1.2mm 3mm 1.2mm 0;
+  border-bottom: 0.6pt solid #ece5d6;
   vertical-align: top;
-  border: 0.8pt solid #e6e1d3;
+}
+.table tr {
+  break-inside: avoid;
+}
+.table-tight td {
+  padding-top: 0.7mm;
+  padding-bottom: 0.7mm;
+}
+html[lang="si"] .table-tight {
+  font-size: 8.2pt;
+}
+html[lang="si"] .table-tight td,
+html[lang="si"] .table-tight th {
+  padding-right: 1.5mm;
+  white-space: nowrap;
+}
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+.table .row-name {
+  font-weight: 600;
+}
+.table td.now {
+  background: #f3ecdb;
+}
+.table .gap {
+  padding-left: 5mm;
+  border-left: 0.6pt solid #ece5d6;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.pass {
+  font-weight: 600;
+  color: #3d7059;
+}
+.fail {
+  font-weight: 600;
+  color: #a8492a;
+}
+.pill {
+  display: inline-block;
+  padding: 0.4mm 2.2mm;
+  border-radius: 8pt;
+  font-size: 8pt;
+  font-weight: 600;
+}
+.pill-pass {
+  background: #e1ebe4;
+  color: #2f5a47;
+}
+.pill-fail {
+  background: #f6e3da;
+  color: #8f3b20;
+}
+.pill-off {
+  background: #f1eee6;
+  color: #6b6558;
+}
+
+.box {
+  border: 0.8pt solid #8a6212;
   border-radius: 4pt;
   padding: 3mm 4mm;
+  margin-top: 4.5mm;
+  break-inside: avoid;
+}
+.box-quiet {
+  border-color: #e4dccb;
+}
+.box p + p {
+  margin-top: 1mm;
+}
+.about {
+  margin-top: 8mm;
+}
+.note {
+  margin-top: 4mm;
+  padding: 2.5mm 4mm;
+  border-radius: 4pt;
+  background: #f3ecdb;
+  color: #6b6558;
+  break-inside: avoid;
+}
+
+/* ---------- Diagrams (visuals.html) ---------- */
+
+/* A flow: cards joined by arrows. */
+.flow {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 2mm;
+  break-inside: avoid;
+}
+.flow-card {
+  vertical-align: top;
+  background: #fffdf8;
+  border: 0.7pt solid #e4dccb;
+  border-top: 2pt solid #8a6212;
+  border-radius: 4pt;
+  padding: 3mm 3mm 3.2mm;
+}
+.flow-arrow {
+  width: 7mm;
+  text-align: center;
+  vertical-align: middle;
+}
+.arrow {
+  width: 5mm;
+  height: 5mm;
+}
+.flow-step {
+  float: right;
+  font-family: "Marcellus";
+  font-size: 15pt;
+  line-height: 1;
+  color: #e3d6b4;
+}
+.flow-glyph {
+  width: 9mm;
+  height: 9mm;
+  margin-bottom: 1.5mm;
+}
+.flow-glyph svg {
+  width: 9mm;
+  height: 9mm;
+}
+.flow-value {
+  margin: 0.8mm 0 1mm;
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-size: 11.5pt;
+  line-height: 1.25;
+}
+.flow-result {
+  background: #f6e3da;
+  border-top-color: #a8492a;
+  vertical-align: middle;
+}
+.flow-clear {
+  background: #e1ebe4;
+  border-top-color: #3d7059;
+}
+.mars-point {
+  margin-top: 1mm;
+}
+.mars-point .dot {
+  display: inline-block;
+  width: 2mm;
+  height: 2mm;
+  margin-right: 1.5mm;
+  border-radius: 50%;
+  border: 0.8pt solid #b9ae94;
+}
+.mars-point.counts .dot {
+  background: #a8492a;
+  border-color: #a8492a;
+}
+
+/* The sky wheel: SVG with the planet names placed over it. */
+.wheel {
+  position: relative;
+  margin: 0 auto;
+}
+.wheel svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.wheel-tag {
+  position: absolute;
+  width: 12mm;
+  margin-left: -6mm;
+  height: 4.4mm;
+  margin-top: -2.2mm;
+  line-height: 4.4mm;
+  text-align: center;
+  font-size: 8pt;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.wheel-tag.moon {
+  color: #3d7059;
+}
+.wheel-legend {
+  margin-top: 2mm;
+  text-align: center;
+}
+
+/* The twelve houses. */
+.houses {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2.4mm;
+  margin: 2mm -2.4mm 0;
+  table-layout: fixed;
+  break-inside: avoid;
+}
+.house {
+  vertical-align: top;
+  background: #fffdf8;
+  border: 0.7pt solid #e4dccb;
+  border-radius: 4pt;
+  padding: 2.4mm 2.6mm;
+  height: 34mm;
+}
+.house-lagna {
+  border-color: #8a6212;
+  border-width: 1.2pt;
+}
+.house-on {
+  background: #f3ecdb;
+  border-color: #8a6212;
+}
+.house-glyph {
+  float: right;
+  width: 7mm;
+  height: 7mm;
+}
+.house-glyph svg {
+  width: 7mm;
+  height: 7mm;
+}
+.house-number {
+  font-size: 7pt;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a6212;
+}
+.house-sign {
+  font-family: "Marcellus", "Noto Sans Sinhala";
+  font-size: 11pt;
+}
+.house-theme {
+  margin-top: 1mm;
+  font-size: 7.5pt;
+  line-height: 1.35;
+  color: #6b6558;
+}
+.house-planets {
+  margin-top: 1.4mm;
+  font-size: 8pt;
+  font-weight: 600;
+  color: #3d7059;
+}
+
+/* The life periods bar. */
+.bar {
+  position: relative;
+  width: 100%;
+  height: 19mm;
+  margin-top: 10mm;
+}
+.bar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.bar-tag {
+  position: absolute;
+  width: 24mm;
+  margin-left: -12mm;
+  height: 4mm;
+  margin-top: -2mm;
+  line-height: 4mm;
+  text-align: center;
+  font-size: 7.5pt;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.bar-tag.on-gold {
+  color: #fffdf8;
+}
+.bar-tag.now {
+  margin-top: -6.5mm;
+  font-size: 7pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The match's factor ring. */
+.ring-row {
+  width: 100%;
+  border-collapse: collapse;
+  break-inside: avoid;
+}
+.ring-row td {
+  vertical-align: middle;
+}
+.ring {
+  position: relative;
+  width: 56mm;
+  height: 56mm;
+}
+.ring svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ring-count {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 19mm;
+  text-align: center;
+  font-family: "Marcellus";
+  font-size: 30pt;
+  line-height: 1;
+  color: #1b1914;
+}
+.ring-of {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 32mm;
+  text-align: center;
+  font-size: 10pt;
+  color: #6b6558;
 }
 .score {
-  margin-top: 6mm;
   font-family: "Marcellus", "Noto Sans Sinhala";
   font-size: 16pt;
+  margin-bottom: 3mm;
 }
-html[lang="si"] .score {
-  font-family: "Noto Sans Sinhala", "DM Sans";
+.legend {
+  margin-top: 1mm;
+}
+.key {
+  display: inline-block;
+  width: 3mm;
+  height: 3mm;
+  margin-right: 2mm;
+  border-radius: 1pt;
+  vertical-align: -0.3mm;
+}
+.key-pass {
+  background: #8a6212;
+}
+.key-fail {
+  background: #f6e3da;
+  border: 0.8pt solid #a8492a;
+}
+.key-off {
+  background: #f1eee6;
+  border: 0.8pt solid #ddd5c2;
+}
+
+/* The two people, joined. */
+.duo {
+  width: 100%;
+  border-collapse: collapse;
+  break-inside: avoid;
+}
+.duo-person {
+  width: 47%;
+  text-align: center;
+  vertical-align: top;
+  background: #fffdf8;
+  border: 0.7pt solid #e4dccb;
+  border-radius: 4pt;
+  padding: 4mm;
+}
+.duo-link {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* The serious checks as cards. */
+.checks {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2.4mm 0;
+  margin: 2mm -2.4mm 0;
+  table-layout: fixed;
+  break-inside: avoid;
+}
+.check {
+  vertical-align: top;
+  border-radius: 4pt;
+  padding: 3mm;
+  border: 0.7pt solid #e4dccb;
+  background: #fffdf8;
+}
+.check-mark {
+  width: 7mm;
+  height: 7mm;
+  border-radius: 50%;
+  margin-bottom: 2mm;
+  padding: 1.2mm;
+  box-sizing: border-box;
+}
+.check-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.check-pass .check-mark {
+  background: #3d7059;
+}
+.check-fail .check-mark {
+  background: #a8492a;
+}
+.check-mars .check-mark {
+  background: #8a6212;
+}
+.check-result {
+  margin-top: 1.5mm;
   font-weight: 600;
-  font-size: 14pt;
 }
-.page-break {
+.check-pass .check-result {
+  color: #3d7059;
+}
+.check-fail .check-result {
+  color: #a8492a;
+}
+
+/* ---------- The AI reading (reading.html) ---------- */
+
+.reading-open {
   break-before: page;
 }
-
-/* The AI reading (reading.html): its own pages, after the engine's results. */
-.reading {
-  break-before: page;
+.reading-hero {
+  height: 61mm;
+  box-sizing: border-box;
+  padding: 12mm 10mm;
+  border-radius: 6pt;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+  background-size: auto 61.6mm;
+  color: #f4f1ea;
 }
-
-.reading h3 {
-  margin-top: 5mm;
+.reading-hero-title {
+  margin-top: 4mm;
+  width: 82mm;
+  font-size: 22pt;
+  color: #f4f1ea;
 }
-
-.reading p,
-.reading li {
+.reading-hero-lead {
+  margin-top: 3mm;
+  width: 78mm;
+  color: #cfc8b8;
+}
+html[lang="si"] .reading-hero {
+  padding-top: 8mm;
+}
+html[lang="si"] .reading-hero .cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.02em;
+}
+html[lang="si"] .reading-hero-title {
+  margin-top: 2mm;
+  font-size: 17pt;
+}
+html[lang="si"] .reading-hero-lead {
+  font-size: 8.2pt;
   line-height: 1.5;
 }
+html[lang="si"] .banner h2 {
+  font-size: 15pt;
+}
+.reading-list {
+  list-style: none;
+  margin: 7mm 0 0;
+  padding: 0;
+  columns: 2;
+  column-gap: 8mm;
+}
+.reading-list li {
+  break-inside: avoid;
+  padding: 2mm 0;
+  border-bottom: 0.6pt solid #ece5d6;
+}
+.reading-list a::after {
+  content: leader(" ") target-counter(attr(href), page);
+  color: #8a6212;
+}
+.reading-num {
+  display: inline-block;
+  width: 8mm;
+  font-family: "Marcellus";
+  color: #8a6212;
+}
 
-/* A small table in a chapter (dates, factors, checks): the data table look, with a little air. */
-.reading .reading-table {
+.chapter {
+  break-before: page;
+}
+.chapter-head {
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 1.2pt solid #8a6212;
+}
+.chapter-head td {
+  vertical-align: bottom;
+  padding-bottom: 3mm;
+}
+.chapter-title {
+  margin: 1.5mm 0 0;
+  font-size: 22pt;
+  line-height: 1.15;
+}
+.chapter-picture {
+  width: 60mm;
+  text-align: right;
+}
+.chapter-picture img {
+  width: 60mm;
+  height: 40mm;
+}
+.answer {
+  margin-top: 5mm;
+  padding: 4mm 5mm;
+  background: #f3ecdb;
+  border-left: 2.4pt solid #8a6212;
+  border-radius: 0 4pt 4pt 0;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  break-inside: avoid;
+}
+.answer .eyebrow {
+  margin-bottom: 1mm;
+}
+.answer p + p {
+  margin-top: 1.5mm;
+}
+.chapter-visual {
+  margin-top: 5mm;
+}
+.part {
+  margin-top: 4.5mm;
+}
+.part-lead {
+  margin-bottom: 1mm;
+  font-size: 10.5pt;
+  break-after: avoid;
+}
+.part-mark {
+  display: inline-block;
+  width: 2.2mm;
+  height: 2.2mm;
+  margin-right: 2mm;
+  border-radius: 50%;
+  background: #8a6212;
+  vertical-align: 0.2mm;
+}
+.part-tip,
+.part-attention,
+.part-good {
+  padding: 3mm 4mm;
+  border-radius: 4pt;
+  break-inside: avoid;
+}
+.part-tip {
+  background: #eef3ef;
+}
+.part-tip .part-mark,
+.part-good .part-mark {
+  background: #3d7059;
+}
+.part-good {
+  background: #e9f1ec;
+}
+.part-attention {
+  background: #f8ebe4;
+}
+.part-attention .part-mark {
+  background: #a8492a;
+}
+.part p,
+.part li {
+  line-height: 1.55;
+}
+.part p + p {
+  margin-top: 1.5mm;
+}
+.part ul {
+  margin: 1mm 0 0;
+  padding-left: 5mm;
+}
+.part li + li {
+  margin-top: 0.8mm;
+}
+.reading-table {
   margin: 2mm 0 3mm;
 }
-
-.reading .reading-table td:first-child {
+.reading-table td:first-child {
   font-weight: 600;
 }
-
-.reading .lead-line {
+.lead-line {
   margin-top: 2.5mm;
   margin-bottom: 0.5mm;
+}
+
+/* Inside a chapter the houses grid is a reminder, not the full page: smaller, no themes. */
+.chapter-visual .house {
+  height: auto;
+  padding: 1.8mm 2.2mm;
+}
+.chapter-visual .house-theme {
+  display: none;
 }

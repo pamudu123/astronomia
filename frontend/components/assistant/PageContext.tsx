@@ -5,8 +5,11 @@ import { createContext, useContext, useEffect, useMemo } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { PageContext } from "@/lib/assistant/context";
 
-/** Where on the page a summary comes from: the page's main result, or a part inside it. */
-export type Slot = "main" | "wedding";
+/**
+ * Where on the page a summary comes from: the page's main result, or a part inside it (the
+ * wedding dates under a match, the chapters of the AI reading written so far).
+ */
+export type Slot = "main" | "wedding" | "reading";
 
 type Setter = (slot: Slot, context: PageContext | null) => void;
 

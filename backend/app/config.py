@@ -44,6 +44,8 @@ class Settings(BaseSettings):
     coupon_misses_per_hour: int = 10
     # How many paid reports one account may keep: a safety limit, not a product one.
     paid_saved_limit: int = 1000
+    # The AI chapters kept with paid reports (docs/17, section 6a), when SQLite is used.
+    chapters_db: Path = VAR_DIR / "chapters.sqlite"
     # Astro chat limits (docs/18 section 5, docs/21). Chat usage, when SQLite is used.
     chat_db: Path = VAR_DIR / "chat.sqlite"
     # Shared with the website's server (CHAT_KEY) and the AI service (ASTRONOMIA_AGENT_CHAT_KEY):

@@ -1,6 +1,7 @@
 "use client";
 
-import { Fragment, useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
+import Image from "next/image";
+import { Fragment, type ReactNode, useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 
 import { Lock } from "@/components/Icons";
 import { Spot } from "@/components/Spot";
@@ -22,6 +23,7 @@ import {
   tone,
 } from "@/lib/assistant/explain";
 import { useCanUse, useReportAccess } from "@/components/paid/ReportAccess";
+import { chapterPicture } from "@/lib/assistant/chapterArt";
 import { askAssistant } from "@/lib/assistant/panel";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -104,8 +106,9 @@ function Blocks({ items }: { items: Block[] }) {
  * A chapter laid out to read at a glance: the answer it opens with in a card beside its
  * picture, then each part under its icon and lead. Tips, cautions and good news are tinted.
  */
-function Reading({ id, text, t }: { id: ChapterId; text: string; t: Text }) {
+function Reading({ id, text, t, diagram }: { id: ChapterId; text: string; t: Text; diagram?: ReactNode }) {
   const { answer, parts: sections } = parts(blocks(text));
+  const picture = chapterPicture(id);
   return (
     <>
       {answer.length > 0 && (
@@ -114,9 +117,14 @@ function Reading({ id, text, t }: { id: ChapterId; text: string; t: Text }) {
             <p className={styles.eyebrow}>{t.inShort}</p>
             <Blocks items={answer} />
           </div>
-          <Spot name={CHAPTER_SPOT[id]} className={styles.spot} />
+          {picture ? (
+            <Image src={picture} alt="" width={240} height={160} className={`${styles.spot} ${styles.picture}`} data-picture />
+          ) : (
+            <Spot name={CHAPTER_SPOT[id]} className={styles.spot} />
+          )}
         </div>
       )}
+      {diagram && <div className={styles.diagram}>{diagram}</div>}
       {sections.map((section, index) => (
         <section key={index} className={styles.part} data-tone={tone(section.lead.icon)}>
           <p className={styles.partLead}>
@@ -153,6 +161,7 @@ function Chapter({
   t,
   heading,
   next,
+  diagram,
 }: {
   id: ChapterId;
   lang: Locale;
@@ -163,6 +172,8 @@ function Chapter({
   heading?: boolean;
   /** In a full reading: the next chapter's title, and what opens it. */
   next?: { title: string; open: () => void };
+  /** The chapter's diagram (ChapterDiagram.tsx), shown under its short answer. */
+  diagram?: ReactNode;
 }) {
   const state = useChapter(id, lang, facts);
   const title = t.chapters[id];
@@ -188,7 +199,7 @@ function Chapter({
         </p>
       ) : (
         <div className={styles.text}>
-          {state.text.trim() ? <Reading id={id} text={state.text} t={t} /> : state.status !== "done" && <Placeholder />}
+          {state.text.trim() ? <Reading id={id} text={state.text} t={t} diagram={diagram} /> : state.status !== "done" && <Placeholder />}
           {state.status !== "done" && (
             <p className={styles.writing} role="status">
               <span className={styles.dots} aria-hidden="true" />
@@ -290,6 +301,7 @@ export function FullReading({
   reading,
   extra,
   pdf = false,
+  diagram,
 }: {
   chapters: ChapterId[];
   lang: Locale;
@@ -303,14 +315,30 @@ export function FullReading({
   pdf?: boolean;
   /** Which reading's words the card uses. */
   reading: "matchReading" | "chartReading";
+  /** Each chapter's diagram, drawn from the page's result; the PDF prints the same ones. */
+  diagram?: (id: ChapterId) => ReactNode;
 }) {
   const t = useExplainText();
-  const [started, setStarted] = useState(false);
+  const [chosen, setStarted] = useState(false);
   const [open, setOpen] = useState<Set<ChapterId>>(new Set());
   const base = useId();
   const allowed = useCanUse("ai_reading");
+  const fullPdf = useCanUse("full_pdf");
   const ok = useAiAcknowledged();
+  // A reading written in full earlier (for the paid PDF, or on another visit) shows at once.
+  // One chapter opened by an explain button leaves the card closed.
+  const allWritten = useSyncExternalStore(
+    subscribe,
+    () =>
+      Boolean(facts) &&
+      chapters.every((id) => {
+        const own = extra && id in extra ? (extra[id] ?? null) : facts;
+        return own ? chapterState(chapterKey(id, lang, own)).status === "done" : false;
+      }),
+    () => false,
+  );
   if (!t || !facts) return null;
+  const started = chosen || (allowed && allWritten);
   const words = t[reading];
 
   const toggle = (id: ChapterId) =>
@@ -401,6 +429,7 @@ export function FullReading({
                         lang={lang}
                         facts={extra && id in extra ? (extra[id] ?? null) : facts}
                         t={t}
+                        diagram={diagram?.(id)}
                         next={
                           index + 1 < chapters.length
                             ? { title: t.chapters[chapters[index + 1]], open: () => openNext(index + 1) }
@@ -415,7 +444,7 @@ export function FullReading({
           </ol>
           <p className={styles.label}>
             {t.readingLabel}
-            {pdf && ` · ${t.inPdf}`}
+            {pdf && fullPdf && ` · ${t.inPdf}`}
           </p>
         </AiNoticeGate>
       )}
@@ -431,10 +460,12 @@ export function TopicChips({
   chapters,
   lang,
   facts,
+  diagram,
 }: {
   chapters: ChapterId[];
   lang: Locale;
   facts: PageContext | null;
+  diagram?: (id: ChapterId) => ReactNode;
 }) {
   const t = useExplainText();
   const [picked, setPicked] = useState<ChapterId | null>(null);
@@ -477,7 +508,7 @@ export function TopicChips({
         <div id={`${base}-panel`} className={styles.panel}>
           {allowed ? (
             <AiNoticeGate>
-              <Chapter key={picked} id={picked} lang={lang} facts={facts} t={t} heading />
+              <Chapter key={picked} id={picked} lang={lang} facts={facts} t={t} heading diagram={diagram?.(picked)} />
               <p className={styles.label}>{t.label}</p>
             </AiNoticeGate>
           ) : (

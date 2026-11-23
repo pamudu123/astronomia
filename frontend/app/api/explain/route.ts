@@ -7,7 +7,10 @@
  *
  * Chart and match chapters are part of a paid report (docs/18): the page sends the report it
  * shows, and the backend says whether this browser's account paid for it (lib/paidCheck.ts).
+ * A paid report keeps each chapter from the first time it is written (lib/keptChapters.ts), so
+ * the AI is never asked for it again and the words never change.
  */
+import { keepingStream, keptChapter } from "@/lib/keptChapters";
 import { paidCheck } from "@/lib/paidCheck";
 
 // A chapter takes a few seconds; an agent on a free host may first need to wake up.
@@ -42,6 +45,16 @@ export async function POST(request: Request): Promise<Response> {
   if (check === "invalid") return bad("Not a report.");
   if (check === "unavailable") return bad("The paid check is not answering.", 502);
 
+  const asked = { request, id, language: String(language), report };
+  const textHeaders = { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" };
+  try {
+    const kept = await keptChapter(asked);
+    if (kept != null) return new Response(kept, { headers: textHeaders });
+  } catch {
+    // Not written again while the backend can't say what the report keeps.
+    return bad("The paid check is not answering.", 502);
+  }
+
   // Staging uses the backend's key for the agent too, as the chat route does.
   const accessKey = process.env.AGENT_ACCESS_KEY || process.env.BACKEND_ACCESS_KEY;
   let upstream: Response;
@@ -57,7 +70,5 @@ export async function POST(request: Request): Promise<Response> {
     return bad("The assistant is not answering.", 502);
   }
   if (!upstream.ok || !upstream.body) return bad("The assistant could not write this.", 502);
-  return new Response(upstream.body, {
-    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" },
-  });
+  return new Response(upstream.body.pipeThrough(keepingStream(asked)), { headers: textHeaders });
 }

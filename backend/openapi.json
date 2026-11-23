@@ -1658,7 +1658,7 @@
           "reports"
         ],
         "summary": "Report Pdf",
-        "description": "A print ready A4 report, in the language of the request (`lang`).\n\nThe AI reading prints only in the full PDF of a paid report (docs/18, section 6); for any\nother report it is left out and the rest prints as before.",
+        "description": "A print ready A4 report, in the language of the request (`lang`).\n\nA paid report gets the full PDF: the cover, the diagrams, every Kuja dosha condition and the\nAI reading (docs/18, section 6). Any other report gets the short free PDF: what the free page\nshows, with no AI text.",
         "operationId": "report_pdf_v1_reports_pdf_post",
         "requestBody": {
           "content": {
@@ -1891,7 +1891,7 @@
           "saved"
         ],
         "summary": "Delete Me",
-        "description": "Deletes the signed in account: every report it keeps and its chat usage, then its\nSupabase sign in.\n\nThe page signs out of this browser afterwards. If Supabase cannot be reached, the reports\nare already gone and 502 asks the page to try again.",
+        "description": "Deletes the signed in account: every report it keeps with its AI chapters, and its\nchat usage, then its Supabase sign in.\n\nThe page signs out of this browser afterwards. If Supabase cannot be reached, the reports\nare already gone and 502 asks the page to try again.",
         "operationId": "delete_me_v1_me_delete",
         "responses": {
           "204": {
@@ -2359,6 +2359,101 @@
           },
           "429": {
             "description": "Too many wrong codes in the last hour"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/chapters": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Kept Chapters",
+        "description": "A POST, so the birth details stay out of the address.",
+        "operationId": "kept_chapters_v1_reports_chapters_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChaptersIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChaptersOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/chapters/keep": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Keep Chapter",
+        "operationId": "keep_chapter_v1_reports_chapters_keep_post",
+        "parameters": [
+          {
+            "name": "X-Chat-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Chat-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeepIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeptOut"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -3513,6 +3608,59 @@
           "moves"
         ],
         "title": "ChangeOut"
+      },
+      "ChaptersIn": {
+        "properties": {
+          "report": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Report",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "en",
+              "si"
+            ],
+            "title": "Language"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report",
+          "language"
+        ],
+        "title": "ChaptersIn"
+      },
+      "ChaptersOut": {
+        "properties": {
+          "chapters": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Chapters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chapters"
+        ],
+        "title": "ChaptersOut",
+        "description": "Chapter texts by id. Empty when the report is not paid for or has none yet."
       },
       "ChartOut": {
         "properties": {
@@ -5087,6 +5235,56 @@
         ],
         "title": "JourneyResponse"
       },
+      "KeepIn": {
+        "properties": {
+          "report": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Report",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "en",
+              "si"
+            ],
+            "title": "Language"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(chart|match)\\.[a-z]+$",
+            "title": "Id"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 8000,
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report",
+          "language",
+          "id",
+          "text"
+        ],
+        "title": "KeepIn"
+      },
       "KendaraMatchOut": {
         "properties": {
           "start": {
@@ -5406,6 +5604,19 @@
           "last"
         ],
         "title": "KendaraResponse"
+      },
+      "KeptOut": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "KeptOut"
       },
       "KeyDateOut": {
         "properties": {
@@ -7549,6 +7760,19 @@
       },
       "ReadingChapter": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^[a-z]+\\.[a-z]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "title": {
             "type": "string",
             "maxLength": 120,
@@ -7568,7 +7792,7 @@
           "text"
         ],
         "title": "ReadingChapter",
-        "description": "One AI chapter as the person read it. Long enough for the longest chapter."
+        "description": "One AI chapter as the person read it. Long enough for the longest chapter.\n\nThe id (`chart.periods`) picks the chapter's picture and diagram; a chapter without one\nprints with a general picture."
       },
       "Rename": {
         "properties": {

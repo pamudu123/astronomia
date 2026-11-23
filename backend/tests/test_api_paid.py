@@ -277,11 +277,11 @@ def test_with_paid_reports_on_free_users_keep_the_free_result(client: TestClient
 
 
 @pytest.fixture
-def printed(monkeypatch: pytest.MonkeyPatch) -> list[list[tuple[str, str]]]:
+def printed(monkeypatch: pytest.MonkeyPatch) -> list[list[tuple[str | None, str, str]]]:
     """The AI chapters each PDF was asked to print."""
-    calls: list[list[tuple[str, str]]] = []
+    calls: list[list[tuple[str | None, str, str]]] = []
 
-    def fake(*args: Any) -> bytes:
+    def fake(*args: Any, full: bool) -> bytes:
         calls.append(list(args[-1]))
         return b"%PDF-1.7"
 
@@ -294,7 +294,7 @@ READING = [{"title": "Your nature", "text": "Calm and steady."}]
 
 
 def test_the_full_pdf_needs_a_paid_report(
-    client: TestClient, pamudu: None, printed: list[list[tuple[str, str]]]
+    client: TestClient, pamudu: None, printed: list[list[tuple[str | None, str, str]]]
 ) -> None:
     pdf = {**hadahan(), "reading": READING}
     assert client.post("/v1/reports/pdf", json=pdf).status_code == 200  # paid reports off
@@ -305,5 +305,5 @@ def test_the_full_pdf_needs_a_paid_report(
     assert client.post("/v1/reports/pdf", json=pdf).status_code == 200  # paid
     match = {**porondam(), "reading": READING}
     assert client.post("/v1/reports/pdf", json=match).status_code == 200  # another report
-    chapter = [("Your nature", "Calm and steady.")]
+    chapter = [(None, "Your nature", "Calm and steady.")]  # id, title, text
     assert printed == [chapter, [], chapter, []]

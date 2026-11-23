@@ -289,6 +289,122 @@ test("the AI notice comes before the first chat message, in place of the input (
   expect(runs).toEqual([]);
 });
 
+/** What the backend says about a report this account paid for, and one it did not. */
+const PAID_REPORT = { ...OPEN, paid: true, paid_reports: true, account: "google" };
+const NOT_PAID = { ...OPEN, features: [], paid_reports: true };
+
+type Pdf = { reading?: { id: string; title: string; text: string }[] };
+
+/** Answers the PDF request, and gives every request that was made. */
+async function mockPdf(page: Page): Promise<Pdf[]> {
+  const made: Pdf[] = [];
+  await page.route("**/api/v1/reports/pdf", (route) => {
+    made.push(JSON.parse(route.request().postData() ?? "{}") as Pdf);
+    return route.fulfill({ contentType: "application/pdf", body: "%PDF-1.7" });
+  });
+  return made;
+}
+
+async function mockKept(page: Page, chapters: Record<string, string> = {}) {
+  await page.route("**/api/v1/reports/chapters", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify({ chapters }) }),
+  );
+}
+
+test("the paid PDF asks for the AI notice, writes every chapter for this report, and reuses them", async ({ page }) => {
+  const calls = await mockAll(page, new Set(), PAID_REPORT, { notice: "new" });
+  await mockKept(page);
+  const made = await mockPdf(page);
+  // Every chapter is asked for with the report, which the server's paid check needs.
+  const reports: unknown[] = [];
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/explain")) {
+      reports.push((JSON.parse(request.postData() ?? "{}") as { report?: { kind: string } }).report?.kind);
+    }
+  });
+  await quickMatch(page);
+
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  const notice = page.locator("[data-ai-notice]").first();
+  await expect(notice).toContainText(NOTICE);
+  expect(calls).toEqual([]);
+  expect(made).toEqual([]);
+
+  await notice.getByRole("button", { name: "I understand" }).click();
+  await expect.poll(() => made.length, { timeout: 30_000 }).toBe(1);
+  const ids = made[0].reading!.map((c) => c.id);
+  expect(ids.length).toBeGreaterThanOrEqual(8);
+  expect(ids).toEqual(expect.arrayContaining(["match.people", "match.checks", "match.summary"]));
+  expect([...calls].sort()).toEqual([...ids].sort());
+  expect(reports.every((kind) => kind === "porondam")).toBe(true);
+  expect(made[0].reading![0].text).toContain(`Text of ${ids[0]}.`);
+
+  // The reading opens by itself, and the next PDF asks the AI for nothing.
+  await expect(page.locator('[data-card="full-reading"] ol')).toBeVisible();
+  const asked = calls.length;
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => made.length).toBe(2);
+  expect(calls.length).toBe(asked);
+});
+
+test("a paid report opened on another device has its kept chapters, and the AI is not asked again", async ({ page }) => {
+  const calls = await mockAll(page, new Set(), PAID_REPORT);
+  await mockKept(page, { "match.people": "Kept words about the two of you.", "match.checks": "Kept checks." });
+  await quickMatch(page);
+
+  const card = page.locator('[data-card="full-reading"]');
+  await card.getByRole("button", { name: "Get the full reading" }).click();
+  await expect(card.locator('[data-chapter="match.people"]')).toContainText("Kept words about the two of you.");
+  await expect.poll(() => calls).not.toContain("match.people");
+  await card.getByRole("heading", { name: "The serious checks" }).getByRole("button").click();
+  await expect(card.locator('[data-chapter="match.checks"]')).toContainText("Kept checks.");
+  expect(calls).not.toContain("match.checks");
+});
+
+test("a paid PDF with a chapter missing is not handed over, and trying again writes only that one", async ({ page }) => {
+  let down = true;
+  const calls = await mockAll(page, new Set(), PAID_REPORT);
+  await mockKept(page);
+  const made = await mockPdf(page);
+  await page.route("**/api/explain", (route) => {
+    const { id } = JSON.parse(route.request().postData() ?? "{}") as { id: string };
+    return id === "match.lords" && down ? route.fulfill({ status: 502, body: "down" }) : route.fallback();
+  });
+  await quickMatch(page);
+
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect(page.getByText("The PDF could not be made. Please try again.")).toBeVisible({ timeout: 30_000 });
+  expect(made).toEqual([]);
+  down = false;
+  const before = calls.length;
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => made.length, { timeout: 30_000 }).toBe(1);
+  expect(calls.slice(before)).toEqual(["match.lords"]);
+});
+
+test("the free PDF asks the AI for nothing, even where this browser once held the chapters", async ({ page }) => {
+  // First as a paid report, so the chapters are on this device.
+  const calls = await mockAll(page, new Set(), PAID_REPORT);
+  await mockKept(page);
+  const made = await mockPdf(page);
+  await quickMatch(page);
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => made.length, { timeout: 30_000 }).toBe(1);
+
+  // Then signed out: the same report, not paid for by anyone here.
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify(NOT_PAID) }),
+  );
+  await page.reload(); // the result is remembered in this tab
+  await expect(page.getByRole("button", { name: "Download PDF" })).toBeVisible();
+  const asked = calls.length;
+  await expect(page.locator('[data-card="full-reading"] ol')).toHaveCount(0);
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => made.length).toBe(2);
+  expect(made[1].reading ?? []).toEqual([]);
+  expect(calls.length).toBe(asked);
+});
+
 /** Lets the chat reach its own route (the agent behind it is away) and keeps what it sends. */
 async function watchChat(page: Page): Promise<string[]> {
   await page.unroute("**/api/copilotkit**");
