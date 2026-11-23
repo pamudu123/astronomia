@@ -68,13 +68,12 @@ revoke execute on function sidera.delete_idle_guests(interval)
   from public, anon, authenticated, service_role;
 
 -- Every day at 20:30 UTC, 02:00 in Sri Lanka, when the site is quietest. Guarded so the
--- migrations also run on a plain PostgreSQL (the backend's CI), which has no pg_cron.
+-- migrations also run on a plain PostgreSQL (the backend's CI), which has no pg_cron. pg_cron
+-- itself is switched on in the Supabase dashboard (see supabase/README.md): creating it here
+-- fails on Supabase, whose own set-up for the extension runs again and refuses.
 do $$
 begin
-  if exists (select 1 from pg_available_extensions where name = 'pg_cron') then
-    create extension if not exists pg_cron with schema pg_catalog;
-    grant usage on schema cron to postgres;
-    grant all privileges on all tables in schema cron to postgres;
+  if exists (select 1 from pg_extension where extname = 'pg_cron') then
     perform cron.schedule(
       'sidera-delete-idle-guests', '30 20 * * *', 'select sidera.delete_idle_guests()'
     );
