@@ -12,9 +12,11 @@
 <section class="cover{% block cover_class %}{% endblock %}" style="background-image: url({{ cover.picture }})">
   <div class="cover-frame">
     <p class="cover-brand">{{ v.star("4.2mm") }} {{ r.brand }}</p>
+    <div class="cover-words">
     <p class="cover-eyebrow">{{ cover.eyebrow }}</p>
-    <h1 class="cover-title">{{ title }}</h1>
+    <h1 class="cover-title{% if title | length > 32 %} long{% endif %}">{{ title }}</h1>
     {% block cover %}{% endblock %}
+    </div>
     <div class="cover-foot">
       <p class="cover-tagline">{{ r.tagline }}</p>
       <p class="cover-made">{{ cover.made }}</p>

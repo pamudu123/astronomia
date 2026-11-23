@@ -140,3 +140,12 @@ def test_a_chapter_picture_is_on_the_paper_colour() -> None:
         corner = Image.open(path).convert("RGB").getpixel((3, 3))
         assert isinstance(corner, tuple)
         assert all(abs(a - b) <= 2 for a, b in zip(corner, (251, 248, 241), strict=True)), path
+
+
+def test_the_covers_fill_the_page_to_its_edges() -> None:
+    """The browser's default page margin once moved them 2 mm to the right."""
+    from app.reports.pdf import REPORTS_DIR
+
+    css = (REPORTS_DIR / "templates" / "report.css").read_text(encoding="utf-8")
+    assert "body {\n  margin: 0;\n}" in css
+    assert "width: 210mm;\n  height: 297mm;" in css

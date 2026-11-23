@@ -23,13 +23,10 @@ RASHI = {
     "07-tula": "01_first_set/07_tula_libra.png",
     "08-vrischika": "01_first_set/08_vrischika_scorpio.png",
     "09-dhanu": "01_first_set/09_dhanu_sagittarius.png",
-    "10-makara": "03_report_set/rashi-10-makara.png",
-    "11-kumbha": "03_report_set/rashi-11-kumbha.png",
-    "12-meena": "03_report_set/rashi-12-meena.png",
+    "10-makara": "04_remade_set/rashi-10-makara.png",
+    "11-kumbha": "04_remade_set/rashi-11-kumbha.png",
+    "12-meena": "04_remade_set/rashi-12-meena.png",
 }
-
-# Scraps of a neighbouring picture left at the edge: (left, top, right, bottom).
-SCRAPS = {"10-makara": (260, 40, 345, 105), "11-kumbha": (40, 45, 150, 110)}
 
 # Panels inside the composite image, as (left, top, right, bottom), inside the white divider lines.
 COMPOSITE = "02_remaining_set/07_composite_all_remaining_visuals.png"
@@ -57,9 +54,6 @@ def hero():
 def rashi():
     for name, src in RASHI.items():
         im = Image.open(SRC / src).convert("RGBA")
-        if name in SCRAPS:
-            left, top, right, bottom = SCRAPS[name]
-            im.paste((0, 0, 0, 0), (left, top, right, bottom))
         im = im.resize((512, 512), Image.LANCZOS)
         im.save(WEB / f"rashi-{name}.webp", quality=88, method=6)
 

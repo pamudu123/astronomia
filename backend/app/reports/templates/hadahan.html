@@ -2,10 +2,10 @@
 {% from "kendara.html" import kendara %}
 {% import "visuals.html" as v %}
 
+{% block cover_class %} cover-chart{% endblock %}
 {% block cover %}
 <p class="cover-born">{{ born }}</p>
 {{ v.medallion(cover.art) }}
-<div class="cover-signs-place">
 <table class="cover-signs">
   <tbody>
     <tr>
@@ -15,7 +15,6 @@
     </tr>
   </tbody>
 </table>
-</div>
 {% endblock %}
 
 {% block content %}

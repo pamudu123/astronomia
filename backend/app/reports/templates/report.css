@@ -74,6 +74,10 @@ html {
 html[lang="si"] {
   line-height: 1.6;
 }
+/* Without it the covers sit 2 mm to the right. */
+body {
+  margin: 0;
+}
 
 h1,
 h2,
@@ -212,12 +216,6 @@ html[lang="si"] .cover-eyebrow {
   margin-top: 3mm;
   font-size: 9.5pt;
   color: #cfc8b8;
-}
-.cover-signs-place {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 194mm;
 }
 .cover-signs {
   margin: 0 auto;
@@ -389,15 +387,44 @@ h1 + .banner {
   height: 100%;
   display: block;
 }
-/* In the middle of the zodiac wheel painted on the cover (its centre is 147 mm down). */
+/* The chart cover: the sign inside the painted wheel (its centre is 102 mm down), the words
+   below it, clear of the ornament at the foot of the page. Positions are from the frame. */
+.cover-chart .cover-frame {
+  border: none;
+  outline: none;
+  padding-top: 8mm;
+}
+.cover-chart .cover-words {
+  position: absolute;
+  left: 22mm;
+  right: 22mm;
+  top: 142mm;
+  text-align: center;
+}
+.cover-chart .cover-eyebrow {
+  margin-top: 0;
+}
+.cover-chart .cover-title {
+  margin-top: 3mm;
+  font-size: 27pt;
+}
+/* A long name: smaller, so the signs under it stay clear of the foot. */
+.cover-chart .cover-title.long {
+  font-size: 17pt;
+}
+.cover-chart .cover-signs {
+  margin-top: 7mm;
+}
+.cover-chart .cover-foot {
+  bottom: 51mm;
+}
 .medallion-big {
   position: absolute;
   left: 50%;
-  top: 89mm;
-  width: 92mm;
-  height: 92mm;
-  margin-left: -46mm;
-  box-shadow: 0 0 0 2.2mm rgba(232, 184, 75, 0.12);
+  top: -93mm;
+  width: 86mm;
+  height: 86mm;
+  margin-left: -43mm;
 }
 .medallion-mid {
   width: 54mm;
