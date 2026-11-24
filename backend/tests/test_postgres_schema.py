@@ -231,6 +231,7 @@ def test_the_migrations_make_the_tables_the_stores_use() -> None:
         "coupon_misses",
         "coupons",
         "orders",
+        "payments",
         "report_chapters",
         "saved_reports",
         "shares",
