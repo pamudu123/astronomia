@@ -230,7 +230,42 @@
   color: var(--gold-hover);
 }
 
+/* Shown until the viewer first travels. Clicks and drags go through it to the road. */
+.dragHint,
+.dragHintGone {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 93%, transparent);
+  color: var(--ink);
+  font-size: 14px;
+  pointer-events: none;
+  transition:
+    opacity 0.4s,
+    visibility 0.4s;
+}
+
+.dragHint svg {
+  color: var(--gold-hover);
+}
+
+.dragHintGone {
+  opacity: 0;
+  visibility: hidden;
+}
+
 /* Under the road */
+.travel {
+  font-size: 15px;
+  color: var(--ink);
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -269,8 +304,14 @@
 
 .arrows {
   display: flex;
+  align-items: center;
   gap: 8px;
   margin-left: auto;
+}
+
+.step {
+  font-size: 13px;
+  color: var(--ink-soft);
 }
 
 .arrow {
@@ -385,6 +426,21 @@
   box-shadow: 0 0 10px var(--gold);
 }
 
+/* A handle, so the line reads as something to drag. */
+.marker::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--panel);
+  border-radius: 50%;
+  background: var(--gold-hover);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+  transform: translate(-50%, -50%);
+}
+
 .scale {
   position: relative;
   height: 16px;
@@ -479,6 +535,18 @@
     height: 300px;
     border: 1px solid var(--line);
     border-radius: 16px;
+  }
+
+  /* Over the foot of the 300px canvas. */
+  .dragHint,
+  .dragHintGone {
+    top: 250px;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: max-content;
+    max-width: calc(100% - 24px);
+    transform: translateX(-50%);
   }
 
   .card {

@@ -11,7 +11,6 @@ import {
   type ChapterId,
   OPEN_FIRST,
   type Span,
-  TOPIC_ICON,
   blocks,
   chapterKey,
   chapterState,
@@ -32,6 +31,7 @@ import type { Locale } from "@/lib/i18n";
 import { AiNoticeGate, useAiAcknowledged } from "./AiNotice";
 import styles from "./Explain.module.css";
 import { useExplainText } from "./PageContext";
+import { TopicIcon } from "./TopicIcon";
 
 type Text = NonNullable<ReturnType<typeof useExplainText>>;
 
@@ -502,11 +502,7 @@ export function TopicChips({
             onClick={() => setPicked(picked === id ? null : id)}
             data-topic={id}
           >
-            {TOPIC_ICON[id] && (
-              <span aria-hidden="true" className={styles.chipIcon}>
-                {TOPIC_ICON[id]}
-              </span>
-            )}
+            <TopicIcon id={id} className={styles.chipIcon} />
             {t.chapters[id]}
           </button>
         ))}

@@ -7,6 +7,7 @@ import { SectionState } from "@/components/SectionState";
 import { useAssistantOn } from "@/components/assistant/PageContext";
 import road from "@/components/hadahan/LifeRoad.module.css";
 import { RoadArrows } from "@/components/hadahan/RoadArrows";
+import { RoadDragHint } from "@/components/hadahan/RoadDragHint";
 import { askAssistant } from "@/lib/assistant/panel";
 import { type CoupleText, drawCoupleRoad } from "@/lib/coupleDraw";
 import {
@@ -149,7 +150,7 @@ function CoupleView({
     [couple, span],
   );
   // Where the viewer is and where they are heading, in years from the elder's birth.
-  const { stage, canvas, title, target, go, dragging, onKey, stageHandlers } = useRoadTravel({
+  const { stage, canvas, title, target, go, dragging, moved, onKey, stageHandlers } = useRoadTravel({
     start: couple.open,
     min: couple.start,
     max: couple.last,
@@ -249,6 +250,7 @@ function CoupleView({
         {...stageHandlers}
       >
         <canvas ref={canvas} className={road.canvas} aria-hidden="true" />
+        <RoadDragHint text={words.dragHint} moved={moved} />
         <div className={styles.nowRow} data-card="now">
           {people.map((person) => (
             <p key={person.role} className={`${styles.now} ${road[person.tone]}`} data-now={person.role}>
@@ -297,6 +299,8 @@ function CoupleView({
         </article>
       </div>
 
+      <p className={road.travel}>{words.travel}</p>
+
       <div className={road.controls}>
         <button
           type="button"
@@ -306,18 +310,23 @@ function CoupleView({
           ‹ {words.prev}
         </button>
         {coupleHasToday(couple) && (
-          <button type="button" className={road.buttonMain} onClick={() => go(couple.today)}>
+          <button type="button" className={road.button} onClick={() => go(couple.today)}>
             {words.today}
           </button>
         )}
         <button
           type="button"
-          className={road.button}
+          className={road.buttonMain}
           onClick={() => go(stopBeside(couple, target.current, 1)?.y ?? couple.last)}
         >
           {words.next} ›
         </button>
-        <RoadArrows later={words.later} earlier={words.earlier} onMove={(years) => go(target.current + years)} />
+        <RoadArrows
+          later={words.later}
+          earlier={words.earlier}
+          step={words.step}
+          onMove={(years) => go(target.current + years)}
+        />
       </div>
 
       <div className={styles.mapRow}>

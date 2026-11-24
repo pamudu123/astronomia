@@ -31,6 +31,7 @@ import { useSection } from "@/lib/useSection";
 
 import styles from "./LifeRoad.module.css";
 import { RoadArrows } from "./RoadArrows";
+import { RoadDragHint } from "./RoadDragHint";
 
 type Props = {
   lang: Locale;
@@ -109,7 +110,7 @@ function RoadView({
     [road],
   );
   // Where the viewer is and where they are heading, in years of age.
-  const { stage, canvas, title, target, go, dragging, onKey, stageHandlers } = useRoadTravel({
+  const { stage, canvas, title, target, go, dragging, moved, onKey, stageHandlers } = useRoadTravel({
     start: road.today,
     min: 0,
     max: road.last,
@@ -175,6 +176,7 @@ function RoadView({
         {...stageHandlers}
       >
         <canvas ref={canvas} className={styles.canvas} aria-hidden="true" />
+        <RoadDragHint text={text.dragHint} moved={moved} />
         <p className={`${styles.roadNow} ${styles[quality.tone]}`} data-card="now">
           <i />
           <small>{text.roadNow}</small>
@@ -242,23 +244,30 @@ function RoadView({
         </article>
       </div>
 
+      <p className={styles.travel}>{text.travel}</p>
+
       <div className={styles.controls}>
         <button type="button" className={styles.button} onClick={() => go(stopBeside(road, target.current, -1)?.y ?? 0)}>
           ‹ {text.prev}
         </button>
         {hasToday(road) && (
-          <button type="button" className={styles.buttonMain} onClick={() => go(road.today)}>
+          <button type="button" className={styles.button} onClick={() => go(road.today)}>
             {text.today}
           </button>
         )}
         <button
           type="button"
-          className={styles.button}
+          className={styles.buttonMain}
           onClick={() => go(stopBeside(road, target.current, 1)?.y ?? road.last)}
         >
           {text.next} ›
         </button>
-        <RoadArrows later={text.later} earlier={text.earlier} onMove={(years) => go(target.current + years)} />
+        <RoadArrows
+          later={text.later}
+          earlier={text.earlier}
+          step={text.step}
+          onMove={(years) => go(target.current + years)}
+        />
       </div>
 
       <div>

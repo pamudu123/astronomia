@@ -86,16 +86,6 @@ export const CHAPTER_SPOT: Record<ChapterId, SpotName> = {
   "kendara.dates": "search",
 };
 
-/** The icon on each life topic chip: the same as the reading's icon for that part of life. */
-export const TOPIC_ICON: Partial<Record<ChapterId, string>> = {
-  "chart.nature": "🙂",
-  "chart.work": "💼",
-  "chart.love": "💞",
-  "chart.family": "🏠",
-  "chart.studies": "📚",
-  "chart.abroad": "✈️",
-};
-
 /** The full match reading, in reading order. */
 export const MATCH_READING: ChapterId[] = [
   "match.people",

@@ -32,6 +32,7 @@ export function useRoadTravel({ start, min, max, draw, onMove }: Options) {
   const frame = useRef(0);
   const drag = useRef<{ x: number; y: number } | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [moved, setMoved] = useState(false);
 
   const paint = useCallback(() => {
     const element = canvas.current;
@@ -59,6 +60,7 @@ export function useRoadTravel({ start, min, max, draw, onMove }: Options) {
 
   const go = useCallback(
     (to: number) => {
+      setMoved(true);
       target.current = clamp(to, min, max);
       const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const tick = () => {
@@ -126,6 +128,8 @@ export function useRoadTravel({ start, min, max, draw, onMove }: Options) {
     target,
     go,
     dragging,
+    /** Whether the viewer has travelled yet, by any means. */
+    moved,
     onKey,
     /** Spread onto the stage element. */
     stageHandlers: { onKeyDown: onKey, onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp },
