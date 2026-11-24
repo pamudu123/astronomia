@@ -600,6 +600,7 @@ const PAID_ACCESS = {
   paid_reports: true,
   account: "google",
   price: { amount: 80_000, currency: "LKR" },
+  checkout: null,
 };
 
 test("a failed paid check shows the free report, and asks again when told to", async ({ page }) => {
@@ -635,7 +636,7 @@ test("the full report of a chart with Kuja dosha promises its rules", async ({ p
     "Explain buttons on every main place",
     "Every Kuja dosha rule, in full",
     "The full PDF with the AI reading",
-    "Kept in your account, on any device",
+    "Kept in My reports, and on any device if you sign in",
   ]);
 });
 
@@ -660,6 +661,6 @@ test("the full report of a match made from full details promises no Kuja dosha r
     "The full AI reading, chapter by chapter",
     "Explain buttons on every main place",
     "The full PDF with the AI reading",
-    "Kept in your account, on any device",
+    "Kept in My reports, and on any device if you sign in",
   ]);
 });

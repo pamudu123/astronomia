@@ -593,14 +593,6 @@
   margin-top: 14px;
 }
 
-.locked {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--ink-soft);
-  font-size: 14px;
-}
-
 @media (max-width: 640px) {
   .topics {
     padding: 22px 18px;

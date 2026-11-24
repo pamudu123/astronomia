@@ -1909,7 +1909,7 @@
           "saved"
         ],
         "summary": "Merge Guest",
-        "description": "Moves a guest's reports into the Google account that just signed in, then removes the guest.\n\nFor a guest who presses \"Continue with Google\" with a Google account that already exists\n(from another phone): Supabase cannot link it, so the page signs in with Google and calls\nthis with both tokens. Both are checked, so only the browser that holds the guest's sign in\ncan move its reports.",
+        "description": "Moves a guest's reports, with what the guest paid for, into the Google account that just\nsigned in, then removes the guest.\n\nFor a guest who presses \"Continue with Google\" with a Google account that already exists\n(from another phone): Supabase cannot link it, so the page signs in with Google and calls\nthis with both tokens. Both are checked, so only the browser that holds the guest's sign in\ncan move its reports.",
         "operationId": "merge_guest_v1_me_merge_guest_post",
         "requestBody": {
           "content": {
@@ -2283,7 +2283,7 @@
           "paid"
         ],
         "summary": "Apply Coupon",
-        "description": "The price of one report after a coupon. Uses nothing up: Unlock does that.",
+        "description": "The price of one report after a coupon. Uses nothing up: Unlock or a payment does that.",
         "operationId": "apply_coupon_v1_coupons_apply_post",
         "requestBody": {
           "content": {
@@ -2325,7 +2325,7 @@
           "paid"
         ],
         "summary": "Unlock",
-        "description": "Unlocks one report with a free coupon and keeps it in My reports as paid.\n\nA report already paid for gives back its order and uses nothing.",
+        "description": "Unlocks one report with a coupon that leaves nothing to pay, and keeps it in My reports\nas paid.\n\nA report already paid for gives back its order and uses nothing.",
         "operationId": "unlock_v1_reports_unlock_post",
         "requestBody": {
           "content": {
@@ -2349,16 +2349,174 @@
             }
           },
           "401": {
-            "description": "Not signed in with Google"
+            "description": "No account: the page makes a guest first"
           },
           "402": {
-            "description": "The coupon leaves something to pay (payment_not_available)"
+            "description": "The coupon leaves something to pay: nothing is unlocked"
           },
           "409": {
             "description": "The coupon was refused: the reason, as in CouponQuote"
           },
           "429": {
             "description": "Too many wrong codes in the last hour"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/checkout": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Start",
+        "description": "Starts a payment for one report. Nothing is unlocked by this.",
+        "operationId": "start_v1_checkout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Checkout"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No account: the page makes a guest first"
+          },
+          "402": {
+            "description": "There is no way to pay yet (payment_not_available)"
+          },
+          "409": {
+            "description": "already_paid, nothing_to_pay, free_now, or why a coupon is refused"
+          },
+          "429": {
+            "description": "Too many wrong codes, or too many payments, in the last hour"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payments/{payment_id}": {
+      "get": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Payment Status",
+        "description": "Where one of this account's payments stands.",
+        "operationId": "payment_status_v1_payments__payment_id__get",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Payment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payments/{payment_id}/mock": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Finish Mock Payment",
+        "description": "The stand-in provider: ends a test payment as the buyer chose, and tells this server so\nwith a signed notice, as a real provider would. No money is taken.",
+        "operationId": "finish_mock_payment_v1_payments__payment_id__mock_post",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Payment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockResult"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such payment, or the mock provider is off"
+          },
+          "409": {
+            "description": "The payment is over"
           },
           "422": {
             "description": "Validation Error",
@@ -2766,6 +2924,18 @@
           },
           "price": {
             "$ref": "#/components/schemas/PriceOut"
+          },
+          "checkout": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "mock"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checkout"
           }
         },
         "type": "object",
@@ -2774,7 +2944,8 @@
           "features",
           "paid_reports",
           "account",
-          "price"
+          "price",
+          "checkout"
         ],
         "title": "AccessOut",
         "description": "What the person may use on one report, and what it costs to unlock."
@@ -3973,6 +4144,45 @@
         ],
         "title": "CheckOut"
       },
+      "Checkout": {
+        "properties": {
+          "report": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Report",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report"
+        ],
+        "title": "Checkout"
+      },
       "ChildOut": {
         "properties": {
           "star": {
@@ -4158,6 +4368,7 @@
                 "type": "string",
                 "enum": [
                   "free",
+                  "discount",
                   "payment_not_available"
                 ]
               },
@@ -4188,6 +4399,16 @@
           "price": {
             "$ref": "#/components/schemas/PriceOut"
           },
+          "discount": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "new_price": {
             "anyOf": [
               {
@@ -4205,7 +4426,7 @@
           "price"
         ],
         "title": "CouponQuote",
-        "description": "The price after a coupon, or why the coupon does not work.\n\n- free: 100% off, the report can be unlocked now\n- payment_not_available: a discount, but there is no way to pay the rest yet\n- unknown: no such code (counts as a wrong guess)\n- ended: switched off or past its end date\n- wrong_report: not for this kind of report\n- used_up: no uses left in total\n- account_limit: this account has used it as many times as it may"
+        "description": "The price after a coupon, or why the coupon does not work.\n\n- free: nothing left to pay, the report can be unlocked now\n- discount: something is left to pay\n- payment_not_available: something is left to pay, and there is no way to pay it yet\n- unknown: no such code (counts as a wrong guess)\n- ended: switched off or past its end date\n- wrong_report: not for this kind of report\n- used_up: no uses left in total\n- account_limit: this account has used it as many times as it may"
       },
       "DashaMainOut": {
         "properties": {
@@ -6182,6 +6403,24 @@
         ],
         "title": "MethodOut"
       },
+      "MockResult": {
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "paid",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Outcome"
+          }
+        },
+        "type": "object",
+        "required": [
+          "outcome"
+        ],
+        "title": "MockResult"
+      },
       "MonthDayOut": {
         "properties": {
           "date": {
@@ -6997,6 +7236,59 @@
           "karana"
         ],
         "title": "PanchangaResponse"
+      },
+      "PaymentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "paid",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Status"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "percent_off": {
+            "type": "integer",
+            "title": "Percent Off"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "provider": {
+            "type": "string",
+            "const": "mock",
+            "title": "Provider"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "price",
+          "percent_off",
+          "amount",
+          "provider"
+        ],
+        "title": "PaymentOut"
       },
       "PeriodOut": {
         "properties": {

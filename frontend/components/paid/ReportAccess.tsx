@@ -14,6 +14,10 @@ type Value = {
   access: AccessState;
   /** The report on the page, for the AI route's paid check. Null where there is none. */
   report: ReportRequest | null;
+  /** Which kind of report the page shows, also where it is shared. */
+  kind: ReportRequest["kind"] | null;
+  /** The chart on the page has Kuja dosha, whose rules the full report opens. */
+  kuja: boolean;
   /** Takes the answer from an unlock, so the page opens up at once. */
   set: (access: Access) => void;
   /** Asks the backend again, after a check that failed. */
@@ -23,7 +27,13 @@ type Value = {
 };
 
 const NOTHING = { set: () => {}, retry: () => {}, retrying: false };
-const ReportAccessContext = createContext<Value>({ ...NOTHING, access: NO_REPORT, report: null });
+const ReportAccessContext = createContext<Value>({
+  ...NOTHING,
+  access: NO_REPORT,
+  report: null,
+  kind: null,
+  kuja: false,
+});
 
 /** The words of "Get the full report", given once by the layout for every page. */
 export const PaidText = createContext<Dictionary["paid"] | null>(null);
@@ -36,7 +46,15 @@ export function PaidTextProvider({ value, children }: { value: Dictionary["paid"
  * Asks the backend what this account may use on the report on the page (docs/18, section 6),
  * once per report. Everything inside reads the answer with useReportAccess or useCanUse.
  */
-export function ReportAccessProvider({ report, children }: { report: ReportRequest; children: ReactNode }) {
+export function ReportAccessProvider({
+  report,
+  kuja = false,
+  children,
+}: {
+  report: ReportRequest;
+  kuja?: boolean;
+  children: ReactNode;
+}) {
   const key = JSON.stringify(report);
   const [found, setFound] = useState<{ key: string; access: Access } | null>(null);
   const [failed, setFailed] = useState<string | null>(null);
@@ -66,13 +84,13 @@ export function ReportAccessProvider({ report, children }: { report: ReportReque
   const set = useCallback((access: Access) => setFound({ key, access }), [key]);
   const value = useMemo<Value>(() => {
     const parsed = JSON.parse(key) as ReportRequest;
-    const rest = { report: parsed, set, retry, retrying };
+    const rest = { report: parsed, kind: parsed.kind, kuja, set, retry, retrying };
     if (found?.key === key) return { ...rest, access: { state: "ready", access: found.access } };
     // No answer from the backend: the free result shows, with a way to ask again (FullReport).
     // The server would refuse anything paid until it can check.
     if (failed === key) return { ...rest, access: { state: "failed" } };
     return { ...rest, access: { state: "loading" } };
-  }, [found, failed, key, set, retry, retrying]);
+  }, [found, failed, key, kuja, set, retry, retrying]);
 
   return <ReportAccessContext value={value}>{children}</ReportAccessContext>;
 }
@@ -83,6 +101,7 @@ const FREE: Access = {
   paid_reports: false,
   account: null,
   price: { amount: 0, currency: "LKR" },
+  checkout: null,
 };
 
 /**
@@ -94,13 +113,22 @@ const FREE: Access = {
 export function ReportScope({
   report,
   kind,
+  kuja = false,
   children,
 }: {
   report: ReportRequest | null;
   kind: ReportRequest["kind"];
+  /** The chart has Kuja dosha, whose rules the full report opens. */
+  kuja?: boolean;
   children: ReactNode;
 }) {
-  if (report) return <ReportAccessProvider report={report}>{children}</ReportAccessProvider>;
+  if (report) {
+    return (
+      <ReportAccessProvider report={report} kuja={kuja}>
+        {children}
+      </ReportAccessProvider>
+    );
+  }
   return <SharedAccess kind={kind}>{children}</SharedAccess>;
 }
 
@@ -125,12 +153,12 @@ function SharedAccess({ kind, children }: { kind: ReportRequest["kind"]; childre
     return () => controller.abort();
   }, [kind, asked]);
   const value = useMemo<Value>(() => {
-    const rest = { ...NOTHING, report: null, retry, retrying };
+    const rest = { ...NOTHING, report: null, kind, kuja: false, retry, retrying };
     if (on === null) return { ...rest, access: { state: "loading" } };
     if (on === "failed") return { ...rest, access: { state: "failed" } };
     if (!on) return { ...rest, access: NO_REPORT };
     return { ...rest, access: { state: "ready", access: FREE } };
-  }, [on, retry, retrying]);
+  }, [on, kind, retry, retrying]);
   return (
     <ReportAccessContext value={value}>
       {children}
@@ -145,13 +173,13 @@ function SharedAccess({ kind, children }: { kind: ReportRequest["kind"]; childre
 }
 
 /** In place of the paid check's answer when there was none: says so, and asks again. */
-export function CheckFailed() {
+export function CheckFailed({ text }: { text?: string }) {
   const t = useContext(PaidText);
   const { retry, retrying } = useReportAccess();
   if (!t) return null;
   return (
     <div className={styles.checkFailed} data-check-failed>
-      <p role="status">{t.checkFailed}</p>
+      <p role="status">{text ?? t.checkFailed}</p>
       {/* Kept enabled while asking, so the keyboard does not lose its place. */}
       <button
         type="button"

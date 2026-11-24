@@ -94,7 +94,11 @@ const GUIDE_FOCUS: ((moonHouse: number) => { houses: number[]; planet?: string }
 export function HadahanResult(props: Props) {
   const { lang, request, name } = props;
   return (
-    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
+    <ReportScope
+      report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null}
+      kind="hadahan"
+      kuja={props.result.kuja?.present ?? false}
+    >
       <HadahanResultPage {...props} />
     </ReportScope>
   );
@@ -480,7 +484,7 @@ function HadahanResultPage({
             {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
             <KujaDials kuja={kuja} labels={labels} t={t} />
             {kuja.present && (
-              <PaidOnly feature="full_detail" locked={<DetailLocked />}>
+              <PaidOnly feature="full_detail" locked={<DetailLocked lang={lang} />}>
                 <h3 className={styles.subTitle}>{t.kujaChecks}</h3>
                 <ul className={styles.checks}>
                   {kuja.cancellations.map((check) => (
@@ -517,7 +521,7 @@ function HadahanResultPage({
       </section>
 
       {/* Getting the full report, then the reading it unlocks. */}
-      {request && <FullReport lang={lang} kujaPresent={kuja.present} />}
+      {request && <FullReport lang={lang} />}
 
       {/* The long chapter reading comes last, so the chart itself is what shows first. */}
       <FullReading

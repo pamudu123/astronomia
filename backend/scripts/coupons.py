@@ -12,8 +12,8 @@ ASTRONOMIA_DATABASE_URL (Supabase) when set, otherwise the local SQLite file the
     uv run python scripts/coupons.py void <order id>
 
 A code is kept in lower case with its spaces taken out. --ends is the last day the code works,
-in Sri Lanka time: it stops at midnight at the end of that day. Only 100% coupons can unlock
-a report until a payment provider is connected; others can be made now and work later.
+in Sri Lanka time: it stops at midnight at the end of that day. A 100% coupon unlocks a report
+by itself; with any other, the rest is paid for first (docs/23).
 """
 
 import argparse

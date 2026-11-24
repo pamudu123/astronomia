@@ -2,8 +2,9 @@
 
 Every unlocked report is an order: the account, the report (its kind and the hash of its
 request, never the birth details), the list price and currency, the coupon and the amount paid.
-Until a payment provider is connected only free (100% off) coupons can make an order; the same
-records will carry real payments later.
+An order is made in only two ways: a coupon that leaves nothing to pay (`redeem`), or a payment
+its provider says was paid (`settle`). A payment is started with the amount worked out here, and
+unlocks nothing until then.
 
 One class for both databases, as in accounts.py: SQLite for local runs and tests, PostgreSQL
 (Supabase) when ASTRONOMIA_DATABASE_URL is set. On PostgreSQL the tables are in the private
@@ -11,12 +12,13 @@ One class for both databases, as in accounts.py: SQLite for local runs and tests
 """
 
 import datetime as dt
+import logging
 import sqlite3
 import threading
 import uuid
 from collections.abc import Callable, Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Literal, cast
 
@@ -24,9 +26,12 @@ from app.store import postgres
 from app.tiers.prices import REPORT_KINDS, Currency, Price, ReportKind, discounted
 
 Clock = Callable[[], dt.datetime]
+log = logging.getLogger(__name__)
 
-TABLES = ("coupons", "orders", "coupon_misses")
+TABLES = ("coupons", "orders", "coupon_misses", "payments")
 MAX_CODE = 64
+# How long a started payment holds its coupon use, so a code cannot be paid past its limits.
+PAYMENT_HOLDS = dt.timedelta(hours=1)
 # Why a coupon was not accepted. Only "unknown" counts as a wrong guess.
 Refusal = Literal["unknown", "ended", "wrong_report", "used_up", "account_limit"]
 
@@ -66,6 +71,26 @@ class Order:
     amount_paid: int
     method: Literal["coupon", "payment"]
     created_at: dt.datetime
+    provider: str | None = None  # who took the payment; None for a coupon
+
+
+PaymentStatus = Literal["pending", "paid", "failed", "cancelled"]
+Outcome = Literal["paid", "failed", "cancelled"]
+
+
+@dataclass(frozen=True)
+class Payment:
+    """One try at paying for a report. It unlocks nothing until it is paid."""
+
+    id: str
+    report_kind: ReportKind
+    report_hash: str
+    price: Price  # before the coupon
+    percent_off: int
+    amount: int  # what is to be paid
+    provider: str
+    status: PaymentStatus
+    created_at: dt.datetime
 
 
 class CouponRefused(Exception):
@@ -74,8 +99,20 @@ class CouponRefused(Exception):
         self.reason: Refusal = reason
 
 
+class AlreadyPaid(Exception):
+    """This account has paid for the report: there is nothing to start a payment for."""
+
+
+class NothingToPay(Exception):
+    """The coupon makes the report free: it is unlocked with `redeem`, not paid for."""
+
+
+class WrongPayment(Exception):
+    """A provider's notice that does not match the payment we started. Nothing changes."""
+
+
 class PaymentNeeded(Exception):
-    """The coupon takes only part of the price off, and there is no way to pay the rest yet."""
+    """The coupon takes only part of the price off: the rest has to be paid."""
 
     def __init__(self, coupon: Coupon) -> None:
         super().__init__(coupon.code)
@@ -122,7 +159,9 @@ _SQLITE_SCHEMA = [
         amount_paid INTEGER NOT NULL,
         method TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'paid',
-        created_at TEXT NOT NULL
+        created_at TEXT NOT NULL,
+        provider TEXT,
+        provider_ref TEXT
     )""",
     "CREATE UNIQUE INDEX IF NOT EXISTS orders_one_per_report "
     "ON orders (user_id, report_kind, report_hash) WHERE status = 'paid'",
@@ -132,6 +171,23 @@ _SQLITE_SCHEMA = [
         at TEXT NOT NULL
     )""",
     "CREATE INDEX IF NOT EXISTS coupon_misses_user ON coupon_misses (user_id, at)",
+    """CREATE TABLE IF NOT EXISTS payments (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        report_kind TEXT NOT NULL,
+        report_hash TEXT NOT NULL,
+        price INTEGER NOT NULL,
+        currency TEXT NOT NULL,
+        coupon_id TEXT,
+        percent_off INTEGER NOT NULL DEFAULT 0,
+        amount INTEGER NOT NULL,
+        provider TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+    )""",
+    "CREATE INDEX IF NOT EXISTS payments_user ON payments (user_id, report_kind, report_hash)",
+    "CREATE INDEX IF NOT EXISTS payments_coupon ON payments (coupon_id)",
 ]
 
 _COUPON_COLUMNS = (
@@ -140,7 +196,11 @@ _COUPON_COLUMNS = (
 )
 _ORDER_COLUMNS = (
     "o.id, o.report_kind, o.report_hash, o.price, o.currency, c.code, o.percent_off, "
-    "o.amount_paid, o.method, o.created_at"
+    "o.amount_paid, o.method, o.created_at, o.provider"
+)
+_PAYMENT_COLUMNS = (
+    "id, report_kind, report_hash, price, currency, percent_off, amount, provider, status, "
+    "created_at"
 )
 
 
@@ -276,9 +336,17 @@ class OrderStore:
     # Using a coupon
 
     def _checked(
-        self, db: Any, user_id: str, code: str, kind: ReportKind, now: dt.datetime, lock: bool
+        self,
+        db: Any,
+        user_id: str | None,
+        code: str,
+        kind: ReportKind,
+        now: dt.datetime,
+        lock: bool,
+        report_hash: str = "",
     ) -> Coupon:
-        """The coupon behind `code` if this account may use it on this kind of report."""
+        """The coupon behind `code` if this account may use it on this kind of report. With no
+        account yet (`user_id` None), only the limits that do not depend on one are checked."""
         normal = normalise_code(code)
         if not normal or len(normal) > MAX_CODE:
             raise CouponRefused("unknown")
@@ -295,18 +363,35 @@ class OrderStore:
             raise CouponRefused("ended")
         if kind not in coupon.kinds:
             raise CouponRefused("wrong_report")
-        if coupon.max_uses is not None and coupon.uses >= coupon.max_uses:
+        # A payment on its way holds one use. This account's own payment for this same report
+        # does not: starting again replaces it. With no report named (the price after Apply),
+        # none of its own do.
+        held = self._run(
+            db,
+            "SELECT user_id, report_kind, report_hash FROM {payments} "
+            "WHERE coupon_id = ? AND status = 'pending' AND created_at > ?",
+            (coupon.id, self._ts(now - PAYMENT_HOLDS)),
+        ).fetchall()
+        others = [
+            str(who)
+            for who, held_kind, held_hash in held
+            if str(who) != user_id
+            or (report_hash and (held_kind, held_hash) != (kind, report_hash))
+        ]
+        if coupon.max_uses is not None and coupon.uses + len(others) >= coupon.max_uses:
             raise CouponRefused("used_up")
+        if user_id is None:
+            return coupon
         (mine,) = self._run(
             db,
             "SELECT COUNT(*) FROM {orders} WHERE coupon_id = ? AND user_id = ? AND status = 'paid'",
             (coupon.id, user_id),
         ).fetchone()
-        if mine >= coupon.max_uses_per_account:
+        if int(mine) + others.count(user_id) >= coupon.max_uses_per_account:
             raise CouponRefused("account_limit")
         return coupon
 
-    def check_coupon(self, user_id: str, code: str, kind: ReportKind) -> Coupon:
+    def check_coupon(self, user_id: str | None, code: str, kind: ReportKind) -> Coupon:
         """The coupon, if this account may use it on this kind of report. Raises
         CouponRefused. Uses nothing up: the price shown after Apply."""
         with self._connect() as db:
@@ -327,8 +412,9 @@ class OrderStore:
             if existing is not None:
                 return existing, False
             # Held until the order is in, so two unlocks at once cannot pass the limits.
-            coupon = self._checked(db, user_id, code, kind, now, lock=True)
-            if coupon.percent_off < 100:
+            coupon = self._checked(db, user_id, code, kind, now, True, report_hash)
+            # The amount, not the percentage, decides: anything left to pay unlocks nothing.
+            if discounted(price, coupon.percent_off).amount > 0:
                 raise PaymentNeeded(coupon)
             order = Order(
                 id=str(uuid.uuid4()),
@@ -361,6 +447,195 @@ class OrderStore:
                 ),
             )
         return order, True
+
+    # Payments
+
+    def start_payment(
+        self,
+        user_id: str,
+        code: str | None,
+        kind: ReportKind,
+        report_hash: str,
+        price: Price,
+        provider: str,
+    ) -> Payment:
+        """Starts paying for one report: the amount is worked out here, from the price list and
+        the coupon. Unlocks nothing. A payment this account left open for the same report is
+        cancelled. Raises AlreadyPaid, CouponRefused, or NothingToPay when the coupon makes the
+        report free.
+        """
+        now = self.clock()
+        with self._connect() as db:
+            if self._paid(db, user_id, kind, report_hash) is not None:
+                raise AlreadyPaid
+            coupon = (
+                self._checked(db, user_id, code, kind, now, True, report_hash) if code else None
+            )
+            percent = coupon.percent_off if coupon else 0
+            amount = discounted(price, percent).amount
+            if amount <= 0:
+                raise NothingToPay
+            payment = Payment(
+                id=str(uuid.uuid4()),
+                report_kind=kind,
+                report_hash=report_hash,
+                price=price,
+                percent_off=percent,
+                amount=amount,
+                provider=provider,
+                status="pending",
+                created_at=now,
+            )
+            self._run(
+                db,
+                "UPDATE {payments} SET status = 'cancelled', updated_at = ? WHERE user_id = ? "
+                "AND report_kind = ? AND report_hash = ? AND status = 'pending'",
+                (self._ts(now), user_id, kind, report_hash),
+            )
+            self._run(
+                db,
+                "INSERT INTO {payments} (id, user_id, report_kind, report_hash, price, currency, "
+                "coupon_id, percent_off, amount, provider, status, created_at, updated_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)",
+                (
+                    payment.id,
+                    user_id,
+                    kind,
+                    report_hash,
+                    price.amount,
+                    price.currency,
+                    coupon.id if coupon else None,
+                    percent,
+                    amount,
+                    provider,
+                    self._ts(now),
+                    self._ts(now),
+                ),
+            )
+        return payment
+
+    def payment(self, user_id: str, payment_id: str) -> Payment | None:
+        """One of this account's payments. Anyone else's is not there."""
+        with self._connect() as db:
+            row = self._run(
+                db,
+                f"SELECT {_PAYMENT_COLUMNS} FROM {{payments}} WHERE id = ? AND user_id = ?",
+                (payment_id, user_id),
+            ).fetchone()
+        return None if row is None else self._payment(row)
+
+    def settle(
+        self,
+        provider: str,
+        payment_id: str,
+        outcome: Outcome,
+        amount: int,
+        currency: str,
+        reference: str,
+    ) -> Payment:
+        """Records what the provider says became of a payment, and makes the order when it was
+        paid. The one place a payment unlocks anything. Call it only with a notice whose
+        signature was checked (app/payments).
+
+        The provider, amount and currency must be the ones the payment was started with, or
+        WrongPayment is raised and nothing changes. The same notice again changes nothing. Money
+        that arrives after the payment was cancelled or failed here still counts: it was paid.
+        """
+        now = self.clock()
+        with self._connect() as db:
+            row = self._run(
+                db,
+                f"SELECT {_PAYMENT_COLUMNS}, user_id, coupon_id FROM {{payments}} WHERE id = ?"
+                + self._d.lock,
+                (payment_id,),
+            ).fetchone()
+            if row is None:
+                raise WrongPayment("no such payment")
+            payment = self._payment(row[:-2])
+            user_id, coupon_id = str(row[-2]), row[-1]
+            if payment.provider != provider:
+                raise WrongPayment("from another provider")
+            if (amount, currency) != (payment.amount, payment.price.currency):
+                raise WrongPayment("not the amount that was asked")
+            if payment.status == "paid" or (outcome != "paid" and payment.status != "pending"):
+                return payment
+            self._run(
+                db,
+                "UPDATE {payments} SET status = ?, updated_at = ? WHERE id = ?",
+                (outcome, self._ts(now), payment_id),
+            )
+            # Already unlocked some other way (a free code meanwhile): the order stays one.
+            paid_before = self._paid(db, user_id, payment.report_kind, payment.report_hash)
+            if outcome == "paid" and paid_before is not None:
+                log.warning("payment %s is for a report already paid for: refund it", payment_id)
+            elif outcome == "paid":
+                self._run(
+                    db,
+                    "INSERT INTO {orders} (id, user_id, report_kind, report_hash, price, "
+                    "currency, coupon_id, percent_off, amount_paid, method, status, created_at, "
+                    "provider, provider_ref) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'payment', 'paid', ?, ?, ?)",
+                    (
+                        str(uuid.uuid4()),
+                        user_id,
+                        payment.report_kind,
+                        payment.report_hash,
+                        payment.price.amount,
+                        payment.price.currency,
+                        None if coupon_id is None else str(coupon_id),
+                        payment.percent_off,
+                        payment.amount,
+                        self._ts(now),
+                        provider,
+                        reference,
+                    ),
+                )
+        return replace(payment, status=outcome)
+
+    def _payment(self, row: Sequence[Any]) -> Payment:
+        (payment_id, kind, report_hash, price, currency, percent, amount, provider, state, at) = row
+        return Payment(
+            id=str(payment_id),
+            report_kind=kind,
+            report_hash=report_hash,
+            price=Price(int(price), cast(Currency, currency)),
+            percent_off=int(percent),
+            amount=int(amount),
+            provider=provider,
+            status=state,
+            created_at=self._read_ts(at),
+        )
+
+    # Accounts
+
+    def move_user(self, from_user: str, to_user: str) -> int:
+        """Gives a guest's orders to the Google account the guest joined, with the payments and
+        the wrong guesses. A report the account has paid for itself keeps its own order. Returns
+        how many orders moved. Moving again changes nothing."""
+        if from_user == to_user:
+            return 0
+        with self._connect() as db:
+            cursor = self._run(
+                db,
+                "UPDATE {orders} AS moved SET user_id = ? WHERE moved.user_id = ? "
+                "AND moved.status = 'paid' AND NOT EXISTS (SELECT 1 FROM {orders} own "
+                "WHERE own.user_id = ? AND own.status = 'paid' "
+                "AND own.report_kind = moved.report_kind "
+                "AND own.report_hash = moved.report_hash)",
+                (to_user, from_user, to_user),
+            )
+            moved = int(cursor.rowcount)
+            for table in ("{payments}", "{coupon_misses}"):
+                self._run(
+                    db, f"UPDATE {table} SET user_id = ? WHERE user_id = ?", (to_user, from_user)
+                )
+        return moved
+
+    def forget_payments(self, user_id: str) -> None:
+        """For a deleted account. Its orders stay (sales records), its payments do not.
+        PostgreSQL also does this through the foreign key."""
+        with self._connect() as db:
+            self._run(db, "DELETE FROM {payments} WHERE user_id = ?", (user_id,))
 
     # Wrong guesses
 
@@ -428,7 +703,19 @@ class OrderStore:
             return bool(cursor.rowcount)
 
     def _order(self, row: Sequence[Any]) -> Order:
-        order_id, kind, report_hash, price, currency, code, percent, paid, method, created = row
+        (
+            order_id,
+            kind,
+            report_hash,
+            price,
+            currency,
+            code,
+            percent,
+            paid,
+            method,
+            created,
+            provider,
+        ) = row
         return Order(
             id=str(order_id),
             report_kind=kind,
@@ -439,6 +726,7 @@ class OrderStore:
             amount_paid=int(paid),
             method=method,
             created_at=self._read_ts(created),
+            provider=provider,
         )
 
 
@@ -460,6 +748,11 @@ def sqlite_orders(path: Path, clock: Clock = _utc_now) -> OrderStore:
     with connect() as db:
         for statement in _SQLITE_SCHEMA:
             db.execute(statement)
+        # A file made before payments gets the new columns, as the migration does.
+        columns = {row[1] for row in db.execute("PRAGMA table_info(orders)")}
+        for column in ("provider", "provider_ref"):
+            if column not in columns:
+                db.execute(f"ALTER TABLE orders ADD COLUMN {column} TEXT")
     return OrderStore(_SQLITE, connect, clock)
 
 

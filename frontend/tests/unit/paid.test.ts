@@ -15,6 +15,7 @@ const PAID: Access = {
   paid_reports: true,
   account: "google",
   price: { amount: 80_000, currency: "LKR" },
+  checkout: null,
 };
 const FREE: Access = { ...PAID, paid: false, features: [], account: null };
 
@@ -146,20 +147,25 @@ describe("Get the full report text", () => {
 
   it("has every line in both languages", () => {
     expect(keys(si.paid).sort()).toEqual(keys(en.paid).sort());
-    expect(Object.keys(en.paid.problems)).toEqual(
+    expect(keys(si.buy).sort()).toEqual(keys(en.buy).sort());
+    expect(Object.keys(en.buy.problems)).toEqual(
       expect.arrayContaining(["unknown", "ended", "wrong_report", "used_up", "account_limit", "payment_not_available"]),
     );
   });
 
-  it("says a discount code is valid and will work later", () => {
-    for (const text of [en.paid.paymentLater, en.paid.problems.payment_not_available]) {
-      expect(text).toContain("This code is valid");
-      expect(text).toContain("it will work once payment opens");
-    }
+  it("invites to buy where a place is locked, with no bare note left", () => {
+    for (const text of [en, si]) expect(text.assistant.explain).not.toHaveProperty("locked");
+    expect(JSON.stringify(en)).not.toContain("Part of the full report");
+    expect(en.paid.buy).toBe("Buy this report");
   });
 
   it("names no plans or passes, only the report", () => {
-    expect(en.assistant.explain.locked).toBe("Part of the full report");
-    expect(JSON.stringify(en.paid)).not.toMatch(/plan|pass|subscri/i);
+    expect(JSON.stringify([en.paid, en.buy])).not.toMatch(/\bplans?\b|\bpass(es)?\b|subscri/i);
+  });
+
+  it("uses no emoji", () => {
+    for (const text of [en, si]) {
+      expect(JSON.stringify([text.paid, text.buy])).not.toMatch(/\p{Extended_Pictographic}/u);
+    }
   });
 });

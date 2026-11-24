@@ -38,12 +38,6 @@
   white-space: nowrap;
 }
 
-.was {
-  color: var(--ink-soft);
-  font-size: 16px;
-  font-weight: 500;
-}
-
 .per {
   color: var(--ink-soft);
   font-size: 13px;
@@ -60,47 +54,11 @@
   font-size: 15px;
 }
 
-.signIn,
-.coupon {
+.buy {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-  max-width: 440px;
-}
-
-.label {
-  color: var(--ink-soft);
-  font-size: 14px;
-}
-
-.row {
-  display: flex;
-  gap: 10px;
-}
-
-.input {
-  flex: 1;
-  min-width: 0;
-  height: 48px;
-  padding: 0 16px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-field);
-  background: var(--night);
-  color: var(--ink);
-  font: inherit;
-}
-
-.input:focus {
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
 }
 
 .linkButton {
@@ -118,18 +76,7 @@
   font-weight: 600;
 }
 
-.status:empty {
-  display: none;
-}
-
-.status p {
-  margin: 0;
-}
-
 .small {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   margin: 0;
   color: var(--ink-soft);
   font-size: 14px;
@@ -162,6 +109,50 @@
   color: var(--gold);
   font-size: 13px;
   font-weight: 600;
+}
+
+.google {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.googleTitle {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.googleText {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.googleActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  margin-top: 4px;
+}
+
+.googleButton {
+  min-height: 48px;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.googleButton:disabled {
+  cursor: progress;
+  opacity: 0.7;
 }
 
 @media (max-width: 640px) {

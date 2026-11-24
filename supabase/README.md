@@ -24,6 +24,9 @@ SQLite, which makes its own tables.
 - `20261122090000_free_reports_expire.sql` (docs/18, step 2) gives each free saved report an
   `expires_at` (7 days after saving; none when paid), adds `sidera.delete_expired_reports()`
   and runs it every hour with pg_cron (job `sidera-expire-free-reports`).
+- `20261123184715_payments.sql` (docs/23) adds `sidera.payments` and who took the money for an
+  order. **Apply it before deploying the backend that reads it.** Applied to staging
+  on 2026-11-24; production still needs it.
 
 ## Scheduled jobs
 

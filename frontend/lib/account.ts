@@ -33,7 +33,7 @@ type Call = { method?: string; body?: unknown; signIn?: boolean };
  * sign in becomes a guest first. A token the backend refuses (a deleted account, a sign in
  * revoked elsewhere) signs this browser out, and a call that may sign in tries once more.
  */
-async function call(path: string, { method = "GET", body, signIn = false }: Call = {}): Promise<Response> {
+export async function accountCall(path: string, { method = "GET", body, signIn = false }: Call = {}): Promise<Response> {
   for (let attempt = 0; ; attempt++) {
     const token = signIn ? await signedInToken() : await accessToken();
     const headers: Record<string, string> = body === undefined ? {} : { ...JSON_HEADERS };
@@ -69,7 +69,7 @@ export type Merged = components["schemas"]["MergeOut"];
  * (it existed already, so Supabase could not link it). The backend checks both sign ins.
  */
 export async function mergeGuest(guestToken: string): Promise<Merged> {
-  const response = await ensureOk(await call("/me/merge-guest", { method: "POST", body: { guest_token: guestToken } }));
+  const response = await ensureOk(await accountCall("/me/merge-guest", { method: "POST", body: { guest_token: guestToken } }));
   announce();
   return (await response.json()) as Merged;
 }
@@ -77,7 +77,7 @@ export async function mergeGuest(guestToken: string): Promise<Merged> {
 /** Saves a result. Saving one already kept answers with that one (`created` is false). */
 export function saveReport(body: ReportRequest): Promise<SavedCreated> {
   return oneSaveAtATime(async () => {
-    const response = await ensureOk(await call("/saved", { method: "POST", body, signIn: true }));
+    const response = await ensureOk(await accountCall("/saved", { method: "POST", body, signIn: true }));
     announce();
     return (await response.json()) as SavedCreated;
   });
@@ -91,7 +91,7 @@ let saving: Promise<unknown> = Promise.resolve();
  * in as a guest; a second save sent before that sign in is kept would make a second guest, and
  * the browser keeps only one of the two. Browsers without Web Locks queue saves within the tab.
  */
-function oneSaveAtATime<T>(work: () => Promise<T>): Promise<T> {
+export function oneSaveAtATime<T>(work: () => Promise<T>): Promise<T> {
   const locks = typeof navigator === "undefined" ? undefined : navigator.locks;
   if (locks) return locks.request(SAVE_LOCK, () => work()).then((value) => value);
   const next = saving.then(work, work);
@@ -103,7 +103,7 @@ export type SavedList = components["schemas"]["SavedList"];
 
 /** Every report kept, newest first, with how many free ones may be kept at a time. */
 export async function listSaved(): Promise<SavedList> {
-  const response = await ensureOk(await call("/saved"));
+  const response = await ensureOk(await accountCall("/saved"));
   const body = (await response.json()) as SavedList;
   announce();
   return body;
@@ -141,16 +141,16 @@ export function keepReminder(keep: Keep, t: KeepText): string | null {
 }
 
 export async function getSaved(id: string, lang: Locale): Promise<SavedDetail> {
-  const response = await ensureOk(await call(`/saved/${encodeURIComponent(id)}?lang=${lang}`));
+  const response = await ensureOk(await accountCall(`/saved/${encodeURIComponent(id)}?lang=${lang}`));
   return (await response.json()) as SavedDetail;
 }
 
 export async function renameSaved(id: string, title: string): Promise<void> {
-  await ensureOk(await call(`/saved/${encodeURIComponent(id)}`, { method: "PATCH", body: { title } }));
+  await ensureOk(await accountCall(`/saved/${encodeURIComponent(id)}`, { method: "PATCH", body: { title } }));
 }
 
 export async function deleteSaved(id: string): Promise<void> {
-  const response = await call(`/saved/${encodeURIComponent(id)}`, { method: "DELETE" });
+  const response = await accountCall(`/saved/${encodeURIComponent(id)}`, { method: "DELETE" });
   // Already gone counts as deleted.
   if (response.status !== 404) await ensureOk(response);
   announce();
@@ -158,7 +158,7 @@ export async function deleteSaved(id: string): Promise<void> {
 
 /** Deletes the signed in account and every report in it, then signs this browser out. */
 export async function deleteEverything(): Promise<void> {
-  const response = await call("/me", { method: "DELETE" });
+  const response = await accountCall("/me", { method: "DELETE" });
   // Nobody signed in here: there is nothing to delete.
   if (response.status !== 401) await ensureOk(response);
   await signOutHere();

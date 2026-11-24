@@ -254,6 +254,21 @@ class AccountStore:
                 (to_user, self._ts(self.clock()), from_user, to_user),
             )
             moved = int(cursor.rowcount)
+            # A report both keep, paid for only as the guest: the account's copy becomes paid,
+            # so it stops expiring.
+            paid = self._run(
+                db,
+                "SELECT input_hash, purchase_id FROM {saved_reports} "
+                "WHERE user_id = ? AND purchase_id IS NOT NULL",
+                (from_user,),
+            ).fetchall()
+            for input_hash, purchase_id in paid:
+                self._run(
+                    db,
+                    "UPDATE {saved_reports} SET purchase_id = ?, expires_at = NULL, "
+                    "updated_at = ? WHERE user_id = ? AND input_hash = ? AND purchase_id IS NULL",
+                    (purchase_id, self._ts(self.clock()), to_user, input_hash),
+                )
             self._delete_users(db, [from_user])
         return moved
 

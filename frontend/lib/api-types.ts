@@ -685,7 +685,8 @@ export interface paths {
         put?: never;
         /**
          * Merge Guest
-         * @description Moves a guest's reports into the Google account that just signed in, then removes the guest.
+         * @description Moves a guest's reports, with what the guest paid for, into the Google account that just
+         *     signed in, then removes the guest.
          *
          *     For a guest who presses "Continue with Google" with a Google account that already exists
          *     (from another phone): Supabase cannot link it, so the page signs in with Google and calls
@@ -810,7 +811,7 @@ export interface paths {
         put?: never;
         /**
          * Apply Coupon
-         * @description The price of one report after a coupon. Uses nothing up: Unlock does that.
+         * @description The price of one report after a coupon. Uses nothing up: Unlock or a payment does that.
          */
         post: operations["apply_coupon_v1_coupons_apply_post"];
         delete?: never;
@@ -830,11 +831,73 @@ export interface paths {
         put?: never;
         /**
          * Unlock
-         * @description Unlocks one report with a free coupon and keeps it in My reports as paid.
+         * @description Unlocks one report with a coupon that leaves nothing to pay, and keeps it in My reports
+         *     as paid.
          *
          *     A report already paid for gives back its order and uses nothing.
          */
         post: operations["unlock_v1_reports_unlock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start
+         * @description Starts a payment for one report. Nothing is unlocked by this.
+         */
+        post: operations["start_v1_checkout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/payments/{payment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Payment Status
+         * @description Where one of this account's payments stands.
+         */
+        get: operations["payment_status_v1_payments__payment_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/payments/{payment_id}/mock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Finish Mock Payment
+         * @description The stand-in provider: ends a test payment as the buyer chose, and tells this server so
+         *     with a signed notice, as a real provider would. No money is taken.
+         */
+        post: operations["finish_mock_payment_v1_payments__payment_id__mock_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -977,6 +1040,8 @@ export interface components {
             /** Account */
             account: ("guest" | "google") | null;
             price: components["schemas"]["PriceOut"];
+            /** Checkout */
+            checkout: "mock" | null;
         };
         /** AllLettersResponse */
         AllLettersResponse: {
@@ -1369,6 +1434,13 @@ export interface components {
             /** Passed */
             passed: boolean;
         };
+        /** Checkout */
+        Checkout: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /** Code */
+            code?: string | null;
+        };
         /** ChildOut */
         ChildOut: {
             /** Star */
@@ -1423,8 +1495,9 @@ export interface components {
          * CouponQuote
          * @description The price after a coupon, or why the coupon does not work.
          *
-         *     - free: 100% off, the report can be unlocked now
-         *     - payment_not_available: a discount, but there is no way to pay the rest yet
+         *     - free: nothing left to pay, the report can be unlocked now
+         *     - discount: something is left to pay
+         *     - payment_not_available: something is left to pay, and there is no way to pay it yet
          *     - unknown: no such code (counts as a wrong guess)
          *     - ended: switched off or past its end date
          *     - wrong_report: not for this kind of report
@@ -1433,10 +1506,11 @@ export interface components {
          */
         CouponQuote: {
             /** Result */
-            result: ("free" | "payment_not_available") | ("unknown" | "ended" | "wrong_report" | "used_up" | "account_limit");
+            result: ("free" | "discount" | "payment_not_available") | ("unknown" | "ended" | "wrong_report" | "used_up" | "account_limit");
             /** Percent Off */
             percent_off?: number | null;
             price: components["schemas"]["PriceOut"];
+            discount?: components["schemas"]["PriceOut"] | null;
             new_price?: components["schemas"]["PriceOut"] | null;
         };
         /** DashaMainOut */
@@ -2138,6 +2212,14 @@ export interface components {
             /** Ephemeris */
             ephemeris: string;
         };
+        /** MockResult */
+        MockResult: {
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "paid" | "failed" | "cancelled";
+        };
         /** MonthDayOut */
         MonthDayOut: {
             /**
@@ -2428,6 +2510,33 @@ export interface components {
             skipped: boolean;
             /** Skipped Note */
             skipped_note?: string | null;
+        };
+        /** PaymentOut */
+        PaymentOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending" | "paid" | "failed" | "cancelled";
+            price: components["schemas"]["PriceOut"];
+            /** Percent Off */
+            percent_off: number;
+            amount: components["schemas"]["PriceOut"];
+            /**
+             * Provider
+             * @constant
+             */
+            provider: "mock";
         };
         /** PeriodOut */
         PeriodOut: {
@@ -5101,14 +5210,14 @@ export interface operations {
                     "application/json": components["schemas"]["Unlocked"];
                 };
             };
-            /** @description Not signed in with Google */
+            /** @description No account: the page makes a guest first */
             401: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            /** @description The coupon leaves something to pay (payment_not_available) */
+            /** @description The coupon leaves something to pay: nothing is unlocked */
             402: {
                 headers: {
                     [name: string]: unknown;
@@ -5137,6 +5246,147 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    start_v1_checkout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Checkout"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentOut"];
+                };
+            };
+            /** @description No account: the page makes a guest first */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description There is no way to pay yet (payment_not_available) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description already_paid, nothing_to_pay, free_now, or why a coupon is refused */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Too many wrong codes, or too many payments, in the last hour */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    payment_status_v1_payments__payment_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                payment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    finish_mock_payment_v1_payments__payment_id__mock_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                payment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MockResult"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentOut"];
+                };
+            };
+            /** @description No such payment, or the mock provider is off */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The payment is over */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };

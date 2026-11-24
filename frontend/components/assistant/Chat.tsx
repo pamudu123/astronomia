@@ -382,7 +382,9 @@ const useScrolled = () =>
 function useFullReport(lang: Locale, close: () => void): () => void {
   const router = useRouter();
   return useCallback(() => {
-    const card = document.querySelector<HTMLElement>('[data-card="full-report"]');
+    // A page kept alive behind this one (Next.js) can have a card too: only the one on screen.
+    const cards = document.querySelectorAll<HTMLElement>('[data-card="full-report"]');
+    const card = Array.from(cards).find((found) => found.offsetParent !== null);
     if (!card) {
       router.push(`/${lang}/hadahan`);
       return;
@@ -390,7 +392,7 @@ function useFullReport(lang: Locale, close: () => void): () => void {
     // On a phone the panel covers the page: close it to show the card.
     if (!window.matchMedia("(min-width: 768px)").matches) close();
     card.scrollIntoView({ behavior: "smooth", block: "center" });
-    card.querySelector<HTMLElement>("button")?.focus({ preventScroll: true });
+    card.querySelector<HTMLElement>("a, button")?.focus({ preventScroll: true });
   }, [lang, close, router]);
 }
 
