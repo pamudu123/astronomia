@@ -33,7 +33,7 @@ The logo story, for an About page: the two rings are great circles of the sky. W
 | File | Used for | Made from |
 |---|---|---|
 | `hero-sky.jpg` (1672 x 941) | Home hero background, mobile home, share preview | `01_first_set/01_hero_night_sky.png` |
-| `rashi-NN-name.webp` (512 x 512, transparent) | Rashi row on the home page, lagna and rashi cards in results, the PDF report | The standalone rashi images in the sets |
+| `rashi-NN-name.webp` (512 x 512, transparent) | Rashi row on the home page, lagna and rashi cards in results, the PDF report | The standalone rashi images in the sets, by `build_assets.py`: every ring is the same circle, and the fifth set gets its glow |
 | `chapters/<name>.webp` (480 x 320, transparent) | The picture beside each AI reading chapter | `03_report_set` and `04_remade_set`, `chapter-*.png`, by `tools/build_report_art.py` |
 | `card-hadahan.jpg` (539 x 340) | Hadahan tool card on the home page | Cropped from the composite image |
 | `card-porondam.jpg` (661 x 376) | Porondam tool card on the home page | Cropped from the composite image |
@@ -51,7 +51,8 @@ The PDF report's own pictures are in `backend/app/reports/art/`, made by `tools/
 - **Eight pictures of the third set were made again** (`source/04_remade_set/`): they were soft, cut off, or had a lion painted into the chart cover. The scripts use the newer one. A few chapter pictures of the third set were enlarged from a grouped sheet; they are sharp at the sizes used.
 - **Makara is drawn as the Western sea-goat.** In Sri Lankan tradition the makara is a crocodile-like creature: for the astrologer to say.
 - **The two card pictures and the moon are low resolution.** They exist only as panels inside `02_remaining_set/07_composite_all_remaining_visuals.png`, so they were cropped from it. They are sharp at normal size but soft on high density screens. Standalone versions at 1200 x 800 (cards) and 1000 x 1000 (moon) would replace them.
-- **Kumbha, Makara and Meena** now come from the fourth set, to match the others. Their earlier versions stay in `source/`.
+- **Simha, Kanya, Makara, Kumbha and Meena** come from the fifth set (`source/05_uniform_set/`), made as dark figures like the other seven: four of them were gold carvings, and Kanya's ring was an oval. They arrived flat, so `build_assets.py` adds the glow. Their earlier versions stay in `source/`.
+- **Mesha's ring is faint and broken** in the original, so it looks lighter than the others on the light theme.
 - The two Kumbha and Meena pair images in `source/` are not used yet.
 
 ## Rebuilding
