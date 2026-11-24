@@ -269,10 +269,20 @@ function HadahanResultPage({
       <section className={`rise ${styles.details}`} aria-label={t.detailsUsed} data-card="details">
         <div className={styles.detailsHead}>
           <span className={styles.detailsLabel}>{t.detailsUsed}</span>
-          {onEdit && (
-            <button type="button" className={styles.editButton} onClick={onEdit}>
-              {t.edit}
-            </button>
+          {(onEdit || onAgain) && (
+            <div className={styles.detailsActions}>
+              {onEdit && (
+                <button type="button" className={styles.editButton} onClick={onEdit}>
+                  {t.edit}
+                </button>
+              )}
+              {/* Also at the end of the page: nobody should have to scroll there to start again. */}
+              {onAgain && (
+                <button type="button" className={styles.editButton} onClick={onAgain}>
+                  {t.again}
+                </button>
+              )}
+            </div>
           )}
         </div>
         {/* Each detail with its own label, so a wrong date, time or place stands out. */}

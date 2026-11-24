@@ -62,7 +62,6 @@
   background: var(--night);
   color: var(--ink);
   font: inherit;
-  color-scheme: dark;
 }
 
 .input:focus {

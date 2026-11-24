@@ -26,7 +26,6 @@
     "lead": "Your hadahan and porondam, worked out precisely and explained in plain Sinhala or English.",
     "ctaHadahan": "Create my hadahan",
     "ctaPorondam": "Match two charts",
-    "privacy": "No sign up. Nothing is stored unless you save or share it.",
     "wheelLabel": "A slowly turning zodiac wheel with the twelve rashi named in Sinhala and planets in orbit"
   },
   "tools": {
@@ -479,7 +478,6 @@
       "choose": "Choose",
       "submit": "Match the charts",
       "working": "Matching the charts",
-      "privacy": "Nothing is stored. Details are used once.",
       "consent": "Both people are adults, and both have agreed to this match using their birth details.",
       "consentNeeded": "Please confirm this before matching with full birth details.",
       "consentOther": "Can't confirm this? A match by birth stars does not need it.",

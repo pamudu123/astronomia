@@ -389,6 +389,7 @@ test("the result leads with the birth details and three plain answers", async ({
   await expect(details).toContainText("Kandy");
   await expect(details).toContainText("UTC+05:30 on that date");
   await expect(details.getByRole("button", { name: "Edit details" })).toBeVisible();
+  await expect(details.getByRole("button", { name: "Check another chart" })).toBeVisible();
 
   // Plain titles first, the traditional term beside them.
   await expect(page.getByRole("heading", { name: "Your chart at a glance" })).toBeVisible();

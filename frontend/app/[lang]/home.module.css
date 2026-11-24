@@ -108,13 +108,6 @@ html[lang="si"] .heroTitle {
   gap: 16px;
 }
 
-.privacy {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-}
-
 .heroWheel {
   flex: 1 1 400px;
   min-width: 0;

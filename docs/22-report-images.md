@@ -73,6 +73,8 @@ One per chapter, at the top right. 1200 x 800, transparent. They replace the sma
 |---|---|---|
 | `rashi-10-makara.png`, `rashi-11-kumbha.png`, `rashi-12-meena.png` | 1024 x 1024, transparent | These three have no gold ring and use teal, so they don't match the other eight. Same composition as the scorpion reference: the sea-goat, a figure pouring water from an urn, two fish circling |
 
+These three and Simha arrived as gold carvings, which did not match the dark figures of the other eight signs. All four, and Kanya (its ring was an oval), were made again as dark figures on 2026-11-23 (`design/assets/source/05_uniform_set/`). `design/tools/build_assets.py` adds their glow and gives all twelve the same ring.
+
 ## What to check before sending
 
 - The gold is a warm gold, not yellow or orange.
