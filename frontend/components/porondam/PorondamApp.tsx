@@ -11,7 +11,7 @@ import {
   toRequest,
 } from "@/components/hadahan/BirthForm";
 import formStyles from "@/components/hadahan/BirthForm.module.css";
-import { ArrowRight, Lock } from "@/components/Icons";
+import { ArrowRight } from "@/components/Icons";
 import { fill, loadSession, saveSession } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { holdInView } from "@/lib/holdInView";
@@ -479,9 +479,6 @@ function PorondamForm({
           )}
 
           <div className={styles.submitRow}>
-            <p className={styles.privacy}>
-              <Lock /> {f.privacy}
-            </p>
             <button
               type="submit"
               className={`btn btn-primary lift ${styles.submit}`}
