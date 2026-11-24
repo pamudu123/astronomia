@@ -37,7 +37,7 @@ const PATHS: Partial<Record<ChapterId, ReactNode>> = {
       <path d="M10 5.5v10.4" />
     </>
   ),
-  // Aeroplane: travel and going abroad.
+  // Paper plane: travel and going abroad.
   "chart.abroad": <path d="M17 3 3 8.5l5 2 2 5L17 3ZM8 10.5 17 3" />,
 };
 
