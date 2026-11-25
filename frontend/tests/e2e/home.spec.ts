@@ -71,9 +71,13 @@ test("the language switch keeps the query and hash", async ({ page }) => {
 });
 
 test("the language switch sees a query added without a page load", async ({ page }) => {
-  await page.goto("/en/porondam");
+  const sinhala = page.getByRole("group", { name: "Language" }).getByRole("link", { name: "සිංහල" });
+  // The built link has no query: it gets this one only once the page's scripts run. Clicking
+  // before that is a plain link, which can't know of a query added later.
+  await page.goto("/en/porondam?for=match");
+  await expect(sinhala).toHaveAttribute("href", "/si/porondam?for=match");
   await page.evaluate(() => window.history.replaceState(null, "", "?for=wedding"));
-  await page.getByRole("group", { name: "Language" }).getByRole("link", { name: "සිංහල" }).click();
+  await sinhala.click();
   await expect(page).toHaveURL("/si/porondam?for=wedding");
 });
 

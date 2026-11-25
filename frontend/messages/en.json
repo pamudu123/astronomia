@@ -1620,6 +1620,7 @@
     "note": "AI answers, based on what is on your screen. A guide, not a decision.",
     "placeholder": "Ask about this page…",
     "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
+    "newChat": "New chat",
     "close": "Close the chat",
     "resize": "Resize the chat. Drag, or use the arrow keys",
     "notice": {
@@ -1729,6 +1730,16 @@
       }
     },
     "cards": {
+      "visual": {
+        "pillars": "Chart at a glance",
+        "wheel": "The sky at birth",
+        "houses": "The 12 parts of life",
+        "periods": "Life periods",
+        "mars": "The Mars check",
+        "people": "The couple",
+        "ring": "Factors that agree",
+        "checks": "The serious checks"
+      },
       "status": {
         "find_place": [
           "Finding the place…",

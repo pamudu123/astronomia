@@ -99,7 +99,8 @@ export async function POST(request: Request): Promise<Response> {
       const { turn } = (await asked.json()) as { turn: string };
       headers.set(TURN_HEADER, turn);
       cookies.push(turnCookie(turn));
-    } else if (call?.method === "agent/suggest") {
+    } else if (call?.method === "agent/suggest" || (call?.method === "agent/run" && call.agentId === SUGGEST_ID)) {
+      // In single-route mode CopilotKit asks for the buttons as a run of the suggester.
       const turn = turnOf(request);
       if (turn) headers.set(TURN_HEADER, turn);
     }

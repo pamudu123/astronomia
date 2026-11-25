@@ -28,7 +28,7 @@ import type { Locale } from "@/lib/i18n";
 
 import { ChartDiagram } from "@/components/assistant/ChapterDiagram";
 import { AiExplain, FullReading, TopicChips } from "@/components/assistant/Explain";
-import { useAssistantContext } from "@/components/assistant/PageContext";
+import { useAssistantContext, useAssistantVisuals } from "@/components/assistant/PageContext";
 import { useReading } from "@/components/assistant/useReading";
 import {
   CHART_EXTRA,
@@ -127,6 +127,16 @@ function HadahanResultPage({
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
   // What the AI assistant sees: this result, with no birth details.
   useAssistantContext(chartContext(result, labels, lang, !request));
+  // The diagrams Astro may show: drawn in the browser, from what this page shows.
+  const birth = request?.date ?? date;
+  // Compared by its words: a saved report's page makes the object anew on every render.
+  const { frozen, live } = savedTimes ?? {};
+  useAssistantVisuals(
+    useMemo(
+      () => ({ kind: "chart" as const, result, labels, birth, ...(frozen && live && { saved: { frozen, live } }) }),
+      [result, labels, birth, frozen, live],
+    ),
+  );
   // What the written reading gets: the same, with every later life period and the Mars
   // check's rules. Kept stable, so each chapter is written once per visit.
   const reading = chartReadingContext(result, labels, lang, !request);

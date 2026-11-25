@@ -3,10 +3,10 @@ list it here."""
 
 from langchain_core.tools import BaseTool
 
-from app.tools import calendar, naming, planets, porondam
+from app.tools import calendar, naming, planets, porondam, visuals
 from app.tools.engine import EngineClient
 
-__all__ = ["EngineClient", "engine_tools"]
+__all__ = ["EngineClient", "assistant_tools", "engine_tools"]
 
 
 def engine_tools(engine: EngineClient) -> list[BaseTool]:
@@ -17,3 +17,8 @@ def engine_tools(engine: EngineClient) -> list[BaseTool]:
         *naming.tools(engine),
         *planets.tools(engine),
     ]
+
+
+def assistant_tools(engine: EngineClient) -> list[BaseTool]:
+    """Everything the guide can call: the engine's lookups, and the page's diagrams."""
+    return [*engine_tools(engine), *visuals.tools()]

@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { PageContext } from "@/lib/assistant/context";
+import type { HeldVisuals, PageVisuals } from "@/lib/assistant/pageVisuals";
 
 /**
  * Where on the page a summary comes from: the page's main result, or a part inside it (the
@@ -43,6 +44,34 @@ export function useAssistantContext(context: PageContext | null, slot: Slot = "m
     set(slot, stable);
     return () => set(slot, null);
   }, [set, slot, stable]);
+}
+
+/** The words a diagram in the chat was first drawn with: an old answer keeps its language too. */
+export type VisualWords = {
+  explain: Dictionary["assistant"]["explain"];
+  titles: Dictionary["assistant"]["cards"]["visual"];
+};
+
+/**
+ * The results pages handed over, by id, for the diagrams in the chat (VisualCard.tsx). A context
+ * and not part of the renderer ToolCards registers: CopilotKit keeps the first renderer when only
+ * what it closes over has changed.
+ */
+export const HeldVisualsContext = createContext<ReadonlyMap<string, HeldVisuals<VisualWords>>>(new Map());
+
+/** Set by the Assistant: where a page hands over the result the chat may draw. */
+export const PageVisualsSetter = createContext<(visuals: PageVisuals | null) => void>(() => undefined);
+
+/**
+ * Hands the chat the result on screen, so Astro can show one of its diagrams (docs/24). Keep
+ * `visuals` the same object while the result is the same (useMemo): a new object is a new result.
+ */
+export function useAssistantVisuals(visuals: PageVisuals | null): void {
+  const set = useContext(PageVisualsSetter);
+  useEffect(() => {
+    set(visuals);
+    return () => set(null);
+  }, [set, visuals]);
 }
 
 /** For server pages: shares a summary the page built while rendering. */

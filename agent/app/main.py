@@ -28,7 +28,7 @@ from app.graph import build_agent, build_model
 from app.memory import ExpiringMemorySaver, run_sweeper
 from app.security import AccessKeyMiddleware
 from app.suggest import build_suggester
-from app.tools import EngineClient, engine_tools
+from app.tools import EngineClient, assistant_tools
 from app.usage import ChatLimitMiddleware, Ledger
 
 AGENT_NAME = "guide"
@@ -58,7 +58,7 @@ def create_app(
     # Each graph keeps its conversations in memory, deleted after a fixed idle time.
     idle = dt.timedelta(minutes=settings.conversation_idle_minutes)
     memories = (ExpiringMemorySaver(idle), ExpiringMemorySaver(idle))
-    graph = build_agent(settings, engine_tools(engine), model=model, checkpointer=memories[0])
+    graph = build_agent(settings, assistant_tools(engine), model=model, checkpointer=memories[0])
     if ledger is None and settings.chat_key.get_secret_value():
         ledger = Ledger(settings)
 
