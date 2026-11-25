@@ -1,0 +1,604 @@
+{
+ "status": "ok",
+ "waiting_for": null,
+ "time": null,
+ "bride": {
+  "name": "",
+  "mode": "full",
+  "nakshatra": "punarvasu",
+  "pada": 3,
+  "rashi": "mithuna",
+  "lagna": "mesha",
+  "offset_label": "UTC+05:30",
+  "placements": [
+   {
+    "body": "sun",
+    "sign": "kumbha",
+    "house": 11
+   },
+   {
+    "body": "moon",
+    "sign": "mithuna",
+    "house": 3
+   },
+   {
+    "body": "mars",
+    "sign": "kataka",
+    "house": 4
+   },
+   {
+    "body": "mercury",
+    "sign": "kumbha",
+    "house": 11
+   },
+   {
+    "body": "jupiter",
+    "sign": "vrischika",
+    "house": 8
+   },
+   {
+    "body": "venus",
+    "sign": "makara",
+    "house": 10
+   },
+   {
+    "body": "saturn",
+    "sign": "kumbha",
+    "house": 11
+   },
+   {
+    "body": "rahu",
+    "sign": "tula",
+    "house": 7
+   },
+   {
+    "body": "ketu",
+    "sign": "mesha",
+    "house": 1
+   }
+  ]
+ },
+ "groom": {
+  "name": "",
+  "mode": "full",
+  "nakshatra": "bharani",
+  "pada": 4,
+  "rashi": "mesha",
+  "lagna": "mesha",
+  "offset_label": "UTC+05:30",
+  "placements": [
+   {
+    "body": "sun",
+    "sign": "simha",
+    "house": 5
+   },
+   {
+    "body": "moon",
+    "sign": "mesha",
+    "house": 1
+   },
+   {
+    "body": "mars",
+    "sign": "vrishabha",
+    "house": 2
+   },
+   {
+    "body": "mercury",
+    "sign": "kataka",
+    "house": 4
+   },
+   {
+    "body": "jupiter",
+    "sign": "simha",
+    "house": 5
+   },
+   {
+    "body": "venus",
+    "sign": "simha",
+    "house": 5
+   },
+   {
+    "body": "saturn",
+    "sign": "makara",
+    "house": 10
+   },
+   {
+    "body": "rahu",
+    "sign": "dhanu",
+    "house": 9
+   },
+   {
+    "body": "ketu",
+    "sign": "mithuna",
+    "house": 3
+   }
+  ]
+ },
+ "match": {
+  "rule_set": "porondam_si_v3",
+  "provisional": true,
+  "score": {
+   "passed": 11,
+   "total": 18
+  },
+  "hard_checks": [
+   {
+    "id": "rajju",
+    "hard": true,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_rajju": "nabhi",
+     "groom_rajju": "kati"
+    },
+    "reason": "The bride's star is in the Nabhi (navel) rajju and the groom's in the Kati (waist) rajju. Different rajju is essential.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vedha",
+    "hard": true,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_star": "punarvasu",
+     "groom_star": "bharani"
+    },
+    "reason": "Punarvasu and Bharani are not an afflicting pair.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "factors": [
+   {
+    "id": "dina",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 23,
+     "remainder": 5
+    },
+    "reason": "Counting from the bride's star, the groom's is number 23. The remainder after nine is 5, which is not favourable.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "gana",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gana": "deva",
+     "groom_gana": "manushya"
+    },
+    "reason": "The bride is Deva gana and the groom is Manushya gana. These go together.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "mahendra",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 23
+    },
+    "reason": "The groom's star is number 23 from the bride's, which is not one of the favourable counts.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "stree_deergha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 23,
+     "threshold": 13
+    },
+    "reason": "The groom's star is number 23 from the bride's, more than 13, which is far enough.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "yoni",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_yoni": "cat",
+     "groom_yoni": "elephant"
+    },
+    "reason": "The animal of the bride's star is the cat and of the groom's the elephant. They are not enemies.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 11
+    },
+    "reason": "The groom's Moon sign is number 11 from the bride's, which is favourable.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashyadhipathi",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_lord": "mercury",
+     "groom_lord": "mars"
+    },
+    "reason": "Mercury rules the bride's sign and Mars the groom's. They are counted as enemies.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vashya",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_sign": "mithuna",
+     "groom_sign": "mesha"
+    },
+    "reason": "Neither sign, Mithuna or Mesha, is under the influence of the other.",
+    "softened_by": [
+     "rashi_and_yoni_agree"
+    ],
+    "softened_text": [
+     "Tradition softens this because the Rashi and Yoni factors agree."
+    ]
+   },
+   {
+    "id": "gothra",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gothra": "atri",
+     "groom_gothra": "marichi"
+    },
+    "reason": "The bride's star is of the Atri gothra and the groom's of the Marichi gothra. A different gothra is favourable.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "pakshi",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_pakshi": "owl",
+     "groom_pakshi": "eagle"
+    },
+    "reason": "The bird of the bride's star is the owl and of the groom's the eagle. They are counted as enemies.",
+    "softened_by": [
+     "main_factors_agree"
+    ],
+    "softened_text": [
+     "Tradition softens this because Gana, Yoni, Rashi and Nadi all agree."
+    ]
+   },
+   {
+    "id": "linga",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_linga": "male",
+     "groom_linga": "male"
+    },
+    "reason": "The bride's star is male and the groom's is male. This pair does not agree.",
+    "softened_by": [
+     "yoni_and_rashi_agree"
+    ],
+    "softened_text": [
+     "Tradition softens this because the Yoni and Rashi factors agree."
+    ]
+   },
+   {
+    "id": "weekday",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_weekday": "sunday",
+     "groom_weekday": "thursday",
+     "count": 5
+    },
+    "reason": "The bride was born on a Sunday and the groom on a Thursday. These days agree.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "varna",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_varna": "shudra",
+     "groom_varna": "kshatriya"
+    },
+    "reason": "The bride's Moon sign is of the Shudra varna and the groom's of the Kshatriya varna. By the traditional varna table, these signs agree.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "bhuta",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_bhuta": "apo",
+     "groom_bhuta": "pathavi"
+    },
+    "reason": "The bride's star is of water (Apo) and the groom's of earth (Pathavi). These elements are not opposed.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vruksha",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_vruksha": "hara",
+     "groom_vruksha": "hara"
+    },
+    "reason": "Both stars have hard trees. This pair does not agree.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "ayusha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "distance": 6
+    },
+    "reason": "The two stars are 6 apart in the count of 28 stars, which agrees.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "graha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_lagna_lord": "mars",
+     "groom_lagna_lord": "mars",
+     "bride_moon_lord": "mercury",
+     "groom_moon_lord": "mars",
+     "positive": 3
+    },
+    "reason": "3 of the 4 checks between the lagna lords (Mars and Mars) and the Moon sign lords (Mercury and Mars) are friendly or neutral, which agrees.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "nadi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_nadi": "aadi",
+     "groom_nadi": "madhya"
+    },
+    "reason": "The bride is Aadi nadi and the groom is Madhya nadi. Different nadi is favourable.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "summary": "majority_pass",
+  "summary_text": "More than half of the factors agree, and both essential checks pass.",
+  "same_star": false,
+  "same_star_text": null
+ },
+ "kuja": {
+  "bride": {
+   "rule_set": "kuja_v2",
+   "provisional": true,
+   "present": true,
+   "strength": 3,
+   "reduced": true,
+   "houses": [
+    1,
+    2,
+    4,
+    7,
+    8,
+    12
+   ],
+   "points": [
+    {
+     "point": "lagna",
+     "house": 4,
+     "counts": true
+    },
+    {
+     "point": "moon",
+     "house": 2,
+     "counts": true
+    },
+    {
+     "point": "venus",
+     "house": 7,
+     "counts": true
+    }
+   ],
+   "cancellations": [
+    {
+     "id": "lagna_kataka_simha",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "The lagna is Mesha."
+    },
+    {
+     "id": "mars_own_or_exalted",
+     "applies": false,
+     "facts": {
+      "sign": "kataka"
+     },
+     "reason": "Mars is in Kataka, which is neither its own nor its exalted sign."
+    },
+    {
+     "id": "jupiter_aspects_mars",
+     "applies": true,
+     "facts": {
+      "jupiter_sign": "vrischika",
+      "mars_sign": "kataka"
+     },
+     "reason": "Jupiter in Vrischika looks at Mars in Kataka."
+    },
+    {
+     "id": "mars_house_sign_exception",
+     "applies": false,
+     "facts": {
+      "house": 4,
+      "sign": "kataka"
+     },
+     "reason": "This exception does not cover Mars in the 4th house in Kataka."
+    },
+    {
+     "id": "mars_with_moon",
+     "applies": false,
+     "facts": {
+      "sign": "kataka"
+     },
+     "reason": "Mars in Kataka is not with the Moon."
+    },
+    {
+     "id": "mars_simha_kumbha",
+     "applies": false,
+     "facts": {
+      "sign": "kataka"
+     },
+     "reason": "Mars is in Kataka, not Simha or Kumbha."
+    },
+    {
+     "id": "benefic_in_lagna",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "Neither Jupiter nor Venus is in the lagna, Mesha."
+    }
+   ],
+   "reasons": [
+    "Mars is in the 4th house counted from the lagna.",
+    "Mars is in the 2nd house counted from the Moon.",
+    "Mars is in the 7th house counted from Venus.",
+    "Some conditions that reduce it apply. An astrologer should review it."
+   ]
+  },
+  "groom": {
+   "rule_set": "kuja_v2",
+   "provisional": true,
+   "present": true,
+   "strength": 2,
+   "reduced": false,
+   "houses": [
+    1,
+    2,
+    4,
+    7,
+    8,
+    12
+   ],
+   "points": [
+    {
+     "point": "lagna",
+     "house": 2,
+     "counts": true
+    },
+    {
+     "point": "moon",
+     "house": 2,
+     "counts": true
+    },
+    {
+     "point": "venus",
+     "house": 10,
+     "counts": false
+    }
+   ],
+   "cancellations": [
+    {
+     "id": "lagna_kataka_simha",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "The lagna is Mesha."
+    },
+    {
+     "id": "mars_own_or_exalted",
+     "applies": false,
+     "facts": {
+      "sign": "vrishabha"
+     },
+     "reason": "Mars is in Vrishabha, which is neither its own nor its exalted sign."
+    },
+    {
+     "id": "jupiter_aspects_mars",
+     "applies": false,
+     "facts": {
+      "jupiter_sign": "simha",
+      "mars_sign": "vrishabha"
+     },
+     "reason": "Jupiter in Simha does not look at Mars in Vrishabha."
+    },
+    {
+     "id": "mars_house_sign_exception",
+     "applies": false,
+     "facts": {
+      "house": 2,
+      "sign": "vrishabha"
+     },
+     "reason": "This exception does not cover Mars in the 2nd house in Vrishabha."
+    },
+    {
+     "id": "mars_with_moon",
+     "applies": false,
+     "facts": {
+      "sign": "vrishabha"
+     },
+     "reason": "Mars in Vrishabha is not with the Moon."
+    },
+    {
+     "id": "mars_simha_kumbha",
+     "applies": false,
+     "facts": {
+      "sign": "vrishabha"
+     },
+     "reason": "Mars is in Vrishabha, not Simha or Kumbha."
+    },
+    {
+     "id": "benefic_in_lagna",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "Neither Jupiter nor Venus is in the lagna, Mesha."
+    }
+   ],
+   "reasons": [
+    "Mars is in the 2nd house counted from the lagna.",
+    "Mars is in the 2nd house counted from the Moon."
+   ]
+  },
+  "comparison": "both",
+  "reason": "Both charts show Kuja dosha, so they are often read as balancing each other."
+ }
+}

@@ -1,0 +1,604 @@
+{
+ "status": "ok",
+ "waiting_for": null,
+ "time": null,
+ "bride": {
+  "name": "",
+  "mode": "full",
+  "nakshatra": "punarvasu",
+  "pada": 3,
+  "rashi": "mithuna",
+  "lagna": "mesha",
+  "offset_label": "UTC+05:30",
+  "placements": [
+   {
+    "body": "sun",
+    "sign": "kumbha",
+    "house": 11
+   },
+   {
+    "body": "moon",
+    "sign": "mithuna",
+    "house": 3
+   },
+   {
+    "body": "mars",
+    "sign": "kataka",
+    "house": 4
+   },
+   {
+    "body": "mercury",
+    "sign": "kumbha",
+    "house": 11
+   },
+   {
+    "body": "jupiter",
+    "sign": "vrischika",
+    "house": 8
+   },
+   {
+    "body": "venus",
+    "sign": "makara",
+    "house": 10
+   },
+   {
+    "body": "saturn",
+    "sign": "kumbha",
+    "house": 11
+   },
+   {
+    "body": "rahu",
+    "sign": "tula",
+    "house": 7
+   },
+   {
+    "body": "ketu",
+    "sign": "mesha",
+    "house": 1
+   }
+  ]
+ },
+ "groom": {
+  "name": "",
+  "mode": "full",
+  "nakshatra": "bharani",
+  "pada": 4,
+  "rashi": "mesha",
+  "lagna": "mesha",
+  "offset_label": "UTC+05:30",
+  "placements": [
+   {
+    "body": "sun",
+    "sign": "simha",
+    "house": 5
+   },
+   {
+    "body": "moon",
+    "sign": "mesha",
+    "house": 1
+   },
+   {
+    "body": "mars",
+    "sign": "vrishabha",
+    "house": 2
+   },
+   {
+    "body": "mercury",
+    "sign": "kataka",
+    "house": 4
+   },
+   {
+    "body": "jupiter",
+    "sign": "simha",
+    "house": 5
+   },
+   {
+    "body": "venus",
+    "sign": "simha",
+    "house": 5
+   },
+   {
+    "body": "saturn",
+    "sign": "makara",
+    "house": 10
+   },
+   {
+    "body": "rahu",
+    "sign": "dhanu",
+    "house": 9
+   },
+   {
+    "body": "ketu",
+    "sign": "mithuna",
+    "house": 3
+   }
+  ]
+ },
+ "match": {
+  "rule_set": "porondam_si_v3",
+  "provisional": true,
+  "score": {
+   "passed": 11,
+   "total": 18
+  },
+  "hard_checks": [
+   {
+    "id": "rajju",
+    "hard": true,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_rajju": "nabhi",
+     "groom_rajju": "kati"
+    },
+    "reason": "මනාලියගේ නැකත නාභි කාණ්ඩයටත් මනාලයාගේ නැකත කටි කාණ්ඩයටත් අයත්. රජ්ජු පොරොන්දම අනුව ගැළපෙන්නේ වෙනස් කාණ්ඩ දෙකක නැකත්.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vedha",
+    "hard": true,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_star": "punarvasu",
+     "groom_star": "bharani"
+    },
+    "reason": "වේධ පොරොන්දමේ නොගැළපෙන යුගල අතරට පුනාවස සහ බෙරණ අයත් නැහැ.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "factors": [
+   {
+    "id": "dina",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 23,
+     "remainder": 5
+    },
+    "reason": "මනාලියගේ නැකතේ සිට ගණන් කළ විට මනාලයාගේ නැකත 23 වැන්නයි. නවයෙන් බෙදූ විට ඉතිරිය 5 වන අතර එය යහපත් නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "gana",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gana": "deva",
+     "groom_gana": "manushya"
+    },
+    "reason": "මනාලිය දේව ගණයට ද මනාලයා මනුෂ්‍ය ගණයට ද අයත් වේ. මේවා එකිනෙකට ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "mahendra",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 23
+    },
+    "reason": "මනාලයාගේ නැකත මනාලියගේ නැකතේ සිට 23 වැන්නයි. එය යහපත් ගණනක් නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "stree_deergha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 23,
+     "threshold": 13
+    },
+    "reason": "මනාලයාගේ නැකත මනාලියගේ නැකතේ සිට 23 වැන්නයි. එය 13 ට වැඩි බැවින් ප්‍රමාණවත් දුරකි.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "yoni",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_yoni": "cat",
+     "groom_yoni": "elephant"
+    },
+    "reason": "මනාලියගේ නැකතට අයත් සතා බළලා. මනාලයාගේ නැකතට අයත් සතා ඇතා. සම්ප්‍රදාය අනුව මේ සතුන් දෙදෙනා සතුරු යුගලයක් ලෙස සැලකෙන්නේ නැහැ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 11
+    },
+    "reason": "මනාලයාගේ චන්ද්‍ර රාශිය මනාලියගේ රාශියේ සිට 11 වැන්නයි. එය යහපත්ය.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashyadhipathi",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_lord": "mercury",
+     "groom_lord": "mars"
+    },
+    "reason": "මනාලියගේ රාශියේ අධිපති බුධ ද මනාලයාගේ රාශියේ අධිපති කුජ ද වේ. ඔවුන් සතුරන් ලෙස සැලකේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vashya",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_sign": "mithuna",
+     "groom_sign": "mesha"
+    },
+    "reason": "මිථුන සහ මේෂ යන රාශි දෙකෙන් කිසිවක් අනෙකේ බලපෑමට යටත් නොවේ.",
+    "softened_by": [
+     "rashi_and_yoni_agree"
+    ],
+    "softened_text": [
+     "රාශි සහ යෝනි පොරොන්දම් ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "gothra",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gothra": "atri",
+     "groom_gothra": "marichi"
+    },
+    "reason": "මනාලියගේ නැකත අත්‍රි ගෝත්‍රයට ද මනාලයාගේ නැකත මරීචි ගෝත්‍රයට ද අයත් වේ. වෙනස් ගෝත්‍ර යහපත්ය.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "pakshi",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_pakshi": "owl",
+     "groom_pakshi": "eagle"
+    },
+    "reason": "මනාලියගේ නැකතේ පක්ෂියා බකමූණා ද මනාලයාගේ නැකතේ පක්ෂියා රාජාලියා ද වේ. ඔවුන් සතුරන් ලෙස සැලකේ.",
+    "softened_by": [
+     "main_factors_agree"
+    ],
+    "softened_text": [
+     "ගණ, යෝනි, රාශි සහ නාඩි යන පොරොන්දම් සියල්ල ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "linga",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_linga": "male",
+     "groom_linga": "male"
+    },
+    "reason": "මනාලියගේ නැකත පුරුෂ ලිංග ද මනාලයාගේ නැකත පුරුෂ ලිංග ද වේ. මෙම යුගලය නොගැළපේ.",
+    "softened_by": [
+     "yoni_and_rashi_agree"
+    ],
+    "softened_text": [
+     "යෝනි සහ රාශි පොරොන්දම් ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "weekday",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_weekday": "sunday",
+     "groom_weekday": "thursday",
+     "count": 5
+    },
+    "reason": "මනාලිය ඉරිදා දිනක ද මනාලයා බ්‍රහස්පතින්දා දිනක ද උපන්නේය. මෙම දින ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "varna",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_varna": "shudra",
+     "groom_varna": "kshatriya"
+    },
+    "reason": "මනාලියගේ චන්ද්‍ර රාශිය ශූද්‍ර වර්ණයටත් මනාලයාගේ චන්ද්‍ර රාශිය ක්ෂත්‍රිය වර්ණයටත් අයත්. සාම්ප්‍රදායික වර්ණ වගුව අනුව මේ රාශි දෙක ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "bhuta",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_bhuta": "apo",
+     "groom_bhuta": "pathavi"
+    },
+    "reason": "මනාලියගේ නැකත ආපෝ භූතයට ද මනාලයාගේ නැකත පඨවි භූතයට ද අයත් වේ. මේවා එකිනෙකට විරුද්ධ නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vruksha",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_vruksha": "hara",
+     "groom_vruksha": "hara"
+    },
+    "reason": "නැකත් දෙකේම වෘක්ෂ හර ගස් වේ. මෙම යුගලය නොගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "ayusha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "distance": 6
+    },
+    "reason": "නැකත් 28 ගණනයේදී නැකත් දෙක අතර පරතරය 6 කි. එය ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "graha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_lagna_lord": "mars",
+     "groom_lagna_lord": "mars",
+     "bride_moon_lord": "mercury",
+     "groom_moon_lord": "mars",
+     "positive": 3
+    },
+    "reason": "ලග්නාධිපතීන් (කුජ සහ කුජ) සහ චන්ද්‍ර රාශි අධිපතීන් (බුධ සහ කුජ) අතර පරීක්ෂා 4 න් 3 ක් මිත්‍ර හෝ සම වන බැවින් ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "nadi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_nadi": "aadi",
+     "groom_nadi": "madhya"
+    },
+    "reason": "මනාලිය ආදි නාඩියට ද මනාලයා මධ්‍ය නාඩියට ද අයත් වේ. වෙනස් නාඩි යහපත්ය.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "summary": "majority_pass",
+  "summary_text": "පොරොන්දම්වලින් අඩකට වඩා ගැළපේ. රජ්ජු සහ වේධ පොරොන්දම් දෙකත් ගැළපේ.",
+  "same_star": false,
+  "same_star_text": null
+ },
+ "kuja": {
+  "bride": {
+   "rule_set": "kuja_v2",
+   "provisional": true,
+   "present": true,
+   "strength": 3,
+   "reduced": true,
+   "houses": [
+    1,
+    2,
+    4,
+    7,
+    8,
+    12
+   ],
+   "points": [
+    {
+     "point": "lagna",
+     "house": 4,
+     "counts": true
+    },
+    {
+     "point": "moon",
+     "house": 2,
+     "counts": true
+    },
+    {
+     "point": "venus",
+     "house": 7,
+     "counts": true
+    }
+   ],
+   "cancellations": [
+    {
+     "id": "lagna_kataka_simha",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "ලග්නය මේෂ වේ."
+    },
+    {
+     "id": "mars_own_or_exalted",
+     "applies": false,
+     "facts": {
+      "sign": "kataka"
+     },
+     "reason": "කුජ කටක රාශියේ සිටී. එය ස්වක්ෂේත්‍ර හෝ උච්ච රාශියක් නොවේ."
+    },
+    {
+     "id": "jupiter_aspects_mars",
+     "applies": true,
+     "facts": {
+      "jupiter_sign": "vrischika",
+      "mars_sign": "kataka"
+     },
+     "reason": "වෘශ්චික රාශියේ සිටින ගුරුගේ දෘෂ්ටිය කටක රාශියේ සිටින කුජට වැටෙනවා."
+    },
+    {
+     "id": "mars_house_sign_exception",
+     "applies": false,
+     "facts": {
+      "house": 4,
+      "sign": "kataka"
+     },
+     "reason": "මෙම ව්‍යතිරේකය කටක රාශියේ 4 වැනි භාවයේ කුජට අදාළ නොවේ."
+    },
+    {
+     "id": "mars_with_moon",
+     "applies": false,
+     "facts": {
+      "sign": "kataka"
+     },
+     "reason": "කටක රාශියේ කුජ චන්ද්‍රයා සමඟ නොසිටී."
+    },
+    {
+     "id": "mars_simha_kumbha",
+     "applies": false,
+     "facts": {
+      "sign": "kataka"
+     },
+     "reason": "කුජ කටක රාශියේ සිටී. එය සිංහ හෝ කුම්භ නොවේ."
+    },
+    {
+     "id": "benefic_in_lagna",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "මේෂ ලග්නයේ ගුරු හෝ සිකුරු නොසිටී."
+    }
+   ],
+   "reasons": [
+    "ලග්නයේ සිට ගණන් කළ විට කුජ 4 වැනි භාවයේ සිටී.",
+    "චන්ද්‍රයාගේ සිට ගණන් කළ විට කුජ 2 වැනි භාවයේ සිටී.",
+    "සිකුරුගේ සිට ගණන් කළ විට කුජ 7 වැනි භාවයේ සිටී.",
+    "එය අඩු කරන සමහර කරුණු අදාළ වේ. ජ්‍යෝතිෂවේදියකු මෙය සලකා බැලිය යුතුය."
+   ]
+  },
+  "groom": {
+   "rule_set": "kuja_v2",
+   "provisional": true,
+   "present": true,
+   "strength": 2,
+   "reduced": false,
+   "houses": [
+    1,
+    2,
+    4,
+    7,
+    8,
+    12
+   ],
+   "points": [
+    {
+     "point": "lagna",
+     "house": 2,
+     "counts": true
+    },
+    {
+     "point": "moon",
+     "house": 2,
+     "counts": true
+    },
+    {
+     "point": "venus",
+     "house": 10,
+     "counts": false
+    }
+   ],
+   "cancellations": [
+    {
+     "id": "lagna_kataka_simha",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "ලග්නය මේෂ වේ."
+    },
+    {
+     "id": "mars_own_or_exalted",
+     "applies": false,
+     "facts": {
+      "sign": "vrishabha"
+     },
+     "reason": "කුජ වෘෂභ රාශියේ සිටී. එය ස්වක්ෂේත්‍ර හෝ උච්ච රාශියක් නොවේ."
+    },
+    {
+     "id": "jupiter_aspects_mars",
+     "applies": false,
+     "facts": {
+      "jupiter_sign": "simha",
+      "mars_sign": "vrishabha"
+     },
+     "reason": "සිංහ රාශියේ සිටින ගුරුගේ දෘෂ්ටිය වෘෂභ රාශියේ සිටින කුජට වැටෙන්නේ නැහැ."
+    },
+    {
+     "id": "mars_house_sign_exception",
+     "applies": false,
+     "facts": {
+      "house": 2,
+      "sign": "vrishabha"
+     },
+     "reason": "මෙම ව්‍යතිරේකය වෘෂභ රාශියේ 2 වැනි භාවයේ කුජට අදාළ නොවේ."
+    },
+    {
+     "id": "mars_with_moon",
+     "applies": false,
+     "facts": {
+      "sign": "vrishabha"
+     },
+     "reason": "වෘෂභ රාශියේ කුජ චන්ද්‍රයා සමඟ නොසිටී."
+    },
+    {
+     "id": "mars_simha_kumbha",
+     "applies": false,
+     "facts": {
+      "sign": "vrishabha"
+     },
+     "reason": "කුජ වෘෂභ රාශියේ සිටී. එය සිංහ හෝ කුම්භ නොවේ."
+    },
+    {
+     "id": "benefic_in_lagna",
+     "applies": false,
+     "facts": {
+      "sign": "mesha"
+     },
+     "reason": "මේෂ ලග්නයේ ගුරු හෝ සිකුරු නොසිටී."
+    }
+   ],
+   "reasons": [
+    "ලග්නයේ සිට ගණන් කළ විට කුජ 2 වැනි භාවයේ සිටී.",
+    "චන්ද්‍රයාගේ සිට ගණන් කළ විට කුජ 2 වැනි භාවයේ සිටී."
+   ]
+  },
+  "comparison": "both",
+  "reason": "කේන්දර දෙකේම කුජ දෝෂය පෙනෙන බැවින්, ඒවා එකිනෙක සමබර කරන ලෙස බොහෝ විට සැලකේ."
+ }
+}

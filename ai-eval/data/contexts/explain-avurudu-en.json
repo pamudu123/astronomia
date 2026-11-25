@@ -1,0 +1,104 @@
+{
+ "page": "avurudu",
+ "language": "en",
+ "result": {
+  "year": 2027,
+  "time_zone_shown": "Asia/Colombo",
+  "calculated": {
+   "label": "the site's own calculation",
+   "new_year_dawn": {
+    "sri_lanka": "15:29 on 2027-04-14"
+   },
+   "punya_kalaya_from": {
+    "sri_lanka": "09:05 on 2027-04-14"
+   },
+   "punya_kalaya_to": {
+    "sri_lanka": "21:53 on 2027-04-14"
+   }
+  },
+  "official": {
+   "source": "Department of Cultural Affairs, Sinhala Avurudu nakath list 2027, released by the Department of Government Information on 25 August 2026",
+   "times": [
+    {
+     "custom": "Viewing the new moon (lunar year)",
+     "at": null,
+     "from": null,
+     "to": null,
+     "date": "9 April 2027"
+    },
+    {
+     "custom": "Viewing the new moon (solar year)",
+     "at": null,
+     "from": null,
+     "to": null,
+     "date": "7 May 2027"
+    },
+    {
+     "custom": "Bathing for the old year",
+     "at": null,
+     "from": null,
+     "to": null,
+     "date": "12 April 2027"
+    },
+    {
+     "custom": "Dawn of the new year",
+     "at": {
+      "sri_lanka": "15:29 on 2027-04-14"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "Punya kalaya (nonagathaya)",
+     "at": null,
+     "from": {
+      "sri_lanka": "09:05 on 2027-04-14"
+     },
+     "to": {
+      "sri_lanka": "21:53 on 2027-04-14"
+     }
+    },
+    {
+     "custom": "Preparing meals",
+     "at": {
+      "sri_lanka": "18:18 on 2027-04-14"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "Starting work, transactions and eating",
+     "at": {
+      "sri_lanka": "20:18 on 2027-04-14"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "Anointing oil",
+     "at": {
+      "sri_lanka": "07:04 on 2027-04-17"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "Leaving for work",
+     "at": {
+      "sri_lanka": "06:15 on 2027-04-21"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "Planting trees",
+     "at": {
+      "sri_lanka": "11:38 on 2027-04-22"
+     },
+     "from": null,
+     "to": null
+    }
+   ]
+  }
+ }
+}

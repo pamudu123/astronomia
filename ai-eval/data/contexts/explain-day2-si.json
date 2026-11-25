@@ -1,0 +1,31 @@
+{
+ "page": "good_times_day",
+ "language": "si",
+ "result": {
+  "date": "2026-12-12",
+  "weekday": "සෙනසුරාදා",
+  "place": "මහනුවර",
+  "place_id": 1241622,
+  "timezone": "Asia/Colombo",
+  "sunrise": "06:09",
+  "sunset": "17:52",
+  "rahu_kalaya": "09:03 to 10:30",
+  "thithi": [
+   {
+    "name": "පුර තියවක",
+    "time": "11:24 on 2026-12-11 to 14:07"
+   },
+   {
+    "name": "පුර ජලවක",
+    "time": "14:07 to 16:49 on 2026-12-13"
+   }
+  ],
+  "nakatha": [
+   {
+    "name": "උත්තරසල",
+    "time": "03:05 to 06:13 on 2026-12-13"
+   }
+  ],
+  "provisional": true
+ }
+}

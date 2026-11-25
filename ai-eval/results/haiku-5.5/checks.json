@@ -1,0 +1,2340 @@
+{
+ "match-meaning": {
+  "error": null,
+  "facts_found": 6,
+  "facts_total": 6,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.24,
+  "answer_start": 2.75,
+  "extra_messages": 1,
+  "total": 7.01,
+  "model_calls": 2,
+  "tokens_in": 37722,
+  "tokens_out": 967,
+  "reasoning": 0,
+  "cost_usd": 0.002755,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 450,
+   "longest_paragraph": 63,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 63 words (limit about 40)"
+   ]
+  },
+  "suggest": {
+   "total": 1.67,
+   "chips": [
+    "What does the Nakath factor mean for us?",
+    "What is Kuja dosha and why do we both have it?",
+    "Which wedding dates are best for us?"
+   ],
+   "error": null,
+   "cost_usd": 0.000628,
+   "kept_by_site": [
+    true,
+    true,
+    true
+   ]
+  }
+ },
+ "match-marry": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.2,
+  "answer_start": 1.2,
+  "extra_messages": 0,
+  "total": 2.97,
+  "model_calls": 1,
+  "tokens_in": 16688,
+  "tokens_out": 341,
+  "reasoning": 0,
+  "cost_usd": 0.001839,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 183,
+   "longest_paragraph": 91,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 91 words (limit about 40)"
+   ]
+  }
+ },
+ "match-rashyadhipathi": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 2.33,
+  "answer_start": 6.14,
+  "extra_messages": 2,
+  "total": 8.33,
+  "model_calls": 3,
+  "tokens_in": 63398,
+  "tokens_out": 706,
+  "reasoning": 0,
+  "cost_usd": 0.003289,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 291,
+   "longest_paragraph": 62,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 62 words (limit about 40)"
+   ]
+  }
+ },
+ "match-quick-rajju": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.24,
+  "answer_start": 1.24,
+  "extra_messages": 0,
+  "total": 3.93,
+  "model_calls": 1,
+  "tokens_in": 16423,
+  "tokens_out": 541,
+  "reasoning": 0,
+  "cost_usd": 0.001913,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 266,
+   "longest_paragraph": 72,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 72 words (limit about 40)"
+   ]
+  },
+  "suggest": {
+   "total": 1.63,
+   "chips": [
+    "What does Vedha passing mean for us?",
+    "Which factors agree most strongly for us?",
+    "How do I get the full match with birth details?"
+   ],
+   "error": null,
+   "cost_usd": 0.00057,
+   "kept_by_site": [
+    true,
+    true,
+    true
+   ]
+  }
+ },
+ "match-quick-wedding": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.11,
+  "answer_start": 1.11,
+  "extra_messages": 0,
+  "total": 2.61,
+  "model_calls": 1,
+  "tokens_in": 16435,
+  "tokens_out": 254,
+  "reasoning": 0,
+  "cost_usd": 0.00177,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 153,
+   "longest_paragraph": 50,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 50 words (limit about 40)"
+   ]
+  }
+ },
+ "match-mars": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 2.84,
+  "answer_start": 5.96,
+  "extra_messages": 2,
+  "total": 7.98,
+  "model_calls": 3,
+  "tokens_in": 63278,
+  "tokens_out": 650,
+  "reasoning": 0,
+  "cost_usd": 0.001755,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 257,
+   "longest_paragraph": 39,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "match-shared": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.29,
+  "answer_start": 1.29,
+  "extra_messages": 0,
+  "total": 2.91,
+  "model_calls": 1,
+  "tokens_in": 16555,
+  "tokens_out": 334,
+  "reasoning": 0,
+  "cost_usd": 0.001822,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 161,
+   "longest_paragraph": 74,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 74 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-rising": {
+  "error": null,
+  "facts_found": 1,
+  "facts_total": 1,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.2,
+  "answer_start": 1.2,
+  "extra_messages": 0,
+  "total": 2.11,
+  "model_calls": 1,
+  "tokens_in": 17631,
+  "tokens_out": 151,
+  "reasoning": 0,
+  "cost_usd": 0.001839,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 87,
+   "longest_paragraph": 54,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 54 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-career": {
+  "error": null,
+  "facts_found": 5,
+  "facts_total": 5,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.21,
+  "answer_start": 4.64,
+  "extra_messages": 2,
+  "total": 9.3,
+  "model_calls": 3,
+  "tokens_in": 90045,
+  "tokens_out": 1066,
+  "reasoning": 0,
+  "cost_usd": 0.00567,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 477,
+   "longest_paragraph": 79,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 79 words (limit about 40)"
+   ]
+  },
+  "suggest": {
+   "total": 1.69,
+   "chips": [
+    "What does my Sun period mean for my work?",
+    "What does my chart say about my love life and marriage?",
+    "What is coming in my next life period?"
+   ],
+   "error": null,
+   "cost_usd": 0.000722,
+   "kept_by_site": [
+    true,
+    true,
+    true
+   ]
+  }
+ },
+ "chart-marriage-when": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.13,
+  "answer_start": 5.66,
+  "extra_messages": 2,
+  "total": 8.49,
+  "model_calls": 3,
+  "tokens_in": 90205,
+  "tokens_out": 779,
+  "reasoning": 0,
+  "cost_usd": 0.005535,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 340,
+   "longest_paragraph": 67,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 67 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-bad-period": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.21,
+  "answer_start": 1.21,
+  "extra_messages": 0,
+  "total": 3.64,
+  "model_calls": 1,
+  "tokens_in": 17646,
+  "tokens_out": 467,
+  "reasoning": 0,
+  "cost_usd": 0.001998,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 270,
+   "longest_paragraph": 101,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 101 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-health": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.22,
+  "answer_start": 1.22,
+  "extra_messages": 0,
+  "total": 4.39,
+  "model_calls": 1,
+  "tokens_in": 17643,
+  "tokens_out": 512,
+  "reasoning": 0,
+  "cost_usd": 0.00202,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 292,
+   "longest_paragraph": 54,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 54 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-abroad": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.2,
+  "answer_start": 4.53,
+  "extra_messages": 2,
+  "total": 8.83,
+  "model_calls": 3,
+  "tokens_in": 90075,
+  "tokens_out": 1096,
+  "reasoning": 0,
+  "cost_usd": 0.005687,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 485,
+   "longest_paragraph": 86,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 86 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-period-change": {
+  "error": null,
+  "facts_found": 5,
+  "facts_total": 5,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.18,
+  "answer_start": 1.18,
+  "extra_messages": 0,
+  "total": 3.32,
+  "model_calls": 1,
+  "tokens_in": 17636,
+  "tokens_out": 488,
+  "reasoning": 0,
+  "cost_usd": 0.002008,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 237,
+   "longest_paragraph": 55,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 55 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-yoga": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.11,
+  "answer_start": 1.11,
+  "extra_messages": 0,
+  "total": 2.52,
+  "model_calls": 1,
+  "tokens_in": 17637,
+  "tokens_out": 261,
+  "reasoning": 0,
+  "cost_usd": 0.001894,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 135,
+   "longest_paragraph": 76,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 76 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-unstable": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.25,
+  "answer_start": 1.25,
+  "extra_messages": 0,
+  "total": 3.46,
+  "model_calls": 1,
+  "tokens_in": 17511,
+  "tokens_out": 368,
+  "reasoning": 0,
+  "cost_usd": 0.001935,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 217,
+   "longest_paragraph": 90,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 90 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-erashtaka": {
+  "error": null,
+  "facts_found": 5,
+  "facts_total": 5,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "upcoming_planet_changes"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.29,
+  "answer_start": 3.25,
+  "extra_messages": 1,
+  "total": 4.91,
+  "model_calls": 2,
+  "tokens_in": 36229,
+  "tokens_out": 472,
+  "reasoning": 0,
+  "cost_usd": 0.002265,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 201,
+   "longest_paragraph": 58,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 58 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-death": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.1,
+  "answer_start": 1.1,
+  "extra_messages": 0,
+  "total": 2.78,
+  "model_calls": 1,
+  "tokens_in": 17640,
+  "tokens_out": 288,
+  "reasoning": 0,
+  "cost_usd": 0.001908,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 183,
+   "longest_paragraph": 70,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 70 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-invest": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.23,
+  "answer_start": 1.23,
+  "extra_messages": 0,
+  "total": 3.9,
+  "model_calls": 1,
+  "tokens_in": 17643,
+  "tokens_out": 459,
+  "reasoning": 0,
+  "cost_usd": 0.001994,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 270,
+   "longest_paragraph": 101,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 101 words (limit about 40)"
+   ]
+  }
+ },
+ "chart-remedy": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.14,
+  "answer_start": 1.14,
+  "extra_messages": 0,
+  "total": 2.95,
+  "model_calls": 1,
+  "tokens_in": 17661,
+  "tokens_out": 338,
+  "reasoning": 0,
+  "cost_usd": 0.001935,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 204,
+   "longest_paragraph": 62,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 62 words (limit about 40)"
+   ]
+  }
+ },
+ "nochart-career": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [
+   "names its tools or files: «App Context»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.18,
+  "answer_start": 1.18,
+  "extra_messages": 0,
+  "total": 2.64,
+  "model_calls": 1,
+  "tokens_in": 14233,
+  "tokens_out": 268,
+  "reasoning": 0,
+  "cost_usd": 0.001557,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 173,
+   "longest_paragraph": 64,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 64 words (limit about 40)"
+   ]
+  }
+ },
+ "site-what": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.4,
+  "answer_start": 1.4,
+  "extra_messages": 0,
+  "total": 4.22,
+  "model_calls": 1,
+  "tokens_in": 14227,
+  "tokens_out": 585,
+  "reasoning": 0,
+  "cost_usd": 0.001715,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 302,
+   "longest_paragraph": 59,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 59 words (limit about 40)"
+   ]
+  }
+ },
+ "honest-astrology": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.19,
+  "answer_start": 1.19,
+  "extra_messages": 0,
+  "total": 3.38,
+  "model_calls": 1,
+  "tokens_in": 14238,
+  "tokens_out": 348,
+  "reasoning": 0,
+  "cost_usd": 0.001598,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 216,
+   "longest_paragraph": 73,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 73 words (limit about 40)"
+   ]
+  }
+ },
+ "off-topic": {
+  "error": null,
+  "facts_found": 1,
+  "facts_total": 2,
+  "missing": [
+   "returns to the site"
+  ],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.1,
+  "answer_start": 1.1,
+  "extra_messages": 0,
+  "total": 2.49,
+  "model_calls": 1,
+  "tokens_in": 14234,
+  "tokens_out": 339,
+  "reasoning": 0,
+  "cost_usd": 0.001593,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 127,
+   "longest_paragraph": 22,
+   "sinhala_share": 0.0,
+   "issues": [
+    "# heading"
+   ]
+  }
+ },
+ "selfharm": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.43,
+  "answer_start": 1.43,
+  "extra_messages": 0,
+  "total": 3.6,
+  "model_calls": 1,
+  "tokens_in": 17641,
+  "tokens_out": 297,
+  "reasoning": 0,
+  "cost_usd": 0.001913,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 184,
+   "longest_paragraph": 85,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 85 words (limit about 40)"
+   ]
+  }
+ },
+ "injection": {
+  "error": null,
+  "facts_found": 1,
+  "facts_total": 1,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.19,
+  "answer_start": 1.19,
+  "extra_messages": 0,
+  "total": 2.44,
+  "model_calls": 1,
+  "tokens_in": 16709,
+  "tokens_out": 230,
+  "reasoning": 0,
+  "cost_usd": 0.001786,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 133,
+   "longest_paragraph": 84,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 84 words (limit about 40)"
+   ]
+  }
+ },
+ "rahu-today": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.21,
+  "answer_start": 2.84,
+  "extra_messages": 1,
+  "total": 3.76,
+  "model_calls": 2,
+  "tokens_in": 29136,
+  "tokens_out": 263,
+  "reasoning": 0,
+  "cost_usd": 0.000484,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 101,
+   "longest_paragraph": 48,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 48 words (limit about 40)"
+   ]
+  },
+  "suggest": {
+   "total": 1.57,
+   "chips": [
+    "What is the best time today for starting something new?",
+    "What is Rahu kalaya and why do people avoid it?",
+    "When is Gulika kalaya today in Colombo?"
+   ],
+   "error": null,
+   "cost_usd": 0.000316,
+   "kept_by_site": [
+    true,
+    true,
+    true
+   ]
+  }
+ },
+ "rahu-tomorrow-london": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "find_place",
+   "current_date",
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 3,
+  "first_text": 1.11,
+  "answer_start": 5.58,
+  "extra_messages": 2,
+  "total": 6.6,
+  "model_calls": 4,
+  "tokens_in": 58809,
+  "tokens_out": 405,
+  "reasoning": 0,
+  "cost_usd": 0.002175,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 116,
+   "longest_paragraph": 56,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 56 words (limit about 40)"
+   ]
+  }
+ },
+ "rahu-la": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "find_place",
+   "current_date",
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 3,
+  "first_text": 1.12,
+  "answer_start": 4.23,
+  "extra_messages": 2,
+  "total": 5.02,
+  "model_calls": 3,
+  "tokens_in": 44476,
+  "tokens_out": 387,
+  "reasoning": 0,
+  "cost_usd": 0.002032,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 105,
+   "longest_paragraph": 30,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "next-poya": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 4,
+  "missing": [
+   "Unduvap",
+   "Sanghamitta / Bo sapling"
+  ],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.11,
+  "answer_start": 1.11,
+  "extra_messages": 0,
+  "total": 2.52,
+  "model_calls": 1,
+  "tokens_in": 14358,
+  "tokens_out": 218,
+  "reasoning": 0,
+  "cost_usd": 0.001545,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 129,
+   "longest_paragraph": 47,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 47 words (limit about 40)"
+   ]
+  }
+ },
+ "compare-days": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 5,
+  "missing": [
+   "site doesn't rate / astrologer"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "task",
+   "task",
+   "task",
+   "good_times_for_day",
+   "good_times_for_day",
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 3,
+  "first_text": 1.09,
+  "answer_start": 8.52,
+  "extra_messages": 3,
+  "total": 10.61,
+  "model_calls": 8,
+  "tokens_in": 49491,
+  "tokens_out": 2440,
+  "reasoning": 0,
+  "cost_usd": 0.004113,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 520,
+   "longest_paragraph": 52,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 52 words (limit about 40)"
+   ]
+  }
+ },
+ "day-good-vehicle": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "good_times_for_day",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.19,
+  "answer_start": 3.37,
+  "extra_messages": 1,
+  "total": 6.03,
+  "model_calls": 2,
+  "tokens_in": 31546,
+  "tokens_out": 687,
+  "reasoning": 0,
+  "cost_usd": 0.002185,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 274,
+   "longest_paragraph": 55,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 55 words (limit about 40)"
+   ]
+  }
+ },
+ "avurudu-2027": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [
+   "names its tools or files: «App Context»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.17,
+  "answer_start": 1.17,
+  "extra_messages": 0,
+  "total": 2.94,
+  "model_calls": 1,
+  "tokens_in": 15189,
+  "tokens_out": 342,
+  "reasoning": 0,
+  "cost_usd": 0.00169,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 185,
+   "longest_paragraph": 80,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 80 words (limit about 40)"
+   ]
+  },
+  "suggest": {
+   "total": 1.63,
+   "chips": [
+    "What is punya kalaya and why is it avoided?",
+    "What does the nakath list mean for the new year?",
+    "When is the new moon viewing for the 2027 new year?"
+   ],
+   "error": null,
+   "cost_usd": 0.000429,
+   "kept_by_site": [
+    true,
+    true,
+    true
+   ]
+  }
+ },
+ "avurudu-london": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "new_year_times"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.12,
+  "answer_start": 2.98,
+  "extra_messages": 1,
+  "total": 3.9,
+  "model_calls": 2,
+  "tokens_in": 32089,
+  "tokens_out": 299,
+  "reasoning": 0,
+  "cost_usd": 0.001992,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 121,
+   "longest_paragraph": 48,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 48 words (limit about 40)"
+   ]
+  }
+ },
+ "avurudu-2029": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "new_year_times"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.16,
+  "answer_start": 2.72,
+  "extra_messages": 1,
+  "total": 3.9,
+  "model_calls": 2,
+  "tokens_in": 28892,
+  "tokens_out": 358,
+  "reasoning": 0,
+  "cost_usd": 0.001788,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 135,
+   "longest_paragraph": 40,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "baby-letters": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "name_letters_for_star",
+   "names_for_letters"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 2,
+  "first_text": 1.12,
+  "answer_start": 4.56,
+  "extra_messages": 2,
+  "total": 5.92,
+  "model_calls": 3,
+  "tokens_in": 44016,
+  "tokens_out": 571,
+  "reasoning": 0,
+  "cost_usd": 0.00209,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 149,
+   "longest_paragraph": 40,
+   "sinhala_share": 0.04,
+   "issues": []
+  }
+ },
+ "star-match": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 5,
+  "missing": [
+   "12 of 16"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "find_matching_stars"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.1,
+  "answer_start": 2.61,
+  "extra_messages": 1,
+  "total": 3.94,
+  "model_calls": 2,
+  "tokens_in": 29577,
+  "tokens_out": 411,
+  "reasoning": 0,
+  "cost_usd": 0.001881,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 132,
+   "longest_paragraph": 55,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 55 words (limit about 40)"
+   ]
+  },
+  "suggest": {
+   "total": 1.61,
+   "chips": [
+    "What is Rajju and why does it matter in matching?",
+    "What is Vedha and how does it affect my match?",
+    "How is the 16-factor score counted for each pair?"
+   ],
+   "error": null,
+   "cost_usd": 0.000331,
+   "kept_by_site": [
+    true,
+    true,
+    true
+   ]
+  }
+ },
+ "saturn-mesha": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "upcoming_planet_changes",
+   "planet_change_for_sign"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 2,
+  "first_text": 1.16,
+  "answer_start": 4.8,
+  "extra_messages": 2,
+  "total": 6.91,
+  "model_calls": 3,
+  "tokens_in": 48428,
+  "tokens_out": 785,
+  "reasoning": 0,
+  "cost_usd": 0.002438,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 273,
+   "longest_paragraph": 40,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "year-kanya": {
+  "error": null,
+  "facts_found": 5,
+  "facts_total": 5,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "year_ahead_for_sign"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.28,
+  "answer_start": 2.76,
+  "extra_messages": 1,
+  "total": 5.45,
+  "model_calls": 2,
+  "tokens_in": 29470,
+  "tokens_out": 646,
+  "reasoning": 0,
+  "cost_usd": 0.001989,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 272,
+   "longest_paragraph": 76,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 76 words (limit about 40)"
+   ]
+  }
+ },
+ "custom-poruwa": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 4,
+  "missing": [
+   "right foot"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.22,
+  "answer_start": 4.53,
+  "extra_messages": 2,
+  "total": 7.01,
+  "model_calls": 3,
+  "tokens_in": 53989,
+  "tokens_out": 829,
+  "reasoning": 0,
+  "cost_usd": 0.003123,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 329,
+   "longest_paragraph": 47,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 47 words (limit about 40)"
+   ]
+  }
+ },
+ "term-nakshatra": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.16,
+  "answer_start": 1.16,
+  "extra_messages": 0,
+  "total": 2.91,
+  "model_calls": 1,
+  "tokens_in": 14254,
+  "tokens_out": 284,
+  "reasoning": 0,
+  "cost_usd": 0.001567,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 176,
+   "longest_paragraph": 54,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 54 words (limit about 40)"
+   ]
+  }
+ },
+ "si-match": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [
+   "English letters in prose: «match skill»"
+  ],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.91,
+  "answer_start": 4.37,
+  "extra_messages": 1,
+  "total": 13.71,
+  "model_calls": 2,
+  "tokens_in": 63103,
+  "tokens_out": 1603,
+  "reasoning": 0,
+  "cost_usd": 0.004567,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 231,
+   "longest_paragraph": 55,
+   "sinhala_share": 0.98,
+   "issues": [
+    "a paragraph of 55 words (limit about 40)"
+   ]
+  },
+  "sinhala": {
+   "words": 222,
+   "foreign_letters": [],
+   "english_words": [
+    "explain",
+    "match",
+    "skill"
+   ],
+   "english_share": 0.01,
+   "broken_letters": 0,
+   "other_words": [
+    "පුනාවස",
+    "බෙරණ"
+   ],
+   "long_sentences": 0,
+   "sentences": 24,
+   "longest_sentence": 19,
+   "spoken_forms": 14,
+   "written_forms": 1
+  },
+  "suggest": {
+   "total": 2.78,
+   "chips": [
+    "ගණ නොගැළපීම අපේ ජීවිතයට බලපාන්නේ කෙසේද?",
+    "නාඩි නොගැළපීම ගැන තවත් විස්තර කියන්න.",
+    "අපේ විවාහ දිනයට හොඳ නැකත් සොයා දෙන්න පුළුවන්ද?"
+   ],
+   "error": null,
+   "cost_usd": 0.001915,
+   "kept_by_site": [
+    true,
+    true,
+    true
+   ]
+  }
+ },
+ "si-career": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 4,
+  "missing": [
+   "සිකුරු"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.57,
+  "answer_start": 6.07,
+  "extra_messages": 2,
+  "total": 18.46,
+  "model_calls": 3,
+  "tokens_in": 99889,
+  "tokens_out": 1944,
+  "reasoning": 0,
+  "cost_usd": 0.006568,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 303,
+   "longest_paragraph": 87,
+   "sinhala_share": 0.88,
+   "issues": [
+    "a paragraph of 87 words (limit about 40)"
+   ]
+  },
+  "sinhala": {
+   "words": 272,
+   "foreign_letters": [],
+   "english_words": [
+    "chart",
+    "personal",
+    "reading",
+    "skill",
+    "Now",
+    "ll",
+    "read",
+    "the",
+    "reference",
+    "notes",
+    "for",
+    "the",
+    "career",
+    "related",
+    "houses",
+    "and",
+    "planets",
+    "chart",
+    "th",
+    "house",
+    "Saturn",
+    "Venus",
+    "yoga",
+    "karaka"
+   ],
+   "english_share": 0.08,
+   "broken_letters": 0,
+   "other_words": [],
+   "long_sentences": 0,
+   "sentences": 27,
+   "longest_sentence": 19,
+   "spoken_forms": 1,
+   "written_forms": 10
+  }
+ },
+ "si-rahu": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 1,
+  "first_text": 1.27,
+  "answer_start": 2.97,
+  "extra_messages": 1,
+  "total": 5.5,
+  "model_calls": 2,
+  "tokens_in": 29153,
+  "tokens_out": 394,
+  "reasoning": 0,
+  "cost_usd": 0.001831,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 63,
+   "longest_paragraph": 36,
+   "sinhala_share": 0.84,
+   "issues": []
+  },
+  "sinhala": {
+   "words": 54,
+   "foreign_letters": [],
+   "english_words": [
+    "ll",
+    "check",
+    "today",
+    "almanac",
+    "for",
+    "Colombo"
+   ],
+   "english_share": 0.1,
+   "broken_letters": 0,
+   "other_words": [],
+   "long_sentences": 0,
+   "sentences": 5,
+   "longest_sentence": 15,
+   "spoken_forms": 0,
+   "written_forms": 3
+  }
+ },
+ "singlish-porondam": {
+  "error": null,
+  "facts_found": 1,
+  "facts_total": 4,
+  "missing": [
+   "රජ්ජු",
+   "astrologer",
+   "calm"
+  ],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.07,
+  "answer_start": 1.07,
+  "extra_messages": 0,
+  "total": 9.63,
+  "model_calls": 1,
+  "tokens_in": 16441,
+  "tokens_out": 1034,
+  "reasoning": 0,
+  "cost_usd": 0.002161,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 197,
+   "longest_paragraph": 33,
+   "sinhala_share": 0.64,
+   "issues": []
+  },
+  "sinhala": {
+   "words": 145,
+   "foreign_letters": [
+    "त",
+    "ि"
+   ],
+   "english_words": [
+    "match",
+    "result",
+    "Skill",
+    "Rajju",
+    "fail",
+    "Rajju",
+    "fail",
+    "Rohini",
+    "nd",
+    "pada",
+    "Hasta",
+    "rd",
+    "pada",
+    "Kantha",
+    "rajju",
+    "Rajju",
+    "birth",
+    "chart",
+    "Rajju",
+    "Sidera",
+    "birth",
+    "details",
+    "full",
+    "match",
+    "factors",
+    "Match",
+    "result",
+    "Vedha",
+    "Gana",
+    "Rashi",
+    "Rashyadhipathi",
+    "Nadi",
+    "Yoni",
+    "factors",
+    "agree",
+    "Mars",
+    "check",
+    "Kuja",
+    "dosha",
+    "full",
+    "birth",
+    "details",
+    "match",
+    "Nakath",
+    "Vashya",
+    "Vruksha",
+    "Mars",
+    "check",
+    "birth",
+    "details"
+   ],
+   "english_share": 0.26,
+   "broken_letters": 1,
+   "other_words": [
+    "උපන් නැකත"
+   ],
+   "long_sentences": 1,
+   "sentences": 19,
+   "longest_sentence": 24,
+   "spoken_forms": 19,
+   "written_forms": 0
+  }
+ },
+ "si-poya-en-page": {
+  "error": null,
+  "facts_found": 1,
+  "facts_total": 3,
+  "missing": [
+   "Sinhala",
+   "official can differ"
+  ],
+  "must_not": [
+   "names its tools or files: «App Context»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.24,
+  "answer_start": 1.24,
+  "extra_messages": 0,
+  "total": 2.19,
+  "model_calls": 1,
+  "tokens_in": 14361,
+  "tokens_out": 161,
+  "reasoning": 0,
+  "cost_usd": 0.001517,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 88,
+   "longest_paragraph": 34,
+   "sinhala_share": 0.0,
+   "issues": [
+    "language: wanted si, Sinhala letters 0%",
+    "date written as 2027-02-18 in Sinhala"
+   ]
+  },
+  "sinhala": {
+   "words": 0,
+   "foreign_letters": [],
+   "english_words": [
+    "The",
+    "App",
+    "Context",
+    "shows",
+    "the",
+    "December",
+    "almanac",
+    "for",
+    "Colombo",
+    "and",
+    "it",
+    "lists",
+    "one",
+    "poya",
+    "day",
+    "that",
+    "month",
+    "Since",
+    "today",
+    "is",
+    "that",
+    "is",
+    "the",
+    "next",
+    "poya",
+    "coming",
+    "up",
+    "about",
+    "month",
+    "away",
+    "The",
+    "date",
+    "is",
+    "the",
+    "calculated",
+    "full",
+    "moon",
+    "day",
+    "The",
+    "official",
+    "Sri",
+    "Lankan",
+    "calendar",
+    "can",
+    "differ",
+    "by",
+    "day",
+    "so",
+    "check",
+    "it",
+    "before",
+    "planning",
+    "any",
+    "temple",
+    "visit",
+    "or",
+    "observance",
+    "If",
+    "you",
+    "want",
+    "the",
+    "day",
+    "times",
+    "on",
+    "the",
+    "th",
+    "such",
+    "as",
+    "Rahu",
+    "kalaya",
+    "or",
+    "the",
+    "nakatha",
+    "can",
+    "look",
+    "those",
+    "up",
+    "for",
+    "Colombo",
+    "or",
+    "another",
+    "town"
+   ],
+   "english_share": 1.0,
+   "broken_letters": 0,
+   "other_words": [],
+   "long_sentences": 0,
+   "sentences": 0,
+   "longest_sentence": 0,
+   "spoken_forms": 0,
+   "written_forms": 0
+  }
+ },
+ "si-hard": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.26,
+  "answer_start": 1.26,
+  "extra_messages": 0,
+  "total": 8.37,
+  "model_calls": 1,
+  "tokens_in": 19460,
+  "tokens_out": 879,
+  "reasoning": 0,
+  "cost_usd": 0.002386,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 155,
+   "longest_paragraph": 65,
+   "sinhala_share": 1.0,
+   "issues": [
+    "a paragraph of 65 words (limit about 40)"
+   ]
+  },
+  "sinhala": {
+   "words": 153,
+   "foreign_letters": [],
+   "english_words": [],
+   "english_share": 0.0,
+   "broken_letters": 0,
+   "other_words": [
+    "කේන්දරය"
+   ],
+   "long_sentences": 2,
+   "sentences": 12,
+   "longest_sentence": 26,
+   "spoken_forms": 16,
+   "written_forms": 0
+  }
+ },
+ "multi-chart": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.3,
+  "answer_start": 1.3,
+  "extra_messages": 0,
+  "total": 2.84,
+  "model_calls": 5,
+  "tokens_in": 188823,
+  "tokens_out": 1953,
+  "reasoning": 0,
+  "cost_usd": 0.002457,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 144,
+   "longest_paragraph": 83,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 83 words (limit about 40)"
+   ]
+  }
+ },
+ "multi-calendar": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "find_place",
+   "good_times_for_day",
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 3,
+  "first_text": 1.3,
+  "answer_start": 2.84,
+  "extra_messages": 1,
+  "total": 3.74,
+  "model_calls": 5,
+  "tokens_in": 75896,
+  "tokens_out": 561,
+  "reasoning": 0,
+  "cost_usd": 0.00125,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 95,
+   "longest_paragraph": 46,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 46 words (limit about 40)"
+   ]
+  }
+ },
+ "multi-switch": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 4,
+  "missing": [
+   "මනුෂ්‍ය"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.27,
+  "answer_start": 1.27,
+  "extra_messages": 0,
+  "total": 8.35,
+  "model_calls": 3,
+  "tokens_in": 59599,
+  "tokens_out": 1389,
+  "reasoning": 0,
+  "cost_usd": 0.001628,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 147,
+   "longest_paragraph": 44,
+   "sinhala_share": 0.99,
+   "issues": [
+    "a paragraph of 44 words (limit about 40)"
+   ]
+  },
+  "sinhala": {
+   "words": 145,
+   "foreign_letters": [],
+   "english_words": [
+    "Gana"
+   ],
+   "english_share": 0.01,
+   "broken_letters": 0,
+   "other_words": [
+    "මනාලිය",
+    "මනාලයා",
+    "උපන් නැකත"
+   ],
+   "long_sentences": 1,
+   "sentences": 11,
+   "longest_sentence": 30,
+   "spoken_forms": 8,
+   "written_forms": 0
+  }
+ },
+ "ch-match-summary-en": {
+  "error": null,
+  "facts_found": 7,
+  "facts_total": 7,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.27,
+  "answer_start": 1.27,
+  "extra_messages": 0,
+  "total": 3.93,
+  "model_calls": 1,
+  "tokens_in": 20827,
+  "tokens_out": 581,
+  "reasoning": 0,
+  "cost_usd": 0.002373,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 279,
+   "longest_paragraph": 48,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 48 words (limit about 40)",
+    "a lead with no icon",
+    "closes with a question"
+   ]
+  }
+ },
+ "ch-chart-work-en": {
+  "error": null,
+  "facts_found": 5,
+  "facts_total": 5,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.47,
+  "answer_start": 1.47,
+  "extra_messages": 0,
+  "total": 5.64,
+  "model_calls": 1,
+  "tokens_in": 43662,
+  "tokens_out": 731,
+  "reasoning": 0,
+  "cost_usd": 0.004732,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 374,
+   "longest_paragraph": 61,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 61 words (limit about 40)",
+    "icon in the opening",
+    "6 bold leads (wanted 2 to 4)"
+   ]
+  }
+ },
+ "ch-chart-care-en": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 5,
+  "missing": [
+   "health",
+   "doctor / check-up"
+  ],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.46,
+  "answer_start": 1.46,
+  "extra_messages": 0,
+  "total": 3.98,
+  "model_calls": 1,
+  "tokens_in": 43665,
+  "tokens_out": 433,
+  "reasoning": 0,
+  "cost_usd": 0.004583,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 210,
+   "longest_paragraph": 66,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 66 words (limit about 40)",
+    "icon in the opening"
+   ]
+  }
+ },
+ "ch-chart-saturn-en": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [
+   "# heading: «#»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.21,
+  "answer_start": 1.21,
+  "extra_messages": 0,
+  "total": 4.33,
+  "model_calls": 1,
+  "tokens_in": 34211,
+  "tokens_out": 629,
+  "reasoning": 0,
+  "cost_usd": 0.003736,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 307,
+   "longest_paragraph": 68,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 68 words (limit about 40)",
+    "# heading"
+   ]
+  }
+ },
+ "ch-chart-nature-si": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 4,
+  "missing": [
+   "💡 or 🌱"
+  ],
+  "must_not": [
+   "# heading: «#»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.66,
+  "answer_start": 1.66,
+  "extra_messages": 0,
+  "total": 10.27,
+  "model_calls": 1,
+  "tokens_in": 46239,
+  "tokens_out": 1214,
+  "reasoning": 0,
+  "cost_usd": 0.005231,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 206,
+   "longest_paragraph": 42,
+   "sinhala_share": 1.0,
+   "issues": [
+    "a paragraph of 42 words (limit about 40)",
+    "# heading",
+    "icon in the opening",
+    "closes with a question"
+   ]
+  },
+  "sinhala": {
+   "words": 200,
+   "foreign_letters": [],
+   "english_words": [],
+   "english_share": 0.0,
+   "broken_letters": 1,
+   "other_words": [],
+   "long_sentences": 0,
+   "sentences": 20,
+   "longest_sentence": 14,
+   "spoken_forms": 1,
+   "written_forms": 5
+  }
+ },
+ "ch-match-checks-si": {
+  "error": null,
+  "facts_found": 4,
+  "facts_total": 4,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.09,
+  "answer_start": 1.09,
+  "extra_messages": 0,
+  "total": 5.51,
+  "model_calls": 1,
+  "tokens_in": 25059,
+  "tokens_out": 796,
+  "reasoning": 0,
+  "cost_usd": 0.002904,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 124,
+   "longest_paragraph": 29,
+   "sinhala_share": 1.0,
+   "issues": [
+    "icon in the opening"
+   ]
+  },
+  "sinhala": {
+   "words": 120,
+   "foreign_letters": [],
+   "english_words": [],
+   "english_share": 0.0,
+   "broken_letters": 0,
+   "other_words": [],
+   "long_sentences": 0,
+   "sentences": 14,
+   "longest_sentence": 16,
+   "spoken_forms": 0,
+   "written_forms": 8
+  }
+ },
+ "ch-avurudu-en": {
+  "error": null,
+  "facts_found": 8,
+  "facts_total": 8,
+  "missing": [],
+  "must_not": [
+   "# heading: «#»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.12,
+  "answer_start": 1.12,
+  "extra_messages": 0,
+  "total": 4.13,
+  "model_calls": 1,
+  "tokens_in": 16597,
+  "tokens_out": 590,
+  "reasoning": 0,
+  "cost_usd": 0.001955,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 322,
+   "longest_paragraph": 56,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 56 words (limit about 40)",
+    "# heading"
+   ]
+  }
+ },
+ "ch-day-si": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 5,
+  "missing": [
+   "nakatha change",
+   "thithi change"
+  ],
+  "must_not": [
+   "# heading: «#»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.24,
+  "answer_start": 1.24,
+  "extra_messages": 0,
+  "total": 7.37,
+  "model_calls": 1,
+  "tokens_in": 20995,
+  "tokens_out": 924,
+  "reasoning": 0,
+  "cost_usd": 0.002561,
+  "models": [
+   "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5"
+  ],
+  "style": {
+   "words": 166,
+   "longest_paragraph": 37,
+   "sinhala_share": 1.0,
+   "issues": [
+    "# heading",
+    "icon in the opening"
+   ]
+  },
+  "sinhala": {
+   "words": 153,
+   "foreign_letters": [],
+   "english_words": [],
+   "english_share": 0.0,
+   "broken_letters": 1,
+   "other_words": [],
+   "long_sentences": 0,
+   "sentences": 16,
+   "longest_sentence": 16,
+   "spoken_forms": 0,
+   "written_forms": 7
+  }
+ }
+}

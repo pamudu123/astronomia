@@ -1,0 +1,41 @@
+{
+ "page": "planet_change_personal",
+ "language": "en",
+ "result": {
+  "change": "Saturn change",
+  "when": "3 June 2027, 05:28 Sri Lanka time",
+  "from_rising_sign": {
+   "sign": "Mesha",
+   "moves": [
+    {
+     "move": "Saturn leaves your 12th house and enters your 1st house.",
+     "leaves": "The 12th house is about rest, spending and faraway places.",
+     "enters": "The 1st house is about yourself and how you begin things."
+    }
+   ],
+   "other_planets": [
+    "Jupiter stays in Kataka, your 4th house.",
+    "Rahu stays in Makara, your 10th house.",
+    "Ketu stays in Kataka, your 4th house."
+   ],
+   "notes": []
+  },
+  "from_moon_sign": {
+   "sign": "Mithuna",
+   "moves": [
+    {
+     "move": "Saturn leaves your 10th house and enters your 11th house.",
+     "leaves": "The 10th house is about career and standing.",
+     "enters": "The 11th house is about gains and friends."
+    }
+   ],
+   "other_planets": [
+    "Jupiter stays in Kataka, your 2nd house.",
+    "Rahu stays in Makara, your 8th house.",
+    "Ketu stays in Kataka, your 2nd house."
+   ],
+   "notes": []
+  },
+  "provisional": true
+ }
+}

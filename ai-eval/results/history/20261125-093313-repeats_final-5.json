@@ -1,0 +1,151 @@
+{
+ "run": {
+  "label": "repeats/final-5",
+  "when_utc": "2026-11-25T09:33:13+00:00",
+  "model": "gpt-6-luna (default)",
+  "thinking": "low (default)",
+  "cases": "ground_truth",
+  "questions": "a6d2c5e4a4",
+  "prompts": "not recorded"
+ },
+ "answers": {
+  "next-poya": {
+   "turns": [
+    {
+     "question": "When is the next poya day and what is it about?",
+     "text": "The next poya shown for Colombo is **Unduvap Poya, Thursday, 24 December 2026**. Traditionally, it commemorates Theri Sanghamitta bringing the Bodhi sapling to Anuradhapura and the beginnings of the nuns’ order in Sri Lanka.\n\nThat date is the calculated full-moon day; the official Sri Lankan calendar can differ by a day, so check it for religious observances.",
+     "first_event": 0.04,
+     "first_text": 3.89,
+     "final_text_start": 3.89,
+     "error": null,
+     "total": 4.36,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.56,
+        "model": "gpt-6-luna",
+        "input": 9255,
+        "cached": 9252,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.11,
+        "model": "gpt-6-luna",
+        "input": 10403,
+        "cached": 10400,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.53,
+        "model": "gpt-6-luna",
+        "input": 16742,
+        "cached": 16739,
+        "output": 92,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 36400,
+      "cached": 36391,
+      "output": 166
+     }
+    }
+   ]
+  },
+  "si-poya-en-page": {
+   "turns": [
+    {
+     "question": "ඊළඟ පෝය කවදද?",
+     "text": "ඊළඟ පෝය **උඳුවප් පෝය**යි—**2026 දෙසැම්බර් 24** දා, කොළඹ ගණනය අනුව. එය සංඝමිත්තා තෙරණිය ශ්‍රී ලංකාවට බෝධි අංකුරය වැඩම කරවීම සිහිපත් කරනවා. ආගමික කටයුතු සඳහා නිල ශ්‍රී ලාංකික දින දර්ශනය බලන්න; එහි දිනය දිනකින් වෙනස් විය හැකියි.",
+     "first_event": 0.04,
+     "first_text": 6.39,
+     "final_text_start": 6.39,
+     "error": null,
+     "total": 7.71,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.03,
+        "model": "gpt-6-luna",
+        "input": 9254,
+        "cached": 9251,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.0,
+        "model": "gpt-6-luna",
+        "input": 10402,
+        "cached": 10399,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.52,
+        "model": "gpt-6-luna",
+        "input": 16741,
+        "cached": 16738,
+        "output": 125,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 36397,
+      "cached": 36388,
+      "output": 199
+     }
+    }
+   ]
+  }
+ }
+}

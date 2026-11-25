@@ -1,0 +1,624 @@
+{
+ "label": "holdout2/haiku-2",
+ "model": "anthropic/claude-haiku-5.5",
+ "effort": "none",
+ "site_limit_seconds": 60,
+ "answers": {
+  "h2-yoga-1": {
+   "turns": [
+    {
+     "question": "Do I have Gajakesari yoga?",
+     "text": "No, you don't have Gajakesari yoga. It is one of the combinations the chart checks for and does not find, so I won't say it is there.\n\nWhat your chart does show is a different set of combinations. The one most closely related to your Moon is the Chandra-Mangala yoga, where your Moon and Mars sit together in the 6th house (the part of the chart linked to daily work and competition). Your chart also shows a Raja yoga, formed by Venus and Mercury together in the 8th house (the part linked to change, shared resources and research), along with several Vipareeta Raja yogas. Traditionally these are read as signs of effort that tends to pay off over time.\n\nIf you'd like, I can go through what the Raja yoga or the Chandra-Mangala yoga means for your work and daily life.",
+     "first_event": 0.45,
+     "first_text": 1.56,
+     "final_text_start": 1.56,
+     "error": null,
+     "total": 3.07,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.46,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17588,
+        "cached": 17584,
+        "output": 253,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17588,
+      "cached": 17584,
+      "output": 253
+     }
+    }
+   ]
+  },
+  "h2-yoga-2": {
+   "turns": [
+    {
+     "question": "Do I have Budhaditya yoga?",
+     "text": "No, you don't have Budhaditya yoga in your chart. That combination is not among the ones found in your birth chart, so I can't count it for you.\n\nWhat your chart does show is a Vipareeta Raja yoga (Vimala), formed because Mercury, the ruler of your 12th house, sits in your 8th house (the part linked to change, shared money and research). Another combination in your chart is the Raja yoga, which comes from Venus and Mercury sharing that same 8th house.\n\nIf you'd like, I can go through what these combinations traditionally suggest for your work or money.",
+     "first_event": 0.39,
+     "first_text": 1.73,
+     "final_text_start": 1.73,
+     "error": null,
+     "total": 2.74,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.22,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17588,
+        "cached": 17584,
+        "output": 184,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17588,
+      "cached": 17584,
+      "output": 184
+     }
+    }
+   ]
+  },
+  "h2-yoga-3": {
+   "turns": [
+    {
+     "question": "Do I have Hamsa yoga?",
+     "text": "No, you don't have Hamsa yoga in your chart. It is listed among the combinations that are not present here, so I won't read it into your placements.\n\nWhat your chart does have is a set of combinations that involve Venus, Mercury and Jupiter together in the part of the chart linked to growth, such as Vasumathi yoga. Venus, which rules your rising sign (Tula), sits in the 8th house with Mercury and Jupiter, which is the chart's main thread around change, shared resources and research. If you'd like, I can go through what those combinations traditionally suggest for you.",
+     "first_event": 0.13,
+     "first_text": 1.22,
+     "final_text_start": 1.22,
+     "error": null,
+     "total": 2.29,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.03,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17587,
+        "cached": 17583,
+        "output": 185,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17587,
+      "cached": 17583,
+      "output": 185
+     }
+    }
+   ]
+  },
+  "h2-yoga-yes": {
+   "turns": [
+    {
+     "question": "Do I have Chandra-Mangala yoga?",
+     "text": "Yes, you do. Chandra-Mangala yoga is in your chart, formed by your Moon and Mars sitting together in the 6th house, the part of the chart linked to daily work, health habits, debts and competition.\n\nTraditionally this combination is read as a strong drive and energy for getting things done. Because your Moon and Mars share the 6th house, you may find you put real effort into your daily routine and tend to push hard at work. The stretch is that this same energy can tip into restlessness or overwork, so it helps to build in rest and watch your health habits, especially since this house also covers health.\n\nIf you'd like, I can look at how this energy fits with your work chapter or your current life period.",
+     "first_event": 0.17,
+     "first_text": 1.41,
+     "final_text_start": 1.41,
+     "error": null,
+     "total": 2.7,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.41,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17591,
+        "cached": 17587,
+        "output": 218,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17591,
+      "cached": 17587,
+      "output": 218
+     }
+    }
+   ]
+  },
+  "h2-abroad": {
+   "turns": [
+    {
+     "question": "Could I end up living abroad?",
+     "text": "I'll read the personal reading guidance first, then look at what your chart shows about living abroad.\n\nNow the reference notes on houses, life periods and travel.\n\nYour chart does show some pointers toward living abroad, though nothing certain. Let me lay them out.\n\n**🌍 Where the pull toward abroad comes from**\n\nYour 12th house (the part linked to living far from home) is Kanya, and it is ruled by Mercury. Mercury sits in your 8th house, the part linked to change and research. Your 9th house (long journeys, higher learning) is Mithuna, with the Sun in it. Rahu, which traditionally pulls toward foreign places, sits in your 5th house. Traditionally, having the 12th and 9th houses active like this is often linked to working or studying away from home.\n\n**⚖️ The stretch**\n\nTraditionally, a strong pull abroad can also mean being far from family, and the Rahu energy can bring restlessness. Many people with this pattern find it helps to plan carefully, keep close ties with home, and check the practical side (visas, costs, work contracts) before committing.\n\n**🕰️ When the timing shifts**\n\nYou are in your Ketu life period until 10 October 2028, and within it your Saturn sub-period runs until 14 October 2027. Ketu tends to be an inward, settling stretch, so this is more a time for sorting out what you want than for a big move. Your Mercury sub-period follows, from 14 October 2027 to 10 October 2028, and Mercury is linked to study, trade and networks, which can open doors for study or work abroad. Your Venus period, from 10 October 2028, is traditionally linked to settling, comfort and partnership.\n\nThis is how the tradition reads your chart, a tendency rather than a promise. Would you like me to look at your career chapter next, to see how work and travel might fit together?",
+     "first_event": 0.1,
+     "first_text": 1.28,
+     "final_text_start": 4.54,
+     "error": null,
+     "total": 7.58,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/reference.md\", \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.5,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17584,
+        "cached": 17580,
+        "output": 117,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.38,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 25303,
+        "cached": 25301,
+        "output": 104,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.33,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 47022,
+        "cached": 25301,
+        "output": 551,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 89909,
+      "cached": 68182,
+      "output": 772
+     }
+    }
+   ]
+  },
+  "h2-home": {
+   "turns": [
+    {
+     "question": "What about my home and family life?",
+     "text": "I'll read the personal-reading skill first, then look at the home and family parts of your chart.\n\nNow the reference, for the home, mother, father, children and family areas.\n\nYour family and home part of the chart is read from four placements: the 4th house (home and mother), the 2nd (family you were born into), the 3rd (siblings) and the 9th (father). Here is what your chart shows.\n\n**🏡 Home and peace of mind**\n\nHome and inner calm are important to you. Your 4th house (home, mother, property) falls in Makara, and its ruler Saturn sits in the 3rd house (siblings, communication), which astrologers read as home matters being built slowly and with effort. The Moon, which stands for mother and comfort, sits in the 6th house. Traditionally this is linked to a mind that works hard to keep things in order at home, and a steady routine usually brings you the most peace.\n\n**👪 Family and speech**\n\nYour 2nd house (the family you were born into, and speech) is ruled by Mars, which sits in the 6th house alongside the Moon. Mars here can give you direct, firm speech, so in family disagreements a pause before you answer often keeps peace better than being right. Jupiter and Venus look at this house, which astrologers read as protection and warmth in family matters.\n\n**🤝 Siblings and the father**\n\nYour 3rd house (siblings and courage) holds Saturn, which astrologers link to responsibility toward brothers and sisters, often a quiet, dutiful bond that grows stronger over time. Your 9th house (father, teachers, blessings) holds the Sun, which traditionally brings respect for your father and elders, and a wish to make them proud.\n\n**🌱 Looking ahead**\n\nYou are in a Ketu life period, with a Saturn sub-period running until 14 October 2027. Traditionally Saturn in this stretch brings steady responsibility at home and in the family, the kind of effort that pays off later. From 14 October 2027 a Mercury sub-period follows, and then a Venus period from 10 October 2028, which tradition links to comfort, home and warmth in relationships.\n\nThis is a reading of tendencies, not a promise about your family. If you tell me which part matters most to you right now, for example your mother, siblings or a question about living arrangements, I can look at that more closely.",
+     "first_event": 0.05,
+     "first_text": 1.17,
+     "final_text_start": 4.37,
+     "error": null,
+     "total": 8.12,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/reference.md\", \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.39,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17582,
+        "cached": 17578,
+        "output": 116,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.52,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 25300,
+        "cached": 17578,
+        "output": 107,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.94,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 47022,
+        "cached": 25298,
+        "output": 696,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 89904,
+      "cached": 60454,
+      "output": 919
+     }
+    }
+   ]
+  },
+  "h2-health": {
+   "turns": [
+    {
+     "question": "Should I worry about my health?",
+     "text": "I'll start by reading the personal-reading skill, since this is a question about your own chart.\n\nThe question is about health, so I need the health pointers in the reference. Let me open section 13 and the care-period notes.\n\nYour chart draws some attention to health, mainly through two placements and your current period. Here is what it shows, and what helps.\n\n**🌿 What the chart points to**\n\nSaturn sits in your 3rd house, and Mars and the Moon sit together in your 6th house, the part of the chart linked to daily routine, rest and health habits. Your Moon is in the 6th house too, which astrologers read as a mind that can get restless or worried when routines slip. Mars in the 6th is traditionally a strong, energetic placement, so this is more about how you manage your energy than about any weakness. None of this is a prediction of illness.\n\n**⏳ Timing**\n\nYou are in a Ketu life period, with a Saturn sub-period running until 14 October 2027. Traditionally Saturn's stretch asks for steady habits and patience, and it is a good time to look after rest and routine. The next period, Mercury, begins in October 2027.\n\n**🛡️ What helps**\n\n- Keep regular sleep and meals, since your Moon and Mars placements are linked to both mood and energy.\n- Don't let stress and overthinking build up: talk things through early, and take breaks.\n- Have routine check-ups now, while things are calm, and see a doctor about any real concern.\n\nKnowing this ahead gives you an advantage, because a steady routine often keeps these tendencies from growing. If you want, I can go through the rest of your chart with you, or talk about your daily routine and energy in more detail.",
+     "first_event": 0.1,
+     "first_text": 1.41,
+     "final_text_start": 4.55,
+     "error": null,
+     "total": 7.18,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/reference.md\", \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.31,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17583,
+        "cached": 17579,
+        "output": 115,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.52,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 25300,
+        "cached": 17579,
+        "output": 121,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.79,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 47036,
+        "cached": 25298,
+        "output": 473,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 89919,
+      "cached": 60456,
+      "output": 709
+     }
+    }
+   ]
+  },
+  "h2-rising": {
+   "turns": [
+    {
+     "question": "What's my lagna?",
+     "text": "Your rising sign (lagna) is Tula (Libra).\n\nIt shows how you tend to meet the world: with balance, charm and a wish for fairness, and a habit of weighing things up before you act. Your chart's ruler for this part of you, Venus, sits in Vrishabha (Taurus) in the 8th house, the part linked to deep change, shared resources and research, so your steadiness and taste tend to come out most when you are working through something in depth.",
+     "first_event": 0.05,
+     "first_text": 1.1,
+     "final_text_start": 1.1,
+     "error": null,
+     "total": 2.0,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.88,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17581,
+        "cached": 17577,
+        "output": 146,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17581,
+      "cached": 17577,
+      "output": 146
+     }
+    }
+   ]
+  },
+  "h2-erashtaka": {
+   "turns": [
+    {
+     "question": "Am I in a Saturn period now?",
+     "text": "You're in a Ketu life period right now, and within it a Saturn sub-period is running. Let me check the exact dates before I answer.\n\nNow I'll look up the Saturn periods using the Moon sign (Meena) and rising sign (Tula).\n\nYes, you are in a Saturn stretch right now, counted from your Moon sign. Saturn is passing through Meena, the sign of your Moon, so you are in the middle part of Saturn's seven-and-a-half-year period (erashtaka).\n\n**🪐 What this means for you**\n\nYour Moon sign is Meena, and Saturn is in the same sign, so this is the main Saturn period astrologers watch for you. It is not counted from your rising sign (Tula), where no Saturn period is running at the moment.\n\nTraditionally this stretch brings a slower, more serious pace. It often asks for patience, steady habits and realistic plans, and many people find they grow a lot through it. Think of it as a period of building rather than rushing.\n\n**📅 When it changes**\n\nSaturn moves into Mesha on 3 June 2027, 05:28 Sri Lanka time. That will change the life areas it touches for your Moon sign. It can also step back into Meena later, on 20 October 2027, 07:12 Sri Lanka time, so the stretch is not a single straight line.\n\nSince your chart depends on an accurate birth time, the rising sign-based picture is less certain. The Moon-based count above is the main one to look at.\n\nWould you like me to look at what the Saturn move on 3 June 2027 means for your life areas?",
+     "first_event": 0.05,
+     "first_text": 1.4,
+     "final_text_start": 5.12,
+     "error": null,
+     "total": 7.23,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"limit\": 1000}"
+      },
+      {
+       "name": "upcoming_planet_changes",
+       "args": "{\"moon_sign\": \"meena\", \"rising_sign\": \"tula\", \"lang\": \"en\"}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.81,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17586,
+        "cached": 17582,
+        "output": 130,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.74,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 20813,
+        "cached": 17582,
+        "output": 144,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.17,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 21588,
+        "cached": 20811,
+        "output": 428,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "upcoming_planet_changes",
+        "input": "{'moon_sign': 'meena', 'rising_sign': 'tula', 'lang': 'en'}",
+        "seconds": 0.35,
+        "status": "success"
+       }
+      ],
+      "input": 59987,
+      "cached": 55975,
+      "output": 702
+     }
+    }
+   ]
+  },
+  "h2-rahu-toronto": {
+   "turns": [
+    {
+     "question": "What time is Rahu kalaya today in Toronto?",
+     "text": "I'll look up Toronto's time zone and today's date there first.\n\nToronto is at 23:30 on Tuesday 2026-11-24, so \"today\" there is the 24th, one day behind Sri Lanka. I'll look up that date.\n\nIn Toronto today, Rahu kalaya is **14:23 to 15:33** (Toronto time, Tuesday 24 November 2026). It has already passed, since it is now 23:30 there.\n\nNote that Toronto is ahead of Sri Lanka's date: it is still Tuesday evening there, while Sri Lanka is already on Wednesday the 25th. If you meant tomorrow in Toronto (Wednesday 25 November), tell me and I'll look that up.",
+     "first_event": 0.04,
+     "first_text": 1.25,
+     "final_text_start": 6.0,
+     "error": null,
+     "total": 6.61,
+     "tool_calls": [
+      {
+       "name": "find_place",
+       "args": "{\"query\": \"Toronto\"}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\": \"America/Toronto\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-11-24\", \"place_id\": 6167865}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.45,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14239,
+        "cached": 14235,
+        "output": 71,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.22,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14494,
+        "cached": 14235,
+        "output": 54,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.65,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14630,
+        "cached": 14492,
+        "output": 138,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.98,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 15400,
+        "cached": 14628,
+        "output": 158,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "find_place",
+        "input": "{'query': 'Toronto'}",
+        "seconds": 0.08,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/Toronto'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 6167865}",
+        "seconds": 0.02,
+        "status": "success"
+       }
+      ],
+      "input": 58763,
+      "cached": 57590,
+      "output": 421
+     }
+    }
+   ]
+  },
+  "h2-compare": {
+   "turns": [
+    {
+     "question": "Is 2 pm on 20 or 21 January 2027 better to sign a contract in Colombo?",
+     "text": "I'll check the almanac for both days at 14:00 in Colombo.\n\nNeither day is ideal for a contract at 2 pm, but 20 January is the better of the two.\n\n**20 January 2027, 2 pm (Colombo)**\n- 2 pm sits outside Rahu kalaya (the daily time people traditionally avoid starting things), which runs 12:20 to 13:48 that day.\n- The lunar day (thithi) is Trayodashi (bright 13), and the star of the day (nakatha) is Mrigashira.\n\n**21 January 2027, 2 pm (Colombo)**\n- 2 pm falls inside Rahu kalaya, which runs 13:48 to 15:16 that day. Traditionally this is the time people avoid starting new things.\n- The lunar day is Chaturdashi (bright 14), and the star of the day is Punarvasu.\n\nIf you can, aim for a time on 20 January outside 12:20 to 13:48, or on 21 January before 13:48 or after 15:16. Rahu kalaya is a tradition, not a rule of law, so a contract's terms and timing are best settled with your lawyer and the other party. If you'd like, I can check the morning or late-afternoon times on either day.",
+     "first_event": 0.05,
+     "first_text": 1.08,
+     "final_text_start": 3.35,
+     "error": null,
+     "total": 4.89,
+     "tool_calls": [
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2027-01-20\", \"time\": \"14:00\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2027-01-21\", \"time\": \"14:00\"}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/calendar-and-nakath/SKILL.md\", \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 2,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.8,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14254,
+        "cached": 14250,
+        "output": 267,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.66,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17270,
+        "cached": 17268,
+        "output": 380,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2027-01-20', 'time': '14:00'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2027-01-21', 'time': '14:00'}",
+        "seconds": 0.27,
+        "status": "success"
+       }
+      ],
+      "input": 31524,
+      "cached": 31518,
+      "output": 647
+     }
+    }
+   ]
+  },
+  "h2-ch-care": {
+   "turns": [
+    {
+     "text": "Here is the chapter.\n\n**🧭 Areas to take care of**\n\nYour chart draws attention to four areas: health, partnerships, money and travel. Looking after them early is a real advantage, and knowing where the pressure tends to gather lets you prepare for it.\n\n**🩺 Your health**\n\nYour Moon and Mars share the 6th house, the part of the chart linked to daily routines and health habits. Tradition links that placement to restlessness and a tendency to take on too much. Keeping regular sleep, steady meals and a check-up now and then goes a long way.\n\nYour chart's care period is the Mercury sub-period, from 14 October 2027 to 10 October 2028. Mercury sits in the 8th house, the part linked to change and sudden shifts, so this stretch calls for extra attention to health and safety. Careful driving, regular medical advice and not taking unnecessary risks usually help. If anything is worrying you, please see a doctor.\n\n**💞 Partnerships**\n\nYour Mars check is present, but reduced by a condition: Mars sits with the Moon. Tradition asks that partners handle the heat in arguments and give each other space. Talking things through early, before small differences build up, is the most useful habit here. A human astrologer can read both charts together for the full picture.\n\n**💰 Money**\n\nYour 2nd and 11th houses, the areas of savings and income, are both connected to the 8th house, where Venus, Jupiter and Mercury gather. That can bring gains through shared resources and partnerships, but also shared risk. Keep a steady reserve, avoid large risks and check any joint financial arrangement carefully before committing. For real decisions, a qualified financial adviser is the right person to ask.\n\n**✈️ Travel and legal matters**\n\nYour 12th house, linked to spending and living away from home, is shaped by several planets looking at it. Plan journeys with care, keep documents in order and check any legal agreement with a qualified professional before you sign. Preparation here tends to prevent most problems before they start.",
+     "first_text": 1.21,
+     "error": null,
+     "tool_calls": [],
+     "total": 4.53,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 4.51,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 43646,
+        "cached": 43642,
+        "output": 655,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 43646,
+      "cached": 43642,
+      "output": 655
+     }
+    }
+   ]
+  }
+ }
+}

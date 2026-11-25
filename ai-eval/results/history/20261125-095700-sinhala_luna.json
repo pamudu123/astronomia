@@ -1,0 +1,1081 @@
+{
+ "run": {
+  "label": "sinhala/luna",
+  "when_utc": "2026-11-25T09:57:00+00:00",
+  "model": "gpt-6-luna (default)",
+  "thinking": "low (default)",
+  "cases": "sinhala",
+  "questions": "ba8c188da2",
+  "commit": "94bbe96",
+  "uncommitted_changes": "yes",
+  "prompts": "badd35c26a",
+  "agent_code": "f6b0744aac"
+ },
+ "answers": {
+  "sf-lagna": {
+   "turns": [
+    {
+     "question": "මගේ ලග්නය මොකක්ද? ඒකෙන් මං ගැන මොනවද කියන්නේ?",
+     "text": "ඔබේ **ලග්නය මේෂ**. ජ්‍යොතිෂයට අනුව ඔබ සාමාන්‍යයෙන් කෙළින් ярьж, ඉක්මනින් ක්‍රියාත්මක වෙන්න කැමති, අභියෝග භාරගන්නා කෙනෙක් විය හැකියි.\n\nඔබේ ලග්නයේ අධිපති කුජ 2 වැනි භාවයේ—පවුල, ඉතිරි කිරීම සහ කතාබහට සම්බන්ධ කොටසේ—සිටිනවා. ඒ නිසා ඔබේ තීරණ සහ උත්සාහය මුදල් හෝ පවුලේ කටයුතුවලට තදින් යොමු විය හැකියි; කතා කරන විට ඉක්මන් හෝ දැඩි වීම ගැන ටිකක් සැලකිලිමත් වීම උදව් වේ.",
+     "first_event": 0.07,
+     "first_text": 3.53,
+     "final_text_start": 3.53,
+     "error": null,
+     "total": 5.85,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/sinhala-style/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.33,
+        "model": "gpt-6-luna",
+        "input": 12780,
+        "cached": 0,
+        "output": 85,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.13,
+        "model": "gpt-6-luna",
+        "input": 19575,
+        "cached": 12777,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.14,
+        "model": "gpt-6-luna",
+        "input": 33519,
+        "cached": 19572,
+        "output": 203,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 65874,
+      "cached": 32349,
+      "output": 322
+     }
+    }
+   ]
+  },
+  "sf-dasha": {
+   "turns": [
+    {
+     "question": "මට දැන් තියෙන දශාව හොඳද නරකද?",
+     "text": "දැන් ඔබට **බුධ මහදශාව තුළ සිකුරු අතුරුදශාව** ක්‍රියාත්මකයි. ඒක සම්පූර්ණයෙන් හොඳ හෝ නරක කියලා වෙන් කරන්න බැහැ; ඔබේ කේන්දරයේ බුධ සහ සිකුරු සිටින තැන් අනුව, මේ කාලය සම්බන්ධතා සහ වැඩකටයුතු ඉදිරියට ගෙනයන්න හොඳ පැත්තක් තිබුණත්, සැලසුම් කරගෙන යාම වැදගත්.\n\nබුධ 11 වැනි භාවයේ රවි සහ සෙනසුරු සමඟ සිටින නිසා, ජ්‍යොතිෂයට අනුව මිතුරන්, වැඩ සම්බන්ධතා, කතාබහ සහ කණ්ඩායම් හරහා අවස්ථා මතුවිය හැකියි. සිකුරු 10 වැනි භාවයේ සිටින අතර 2 සහ 7 භාව පාලනය කරන නිසා, රැකියාව, ආදායම සහ හවුල්කාරිත්වය ගැන අවධානය වැඩි විය හැකියි. උදාහරණයක් ලෙස, හඳුනන අය හරහා රැකියා අවස්ථාවක් හෝ හවුල් වැඩක් ගැන සාකච්ඡාවක් මතුවීම මේ තේමාවට ගැළපෙනවා—එය ඔබට අනිවාර්යයෙන් සිදුවන බවක් නොවේ.\n\nමේ අතුරුදශාව **2027 සැප්තැම්බර් 19** දක්වායි. ඉන්පසු බුධ මහදශාව තුළ රවි අතුරුදශාව ආරම්භ වන නිසා, පිළිගැනීම, වගකීම් සහ වැඩිහිටියන් හෝ බලධාරීන් සමඟ කටයුතු කිරීම ඉස්මතු විය හැකියි. දැන් තියෙන හොඳ අවස්ථා ප්‍රයෝජනයට ගන්න අතර, මුදල් ගනුදෙනු සහ පොරොන්දු පැහැදිලිව තබාගැනීමත් උපකාරී වේ. ජ්‍යොතිෂය සම්ප්‍රදායික කියවීමක් පමණයි; ඔබේ තීරණ සහ සැලසුම් වැදගත්.",
+     "first_event": 0.05,
+     "first_text": 3.42,
+     "final_text_start": 3.42,
+     "error": null,
+     "total": 9.34,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/sinhala-style/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.28,
+        "model": "gpt-6-luna",
+        "input": 12678,
+        "cached": 0,
+        "output": 117,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.2,
+        "model": "gpt-6-luna",
+        "input": 21694,
+        "cached": 12675,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 6.61,
+        "model": "gpt-6-luna",
+        "input": 35638,
+        "cached": 21691,
+        "output": 529,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.02,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 70010,
+      "cached": 34366,
+      "output": 680
+     }
+    }
+   ]
+  },
+  "sf-abroad": {
+   "turns": [
+    {
+     "question": "මට රට යන්න පුළුවන් වෙයිද?",
+     "text": "ඔබේ කේන්දරයේ විදේශගත වීමේ හෝ දුර ගමන්වලට යොමුවක් තියෙනවා; ඒත් යාමක් හෝ වීසා ලැබීමක් නිශ්චිතව කියන්න බැහැ.\n\nවිදේශ හා දිගු ගමන්වලට සම්බන්ධ රාහු ඔබේ දිගු ගමන් සහ උසස් අධ්‍යාපන කොටසේ සිටිනවා. ඒ වගේම දැනට පවතින රාහු දශාව **2035 ජූනි 17** දක්වායි. මේ කාලය තුළ විදේශ සම්බන්ධතා, වෙනස් මාර්ග සහ අලුත් අවස්ථා ගැන උනන්දුව වැඩි විය හැකියි. උදාහරණයක් ලෙස, පිටරට රැකියාවකට හෝ අධ්‍යාපනයකට අයදුම් කිරීම ගැන සිතීමක් ඇති විය හැකියි—එය පොරොන්දුවක් නොව, කේන්දරයේ නැඹුරුවක් පමණයි.\n\nදැනට බුධ අතුරු දශාව **2027 දෙසැම්බර් 17** දක්වා පවතින නිසා, අයදුම්පත්, ලිපි ලේඛන, භාෂා හෝ වෘත්තීය කුසලතා සූදානම් කරගැනීම ප්‍රයෝජනවත් විය හැකියි. අවස්ථාවක් පෙනුණත් තොරතුරු හොඳින් පරීක්ෂා කර සැලසුම් කරගෙන යන්න; ජ්‍යොතිෂය මඟ පෙන්වීමක් මිස තහවුරු කිරීමක් නොවේ. ඔබ වැඩියෙන් බලන්නේ රැකියාවකටද, අධ්‍යාපනයකටද පිටරට යාම ගැන?",
+     "first_event": 0.04,
+     "first_text": 4.56,
+     "final_text_start": 4.56,
+     "error": null,
+     "total": 8.99,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/sinhala-style/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.03,
+        "model": "gpt-6-luna",
+        "input": 12767,
+        "cached": 12747,
+        "output": 117,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.44,
+        "model": "gpt-6-luna",
+        "input": 21783,
+        "cached": 12764,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 5.35,
+        "model": "gpt-6-luna",
+        "input": 35727,
+        "cached": 21780,
+        "output": 418,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 70277,
+      "cached": 47291,
+      "output": 569
+     }
+    }
+   ]
+  },
+  "sf-rajju": {
+   "turns": [
+    {
+     "question": "අපේ පොරොන්දම්වල රජ්ජු ගැළපෙන්නේ නැහැ කියලා තියෙනවා. අම්මලා බයයි. මොකද කරන්නේ?",
+     "text": "අම්මලා බය වෙන එක තේරෙනවා. ඔබේ ප්‍රතිඵලයේ රජ්ජු පරීක්ෂාව නොගැළපෙන බව පෙන්වනවා; ඒත් ඒකෙන් විවාහය ගැන නියත තීරණයක් කියවෙන්නේ නැහැ.\n\nමෙහි හේතුව ලෙස, රෙහෙණ සහ හත නැකත් දෙකම එකම කාණ්ඩයට අයත් බව සඳහන්. සම්ප්‍රදායේදී රජ්ජු පරීක්ෂාව යුවළගේ යහපැවැත්ම ගැන සැලකිලිමත් වන නිසා එය සැහැල්ලුවෙන් නොගෙන, දෙදෙනාගේ සම්පූර්ණ කේන්දර දෙකම බලන්න පුළුවන් ජ්‍යොතිෂවේදියෙකු සමඟ සාකච්ඡා කරන්න.\n\nඒ අතරම, මේක ඉක්මන් පොරොන්දම් ගැළපීමක් නිසා ප්‍රතිඵලය තාවකාලිකයි; නීති තවම ජ්‍යොතිෂවේදියෙකුගේ තහවුරු කිරීම බලාපොරොත්තු වෙනවා. වේධ පරීක්ෂාව සමත් වී ඇති අතර, රාශි සහ රාශි අධිපති පොරොන්දම් ගැළපීම නිසා නැකත් පොරොන්දමේ එක් නොගැළපීමක් සම්ප්‍රදායට අනුව අඩු කර සලකන බවත් පිටුවේ දක්වා තිබෙනවා. එය රජ්ජු පරීක්ෂාව සමත් වූ බවක් නොවෙයි.\n\nඒ නිසා බය වෙලා තනිවම තීරණයක් ගන්න එපා. සම්පූර්ණ විස්තර සමඟ දෙදෙනාගේ කේන්දර පරීක්ෂා කරවාගෙන, දෙදෙනාගේ අදහස් සහ පවුල්වල කතාබහත් එක්ක තීරණය කරන්න. මේ පොරොන්දමේ වෙනත් කරුණුත් සරලව පැහැදිලි කරලා දෙන්නම්.",
+     "first_event": 0.04,
+     "first_text": 2.79,
+     "final_text_start": 2.79,
+     "error": null,
+     "total": 7.62,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/explain-match/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/sinhala-style/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.4,
+        "model": "gpt-6-luna",
+        "input": 18348,
+        "cached": 0,
+        "output": 85,
+        "reasoning": 0
+       },
+       {
+        "seconds": 6.08,
+        "model": "gpt-6-luna",
+        "input": 22701,
+        "cached": 18345,
+        "output": 476,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/explain-match/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 41049,
+      "cached": 18345,
+      "output": 561
+     }
+    }
+   ]
+  },
+  "sf-rahu": {
+   "turns": [
+    {
+     "question": "හෙට කොළඹ රාහු කාලය කීයටද? අලුත් වැඩක් පටන් ගන්න ඕන.",
+     "text": "හෙට, **2026 නොවැම්බර් 26 බ්‍රහස්පතින්දා**, කොළඹ රාහු කාලය **ප.ව. 1:24 සිට 2:52 දක්වා**. සම්ප්‍රදායට අනුව ඒ කාලයේ අලුත් වැඩක් ආරම්භ කිරීමෙන් වළකිනවා.\n\nවැදගත් වැඩක් නම්, ඒ සඳහා සුදුසු නැකතක් පවුලේ ජ්‍යොතිෂවේදියාගෙන් තහවුරු කරගන්න. මේ දවසේ නැකත් ගණනය තවම තහවුරු කරමින් පවතින එකක් බවත් සලකන්න.",
+     "first_event": 0.04,
+     "first_text": 4.89,
+     "final_text_start": 4.89,
+     "error": null,
+     "total": 5.84,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/sinhala-style/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-26\",\"place_id\":1248991,\"lang\":\"si\",\"time\":null}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.02,
+        "model": "gpt-6-luna",
+        "input": 9187,
+        "cached": 0,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.01,
+        "model": "gpt-6-luna",
+        "input": 10335,
+        "cached": 9184,
+        "output": 37,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.27,
+        "model": "gpt-6-luna",
+        "input": 11629,
+        "cached": 10332,
+        "output": 40,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.08,
+        "model": "gpt-6-luna",
+        "input": 12139,
+        "cached": 11626,
+        "output": 155,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-26', 'place_id': 1248991, 'lang': 'si', 'time': None}",
+        "seconds": 0.28,
+        "status": "success"
+       }
+      ],
+      "input": 43290,
+      "cached": 31142,
+      "output": 270
+     }
+    }
+   ]
+  },
+  "sf-erashtaka": {
+   "turns": [
+    {
+     "question": "ඒරාෂ්ටකය කියන්නේ මොකක්ද? මට දැන් ඒක තියෙනවද?",
+     "text": "**ඔව්—ඔබේ චන්ද්‍ර රාශියෙන් ගණන් කළ ප්‍රධාන ඒරාෂ්ටකයේ පළමු අදියර දැන් ක්‍රියාත්මකයි.** ඔබේ ලග්නයෙන් ගණන් කළත් ඒරාෂ්ටකය ක්‍රියාත්මක බව පෙන්වයි; අෂ්ටම ශනි නම් දැන් නැහැ.\n\nඒරාෂ්ටකය කියන්නේ සෙනසුරු ඔබේ චන්ද්‍ර රාශියට පෙර රාශියෙන්, එම රාශියෙන්, ඊළඟ රාශියෙන් ගමන් කරන කාලයයි. ජ්‍යොතිෂයේදී මේ කාලය වසර හතහමාරක් පමණ ලෙස සලකනවා. ඔබේ චන්ද්‍ර රාශිය මේෂ නිසා, දැන් පළමු අදියරයි.\n\nමෙය අනිවාර්යයෙන් නරක දෙයක් සිදුවන කාලයක් නොවේ. සෙනසුරු මීන රාශියේ සිටින අතර, ගණනය අනුව 2027 ජූනි 3 වැනිදා මේෂයට යන විට ඊළඟ අදියරට මාරුවෙයි; 2027 ඔක්තෝබර් 20 වැනිදා වක්‍රව නැවත මීනට පැමිණෙන බවත් පෙන්වයි. එබැවින් අදියරේ මාරුව තාවකාලිකව ආපසු හැරෙන්න පුළුවන්.\n\nසම්ප්‍රදායෙන් මෙය ඉවසීම, සැලසුම් සහ ස්ථාවර පුරුදු අවශ්‍ය විය හැකි කාලයක් ලෙස කියවෙනවා; බොහෝ දෙනා මේ කාලයේත් හොඳ ප්‍රගතියක් ලබනවා. හදිසි තීරණවලට පෙර සිතා බලන්න, වැඩ සහ වියදම් සැලසුම් කරගන්න, විවේකය හා දෛනික සෞඛ්‍ය පුරුදු ගැනත් සැලකිලිමත් වෙන්න. මේ දින ගණනය වෙබ් අඩවියේ තාවකාලික නීති අනුවයි.",
+     "first_event": 0.03,
+     "first_text": 5.79,
+     "final_text_start": 5.79,
+     "error": null,
+     "total": 10.78,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/sinhala-style/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/reference.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "upcoming_planet_changes",
+       "args": "{\"lang\":\"si\",\"moon_sign\":\"mesha\",\"rising_sign\":\"mesha\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.72,
+        "model": "gpt-6-luna",
+        "input": 12781,
+        "cached": 12747,
+        "output": 117,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.32,
+        "model": "gpt-6-luna",
+        "input": 21797,
+        "cached": 12778,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.2,
+        "model": "gpt-6-luna",
+        "input": 30073,
+        "cached": 21794,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 6.04,
+        "model": "gpt-6-luna",
+        "input": 30710,
+        "cached": 30070,
+        "output": 495,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "upcoming_planet_changes",
+        "input": "{'lang': 'si', 'moon_sign': 'mesha', 'rising_sign': 'mesha'}",
+        "seconds": 0.29,
+        "status": "success"
+       }
+      ],
+      "input": 95361,
+      "cached": 77389,
+      "output": 680
+     }
+    }
+   ]
+  },
+  "sf-poruwa": {
+   "turns": [
+    {
+     "question": "පෝරුවේ චාරිත්‍ර ගැන සරලව කියන්න.",
+     "text": "පෝරුවේ චාරිත්‍රය කියන්නේ මනාල යුවළ පෝරුවට නැඟී, පවුල් දෙකේ ආශීර්වාද මැද විවාහය සංකේතවත් කරන චාරිත්‍ර කිහිපයක් කරන අවස්ථාවයි.\n\nසාමාන්‍යයෙන් මනාලයා පැමිණි පසු, නියමිත සුබ වේලාවට වැඩිහිටියන්ගේ සහායෙන් යුවළ පෝරුවට නඟිනවා. ඔවුන් බුලත් හුවමාරු කිරීම, අෂ්ටක කියවීම, මුදු හෝ තෑගි හුවමාරු කිරීම, ඇඟිලි නූලකින් බැඳ පිරිත් පැන් වත් කිරීම වැනි චාරිත්‍ර කරනවා. අවසානයේ කිරිබත් කවා, දෙමාපියන්ට හා වැඩිහිටියන්ට බුලත් දී ගෞරව කරනවා.\n\nමේ චාරිත්‍රවල අනුපිළිවෙළ සහ කරන විදිහ පවුලෙන් පවුලට වෙනස් වෙන්න පුළුවන්. සරලව කිව්වොත්, ඒවා යුවළගේ එකතුවත් පවුල්වල ආශීර්වාදයත් සංකේතවත් කරන සම්ප්‍රදායන්.",
+     "first_event": 0.04,
+     "first_text": 3.51,
+     "final_text_start": 3.51,
+     "error": null,
+     "total": 7.25,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/ceremonies-and-names/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/ceremonies-and-names/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.97,
+        "model": "gpt-6-luna",
+        "input": 9174,
+        "cached": 0,
+        "output": 40,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.41,
+        "model": "gpt-6-luna",
+        "input": 10107,
+        "cached": 9171,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.68,
+        "model": "gpt-6-luna",
+        "input": 15525,
+        "cached": 10104,
+        "output": 311,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/ceremonies-and-names/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/ceremonies-and-names/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 34806,
+      "cached": 19275,
+      "output": 389
+     }
+    }
+   ]
+  },
+  "sf-avurudu": {
+   "turns": [
+    {
+     "question": "2027 අවුරුදු නැකත් මොනවද? ළමයින්ට තේරෙන විදිහට කියන්න.",
+     "text": "2027 අවුරුදු නැකත් කියන්නේ පවුලේ අය අවුරුද්දට අදාළ වැඩ එකට කරන **වේලාවන්**. මෙන්න ළමයින්ටත් ලේසියෙන් තේරෙන විදිහට, ශ්‍රී ලංකාවේ නිල නැකත් ලැයිස්තුවෙන්:\n\n- **අලුත් අවුරුද්ද උදාව:** අප්‍රේල් 14 වැනිදා පස්වරු **3.29ට** — අලුත් අවුරුද්ද පිළිගන්න වෙලාව.\n- **පුණ්‍ය කාලය (නොනගතය):** එදින උදේ **9.05 සිට රාත්‍රී 9.53 දක්වා** — මේ කාලයේ බොහෝ දෙනා පන්සල් හෝ කෝවිල් ගිහින් ආගමික වැඩ කරනවා.\n- **ආහාර පිසීම:** පස්වරු **6.18ට** — ගෙදර අය කිරි උතුරවා කිරිබත් වගේ කෑම පිළියෙල කරන වෙලාව.\n- **වැඩ ඇල්ලීම, ගනුදෙනු කිරීම හා ආහාර අනුභවය:** රාත්‍රී **8.18ට** — දරුවන්ට පොතක් කියවලා වැඩ පටන් ගන්නත්, වැඩිහිටියන්ට බුලත් දී ආශීර්වාද ගන්නත්, පවුලේ අය එකට කෑම කන්නත් පුළුවන්.\n- **හිසතෙල් ගෑම:** අප්‍රේල් 17 වැනිදා උදේ **7.04ට** — වැඩිහිටියෙක් හෝ හාමුදුරුවෝ හිසට තෙල් ගාලා ආශීර්වාද කරන චාරිත්‍රය.\n- **රැකීරක්ෂා සඳහා පිටත්ව යාම:** අප්‍රේල් 21 වැනිදා උදේ **6.15ට** — නිවාඩුවෙන් පස්සේ පළමු වතාවට වැඩට හෝ රැකියාවට යන වෙලාව.\n- **පැළ සිටුවීම:** අප්‍රේල් 22 වැනිදා පෙරවරු **11.38ට** — අලුත් පැළයක් සිටුවන වෙලාව.\n\nමේවා නැකත් චාරිත්‍රවලට අදාළ සම්ප්‍රදායික වේලාවන්. හැම පවුලක්ම හැම චාරිත්‍රයක්ම එකම විදිහට කරන්නේ නැහැ. 2027 සඳහා මේ ලැයිස්තුව සංස්කෘතික කටයුතු දෙපාර්තමේන්තුවෙන් නිකුත් කළ නිල නැකත් ලැයිස්තුවයි.",
+     "first_event": 0.03,
+     "first_text": 3.05,
+     "final_text_start": 3.05,
+     "error": null,
+     "total": 8.68,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/avurudu/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/avurudu/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.04,
+        "model": "gpt-6-luna",
+        "input": 10566,
+        "cached": 0,
+        "output": 37,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.05,
+        "model": "gpt-6-luna",
+        "input": 11392,
+        "cached": 10563,
+        "output": 35,
+        "reasoning": 0
+       },
+       {
+        "seconds": 6.41,
+        "model": "gpt-6-luna",
+        "input": 15945,
+        "cached": 11389,
+        "output": 627,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/avurudu/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/avurudu/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 37903,
+      "cached": 21952,
+      "output": 699
+     }
+    }
+   ]
+  },
+  "sf-baby": {
+   "turns": [
+    {
+     "question": "මගේ බබා රෙහෙණ නැකතේ දෙවෙනි පාදයේ ඉපදුණේ. නමේ මුල් අකුර මොකක්ද?",
+     "text": "ඔබේ බබාගේ රෙහෙණ නැකතේ දෙවෙනි පාදයට සම්ප්‍රදායික මුල් අකුර **ව**යි. **ච** අකුරත් විකල්පයක් ලෙස භාවිත වෙනවා. මේ අකුරු ලැයිස්තුව තාවකාලිකයි; පවුලේ චාරිත්‍ර අනුව තෝරාගැනීම වෙනස් වෙන්න පුළුවන්.",
+     "first_event": 0.05,
+     "first_text": 5.88,
+     "final_text_start": 5.88,
+     "error": null,
+     "total": 6.79,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/ceremonies-and-names/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/sinhala-style/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "name_letters_for_star",
+       "args": "{\"star\":\"rohini\",\"lang\":\"si\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.28,
+        "model": "gpt-6-luna",
+        "input": 9198,
+        "cached": 0,
+        "output": 40,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.48,
+        "model": "gpt-6-luna",
+        "input": 10131,
+        "cached": 9195,
+        "output": 37,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.11,
+        "model": "gpt-6-luna",
+        "input": 11425,
+        "cached": 10128,
+        "output": 25,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.44,
+        "model": "gpt-6-luna",
+        "input": 11627,
+        "cached": 11422,
+        "output": 104,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/ceremonies-and-names/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "name_letters_for_star",
+        "input": "{'star': 'rohini', 'lang': 'si'}",
+        "seconds": 0.27,
+        "status": "success"
+       }
+      ],
+      "input": 42381,
+      "cached": 30745,
+      "output": 206
+     }
+    }
+   ]
+  },
+  "sf-sad": {
+   "turns": [
+    {
+     "question": "මගේ කේන්දරේ නරකයි කියලා ගමේ කෙනෙක් කිව්වා. මට ගොඩක් දුකයි.",
+     "text": "ඔබට එහෙම කියපු එකෙන් දුක හිතුණා කියලා මට තේරෙනවා. කෙනෙක්ගේ එක වචනයක් නිසා ඔබේ මුළු කේන්දරයම “නරකයි” කියලා තීරණය කරන්න බැහැ.\n\nඔබේ කේන්දරයේ අභියෝග තියෙන තැන් වගේම, ඒවාට සමබරයක් දෙන ශක්තිමත් කරුණුත් තියෙනවා. උදාහරණයක් ලෙස, ගෙදර සහ සිතේ සැනසීම සම්බන්ධ තැන කුජට ටිකක් ඉවසීම අවශ්‍ය වුණත්, ඒ අමාරුව ශක්තියක් කරගැනීමට උදව් වන යෝගයක්ද ඔබේ කේන්දරයේ සඳහන්. සෙනසුරු තමන්ගේ රාශියේ සිටීමත්, උත්සාහයෙන් දිගුකාලීන ප්‍රගතිය ගොඩනඟන පැත්තක් ලෙස ජ්‍යොතිෂයේ කියවෙනවා.\n\nජ්‍යොතිෂයත් එක් ලකුණකින් හෝ එක් පුද්ගලයෙකුගේ අදහසකින් තීරණය කළ යුතු දෙයක් නෙවෙයි. ඔබේ කේන්දරය ගැන ඒ කෙනා කියපු විශේෂ දෙයක් තිබුණා නම්, ඒක කියන්න—ඔබේ සටහනට ගැළපෙන්නේ කොහොමද කියලා සන්සුන්ව පැහැදිලි කරමු.",
+     "first_event": 0.05,
+     "first_text": 3.25,
+     "final_text_start": 3.25,
+     "error": null,
+     "total": 7.3,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/sinhala-style/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.26,
+        "model": "gpt-6-luna",
+        "input": 12693,
+        "cached": 12653,
+        "output": 117,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.99,
+        "model": "gpt-6-luna",
+        "input": 21709,
+        "cached": 12690,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.84,
+        "model": "gpt-6-luna",
+        "input": 35653,
+        "cached": 21706,
+        "output": 346,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 70055,
+      "cached": 47049,
+      "output": 497
+     }
+    }
+   ]
+  },
+  "sf-formal": {
+   "turns": [
+    {
+     "question": "මගේ දියණියගේ විවාහය සඳහා මෙම කේන්දරය අනුව සුදුසු කාලයක් පවතී ද?",
+     "text": "මෙම කේන්දරයේ හැටියට, විවාහය ගැන යෝජනා හා කතාබහට හොඳ සහය දක්වන කාලයක් දැන් පවතිනවා. නමුත් විවාහයට නිශ්චිත දිනයක් හෝ “අනිවාර්යයෙන්ම මේ කාලයේ” කියා කේන්දරයෙන් තීරණය කරන්න බැහැ.\n\nදියණිය දැන් බුධ දශාවේ සිකුරු අන්තර්දශාව තුළයි; එය **2027 සැප්තැම්බර් 19 දක්වා** පවතිනවා. සිකුරු විවාහය හා සබඳතා සමඟ සම්බන්ධ ග්‍රහයා නිසා, ජ්‍යොතිෂයට අනුව මේ කාලය යෝජනා සලකා බැලීමට සහ දෙපාර්ශ්වයේ අදහස් පැහැදිලි කරගැනීමට සුදුසු විය හැකියි. සිකුරු ඇගේ රැකියා හා සමාජ තත්ත්වයට සම්බන්ධ කොටසේ සිටීමෙන්, රැකියාව හෝ සමාජ සම්බන්ධතා හරහා හඳුනාගැනීම් මතු වීමත් සලකා බැලිය හැකියි.\n\nඑහෙත් විවාහ හා හවුල්කාරිත්වයේ කොටසේ රාහු සිටින නිසා, තීරණ ගැනීමට පෙර හොඳින් කතාබහ කිරීම සහ දෙදෙනාගේ බලාපොරොත්තු පැහැදිලි කරගැනීම වැදගත්. මෙය බාධාවක් හෝ අනිවාර්ය ප්‍රතිඵලයක් නොවෙයි; ඉක්මන් නොවී පවුල් දෙකේ අදහස් අසා, ගැළපීම හොඳින් පරීක්ෂා කරගැනීමෙන් මේ පැත්ත වඩා සැලකිල්ලෙන් හසුරුවාගත හැකියි.\n\nවිවාහ යෝජනාවක් තිබේ නම්, දෙදෙනාගේ කේන්දර සහ පොරොන්දම් එකට පරීක්ෂා කර ජ්‍යොතිෂවේදියෙකුගෙන් සම්පූර්ණ අදහසක් ගන්න. අවසාන තීරණය දියණියගේ කැමැත්ත සහ පවුල් දෙකේ සැබෑ තොරතුරු මත ගන්න; මේ කියවීම ජ්‍යොතිෂ සම්ප්‍රදායේ මඟපෙන්වීමක් මිස සහතිකයක් නොවේ.",
+     "first_event": 0.05,
+     "first_text": 3.36,
+     "final_text_start": 3.36,
+     "error": null,
+     "total": 9.68,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/sinhala-style/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.58,
+        "model": "gpt-6-luna",
+        "input": 12692,
+        "cached": 12653,
+        "output": 117,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.92,
+        "model": "gpt-6-luna",
+        "input": 21708,
+        "cached": 12689,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 6.97,
+        "model": "gpt-6-luna",
+        "input": 35652,
+        "cached": 21705,
+        "output": 572,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/sinhala-style/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 70052,
+      "cached": 47047,
+      "output": 723
+     }
+    }
+   ]
+  },
+  "sf-singlish": {
+   "turns": [
+    {
+     "question": "mage rakiyawa gana kiyanna puluwanda? mama dan job eka maru karanna hithan inne",
+     "text": "ඔබේ කේන්දරේ රැකියාව සහ ආදායම එකිනෙකට හොඳින් සම්බන්ධ වෙලා තියෙනවා. ඒ නිසා රැකියාව මාරු කිරීම ගැන හිතන්න පුළුවන්—නමුත් හදිසියේ තීරණයක් ගන්නවාට වඩා, අලුත් තැනේ ස්ථාවරත්වය සහ වර්ධන අවස්ථා හොඳින් බලලා මාරු වීම ඔබට වඩා ගැළපේ.\n\n**💼 වැඩේට ඇති ශක්තිය**  \nඔබේ රැකියා කොටසේ සිකුරු සිටින අතර, රැකියාව බලාගන්නා සෙනසුරු ආදායම් සහ සම්බන්ධතා කොටසේ තමන්ගේම රාශියේ සිටිනවා. සම්ප්‍රදායිකව මෙය හොඳ නමක් ගොඩනඟාගෙන, කාලයත් සමඟ වගකීම් සහ ආදායම වැඩි කරගැනීමට සහාය දෙන රටාවක්. සන්නිවේදනය, ගනුදෙනු, ජාලගත සම්බන්ධතා හෝ නිර්මාණශීලී/මිනිසුන් සමඟ වැඩ කරන ක්ෂේත්‍ර ඔබට ගැළපෙන්න පුළුවන්.\n\n**🔄 මාරුව ගැන**  \nදැනට බුධගේ ජීවිත කාලය යටතේ, 2027 සැප්තැම්බර් 19 දක්වා සිකුරු අනුකාලය පවතිනවා. සිකුරු ඔබේ රැකියා කොටසේ සිටින නිසා, මේ කාලය රැකියා තේරීම් සහ හොඳ වැඩ සම්බන්ධතා ගැන සිතන්නට හිතකර විය හැකියි. ඒත් හොඳ පෙනුමක් ඇති යෝජනාවක් විතරක් නොබලා, වැටුප, වගකීම්, වැඩ-ජීවිත සමතුලිතතාව සහ දිගුකාලීන ඉදිරිගමන සසඳන්න.\n\nඋදාහරණයක් විදිහට, වෙනත් ආයතනයකින් වැඩි වැටුපක් ලැබුණත් පුහුණුවක් හෝ උසස්වීමේ මඟක් නැත්නම්, ඔබේ දිගුකාලීන ඉලක්කයට ඒක ගැළපෙනවාද කියලා බලන්න. ඔබට දැන් ලැබෙන මාරු අවස්ථාවක් තියෙනවා නම්, ලිඛිත කොන්දේසි සහතික කරගෙන, දැනට තිබෙන වැඩෙන් ඉවත් වීමට පෙර අලුත් රැකියාව තහවුරු කරගැනීම ප්‍රයෝජනවත්.\n\nමේක ජ්‍යොතිෂ සම්ප්‍රදායේ කියවීමක් මිස සහතික අනාවැකියක් නොවේ; තීරණයට සැබෑ රැකියා තොරතුරු සහ ඔබ විශ්වාස කරන අයගේ උපදෙස්ද එක්කරගන්න. මේ මාරුවේ ඔබට වැඩියෙන්ම වැදගත් දේ—වැටුපද, වැඩ පරිසරයද, නැත්නම් ඉදිරි වර්ධනයද?",
+     "first_event": 0.04,
+     "first_text": 3.13,
+     "final_text_start": 3.13,
+     "error": null,
+     "total": 10.06,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.98,
+        "model": "gpt-6-luna",
+        "input": 11218,
+        "cached": 11188,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.2,
+        "model": "gpt-6-luna",
+        "input": 16709,
+        "cached": 11215,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 7.72,
+        "model": "gpt-6-luna",
+        "input": 30653,
+        "cached": 16706,
+        "output": 739,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 58580,
+      "cached": 39109,
+      "output": 809
+     }
+    }
+   ]
+  },
+  "sf-ch-love": {
+   "turns": [
+    {
+     "text": "ඔබ ආදරය කරන විට උණුසුමත්, අවංක බැඳීමත් සොයනවා. සම්බන්ධතාවයකදී ඉක්මන් ප්‍රතිචාර වෙනුවට සන්සුන් කතාබහ ඔබට වඩාත් උපකාරී වේ.\n\n**💞 ආදරයේ ඔබේ රටාව**\n\nආදරය සහ නිර්මාණශීලීත්වය ඔබේ ජීවිතයේ වැදගත් තේමාවන් විය හැකියි. සිංහ රාශියේ, ආදරයට සම්බන්ධ ප්‍රදේශයේ සිටින ශුක්‍ර සහ ගුරු මේ බැඳීම්වලට උණුසුම, සෙනෙහස සහ විශ්වාසය එක් කරන බව ජ්‍යොතිෂයට අනුව සැලකේ.\n\nඔබේ විවාහයට අදාළ ප්‍රදේශයේ අධිපති ශුක්‍ර එම ආදර හා නිර්මාණශීලී ප්‍රදේශයේම සිටින නිසා, හිතවත්කම සහ එකට සතුට බෙදාගැනීම ඔබට වැදගත් විය හැකියි.\n\n**🌱 ඉවසීමෙන් ගොඩනැඟීම**\n\nසමහර විට හැඟීම් ඉක්මනින් මතු වීම හෝ එකිනෙකාගේ අදහස්වලට තදින් ඇලී සිටීමෙන් කුඩා මතභේද වැඩි විය හැකියි. චන්ද්‍රයා සහ ශනි ඔබේ විවාහ ප්‍රදේශය දෙස බලන නිසා, එහි ඉවසීම සහ වගකීම ගැන සැලකිලිමත් වීම ප්‍රයෝජනවත් වේ.\n\nකුජ දෝෂය ඔබේ ප්‍රතිඵලයේ ඇත: කුජ පවුල හා කතාබහ සම්බන්ධ ප්‍රදේශයේ සිටින අතර, එය ලග්නයෙන් සහ චන්ද්‍ර රාශියෙන් ගණන් කළ විට දෙකෙන්ම සලකුණු වේ. මෙය විවාහයට නියත බාධාවක් නොවෙයි; සම්ප්‍රදායෙන් මෙය දෙදෙනාගේ කතාබහ සහ පවුල් ජීවිතයේ ඉවසීම ගැන අවධානය යොමු කරන ලකුණක් ලෙස කියවයි.\n\n**💡 සම්බන්ධතාවය රැකගැනීම**\n\nඅමනාපයක් ඇති වූ විට පිළිතුරු දීමට පෙර මොහොතක් නවතින්න. වැදගත් කාරණා කලින්ම සාකච්ඡා කරන්න; දෙදෙනාගේ අදහස් අහන්නත් පවුලේ සහය ලබාගන්නත් ඉඩ තබන්න.\n\nකුජ දෝෂයේ සම්ප්‍රදායික අර්ථය තීරණය කිරීමේදී දෙදෙනාගේ කේන්දරයම එකට සසඳා බලන අතර, නීති පිළිබඳ ජ්‍යොතිෂවේදීන් අතර වෙනස්කම් තිබිය හැකියි. සම්පූර්ණ අදහසක් සඳහා කේන්දර දෙකම කියවිය හැකි ජ්‍යොතිෂවේදියෙකු සමඟ සාකච්ඡා කිරීම සුදුසුයි.\n\n**🗓️ සම්බන්ධතා සඳහා කාලය**\n\nදැනට රාහු දශාවේ බුධ අතුරු කාලය 2027 දෙසැම්බර් 17 දක්වා පවතී. ඉන්පසු කේතු අතුරු කාලය 2029 ජනවාරි 3 දක්වාත්, ශුක්‍ර අතුරු කාලය 2029 ජනවාරි 3 සිට 2032 ජනවාරි 4 දක්වාත් යෙදේ.\n\nශුක්‍ර ඔබේ විවාහයට අදාළ ප්‍රදේශයේ අධිපති නිසා, එහි අතුරු කාලය තුළ ආදරය සහ බැඳීම් ගැන කතාබහ ඉදිරියට එන්නට පුළුවන්. මේවා නිශ්චිත සිදුවීම් පොරොන්දු කරන කාල නොවෙයි.",
+     "first_text": 1.19,
+     "error": null,
+     "tool_calls": [],
+     "total": 10.67,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 10.67,
+        "model": "gpt-6-luna",
+        "input": 30662,
+        "cached": 0,
+        "output": 941,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 30662,
+      "cached": 0,
+      "output": 941
+     }
+    }
+   ]
+  },
+  "sf-ch-match": {
+   "turns": [
+    {
+     "text": "මෙම යුවළගේ පොරොන්දම් 18 න් 11 ක් ගැළපෙන අතර, රජ්ජු සහ වේධ පරීක්ෂා දෙකම සමත්. හොඳ පැති තිබුණත්, දෛනික වෙනස්කම් ගැන ඉවසීමෙන් කතා කිරීම වැදගත්.\n\n**✅ සමත් වූ අත්‍යවශ්‍ය පරීක්ෂා**\n\nරජ්ජු සහ වේධ දෙකම සමත් වීම සැනසිලිදායක පැත්තක්. මනාලියගේ පුනාවස නැකතත් මනාලයාගේ බෙරණ නැකතත් වෙනස් රජ්ජු කාණ්ඩවලට අයත් වන අතර, ඒවා වේධ නොගැළපෙන යුගලයක්ද නොවේ.\n\n**🤝 පහසුවෙන් ගැළපෙන පැති**\n\nදෙදෙනාගේ බැඳීම සහ ස්වභාවය පිළිබඳ කරුණු 8 න් 5 ක් ගැළපේ. විශේෂයෙන්, ගණය ගැළපීමෙන් දෙදෙනාගේ ස්වභාවයන් එකිනෙකාට ගැළපෙන පැත්තක් ඇති බව සම්ප්‍රදායෙන් කියවයි. චන්ද්‍ර රාශි දෙක අතර ඇති රාශි ගැළපීමද සිතුවිලි හා හැඟීම් අතර බැඳීමට සහාය වන ලකුණක් ලෙස සැලකේ.\n\nදෙදෙනාගේ සඳු රාශි වන මිථුන සහ මේෂ වෙනස් හැඟීම් රටා පෙන්විය හැකියි. එක් අයෙක් දේවල් කතා කරමින් සකස් කරගන්නට කැමති විය හැකි අතර, අනෙක් අය ඉක්මනින් ප්‍රතිචාර දක්වන්නට ඉඩ ඇත. අනුමාන නොකර හැඟීම් පැහැදිලිව කියාගැනීම උපකාරී වේ.\n\n**🌱 අවධානය දිය යුතු පැති**\n\nරාශි අධිපතීන් වන බුධ සහ කුජ සතුරන් ලෙස සැලකෙන නිසා, අදහස් හෝ දේවල් හසුරුවන ආකාරය වෙනස් විය හැකියි. වශ්‍ය, පක්ෂි සහ ලිංග කරුණුද නොගැළපුණත්, ඒවායේ බලපෑම අඩු කරන වෙනත් ගැළපීම් ඇති බව සම්ප්‍රදාය කියයි. ඉක්මන් නිගමනවලට නොගොස්, දෙදෙනාටම වැදගත් දේ කල්තියා කතා කරගන්න.\n\nපවුල සහ දරුවන් පිළිබඳ කරුණු 3 න් 1 ක් ගැළපේ. මෙය දරුවන් පිළිබඳ අනාවැකියක් නොවේ; පවුල් ජීවිතය ගැන බලාපොරොත්තු සහ වගකීම් විවෘතව කතා කිරීම ප්‍රයෝජනවත්.\n\n**💡 ඉදිරියට ගත හැකි පියවර**\n\nකේන්දර දෙකේම කුජ දෝෂය පෙනෙන අතර, සම්ප්‍රදායට අනුව එය සමබර වන ලෙස සැලකේ. පොරොන්දම් නීති තවමත් ජ්‍යොතිෂවේදියකුගේ තහවුරු කිරීම සඳහා පවතින නිසා, විවාහ තීරණයකදී පවුල සමඟ කතා කර, කේන්දර දෙකම සම්පූර්ණයෙන් කියවන ජ්‍යොතිෂවේදියකුගෙන් උපදෙස් ගන්න.",
+     "first_text": 0.86,
+     "error": null,
+     "tool_calls": [],
+     "total": 8.07,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 8.06,
+        "model": "gpt-6-luna",
+        "input": 16951,
+        "cached": 0,
+        "output": 829,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 16951,
+      "cached": 0,
+      "output": 829
+     }
+    }
+   ]
+  },
+  "sf-ch-periods": {
+   "turns": [
+    {
+     "text": "ඔබ දැන් බුධ මහ දශාවේ සිටින අතර, රැකියාව, ආදායම සහ සම්බන්ධතා වටා අවස්ථා හා තීරණ ඉදිරියට එන්න පුළුවන්. බුධ 11 වැනි භාවයේ සිටීමෙන් මිතුරු ජාල සහ ආදායම් මාර්ග මේ කාලයේ වැදගත් වෙයි.\n\n**🗓️ දැන් ක්‍රියාත්මක කාලය**\n\nබුධ දශාව 2038 ජූනි 26 දක්වා පවතිනවා. බුධ ඔබේ රැකියාව, දිනපතා වැඩ සහ සන්නිවේදන කුසලතා සමඟ සම්බන්ධයි. ඒ නිසා අදහස් හුවමාරු කරගැනීම, ඉගෙනීම සහ හොඳ සම්බන්ධතා ගොඩනැගීමෙන් ප්‍රයෝජන ගන්න පුළුවන්.\n\nදැනට ශුක්‍ර අතුරු දශාව 2027 සැප්තැම්බර් 19 දක්වායි. ශුක්‍ර ඔබේ රැකියා සහ මුදල් පැත්තටත්, විවාහ සහ හවුල්කාරිත්වයටත් සම්බන්ධ නිසා, ඒ කරුණු ගැන සාකච්ඡා හෝ තීරණ ඉස්මතු විය හැකියි.\n\n**⏳ ඉදිරි අතුරු කාල**\n\nඉදිරි කාලවලදී අවධානය වෙනස් විය හැකි ආකාරය මෙන්න:\n\n- **රවි අතුරු දශාව** (2027 සැප්තැම්බර් 19 – 2028 ජූලි 26): ඉලээным, පිළිගැනීම සහ අනාගත සැලසුම්.\n- **චන්ද්‍ර අතුරු දශාව** (2028 ජූලි 26 – 2029 දෙසැම්බර් 25): නිවස, පවුල සහ මනසේ සැනසීම.\n- **කුජ අතුරු දශාව** (2029 දෙසැම්බර් 25 – 2030 දෙසැම්බර් 22): ක්‍රියාශීලී තීරණ සහ නිවසේ කටයුතු; ඉක්මන් ප්‍රතිචාරවලට පෙර මොහොතක් නවතින්න.\n- **රාහු අතුරු දශාව** (2030 දෙසැම්බර් 22 – 2033 ජූලි 11): හවුල්කාරිත්ව සහ අලුත් අවස්ථා ගැන සැලකිලිමත් සැලසුම්.\n- **ගුරු අතුරු දශාව** (2033 ජූලි 11 – 2035 ඔක්තෝබර් 17): ඉගෙනීම, උපදෙස් සහ දුර ගමන්.\n- **ශනි අතුරු දශාව** (2035 ඔක්තෝබර් 17 – 2038 ජූනි 26): දිගුකාලීන වැඩ සහ වගකීම්.\n\n**🧭 ඊළඟ මහ දශාව**\n\n2038 ජූනි 26 සිට කේතු මහ දශාව ආරම්භ වෙනවා. කේතු ඔබේ පෞද්ගලිකත්වය සහ තමන්ගේ මඟ සොයාගැනීමේ පැත්තේ සිටින නිසා, එය සරල කරගැනීම සහ ඇතුළතින් සිතා බැලීම ඉස්මතු කරන කාලයක් විය හැකියි. සැලසුම්වලට ඉඩ තබාගෙන, වැදගත් තීරණවලදී විශ්වාසවන්ත අය සමඟ කතා කිරීම උපකාරී වෙයි.",
+     "first_text": 1.07,
+     "error": null,
+     "tool_calls": [],
+     "total": 8.74,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 8.74,
+        "model": "gpt-6-luna",
+        "input": 31418,
+        "cached": 25868,
+        "output": 832,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 31418,
+      "cached": 25868,
+      "output": 832
+     }
+    }
+   ]
+  }
+ }
+}

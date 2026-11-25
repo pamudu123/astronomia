@@ -1,0 +1,114 @@
+{
+ "status": "ok",
+ "time": {
+  "status": "ok",
+  "timezone": "Asia/Colombo",
+  "local": "1995-03-12T08:45:00",
+  "utc": "1995-03-12T03:15:00Z",
+  "offset_seconds": 19800,
+  "offset_label": "UTC+05:30",
+  "abbreviation": "+0530",
+  "clock_change": null,
+  "options": []
+ },
+ "rule_set": "changes_v1",
+ "provisional": true,
+ "change": {
+  "id": "saturn-2027-06",
+  "kind": "saturn",
+  "title": "සෙනසුරු මාරුව",
+  "moment": "2027-06-02T23:58:00Z",
+  "local_date": "2027-06-03",
+  "when": "2027 ජූනි 3, ශ්‍රී ලංකා වේලාවෙන් 05:28",
+  "moves": [
+   {
+    "body": "saturn",
+    "from_sign": "meena",
+    "to_sign": "mesha",
+    "retrograde": false,
+    "returning": false,
+    "until": "2027-10-20T01:42:00Z",
+    "next_sign": "meena",
+    "text": "සෙනසුරු මීන රාශියේ සිට මේෂ රාශියට මාරු වේ.",
+    "until_text": "සෙනසුරු 2027 ඔක්තෝබර් 20 දින මීන රාශියට මාරු වන තුරු මේෂ රාශියේ රැඳේ.",
+    "note": null
+   }
+  ]
+ },
+ "lagna": {
+  "sign": "mesha",
+  "sign_name": "මේෂ",
+  "moves": [
+   {
+    "body": "saturn",
+    "from_sign": "meena",
+    "to_sign": "mesha",
+    "from_house": 12,
+    "to_house": 1,
+    "text": "සෙනසුරු ඔබේ 12 වැනි භාවයෙන් ඉවත්ව 1 වැනි භාවයට පැමිණේ.",
+    "short": "සෙනසුරු: 12 වැනි භාවයේ සිට 1 වැනි භාවයට",
+    "from_theme": "12 වැනි භාවයෙන් විවේකය, වියදම් සහ දුර බැහැර ස්ථාන දැක්වේ.",
+    "to_theme": "1 වැනි භාවයෙන් ඔබ සහ ඔබ යමක් ආරම්භ කරන ආකාරය දැක්වේ."
+   }
+  ],
+  "others": [
+   {
+    "body": "jupiter",
+    "sign": "kataka",
+    "house": 4,
+    "text": "ගුරු කටක රාශියේ, ඔබේ 4 වැනි භාවයේ රැඳේ."
+   },
+   {
+    "body": "rahu",
+    "sign": "makara",
+    "house": 10,
+    "text": "රාහු මකර රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ."
+   },
+   {
+    "body": "ketu",
+    "sign": "kataka",
+    "house": 4,
+    "text": "කේතු කටක රාශියේ, ඔබේ 4 වැනි භාවයේ රැඳේ."
+   }
+  ],
+  "notes": []
+ },
+ "gochara": {
+  "sign": "mithuna",
+  "sign_name": "මිථුන",
+  "moves": [
+   {
+    "body": "saturn",
+    "from_sign": "meena",
+    "to_sign": "mesha",
+    "from_house": 10,
+    "to_house": 11,
+    "text": "සෙනසුරු ඔබේ 10 වැනි භාවයෙන් ඉවත්ව 11 වැනි භාවයට පැමිණේ.",
+    "short": "සෙනසුරු: 10 වැනි භාවයේ සිට 11 වැනි භාවයට",
+    "from_theme": "10 වැනි භාවයෙන් වෘත්තිය සහ සමාජ තත්ත්වය දැක්වේ.",
+    "to_theme": "11 වැනි භාවයෙන් ලාභ සහ මිතුරන් දැක්වේ."
+   }
+  ],
+  "others": [
+   {
+    "body": "jupiter",
+    "sign": "kataka",
+    "house": 2,
+    "text": "ගුරු කටක රාශියේ, ඔබේ 2 වැනි භාවයේ රැඳේ."
+   },
+   {
+    "body": "rahu",
+    "sign": "makara",
+    "house": 8,
+    "text": "රාහු මකර රාශියේ, ඔබේ 8 වැනි භාවයේ රැඳේ."
+   },
+   {
+    "body": "ketu",
+    "sign": "kataka",
+    "house": 2,
+    "text": "කේතු කටක රාශියේ, ඔබේ 2 වැනි භාවයේ රැඳේ."
+   }
+  ],
+  "notes": []
+ }
+}

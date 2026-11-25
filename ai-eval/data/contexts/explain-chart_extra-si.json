@@ -1,0 +1,1099 @@
+{
+ "page": "chart_result",
+ "language": "si",
+ "result": {
+  "rising_sign": "මේෂ",
+  "moon_sign": "මිථුන",
+  "birth_star": "පුනාවස",
+  "birth_star_id": "punarvasu",
+  "pada": 3,
+  "birth_time_check": "the rising sign is the same for nearby birth times",
+  "planets": [
+   {
+    "planet": "රවි",
+    "sign": "කුම්භ",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "rules_houses": [
+     5
+    ]
+   },
+   {
+    "planet": "චන්ද්‍ර",
+    "sign": "මිථුන",
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "rules_houses": [
+     4
+    ],
+    "vargottama": true
+   },
+   {
+    "planet": "කුජ",
+    "sign": "කටක",
+    "house": 4,
+    "area": "home, mother, property, inner peace",
+    "strength": "debilitated",
+    "rules_houses": [
+     1,
+     8
+    ],
+    "retrograde": true
+   },
+   {
+    "planet": "බුධ",
+    "sign": "කුම්භ",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "rules_houses": [
+     3,
+     6
+    ]
+   },
+   {
+    "planet": "ගුරු",
+    "sign": "වෘශ්චික",
+    "house": 8,
+    "area": "change, shared money, research",
+    "rules_houses": [
+     9,
+     12
+    ]
+   },
+   {
+    "planet": "සිකුරු",
+    "sign": "මකර",
+    "house": 10,
+    "area": "career, status",
+    "rules_houses": [
+     2,
+     7
+    ]
+   },
+   {
+    "planet": "සෙනසුරු",
+    "sign": "කුම්භ",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "strength": "own sign",
+    "rules_houses": [
+     10,
+     11
+    ],
+    "combust": true
+   },
+   {
+    "planet": "රාහු",
+    "sign": "තුලා",
+    "house": 7,
+    "area": "marriage, partnership",
+    "retrograde": true
+   },
+   {
+    "planet": "කේතු",
+    "sign": "මේෂ",
+    "house": 1,
+    "area": "self, body, how you start things",
+    "retrograde": true
+   }
+  ],
+  "houses": [
+   {
+    "house": 1,
+    "area": "self, body, how you start things",
+    "sign": "මේෂ",
+    "lord": "කුජ",
+    "lord_in_house": 4,
+    "planets": [
+     "කේතු"
+    ],
+    "aspected_by": [
+     "සෙනසුරු"
+    ]
+   },
+   {
+    "house": 2,
+    "area": "family you were born into, savings, speech",
+    "sign": "වෘෂභ",
+    "lord": "සිකුරු",
+    "lord_in_house": 10,
+    "aspected_by": [
+     "ගුරු"
+    ]
+   },
+   {
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "sign": "මිථුන",
+    "lord": "බුධ",
+    "lord_in_house": 11,
+    "planets": [
+     "චන්ද්‍ර"
+    ]
+   },
+   {
+    "house": 4,
+    "area": "home, mother, property, inner peace",
+    "sign": "කටක",
+    "lord": "චන්ද්‍ර",
+    "lord_in_house": 3,
+    "planets": [
+     "කුජ"
+    ],
+    "aspected_by": [
+     "ගුරු",
+     "සිකුරු"
+    ]
+   },
+   {
+    "house": 5,
+    "area": "children, creativity, studies, romance",
+    "sign": "සිංහ",
+    "lord": "රවි",
+    "lord_in_house": 11,
+    "aspected_by": [
+     "රවි",
+     "බුධ",
+     "සෙනසුරු"
+    ]
+   },
+   {
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "sign": "කන්‍යා",
+    "lord": "බුධ",
+    "lord_in_house": 11
+   },
+   {
+    "house": 7,
+    "area": "marriage, partnership",
+    "sign": "තුලා",
+    "lord": "සිකුරු",
+    "lord_in_house": 10,
+    "planets": [
+     "රාහු"
+    ],
+    "aspected_by": [
+     "කුජ"
+    ]
+   },
+   {
+    "house": 8,
+    "area": "change, shared money, research",
+    "sign": "වෘශ්චික",
+    "lord": "කුජ",
+    "lord_in_house": 4,
+    "planets": [
+     "ගුරු"
+    ],
+    "aspected_by": [
+     "සෙනසුරු"
+    ]
+   },
+   {
+    "house": 9,
+    "area": "luck, father, teachers, higher learning, long journeys",
+    "sign": "ධනු",
+    "lord": "ගුරු",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "චන්ද්‍ර"
+    ]
+   },
+   {
+    "house": 10,
+    "area": "career, status",
+    "sign": "මකර",
+    "lord": "සෙනසුරු",
+    "lord_in_house": 11,
+    "planets": [
+     "සිකුරු"
+    ],
+    "aspected_by": [
+     "කුජ"
+    ]
+   },
+   {
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "sign": "කුම්භ",
+    "lord": "සෙනසුරු",
+    "lord_in_house": 11,
+    "planets": [
+     "රවි",
+     "බුධ",
+     "සෙනසුරු"
+    ],
+    "aspected_by": [
+     "කුජ"
+    ]
+   },
+   {
+    "house": 12,
+    "area": "spending, rest, living abroad",
+    "sign": "මීන",
+    "lord": "ගුරු",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "ගුරු"
+    ]
+   }
+  ],
+  "combinations": [
+   {
+    "name": "Budhaditya yoga",
+    "based_on": "රවි and බුධ together in house 11"
+   },
+   {
+    "name": "Sunapha yoga",
+    "based_on": "planets in the house after the චන්ද්‍ර's house 3"
+   },
+   {
+    "name": "Neecha Bhanga Raja yoga",
+    "based_on": "කුජ debilitated in කටක, helped by චන්ද්‍ර in house 3, an angle from the rising sign or the චන්ද්‍ර"
+   },
+   {
+    "name": "Raja yoga",
+    "based_on": "සෙනසුරු (ruler of house 10 and 11) and රවි (ruler of house 5) together in house 11"
+   },
+   {
+    "name": "Dhana yoga",
+    "based_on": "සෙනසුරු (ruler of house 10 and 11) and රවි (ruler of house 5) together in house 11"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Vimala)",
+    "based_on": "ගුරු, ruler of house 12, in house 8"
+   },
+   {
+    "name": "Amala yoga",
+    "based_on": "සිකුරු in house 10, the 10th from the rising sign"
+   }
+  ],
+  "combinations_not_in_this_chart": [
+   "Gajakesari yoga",
+   "Chandra-Mangala yoga",
+   "Ruchaka yoga",
+   "Bhadra yoga",
+   "Hamsa yoga",
+   "Malavya yoga",
+   "Shasha yoga",
+   "Anapha yoga",
+   "Durudhara yoga",
+   "Ravi-Sukra yoga",
+   "Kuja-Sukra yoga",
+   "Shani-Mangala yoga",
+   "Papa Kartari",
+   "Shubha Kartari",
+   "Guru-Chandala yoga",
+   "Angaraka yoga",
+   "Guru-Mangala yoga",
+   "Kala Sarpa",
+   "Saraswati yoga",
+   "Vasumathi yoga",
+   "Kemadruma yoga"
+  ],
+  "life_period": {
+   "now": "බුධ",
+   "until": "2038-06-26T08:56:27.490560Z",
+   "sub_period": "සිකුරු",
+   "sub_until": "2027-09-19T20:20:27.490560Z",
+   "next": "කේතු",
+   "next_from": "2038-06-26T08:56:27.490560Z"
+  },
+  "life_period_timeline": {
+   "sub_periods": [
+    {
+     "sub": "බුධ",
+     "from": "2021-06-26",
+     "until": "2023-11-22"
+    },
+    {
+     "sub": "කේතු",
+     "from": "2023-11-22",
+     "until": "2024-11-18"
+    },
+    {
+     "sub": "සිකුරු",
+     "from": "2024-11-18",
+     "until": "2027-09-19"
+    },
+    {
+     "sub": "රවි",
+     "from": "2027-09-19",
+     "until": "2028-07-26"
+    },
+    {
+     "sub": "චන්ද්‍ර",
+     "from": "2028-07-26",
+     "until": "2029-12-25"
+    },
+    {
+     "sub": "කුජ",
+     "from": "2029-12-25",
+     "until": "2030-12-22"
+    },
+    {
+     "sub": "රාහු",
+     "from": "2030-12-22",
+     "until": "2033-07-11"
+    },
+    {
+     "sub": "ගුරු",
+     "from": "2033-07-11",
+     "until": "2035-10-17"
+    },
+    {
+     "sub": "සෙනසුරු",
+     "from": "2035-10-17",
+     "until": "2038-06-26"
+    }
+   ],
+   "later_periods": [
+    {
+     "period": "කේතු",
+     "from": "2038-06-26",
+     "until": "2045-06-26",
+     "sub_periods": [
+      {
+       "sub": "කේතු",
+       "from": "2038-06-26",
+       "until": "2038-11-22"
+      },
+      {
+       "sub": "සිකුරු",
+       "from": "2038-11-22",
+       "until": "2040-01-22"
+      },
+      {
+       "sub": "රවි",
+       "from": "2040-01-22",
+       "until": "2040-05-29"
+      },
+      {
+       "sub": "චන්ද්‍ර",
+       "from": "2040-05-29",
+       "until": "2040-12-28"
+      },
+      {
+       "sub": "කුජ",
+       "from": "2040-12-28",
+       "until": "2041-05-26"
+      },
+      {
+       "sub": "රාහු",
+       "from": "2041-05-26",
+       "until": "2042-06-14"
+      },
+      {
+       "sub": "ගුරු",
+       "from": "2042-06-14",
+       "until": "2043-05-21"
+      },
+      {
+       "sub": "සෙනසුරු",
+       "from": "2043-05-21",
+       "until": "2044-06-28"
+      },
+      {
+       "sub": "බුධ",
+       "from": "2044-06-28",
+       "until": "2045-06-26"
+      }
+     ]
+    },
+    {
+     "period": "සිකුරු",
+     "from": "2045-06-26",
+     "until": "2065-06-26",
+     "sub_periods": [
+      {
+       "sub": "සිකුරු",
+       "from": "2045-06-26",
+       "until": "2048-10-25"
+      },
+      {
+       "sub": "රවි",
+       "from": "2048-10-25",
+       "until": "2049-10-25"
+      },
+      {
+       "sub": "චන්ද්‍ර",
+       "from": "2049-10-25",
+       "until": "2051-06-26"
+      },
+      {
+       "sub": "කුජ",
+       "from": "2051-06-26",
+       "until": "2052-08-25"
+      },
+      {
+       "sub": "රාහු",
+       "from": "2052-08-25",
+       "until": "2055-08-26"
+      },
+      {
+       "sub": "ගුරු",
+       "from": "2055-08-26",
+       "until": "2058-04-26"
+      },
+      {
+       "sub": "සෙනසුරු",
+       "from": "2058-04-26",
+       "until": "2061-06-26"
+      },
+      {
+       "sub": "බුධ",
+       "from": "2061-06-26",
+       "until": "2064-04-25"
+      },
+      {
+       "sub": "කේතු",
+       "from": "2064-04-25",
+       "until": "2065-06-26"
+      }
+     ]
+    },
+    {
+     "period": "රවි",
+     "from": "2065-06-26",
+     "until": "2071-06-26",
+     "sub_periods": [
+      {
+       "sub": "රවි",
+       "from": "2065-06-26",
+       "until": "2065-10-13"
+      },
+      {
+       "sub": "චන්ද්‍ර",
+       "from": "2065-10-13",
+       "until": "2066-04-14"
+      },
+      {
+       "sub": "කුජ",
+       "from": "2066-04-14",
+       "until": "2066-08-20"
+      },
+      {
+       "sub": "රාහු",
+       "from": "2066-08-20",
+       "until": "2067-07-14"
+      },
+      {
+       "sub": "ගුරු",
+       "from": "2067-07-14",
+       "until": "2068-05-02"
+      },
+      {
+       "sub": "සෙනසුරු",
+       "from": "2068-05-02",
+       "until": "2069-04-14"
+      },
+      {
+       "sub": "බුධ",
+       "from": "2069-04-14",
+       "until": "2070-02-18"
+      },
+      {
+       "sub": "කේතු",
+       "from": "2070-02-18",
+       "until": "2070-06-26"
+      },
+      {
+       "sub": "සිකුරු",
+       "from": "2070-06-26",
+       "until": "2071-06-26"
+      }
+     ]
+    },
+    {
+     "period": "චන්ද්‍ර",
+     "from": "2071-06-26",
+     "until": "2081-06-26",
+     "sub_periods": [
+      {
+       "sub": "චන්ද්‍ර",
+       "from": "2071-06-26",
+       "until": "2072-04-25"
+      },
+      {
+       "sub": "කුජ",
+       "from": "2072-04-25",
+       "until": "2072-11-25"
+      },
+      {
+       "sub": "රාහු",
+       "from": "2072-11-25",
+       "until": "2074-05-26"
+      },
+      {
+       "sub": "ගුරු",
+       "from": "2074-05-26",
+       "until": "2075-09-25"
+      },
+      {
+       "sub": "සෙනසුරු",
+       "from": "2075-09-25",
+       "until": "2077-04-26"
+      },
+      {
+       "sub": "බුධ",
+       "from": "2077-04-26",
+       "until": "2078-09-25"
+      },
+      {
+       "sub": "කේතු",
+       "from": "2078-09-25",
+       "until": "2079-04-26"
+      },
+      {
+       "sub": "සිකුරු",
+       "from": "2079-04-26",
+       "until": "2080-12-25"
+      },
+      {
+       "sub": "රවි",
+       "from": "2080-12-25",
+       "until": "2081-06-26"
+      }
+     ]
+    },
+    {
+     "period": "කුජ",
+     "from": "2081-06-26",
+     "until": "2088-06-25",
+     "sub_periods": [
+      {
+       "sub": "කුජ",
+       "from": "2081-06-26",
+       "until": "2081-11-22"
+      },
+      {
+       "sub": "රාහු",
+       "from": "2081-11-22",
+       "until": "2082-12-10"
+      },
+      {
+       "sub": "ගුරු",
+       "from": "2082-12-10",
+       "until": "2083-11-16"
+      },
+      {
+       "sub": "සෙනසුරු",
+       "from": "2083-11-16",
+       "until": "2084-12-25"
+      },
+      {
+       "sub": "බුධ",
+       "from": "2084-12-25",
+       "until": "2085-12-22"
+      },
+      {
+       "sub": "කේතු",
+       "from": "2085-12-22",
+       "until": "2086-05-20"
+      },
+      {
+       "sub": "සිකුරු",
+       "from": "2086-05-20",
+       "until": "2087-07-20"
+      },
+      {
+       "sub": "රවි",
+       "from": "2087-07-20",
+       "until": "2087-11-25"
+      },
+      {
+       "sub": "චන්ද්‍ර",
+       "from": "2087-11-25",
+       "until": "2088-06-25"
+      }
+     ]
+    },
+    {
+     "period": "රාහු",
+     "from": "2088-06-25",
+     "until": "2106-06-27",
+     "sub_periods": [
+      {
+       "sub": "රාහු",
+       "from": "2088-06-25",
+       "until": "2091-03-09"
+      },
+      {
+       "sub": "ගුරු",
+       "from": "2091-03-09",
+       "until": "2093-08-01"
+      },
+      {
+       "sub": "සෙනසුරු",
+       "from": "2093-08-01",
+       "until": "2096-06-07"
+      },
+      {
+       "sub": "බුධ",
+       "from": "2096-06-07",
+       "until": "2098-12-25"
+      },
+      {
+       "sub": "කේතු",
+       "from": "2098-12-25",
+       "until": "2100-01-13"
+      },
+      {
+       "sub": "සිකුරු",
+       "from": "2100-01-13",
+       "until": "2103-01-14"
+      },
+      {
+       "sub": "රවි",
+       "from": "2103-01-14",
+       "until": "2103-12-08"
+      },
+      {
+       "sub": "චන්ද්‍ර",
+       "from": "2103-12-08",
+       "until": "2105-06-08"
+      },
+      {
+       "sub": "කුජ",
+       "from": "2105-06-08",
+       "until": "2106-06-27"
+      }
+     ]
+    }
+   ]
+  },
+  "mars_check": {
+   "present": true,
+   "reduced": true,
+   "strength": 3,
+   "reasons": [
+    "ලග්නයේ සිට ගණන් කළ විට කුජ 4 වැනි භාවයේ සිටී.",
+    "චන්ද්‍රයාගේ සිට ගණන් කළ විට කුජ 2 වැනි භාවයේ සිටී.",
+    "සිකුරුගේ සිට ගණන් කළ විට කුජ 7 වැනි භාවයේ සිටී.",
+    "එය අඩු කරන සමහර කරුණු අදාළ වේ. ජ්‍යෝතිෂවේදියකු මෙය සලකා බැලිය යුතුය."
+   ],
+   "checks": [
+    {
+     "rule": "ලග්නය කටක හෝ සිංහ වීම",
+     "applies": false,
+     "reason": "ලග්නය මේෂ වේ."
+    },
+    {
+     "rule": "කුජ ස්වක්ෂේත්‍ර හෝ උච්ච රාශියක සිටීම",
+     "applies": false,
+     "reason": "කුජ කටක රාශියේ සිටී. එය ස්වක්ෂේත්‍ර හෝ උච්ච රාශියක් නොවේ."
+    },
+    {
+     "rule": "කුජට ගුරුගේ දෘෂ්ටිය ලැබීම",
+     "applies": true,
+     "reason": "වෘශ්චික රාශියේ සිටින ගුරුගේ දෘෂ්ටිය කටක රාශියේ සිටින කුජට වැටෙනවා."
+    },
+    {
+     "rule": "කුජ සිටින භාවය සහ රාශිය අනුව දෝෂය අඩු වීම",
+     "applies": false,
+     "reason": "මෙම ව්‍යතිරේකය කටක රාශියේ 4 වැනි භාවයේ කුජට අදාළ නොවේ."
+    },
+    {
+     "rule": "කුජ චන්ද්‍රයා සමඟ සිටීම",
+     "applies": false,
+     "reason": "කටක රාශියේ කුජ චන්ද්‍රයා සමඟ නොසිටී."
+    },
+    {
+     "rule": "කුජ සිංහ හෝ කුම්භ රාශියේ සිටීම",
+     "applies": false,
+     "reason": "කුජ කටක රාශියේ සිටී. එය සිංහ හෝ කුම්භ නොවේ."
+    },
+    {
+     "rule": "ලග්නයේ ගුරු හෝ සිකුරු සිටීම",
+     "applies": false,
+     "reason": "මේෂ ලග්නයේ ගුරු හෝ සිකුරු නොසිටී."
+    }
+   ]
+  },
+  "care_periods": [],
+  "birth_table": {
+   "weekday": "ඉරිදා",
+   "thithi": "පුර දසවක",
+   "yoga": "ශෝභන",
+   "karana": "ගරජ",
+   "star_groups": {
+    "gana": "දේව",
+    "yoni": "බළලා",
+    "nadi": "ආදි",
+    "rajju": "නාභි",
+    "pakshi": "බකමූණා",
+    "bhuta": "ආපෝ",
+    "vruksha": "හර",
+    "gothra": "අත්‍රි",
+    "linga": "පුරුෂ"
+   },
+   "provisional": true
+  },
+  "saturn_erashtaka": [
+   {
+    "from": "2000-06-07",
+    "until": "2007-07-16",
+    "state": "past"
+   },
+   {
+    "from": "2029-08-08",
+    "until": "2036-08-27",
+    "state": "ahead"
+   },
+   {
+    "from": "2059-05-28",
+    "until": "2066-07-03",
+    "state": "ahead"
+   }
+  ],
+  "saturn_erashtaka_from_rising_sign": [
+   {
+    "from": "1995-06-02",
+    "until": "2003-04-08",
+    "state": "past"
+   },
+   {
+    "from": "2025-03-30",
+    "until": "2032-05-31",
+    "state": "now"
+   },
+   {
+    "from": "2054-05-15",
+    "until": "2062-03-07",
+    "state": "ahead"
+   },
+   {
+    "from": "2084-03-20",
+    "until": "2091-05-21",
+    "state": "ahead"
+   }
+  ],
+  "jupiter_returns": [
+   {
+    "from": "2006-10-27",
+    "until": "2007-11-22",
+    "state": "past"
+   },
+   {
+    "from": "2018-10-11",
+    "until": "2019-11-05",
+    "state": "past"
+   },
+   {
+    "from": "2030-01-25",
+    "until": "2031-10-15",
+    "state": "ahead"
+   },
+   {
+    "from": "2042-01-02",
+    "until": "2043-09-11",
+    "state": "ahead"
+   },
+   {
+    "from": "2053-12-16",
+    "until": "2055-01-11",
+    "state": "ahead"
+   },
+   {
+    "from": "2065-12-01",
+    "until": "2066-12-27",
+    "state": "ahead"
+   },
+   {
+    "from": "2077-11-16",
+    "until": "2078-12-11",
+    "state": "ahead"
+   },
+   {
+    "from": "2089-11-01",
+    "until": "2090-11-26",
+    "state": "ahead"
+   }
+  ],
+  "road_provisional": true,
+  "planet_changes_ahead": [
+   {
+    "change": "රාහු කේතු මාරුව",
+    "when": "2026 දෙසැම්බර් 5, ශ්‍රී ලංකා වේලාවෙන් 22:32",
+    "from_rising_sign": {
+     "sign": "මේෂ",
+     "moves": [
+      {
+       "move": "රාහු ඔබේ 11 වැනි භාවයෙන් ඉවත්ව 10 වැනි භාවයට පැමිණේ.",
+       "leaves": "11 වැනි භාවයෙන් ලාභ සහ මිතුරන් දැක්වේ.",
+       "enters": "10 වැනි භාවයෙන් වෘත්තිය සහ සමාජ තත්ත්වය දැක්වේ."
+      },
+      {
+       "move": "කේතු ඔබේ 5 වැනි භාවයෙන් ඉවත්ව 4 වැනි භාවයට පැමිණේ.",
+       "leaves": "5 වැනි භාවයෙන් ඉගෙනීම, දරුවන් සහ නිර්මාණශීලීත්වය දැක්වේ.",
+       "enters": "4 වැනි භාවයෙන් නිවස සහ සිතේ සැනසීම දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "සෙනසුරු මීන රාශියේ, ඔබේ 12 වැනි භාවයේ රැඳේ.",
+      "ගුරු සිංහ රාශියේ, ඔබේ 5 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "මිථුන",
+     "moves": [
+      {
+       "move": "රාහු ඔබේ 9 වැනි භාවයෙන් ඉවත්ව 8 වැනි භාවයට පැමිණේ.",
+       "leaves": "9 වැනි භාවයෙන් වාසනාව, ගුරුවරුන් සහ විශ්වාසයන් දැක්වේ.",
+       "enters": "8 වැනි භාවයෙන් වෙනස්වීම් සහ අන් අය සමඟ බෙදාගන්නා දේ දැක්වේ."
+      },
+      {
+       "move": "කේතු ඔබේ 3 වැනි භාවයෙන් ඉවත්ව 2 වැනි භාවයට පැමිණේ.",
+       "leaves": "3 වැනි භාවයෙන් උත්සාහය, ධෛර්යය සහ සහෝදර සහෝදරියන් දැක්වේ.",
+       "enters": "2 වැනි භාවයෙන් පවුල, කථනය සහ ඉතිරිකිරීම් දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "සෙනසුරු මීන රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ.",
+      "ගුරු සිංහ රාශියේ, ඔබේ 3 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "ගුරු මාරුව",
+    "when": "2027 ජනවාරි 25, ශ්‍රී ලංකා වේලාවෙන් 01:32",
+    "from_rising_sign": {
+     "sign": "මේෂ",
+     "moves": [
+      {
+       "move": "ගුරු ඔබේ 5 වැනි භාවයෙන් ඉවත්ව 4 වැනි භාවයට පැමිණේ.",
+       "leaves": "5 වැනි භාවයෙන් ඉගෙනීම, දරුවන් සහ නිර්මාණශීලීත්වය දැක්වේ.",
+       "enters": "4 වැනි භාවයෙන් නිවස සහ සිතේ සැනසීම දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "සෙනසුරු මීන රාශියේ, ඔබේ 12 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 4 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "මිථුන",
+     "moves": [
+      {
+       "move": "ගුරු ඔබේ 3 වැනි භාවයෙන් ඉවත්ව 2 වැනි භාවයට පැමිණේ.",
+       "leaves": "3 වැනි භාවයෙන් උත්සාහය, ධෛර්යය සහ සහෝදර සහෝදරියන් දැක්වේ.",
+       "enters": "2 වැනි භාවයෙන් පවුල, කථනය සහ ඉතිරිකිරීම් දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "සෙනසුරු මීන රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 8 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 2 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "සෙනසුරු මාරුව",
+    "when": "2027 ජූනි 3, ශ්‍රී ලංකා වේලාවෙන් 05:28",
+    "from_rising_sign": {
+     "sign": "මේෂ",
+     "moves": [
+      {
+       "move": "සෙනසුරු ඔබේ 12 වැනි භාවයෙන් ඉවත්ව 1 වැනි භාවයට පැමිණේ.",
+       "leaves": "12 වැනි භාවයෙන් විවේකය, වියදම් සහ දුර බැහැර ස්ථාන දැක්වේ.",
+       "enters": "1 වැනි භාවයෙන් ඔබ සහ ඔබ යමක් ආරම්භ කරන ආකාරය දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "ගුරු කටක රාශියේ, ඔබේ 4 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 4 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "මිථුන",
+     "moves": [
+      {
+       "move": "සෙනසුරු ඔබේ 10 වැනි භාවයෙන් ඉවත්ව 11 වැනි භාවයට පැමිණේ.",
+       "leaves": "10 වැනි භාවයෙන් වෘත්තිය සහ සමාජ තත්ත්වය දැක්වේ.",
+       "enters": "11 වැනි භාවයෙන් ලාභ සහ මිතුරන් දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "ගුරු කටක රාශියේ, ඔබේ 2 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 8 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 2 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "ගුරු මාරුව",
+    "when": "2027 ජූනි 26, ශ්‍රී ලංකා වේලාවෙන් 05:19",
+    "from_rising_sign": {
+     "sign": "මේෂ",
+     "moves": [
+      {
+       "move": "ගුරු ඔබේ 4 වැනි භාවයෙන් ඉවත්ව 5 වැනි භාවයට පැමිණේ.",
+       "leaves": "4 වැනි භාවයෙන් නිවස සහ සිතේ සැනසීම දැක්වේ.",
+       "enters": "5 වැනි භාවයෙන් ඉගෙනීම, දරුවන් සහ නිර්මාණශීලීත්වය දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "සෙනසුරු මේෂ රාශියේ, ඔබේ 1 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 4 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "මිථුන",
+     "moves": [
+      {
+       "move": "ගුරු ඔබේ 2 වැනි භාවයෙන් ඉවත්ව 3 වැනි භාවයට පැමිණේ.",
+       "leaves": "2 වැනි භාවයෙන් පවුල, කථනය සහ ඉතිරිකිරීම් දැක්වේ.",
+       "enters": "3 වැනි භාවයෙන් උත්සාහය, ධෛර්යය සහ සහෝදර සහෝදරියන් දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "සෙනසුරු මේෂ රාශියේ, ඔබේ 11 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 8 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 2 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "සෙනසුරු මාරුව",
+    "when": "2027 ඔක්තෝබර් 20, ශ්‍රී ලංකා වේලාවෙන් 07:12",
+    "from_rising_sign": {
+     "sign": "මේෂ",
+     "moves": [
+      {
+       "move": "සෙනසුරු ඔබේ 1 වැනි භාවයෙන් ඉවත්ව 12 වැනි භාවයට පැමිණේ.",
+       "leaves": "1 වැනි භාවයෙන් ඔබ සහ ඔබ යමක් ආරම්භ කරන ආකාරය දැක්වේ.",
+       "enters": "12 වැනි භාවයෙන් විවේකය, වියදම් සහ දුර බැහැර ස්ථාන දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "ගුරු සිංහ රාශියේ, ඔබේ 5 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 10 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 4 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "මිථුන",
+     "moves": [
+      {
+       "move": "සෙනසුරු ඔබේ 11 වැනි භාවයෙන් ඉවත්ව 10 වැනි භාවයට පැමිණේ.",
+       "leaves": "11 වැනි භාවයෙන් ලාභ සහ මිතුරන් දැක්වේ.",
+       "enters": "10 වැනි භාවයෙන් වෘත්තිය සහ සමාජ තත්ත්වය දැක්වේ."
+      }
+     ],
+     "other_planets": [
+      "ගුරු සිංහ රාශියේ, ඔබේ 3 වැනි භාවයේ රැඳේ.",
+      "රාහු මකර රාශියේ, ඔබේ 8 වැනි භාවයේ රැඳේ.",
+      "කේතු කටක රාශියේ, ඔබේ 2 වැනි භාවයේ රැඳේ."
+     ],
+     "notes": []
+    }
+   }
+  ],
+  "sun_months_ahead": [
+   {
+    "sign": "වෘශ්චික",
+    "from": "2026-11-25",
+    "until": "2026-12-16",
+    "house_from_rising_sign": 8,
+    "house_from_moon_sign": 6
+   },
+   {
+    "sign": "ධනු",
+    "from": "2026-12-16",
+    "until": "2027-01-14",
+    "house_from_rising_sign": 9,
+    "house_from_moon_sign": 7
+   },
+   {
+    "sign": "මකර",
+    "from": "2027-01-14",
+    "until": "2027-02-13",
+    "house_from_rising_sign": 10,
+    "house_from_moon_sign": 8
+   },
+   {
+    "sign": "කුම්භ",
+    "from": "2027-02-13",
+    "until": "2027-03-15",
+    "house_from_rising_sign": 11,
+    "house_from_moon_sign": 9
+   },
+   {
+    "sign": "මීන",
+    "from": "2027-03-15",
+    "until": "2027-04-14",
+    "house_from_rising_sign": 12,
+    "house_from_moon_sign": 10
+   },
+   {
+    "sign": "මේෂ",
+    "from": "2027-04-14",
+    "until": "2027-05-15",
+    "house_from_rising_sign": 1,
+    "house_from_moon_sign": 11
+   },
+   {
+    "sign": "වෘෂභ",
+    "from": "2027-05-15",
+    "until": "2027-06-15",
+    "house_from_rising_sign": 2,
+    "house_from_moon_sign": 12
+   },
+   {
+    "sign": "මිථුන",
+    "from": "2027-06-15",
+    "until": "2027-07-17",
+    "house_from_rising_sign": 3,
+    "house_from_moon_sign": 1
+   },
+   {
+    "sign": "කටක",
+    "from": "2027-07-17",
+    "until": "2027-08-17",
+    "house_from_rising_sign": 4,
+    "house_from_moon_sign": 2
+   },
+   {
+    "sign": "සිංහ",
+    "from": "2027-08-17",
+    "until": "2027-09-17",
+    "house_from_rising_sign": 5,
+    "house_from_moon_sign": 3
+   },
+   {
+    "sign": "කන්‍යා",
+    "from": "2027-09-17",
+    "until": "2027-10-18",
+    "house_from_rising_sign": 6,
+    "house_from_moon_sign": 4
+   },
+   {
+    "sign": "තුලා",
+    "from": "2027-10-18",
+    "until": "2027-11-17",
+    "house_from_rising_sign": 7,
+    "house_from_moon_sign": 5
+   },
+   {
+    "sign": "වෘශ්චික",
+    "from": "2027-11-17",
+    "until": "2027-11-25",
+    "house_from_rising_sign": 8,
+    "house_from_moon_sign": 6
+   }
+  ]
+ }
+}

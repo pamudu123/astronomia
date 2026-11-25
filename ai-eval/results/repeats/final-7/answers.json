@@ -1,0 +1,164 @@
+{
+ "label": "repeats/final-7",
+ "model": "default",
+ "effort": "default",
+ "site_limit_seconds": 60,
+ "answers": {
+  "next-poya": {
+   "turns": [
+    {
+     "question": "When is the next poya day and what is it about?",
+     "text": "The next poya shown for Colombo is **Unduvap Poya, Thursday, 24 December 2026**. It traditionally commemorates Theri Sanghamitta bringing the Bodhi sapling to Anuradhapura and establishing the order of nuns in Sri Lanka.\n\nThat date is the calculated full-moon day; the official Sri Lankan calendar may differ by a day, so check it for religious observances.",
+     "first_event": 0.03,
+     "first_text": 3.14,
+     "final_text_start": 3.14,
+     "error": null,
+     "total": 3.78,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.12,
+        "model": "gpt-6-luna",
+        "input": 9255,
+        "cached": 9252,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.98,
+        "model": "gpt-6-luna",
+        "input": 10403,
+        "cached": 10400,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.53,
+        "model": "gpt-6-luna",
+        "input": 16742,
+        "cached": 16739,
+        "output": 89,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 36400,
+      "cached": 36391,
+      "output": 163
+     }
+    }
+   ]
+  },
+  "si-poya-en-page": {
+   "turns": [
+    {
+     "question": "ඊළඟ පෝය කවදද?",
+     "text": "ඊළඟ පෝය **උඳුවප් පෝය**, 2026 දෙසැම්බර් 24 බ්‍රහස්පතින්දා. මෙය සඟමිත් තෙරණිය ශ්‍රී ලංකාවට වැඩම කිරීම සිහිපත් කරන පෝයයි. ආගමික වතාවත් සඳහා නිල ශ්‍රී ලංකා දින දර්ශනයත් පරීක්ෂා කරන්න—එහි දිනය දිනකින් වෙනස් විය හැකිය.",
+     "first_event": 0.04,
+     "first_text": 4.59,
+     "final_text_start": 4.59,
+     "error": null,
+     "total": 5.62,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "month_calendar",
+       "args": "{\"year\":2026,\"month\":11,\"place_id\":1248991,\"lang\":\"si\"}"
+      },
+      {
+       "name": "month_calendar",
+       "args": "{\"year\":2026,\"month\":12,\"place_id\":1248991,\"lang\":\"si\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.09,
+        "model": "gpt-6-luna",
+        "input": 9254,
+        "cached": 9251,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.98,
+        "model": "gpt-6-luna",
+        "input": 10402,
+        "cached": 10399,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.24,
+        "model": "gpt-6-luna",
+        "input": 12599,
+        "cached": 12596,
+        "output": 41,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.81,
+        "model": "gpt-6-luna",
+        "input": 14880,
+        "cached": 12596,
+        "output": 112,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "month_calendar",
+        "input": "{'year': 2026, 'month': 11, 'place_id': 1248991, 'lang': 'si'}",
+        "seconds": 0.29,
+        "status": "success"
+       },
+       {
+        "name": "month_calendar",
+        "input": "{'year': 2026, 'month': 12, 'place_id': 1248991, 'lang': 'si'}",
+        "seconds": 0.02,
+        "status": "success"
+       }
+      ],
+      "input": 47135,
+      "cached": 44842,
+      "output": 225
+     }
+    }
+   ]
+  }
+ }
+}

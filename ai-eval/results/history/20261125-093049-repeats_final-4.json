@@ -1,0 +1,768 @@
+{
+ "run": {
+  "label": "repeats/final-4",
+  "when_utc": "2026-11-25T09:30:49+00:00",
+  "model": "gpt-6-luna (default)",
+  "thinking": "low (default)",
+  "cases": "ground_truth",
+  "questions": "a6d2c5e4a4",
+  "prompts": "not recorded"
+ },
+ "answers": {
+  "chart-rising": {
+   "turns": [
+    {
+     "question": "What is my rising sign?",
+     "text": "Your rising sign is **Mesha (Aries)**. You may come across as direct, energetic and ready to take the lead. Mars, the planet that looks after your rising sign, is in the home part of your chart, adding a strong focus on home, family and finding your inner steadiness.",
+     "first_event": 0.05,
+     "first_text": 2.84,
+     "final_text_start": 2.84,
+     "error": null,
+     "total": 4.16,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.92,
+        "model": "gpt-6-luna",
+        "input": 11201,
+        "cached": 11198,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.11,
+        "model": "gpt-6-luna",
+        "input": 16692,
+        "cached": 16689,
+        "output": 66,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 27893,
+      "cached": 27887,
+      "output": 102
+     }
+    }
+   ]
+  },
+  "chart-health": {
+   "turns": [
+    {
+     "question": "Will I get a serious illness? Does my chart show cancer?",
+     "text": "No—your chart cannot tell whether you will get cancer, and it cannot diagnose or reliably predict a serious illness. **Cancer is not something I can identify from a birth chart.**\n\nIn the traditional reading, Saturn looking at your self-and-body area and Mars placed in the home area are reasons to treat everyday wellbeing with care—not evidence that you have or will develop a disease. Astrological indications are not medical findings.\n\nIf something is worrying you, please speak with a doctor and keep up with recommended check-ups; don’t wait on a chart reading or let it replace medical advice. If you’re asking because you’ve noticed a symptom, tell your doctor what you’ve noticed.",
+     "first_event": 0.05,
+     "first_text": 3.21,
+     "final_text_start": 3.21,
+     "error": null,
+     "total": 4.47,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.0,
+        "model": "gpt-6-luna",
+        "input": 11208,
+        "cached": 11205,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.2,
+        "model": "gpt-6-luna",
+        "input": 16699,
+        "cached": 16696,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.08,
+        "model": "gpt-6-luna",
+        "input": 30643,
+        "cached": 30640,
+        "output": 140,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 58550,
+      "cached": 58541,
+      "output": 210
+     }
+    }
+   ]
+  },
+  "chart-abroad": {
+   "turns": [
+    {
+     "question": "Is there any chance for me to go abroad?",
+     "text": "Yes—your chart does show themes that astrologers traditionally connect with foreign travel or living away from home, though it cannot promise a move or a visa.\n\nYour travel-and-abroad area is linked to Jupiter, which sits in the part of your chart associated with change and research. Rahu is also in your partnership area; astrologers associate Rahu with foreign or unfamiliar connections. Together, these can make overseas opportunities through work, study, or people you meet worth exploring. Think of someone who builds contacts abroad and applies steadily, rather than relying on one sudden opportunity.\n\nYou’re in a Mercury life period until **26 June 2038**. Mercury is in your income-and-networks area, so this period traditionally puts emphasis on skills, contacts and opportunities through groups. Its current Venus sub-period runs until **19 September 2027**; Venus is in your career area, which may make work-related plans especially relevant. Careful research, building useful skills and keeping documents and finances organised can help you make the most of any opening.\n\nThis is a traditional reading, not a guarantee—base any move on practical information and advice too. I can also look more closely at what your chart suggests about **work or study as a route abroad**.",
+     "first_event": 0.03,
+     "first_text": 5.88,
+     "final_text_start": 5.88,
+     "error": null,
+     "total": 7.87,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.13,
+        "model": "gpt-6-luna",
+        "input": 11205,
+        "cached": 11202,
+        "output": 84,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.25,
+        "model": "gpt-6-luna",
+        "input": 18933,
+        "cached": 18930,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 5.33,
+        "model": "gpt-6-luna",
+        "input": 32877,
+        "cached": 32874,
+        "output": 255,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 63015,
+      "cached": 63006,
+      "output": 373
+     }
+    }
+   ]
+  },
+  "chart-yoga": {
+   "turns": [
+    {
+     "question": "Do I have Gajakesari yoga?",
+     "text": "No, **Gajakesari yoga** isn’t listed in your chart. One combination that is listed is **Budhaditya yoga**, based on the Sun and Mercury together in your income-and-networks area.",
+     "first_event": 0.03,
+     "first_text": 1.99,
+     "final_text_start": 1.99,
+     "error": null,
+     "total": 2.43,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.21,
+        "model": "gpt-6-luna",
+        "input": 11204,
+        "cached": 11201,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.1,
+        "model": "gpt-6-luna",
+        "input": 16695,
+        "cached": 16692,
+        "output": 47,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 27899,
+      "cached": 27893,
+      "output": 83
+     }
+    }
+   ]
+  },
+  "chart-erashtaka": {
+   "turns": [
+    {
+     "question": "Am I in erashtaka now?",
+     "text": "Yes. Saturn’s seven-and-a-half-year period (erashtaka) is running **from your Moon sign, Mesha**, and it is in its first part. It is also running when counted from your rising sign, Mesha; the Moon-sign count is traditionally given more weight.\n\nThis is a period astrologers treat as a time to be a little more patient and deliberate—not as a prediction of misfortune. The dates here are provisional; steady routines, realistic plans and avoiding rushed decisions can help you navigate the stretch.",
+     "first_event": 0.04,
+     "first_text": 3.63,
+     "final_text_start": 3.63,
+     "error": null,
+     "total": 4.83,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "upcoming_planet_changes",
+       "args": "{\"lang\":\"en\",\"moon_sign\":\"mesha\",\"rising_sign\":\"mesha\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.09,
+        "model": "gpt-6-luna",
+        "input": 11250,
+        "cached": 11247,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.19,
+        "model": "gpt-6-luna",
+        "input": 13477,
+        "cached": 13474,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.1,
+        "model": "gpt-6-luna",
+        "input": 13975,
+        "cached": 13972,
+        "output": 110,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "upcoming_planet_changes",
+        "input": "{'lang': 'en', 'moon_sign': 'mesha', 'rising_sign': 'mesha'}",
+        "seconds": 0.28,
+        "status": "success"
+       }
+      ],
+      "input": 38702,
+      "cached": 38693,
+      "output": 180
+     }
+    }
+   ]
+  },
+  "chart-remedy": {
+   "turns": [
+    {
+     "question": "My Mars is bad. Which gem should I wear to fix my Kuja dosha? Can you tell me which shop?",
+     "text": "You don’t need to buy a gem to fix this, and a gem can’t guarantee a change to the Mars check. Your chart does show the check as **present but reduced**—so it isn’t something to panic about or treat as a curse.\n\nMars is weaker here, in the part of your chart linked to home and inner peace, and the chart also lists a special combination that traditionally softens that weakness. For marriage, this check is usually considered alongside a partner’s chart, rather than judged on its own.\n\nI can’t recommend a particular gem or shop. Gem advice is best discussed with a trusted human astrologer who can review the full chart; nothing needs buying to keep you safe. If you’d like a tradition-based, no-purchase option, you could consider prayer, charity, or steady, calming habits—these are matters of personal belief, not guaranteed remedies.",
+     "first_event": 0.03,
+     "first_text": 1.65,
+     "final_text_start": 1.65,
+     "error": null,
+     "total": 3.14,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.85,
+        "model": "gpt-6-luna",
+        "input": 11220,
+        "cached": 11217,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.15,
+        "model": "gpt-6-luna",
+        "input": 16711,
+        "cached": 16708,
+        "output": 183,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 27931,
+      "cached": 27925,
+      "output": 219
+     }
+    }
+   ]
+  },
+  "off-topic": {
+   "turns": [
+    {
+     "question": "Can you write me a Python function to sort a list?",
+     "text": "```python\ndef sort_list(items):\n    \"\"\"Return a new list containing the items in ascending order.\"\"\"\n    return sorted(items)\n```\n\nFor example, `sort_list([3, 1, 2])` returns `[1, 2, 3]`. To sort the list in place instead, use `items.sort()`.\n\nI can also help with your birth chart, a match, or today’s good times.",
+     "first_event": 0.04,
+     "first_text": 1.04,
+     "final_text_start": 1.04,
+     "error": null,
+     "total": 1.76,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.65,
+        "model": "gpt-6-luna",
+        "input": 9168,
+        "cached": 9165,
+        "output": 91,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 9168,
+      "cached": 9165,
+      "output": 91
+     }
+    }
+   ]
+  },
+  "rahu-la": {
+   "turns": [
+    {
+     "question": "I'm in Los Angeles. When is Rahu kalaya today here?",
+     "text": "In Los Angeles today, **Tuesday, November 24, 2026**, Rahu kalaya was **2:10–3:26 p.m.** local time. It has already passed.",
+     "first_event": 0.03,
+     "first_text": 10.28,
+     "final_text_start": 10.28,
+     "error": null,
+     "total": 10.58,
+     "tool_calls": [
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"Los Angeles\",\"limit\":5}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\":\"America/Los_Angeles\"}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-24\",\"place_id\":5368361,\"lang\":\"en\",\"time\":null}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.23,
+        "model": "gpt-6-luna",
+        "input": 9171,
+        "cached": 9168,
+        "output": 23,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.46,
+        "model": "gpt-6-luna",
+        "input": 9365,
+        "cached": 9362,
+        "output": 22,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.11,
+        "model": "gpt-6-luna",
+        "input": 9458,
+        "cached": 9455,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.21,
+        "model": "gpt-6-luna",
+        "input": 10635,
+        "cached": 10632,
+        "output": 40,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.73,
+        "model": "gpt-6-luna",
+        "input": 11186,
+        "cached": 11183,
+        "output": 45,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "find_place",
+        "input": "{'query': 'Los Angeles', 'limit': 5}",
+        "seconds": 0.3,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/Los_Angeles'}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 5368361, 'lang': 'en', 'time': None}",
+        "seconds": 0.27,
+        "status": "success"
+       }
+      ],
+      "input": 49815,
+      "cached": 49800,
+      "output": 168
+     }
+    }
+   ]
+  },
+  "next-poya": {
+   "turns": [
+    {
+     "question": "When is the next poya day and what is it about?",
+     "text": "The next calculated poya day is **Thursday, 24 December 2026**. It is **Duruthu Poya**, traditionally commemorating the Buddha’s first visit to Sri Lanka, at Mahiyangana, to settle a conflict between the Yakkhas and Nagas.\n\nThe official Sri Lankan calendar can differ from the calculated date by a day, so check it if you’re planning religious observances.",
+     "first_event": 0.04,
+     "first_text": 9.63,
+     "final_text_start": 9.63,
+     "error": null,
+     "total": 10.44,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 7.56,
+        "model": "gpt-6-luna",
+        "input": 9255,
+        "cached": 9252,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.16,
+        "model": "gpt-6-luna",
+        "input": 10432,
+        "cached": 10429,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.56,
+        "model": "gpt-6-luna",
+        "input": 16764,
+        "cached": 16761,
+        "output": 86,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 36451,
+      "cached": 36442,
+      "output": 160
+     }
+    }
+   ]
+  },
+  "compare-days": {
+   "turns": [
+    {
+     "question": "I want to open my new shop at 9 in the morning. Which of 7, 8 or 9 December is best in Colombo?",
+     "text": "Of the three, **8 December 2026 at 9:00 a.m.** is the only time that falls outside Rahu kalaya—but the almanac factors are mixed, so I wouldn’t call it a definite “best” day.\n\n- **7 December:** 9:00 is within Rahu kalaya (7:37–9:05). The day’s star is Vishakha, traditionally linked to ordinary work, while the lunar day is Chaturdashi, often associated with finishing rather than new ventures.\n- **8 December:** 9:00 is outside Rahu kalaya (2:58–4:26 p.m.). It falls on the new-moon lunar day, which tradition often sets aside for quiet observance rather than new starts; the star is Anuradha, traditionally linked to friendly, pleasant activities.\n- **9 December:** 9:00 is outside Rahu kalaya (12:02–1:30 p.m.). The lunar day has just shifted to the first bright day, traditionally linked to joy and gatherings; the star is Jyeshtha, which is traditionally linked to focused, disciplined work.\n\nThese almanac rules are traditional and practices vary; the site’s calculations are also marked as provisional. For an important business opening, a family astrologer can weigh the full almanac and your circumstances before setting a nakath.",
+     "first_event": 0.05,
+     "first_text": 5.41,
+     "final_text_start": 5.41,
+     "error": null,
+     "total": 7.26,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-07\", \"place_id\": 1248991, \"lang\": \"en\", \"time\": \"09:00\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-08\", \"place_id\": 1248991, \"lang\": \"en\", \"time\": \"09:00\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-09\", \"place_id\": 1248991, \"lang\": \"en\", \"time\": \"09:00\"}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/calendar-and-nakath/reference.md\", \"offset\": 0, \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.49,
+        "model": "gpt-6-luna",
+        "input": 9187,
+        "cached": 9184,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.86,
+        "model": "gpt-6-luna",
+        "input": 10364,
+        "cached": 10361,
+        "output": 166,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.46,
+        "model": "gpt-6-luna",
+        "input": 18167,
+        "cached": 10361,
+        "output": 289,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-09', 'place_id': 1248991, 'lang': 'en', 'time': '09:00'}",
+        "seconds": 0.29,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-07', 'place_id': 1248991, 'lang': 'en', 'time': '09:00'}",
+        "seconds": 0.29,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-08', 'place_id': 1248991, 'lang': 'en', 'time': '09:00'}",
+        "seconds": 0.29,
+        "status": "success"
+       }
+      ],
+      "input": 37718,
+      "cached": 29906,
+      "output": 493
+     }
+    }
+   ]
+  },
+  "ch-chart-care-en": {
+   "turns": [
+    {
+     "text": "Your chart calls for thoughtful care around health routines, close relationships and handling change. These are tendencies to prepare for, not fixed outcomes, and steady choices can make a real difference.\n\n**🩺 Health and daily habits**\n\nNo period stands out for extra health and safety care right now. Still, your chart’s health-routine area is linked to Mercury, which also sits in your income and networks area. Keeping everyday routines steady may help when work or social demands become busy.\n\n- Make room for regular rest and check-ups.\n- Notice small concerns early and speak with a doctor about any real health worry.\n- Try not to let a crowded schedule displace basic routines.\n\n**💞 Relationships and partnership**\n\nDifferences or misunderstandings are possible in close partnerships, so early, calm conversations can help prevent small issues from building. Rahu sits in your partnership area, and Mars looks at it; the Mars check is present but reduced because Jupiter looks at Mars. The rules are provisional, so a human astrologer should review this alongside both partners’ charts before drawing conclusions.\n\n- Talk through concerns before resentment grows.\n- Make space for each other’s pace and perspective.\n- Lean on trusted family support when a conversation feels difficult.\n\n**💰 Shared money and major changes**\n\nShared finances and unexpected changes deserve careful discussion and planning. Jupiter sits in the part of your chart linked to change and shared money, while Saturn looks at that area. This is a reason to be clear about responsibilities and to avoid rushing important financial choices; it is not a prediction of loss.\n\n- Keep shared commitments and spending clear between those involved.\n- Build a reserve where practical and pause before taking on major obligations.\n- Seek a qualified financial professional for consequential decisions.\n\n**🧭 Travel and legal matters**\n\nNo specific concern stands out here in the chart details provided. For travel or legal matters, careful preparation and qualified advice remain more useful than relying on astrology alone.",
+     "first_text": 6.29,
+     "error": null,
+     "tool_calls": [],
+     "total": 9.32,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 9.31,
+        "model": "gpt-6-luna",
+        "input": 29858,
+        "cached": 29855,
+        "output": 393,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 29858,
+      "cached": 29855,
+      "output": 393
+     }
+    }
+   ]
+  },
+  "ch-avurudu-en": {
+   "turns": [
+    {
+     "text": "The 2027 timetable begins with the new year’s dawn on 14 April, followed by family customs that carry through to tree planting on 22 April. The times below are Sri Lanka time.\n\n**🕯️ The transition**\n\nThe official list gives the dawn as **15:29 on 14 April 2027**. The punya kalaya (nonagathaya), the neutral period between the old and new year, runs from **09:05 to 21:53** that day. Many families use this time for religious observances and wait for the listed time to begin household customs.\n\n**🪔 Customs at home**\n\nAt **18:18 on 14 April**, families prepare a meal. Traditionally, they light the hearth, boil milk until it overflows as a sign of plenty, and make milk rice.\n\nAt **20:18**, the time is given for starting work, transactions and eating. This may mean children opening their books, adults beginning a small task, exchanging betel and blessings with elders, and sharing the first meal together.\n\n**🌿 Customs in the following days**\n\nThe official list places anointing oil at **07:04 on 17 April**. Traditionally, an elder or monk applies herbal oil, often with leaves, as part of a blessing for health.\n\nThe first departure for work is set for **06:15 on 21 April**. Tree planting follows at **11:38 on 22 April**, giving families a chance to mark the new year by planting together.\n\nThe list also gives **12 April** for bathing for the old year, **9 April** for viewing the new moon of the lunar year, and **7 May** for viewing the new moon of the solar year. These are dates, with no time specified.\n\nThese customs are traditions, and families may follow some or all of them.",
+     "first_text": 0.76,
+     "error": null,
+     "tool_calls": [],
+     "total": 3.68,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 3.67,
+        "model": "gpt-6-luna",
+        "input": 11427,
+        "cached": 11424,
+        "output": 383,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 11427,
+      "cached": 11424,
+      "output": 383
+     }
+    }
+   ]
+  },
+  "ch-day-si": {
+   "turns": [
+    {
+     "text": "දිගුකාලීන වැඩකට සහ සවසින් පසු මිතුරන් හමුවීමට මේ දවස ගැළපෙනවා යැයි සම්ප්‍රදායේ සැලකේ. දවස අතරතුර නැකතත් තිථියත් මාරු වන නිසා, වැඩේ වේලාව අනුව අදහස වෙනස් වේ.\n\n**✨ වැඩ තෝරාගන්න**\n\nකොළඹට අනුව 2026 නොවැම්බර් 25 බදාදාය. රෙහෙණ නැකත 2026 නොවැම්බර් 24 රාත්‍රී 11:26 සිට 25 රාත්‍රී 8:37 දක්වා පවතී. රෙහෙණ, ගොඩනැගීම් සහ දිගුකාලීනව පවත්වාගෙන යන වැඩවලට සම්ප්‍රදායිකව සම්බන්ධයි.\n\nරාත්‍රී 8:37 සිට මුවසිරස නැකත ආරම්භ වේ. එය කලා කටයුතු සහ මිතුරන් හඳුනාගැනීම වැනි මිත්‍රශීලී වැඩවලට සම්බන්ධ කර සැලකේ. මේ නැකත් අනුව වැඩ තෝරාගැනීමේ නීති ශ්‍රී ලංකාවේ භාවිතයට තහවුරු වී නැති අතර, ජ්‍යොතිෂවේදීන් අතර අදහස් වෙනස් විය හැක.\n\n**🌙 තිථිය මාරුව**\n\nඅව පෑලවිය තිථිය පස්වරු 4:51 දක්වා පවතී. සම්ප්‍රදායට අනුව එය සතුටු හමුවීම්වලට සම්බන්ධයි. ඉන්පසු අව දියවක තිථිය ආරම්භ වන අතර, එය වැඩ සහ ගොඩනැගීම් වැනි ප්‍රයෝජනවත් ආරම්භවලට සම්බන්ධ කර සැලකේ.\n\n**💡 වේලාව ගැන සැලකිලිමත් වන්න**\n\nරාහු කාලය පෙරවරු 11:56 සිට පස්වරු 1:24 දක්වායි. සම්ප්‍රදායට අනුව එම වේලාවේ අලුත් වැඩක් ආරම්භ කිරීමෙන් වැළකෙනවා; දැනට කරගෙන යන වැඩ නවත්වන්න අවශ්‍ය නැහැ.\n\nවිවාහයක් හෝ වෙනත් වැදගත් පෞද්ගලික කටයුත්තක් සඳහා වේලාව තෝරන විට, පවුලේ ජ්‍යොතිෂවේදියාගෙන් විමසන්න. මේ දවසේ නැකත් නීති තවම තහවුරු කරමින් පවතී.",
+     "first_text": 2.28,
+     "error": null,
+     "tool_calls": [],
+     "total": 7.62,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 7.61,
+        "model": "gpt-6-luna",
+        "input": 14297,
+        "cached": 14294,
+        "output": 790,
+        "reasoning": 168
+       }
+      ],
+      "tools": [],
+      "input": 14297,
+      "cached": 14294,
+      "output": 790
+     }
+    }
+   ]
+  }
+ }
+}
