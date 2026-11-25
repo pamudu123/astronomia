@@ -34,6 +34,12 @@ from app.usage import ChatLimitMiddleware, Ledger
 AGENT_NAME = "guide"
 SUGGEST_NAME = "suggest"
 
+# How many graph steps one answer may take. A model call with its lookups is about five steps,
+# so this is about twenty calls: far above a normal answer, and still an end to a run that loops.
+# It must be set here: the AG-UI adapter otherwise runs with LangGraph's default of 25, which
+# replaces the limit Deep Agents sets on the graph and ends an answer after five calls.
+MAX_STEPS = 100
+
 
 def create_app(
     settings: Settings | None = None,
@@ -93,6 +99,11 @@ def create_app(
             name=AGENT_NAME,
             description="Explains results on the page in plain words.",
             graph=graph,
+            config={"recursion_limit": MAX_STEPS},
+            # Helpers run at the same time and write reports for the guide. By default their words
+            # stream into the chat as they come, mixed together. The chat sees only that a helper
+            # was started; what it found reaches the person in the guide's own answer.
+            subagent_visibility="hidden",
             # The raw LangGraph events are only for debugging and make every event large.
             emit_raw_events=False,
         ),
