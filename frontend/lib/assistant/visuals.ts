@@ -9,7 +9,10 @@ import { RASHI } from "@/lib/rashi";
 
 import type { ChapterId } from "./explain";
 
-export type VisualName = "pillars" | "wheel" | "houses" | "periods" | "mars" | "people" | "ring" | "checks";
+/** Every diagram. The agent's `show_visual` tool names the same ones (agent/app/tools/visuals.py). */
+export const VISUALS = ["pillars", "wheel", "houses", "periods", "mars", "people", "ring", "checks"] as const;
+
+export type VisualName = (typeof VISUALS)[number];
 
 /** The diagram each chapter shows under its short answer, and the houses it lights up. */
 export const CHAPTER_VISUAL: Partial<Record<ChapterId, { visual: VisualName; houses?: number[] }>> = {

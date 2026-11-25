@@ -39,6 +39,7 @@ from langgraph.graph.state import CompiledStateGraph
 from app.clock import today_middleware
 from app.config import Settings
 from app.subagents import build_subagents
+from app.tools.visuals import SHOW_VISUAL
 
 AGENT_ROOT = Path(__file__).resolve().parents[1]
 SKILLS_DIR = AGENT_ROOT / "skills"
@@ -103,6 +104,8 @@ def build_agent(
         today_middleware,
         # A cap on helpers per question, so one message can't start a costly fan-out.
         ToolCallLimitMiddleware(tool_name="task", run_limit=settings.max_subagent_calls),
+        # At most one diagram in an answer (docs/24).
+        ToolCallLimitMiddleware(tool_name=SHOW_VISUAL, run_limit=1),
     ]
     backend = CompositeBackend(
         default=StateBackend(),

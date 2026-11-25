@@ -17,6 +17,8 @@ export type PageContext = {
   result?: Json;
   /** Results of parts inside the page, such as the wedding dates under a match. */
   also_on_page?: { [part: string]: Json };
+  /** The diagrams the chat can draw of this result, under its id (lib/assistant/pageVisuals.ts). */
+  visuals?: { id: string; offers: string[] };
 };
 
 /** The page name from the address: "/en/porondam/stars" -> "porondam/stars", "/en" -> "home". */

@@ -543,3 +543,145 @@ test("Astro is told of a wedding search that is running, and of one that failed 
   expect(runs.at(-1)).toContain("the last search did not finish");
   expect(runs.at(-1)).not.toContain("this search is running now");
 });
+
+/** A chat run as the agent streams it: one show_visual call, then a line of text. */
+function shows(body: string, visual: string, run: number): string {
+  const id = /\\"visuals\\":\{\\"id\\":\\"([\w-]+)\\"/.exec(body)?.[1];
+  const { threadId, runId } = (JSON.parse(body) as { body: { threadId: string; runId: string } }).body;
+  const events = [
+    { type: "RUN_STARTED", threadId, runId },
+    { type: "TOOL_CALL_START", toolCallId: `t${run}`, toolCallName: "show_visual", parentMessageId: `a${run}` },
+    { type: "TOOL_CALL_ARGS", toolCallId: `t${run}`, delta: JSON.stringify({ visual }) },
+    { type: "TOOL_CALL_END", toolCallId: `t${run}` },
+    { type: "TOOL_CALL_RESULT", messageId: `r${run}`, toolCallId: `t${run}`, role: "tool", content: JSON.stringify({ shown: visual, page: id }) },
+    { type: "TEXT_MESSAGE_START", messageId: `b${run}`, role: "assistant" },
+    { type: "TEXT_MESSAGE_CONTENT", messageId: `b${run}`, delta: `Answer ${run}.` },
+    { type: "TEXT_MESSAGE_END", messageId: `b${run}` },
+    { type: "RUN_FINISHED", threadId, runId },
+  ];
+  return events.map((event) => `data: ${JSON.stringify(event)}\n\n`).join("");
+}
+
+test("Astro shows a diagram of the match asked about, and keeps it when another match is opened (docs/24)", async ({ page }) => {
+  await mockAll(page);
+  await page.unroute("**/api/copilotkit**");
+  const runs: string[] = [];
+  await page.route("**/api/copilotkit**", (route) => {
+    const body = route.request().postData() ?? "";
+    if (!body.includes('"agent/run"')) return route.continue();
+    // The follow-up buttons' own run, which never counts as a question.
+    if (body.includes('"agentId":"suggest"')) return route.fulfill({ status: 404, body: "" });
+    runs.push(body);
+    return route.fulfill({ contentType: "text/event-stream", body: shows(body, "ring", runs.length) });
+  });
+  const ready = chatReady(page);
+  await quickMatch(page);
+  await ready;
+  await page.getByRole("button", { name: "Ask Astro" }).click();
+  await ask(page, "What does our match mean?");
+
+  const panel = page.locator(".copilotKitSidebar");
+  const first = panel.locator('[data-chat-visual="ring"]').first();
+  await expect(first.getByRole("heading", { name: "Factors that agree" })).toBeVisible();
+  const score = await first.locator("svg").getAttribute("aria-label");
+  expect(score).toMatch(/^\d+ of \d+ agree$/);
+  await expect(panel.getByText("Answer 1.")).toBeVisible();
+  // One question is one run: a diagram never costs a second one.
+  expect(runs).toHaveLength(1);
+  // Only the diagrams' names and an id go out with the question.
+  expect(runs[0]).toContain('\\"offers\\":[\\"people\\",\\"ring\\",\\"checks\\"]');
+
+  // Another match on the page: its own answer, and the first answer keeps the diagram it was given.
+  await page.route("**/api/v1/porondam", (route) => {
+    const other = JSON.parse(fixture("porondam-quick-en.json")) as { match: { score: { passed: number; total: number } } };
+    other.match.score = { passed: 3, total: 16 };
+    return route.fulfill({ contentType: "application/json", body: JSON.stringify(other) });
+  });
+  await page.getByRole("button", { name: "Try another match" }).first().click();
+  await page.getByRole("button", { name: "Match the charts" }).click(); // the details are still there
+  await ask(page, "And this one?");
+  await expect(panel.locator('[data-chat-visual="ring"]')).toHaveCount(2);
+  await expect(panel.locator('[data-chat-visual="ring"]').last().locator("svg")).toHaveAttribute("aria-label", "3 of 16 agree");
+  await expect(first.locator("svg")).toHaveAttribute("aria-label", score!);
+  expect(runs).toHaveLength(2);
+
+  // It fits the narrow panel.
+  for (const card of await panel.locator("[data-chat-visual]").all()) {
+    expect(await card.evaluate((element) => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(0);
+  }
+});
+
+test("New chat clears the panel, and the old conversation is not sent again", async ({ page }) => {
+  await mockAll(page);
+  await page.unroute("**/api/copilotkit**");
+  const runs: string[] = [];
+  let release = () => {};
+  await page.route("**/api/copilotkit**", async (route) => {
+    const body = route.request().postData() ?? "";
+    if (!body.includes('"agent/run"')) return route.continue();
+    if (body.includes('"agentId":"suggest"')) return route.fulfill({ status: 404, body: "" });
+    runs.push(body);
+    if (runs.length === 1) await new Promise<void>((resolve) => (release = resolve));
+    return route.fulfill({ contentType: "text/event-stream", body: shows(body, "ring", runs.length) });
+  });
+  const ready = chatReady(page);
+  await quickMatch(page);
+  await ready;
+  await page.getByRole("button", { name: "Ask Astro" }).click();
+  const panel = page.locator(".copilotKitSidebar");
+  const button = panel.getByRole("button", { name: "New chat" });
+  // Nothing to clear yet.
+  await expect(button).toHaveCount(0);
+
+  await ask(page, "What does our match mean?");
+  await expect(button).toBeDisabled(); // while the answer is being written
+  release();
+  await expect(panel.getByText("Answer 1.")).toBeVisible();
+  await expect(panel.locator('[data-chat-visual="ring"]')).toBeVisible();
+
+  await button.click();
+  await expect(panel.getByText("What does our match mean?")).toHaveCount(0);
+  await expect(panel.locator("[data-chat-visual]")).toHaveCount(0);
+  await expect(panel.getByText("This is a fresh start")).toHaveCount(0); // that is the idle reset's line
+  await expect(panel.locator("textarea")).toBeFocused();
+  await expect(button).toHaveCount(0);
+  expect(runs).toHaveLength(1); // clearing asks nothing
+
+  await ask(page, "And the serious checks?");
+  await expect(panel.getByText("Answer 2.")).toBeVisible();
+  const [first, second] = runs.map((run) => (JSON.parse(run) as { body: { threadId: string; messages: unknown[] } }).body);
+  expect(second.threadId).not.toBe(first.threadId);
+  expect(second.messages).toHaveLength(1);
+  expect(runs[1]).not.toContain("What does our match mean?");
+});
+
+test("a chat left for 30 minutes is cleared, and not sent again", async ({ page }) => {
+  await page.clock.install();
+  await mockAll(page);
+  await page.unroute("**/api/copilotkit**");
+  const runs: string[] = [];
+  await page.route("**/api/copilotkit**", (route) => {
+    const body = route.request().postData() ?? "";
+    if (!body.includes('"agent/run"')) return route.continue();
+    if (body.includes('"agentId":"suggest"')) return route.fulfill({ status: 404, body: "" });
+    runs.push(body);
+    return route.fulfill({ contentType: "text/event-stream", body: shows(body, "ring", runs.length) });
+  });
+  const ready = chatReady(page);
+  await quickMatch(page);
+  await ready;
+  await page.getByRole("button", { name: "Ask Astro" }).click();
+  const panel = page.locator(".copilotKitSidebar");
+  await ask(page, "What does our match mean?");
+  await expect(panel.getByText("Answer 1.")).toBeVisible();
+
+  await page.clock.fastForward("29:00");
+  await expect(panel.getByText("Answer 1.")).toBeVisible();
+  await page.clock.fastForward("01:30");
+  await expect(panel.getByText("Your earlier chat was cleared after 30 minutes without use.")).toBeVisible();
+  await expect(panel.getByText("Answer 1.")).toHaveCount(0);
+
+  await ask(page, "And now?");
+  await expect(panel.getByText("Answer 2.")).toBeVisible();
+  expect(runs[1]).not.toContain("What does our match mean?");
+});

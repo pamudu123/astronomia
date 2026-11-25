@@ -1,8 +1,10 @@
 from fastapi.testclient import TestClient
+from langchain_core.messages import AIMessage
 from pydantic import SecretStr
 
 from app.config import Settings
 from app.main import create_app
+from tests.conftest import RecordingModel
 
 
 def test_health_is_open(settings: Settings) -> None:
@@ -28,3 +30,34 @@ def test_suggest_route_is_locked_the_same_way(settings: Settings) -> None:
 
     assert client.post("/agent/suggest", json={}).status_code == 401
     assert client.post("/agent/suggest", json={}, headers={"X-Access-Key": "k"}).status_code == 422
+
+
+def test_an_answer_with_many_lookups_finishes(settings: Settings) -> None:
+    # Each lookup is a round of several graph steps. LangGraph's default of 25 steps ended a run
+    # after five model calls, with an error after the answer (or no answer at all).
+    lookup = [
+        AIMessage(
+            content="",
+            tool_calls=[{"id": f"t{n}", "name": "current_date", "args": {}}],
+        )
+        for n in range(8)
+    ]
+    model = RecordingModel(responses=[*lookup, AIMessage(content="All looked up.")])
+    client = TestClient(create_app(settings, model=model, explain_model=model))
+
+    response = client.post(
+        "/agent",
+        json={
+            "threadId": "many",
+            "runId": "r1",
+            "messages": [{"id": "m1", "role": "user", "content": "Compare these days."}],
+            "state": {},
+            "tools": [],
+            "context": [],
+            "forwardedProps": {},
+        },
+    )
+
+    assert "RUN_ERROR" not in response.text
+    assert "All looked up." in response.text
+    assert "RUN_FINISHED" in response.text

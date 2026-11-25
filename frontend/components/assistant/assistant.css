@@ -188,6 +188,17 @@ html.sidera-resizing body {
   color: var(--ink);
 }
 
+/* Beside the close button, and quiet while an answer is being written. */
+.sidera-panel-new {
+  margin-right: -8px;
+}
+
+.sidera-panel-new:disabled {
+  opacity: 0.4;
+  background: transparent;
+  cursor: default;
+}
+
 /* Welcome: the greeting in the middle, suggestions above the input. */
 .sidera-welcome {
   display: flex;
