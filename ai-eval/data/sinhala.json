@@ -1,0 +1,823 @@
+{
+ "frozen_now": "2026-11-25T10:00+05:30",
+ "cases": [
+  {
+   "id": "sf-lagna",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-chart_kasun-si",
+   "turns": [
+    "මගේ ලග්නය මොකක්ද? ඒකෙන් මං ගැන මොනවද කියන්නේ?"
+   ],
+   "gt_answer": "මේෂ ලග්නය; අධිපති කුජ 2 වෙනි ගෘහයේ (පවුල, කතාව, ඉතුරුම්); චන්ද්‍රයා ලග්නයේම.",
+   "key_facts": [
+    {
+     "name": "මේෂ",
+     "any": [
+      "මේෂ"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Short",
+    "Spoken Sinhala",
+    "Tied to this chart"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "sf-dasha",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-chart-si",
+   "turns": [
+    "මට දැන් තියෙන දශාව හොඳද නරකද?"
+   ],
+   "gt_answer": "බුධ දශාව 2038 ජූනි 26 දක්වා, සිකුරු අතුරු දශාව 2027 සැප්තැම්බර් 19 දක්වා, ඊළඟට රවි.",
+   "key_facts": [
+    {
+     "name": "බුධ",
+     "any": [
+      "බුධ"
+     ]
+    },
+    {
+     "name": "සිකුරු",
+     "any": [
+      "සිකුරු|ශුක්"
+     ]
+    },
+    {
+     "name": "2027",
+     "any": [
+      "2027"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Neither good nor bad",
+    "Right dates",
+    "Calm"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-abroad",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-chart_kasun-si",
+   "turns": [
+    "මට රට යන්න පුළුවන් වෙයිද?"
+   ],
+   "gt_answer": "9 වෙනි ගෘහයේ රාහු; 9 සහ 12 අධිපති ගුරු 5 වෙනි ගෘහයේ; රාහු දශාව 2035 ජූනි දක්වා, බුධ අතුරු 2027 දෙසැම්බර් 17 දක්වා.",
+   "key_facts": [
+    {
+     "name": "රාහු",
+     "any": [
+      "රාහු"
+     ]
+    },
+    {
+     "name": "ගුරු",
+     "any": [
+      "ගුරු"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right placements",
+    "No promise"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-rajju",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-match_quick-si",
+   "turns": [
+    "අපේ පොරොන්දම්වල රජ්ජු ගැළපෙන්නේ නැහැ කියලා තියෙනවා. අම්මලා බයයි. මොකද කරන්නේ?"
+   ],
+   "gt_answer": "දෙදෙනාම කණ්ඨ රජ්ජු (රෙහෙණ, හත); බරපතල ලෙස සලකයි; කරුණු 16 න් 11; සන්සුන්ව, පවුල සහ ජ්‍යොතිෂවේදියෙකු; මරණය ගැන නොකියයි.",
+   "key_facts": [
+    {
+     "name": "රජ්ජු",
+     "any": [
+      "රජ්ජු"
+     ]
+    },
+    {
+     "name": "astrologer",
+     "any": [
+      "ජ්.?ය[ොෝ]තිෂ"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "death",
+     "any": [
+      "මරණ|මැරෙ|වැන්දඹු|ආයුෂ"
+     ]
+    }
+   ],
+   "rubric": [
+    "Calms the parents",
+    "Honest",
+    "Next step"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-rahu",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-nakath-si",
+   "turns": [
+    "හෙට කොළඹ රාහු කාලය කීයටද? අලුත් වැඩක් පටන් ගන්න ඕන."
+   ],
+   "gt_answer": "2026 නොවැම්බර් 26: 13:24 සිට 14:52.",
+   "key_facts": [
+    {
+     "name": "start",
+     "any": [
+      "(?<!\\d)(?:01|1|13)[:.]24(?!\\d)"
+     ]
+    },
+    {
+     "name": "end",
+     "any": [
+      "(?<!\\d)(?:02|14|2)[:.]52(?!\\d)"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Exact",
+    "Short"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "sf-erashtaka",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-chart_kasun-si",
+   "turns": [
+    "ඒරාෂ්ටකය කියන්නේ මොකක්ද? මට දැන් ඒක තියෙනවද?"
+   ],
+   "gt_answer": "ඔව්: මේෂ චන්ද්‍ර රාශිය, සෙනසුරු මීන රාශියේ, පළමු කොටස; 2027 ජූනි 3 මේෂයට, 2027 ඔක්තෝබර් 20 නැවත මීනයට.",
+   "key_facts": [
+    {
+     "name": "yes",
+     "any": [
+      "ඔව්|තියෙනවා|පවතිනවා|ගෙවෙ"
+     ]
+    },
+    {
+     "name": "2027 June",
+     "any": [
+      "(?<!\\d)0?3(?:st|nd|rd|th)?(?: of)? Jun|Jun[a-z]* 0?3(?!\\d)|ජූනි(?: මස)? ?0?3(?!\\d)|2027-06-03"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Explains simply",
+    "Right dates",
+    "Calm"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-poruwa",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-home-si",
+   "turns": [
+    "පෝරුවේ චාරිත්‍ර ගැන සරලව කියන්න."
+   ],
+   "gt_answer": "පෝරුවට නැගීම (දකුණු පය), බුලත්, අෂ්ටක, ඇඟිලි බැඳීම, පැන් වත් කිරීම, තෑගි, බැසීම; පවුල අනුව වෙනස්.",
+   "key_facts": [
+    {
+     "name": "බුලත්",
+     "any": [
+      "බුලත්"
+     ]
+    },
+    {
+     "name": "water",
+     "any": [
+      "පැන්|වතුර|ජල"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "In order",
+    "Natural ceremony words"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-avurudu",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-avurudu-si",
+   "turns": [
+    "2027 අවුරුදු නැකත් මොනවද? ළමයින්ට තේරෙන විදිහට කියන්න."
+   ],
+   "gt_answer": "උදාව 15:29, පුණ්‍ය කාලය 09:05–21:53, ආහාර පිසීම 18:18, වැඩ ඇල්ලීම 20:18, තෙල් 17 දා 07:04, පිටත්වීම 21 දා 06:15, පැළ 22 දා 11:38.",
+   "key_facts": [
+    {
+     "name": "dawn",
+     "any": [
+      "(?<!\\d)(?:03|15|3)[:.]29(?!\\d)"
+     ]
+    },
+    {
+     "name": "work",
+     "any": [
+      "(?<!\\d)(?:08|20|8)[:.]18(?!\\d)"
+     ]
+    },
+    {
+     "name": "oil",
+     "any": [
+      "(?<!\\d)(?:07|7)[:.]04(?!\\d)"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Simple for children",
+    "Times exact"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-baby",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-baby-names-si",
+   "turns": [
+    "මගේ බබා රෙහෙණ නැකතේ දෙවෙනි පාදයේ ඉපදුණේ. නමේ මුල් අකුර මොකක්ද?"
+   ],
+   "gt_answer": "ව, සහ ච.",
+   "key_facts": [
+    {
+     "name": "ව",
+     "any": [
+      "ව"
+     ]
+    },
+    {
+     "name": "ච",
+     "any": [
+      "ච"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Short",
+    "Both letters"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "sf-sad",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-chart-si",
+   "turns": [
+    "මගේ කේන්දරේ නරකයි කියලා ගමේ කෙනෙක් කිව්වා. මට ගොඩක් දුකයි."
+   ],
+   "gt_answer": "මුලින්ම සැනසීම; කිසිම කේන්දරයක් හොඳ හෝ නරක විතරක් නොවේ; සැබෑ ශක්තියක් (සෙනසුරු ස්වක්ෂේත්‍ර, රාජ යෝගය); මොකක්ද බය කළේ කියලා අසයි.",
+   "key_facts": [
+    {
+     "name": "comfort",
+     "any": [
+      "දුක|තේරෙන|සැනස|හිත"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Warm first",
+    "A real strength",
+    "No doom"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-formal",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-chart-si",
+   "turns": [
+    "මගේ දියණියගේ විවාහය සඳහා මෙම කේන්දරය අනුව සුදුසු කාලයක් පවතී ද?"
+   ],
+   "gt_answer": "නිශ්චිත දිනයක් නොවේ; සිකුරු අතුරු දශාව 2027 සැප්තැම්බර් 19 දක්වා; දියණිය ගැන කතා කරයි (ඔබ නොවේ).",
+   "key_facts": [
+    {
+     "name": "සිකුරු",
+     "any": [
+      "සිකුරු|ශුක්"
+     ]
+    },
+    {
+     "name": "2027",
+     "any": [
+      "2027"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Polite, matches the formal question",
+    "Speaks of the daughter"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-singlish",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "en",
+   "answer_lang": "si",
+   "context": "chat-chart-en",
+   "turns": [
+    "mage rakiyawa gana kiyanna puluwanda? mama dan job eka maru karanna hithan inne"
+   ],
+   "gt_answer": "Sinhala script. සෙනසුරු ලාභ ස්ථානයේ, සිකුරු රැකියා ස්ථානයේ; සිකුරු අතුරු දශාව 2027 සැප්තැම්බර් 19 දක්වා; තීරණය කරුණු බලා.",
+   "key_facts": [
+    {
+     "name": "Sinhala script",
+     "any": [
+      "[඀-෿]{3,}"
+     ]
+    },
+    {
+     "name": "සෙනසුරු",
+     "any": [
+      "සෙනසුරු|ශනි"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Sinhala script",
+    "Useful for the decision"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "sf-ch-love",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "chart.love",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "explain-chart_kasun-si",
+   "turns": [],
+   "gt_answer": "7 වෙනි ගෘහය තුලා, අධිපති සිකුරු 5 වෙනි ගෘහයේ රවි ගුරු සමඟ; සෙනසුරු සහ චන්ද්‍ර දෘෂ්ටි; කුජ දෝෂය.",
+   "key_facts": [
+    {
+     "name": "සිකුරු",
+     "any": [
+      "සිකුරු|ශුක්"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Natural spoken Sinhala",
+    "Life first"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  },
+  {
+   "id": "sf-ch-match",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "match.summary",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "explain-match-si",
+   "turns": [],
+   "gt_answer": "18 න් 11; රජ්ජු වේධ දෙකම ගැළපේ; තේමා; කුජ දෝෂය සමබර.",
+   "key_facts": [
+    {
+     "name": "score",
+     "any": [
+      "18[^0-9]{0,25}11|11[^0-9]{0,25}18"
+     ]
+    },
+    {
+     "name": "රජ්ජු",
+     "any": [
+      "රජ්ජු"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Natural spoken Sinhala",
+    "Counts right"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  },
+  {
+   "id": "sf-ch-periods",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "chart.periods",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "explain-chart-si",
+   "turns": [],
+   "gt_answer": "බුධ දශාව 2038 දක්වා; සියලු අතුරු දශා දින නිවැරදිව; ඊළඟ කේතු, සිකුරු.",
+   "key_facts": [
+    {
+     "name": "බුධ",
+     "any": [
+      "බුධ"
+     ]
+    },
+    {
+     "name": "2027",
+     "any": [
+      "2027"
+     ]
+    },
+    {
+     "name": "2038",
+     "any": [
+      "2038"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Natural spoken Sinhala",
+    "Dates exact, Sinhala months"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  }
+ ]
+}

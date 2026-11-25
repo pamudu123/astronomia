@@ -1,0 +1,534 @@
+{
+ "page": "match_result",
+ "language": "si",
+ "result": {
+  "bride": {
+   "birth_star": "පුනාවස",
+   "birth_star_id": "punarvasu",
+   "pada": 3,
+   "moon_sign": "මිථුන",
+   "rising_sign": "මේෂ"
+  },
+  "groom": {
+   "birth_star": "බෙරණ",
+   "birth_star_id": "bharani",
+   "pada": 4,
+   "moon_sign": "මේෂ",
+   "rising_sign": "මේෂ"
+  },
+  "quick_match": false,
+  "provisional": true,
+  "score": {
+   "agree": 11,
+   "counted": 18
+  },
+  "summary": "පොරොන්දම්වලින් අඩකට වඩා ගැළපේ. රජ්ජු සහ වේධ පොරොන්දම් දෙකත් ගැළපේ.",
+  "essential_checks": [
+   {
+    "id": "rajju",
+    "name": "රජ්ජු",
+    "meaning": "යුවළගේ යහපැවැත්ම ගැන සලකන සාම්ප්‍රදායික නැකත් ගැළපීමක්",
+    "passes": true,
+    "reason": "මනාලියගේ නැකත නාභි කාණ්ඩයටත් මනාලයාගේ නැකත කටි කාණ්ඩයටත් අයත්. රජ්ජු පොරොන්දම අනුව ගැළපෙන්නේ වෙනස් කාණ්ඩ දෙකක නැකත්."
+   },
+   {
+    "id": "vedha",
+    "name": "වේධ",
+    "meaning": "සම්ප්‍රදාය අනුව එකිනෙකට නොගැළපෙන නැකත් යුගල",
+    "passes": true,
+    "reason": "වේධ පොරොන්දමේ නොගැළපෙන යුගල අතරට පුනාවස සහ බෙරණ අයත් නැහැ."
+   }
+  ],
+  "factors_not_agreeing": [
+   {
+    "id": "dina",
+    "name": "නැකත්",
+    "meaning": "දෙදෙනාගේ යහපැවැත්ම ගැන සලකා බලන සාම්ප්‍රදායික පොරොන්දමක්",
+    "reason": "මනාලියගේ නැකතේ සිට ගණන් කළ විට මනාලයාගේ නැකත 23 වැන්නයි. නවයෙන් බෙදූ විට ඉතිරිය 5 වන අතර එය යහපත් නොවේ."
+   },
+   {
+    "id": "mahendra",
+    "name": "මහේන්ද්‍ර",
+    "meaning": "පවුලේ වර්ධනය",
+    "reason": "මනාලයාගේ නැකත මනාලියගේ නැකතේ සිට 23 වැන්නයි. එය යහපත් ගණනක් නොවේ."
+   },
+   {
+    "id": "rashyadhipathi",
+    "name": "රාශ්‍යාධිපති",
+    "meaning": "රාශි දෙකේ අධිපතීන්",
+    "reason": "මනාලියගේ රාශියේ අධිපති බුධ ද මනාලයාගේ රාශියේ අධිපති කුජ ද වේ. ඔවුන් සතුරන් ලෙස සැලකේ."
+   },
+   {
+    "id": "vashya",
+    "name": "වශ්‍ය",
+    "meaning": "අන්‍යෝන්‍ය ආකර්ෂණය",
+    "reason": "මිථුන සහ මේෂ යන රාශි දෙකෙන් කිසිවක් අනෙකේ බලපෑමට යටත් නොවේ.",
+    "softened_by": [
+     "රාශි සහ යෝනි පොරොන්දම් ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "pakshi",
+    "name": "පක්ෂි",
+    "meaning": "දෙදෙනා අතර සමඟිය",
+    "reason": "මනාලියගේ නැකතේ පක්ෂියා බකමූණා ද මනාලයාගේ නැකතේ පක්ෂියා රාජාලියා ද වේ. ඔවුන් සතුරන් ලෙස සැලකේ.",
+    "softened_by": [
+     "ගණ, යෝනි, රාශි සහ නාඩි යන පොරොන්දම් සියල්ල ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "linga",
+    "name": "ලිංග",
+    "meaning": "ස්ත්‍රී පුරුෂ ස්වභාවය",
+    "reason": "මනාලියගේ නැකත පුරුෂ ලිංග ද මනාලයාගේ නැකත පුරුෂ ලිංග ද වේ. මෙම යුගලය නොගැළපේ.",
+    "softened_by": [
+     "යෝනි සහ රාශි පොරොන්දම් ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "vruksha",
+    "name": "වෘක්ෂ",
+    "meaning": "දරුවන් සහ පවුල් ජීවිතය පිළිබඳ සාම්ප්‍රදායික පොරොන්දමක්",
+    "reason": "නැකත් දෙකේම වෘක්ෂ හර ගස් වේ. මෙම යුගලය නොගැළපේ."
+   }
+  ],
+  "factors_agreeing": [
+   {
+    "id": "gana",
+    "name": "ගණ",
+    "meaning": "ස්වභාවය",
+    "reason": "මනාලිය දේව ගණයට ද මනාලයා මනුෂ්‍ය ගණයට ද අයත් වේ. මේවා එකිනෙකට ගැළපේ."
+   },
+   {
+    "id": "stree_deergha",
+    "name": "ස්ත්‍රී දීර්ඝ",
+    "meaning": "මනාලියගේ යහපත",
+    "reason": "මනාලයාගේ නැකත මනාලියගේ නැකතේ සිට 23 වැන්නයි. එය 13 ට වැඩි බැවින් ප්‍රමාණවත් දුරකි."
+   },
+   {
+    "id": "yoni",
+    "name": "යෝනි",
+    "meaning": "ශාරීරික ගැළපීම",
+    "reason": "මනාලියගේ නැකතට අයත් සතා බළලා. මනාලයාගේ නැකතට අයත් සතා ඇතා. සම්ප්‍රදාය අනුව මේ සතුන් දෙදෙනා සතුරු යුගලයක් ලෙස සැලකෙන්නේ නැහැ."
+   },
+   {
+    "id": "rashi",
+    "name": "රාශි",
+    "meaning": "සිතුවිලි හා හැඟීම් අතින් ඇති බැඳීම",
+    "reason": "මනාලයාගේ චන්ද්‍ර රාශිය මනාලියගේ රාශියේ සිට 11 වැන්නයි. එය යහපත්ය."
+   },
+   {
+    "id": "gothra",
+    "name": "ගෝත්‍ර",
+    "meaning": "පරම්පරාවේ ගැළපීම",
+    "reason": "මනාලියගේ නැකත අත්‍රි ගෝත්‍රයට ද මනාලයාගේ නැකත මරීචි ගෝත්‍රයට ද අයත් වේ. වෙනස් ගෝත්‍ර යහපත්ය."
+   },
+   {
+    "id": "weekday",
+    "name": "දින",
+    "meaning": "දෙදෙනා උපන් සතියේ දවස් අතර ගැළපීම",
+    "reason": "මනාලිය ඉරිදා දිනක ද මනාලයා බ්‍රහස්පතින්දා දිනක ද උපන්නේය. මෙම දින ගැළපේ."
+   },
+   {
+    "id": "varna",
+    "name": "වර්ණ",
+    "meaning": "ස්වභාවය සහ ආකල්ප",
+    "reason": "මනාලියගේ චන්ද්‍ර රාශිය ශූද්‍ර වර්ණයටත් මනාලයාගේ චන්ද්‍ර රාශිය ක්ෂත්‍රිය වර්ණයටත් අයත්. සාම්ප්‍රදායික වර්ණ වගුව අනුව මේ රාශි දෙක ගැළපේ."
+   },
+   {
+    "id": "bhuta",
+    "name": "භූත",
+    "meaning": "පංච මහා භූත ගැළපීම",
+    "reason": "මනාලියගේ නැකත ආපෝ භූතයට ද මනාලයාගේ නැකත පඨවි භූතයට ද අයත් වේ. මේවා එකිනෙකට විරුද්ධ නොවේ."
+   },
+   {
+    "id": "ayusha",
+    "name": "ආයුෂ",
+    "meaning": "දෙදෙනාගේ යහපැවැත්ම ගැන සම්ප්‍රදායේ සලකා බලන කරුණක්",
+    "reason": "නැකත් 28 ගණනයේදී නැකත් දෙක අතර පරතරය 6 කි. එය ගැළපේ."
+   },
+   {
+    "id": "graha",
+    "name": "ග්‍රහ",
+    "meaning": "කේන්දර දෙකේ අධිපති ග්‍රහයන්",
+    "reason": "ලග්නාධිපතීන් (කුජ සහ කුජ) සහ චන්ද්‍ර රාශි අධිපතීන් (බුධ සහ කුජ) අතර පරීක්ෂා 4 න් 3 ක් මිත්‍ර හෝ සම වන බැවින් ගැළපේ."
+   },
+   {
+    "id": "nadi",
+    "name": "නාඩි",
+    "meaning": "පවුලේ යහපැවැත්ම ගැන සලකා බලන සාම්ප්‍රදායික පොරොන්දමක්",
+    "reason": "මනාලිය ආදි නාඩියට ද මනාලයා මධ්‍ය නාඩියට ද අයත් වේ. වෙනස් නාඩි යහපත්ය."
+   }
+  ],
+  "factors_not_counted": [],
+  "mars_check": {
+   "bride": {
+    "present": true,
+    "reduced": true,
+    "reasons": [
+     "ලග්නයේ සිට ගණන් කළ විට කුජ 4 වැනි භාවයේ සිටී.",
+     "චන්ද්‍රයාගේ සිට ගණන් කළ විට කුජ 2 වැනි භාවයේ සිටී.",
+     "සිකුරුගේ සිට ගණන් කළ විට කුජ 7 වැනි භාවයේ සිටී.",
+     "එය අඩු කරන සමහර කරුණු අදාළ වේ. ජ්‍යෝතිෂවේදියකු මෙය සලකා බැලිය යුතුය."
+    ],
+    "checks": [
+     {
+      "rule": "ලග්නය කටක හෝ සිංහ වීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජ ස්වක්ෂේත්‍ර හෝ උච්ච රාශියක සිටීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජට ගුරුගේ දෘෂ්ටිය ලැබීම",
+      "applies": true
+     },
+     {
+      "rule": "කුජ සිටින භාවය සහ රාශිය අනුව දෝෂය අඩු වීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජ චන්ද්‍රයා සමඟ සිටීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජ සිංහ හෝ කුම්භ රාශියේ සිටීම",
+      "applies": false
+     },
+     {
+      "rule": "ලග්නයේ ගුරු හෝ සිකුරු සිටීම",
+      "applies": false
+     }
+    ]
+   },
+   "groom": {
+    "present": true,
+    "reduced": false,
+    "reasons": [
+     "ලග්නයේ සිට ගණන් කළ විට කුජ 2 වැනි භාවයේ සිටී.",
+     "චන්ද්‍රයාගේ සිට ගණන් කළ විට කුජ 2 වැනි භාවයේ සිටී."
+    ],
+    "checks": [
+     {
+      "rule": "ලග්නය කටක හෝ සිංහ වීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජ ස්වක්ෂේත්‍ර හෝ උච්ච රාශියක සිටීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජට ගුරුගේ දෘෂ්ටිය ලැබීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජ සිටින භාවය සහ රාශිය අනුව දෝෂය අඩු වීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජ චන්ද්‍රයා සමඟ සිටීම",
+      "applies": false
+     },
+     {
+      "rule": "කුජ සිංහ හෝ කුම්භ රාශියේ සිටීම",
+      "applies": false
+     },
+     {
+      "rule": "ලග්නයේ ගුරු හෝ සිකුරු සිටීම",
+      "applies": false
+     }
+    ]
+   },
+   "comparison": "කේන්දර දෙකේම කුජ දෝෂය පෙනෙන බැවින්, ඒවා එකිනෙක සමබර කරන ලෙස බොහෝ විට සැලකේ."
+  },
+  "wedding_dates": "on this page, below the match: works with the birth stars alone (quick or full match). The person picks the venue and how many months ahead (3, 6, 12 or 24), chooses the ceremonies and presses search. While it runs (or if it fails) also_on_page.wedding says so in its status; the dates found then appear there. With no also_on_page.wedding, no search has been made for this match",
+  "factor_themes": [
+   {
+    "theme": "යහපැවැත්ම පිළිබඳ පොරොන්දම්",
+    "agree": 3,
+    "counted": 4,
+    "factors": [
+     "නැකත්",
+     "ස්ත්‍රී දීර්ඝ",
+     "ආයුෂ",
+     "නාඩි"
+    ]
+   },
+   {
+    "theme": "බැඳීම සහ ස්වභාවය",
+    "agree": 5,
+    "counted": 8,
+    "factors": [
+     "ගණ",
+     "යෝනි",
+     "රාශි",
+     "වශ්‍ය",
+     "පක්ෂි",
+     "ලිංග",
+     "වර්ණ",
+     "භූත"
+    ]
+   },
+   {
+    "theme": "පවුල සහ දරුවන්",
+    "agree": 1,
+    "counted": 3,
+    "factors": [
+     "මහේන්ද්‍ර",
+     "ගෝත්‍ර",
+     "වෘක්ෂ"
+    ]
+   },
+   {
+    "theme": "ග්‍රහයන් සහ උපන් දින",
+    "agree": 2,
+    "counted": 3,
+    "factors": [
+     "රාශ්‍යාධිපති",
+     "දින",
+     "ග්‍රහ"
+    ]
+   }
+  ],
+  "marriage_in_each_chart": {
+   "bride": {
+    "seventh_house_sign": "තුලා",
+    "seventh_lord": "සිකුරු",
+    "seventh_lord_in_house": 10,
+    "planets_in_seventh": [
+     "රාහු"
+    ],
+    "venus": {
+     "sign": "මකර",
+     "house": 10
+    },
+    "combinations": [
+     {
+      "name": "Budhaditya yoga",
+      "based_on": "රවි and බුධ together in house 11"
+     },
+     {
+      "name": "Sunapha yoga",
+      "based_on": "planets in the house after the චන්ද්‍ර's house 3"
+     },
+     {
+      "name": "Neecha Bhanga Raja yoga",
+      "based_on": "කුජ debilitated in කටක, helped by චන්ද්‍ර in house 3, an angle from the rising sign or the චන්ද්‍ර"
+     },
+     {
+      "name": "Raja yoga",
+      "based_on": "සෙනසුරු (ruler of house 10 and 11) and රවි (ruler of house 5) together in house 11"
+     },
+     {
+      "name": "Dhana yoga",
+      "based_on": "සෙනසුරු (ruler of house 10 and 11) and රවි (ruler of house 5) together in house 11"
+     },
+     {
+      "name": "Vipareeta Raja yoga (Vimala)",
+      "based_on": "ගුරු, ruler of house 12, in house 8"
+     },
+     {
+      "name": "Amala yoga",
+      "based_on": "සිකුරු in house 10, the 10th from the rising sign"
+     }
+    ]
+   },
+   "groom": {
+    "seventh_house_sign": "තුලා",
+    "seventh_lord": "සිකුරු",
+    "seventh_lord_in_house": 5,
+    "planets_in_seventh": [],
+    "venus": {
+     "sign": "සිංහ",
+     "house": 5
+    },
+    "combinations": [
+     {
+      "name": "Ravi-Sukra yoga",
+      "based_on": "රවි and සිකුරු together in house 5"
+     },
+     {
+      "name": "Sunapha yoga",
+      "based_on": "planets in the house after the චන්ද්‍ර's house 1"
+     },
+     {
+      "name": "Shasha yoga",
+      "based_on": "සෙනසුරු in its own sign මකර, in house 10"
+     },
+     {
+      "name": "Raja yoga",
+      "based_on": "සිකුරු (ruler of house 2 and 7) and රවි (ruler of house 5) together in house 5"
+     },
+     {
+      "name": "Raja yoga",
+      "based_on": "සිකුරු (ruler of house 2 and 7) and ගුරු (ruler of house 9 and 12) together in house 5"
+     },
+     {
+      "name": "Dhana yoga",
+      "based_on": "සිකුරු (ruler of house 2 and 7) and රවි (ruler of house 5) together in house 5"
+     },
+     {
+      "name": "Dhana yoga",
+      "based_on": "සිකුරු (ruler of house 2 and 7) and ගුරු (ruler of house 9 and 12) together in house 5"
+     },
+     {
+      "name": "Saraswati yoga",
+      "based_on": "බුධ in house 4, ගුරු in house 5, සිකුරු in house 5, with ගුරු well placed in සිංහ"
+     }
+    ]
+   },
+   "provisional": true
+  },
+  "seventh_lords": {
+   "bride": "සිකුරු",
+   "groom": "සිකුරු",
+   "relation": "same planet",
+   "provisional": true
+  },
+  "years_ahead": {
+   "window": {
+    "from": "2026-11-25",
+    "until": "2036-11-25"
+   },
+   "bride": {
+    "birth_details": "full",
+    "now": "බුධ මහ දශාව 2038 ජූනි 26 දක්වා. සිකුරු අතුරු දශාව 2027 සැප්තැම්බර් 19 දක්වා.",
+    "life_periods": [
+     {
+      "period": "බුධ",
+      "from": "before this window",
+      "until": "2038-06-26",
+      "sub_periods": [
+       {
+        "sub": "සිකුරු",
+        "from": "2026-11-25",
+        "until": "2027-09-19"
+       },
+       {
+        "sub": "රවි",
+        "from": "2027-09-19",
+        "until": "2028-07-26"
+       },
+       {
+        "sub": "චන්ද්‍ර",
+        "from": "2028-07-26",
+        "until": "2029-12-25"
+       },
+       {
+        "sub": "කුජ",
+        "from": "2029-12-25",
+        "until": "2030-12-22"
+       },
+       {
+        "sub": "රාහු",
+        "from": "2030-12-22",
+        "until": "2033-07-11"
+       },
+       {
+        "sub": "ගුරු",
+        "from": "2033-07-11",
+        "until": "2035-10-17"
+       },
+       {
+        "sub": "සෙනසුරු",
+        "from": "2035-10-17",
+        "until": "2038-06-26"
+       }
+      ]
+     }
+    ],
+    "saturn": [
+     {
+      "kind": "erashtaka",
+      "from": "2029-08-08",
+      "until": "2029-10-05",
+      "text": "2029 අගෝස්තු 8 සිට 2029 ඔක්තෝබර් 5 දක්වා සෙනසුරු චන්ද්‍රයාගෙන් 12, 1 හෝ 2 වැනි රාශියේ සිටී (එරාෂ්ටකය)."
+     },
+     {
+      "kind": "erashtaka",
+      "from": "2030-04-17",
+      "until": "2036-08-27",
+      "text": "2030 අප්‍රේල් 17 සිට 2036 අගෝස්තු 27 දක්වා සෙනසුරු චන්ද්‍රයාගෙන් 12, 1 හෝ 2 වැනි රාශියේ සිටී (එරාෂ්ටකය)."
+     }
+    ]
+   },
+   "groom": {
+    "birth_details": "full",
+    "now": "රාහු මහ දශාව 2035 ජූනි 17 දක්වා. බුධ අතුරු දශාව 2027 දෙසැම්බර් 17 දක්වා.",
+    "life_periods": [
+     {
+      "period": "රාහු",
+      "from": "before this window",
+      "until": "2035-06-17",
+      "sub_periods": [
+       {
+        "sub": "බුධ",
+        "from": "2026-11-25",
+        "until": "2027-12-17"
+       },
+       {
+        "sub": "කේතු",
+        "from": "2027-12-17",
+        "until": "2029-01-03"
+       },
+       {
+        "sub": "සිකුරු",
+        "from": "2029-01-03",
+        "until": "2032-01-04"
+       },
+       {
+        "sub": "රවි",
+        "from": "2032-01-04",
+        "until": "2032-11-28"
+       },
+       {
+        "sub": "චන්ද්‍ර",
+        "from": "2032-11-28",
+        "until": "2034-05-30"
+       },
+       {
+        "sub": "කුජ",
+        "from": "2034-05-30",
+        "until": "2035-06-17"
+       }
+      ]
+     },
+     {
+      "period": "ගුරු",
+      "from": "2035-06-17",
+      "until": "2051-06-17",
+      "sub_periods": [
+       {
+        "sub": "ගුරු",
+        "from": "2035-06-17",
+        "until": "2037-08-04"
+       }
+      ]
+     }
+    ],
+    "saturn": [
+     {
+      "kind": "erashtaka",
+      "from": "2026-11-25",
+      "until": "2032-05-30",
+      "text": "සෙනසුරු දැන් චන්ද්‍රයාගෙන් 12, 1 හෝ 2 වැනි රාශියේ සිටී (එරාෂ්ටකය). එය 2032 මැයි 30 දක්වා පවතී."
+     }
+    ]
+   },
+   "saturn_for_both": [
+    {
+     "from": "2029-08-08",
+     "until": "2029-10-05",
+     "text": "2029 අගෝස්තු 8 සිට 2029 ඔක්තෝබර් 5 දක්වා දෙදෙනාම මෙම සෙනසුරු කාලවල සිටිති."
+    },
+    {
+     "from": "2030-04-17",
+     "until": "2032-05-30",
+     "text": "2030 අප්‍රේල් 17 සිට 2032 මැයි 30 දක්වා දෙදෙනාම මෙම සෙනසුරු කාලවල සිටිති."
+    }
+   ],
+   "provisional": true
+  }
+ }
+}

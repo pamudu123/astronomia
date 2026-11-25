@@ -1,0 +1,31 @@
+{
+ "page": "good_times_day",
+ "language": "en",
+ "result": {
+  "date": "2026-12-12",
+  "weekday": "Saturday",
+  "place": "Kandy",
+  "place_id": 1241622,
+  "timezone": "Asia/Colombo",
+  "sunrise": "06:09",
+  "sunset": "17:52",
+  "rahu_kalaya": "09:03 to 10:30",
+  "thithi": [
+   {
+    "name": "Bright 3 (Tritiya)",
+    "time": "11:24 on 2026-12-11 to 14:07"
+   },
+   {
+    "name": "Bright 4 (Chaturthi)",
+    "time": "14:07 to 16:49 on 2026-12-13"
+   }
+  ],
+  "nakatha": [
+   {
+    "name": "Uttara Ashadha",
+    "time": "03:05 to 06:13 on 2026-12-13"
+   }
+  ],
+  "provisional": true
+ }
+}

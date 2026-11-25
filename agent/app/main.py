@@ -100,6 +100,10 @@ def create_app(
             description="Explains results on the page in plain words.",
             graph=graph,
             config={"recursion_limit": MAX_STEPS},
+            # Helpers run at the same time and write reports for the guide. By default their words
+            # stream into the chat as they come, mixed together. The chat sees only that a helper
+            # was started; what it found reaches the person in the guide's own answer.
+            subagent_visibility="hidden",
             # The raw LangGraph events are only for debugging and make every event large.
             emit_raw_events=False,
         ),

@@ -1,0 +1,158 @@
+{
+ "status": "ok",
+ "waiting_for": null,
+ "time": null,
+ "timeline": {
+  "rule_set": "couple_v1",
+  "provisional": true,
+  "start": "2026-11-25",
+  "end": "2036-11-25",
+  "bride": {
+   "mode": "full",
+   "saturn": [
+    {
+     "start": "2029-08-08",
+     "end": "2029-10-05",
+     "from_before": false,
+     "continues": false,
+     "text": "Saturn is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) from 8 August 2029 to 5 October 2029.",
+     "kind": "erashtaka"
+    },
+    {
+     "start": "2030-04-17",
+     "end": "2036-08-27",
+     "from_before": false,
+     "continues": false,
+     "text": "Saturn is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) from 17 April 2030 to 27 August 2036.",
+     "kind": "erashtaka"
+    }
+   ],
+   "dasha": [
+    {
+     "lord": "mercury",
+     "start": "2021-06-26",
+     "end": "2038-06-26",
+     "sub": [
+      {
+       "lord": "venus",
+       "start": "2024-11-18",
+       "end": "2027-09-19"
+      },
+      {
+       "lord": "sun",
+       "start": "2027-09-19",
+       "end": "2028-07-26"
+      },
+      {
+       "lord": "moon",
+       "start": "2028-07-26",
+       "end": "2029-12-25"
+      },
+      {
+       "lord": "mars",
+       "start": "2029-12-25",
+       "end": "2030-12-22"
+      },
+      {
+       "lord": "rahu",
+       "start": "2030-12-22",
+       "end": "2033-07-11"
+      },
+      {
+       "lord": "jupiter",
+       "start": "2033-07-11",
+       "end": "2035-10-17"
+      },
+      {
+       "lord": "saturn",
+       "start": "2035-10-17",
+       "end": "2038-06-26"
+      }
+     ]
+    }
+   ],
+   "dasha_now": "Mercury main period until 26 June 2038. Venus sub period until 19 September 2027."
+  },
+  "groom": {
+   "mode": "full",
+   "saturn": [
+    {
+     "start": "2026-11-25",
+     "end": "2032-05-30",
+     "from_before": true,
+     "continues": false,
+     "text": "Saturn is in the 12th, 1st or 2nd sign from the Moon (Erashtaka) now, until 30 May 2032.",
+     "kind": "erashtaka"
+    }
+   ],
+   "dasha": [
+    {
+     "lord": "rahu",
+     "start": "2017-06-17",
+     "end": "2035-06-17",
+     "sub": [
+      {
+       "lord": "mercury",
+       "start": "2025-05-29",
+       "end": "2027-12-17"
+      },
+      {
+       "lord": "ketu",
+       "start": "2027-12-17",
+       "end": "2029-01-03"
+      },
+      {
+       "lord": "venus",
+       "start": "2029-01-03",
+       "end": "2032-01-04"
+      },
+      {
+       "lord": "sun",
+       "start": "2032-01-04",
+       "end": "2032-11-28"
+      },
+      {
+       "lord": "moon",
+       "start": "2032-11-28",
+       "end": "2034-05-30"
+      },
+      {
+       "lord": "mars",
+       "start": "2034-05-30",
+       "end": "2035-06-17"
+      }
+     ]
+    },
+    {
+     "lord": "jupiter",
+     "start": "2035-06-17",
+     "end": "2051-06-17",
+     "sub": [
+      {
+       "lord": "jupiter",
+       "start": "2035-06-17",
+       "end": "2037-08-04"
+      }
+     ]
+    }
+   ],
+   "dasha_now": "Rahu main period until 17 June 2035. Mercury sub period until 17 December 2027."
+  },
+  "overlaps": [
+   {
+    "start": "2029-08-08",
+    "end": "2029-10-05",
+    "from_before": false,
+    "continues": false,
+    "text": "Both are in one of these Saturn periods from 8 August 2029 to 5 October 2029."
+   },
+   {
+    "start": "2030-04-17",
+    "end": "2032-05-30",
+    "from_before": false,
+    "continues": false,
+    "text": "Both are in one of these Saturn periods from 17 April 2030 to 30 May 2032."
+   }
+  ]
+ }
+}

@@ -1,0 +1,104 @@
+{
+ "page": "avurudu",
+ "language": "si",
+ "result": {
+  "year": 2027,
+  "time_zone_shown": "Asia/Colombo",
+  "calculated": {
+   "label": "the site's own calculation",
+   "new_year_dawn": {
+    "sri_lanka": "15:29 on 2027-04-14"
+   },
+   "punya_kalaya_from": {
+    "sri_lanka": "09:05 on 2027-04-14"
+   },
+   "punya_kalaya_to": {
+    "sri_lanka": "21:53 on 2027-04-14"
+   }
+  },
+  "official": {
+   "source": "Department of Cultural Affairs, Sinhala Avurudu nakath list 2027, released by the Department of Government Information on 25 August 2026",
+   "times": [
+    {
+     "custom": "නව සඳ බැලීම (චන්ද්‍ර වර්ෂය)",
+     "at": null,
+     "from": null,
+     "to": null,
+     "date": "2027 අප්‍රේල් 9"
+    },
+    {
+     "custom": "නව සඳ බැලීම (සූර්ය වර්ෂය)",
+     "at": null,
+     "from": null,
+     "to": null,
+     "date": "2027 මැයි 7"
+    },
+    {
+     "custom": "පරණ අවුරුද්ද සඳහා ස්නානය",
+     "at": null,
+     "from": null,
+     "to": null,
+     "date": "2027 අප්‍රේල් 12"
+    },
+    {
+     "custom": "අලුත් අවුරුදු උදාව",
+     "at": {
+      "sri_lanka": "15:29 on 2027-04-14"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "පුණ්‍ය කාලය (නොනගතය)",
+     "at": null,
+     "from": {
+      "sri_lanka": "09:05 on 2027-04-14"
+     },
+     "to": {
+      "sri_lanka": "21:53 on 2027-04-14"
+     }
+    },
+    {
+     "custom": "ආහාර පිසීම",
+     "at": {
+      "sri_lanka": "18:18 on 2027-04-14"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "වැඩ ඇල්ලීම, ගනුදෙනු කිරීම හා ආහාර අනුභවය",
+     "at": {
+      "sri_lanka": "20:18 on 2027-04-14"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "හිසතෙල් ගෑම",
+     "at": {
+      "sri_lanka": "07:04 on 2027-04-17"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "රැකීරක්ෂා සඳහා පිටත්ව යෑම",
+     "at": {
+      "sri_lanka": "06:15 on 2027-04-21"
+     },
+     "from": null,
+     "to": null
+    },
+    {
+     "custom": "පැළ සිටුවීම",
+     "at": {
+      "sri_lanka": "11:38 on 2027-04-22"
+     },
+     "from": null,
+     "to": null
+    }
+   ]
+  }
+ }
+}

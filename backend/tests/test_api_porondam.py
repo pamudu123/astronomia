@@ -176,7 +176,7 @@ def test_timeline_by_birth_stars_has_saturn_but_no_dasha(client: TestClient) -> 
     assert bride["saturn"][0]["from_before"] is True
     assert "එරාෂ්ටකය" in bride["saturn"][0]["text"]
     assert timeline["overlaps"][0]["from_before"] is True
-    assert "ශනි" in timeline["overlaps"][0]["text"]
+    assert "සෙනසුරු" in timeline["overlaps"][0]["text"]
 
 
 def test_timeline_for_a_mixed_couple(client: TestClient) -> None:

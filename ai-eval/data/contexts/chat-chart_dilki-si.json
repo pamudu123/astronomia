@@ -1,0 +1,358 @@
+{
+ "page": "chart_result",
+ "language": "si",
+ "result": {
+  "rising_sign": "තුලා",
+  "moon_sign": "මීන",
+  "birth_star": "උත්තරපුටුප",
+  "birth_star_id": "uttara_bhadrapada",
+  "pada": 1,
+  "birth_time_check": "the rising sign is the same for nearby birth times",
+  "planets": [
+   {
+    "planet": "රවි",
+    "sign": "මිථුන",
+    "house": 9,
+    "area": "luck, father, teachers, higher learning, long journeys",
+    "rules_houses": [
+     11
+    ]
+   },
+   {
+    "planet": "චන්ද්‍ර",
+    "sign": "මීන",
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "rules_houses": [
+     10
+    ]
+   },
+   {
+    "planet": "කුජ",
+    "sign": "මීන",
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "rules_houses": [
+     2,
+     7
+    ]
+   },
+   {
+    "planet": "බුධ",
+    "sign": "වෘෂභ",
+    "house": 8,
+    "area": "change, shared money, research",
+    "rules_houses": [
+     9,
+     12
+    ]
+   },
+   {
+    "planet": "ගුරු",
+    "sign": "වෘෂභ",
+    "house": 8,
+    "area": "change, shared money, research",
+    "rules_houses": [
+     3,
+     6
+    ]
+   },
+   {
+    "planet": "සිකුරු",
+    "sign": "වෘෂභ",
+    "house": 8,
+    "area": "change, shared money, research",
+    "strength": "own sign",
+    "rules_houses": [
+     1,
+     8
+    ]
+   },
+   {
+    "planet": "සෙනසුරු",
+    "sign": "ධනු",
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "rules_houses": [
+     4,
+     5
+    ],
+    "yoga_karaka": true,
+    "retrograde": true
+   },
+   {
+    "planet": "රාහු",
+    "sign": "කුම්භ",
+    "house": 5,
+    "area": "children, creativity, studies, romance",
+    "retrograde": true
+   },
+   {
+    "planet": "කේතු",
+    "sign": "සිංහ",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "retrograde": true
+   }
+  ],
+  "houses": [
+   {
+    "house": 1,
+    "area": "self, body, how you start things",
+    "sign": "තුලා",
+    "lord": "සිකුරු",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "කුජ"
+    ]
+   },
+   {
+    "house": 2,
+    "area": "family you were born into, savings, speech",
+    "sign": "වෘශ්චික",
+    "lord": "කුජ",
+    "lord_in_house": 6,
+    "aspected_by": [
+     "බුධ",
+     "ගුරු",
+     "සිකුරු"
+    ]
+   },
+   {
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "sign": "ධනු",
+    "lord": "ගුරු",
+    "lord_in_house": 8,
+    "planets": [
+     "සෙනසුරු"
+    ],
+    "aspected_by": [
+     "රවි"
+    ]
+   },
+   {
+    "house": 4,
+    "area": "home, mother, property, inner peace",
+    "sign": "මකර",
+    "lord": "සෙනසුරු",
+    "lord_in_house": 3,
+    "aspected_by": [
+     "ගුරු"
+    ]
+   },
+   {
+    "house": 5,
+    "area": "children, creativity, studies, romance",
+    "sign": "කුම්භ",
+    "lord": "සෙනසුරු",
+    "lord_in_house": 3,
+    "planets": [
+     "රාහු"
+    ],
+    "aspected_by": [
+     "සෙනසුරු"
+    ]
+   },
+   {
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "sign": "මීන",
+    "lord": "ගුරු",
+    "lord_in_house": 8,
+    "planets": [
+     "චන්ද්‍ර",
+     "කුජ"
+    ]
+   },
+   {
+    "house": 7,
+    "area": "marriage, partnership",
+    "sign": "මේෂ",
+    "lord": "කුජ",
+    "lord_in_house": 6
+   },
+   {
+    "house": 8,
+    "area": "change, shared money, research",
+    "sign": "වෘෂභ",
+    "lord": "සිකුරු",
+    "lord_in_house": 8,
+    "planets": [
+     "බුධ",
+     "ගුරු",
+     "සිකුරු"
+    ]
+   },
+   {
+    "house": 9,
+    "area": "luck, father, teachers, higher learning, long journeys",
+    "sign": "මිථුන",
+    "lord": "බුධ",
+    "lord_in_house": 8,
+    "planets": [
+     "රවි"
+    ],
+    "aspected_by": [
+     "කුජ",
+     "සෙනසුරු"
+    ]
+   },
+   {
+    "house": 10,
+    "area": "career, status",
+    "sign": "කටක",
+    "lord": "චන්ද්‍ර",
+    "lord_in_house": 6
+   },
+   {
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "sign": "සිංහ",
+    "lord": "රවි",
+    "lord_in_house": 9,
+    "planets": [
+     "කේතු"
+    ]
+   },
+   {
+    "house": 12,
+    "area": "spending, rest, living abroad",
+    "sign": "කන්‍යා",
+    "lord": "බුධ",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "චන්ද්‍ර",
+     "කුජ",
+     "ගුරු",
+     "සෙනසුරු"
+    ]
+   }
+  ],
+  "combinations": [
+   {
+    "name": "Chandra-Mangala yoga",
+    "based_on": "චන්ද්‍ර and කුජ together in house 6"
+   },
+   {
+    "name": "Raja yoga",
+    "based_on": "සිකුරු (ruler of house 1 and 8) and බුධ (ruler of house 9 and 12) together in house 8"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Harsha)",
+    "based_on": "ගුරු, ruler of house 6, in house 8"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Sarala)",
+    "based_on": "සිකුරු, ruler of house 8, in house 8"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Vimala)",
+    "based_on": "බුධ, ruler of house 12, in house 8"
+   },
+   {
+    "name": "Vasumathi yoga",
+    "based_on": "බුධ, ගුරු, සිකුරු in houses of growth from the චන්ද්‍ර"
+   }
+  ],
+  "combinations_not_in_this_chart": [
+   "Gajakesari yoga",
+   "Budhaditya yoga",
+   "Ruchaka yoga",
+   "Bhadra yoga",
+   "Hamsa yoga",
+   "Malavya yoga",
+   "Shasha yoga",
+   "Sunapha yoga",
+   "Anapha yoga",
+   "Durudhara yoga",
+   "Ravi-Sukra yoga",
+   "Kuja-Sukra yoga",
+   "Shani-Mangala yoga",
+   "Papa Kartari",
+   "Shubha Kartari",
+   "Neecha Bhanga Raja yoga",
+   "Dhana yoga",
+   "Guru-Chandala yoga",
+   "Angaraka yoga",
+   "Guru-Mangala yoga",
+   "Kala Sarpa",
+   "Amala yoga",
+   "Saraswati yoga",
+   "Kemadruma yoga"
+  ],
+  "life_period": {
+   "now": "කේතු",
+   "until": "2028-10-10T23:19:21.918550Z",
+   "sub_period": "සෙනසුරු",
+   "sub_until": "2027-10-14T18:22:21.918550Z",
+   "next": "සිකුරු",
+   "next_from": "2028-10-10T23:19:21.918550Z"
+  },
+  "life_period_timeline": {
+   "sub_periods": [
+    {
+     "sub": "කේතු",
+     "from": "2021-10-11",
+     "until": "2022-03-09"
+    },
+    {
+     "sub": "සිකුරු",
+     "from": "2022-03-09",
+     "until": "2023-05-09"
+    },
+    {
+     "sub": "රවි",
+     "from": "2023-05-09",
+     "until": "2023-09-14"
+    },
+    {
+     "sub": "චන්ද්‍ර",
+     "from": "2023-09-14",
+     "until": "2024-04-14"
+    },
+    {
+     "sub": "කුජ",
+     "from": "2024-04-14",
+     "until": "2024-09-10"
+    },
+    {
+     "sub": "රාහු",
+     "from": "2024-09-10",
+     "until": "2025-09-29"
+    },
+    {
+     "sub": "ගුරු",
+     "from": "2025-09-29",
+     "until": "2026-09-04"
+    },
+    {
+     "sub": "සෙනසුරු",
+     "from": "2026-09-04",
+     "until": "2027-10-14"
+    },
+    {
+     "sub": "බුධ",
+     "from": "2027-10-14",
+     "until": "2028-10-10"
+    }
+   ],
+   "later_periods": [
+    {
+     "period": "සිකුරු",
+     "from": "2028-10-10",
+     "until": "2048-10-10"
+    },
+    {
+     "period": "රවි",
+     "from": "2048-10-10",
+     "until": "2054-10-11"
+    }
+   ]
+  },
+  "mars_check": {
+   "present": true,
+   "reduced": true
+  }
+ }
+}

@@ -121,7 +121,28 @@ function namesFrom(labels: Labels): Names {
   };
 }
 
-/** Each house: its sign, its ruler and where the ruler sits, the planets in it and looking at it. */
+/**
+ * The life area each house stands for, in the words the assistant should use. Sent with the
+ * facts because the model mixes up which house a life area belongs to, and then names the wrong
+ * ruler (AI evaluation, 2026-11-25). The same areas as personal-reading/reference.md, section 4;
+ * the 8th in its careful wording.
+ */
+export const HOUSE_AREA: Record<number, string> = {
+  1: "self, body, how you start things",
+  2: "family you were born into, savings, speech",
+  3: "siblings, courage, communication, short trips",
+  4: "home, mother, property, inner peace",
+  5: "children, creativity, studies, romance",
+  6: "daily work, health habits, debts, competition",
+  7: "marriage, partnership",
+  8: "change, shared money, research",
+  9: "luck, father, teachers, higher learning, long journeys",
+  10: "career, status",
+  11: "income, gains, friends, networks",
+  12: "spending, rest, living abroad",
+};
+
+/** Each house: its life area, its sign, its ruler and where the ruler sits, the planets in it and looking at it. */
 export function houseFacts(chart: Chart, labels: Labels): Json[] {
   const names = namesFrom(labels);
   const start = SIGNS.indexOf(chart.lagna.sign as (typeof SIGNS)[number]);
@@ -137,6 +158,7 @@ export function houseFacts(chart: Chart, labels: Labels): Json[] {
       .map((p) => names.planet(p.body));
     return {
       house,
+      area: HOUSE_AREA[house],
       sign: names.sign(sign),
       lord: names.planet(lord),
       lord_in_house: houseOf.get(lord) ?? null,
@@ -164,6 +186,7 @@ export function planetFacts(chart: Chart, labels: Labels): Json[] {
       planet: names.planet(p.body),
       sign: names.sign(p.sign),
       house: p.house,
+      area: HOUSE_AREA[p.house],
       ...(power && { strength: power }),
       ...(ruled.length && { rules_houses: ruled }),
       ...(isYogaKaraka(ruled) && { yoga_karaka: true }),
@@ -234,6 +257,49 @@ function hemmed(planets: Placement[], house: number, kind: "papa" | "shubha"): b
   const after = houseFrom(house, 2);
   const has = (h: number) => planets.some((p) => p.house === h && group.includes(p.body));
   return has(before) && has(after);
+}
+
+/** Every combination the site looks for, without the variant in brackets. */
+export const COMBINATIONS = [
+  "Gajakesari yoga",
+  "Budhaditya yoga",
+  "Chandra-Mangala yoga",
+  "Ruchaka yoga",
+  "Bhadra yoga",
+  "Hamsa yoga",
+  "Malavya yoga",
+  "Shasha yoga",
+  "Sunapha yoga",
+  "Anapha yoga",
+  "Durudhara yoga",
+  "Ravi-Sukra yoga",
+  "Kuja-Sukra yoga",
+  "Shani-Mangala yoga",
+  "Papa Kartari",
+  "Shubha Kartari",
+  "Neecha Bhanga Raja yoga",
+  "Raja yoga",
+  "Dhana yoga",
+  "Vipareeta Raja yoga",
+  "Guru-Chandala yoga",
+  "Angaraka yoga",
+  "Guru-Mangala yoga",
+  "Kala Sarpa",
+  "Amala yoga",
+  "Saraswati yoga",
+  "Vasumathi yoga",
+  "Kemadruma yoga",
+] as const;
+
+/**
+ * The combinations the site looked for and did not find. Asked "do I have X yoga?", the model
+ * sometimes said yes to one that isn't there (AI evaluation, 2026-11-25): here it reads the no.
+ */
+export function combinationsNotFound(chart: { planets: Placement[] }, labels: Labels): string[] {
+  const found = new Set(
+    combinations(chart, labels).map((c) => String((c as { name: string }).name).replace(/ \(.*\)$/, "")),
+  );
+  return COMBINATIONS.filter((name) => !found.has(name));
 }
 
 /** Well-known combinations found in the chart, each with the placements behind it. */

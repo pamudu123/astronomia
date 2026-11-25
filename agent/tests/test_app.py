@@ -1,5 +1,11 @@
+import asyncio
+import json
+from collections.abc import AsyncIterator
+from typing import Any
+
 from fastapi.testclient import TestClient
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, AIMessageChunk, BaseMessage, ToolMessage
+from langchain_core.outputs import ChatGenerationChunk
 from pydantic import SecretStr
 
 from app.config import Settings
@@ -61,3 +67,59 @@ def test_an_answer_with_many_lookups_finishes(settings: Settings) -> None:
     assert "RUN_ERROR" not in response.text
     assert "All looked up." in response.text
     assert "RUN_FINISHED" in response.text
+
+
+class Helping(RecordingModel):
+    """A guide that starts three helpers at once; each helper streams its own words."""
+
+    async def _astream(
+        self, messages: list[BaseMessage], *args: Any, **kwargs: Any
+    ) -> AsyncIterator[ChatGenerationChunk]:
+        if "date checker" in str(messages[0].content):
+            words = [f"helper-{n} " for n in range(4)]
+        elif any(isinstance(m, ToolMessage) for m in messages):
+            words = ["The guide's ", "own answer."]
+        else:
+            calls: Any = [
+                {
+                    "id": f"t{n}",
+                    "name": "task",
+                    "args": json.dumps({"description": "a day", "subagent_type": "date-checker"}),
+                    "index": n,
+                }
+                for n in range(3)
+            ]
+            yield ChatGenerationChunk(message=AIMessageChunk(content="", tool_call_chunks=calls))
+            return
+        for word in words:
+            await asyncio.sleep(0)
+            yield ChatGenerationChunk(message=AIMessageChunk(content=word))
+
+
+def test_a_helpers_own_words_stay_out_of_the_chat(settings: Settings) -> None:
+    # Helpers run at the same time: streamed into the chat, their words came out mixed together.
+    model = Helping(responses=[AIMessage(content="unused")])
+    client = TestClient(create_app(settings, model=model, explain_model=model))
+
+    response = client.post(
+        "/agent",
+        json={
+            "threadId": "helpers",
+            "runId": "r1",
+            "messages": [{"id": "m1", "role": "user", "content": "Compare three days."}],
+            "state": {},
+            "tools": [],
+            "context": [],
+            "forwardedProps": {},
+        },
+    )
+
+    events = [json.loads(x[5:]) for x in response.text.splitlines() if x.startswith("data:")]
+    written = "".join(e["delta"] for e in events if e["type"] == "TEXT_MESSAGE_CONTENT")
+    assert written == "The guide's own answer."
+    # The chat still knows helpers are at work (the status line), and the guide got their reports.
+    started = [e["toolCallName"] for e in events if e["type"] == "TOOL_CALL_START"]
+    assert started == ["task"] * 3
+    results = [e["content"] for e in events if e["type"] == "TOOL_CALL_RESULT"]
+    assert len(results) == 3 and all("helper-0" in r for r in results)
+    assert events[-1]["type"] == "RUN_FINISHED"

@@ -1,0 +1,386 @@
+{
+ "label": "repeats/haiku-1",
+ "model": "anthropic/claude-haiku-5.5",
+ "effort": "none",
+ "site_limit_seconds": 60,
+ "answers": {
+  "chart-rising": {
+   "turns": [
+    {
+     "question": "What is my rising sign?",
+     "text": "Your rising sign is **Mesha** (Aries). It is the sign that was rising on the eastern horizon at your birth, and it shapes how you meet the world: direct, energetic and quick to make a start.\n\nYour rising sign is planet Mars's sign, and Mars sits in the 4th house of home and inner peace, where it is weaker (debilitated), so its drive tends to work more quietly at home and with family. The chart says the rising sign stays the same for nearby birth times, so this part is steady.",
+     "first_event": 0.05,
+     "first_text": 1.37,
+     "final_text_start": 1.37,
+     "error": null,
+     "total": 2.08,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.96,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17631,
+        "cached": 0,
+        "output": 163,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17631,
+      "cached": 0,
+      "output": 163
+     }
+    }
+   ]
+  },
+  "chart-abroad": {
+   "turns": [
+    {
+     "question": "Is there any chance for me to go abroad?",
+     "text": "I'll read the personal-reading skill first, since this is a question about your own chart and future.\n\nNow let me read the reference for the abroad and travel meanings.\n\nLet me look at what the chart says about travel: the 12th house (living far away), the 9th (long journeys), the 3rd (short trips), and Rahu. Here are the placements from your chart:\n\n- **12th house (spending, rest, living abroad)** is ruled by Jupiter, which sits in the 8th house (change, research). Jupiter also looks at the 12th house itself.\n- **9th house (long journeys, higher learning)** is ruled by Jupiter too, so Jupiter links the 9th and 12th houses together.\n- **Rahu** sits in the 7th house, and is retrograde.\n- **Moon** (your mind and needs) is in the 3rd house, which covers short trips.\n- **Venus**, which rules the 2nd and 7th houses, sits in the 10th house (career).\n- Your current life period is **Mercury** (until 26 June 2038), and the sub-period is **Venus** until 19 September 2027. Then comes **Sun** from 19 September 2027 to 26 July 2028.\n\nHere is my answer.\n\n**Yes, your chart does show a real pull toward working or living away from home, though it isn't a promise.**\n\n**✈️ Where the pull comes from**\n\nThe part of your chart linked to living abroad (the 12th house) is ruled by Jupiter, and Jupiter sits in your 8th house, with the 9th house (long journeys) sharing the same ruler. Traditionally, that link between the 9th and 12th houses is one of the classic signs of travel and time spent far from home. Rahu, the planet astrologers link with the foreign and the unusual, sits in your 7th house, which adds to the theme. Your Moon in the 3rd house also brings an interest in movement and trips.\n\n**🌏 What it could look like in real life**\n\nThink of someone who always had a plan to work overseas, applied through setbacks, and finally got a door open after years of trying. The chart fits that kind of slow, persistent path better than an overnight move. Tradition also says Jupiter's pull toward learning and the 9th house often open doors through study or a mentor who points the way.\n\n**⏳ When it may stir**\n\nYour current Mercury period is a time of learning, trade and networks, which can prepare the ground. The Venus sub-period, running until 19 September 2027, leans toward partnership and comfort, so it is a time to build your base. From 19 September 2027 to 26 July 2028 you enter the Sun sub-period, which brings focus on recognition and authority, and could be a good time to act on a plan.\n\n**⚖️ The honest side**\n\nRahu's pull can bring restlessness and the urge to move quickly. It is worth checking plans carefully, looking at visas, costs and terms properly, and not rushing a decision because it looks exciting. Your Saturn sits in your 11th house, which asks for steady planning and savings before a big move.\n\nThis is a tendency, not a promise. A move abroad depends on many things, including your own effort and the real opportunities in front of you.\n\nWould you like me to look at your career chapter next, to see how work and travel fit together?",
+     "first_event": 0.05,
+     "first_text": 1.33,
+     "final_text_start": 4.68,
+     "error": null,
+     "total": 10.19,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/reference.md\", \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.59,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17637,
+        "cached": 17633,
+        "output": 115,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.47,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 25354,
+        "cached": 17633,
+        "output": 106,
+        "reasoning": 0
+       },
+       {
+        "seconds": 6.93,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 47075,
+        "cached": 25352,
+        "output": 999,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 90066,
+      "cached": 60618,
+      "output": 1220
+     }
+    }
+   ]
+  },
+  "chart-yoga": {
+   "turns": [
+    {
+     "question": "Do I have Gajakesari yoga?",
+     "text": "No. Gajakesari yoga is not in your chart. It is one of the combinations the site checked for and did not find, so I can't read it as part of your reading.\n\nWhat your chart does have includes Raja yoga and Dhana yoga, both formed by Saturn and the Sun together in the 11th house (the part of life linked to income, gains and friends). Your Budhaditya yoga, with the Sun and Mercury together in the same house, is also there. These are the combinations to look at when you think about work, earnings and your network.",
+     "first_event": 0.04,
+     "first_text": 1.11,
+     "final_text_start": 1.11,
+     "error": null,
+     "total": 2.03,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.92,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17637,
+        "cached": 17633,
+        "output": 165,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17637,
+      "cached": 17633,
+      "output": 165
+     }
+    }
+   ]
+  },
+  "rahu-la": {
+   "turns": [
+    {
+     "question": "I'm in Los Angeles. When is Rahu kalaya today here?",
+     "text": "I'll look up Los Angeles's time zone first, since its date may differ from Sri Lanka's.\n\nLos Angeles is a day behind Sri Lanka right now, so today there is still Tuesday, 2026-11-24.\n\nIn Los Angeles today, Rahu kalaya is from **14:10 to 15:26** (Pacific time), on Tuesday, 2026-11-24.\n\nIt has already passed, since it is now 20:30 there. Tomorrow, Wednesday 2026-11-25, is the next day to check if you want to plan something.\n\nIf you'd like, I can look up tomorrow's times for Los Angeles as well.",
+     "first_event": 0.04,
+     "first_text": 1.13,
+     "final_text_start": 5.5,
+     "error": null,
+     "total": 6.12,
+     "tool_calls": [
+      {
+       "name": "find_place",
+       "args": "{\"query\": \"Los Angeles\"}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\": \"America/Los_Angeles\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-11-24\", \"place_id\": 5368361}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.37,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14245,
+        "cached": 14241,
+        "output": 86,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.15,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14578,
+        "cached": 14241,
+        "output": 57,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.48,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14720,
+        "cached": 14576,
+        "output": 122,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.63,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 15461,
+        "cached": 14718,
+        "output": 134,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "find_place",
+        "input": "{'query': 'Los Angeles'}",
+        "seconds": 0.29,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/Los_Angeles'}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 5368361}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 59004,
+      "cached": 57776,
+      "output": 399
+     }
+    }
+   ]
+  },
+  "next-poya": {
+   "turns": [
+    {
+     "question": "When is the next poya day and what is it about?",
+     "text": "The page you have open shows December 2026 for Colombo, and its only poya day that month is on 24 December 2026. The poya day is the full moon day, and in the Sri Lankan Buddhist calendar it is a day of observance: people go to the temple, keep the eight precepts, and often take it as a quiet day for merit-making and reflection.\n\nToday is 25 November 2026, so the next poya day is the one on 24 December, roughly four weeks away.\n\nThe page calculates full moon days, and the official Sri Lankan calendar can differ by a day, so check the official calendar before planning temple visits or observances.\n\nIf you'd like, I can also show you the day's times for 24 December in Colombo, or look at the almanac for another place.",
+     "first_event": 0.05,
+     "first_text": 1.07,
+     "final_text_start": 1.07,
+     "error": null,
+     "total": 2.44,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.33,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14358,
+        "cached": 14354,
+        "output": 234,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 14358,
+      "cached": 14354,
+      "output": 234
+     }
+    }
+   ]
+  },
+  "compare-days": {
+   "turns": [
+    {
+     "question": "I want to open my new shop at 9 in the morning. Which of 7, 8 or 9 December is best in Colombo?",
+     "text": "I'll check the three days at 9 in the morning in Colombo.\n\nFor a 9 o'clock opening, **8 December** is the best of the three.\n\nOn 7 December, 9:00 falls inside the Rahu kalaya (the daily window people avoid starting things, here 07:37 to 09:05), so that day is the weakest choice. On 8 December, Rahu kalaya is in the afternoon (14:58 to 16:26), well clear of 9 o'clock, and the star at that hour is Anuradha, a nakath often linked with steady growth and good settling-in.\n\nOn 9 December, 9:00 is also clear of Rahu kalaya (12:02 to 13:30), with the star Jyeshtha. It is a fine second choice if the 8th doesn't suit your plans.\n\nThe 8th is a new moon day, which some families prefer to avoid for beginnings, so if that matters to you, 9 December is the one to pick. Both are reasonable; the 7th is the one to skip.\n\nThese times are provisional, so check again with your astrologer or the day's almanac closer to the date.",
+     "first_event": 0.04,
+     "first_text": 1.15,
+     "final_text_start": 3.56,
+     "error": null,
+     "total": 5.33,
+     "tool_calls": [
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-07\", \"place_id\": 1248991, \"time\": \"09:00\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-08\", \"place_id\": 1248991, \"time\": \"09:00\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-09\", \"place_id\": 1248991, \"time\": \"09:00\"}"
+      }
+     ],
+     "messages_written": 2,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.0,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14260,
+        "cached": 14256,
+        "output": 328,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.84,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 16316,
+        "cached": 14256,
+        "output": 330,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-09', 'place_id': 1248991, 'time': '09:00'}",
+        "seconds": 0.32,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-07', 'place_id': 1248991, 'time': '09:00'}",
+        "seconds": 0.32,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-08', 'place_id': 1248991, 'time': '09:00'}",
+        "seconds": 0.31,
+        "status": "success"
+       }
+      ],
+      "input": 30576,
+      "cached": 28512,
+      "output": 658
+     }
+    }
+   ]
+  },
+  "singlish-porondam": {
+   "turns": [
+    {
+     "question": "mage porondam hari da? rajju eka fail kiyala thiyenawa, baya wenna ona da?",
+     "text": "ඔව්, ඔයාට දැනගන්න ඕන වෙන්නේ ඒක ගැන වගේම ඒක කරන්න පුළුවන් දේවල් ගැනත්. මම ඒක සරලව කියන්නම්.\n\n**🔍 Rajju එක fail වුණේ ඇයි**\n\nඔබේ කලාපයේ (bride) නැකත Rohini, groom ගේ නැකත Hasta. දෙදෙනාම \"Kantha\" (බෙල්ල) rajju එකේ තියෙන නිසා මේ essential check එක pass වෙන්නේ නැහැ. Tradition එකේ මේ check එක ගොඩක් බරට ගන්නවා, ඒ නිසා ගණන් කරන්නේ නැතුව ඒක වැදගත්.\n\n**🌿 ඒත් සංතෝෂ වෙන්න පුළුවන් කරුණු**\n\n- **Vedha** pass වෙනවා. මේ නැකත් දෙක එකිනෙකාට හානි කරන යුගලයක් නොවෙයි.\n- මුළු factors 16න් 11ක් agree වෙනවා. Gana, Yoni, Rashi, Gothra, Nadi, Bhuta වගේ ඒවා හොඳින් ගැලපෙනවා.\n- Rashi සහ Rashyadhipathi (ග්‍රහයන්ගේ ගැලපීම) දෙකම හොඳයි. ඒ නිසා දෙදෙනාගේ හිතේ බැඳීම සහ ග්‍රහ පාලනය ගැන tradition එක softer විදියට බලනවා.\n\n**🤝 කරන්න පුළුවන් දේවල්**\n\n- මේ match එක ගැන **තමන්ගේ පවුලේ පූජනීය අයෙක් (ගුරුවරයෙක් හෝ පවුලේ ජ්‍යෝතිෂ්‍යවේදියෙක්)** එක්ක කතා කරන්න. Rajju fail වුණු නිසා ඔවුන් කෙලින්ම දෙකම පරීක්ෂා කරලා උපදෙස් දෙන්න පුළුවන්.\n- Mars check (Kuja dosha) තවම බලලා නැහැ. ඒකට දෙදෙනාගේ සම්පූර්ණ උප්පැන්න විස්තර (දිනය, වෙලාව, ස්ථානය) දාන්න ඕන. ඒක කළොත් තවත් චිත්‍රයක් ලැබෙයි.\n- අවසාන තීරණය ඔබට සහ පවුලට අයිති. Chart එක දිශාවක් දෙන්නේ, තීරණය ගන්නේ නැහැ.\n\nඔබට කැමති නම් Mars check එක කරන්න දෙදෙනාගේ උප්පැන්න විස්තර දෙන්න. ඒක සමග ගැලපීම තවත් සම්පූර්ණයෙන් බලන්න පුළුවන්.",
+     "first_event": 0.04,
+     "first_text": 1.13,
+     "final_text_start": 1.13,
+     "error": null,
+     "total": 9.61,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 9.51,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 16441,
+        "cached": 16437,
+        "output": 1083,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 16441,
+      "cached": 16437,
+      "output": 1083
+     }
+    }
+   ]
+  },
+  "ch-chart-care-en": {
+   "turns": [
+    {
+     "text": "**🌟 Health and steady routines**\n\nYour chart draws most attention to your home, your energy and your inner calm. Mars, the planet of drive and heat, sits in your home area (the 4th house) and is retrograde, so its energy tends to turn inward and work more slowly. Tradition links Mars to blood, heat and sudden impatience, so steady routines help more than sharp bursts of effort.\n\n**💡 What helps**\n\n- Keep regular sleep and rest, especially when you feel rushed.\n- Cool down before big decisions and avoid heated arguments at home.\n- Keep a yearly check-up, and see a doctor about any real concern.\n\n**💼 Work and money**\n\nYour chart shows no special pressure on your daily work or money. Saturn, the planet of discipline, rules two areas of income and career and sits in its own sign, which tradition reads as steady, long-term earning. Mercury, which rules your daily work and health habits, sits with it in your income area (the 11th house), so practical planning in your work tends to pay off.\n\n**💡 What helps**\n\n- Keep a simple budget and build a small reserve before taking any big financial risk.\n- Set regular routines in your work so that daily habits support your health.\n\n**💞 Partnership**\n\nRahu sits in your partnership area (the 7th house), and Mars looks at it. Together they add a restless, strong energy to close relationships. This is worth noticing rather than fearing: tradition suggests patience and clear talk help most, and couples who keep small things from piling up tend to handle this energy well. A human astrologer can read both charts together for the full picture.\n\n**🧭 Next step**\n\nYour birth time is reliable, so the rising sign and house readings above can be trusted. For a fuller view of your health and relationships, talk through the whole chart with a trusted astrologer, and see a doctor for any health concern.",
+     "first_text": 1.19,
+     "error": null,
+     "tool_calls": [],
+     "total": 4.72,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 4.71,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 43665,
+        "cached": 43661,
+        "output": 602,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 43665,
+      "cached": 43661,
+      "output": 602
+     }
+    }
+   ]
+  }
+ }
+}
