@@ -239,3 +239,12 @@
     animation: none;
   }
 }
+
+/* D: a diagram of the result on the page (VisualCard.tsx). */
+.visual {
+  margin: 6px 0 12px;
+}
+
+.visual .title {
+  margin: 0 0 8px;
+}

@@ -16,11 +16,13 @@ import {
   splitSpan,
   statusKey,
 } from "@/lib/assistant/tools";
+import { parseShown } from "@/lib/assistant/pageVisuals";
 import { fill, formatDate } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { COLOMBO } from "@/lib/nakath";
 
 import styles from "./ToolCards.module.css";
+import { VisualCard } from "./VisualCard";
 
 type Cards = Dictionary["assistant"]["cards"];
 type Status = "inProgress" | "executing" | "complete";
@@ -220,6 +222,11 @@ function arg(parameters: unknown, key: string): unknown {
 /** The card or status line for one tool call. */
 export function ToolCall({ call, lang, t }: { call: Call; lang: Locale; t: Cards }): ReactElement | null {
   const { name, parameters, status, result } = call;
+  if (name === "show_visual") {
+    // Drawn from the result the question was about, never from the page on screen now.
+    const shown = status === "complete" ? parseShown(result) : null;
+    return shown && <VisualCard shown={shown} />;
+  }
   const engine = isEngineTool(name);
   // Reading notes and helpers are background work: shown while they run, then gone.
   if (!engine && name !== "task" && status === "complete") return null;
@@ -244,7 +251,7 @@ export function ToolCall({ call, lang, t }: { call: Call; lang: Locale; t: Cards
 
 /**
  * Draws the agent's tool calls in the chat: a card for the day's times and for star matches,
- * a status line for every other lookup. One wildcard renderer, so a tool added to the agent
+ * a diagram of the result on the page (docs/24), and a status line for every other lookup. One wildcard renderer, so a tool added to the agent
  * later gets a status line without a change here.
  */
 export function ToolCards({ lang, t }: { lang: Locale; t: Cards }) {

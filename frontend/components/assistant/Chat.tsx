@@ -4,6 +4,7 @@ import "@copilotkit/react-core/v2/styles.css";
 import "./assistant.css";
 
 import {
+  CopilotChatConfigurationProvider,
   CopilotChatInput,
   CopilotChatSuggestionView,
   CopilotKitProvider,
@@ -51,6 +52,7 @@ import { accountHeaders } from "@/lib/paid";
 
 import { AiNotice, useAiAcknowledged } from "./AiNotice";
 import { IdleReset } from "./IdleReset";
+import { NewChat } from "./NewChat";
 import { ToolCards } from "./ToolCards";
 
 // The agents' names, shared with app/api/copilotkit/route.ts: the guide answers, the
@@ -82,6 +84,7 @@ type Panel = {
   /** True after an idle chat was cleared (IdleReset), to say why the panel is empty. */
   fresh: boolean;
   onIdleReset: () => void;
+  onNewChat: () => void;
 };
 const PanelContext = createContext<Panel | null>(null);
 
@@ -113,9 +116,9 @@ function Sparkle({ size = 20 }: { size?: number }) {
   );
 }
 
-/** Name, what the assistant is reading, and close. Replaces CopilotKit's header. */
+/** Name, what the assistant is reading, new chat and close. Replaces CopilotKit's header. */
 function Header() {
-  const { t, reading, close, onIdleReset } = usePanel();
+  const { t, reading, close, onIdleReset, onNewChat } = usePanel();
   return (
     <div className="sidera-panel-header">
       <IdleReset agentId={AGENT_ID} onReset={onIdleReset} />
@@ -124,6 +127,7 @@ function Header() {
         <h2>{t.title}</h2>
         {reading && <p>{fill(t.reading, { page: reading })}</p>}
       </div>
+      <NewChat agentId={AGENT_ID} label={t.newChat} onStart={onNewChat} />
       <button type="button" className="sidera-panel-close" aria-label={t.close} onClick={close}>
         <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -579,6 +583,12 @@ export default function Chat({
   const scrolled = useScrolled();
   const [fresh, setFresh] = useState(false);
   const onIdleReset = useCallback(() => setFresh(true), []);
+  // Asked for, so the welcome screen does not say the chat was cleared for being idle.
+  const onNewChat = useCallback(() => {
+    setFresh(false);
+    // Laptops only, so phones don't pop up the keyboard.
+    if (window.matchMedia("(min-width: 768px)").matches) focusInput();
+  }, []);
   const launcher = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
   // Keyboard: Escape closes; opening moves focus to the input, or to the AI notice in its place
@@ -619,8 +629,9 @@ export default function Chat({
       limits,
       fresh,
       onIdleReset,
+      onNewChat,
     }),
-    [t, lang, tools, key, value, limits, fresh, onIdleReset],
+    [t, lang, tools, key, value, limits, fresh, onIdleReset, onNewChat],
   );
 
   return (
@@ -653,27 +664,31 @@ export default function Chat({
               <span>{t.open}</span>
             </button>
           )}
-          <CopilotSidebar
-            open={open}
-            onOpenChange={setOpen}
-            position="right"
-            header={Header}
-            // The launcher above replaces CopilotKit's round toggle button.
-            toggleButton="sidera-hidden"
-            welcomeScreen={Welcome}
-            suggestionView={FollowUps}
-            labels={{
-              modalHeaderTitle: t.title,
-              sidebarLabel: t.title,
-              welcomeMessageText: t.welcome,
-              chatInputPlaceholder: t.placeholder,
-              chatDisclaimerText: t.note,
-              chatToggleOpenLabel: t.open,
-              chatToggleCloseLabel: t.close,
-            }}
-            // The limits around CopilotKit's input (no attachments or tools menu yet, so no "+").
-            input={LimitedInput}
-          />
+          {/* Owns the conversation's id. Without it above the chat, startNewThread (IdleReset,
+              NewChat) changes an inner copy the chat never reads, and nothing is cleared. */}
+          <CopilotChatConfigurationProvider agentId={AGENT_ID}>
+            <CopilotSidebar
+              open={open}
+              onOpenChange={setOpen}
+              position="right"
+              header={Header}
+              // The launcher above replaces CopilotKit's round toggle button.
+              toggleButton="sidera-hidden"
+              welcomeScreen={Welcome}
+              suggestionView={FollowUps}
+              labels={{
+                modalHeaderTitle: t.title,
+                sidebarLabel: t.title,
+                welcomeMessageText: t.welcome,
+                chatInputPlaceholder: t.placeholder,
+                chatDisclaimerText: t.note,
+                chatToggleOpenLabel: t.open,
+                chatToggleCloseLabel: t.close,
+              }}
+              // The limits around CopilotKit's input (no attachments or tools menu yet, so no "+").
+              input={LimitedInput}
+            />
+          </CopilotChatConfigurationProvider>
         </div>
       </PanelContext>
     </CopilotKitProvider>

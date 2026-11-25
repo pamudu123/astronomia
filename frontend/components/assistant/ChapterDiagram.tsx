@@ -4,7 +4,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 
 import { type ChapterId } from "@/lib/assistant/explain";
-import { CHAPTER_VISUAL, WHEEL, barLayout, point, wheelLayout } from "@/lib/assistant/visuals";
+import { CHAPTER_VISUAL, type VisualName, WHEEL, barLayout, point, wheelLayout } from "@/lib/assistant/visuals";
 import { type AnyHadahan, type Chart, type Dasha, type Kuja, type Labels, fill } from "@/lib/hadahan";
 import { type Porondam, isCounted } from "@/lib/porondam";
 import { RASHI } from "@/lib/rashi";
@@ -135,12 +135,15 @@ function PeriodsBar({
   labels,
   t,
   saved,
+  now,
 }: {
   dasha: Dasha;
   birth: string;
   labels: Labels;
   t: Words;
   saved?: ReactNode;
+  /** The day the bar marks as today. Left out: the real one. */
+  now?: Date;
 }) {
   const main = dasha.current[0];
   const layout = barLayout(
@@ -151,6 +154,7 @@ function PeriodsBar({
       end: p.end,
       now: Boolean(main && p.start === main.start),
     })),
+    now,
   );
   return (
     <figure className={styles.barFigure}>
@@ -218,29 +222,37 @@ function MarsFlow({ kuja, labels, t }: { kuja: Kuja; labels: Labels; t: Words })
   );
 }
 
-/** The chart chapter's diagram, or nothing for a chapter without one or a result without the data. */
-export function ChartDiagram({
-  id,
-  result,
-  labels,
-  birth,
-  saved,
-}: {
-  id: ChapterId;
+type ChartParts = {
   /** Only the parts drawn, so a shared result (with less in it) fits too. */
   result: Pick<AnyHadahan, "chart" | "dasha" | "kuja">;
   labels: Labels;
   birth?: string | null;
   /** On a saved report: the line saying this was worked out on the day it was saved. */
   saved?: ReactNode;
-}) {
-  const t = useExplainText()?.diagram;
+};
+
+/** The chart chapter's diagram, or nothing for a chapter without one or a result without the data. */
+export function ChartDiagram({ id, ...parts }: ChartParts & { id: ChapterId }) {
   const found = CHAPTER_VISUAL[id];
+  return found ? <ChartVisual visual={found.visual} houses={found.houses} {...parts} /> : null;
+}
+
+/** One diagram of a chart, by its name. Nothing for a match's diagram or without its data. */
+export function ChartVisual(props: ChartParts & { visual: VisualName; houses?: number[]; today?: Date }) {
+  const t = useExplainText()?.diagram;
+  const drawn = t && drawChart(t, props);
+  return drawn ? <div className={styles.frame}>{drawn}</div> : null;
+}
+
+function drawChart(
+  t: Words,
+  { visual, houses, result, labels, birth, saved, today }: Parameters<typeof ChartVisual>[0],
+): ReactNode {
   const { chart, dasha, kuja } = result;
-  if (!t || !found || !chart) return null;
+  if (!chart) return null;
   const sign = (key: string) => labels.rashi[key]?.name ?? key;
   const planet = (key: string) => labels.planet[key]?.name ?? key;
-  switch (found.visual) {
+  switch (visual) {
     case "pillars": {
       const [main, sub] = dasha?.current ?? [];
       return (
@@ -272,12 +284,12 @@ export function ChartDiagram({
     case "wheel":
       return <SkyWheel chart={chart} labels={labels} t={t} />;
     case "houses":
-      return <Houses chart={chart} labels={labels} t={t} on={found.houses} />;
+      return <Houses chart={chart} labels={labels} t={t} on={houses} />;
     case "periods":
       return dasha ? (
         <>
           {saved}
-          <PeriodsBar dasha={dasha} birth={birth || dasha.periods[0]?.start} labels={labels} t={t} saved={saved} />
+          <PeriodsBar dasha={dasha} birth={birth || dasha.periods[0]?.start} labels={labels} t={t} saved={saved} now={today} />
         </>
       ) : null;
     case "mars":
@@ -287,13 +299,25 @@ export function ChartDiagram({
   }
 }
 
+type MatchParts = { result: Porondam; labels: Labels };
+
 /** The match chapter's diagram. */
-export function MatchDiagram({ id, result, labels }: { id: ChapterId; result: Porondam; labels: Labels }) {
-  const t = useExplainText()?.diagram;
+export function MatchDiagram({ id, ...parts }: MatchParts & { id: ChapterId }) {
   const found = CHAPTER_VISUAL[id];
+  return found ? <MatchVisual visual={found.visual} {...parts} /> : null;
+}
+
+/** One diagram of a match, by its name. Nothing for a chart's diagram or without its data. */
+export function MatchVisual(props: MatchParts & { visual: VisualName }) {
+  const t = useExplainText()?.diagram;
+  const drawn = t && drawMatch(t, props);
+  return drawn ? <div className={styles.frame}>{drawn}</div> : null;
+}
+
+function drawMatch(t: Words, { visual, result, labels }: MatchParts & { visual: VisualName }): ReactNode {
   const { match, bride, groom, kuja } = result;
-  if (!t || !found || !match || !bride || !groom) return null;
-  switch (found.visual) {
+  if (!match || !bride || !groom) return null;
+  switch (visual) {
     case "people":
       return (
         <div className={styles.duo}>

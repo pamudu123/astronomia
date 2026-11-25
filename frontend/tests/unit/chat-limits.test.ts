@@ -164,10 +164,15 @@ describe("the chat route", () => {
     vi.unstubAllGlobals();
   });
 
-  function run(message = "What is my nakatha?", headers: Record<string, string> = {}, method = "agent/run") {
+  function run(
+    message = "What is my nakatha?",
+    headers: Record<string, string> = {},
+    method = "agent/run",
+    agentId = method === "agent/run" ? "guide" : "suggest",
+  ) {
     const body = JSON.stringify({
       method,
-      params: { agentId: method === "agent/run" ? "guide" : "suggest" },
+      params: { agentId },
       body: { messages: [{ id: "m1", role: "user", content: message }] },
     });
     return new Request("http://site.test/api/copilotkit", {
@@ -218,6 +223,15 @@ describe("the chat route", () => {
     const cookie = "sidera_chat=abcd-1234-efgh; sidera_chat_turn=6f1d2b9e-8a40-4c55-9d3b-0a1b2c3d4e5f";
     await POST(run("", { cookie }, "agent/suggest"));
     expect(backend).not.toHaveBeenCalled();
+    expect(reached[0].headers.get("x-sidera-turn")).toBe("6f1d2b9e-8a40-4c55-9d3b-0a1b2c3d4e5f");
+  });
+
+  it("does the same when CopilotKit asks for the buttons as a run of the suggester", async () => {
+    // What the installed CopilotKit sends in single-route mode.
+    const { POST } = await import("@/app/api/copilotkit/route");
+    const cookie = "sidera_chat=abcd-1234-efgh; sidera_chat_turn=6f1d2b9e-8a40-4c55-9d3b-0a1b2c3d4e5f";
+    await POST(run("", { cookie }, "agent/run", "suggest"));
+    expect(backend).not.toHaveBeenCalled(); // only the person's own questions count
     expect(reached[0].headers.get("x-sidera-turn")).toBe("6f1d2b9e-8a40-4c55-9d3b-0a1b2c3d4e5f");
   });
 

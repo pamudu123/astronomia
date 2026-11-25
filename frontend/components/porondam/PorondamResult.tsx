@@ -6,7 +6,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { MatchDiagram } from "@/components/assistant/ChapterDiagram";
 import { SavedTime, type SavedTimes } from "@/components/account/SavedTime";
 import { AiExplain, FullReading } from "@/components/assistant/Explain";
-import { useAssistantContext } from "@/components/assistant/PageContext";
+import { useAssistantContext, useAssistantVisuals } from "@/components/assistant/PageContext";
 import { useReading } from "@/components/assistant/useReading";
 import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
@@ -104,6 +104,8 @@ function PorondamResultPage({
   const [filter, setFilter] = useState<FactorFilter>("all");
   // What the AI assistant sees: this result, with no names or birth details.
   useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding)));
+  // The diagrams Astro may show: drawn in the browser, from what this page shows.
+  useAssistantVisuals(useMemo(() => ({ kind: "match" as const, result, labels }), [result, labels]));
   // The written explanations get the same, plus each chart's marriage facts with full birth
   // details. Kept stable, so each chapter is written once.
   const reading = matchReadingContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding));
