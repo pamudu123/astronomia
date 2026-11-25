@@ -16,6 +16,7 @@ The rule: **the AI talks, the engine calculates.** Facts come from the page the 
 | `app/graph.py` | Puts the agent together: model, skills, tools, helpers, page context, the cap on helpers per question | Turning on a Deep Agents feature (memory, approvals, ...) |
 | `app/suggest.py`, `app/prompts/suggest.md` | The follow-up questions under each answer, written in the person's own voice ("What does my Rajju result mean?"). One model call, no tools, served at `POST /agent/suggest` | The suggestions' wording or rules change |
 | `app/usage.py` | Chat limits (`docs/21-chat-limits.md`): runs only questions the backend allowed, measures every model call's tokens and reports their cost. On when `ASTRONOMIA_AGENT_CHAT_KEY` is set | The limits' flow or the cost measuring changes |
+| `app/wire.py` | What a run streams to the browser: engine results in full, a short note in place of a skill file's text, no state. Keeps the request the chat sends back small, since the website refuses one over 500 KB | A tool's result should stay out of the browser |
 | `app/main.py` | The web service: `POST /agent` (AG-UI), `POST /agent/suggest`, `GET /healthz` | Rarely |
 
 **Skills now:** `site-guide` (every page and how to read it), `personal-reading` (a human astrologer-style reading of the person's own chart: life areas, life periods, the years ahead), `explain-match`, `star-matches`, `birth-chart`, `calendar-and-nakath`, `avurudu`, `ceremonies-and-names`, `sinhala-style`.
