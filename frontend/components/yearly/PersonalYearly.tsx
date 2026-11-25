@@ -23,10 +23,12 @@ type Props = {
   hadahan: Dictionary["hadahan"];
   lang: Locale;
   year: number;
+  /** Other words for the question, where the page asks it first (the list of lagnas). */
+  ask?: { title: string; lead: string };
 };
 
 /** "Your own 2027": the year counted from the visitor's lagna and Moon sign. */
-export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
+export function PersonalYearly({ t, names, hadahan, lang, year, ask }: Props) {
   const p = t.personal;
   const hydrated = useHydrated();
   const [showForm, setShowForm] = useState(false);
@@ -41,6 +43,7 @@ export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
   // A hadahan made earlier in this tab saves typing. Read only after hydration.
   const saved = hydrated ? loadResult() : null;
   const title = fill(p.title, { year });
+  const asked = ask ?? { title, lead: p.lead };
 
   async function run(request: BirthRequest) {
     setBusy(true);
@@ -63,7 +66,7 @@ export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
 
   if (result?.lagna && result.gochara) {
     return (
-      <section className={changeStyles.personal} aria-labelledby="personal-year-title" data-card="personal-year">
+      <section id="personal-year" className={changeStyles.personal} aria-labelledby="personal-year-title" data-card="personal-year">
         <h2 id="personal-year-title" className={`display ${changeStyles.sectionTitle}`}>
           {title}
         </h2>
@@ -98,13 +101,13 @@ export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
   }
 
   return (
-    <section className={changeStyles.personal} aria-labelledby="personal-year-title" data-card="personal-year">
+    <section id="personal-year" className={changeStyles.personal} aria-labelledby="personal-year-title" data-card="personal-year">
       {!showForm && (
         <>
           <h2 id="personal-year-title" className={`display ${changeStyles.sectionTitle}`}>
-            {title}
+            {asked.title}
           </h2>
-          <p className="soft">{p.lead}</p>
+          <p className="soft">{asked.lead}</p>
           <div className={changeStyles.actions}>
             {saved && (
               <button
@@ -134,7 +137,7 @@ export function PersonalYearly({ t, names, hadahan, lang, year }: Props) {
           initial={form}
           busy={busy}
           error={error}
-          embedded={{ title, lead: p.lead, submit: p.submit, working: p.working }}
+          embedded={{ title: asked.title, lead: asked.lead, submit: p.submit, working: p.working }}
           onSubmit={(request, values) => {
             setForm(values);
             void run(request);

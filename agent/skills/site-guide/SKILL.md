@@ -15,7 +15,7 @@ The App Context `page` is either a result name set by the page (such as `chart_r
 | `hadahan` | Birth chart: rising sign, Moon sign, birth star, the nine planets, life periods (dasha), the life road, Mars check, PDF | Birth date, time and place | Page sends `chart_result` |
 | `porondam` | Marriage match, factor by factor, with reasons, the Mars check, a couple timeline and wedding dates | Two people's birth details, or just their birth stars (quick match). The wedding dates search needs only a venue and a range, for either kind of match | Page sends `match_result`. Wedding dates arrive under `also_on_page.wedding` after the person searches |
 | `porondam/stars` and `porondam/stars/<star>` | Which birth stars suit a star, before full charts | A birth star | `find_matching_stars` |
-| `nakath` and `nakath/<YYYY-MM-DD>` | One day's almanac for a place: Rahu kalaya, thithi, nakatha, yoga, karana | A date and place | Page sends `good_times_day`; or `good_times_for_day` |
+| `nakath` and `nakath/<YYYY-MM-DD>` | One day for a place: the Rahu kalaya to avoid, whether the day's star suits a birth star, the Moon, then the almanac to open (thithi, nakatha, yoga, karana) | A date and place | Page sends `good_times_day`; or `good_times_for_day` |
 | `litha` and `litha/<YYYY-MM>` | The month at a glance, with poya days and Rahu kalaya | A month | Page sends `litha_month`; or `month_calendar` |
 | `avurudu`, `avurudu/<year>`, `avurudu/<year>/<city>` | Sinhala and Tamil New Year nakath, in any time zone: the site's calculated dawn every year, and the official list when published | A year | Page sends `avurudu`; or `new_year_times` |
 | `baby-names` | First letters for a baby's name from the birth, with name ideas | Baby's birth details | The child's result is never sent. For a birth star the person names: `name_letters_for_star` |
@@ -23,7 +23,7 @@ The App Context `page` is either a result name set by the page (such as `chart_r
 | `first-letters` | Good times for the first letters ceremony (akuru kiyaweema) | The child's birth details, or birth star | The child's result is never sent. Explain the custom |
 | `changes` | Coming changes of Saturn, Jupiter, Rahu and Ketu | Nothing | `upcoming_planet_changes` |
 | `changes/<change-id>` and `changes/<change-id>/<sign>` | One change, read for each rising sign, or for one sign | A rising sign, or birth details for a personal reading | `planet_change_for_sign`. A personal reading arrives as `planet_change_personal` |
-| `forecast/<year>` and `forecast/<year>/<sign>` | The year ahead for each rising sign, month by month | A rising sign, or birth details | `year_ahead_for_sign`. A personal reading arrives as `year_ahead_personal` |
+| `forecast/<year>` and `forecast/<year>/<sign>` | The year ahead for each rising sign, by part of life and month by month | A rising sign, or birth details | `year_ahead_for_sign`. A personal reading arrives as `year_ahead_personal` |
 | `kendara` | Find the birth dates and times that fit an old paper horoscope | The planets as drawn on the paper chart | Page sends `old_horoscope_result` (how many fit, never the dates) |
 | `tools` | Every tool, grouped by what the person is planning | Nothing | This table |
 | `s/<code>` | Someone's shared chart or match. Talk about "this person" or "this couple" | Nothing | Page sends the result with `shared: true` |
