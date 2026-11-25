@@ -16,7 +16,6 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from ag_ui_langgraph import add_langgraph_fastapi_endpoint
-from copilotkit import LangGraphAGUIAgent
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from langchain_core.language_models import BaseChatModel
@@ -30,6 +29,7 @@ from app.security import AccessKeyMiddleware
 from app.suggest import build_suggester
 from app.tools import EngineClient, engine_tools
 from app.usage import ChatLimitMiddleware, Ledger
+from app.wire import ChatAgent
 
 AGENT_NAME = "guide"
 SUGGEST_NAME = "suggest"
@@ -89,7 +89,7 @@ def create_app(
 
     add_langgraph_fastapi_endpoint(
         app,
-        LangGraphAGUIAgent(
+        ChatAgent(
             name=AGENT_NAME,
             description="Explains results on the page in plain words.",
             graph=graph,
@@ -100,7 +100,7 @@ def create_app(
     )
     add_langgraph_fastapi_endpoint(
         app,
-        LangGraphAGUIAgent(
+        ChatAgent(
             name=SUGGEST_NAME,
             description="Writes the follow-up questions shown under each answer.",
             graph=build_suggester(settings, model=model, checkpointer=memories[1]),
