@@ -111,6 +111,7 @@ The official lists are data in `backend/app/data/rules/avurudu_v1.yaml`, with th
 - The homecoming nakathas, and whether a Sri Lankan homecoming follows the griha pravesha rules.
 - Whether the poruwa lagna rule (no Sun, Mars, Saturn, Rahu or Ketu in the 7th house) is the one used in Sri Lanka, and whether other lagna rules apply.
 - Whether janma tara should exclude a date rather than only be a caution.
+- Whether tara bala on its own may be shown for an ordinary day. Since 2026-11-25 the daily nakath page shows it for a person's birth star (`frontend/lib/dayAdvice.ts`, the wedding rules' numbers): 3, 5 and 7 as "Take it easy", 1 as "Birth star day", the rest as "Good".
 - Any months or seasons Sri Lankan astrologers avoid for weddings.
 - How astrologers abroad set the local Avurudu times for their city.
 

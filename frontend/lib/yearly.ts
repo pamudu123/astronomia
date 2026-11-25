@@ -6,6 +6,7 @@
 import type { components } from "./api-types";
 import type { BirthRequest } from "./hadahan";
 import type { Locale } from "./i18n";
+import type { SpotName } from "./spots";
 
 export type Year = components["schemas"]["YearOut"];
 export type PersonalYear = components["schemas"]["PersonalYearResponse"];
@@ -42,3 +43,32 @@ export function dayOfYear(date: string, year: number): number {
 }
 
 export const daysInYear = (year: number) => (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / 86_400_000;
+
+type Stay = Year["planets"][number]["stays"][number];
+
+export type Area = { house: number; visits: { body: string; stay: Stay }[]; days: number; isNew: boolean };
+
+const stayDays = (stay: Stay, year: number) => dayOfYear(stay.end, year) + 1 - dayOfYear(stay.start, year);
+
+/**
+ * The year by part of life instead of by planet: each house the slow planets visit, the one
+ * they spend the most time in first. `isNew`: none of them was there when the year began.
+ */
+export function areasOf(year: Year): Area[] {
+  const areas = new Map<number, Area>();
+  for (const { body, stays } of year.planets) {
+    for (const stay of stays) {
+      const area = areas.get(stay.house) ?? { house: stay.house, visits: [], days: 0, isNew: true };
+      area.visits.push({ body, stay });
+      area.days += stayDays(stay, year.year);
+      area.isNew &&= !stay.from_before;
+      areas.set(stay.house, area);
+    }
+  }
+  return [...areas.values()].sort((a, b) => b.days - a.days || a.house - b.house);
+}
+
+/** The picture for each house, 1 to 12 (lib/spots.ts). */
+export const AREA_SPOTS: SpotName[] = [
+  "sunrise", "family", "road", "lamp", "book", "checklist", "couple", "change", "lotus", "work", "pot", "travel",
+];
