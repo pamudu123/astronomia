@@ -31,10 +31,10 @@ The App Context on the match page gives:
 3. **Where it comes easily.** Group the agreeing factors by theme (reference) and name the strongest one or two themes, with the reason behind one factor: "Your temperaments are in the same group (Gana), so you tend to react to life in a similar way."
 4. **Where to give attention.** The non-agreeing factors, by theme and plain meaning, at most three, each with what it can look like in daily life and what couples do about it. Frame these as heads-ups, not verdicts. When a factor has `softened_by`, say so in the same breath: "it doesn't agree, but tradition softens it because..." (reference, "Softening").
 5. **Each person's emotional style**, from the two Moon signs, and how they meet (reference). One or two sentences. Skip if there is no room.
-6. **The Mars check**, in one sentence, if present.
+6. **The Mars check**, in one sentence, whenever `mars_check` has a result, in either language: who shows it and how the two compare.
 7. **Close** with one offer: "Want me to go through any of these in more detail?"
 
-For a short question, answer just that part. Don't run the whole structure for "what does Yoni mean?".
+A simple or short explanation ("tell me simply", "in short") still names the score, both essential checks and the Mars check. For a question about one thing, answer just that part. Don't run the whole structure for "what does Yoni mean?".
 
 ## Chapters
 

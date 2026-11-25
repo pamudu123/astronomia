@@ -1,0 +1,14 @@
+{
+ "page": "litha_month",
+ "language": "en",
+ "result": {
+  "year": 2026,
+  "month": 12,
+  "place": "Colombo",
+  "place_id": 1248991,
+  "poya_days": [
+   "2026-12-24"
+  ],
+  "poya_note": "Poya days are the calculated full moon days. The official Sri Lankan calendar can differ by a day, so check it for religious observances."
+ }
+}

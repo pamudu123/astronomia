@@ -1,0 +1,1242 @@
+{
+ "frozen_now": "2026-11-25T10:00+05:30",
+ "cases": [
+  {
+   "id": "ho-yoga-malavya",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_kasun-en",
+   "turns": [
+    "I heard I have Malavya yoga. Is it true?"
+   ],
+   "gt_answer": "No: not among the combinations. Found: Ravi-Sukra, Sunapha, Shasha, Raja, Dhana, Saraswati.",
+   "key_facts": [
+    {
+     "name": "says no",
+     "any": [
+      "\\bno\\b|not|isn.t|doesn.t"
+     ]
+    },
+    {
+     "name": "a real one",
+     "any": [
+      "Shasha|Raja|Dhana|Saraswati|Ravi|Sunapha"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "claims it",
+     "any": [
+      "\\byes\\b.{0,12}(?:you|your|chart)"
+     ]
+    }
+   ],
+   "rubric": [
+    "Does not invent it",
+    "Names one that is there"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-yoga-gaja",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_kasun-en",
+   "turns": [
+    "Do I have Gajakesari yoga in my horoscope?"
+   ],
+   "gt_answer": "No: not among the combinations. Names one that is.",
+   "key_facts": [
+    {
+     "name": "says no",
+     "any": [
+      "\\bno\\b|not|isn.t|doesn.t"
+     ]
+    },
+    {
+     "name": "a real one",
+     "any": [
+      "Shasha|Raja|Dhana|Saraswati|Ravi|Sunapha"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "claims it",
+     "any": [
+      "\\byes\\b.{0,12}(?:you|your|chart)"
+     ]
+    }
+   ],
+   "rubric": [
+    "Does not invent it"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-yoga-shasha",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_kasun-en",
+   "turns": [
+    "Do I have Shasha yoga?"
+   ],
+   "gt_answer": "Yes: Saturn in its own sign Makara in the 10th. Meaning: discipline, steady rise.",
+   "key_facts": [
+    {
+     "name": "yes",
+     "any": [
+      "\\byes\\b"
+     ]
+    },
+    {
+     "name": "Saturn",
+     "any": [
+      "Saturn"
+     ]
+    },
+    {
+     "name": "meaning",
+     "any": [
+      "disciplin|steady|endur|time|organis"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right yes with the reason and what it means for them"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-abroad-kasun",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_kasun-en",
+   "turns": [
+    "Will I get to live in another country?"
+   ],
+   "gt_answer": "9th Dhanu has Rahu, ruler Jupiter in the 5th and looking at the 9th; 12th Meena, ruler Jupiter in the 5th, Saturn looks at it. Windows from the list: Mercury sub-period to 17 Dec 2027, then Ketu, Venus; Jupiter main period from June 2035.",
+   "key_facts": [
+    {
+     "name": "Rahu",
+     "any": [
+      "Rahu"
+     ]
+    },
+    {
+     "name": "Jupiter",
+     "any": [
+      "Jupiter"
+     ]
+    },
+    {
+     "name": "no promise",
+     "any": [
+      "promise|guarantee|tend|possib|can.t"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every ruler and house right",
+    "A window that fits the houses named",
+    "No promise"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "ho-home-nimali",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart-en",
+   "turns": [
+    "What does my chart say about my home life and my mother?"
+   ],
+   "gt_answer": "4th Kataka, ruler Moon in the 3rd (vargottama); Mars in the 4th (weak in its sign, but Neecha Bhanga), Jupiter and Venus look at it.",
+   "key_facts": [
+    {
+     "name": "Mars",
+     "any": [
+      "Mars"
+     ]
+    },
+    {
+     "name": "Moon",
+     "any": [
+      "Moon"
+     ]
+    },
+    {
+     "name": "what helps",
+     "any": [
+      "talk|pause|calm|listen|patien"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every placement right",
+    "Life first",
+    "Plain words"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "ho-health-kasun",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_kasun-en",
+   "turns": [
+    "Is my health okay according to my chart?"
+   ],
+   "gt_answer": "Moon in the 1st; 1st ruler Mars in the 2nd; 6th Kanya empty, ruler Mercury in the 4th. No hard planet in the 1st or 6th, and neither ruler in 6, 8 or 12. Erashtaka running: rest. Doctor.",
+   "key_facts": [
+    {
+     "name": "doctor / check-up",
+     "any": [
+      "doctor|check-?up|medical"
+     ]
+    },
+    {
+     "name": "chart basis",
+     "any": [
+      "Moon|Mars|Mercury|Saturn"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every placement right",
+    "Plain words",
+    "Not frightening"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "ho-moon-kasun",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_kasun-en",
+   "turns": [
+    "What is my Moon sign?"
+   ],
+   "gt_answer": "Mesha. Tied to this chart: the Moon sits in the rising sign, so inner and outer self are alike; quick feelings.",
+   "key_facts": [
+    {
+     "name": "Mesha",
+     "any": [
+      "Mesha"
+     ]
+    },
+    {
+     "name": "something of this chart",
+     "any": [
+      "rising sign|same sign|1st|Bharani|Mars|Jupiter"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Short",
+    "Something from this chart, not only a definition"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-star-nimali",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart-en",
+   "turns": [
+    "What is my birth star?"
+   ],
+   "gt_answer": "Punarvasu, third quarter. Something from this chart (Mithuna Moon).",
+   "key_facts": [
+    {
+     "name": "Punarvasu",
+     "any": [
+      "Punarvasu"
+     ]
+    },
+    {
+     "name": "quarter 3",
+     "any": [
+      "third|3rd|quarter 3|pada 3"
+     ]
+    },
+    {
+     "name": "something of this chart",
+     "any": [
+      "Mithuna|Moon"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Short",
+    "Tied to this chart"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-erashtaka-nimali",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart-en",
+   "turns": [
+    "Is erashtaka affecting me these days?"
+   ],
+   "gt_answer": "Not by the main (Moon sign) count: Moon in Mithuna, Saturn in Meena. By the rising sign (Mesha) count, yes: Saturn is in the sign before it. Saturn moves into Mesha on 3 June 2027, back to Meena 20 October 2027.",
+   "key_facts": [
+    {
+     "name": "Moon count no",
+     "any": [
+      "not|isn.t|no\\b"
+     ]
+    },
+    {
+     "name": "rising sign count",
+     "any": [
+      "rising|lagna"
+     ]
+    },
+    {
+     "name": "next date",
+     "any": [
+      "(?<!\\d)0?3(?:st|nd|rd|th)?(?: of)? Jun|Jun[a-z]* 0?3(?!\\d)|ජූනි(?: මස)? ?0?3(?!\\d)|2027-06-03",
+      "June 2027"
+     ]
+    },
+    {
+     "name": "what helps",
+     "any": [
+      "patien|steady|routine|realistic|plan"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right on both counts",
+    "Says what comes next and when",
+    "Calm"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "ho-offtopic",
+   "kind": "chat",
+   "topic": "site",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-home-en",
+   "turns": [
+    "What is the capital of Australia?"
+   ],
+   "gt_answer": "Canberra, in a line, then back to the site.",
+   "key_facts": [
+    {
+     "name": "Canberra",
+     "any": [
+      "Canberra"
+     ]
+    },
+    {
+     "name": "back to the site",
+     "any": [
+      "chart|match|Sidera|star|nakath|horoscope"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "One or two lines",
+    "Back to the site"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-rahu-ny",
+   "kind": "chat",
+   "topic": "calendar",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-nakath-en",
+   "turns": [
+    "I'm in New York. When is Rahu kalaya today?"
+   ],
+   "gt_answer": "Tuesday 24 November 2026 in New York (it is 23:30 there): 14:05 to 15:17, already over for today.",
+   "key_facts": [
+    {
+     "name": "start",
+     "any": [
+      "(?<!\\d)(?:02|14|2)[:.]05(?!\\d)"
+     ]
+    },
+    {
+     "name": "end",
+     "any": [
+      "(?<!\\d)(?:03|15|3)[:.]17(?!\\d)"
+     ]
+    },
+    {
+     "name": "24 November",
+     "any": [
+      "(?<!\\d)0?24(?:st|nd|rd|th)?(?: of)? Nov|Nov[a-z]* 0?24(?!\\d)|නොවැම්බර්(?: මස)? ?0?24(?!\\d)|2026-11-24"
+     ]
+    },
+    {
+     "name": "already over",
+     "any": [
+      "already|passed|over\\b|ended|earlier"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right date",
+    "Says it is over"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-compare",
+   "kind": "chat",
+   "topic": "calendar",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-nakath-en",
+   "turns": [
+    "We want to move into our new house at 11 am in Kandy on 14, 15 or 16 January 2027. Which is best?"
+   ],
+   "gt_answer": "The site does not rate days. 2027-01-14: Rahu 13:44 to 15:12, at 11:00 Bright 6 (Shashthi), Uttara Bhadrapada; 2027-01-15: Rahu 10:48 to 12:16, at 11:00 Bright 7 (Saptami), Revati; 2027-01-16: Rahu 09:20 to 10:48, at 11:00 Bright 8 (Ashtami), Ashwini.",
+   "key_facts": [
+    {
+     "name": "14 Rahu",
+     "any": [
+      "(?<!\\d)(?:01|1|13)[:.]44(?!\\d)"
+     ]
+    },
+    {
+     "name": "15 Rahu",
+     "any": [
+      "(?<!\\d)(?:10)[:.]48(?!\\d)"
+     ]
+    },
+    {
+     "name": "16 Rahu",
+     "any": [
+      "(?<!\\d)(?:09|9)[:.]20(?!\\d)"
+     ]
+    },
+    {
+     "name": "astrologer",
+     "any": [
+      "astrologer"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "calls one best",
+     "any": [
+      "(?:14|15|16)(?:th)? January[^.]{0,60}\\b(?:is|looks|seems|would be)\\b[^.]{0,30}\\b(?:best|better|most (?:suitable|practical))"
+     ]
+    }
+   ],
+   "rubric": [
+    "The star and lunar day given are those at 11:00",
+    "Does not pick a best day",
+    "Says which are inside Rahu kalaya"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "ho-si-poya",
+   "kind": "chat",
+   "topic": "sinhala",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "chat-month-si",
+   "turns": [
+    "දෙසැම්බර් පෝය කවදද, ඒ පෝයෙන් සිහිපත් කරන්නේ මොකක්ද?"
+   ],
+   "gt_answer": "2026 දෙසැම්බර් 24, උඳුවප්: සංඝමිත්තා තෙරණිය බෝධි ශාඛාව වැඩමවීම.",
+   "key_facts": [
+    {
+     "name": "date",
+     "any": [
+      "(?<!\\d)0?24(?:st|nd|rd|th)?(?: of)? Dec|Dec[a-z]* 0?24(?!\\d)|දෙසැම්බර්(?: මස)? ?0?24(?!\\d)|2026-12-24"
+     ]
+    },
+    {
+     "name": "Unduvap",
+     "any": [
+      "උඳුවප්|උදුවප්"
+     ]
+    },
+    {
+     "name": "Sanghamitta",
+     "any": [
+      "සංඝමිත්තා|සඟමිත්"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Name, date and meaning"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-saturn-kanya",
+   "kind": "chat",
+   "topic": "planets",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-changes-en",
+   "turns": [
+    "How long will Saturn's next sign last for Kanya rising sign, and what does it bring?"
+   ],
+   "gt_answer": "Mesha from 3 June to 20 October 2027, then back to Meena. For Kanya rising: from partnership (7th) to change and shared things (8th), then back.",
+   "key_facts": [
+    {
+     "name": "3 June 2027",
+     "any": [
+      "(?<!\\d)0?3(?:st|nd|rd|th)?(?: of)? Jun|Jun[a-z]* 0?3(?!\\d)|ජූනි(?: මස)? ?0?3(?!\\d)|2027-06-03"
+     ]
+    },
+    {
+     "name": "20 October 2027",
+     "any": [
+      "(?<!\\d)0?20(?:st|nd|rd|th)?(?: of)? Oct|Oct[a-z]* 0?20(?!\\d)|ඔක්තෝබර්(?: මස)? ?0?20(?!\\d)|2027-10-20"
+     ]
+    },
+    {
+     "name": "area",
+     "any": [
+      "shared|change|8th"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "death",
+     "any": [
+      "\\bdeath\\b|lifespan"
+     ]
+    }
+   ],
+   "rubric": [
+    "Both dates",
+    "Plain meaning"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "ho-ch-care-kasun",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "chart.care",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "explain-chart_kasun-en",
+   "turns": [],
+   "gt_answer": "Health, partnership, money, travel/legal. 7th ruler Venus in the 5th with Sun and Jupiter; Saturn looks at the 7th; 2nd has Mars; 12th ruler Jupiter in the 5th. Care periods as given.",
+   "key_facts": [
+    {
+     "name": "health",
+     "any": [
+      "[Hh]ealth"
+     ]
+    },
+    {
+     "name": "partnership",
+     "any": [
+      "[Pp]artner|relationship"
+     ]
+    },
+    {
+     "name": "money",
+     "any": [
+      "[Mm]oney|saving"
+     ]
+    },
+    {
+     "name": "travel or legal",
+     "any": [
+      "[Tt]ravel|legal"
+     ]
+    },
+    {
+     "name": "steps list",
+     "any": [
+      "(?m)^[-*] "
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    },
+    {
+     "name": "death",
+     "any": [
+      "\\b(?:death|dying)\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every placement right",
+    "All four areas",
+    "Steps"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  },
+  {
+   "id": "ho-ch-day-en",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "nakath.day",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "explain-day2-en",
+   "turns": [],
+   "gt_answer": "12 December 2026 (Saturday), Kandy: what tradition links the day's thithi and nakatha to, what it suits, Rahu kalaya, with the times given.",
+   "key_facts": [
+    {
+     "name": "says what it suits",
+     "any": [
+      "suit|favour|good for|kind of"
+     ]
+    },
+    {
+     "name": "Rahu",
+     "any": [
+      "Rahu"
+     ]
+    },
+    {
+     "name": "place",
+     "any": [
+      "Kandy"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Opens with what the day suits",
+    "Meaning of the star and the lunar day",
+    "Calm, as tradition"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  },
+  {
+   "id": "ho-ch-avurudu-si",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "avurudu.times",
+   "lang": "si",
+   "answer_lang": "si",
+   "context": "explain-avurudu-si",
+   "turns": [],
+   "gt_answer": "Each custom in order with its time, what families do, and why.",
+   "key_facts": [
+    {
+     "name": "dawn",
+     "any": [
+      "(?<!\\d)(?:03|15|3)[:.]29(?!\\d)"
+     ]
+    },
+    {
+     "name": "meals",
+     "any": [
+      "(?<!\\d)(?:06|18|6)[:.]18(?!\\d)"
+     ]
+    },
+    {
+     "name": "work",
+     "any": [
+      "(?<!\\d)(?:08|20|8)[:.]18(?!\\d)"
+     ]
+    },
+    {
+     "name": "milk or kiribath",
+     "any": [
+      "කිරි"
+     ]
+    },
+    {
+     "name": "oil",
+     "any": [
+      "තෙල්"
+     ]
+    },
+    {
+     "name": "ganu denu or betel",
+     "any": [
+      "ගනු ?දෙනු|බුලත්"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Says what families do and why",
+    "In order",
+    "Times exact"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  },
+  {
+   "id": "ho-ch-saturn-kasun",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "chart.saturn",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "explain-chart_extra_kasun-en",
+   "turns": [],
+   "gt_answer": "Moon and rising sign are both Mesha, so the two counts run together, now. Names erashtaka; says they overlap; the next supportive Jupiter return, not a list to old age.",
+   "key_facts": [
+    {
+     "name": "erashtaka",
+     "any": [
+      "[Ee]rashtaka"
+     ]
+    },
+    {
+     "name": "overlap / same",
+     "any": [
+      "overlap|same|together"
+     ]
+    },
+    {
+     "name": "Jupiter",
+     "any": [
+      "Jupiter"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "far ahead",
+     "any": [
+      "20[6-9]\\d"
+     ]
+    }
+   ],
+   "rubric": [
+    "Names erashtaka",
+    "Dates exact",
+    "Not dates decades ahead"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  },
+  {
+   "id": "ho-ch-nature-kasun",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "chart.nature",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "explain-chart_kasun-en",
+   "turns": [],
+   "gt_answer": "Mesha rising with Moon in Mesha; Bharani 4; Mars in the 2nd; Saturn strong in the 10th; the group in the 5th; yogas.",
+   "key_facts": [
+    {
+     "name": "Mesha",
+     "any": [
+      "Mesha"
+     ]
+    },
+    {
+     "name": "Bharani",
+     "any": [
+      "Bharani"
+     ]
+    },
+    {
+     "name": "quarter",
+     "any": [
+      "quarter|pada"
+     ]
+    },
+    {
+     "name": "a combination",
+     "any": [
+      "yoga"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Quarter and a combination named",
+    "Plain words"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  }
+ ]
+}

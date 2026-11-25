@@ -1,0 +1,637 @@
+{
+ "label": "repeats/current-2",
+ "model": "default",
+ "effort": "default",
+ "site_limit_seconds": 60,
+ "answers": {
+  "chart-career": {
+   "turns": [
+    {
+     "question": "What does my chart say about my career?",
+     "text": "Your chart leans toward **building a respected career through communication, networks and steady effort**. Roles involving people, ideas, organisation or creative judgement may suit you better than work that stays isolated and repetitive.\n\n**💼 Where your strengths meet work**  \nYour career area is in Makara, a disciplined, practical sign. Its ruler, Saturn, sits in your 11th house of gains and networks, in its own sign. Astrologers traditionally read this as progress through long-term effort and useful professional connections: you may be someone colleagues come to rely on as you gain experience. Venus in your 10th house adds a creative, diplomatic or people-facing touch; fields such as design, hospitality, the arts or client work are traditional possibilities, not a fixed prescription.\n\n**🤝 Skills and connections**  \nMercury and the Sun join Saturn in your 11th house, linking communication and recognition with income and networks. The chart also lists Budhaditya yoga from the Sun and Mercury together there, traditionally associated with clear thinking and recognition for skill. Think of someone who builds a reputation by explaining ideas well and staying connected with colleagues or clients.\n\nThe stretch is that Saturn can make results feel slow, while its closeness to the Sun may mean its steady, patient side works more quietly. Keep developing practical skills, maintain good professional relationships, and measure progress over time rather than by one quick promotion.\n\n**⏳ The current emphasis**  \nYou’re in a Mercury life period, which traditionally brings learning, communication, business and networks into focus; Mercury is also in your 11th house. The current Venus sub-period runs until **19 September 2027**, bringing Venus themes—work, partnerships, taste and creative skills—to the foreground. This can be a useful window to strengthen your portfolio or contacts and explore roles that value both skill and people sense. Astrology offers traditional guidance, not a guarantee; for major career decisions, weigh the practical facts too.",
+     "first_event": 0.05,
+     "first_text": 4.0,
+     "final_text_start": 4.0,
+     "error": null,
+     "total": 7.78,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.89,
+        "model": "gpt-6-luna",
+        "input": 9809,
+        "cached": 9806,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.06,
+        "model": "gpt-6-luna",
+        "input": 15128,
+        "cached": 9806,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.63,
+        "model": "gpt-6-luna",
+        "input": 29043,
+        "cached": 15125,
+        "output": 400,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 53980,
+      "cached": 34737,
+      "output": 470
+     }
+    }
+   ],
+   "suggest": {
+    "chips": [
+     "How can I use this period to grow professionally?",
+     "What does Venus in my 10th house mean?",
+     "What does my chart say about my relationships?"
+    ],
+    "total": 1.46,
+    "usage": {
+     "calls": [
+      {
+       "seconds": 1.4,
+       "model": "gpt-6-luna",
+       "input": 3295,
+       "cached": 2523,
+       "output": 100,
+       "reasoning": 0
+      }
+     ],
+     "tools": [],
+     "input": 3295,
+     "cached": 2523,
+     "output": 100
+    },
+    "error": null
+   }
+  },
+  "chart-abroad": {
+   "turns": [
+    {
+     "question": "Is there any chance for me to go abroad?",
+     "text": "Yes—your chart does show a meaningful pull toward travel or opportunities abroad, though it can’t promise a move or visa.\n\nFor you, Rahu is in the part of the chart linked to partnership and dealing with others, and your 12th-house ruler, Jupiter, sits in the part linked to deep change and research. Astrologers read these as possible links with people or circumstances that broaden your horizons, though the chart doesn’t show the 12th house itself as especially emphasised by a planet. Your long-journey area is ruled by Jupiter too, so travel may come through learning, advice, or a major change in direction.\n\nYou’re in Mercury’s life period until **26 June 2038**, with Venus as the current sub-period until **19 September 2027**. Mercury in your gains-and-networks area can make contacts, applications, and communication useful; Venus rules your travel-related 12th house, so this sub-period may bring foreign plans into focus. Think of someone building an overseas opportunity through work contacts or study applications: that’s an illustration, not a prediction.\n\nThe practical side matters most: check visa and job requirements carefully, keep documents organised, and make a realistic financial plan before committing. This is a traditional reading, not a guarantee; would you like me to look more closely at whether work or study seems the stronger route?",
+     "first_event": 0.06,
+     "first_text": 2.72,
+     "final_text_start": 2.72,
+     "error": null,
+     "total": 5.16,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/reference.md\", \"offset\": 0, \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.35,
+        "model": "gpt-6-luna",
+        "input": 9810,
+        "cached": 9807,
+        "output": 114,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.63,
+        "model": "gpt-6-luna",
+        "input": 31073,
+        "cached": 31070,
+        "output": 282,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 40883,
+      "cached": 40877,
+      "output": 396
+     }
+    }
+   ]
+  },
+  "chart-yoga": {
+   "turns": [
+    {
+     "question": "Do I have Gajakesari yoga?",
+     "text": "**No—Gajakesari yoga isn’t listed among the combinations found in your chart.** Traditionally, it’s associated with Jupiter being at an angle from the Moon. Your Moon is in the 3rd house and Jupiter is in the 8th, so that condition isn’t met in the chart shown.",
+     "first_event": 0.04,
+     "first_text": 4.5,
+     "final_text_start": 4.5,
+     "error": null,
+     "total": 5.17,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/reference.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.94,
+        "model": "gpt-6-luna",
+        "input": 9809,
+        "cached": 9806,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.03,
+        "model": "gpt-6-luna",
+        "input": 11834,
+        "cached": 11831,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.13,
+        "model": "gpt-6-luna",
+        "input": 20110,
+        "cached": 11831,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.85,
+        "model": "gpt-6-luna",
+        "input": 25429,
+        "cached": 20107,
+        "output": 68,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 67182,
+      "cached": 53575,
+      "output": 174
+     }
+    }
+   ]
+  },
+  "rahu-tomorrow-london": {
+   "turns": [
+    {
+     "question": "I live in London. What time is Rahu kalaya for me tomorrow?",
+     "text": "For **London tomorrow, Thursday 26 November**, Rahu kalaya is **12:46–13:48** local time. Traditionally, people avoid starting important new activities during this period.",
+     "first_event": 0.03,
+     "first_text": 5.6,
+     "final_text_start": 5.6,
+     "error": "Recursion limit of 25 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.\nFor troubleshooting, visit: https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT",
+     "total": 5.95,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"London\",\"limit\":5}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\":\"Europe/London\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-26\",\"place_id\":2643743,\"lang\":\"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.18,
+        "model": "gpt-6-luna",
+        "input": 8172,
+        "cached": 8169,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.03,
+        "model": "gpt-6-luna",
+        "input": 8962,
+        "cached": 8959,
+        "output": 22,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.98,
+        "model": "gpt-6-luna",
+        "input": 9153,
+        "cached": 9150,
+        "output": 20,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.95,
+        "model": "gpt-6-luna",
+        "input": 9242,
+        "cached": 9239,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.06,
+        "model": "gpt-6-luna",
+        "input": 9753,
+        "cached": 9750,
+        "output": 43,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "find_place",
+        "input": "{'query': 'London', 'limit': 5}",
+        "seconds": 0.5,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'Europe/London'}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-26', 'place_id': 2643743, 'lang': 'en'}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 45282,
+      "cached": 45267,
+      "output": 159
+     }
+    }
+   ]
+  },
+  "rahu-la": {
+   "turns": [
+    {
+     "question": "I'm in Los Angeles. When is Rahu kalaya today here?",
+     "text": "In Los Angeles, Rahu kalaya today, **Tuesday, November 24**, is **2:10–3:26 p.m.** local time. Traditionally, people avoid starting something important during this period. The almanac timings are marked provisional.",
+     "first_event": 0.03,
+     "first_text": 5.16,
+     "final_text_start": 5.16,
+     "error": "Recursion limit of 25 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.\nFor troubleshooting, visit: https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT",
+     "total": 5.6,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"Los Angeles\",\"limit\":5}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\":\"America/Los_Angeles\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-24\",\"place_id\":5368361,\"lang\":\"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.0,
+        "model": "gpt-6-luna",
+        "input": 8170,
+        "cached": 8167,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.94,
+        "model": "gpt-6-luna",
+        "input": 8960,
+        "cached": 8957,
+        "output": 23,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.99,
+        "model": "gpt-6-luna",
+        "input": 9154,
+        "cached": 9151,
+        "output": 22,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.25,
+        "model": "gpt-6-luna",
+        "input": 9247,
+        "cached": 9244,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.16,
+        "model": "gpt-6-luna",
+        "input": 9762,
+        "cached": 9759,
+        "output": 57,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "find_place",
+        "input": "{'query': 'Los Angeles', 'limit': 5}",
+        "seconds": 0.02,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/Los_Angeles'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 5368361, 'lang': 'en'}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 45293,
+      "cached": 45278,
+      "output": 176
+     }
+    }
+   ]
+  },
+  "compare-days": {
+   "turns": [
+    {
+     "question": "I want to open my new shop at 9 in the morning. Which of 7, 8 or 9 December is best in Colombo?",
+     "text": "Of the three, **9 December 2026 looks the least unsuitable for a 9:00 a.m. opening in Colombo**: it is outside Rahu kalaya, which is listed as 12:02–1:30 p.m. The almanac shows the new-moon period ending at 6:22 a.m., but the day’s guidance is **provisional**, and these general day details don’t establish a personal auspicious time for opening a shop.\n\nI’d avoid **7 December at 9:00 a.m.** because it falls within Rahu kalaya (7:37–9:05 a.m.). On **8 December**, the almanac lists the new-moon period through the morning, though Rahu kalaya is later in the day.\n\nFor an important opening, it’s worth asking your family astrologer to set a time using your birth details and the shop’s circumstances.",
+     "first_event": 0.03,
+     "first_text": 3.7,
+     "final_text_start": 3.7,
+     "error": null,
+     "total": 5.09,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-07\", \"place_id\": 1248991, \"lang\": \"en\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-08\", \"place_id\": 1248991, \"lang\": \"en\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-09\", \"place_id\": 1248991, \"lang\": \"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.02,
+        "model": "gpt-6-luna",
+        "input": 8186,
+        "cached": 8183,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.47,
+        "model": "gpt-6-luna",
+        "input": 8976,
+        "cached": 8973,
+        "output": 116,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.13,
+        "model": "gpt-6-luna",
+        "input": 10247,
+        "cached": 10244,
+        "output": 193,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-07', 'place_id': 1248991, 'lang': 'en'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-08', 'place_id': 1248991, 'lang': 'en'}",
+        "seconds": 0.28,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-09', 'place_id': 1248991, 'lang': 'en'}",
+        "seconds": 0.28,
+        "status": "success"
+       }
+      ],
+      "input": 27409,
+      "cached": 27400,
+      "output": 347
+     }
+    }
+   ]
+  },
+  "singlish-porondam": {
+   "turns": [
+    {
+     "question": "mage porondam hari da? rajju eka fail kiyala thiyenawa, baya wenna ona da?",
+     "text": "බය වෙන්න ඕනේ නැහැ—මේක **අනිවාර්යයෙන්ම නරක දෙයක් සිදුවෙයි කියන අනාවැකියක් නොවෙයි**. හැබැයි මේ ප්‍රතිඵලයේ රාජ්ජු පරීක්ෂාව නොගැළපෙන නිසා, සම්ප්‍රදාය ඒක වැදගත් කරුණක් ලෙස සලකනවා.\n\nඔයාලා දෙන්නාගේ නැකැත් දෙකම කණ්ඨ රාජ්ජු කාණ්ඩයට වැටෙන බවයි මෙහි හේතුව. ඒ සමඟම, තවත් කරුණු කිහිපයක් ගැළපෙනවා—රාශි, රාශ්‍යාධිපති, යෝනි සහ නාඩි ඇතුළුව. ඒවා හොඳ පැත්තක් වුණත්, රාජ්ජු ප්‍රතිඵලය වෙනස් කරන්නේ නැහැ.\n\nමෙය ඉක්මන් ගැළපීමක් සහ සම්පූර්ණ ජන්ම විස්තර නැතිව කළ පරීක්ෂාවක්; ප්‍රතිඵලයේ නීතිත් තවම තහවුරු වෙමින් පවතිනවා. ඒ නිසා තීරණයක් ගන්න කලින්, දෙන්නාගේම සම්පූර්ණ කේන්දර බලන්න පුළුවන් පළපුරුදු ජ්‍යෝතිෂවේදියෙකුත් පවුලේ අයත් එක්ක සන්සුන්ව සාකච්ඡා කරන්න. පොරොන්දම විතරක් මත තීරණය කරන්න අවශ්‍ය නැහැ.",
+     "first_event": 0.05,
+     "first_text": 5.26,
+     "final_text_start": 5.26,
+     "error": null,
+     "total": 9.72,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/explain-match/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 4.01,
+        "model": "gpt-6-luna",
+        "input": 9497,
+        "cached": 9494,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 5.56,
+        "model": "gpt-6-luna",
+        "input": 12498,
+        "cached": 12495,
+        "output": 372,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/explain-match/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 21995,
+      "cached": 21989,
+      "output": 408
+     }
+    }
+   ]
+  },
+  "ch-chart-care-en": {
+   "turns": [
+    {
+     "text": "Your chart’s main care themes are steady health routines, thoughtful handling of pressure at home and in close relationships, and measured choices around shared responsibilities. No health-and-safety period stands out right now.\n\n**🩺 Health and daily habits**\n\nThe chart draws attention to keeping a steady routine rather than ignoring strain. Mars, which rules your self and sits in your home area (the 4th house), is debilitated and retrograde; traditionally, Mars is linked with energy, impatience and haste.\n\nNo period stands out for health right now. Regular check-ups, enough rest and seeking medical advice about any real concern are sensible ways to look after yourself.\n\n**💞 Close relationships**\n\nDifferences or restlessness in partnership are possible, so patience and clear communication may help. Rahu sits in your partnership area (the 7th house), while Mars looks at it from your home area; astrologers read these as influences that can bring intensity or impatience.\n\nKnowing this ahead is useful: talk through concerns early, pause before reacting, and seek support from people you trust. Your Mars check is present but reduced, and the site marks Jupiter’s look at Mars as a reducing condition. These rules are provisional; a human astrologer can review both charts together.\n\n**💰 Money and shared responsibilities**\n\nYour chart does not show a clear money-strain pointer from the placements used here. Jupiter looks at your savings area (the 2nd house), a traditional sign of support; still, careful planning is wise when making significant financial decisions.\n\n**💡 Steady steps**\n\nKeep everyday routines manageable, take care with rushed decisions and discuss practical concerns before they build up. These are areas you can steer through awareness and thoughtful choices.",
+     "first_text": 0.99,
+     "error": null,
+     "tool_calls": [],
+     "total": 4.4,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 4.39,
+        "model": "gpt-6-luna",
+        "input": 28710,
+        "cached": 28707,
+        "output": 353,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 28710,
+      "cached": 28707,
+      "output": 353
+     }
+    }
+   ]
+  }
+ }
+}

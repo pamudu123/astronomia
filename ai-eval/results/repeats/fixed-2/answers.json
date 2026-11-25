@@ -1,0 +1,356 @@
+{
+ "label": "repeats/fixed-2",
+ "model": "default",
+ "effort": "default",
+ "site_limit_seconds": 60,
+ "answers": {
+  "chart-rising": {
+   "turns": [
+    {
+     "question": "What is my rising sign?",
+     "text": "Your rising sign is **Mesha (Aries)**. In astrology, it’s the sign traditionally linked with how you approach new situations and meet the world.",
+     "first_event": 0.04,
+     "first_text": 2.28,
+     "final_text_start": 2.28,
+     "error": null,
+     "total": 2.63,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.34,
+        "model": "gpt-6-luna",
+        "input": 9806,
+        "cached": 9803,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.17,
+        "model": "gpt-6-luna",
+        "input": 11831,
+        "cached": 11828,
+        "output": 36,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 21637,
+      "cached": 21631,
+      "output": 72
+     }
+    }
+   ]
+  },
+  "rahu-tomorrow-london": {
+   "turns": [
+    {
+     "question": "I live in London. What time is Rahu kalaya for me tomorrow?",
+     "text": "In London, **Rahu kalaya tomorrow, Thursday 26 November 2026, is 12:46–13:48** local time. Traditionally, people avoid starting new things during this period. The site notes that these calculations are still provisional.",
+     "first_event": 0.03,
+     "first_text": 6.82,
+     "final_text_start": 6.82,
+     "error": null,
+     "total": 7.26,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"London\",\"limit\":5}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\":\"Europe/London\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-26\",\"place_id\":2643743,\"lang\":\"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.32,
+        "model": "gpt-6-luna",
+        "input": 8172,
+        "cached": 8169,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.03,
+        "model": "gpt-6-luna",
+        "input": 8962,
+        "cached": 8959,
+        "output": 22,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.84,
+        "model": "gpt-6-luna",
+        "input": 9153,
+        "cached": 9150,
+        "output": 20,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.16,
+        "model": "gpt-6-luna",
+        "input": 9242,
+        "cached": 9239,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.41,
+        "model": "gpt-6-luna",
+        "input": 9753,
+        "cached": 9750,
+        "output": 56,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "find_place",
+        "input": "{'query': 'London', 'limit': 5}",
+        "seconds": 0.26,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'Europe/London'}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-26', 'place_id': 2643743, 'lang': 'en'}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 45282,
+      "cached": 45267,
+      "output": 172
+     }
+    }
+   ]
+  },
+  "rahu-la": {
+   "turns": [
+    {
+     "question": "I'm in Los Angeles. When is Rahu kalaya today here?",
+     "text": "In Los Angeles today, **Tuesday, November 24, Rahu kalaya is 2:10–3:26 p.m.** Traditionally, people avoid starting important new activities during this time.",
+     "first_event": 0.03,
+     "first_text": 5.33,
+     "final_text_start": 5.33,
+     "error": null,
+     "total": 5.68,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"Los Angeles\",\"limit\":5}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\":\"America/Los_Angeles\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-24\",\"place_id\":5368361,\"lang\":\"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.03,
+        "model": "gpt-6-luna",
+        "input": 8170,
+        "cached": 8167,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.92,
+        "model": "gpt-6-luna",
+        "input": 8960,
+        "cached": 8957,
+        "output": 23,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.95,
+        "model": "gpt-6-luna",
+        "input": 9154,
+        "cached": 9151,
+        "output": 22,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.98,
+        "model": "gpt-6-luna",
+        "input": 9247,
+        "cached": 9244,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.57,
+        "model": "gpt-6-luna",
+        "input": 9762,
+        "cached": 9759,
+        "output": 45,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "find_place",
+        "input": "{'query': 'Los Angeles', 'limit': 5}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/Los_Angeles'}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 5368361, 'lang': 'en'}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 45293,
+      "cached": 45278,
+      "output": 164
+     }
+    }
+   ]
+  },
+  "baby-letters": {
+   "turns": [
+    {
+     "question": "My baby girl was born under Rohini, second quarter. Which letter should the name start with, and can you suggest names?",
+     "text": "For **Rohini’s second quarter**, the traditional starting letter is **ව** (“Va”); **ච** (“Cha”) is also used as an alternative in the site’s list. The letter guidance is marked provisional, so families may follow a different tradition.\n\nSome girl-name suggestions from the list:\n\n- **Vajira** (වජිරා) — diamond  \n- **Wasanthi** (වසන්ති) — of the spring  \n- **Chandima** (චන්දිමා) — moonlight  \n- **Chandrani** (චන්ද්‍රානි) — like the moon  \n- **Chandrika** (චන්ද්‍රිකා) — moonlight  \n- **Chathurika** (චතුරිකා) — clever  \n\nChoose the sound and spelling that feel right for your family; the birth-star letter is a custom, not a requirement.",
+     "first_event": 0.04,
+     "first_text": 4.67,
+     "final_text_start": 4.67,
+     "error": null,
+     "total": 5.87,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/ceremonies-and-names/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "name_letters_for_star",
+       "args": "{\"star\":\"rohini\",\"lang\":\"en\"}"
+      },
+      {
+       "name": "names_for_letters",
+       "args": "{\"letters\":[\"ව\",\"ච\"],\"gender\":\"girl\",\"lang\":\"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.99,
+        "model": "gpt-6-luna",
+        "input": 8183,
+        "cached": 8180,
+        "output": 40,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.16,
+        "model": "gpt-6-luna",
+        "input": 9100,
+        "cached": 9097,
+        "output": 25,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.23,
+        "model": "gpt-6-luna",
+        "input": 9300,
+        "cached": 9097,
+        "output": 30,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.96,
+        "model": "gpt-6-luna",
+        "input": 9607,
+        "cached": 9297,
+        "output": 190,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/ceremonies-and-names/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "name_letters_for_star",
+        "input": "{'star': 'rohini', 'lang': 'en'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "names_for_letters",
+        "input": "{'letters': ['ව', 'ච'], 'gender': 'girl', 'lang': 'en'}",
+        "seconds": 0.34,
+        "status": "success"
+       }
+      ],
+      "input": 36190,
+      "cached": 35671,
+      "output": 285
+     }
+    }
+   ]
+  }
+ }
+}

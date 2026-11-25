@@ -1,0 +1,156 @@
+{
+ "page": "match_result",
+ "language": "en",
+ "result": {
+  "bride": {
+   "birth_star": "Rohini",
+   "birth_star_id": "rohini",
+   "pada": 2,
+   "moon_sign": "Vrishabha"
+  },
+  "groom": {
+   "birth_star": "Hasta",
+   "birth_star_id": "hasta",
+   "pada": 3,
+   "moon_sign": "Kanya"
+  },
+  "quick_match": true,
+  "provisional": true,
+  "score": {
+   "agree": 11,
+   "counted": 16
+  },
+  "summary": "An essential check does not pass. Tradition treats this seriously, whatever the count.",
+  "essential_checks": [
+   {
+    "id": "rajju",
+    "name": "Rajju",
+    "meaning": "A traditional star check on the couple's wellbeing",
+    "passes": false,
+    "reason": "Both stars are in the Kantha (neck) rajju. This essential check does not pass."
+   },
+   {
+    "id": "vedha",
+    "name": "Vedha",
+    "meaning": "Stars that must not afflict each other",
+    "passes": true,
+    "reason": "Rohini and Hasta are not an afflicting pair."
+   }
+  ],
+  "factors_not_agreeing": [
+   {
+    "id": "dina",
+    "name": "Nakath",
+    "meaning": "A traditional check on the couple's wellbeing",
+    "reason": "Counting from the bride's star, the groom's is number 10. The remainder after nine is 1, which is not favourable.",
+    "softened_by": [
+     "Tradition softens this because the Rashi and Rashyadhipathi factors agree."
+    ]
+   },
+   {
+    "id": "stree_deergha",
+    "name": "Stree Deergha",
+    "meaning": "Wellbeing of the bride",
+    "reason": "The groom's star is number 10 from the bride's, not more than 13, which is too close."
+   },
+   {
+    "id": "vashya",
+    "name": "Vashya",
+    "meaning": "Mutual attraction",
+    "reason": "Neither sign, Vrishabha or Kanya, is under the influence of the other.",
+    "softened_by": [
+     "Tradition softens this because the Rashi and Yoni factors agree."
+    ]
+   },
+   {
+    "id": "linga",
+    "name": "Linga",
+    "meaning": "Masculine and feminine nature",
+    "reason": "The bride's star is male and the groom's is female. This pair does not agree.",
+    "softened_by": [
+     "Tradition softens this because the Yoni and Rashi factors agree."
+    ]
+   },
+   {
+    "id": "vruksha",
+    "name": "Vruksha",
+    "meaning": "A traditional check on children and family life",
+    "reason": "Both stars have hard trees. This pair does not agree."
+   }
+  ],
+  "factors_agreeing": [
+   {
+    "id": "gana",
+    "name": "Gana",
+    "meaning": "Temperament",
+    "reason": "The bride is Manushya gana and the groom is Deva gana. These go together."
+   },
+   {
+    "id": "mahendra",
+    "name": "Mahendra",
+    "meaning": "Family growth",
+    "reason": "The groom's star is number 10 from the bride's, one of the counts that favour family growth."
+   },
+   {
+    "id": "yoni",
+    "name": "Yoni",
+    "meaning": "Physical compatibility",
+    "reason": "The animal of the bride's star is the snake and of the groom's the buffalo. They are not enemies."
+   },
+   {
+    "id": "rashi",
+    "name": "Rashi",
+    "meaning": "Emotional bond",
+    "reason": "The groom's Moon sign is number 5 from the bride's, which is favourable."
+   },
+   {
+    "id": "rashyadhipathi",
+    "name": "Rashyadhipathi",
+    "meaning": "Rulers of the two signs",
+    "reason": "Venus rules the bride's sign and Mercury the groom's. They are not enemies."
+   },
+   {
+    "id": "gothra",
+    "name": "Gothra",
+    "meaning": "Family lineage",
+    "reason": "The bride's star is of the Marichi gothra and the groom's of the Angirasa gothra. A different gothra is favourable."
+   },
+   {
+    "id": "pakshi",
+    "name": "Pakshi",
+    "meaning": "Harmony between the two",
+    "reason": "The bird of the bride's star is the eagle and of the groom's the crow. They are not enemies."
+   },
+   {
+    "id": "varna",
+    "name": "Varna",
+    "meaning": "Temperament and outlook",
+    "reason": "The bride's Moon sign is of the Vaishya varna and the groom's of the Vaishya varna. By the traditional varna table, these signs agree."
+   },
+   {
+    "id": "bhuta",
+    "name": "Bhutha",
+    "meaning": "The five elements",
+    "reason": "The bride's star is of earth (Pathavi) and the groom's of fire (Thejo). These elements are not opposed."
+   },
+   {
+    "id": "ayusha",
+    "name": "Ayusha",
+    "meaning": "A traditional check on the couple's wellbeing",
+    "reason": "The two stars are 10 apart in the count of 28 stars, which agrees."
+   },
+   {
+    "id": "nadi",
+    "name": "Nadi",
+    "meaning": "A traditional check on the family's wellbeing",
+    "reason": "The bride is Antya nadi and the groom is Aadi nadi. Different nadi is favourable."
+   }
+  ],
+  "factors_not_counted": [
+   "Dina",
+   "Graha"
+  ],
+  "mars_check": "not checked: only the Mars check needs full birth details for both people",
+  "wedding_dates": "on this page, below the match: works with the birth stars alone (quick or full match). The person picks the venue and how many months ahead (3, 6, 12 or 24), chooses the ceremonies and presses search. While it runs (or if it fails) also_on_page.wedding says so in its status; the dates found then appear there. With no also_on_page.wedding, no search has been made for this match"
+ }
+}

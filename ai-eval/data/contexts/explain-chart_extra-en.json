@@ -1,0 +1,1099 @@
+{
+ "page": "chart_result",
+ "language": "en",
+ "result": {
+  "rising_sign": "Mesha",
+  "moon_sign": "Mithuna",
+  "birth_star": "Punarvasu",
+  "birth_star_id": "punarvasu",
+  "pada": 3,
+  "birth_time_check": "the rising sign is the same for nearby birth times",
+  "planets": [
+   {
+    "planet": "Sun",
+    "sign": "Kumbha",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "rules_houses": [
+     5
+    ]
+   },
+   {
+    "planet": "Moon",
+    "sign": "Mithuna",
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "rules_houses": [
+     4
+    ],
+    "vargottama": true
+   },
+   {
+    "planet": "Mars",
+    "sign": "Kataka",
+    "house": 4,
+    "area": "home, mother, property, inner peace",
+    "strength": "debilitated",
+    "rules_houses": [
+     1,
+     8
+    ],
+    "retrograde": true
+   },
+   {
+    "planet": "Mercury",
+    "sign": "Kumbha",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "rules_houses": [
+     3,
+     6
+    ]
+   },
+   {
+    "planet": "Jupiter",
+    "sign": "Vrischika",
+    "house": 8,
+    "area": "change, shared money, research",
+    "rules_houses": [
+     9,
+     12
+    ]
+   },
+   {
+    "planet": "Venus",
+    "sign": "Makara",
+    "house": 10,
+    "area": "career, status",
+    "rules_houses": [
+     2,
+     7
+    ]
+   },
+   {
+    "planet": "Saturn",
+    "sign": "Kumbha",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "strength": "own sign",
+    "rules_houses": [
+     10,
+     11
+    ],
+    "combust": true
+   },
+   {
+    "planet": "Rahu",
+    "sign": "Tula",
+    "house": 7,
+    "area": "marriage, partnership",
+    "retrograde": true
+   },
+   {
+    "planet": "Ketu",
+    "sign": "Mesha",
+    "house": 1,
+    "area": "self, body, how you start things",
+    "retrograde": true
+   }
+  ],
+  "houses": [
+   {
+    "house": 1,
+    "area": "self, body, how you start things",
+    "sign": "Mesha",
+    "lord": "Mars",
+    "lord_in_house": 4,
+    "planets": [
+     "Ketu"
+    ],
+    "aspected_by": [
+     "Saturn"
+    ]
+   },
+   {
+    "house": 2,
+    "area": "family you were born into, savings, speech",
+    "sign": "Vrishabha",
+    "lord": "Venus",
+    "lord_in_house": 10,
+    "aspected_by": [
+     "Jupiter"
+    ]
+   },
+   {
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "sign": "Mithuna",
+    "lord": "Mercury",
+    "lord_in_house": 11,
+    "planets": [
+     "Moon"
+    ]
+   },
+   {
+    "house": 4,
+    "area": "home, mother, property, inner peace",
+    "sign": "Kataka",
+    "lord": "Moon",
+    "lord_in_house": 3,
+    "planets": [
+     "Mars"
+    ],
+    "aspected_by": [
+     "Jupiter",
+     "Venus"
+    ]
+   },
+   {
+    "house": 5,
+    "area": "children, creativity, studies, romance",
+    "sign": "Simha",
+    "lord": "Sun",
+    "lord_in_house": 11,
+    "aspected_by": [
+     "Sun",
+     "Mercury",
+     "Saturn"
+    ]
+   },
+   {
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "sign": "Kanya",
+    "lord": "Mercury",
+    "lord_in_house": 11
+   },
+   {
+    "house": 7,
+    "area": "marriage, partnership",
+    "sign": "Tula",
+    "lord": "Venus",
+    "lord_in_house": 10,
+    "planets": [
+     "Rahu"
+    ],
+    "aspected_by": [
+     "Mars"
+    ]
+   },
+   {
+    "house": 8,
+    "area": "change, shared money, research",
+    "sign": "Vrischika",
+    "lord": "Mars",
+    "lord_in_house": 4,
+    "planets": [
+     "Jupiter"
+    ],
+    "aspected_by": [
+     "Saturn"
+    ]
+   },
+   {
+    "house": 9,
+    "area": "luck, father, teachers, higher learning, long journeys",
+    "sign": "Dhanu",
+    "lord": "Jupiter",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "Moon"
+    ]
+   },
+   {
+    "house": 10,
+    "area": "career, status",
+    "sign": "Makara",
+    "lord": "Saturn",
+    "lord_in_house": 11,
+    "planets": [
+     "Venus"
+    ],
+    "aspected_by": [
+     "Mars"
+    ]
+   },
+   {
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "sign": "Kumbha",
+    "lord": "Saturn",
+    "lord_in_house": 11,
+    "planets": [
+     "Sun",
+     "Mercury",
+     "Saturn"
+    ],
+    "aspected_by": [
+     "Mars"
+    ]
+   },
+   {
+    "house": 12,
+    "area": "spending, rest, living abroad",
+    "sign": "Meena",
+    "lord": "Jupiter",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "Jupiter"
+    ]
+   }
+  ],
+  "combinations": [
+   {
+    "name": "Budhaditya yoga",
+    "based_on": "Sun and Mercury together in house 11"
+   },
+   {
+    "name": "Sunapha yoga",
+    "based_on": "planets in the house after the Moon's house 3"
+   },
+   {
+    "name": "Neecha Bhanga Raja yoga",
+    "based_on": "Mars debilitated in Kataka, helped by Moon in house 3, an angle from the rising sign or the Moon"
+   },
+   {
+    "name": "Raja yoga",
+    "based_on": "Saturn (ruler of house 10 and 11) and Sun (ruler of house 5) together in house 11"
+   },
+   {
+    "name": "Dhana yoga",
+    "based_on": "Saturn (ruler of house 10 and 11) and Sun (ruler of house 5) together in house 11"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Vimala)",
+    "based_on": "Jupiter, ruler of house 12, in house 8"
+   },
+   {
+    "name": "Amala yoga",
+    "based_on": "Venus in house 10, the 10th from the rising sign"
+   }
+  ],
+  "combinations_not_in_this_chart": [
+   "Gajakesari yoga",
+   "Chandra-Mangala yoga",
+   "Ruchaka yoga",
+   "Bhadra yoga",
+   "Hamsa yoga",
+   "Malavya yoga",
+   "Shasha yoga",
+   "Anapha yoga",
+   "Durudhara yoga",
+   "Ravi-Sukra yoga",
+   "Kuja-Sukra yoga",
+   "Shani-Mangala yoga",
+   "Papa Kartari",
+   "Shubha Kartari",
+   "Guru-Chandala yoga",
+   "Angaraka yoga",
+   "Guru-Mangala yoga",
+   "Kala Sarpa",
+   "Saraswati yoga",
+   "Vasumathi yoga",
+   "Kemadruma yoga"
+  ],
+  "life_period": {
+   "now": "Mercury",
+   "until": "2038-06-26T08:56:27.490560Z",
+   "sub_period": "Venus",
+   "sub_until": "2027-09-19T20:20:27.490560Z",
+   "next": "Ketu",
+   "next_from": "2038-06-26T08:56:27.490560Z"
+  },
+  "life_period_timeline": {
+   "sub_periods": [
+    {
+     "sub": "Mercury",
+     "from": "2021-06-26",
+     "until": "2023-11-22"
+    },
+    {
+     "sub": "Ketu",
+     "from": "2023-11-22",
+     "until": "2024-11-18"
+    },
+    {
+     "sub": "Venus",
+     "from": "2024-11-18",
+     "until": "2027-09-19"
+    },
+    {
+     "sub": "Sun",
+     "from": "2027-09-19",
+     "until": "2028-07-26"
+    },
+    {
+     "sub": "Moon",
+     "from": "2028-07-26",
+     "until": "2029-12-25"
+    },
+    {
+     "sub": "Mars",
+     "from": "2029-12-25",
+     "until": "2030-12-22"
+    },
+    {
+     "sub": "Rahu",
+     "from": "2030-12-22",
+     "until": "2033-07-11"
+    },
+    {
+     "sub": "Jupiter",
+     "from": "2033-07-11",
+     "until": "2035-10-17"
+    },
+    {
+     "sub": "Saturn",
+     "from": "2035-10-17",
+     "until": "2038-06-26"
+    }
+   ],
+   "later_periods": [
+    {
+     "period": "Ketu",
+     "from": "2038-06-26",
+     "until": "2045-06-26",
+     "sub_periods": [
+      {
+       "sub": "Ketu",
+       "from": "2038-06-26",
+       "until": "2038-11-22"
+      },
+      {
+       "sub": "Venus",
+       "from": "2038-11-22",
+       "until": "2040-01-22"
+      },
+      {
+       "sub": "Sun",
+       "from": "2040-01-22",
+       "until": "2040-05-29"
+      },
+      {
+       "sub": "Moon",
+       "from": "2040-05-29",
+       "until": "2040-12-28"
+      },
+      {
+       "sub": "Mars",
+       "from": "2040-12-28",
+       "until": "2041-05-26"
+      },
+      {
+       "sub": "Rahu",
+       "from": "2041-05-26",
+       "until": "2042-06-14"
+      },
+      {
+       "sub": "Jupiter",
+       "from": "2042-06-14",
+       "until": "2043-05-21"
+      },
+      {
+       "sub": "Saturn",
+       "from": "2043-05-21",
+       "until": "2044-06-28"
+      },
+      {
+       "sub": "Mercury",
+       "from": "2044-06-28",
+       "until": "2045-06-26"
+      }
+     ]
+    },
+    {
+     "period": "Venus",
+     "from": "2045-06-26",
+     "until": "2065-06-26",
+     "sub_periods": [
+      {
+       "sub": "Venus",
+       "from": "2045-06-26",
+       "until": "2048-10-25"
+      },
+      {
+       "sub": "Sun",
+       "from": "2048-10-25",
+       "until": "2049-10-25"
+      },
+      {
+       "sub": "Moon",
+       "from": "2049-10-25",
+       "until": "2051-06-26"
+      },
+      {
+       "sub": "Mars",
+       "from": "2051-06-26",
+       "until": "2052-08-25"
+      },
+      {
+       "sub": "Rahu",
+       "from": "2052-08-25",
+       "until": "2055-08-26"
+      },
+      {
+       "sub": "Jupiter",
+       "from": "2055-08-26",
+       "until": "2058-04-26"
+      },
+      {
+       "sub": "Saturn",
+       "from": "2058-04-26",
+       "until": "2061-06-26"
+      },
+      {
+       "sub": "Mercury",
+       "from": "2061-06-26",
+       "until": "2064-04-25"
+      },
+      {
+       "sub": "Ketu",
+       "from": "2064-04-25",
+       "until": "2065-06-26"
+      }
+     ]
+    },
+    {
+     "period": "Sun",
+     "from": "2065-06-26",
+     "until": "2071-06-26",
+     "sub_periods": [
+      {
+       "sub": "Sun",
+       "from": "2065-06-26",
+       "until": "2065-10-13"
+      },
+      {
+       "sub": "Moon",
+       "from": "2065-10-13",
+       "until": "2066-04-14"
+      },
+      {
+       "sub": "Mars",
+       "from": "2066-04-14",
+       "until": "2066-08-20"
+      },
+      {
+       "sub": "Rahu",
+       "from": "2066-08-20",
+       "until": "2067-07-14"
+      },
+      {
+       "sub": "Jupiter",
+       "from": "2067-07-14",
+       "until": "2068-05-02"
+      },
+      {
+       "sub": "Saturn",
+       "from": "2068-05-02",
+       "until": "2069-04-14"
+      },
+      {
+       "sub": "Mercury",
+       "from": "2069-04-14",
+       "until": "2070-02-18"
+      },
+      {
+       "sub": "Ketu",
+       "from": "2070-02-18",
+       "until": "2070-06-26"
+      },
+      {
+       "sub": "Venus",
+       "from": "2070-06-26",
+       "until": "2071-06-26"
+      }
+     ]
+    },
+    {
+     "period": "Moon",
+     "from": "2071-06-26",
+     "until": "2081-06-26",
+     "sub_periods": [
+      {
+       "sub": "Moon",
+       "from": "2071-06-26",
+       "until": "2072-04-25"
+      },
+      {
+       "sub": "Mars",
+       "from": "2072-04-25",
+       "until": "2072-11-25"
+      },
+      {
+       "sub": "Rahu",
+       "from": "2072-11-25",
+       "until": "2074-05-26"
+      },
+      {
+       "sub": "Jupiter",
+       "from": "2074-05-26",
+       "until": "2075-09-25"
+      },
+      {
+       "sub": "Saturn",
+       "from": "2075-09-25",
+       "until": "2077-04-26"
+      },
+      {
+       "sub": "Mercury",
+       "from": "2077-04-26",
+       "until": "2078-09-25"
+      },
+      {
+       "sub": "Ketu",
+       "from": "2078-09-25",
+       "until": "2079-04-26"
+      },
+      {
+       "sub": "Venus",
+       "from": "2079-04-26",
+       "until": "2080-12-25"
+      },
+      {
+       "sub": "Sun",
+       "from": "2080-12-25",
+       "until": "2081-06-26"
+      }
+     ]
+    },
+    {
+     "period": "Mars",
+     "from": "2081-06-26",
+     "until": "2088-06-25",
+     "sub_periods": [
+      {
+       "sub": "Mars",
+       "from": "2081-06-26",
+       "until": "2081-11-22"
+      },
+      {
+       "sub": "Rahu",
+       "from": "2081-11-22",
+       "until": "2082-12-10"
+      },
+      {
+       "sub": "Jupiter",
+       "from": "2082-12-10",
+       "until": "2083-11-16"
+      },
+      {
+       "sub": "Saturn",
+       "from": "2083-11-16",
+       "until": "2084-12-25"
+      },
+      {
+       "sub": "Mercury",
+       "from": "2084-12-25",
+       "until": "2085-12-22"
+      },
+      {
+       "sub": "Ketu",
+       "from": "2085-12-22",
+       "until": "2086-05-20"
+      },
+      {
+       "sub": "Venus",
+       "from": "2086-05-20",
+       "until": "2087-07-20"
+      },
+      {
+       "sub": "Sun",
+       "from": "2087-07-20",
+       "until": "2087-11-25"
+      },
+      {
+       "sub": "Moon",
+       "from": "2087-11-25",
+       "until": "2088-06-25"
+      }
+     ]
+    },
+    {
+     "period": "Rahu",
+     "from": "2088-06-25",
+     "until": "2106-06-27",
+     "sub_periods": [
+      {
+       "sub": "Rahu",
+       "from": "2088-06-25",
+       "until": "2091-03-09"
+      },
+      {
+       "sub": "Jupiter",
+       "from": "2091-03-09",
+       "until": "2093-08-01"
+      },
+      {
+       "sub": "Saturn",
+       "from": "2093-08-01",
+       "until": "2096-06-07"
+      },
+      {
+       "sub": "Mercury",
+       "from": "2096-06-07",
+       "until": "2098-12-25"
+      },
+      {
+       "sub": "Ketu",
+       "from": "2098-12-25",
+       "until": "2100-01-13"
+      },
+      {
+       "sub": "Venus",
+       "from": "2100-01-13",
+       "until": "2103-01-14"
+      },
+      {
+       "sub": "Sun",
+       "from": "2103-01-14",
+       "until": "2103-12-08"
+      },
+      {
+       "sub": "Moon",
+       "from": "2103-12-08",
+       "until": "2105-06-08"
+      },
+      {
+       "sub": "Mars",
+       "from": "2105-06-08",
+       "until": "2106-06-27"
+      }
+     ]
+    }
+   ]
+  },
+  "mars_check": {
+   "present": true,
+   "reduced": true,
+   "strength": 3,
+   "reasons": [
+    "Mars is in the 4th house counted from the lagna.",
+    "Mars is in the 2nd house counted from the Moon.",
+    "Mars is in the 7th house counted from Venus.",
+    "Some conditions that reduce it apply. An astrologer should review it."
+   ],
+   "checks": [
+    {
+     "rule": "The lagna is Kataka or Simha",
+     "applies": false,
+     "reason": "The lagna is Mesha."
+    },
+    {
+     "rule": "Mars is in its own or exalted sign",
+     "applies": false,
+     "reason": "Mars is in Kataka, which is neither its own nor its exalted sign."
+    },
+    {
+     "rule": "Jupiter looks at Mars",
+     "applies": true,
+     "reason": "Jupiter in Vrischika looks at Mars in Kataka."
+    },
+    {
+     "rule": "Mars is in a sign that is excused for its house",
+     "applies": false,
+     "reason": "This exception does not cover Mars in the 4th house in Kataka."
+    },
+    {
+     "rule": "Mars is with the Moon",
+     "applies": false,
+     "reason": "Mars in Kataka is not with the Moon."
+    },
+    {
+     "rule": "Mars is in Simha or Kumbha",
+     "applies": false,
+     "reason": "Mars is in Kataka, not Simha or Kumbha."
+    },
+    {
+     "rule": "Jupiter or Venus is in the lagna",
+     "applies": false,
+     "reason": "Neither Jupiter nor Venus is in the lagna, Mesha."
+    }
+   ]
+  },
+  "care_periods": [],
+  "birth_table": {
+   "weekday": "Sunday",
+   "thithi": "Bright 10 (Dashami)",
+   "yoga": "Shobhana",
+   "karana": "Gara",
+   "star_groups": {
+    "gana": "Deva",
+    "yoni": "cat",
+    "nadi": "Aadi",
+    "rajju": "Nabhi (navel)",
+    "pakshi": "owl",
+    "bhuta": "water (Apo)",
+    "vruksha": "hard",
+    "gothra": "Atri",
+    "linga": "male"
+   },
+   "provisional": true
+  },
+  "saturn_erashtaka": [
+   {
+    "from": "2000-06-07",
+    "until": "2007-07-16",
+    "state": "past"
+   },
+   {
+    "from": "2029-08-08",
+    "until": "2036-08-27",
+    "state": "ahead"
+   },
+   {
+    "from": "2059-05-28",
+    "until": "2066-07-03",
+    "state": "ahead"
+   }
+  ],
+  "saturn_erashtaka_from_rising_sign": [
+   {
+    "from": "1995-06-02",
+    "until": "2003-04-08",
+    "state": "past"
+   },
+   {
+    "from": "2025-03-30",
+    "until": "2032-05-31",
+    "state": "now"
+   },
+   {
+    "from": "2054-05-15",
+    "until": "2062-03-07",
+    "state": "ahead"
+   },
+   {
+    "from": "2084-03-20",
+    "until": "2091-05-21",
+    "state": "ahead"
+   }
+  ],
+  "jupiter_returns": [
+   {
+    "from": "2006-10-27",
+    "until": "2007-11-22",
+    "state": "past"
+   },
+   {
+    "from": "2018-10-11",
+    "until": "2019-11-05",
+    "state": "past"
+   },
+   {
+    "from": "2030-01-25",
+    "until": "2031-10-15",
+    "state": "ahead"
+   },
+   {
+    "from": "2042-01-02",
+    "until": "2043-09-11",
+    "state": "ahead"
+   },
+   {
+    "from": "2053-12-16",
+    "until": "2055-01-11",
+    "state": "ahead"
+   },
+   {
+    "from": "2065-12-01",
+    "until": "2066-12-27",
+    "state": "ahead"
+   },
+   {
+    "from": "2077-11-16",
+    "until": "2078-12-11",
+    "state": "ahead"
+   },
+   {
+    "from": "2089-11-01",
+    "until": "2090-11-26",
+    "state": "ahead"
+   }
+  ],
+  "road_provisional": true,
+  "planet_changes_ahead": [
+   {
+    "change": "Rahu and Ketu change",
+    "when": "5 December 2026, 22:32 Sri Lanka time",
+    "from_rising_sign": {
+     "sign": "Mesha",
+     "moves": [
+      {
+       "move": "Rahu leaves your 11th house and enters your 10th house.",
+       "leaves": "The 11th house is about gains and friends.",
+       "enters": "The 10th house is about career and standing."
+      },
+      {
+       "move": "Ketu leaves your 5th house and enters your 4th house.",
+       "leaves": "The 5th house is about learning, children and creativity.",
+       "enters": "The 4th house is about home and peace of mind."
+      }
+     ],
+     "other_planets": [
+      "Saturn stays in Meena, your 12th house.",
+      "Jupiter stays in Simha, your 5th house."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "Mithuna",
+     "moves": [
+      {
+       "move": "Rahu leaves your 9th house and enters your 8th house.",
+       "leaves": "The 9th house is about fortune, teachers and beliefs.",
+       "enters": "The 8th house is about change and things shared with others."
+      },
+      {
+       "move": "Ketu leaves your 3rd house and enters your 2nd house.",
+       "leaves": "The 3rd house is about effort, courage and siblings.",
+       "enters": "The 2nd house is about family, speech and savings."
+      }
+     ],
+     "other_planets": [
+      "Saturn stays in Meena, your 10th house.",
+      "Jupiter stays in Simha, your 3rd house."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "Jupiter change",
+    "when": "25 January 2027, 01:32 Sri Lanka time",
+    "from_rising_sign": {
+     "sign": "Mesha",
+     "moves": [
+      {
+       "move": "Jupiter leaves your 5th house and enters your 4th house.",
+       "leaves": "The 5th house is about learning, children and creativity.",
+       "enters": "The 4th house is about home and peace of mind."
+      }
+     ],
+     "other_planets": [
+      "Saturn stays in Meena, your 12th house.",
+      "Rahu stays in Makara, your 10th house.",
+      "Ketu stays in Kataka, your 4th house."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "Mithuna",
+     "moves": [
+      {
+       "move": "Jupiter leaves your 3rd house and enters your 2nd house.",
+       "leaves": "The 3rd house is about effort, courage and siblings.",
+       "enters": "The 2nd house is about family, speech and savings."
+      }
+     ],
+     "other_planets": [
+      "Saturn stays in Meena, your 10th house.",
+      "Rahu stays in Makara, your 8th house.",
+      "Ketu stays in Kataka, your 2nd house."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "Saturn change",
+    "when": "3 June 2027, 05:28 Sri Lanka time",
+    "from_rising_sign": {
+     "sign": "Mesha",
+     "moves": [
+      {
+       "move": "Saturn leaves your 12th house and enters your 1st house.",
+       "leaves": "The 12th house is about rest, spending and faraway places.",
+       "enters": "The 1st house is about yourself and how you begin things."
+      }
+     ],
+     "other_planets": [
+      "Jupiter stays in Kataka, your 4th house.",
+      "Rahu stays in Makara, your 10th house.",
+      "Ketu stays in Kataka, your 4th house."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "Mithuna",
+     "moves": [
+      {
+       "move": "Saturn leaves your 10th house and enters your 11th house.",
+       "leaves": "The 10th house is about career and standing.",
+       "enters": "The 11th house is about gains and friends."
+      }
+     ],
+     "other_planets": [
+      "Jupiter stays in Kataka, your 2nd house.",
+      "Rahu stays in Makara, your 8th house.",
+      "Ketu stays in Kataka, your 2nd house."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "Jupiter change",
+    "when": "26 June 2027, 05:19 Sri Lanka time",
+    "from_rising_sign": {
+     "sign": "Mesha",
+     "moves": [
+      {
+       "move": "Jupiter leaves your 4th house and enters your 5th house.",
+       "leaves": "The 4th house is about home and peace of mind.",
+       "enters": "The 5th house is about learning, children and creativity."
+      }
+     ],
+     "other_planets": [
+      "Saturn stays in Mesha, your 1st house.",
+      "Rahu stays in Makara, your 10th house.",
+      "Ketu stays in Kataka, your 4th house."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "Mithuna",
+     "moves": [
+      {
+       "move": "Jupiter leaves your 2nd house and enters your 3rd house.",
+       "leaves": "The 2nd house is about family, speech and savings.",
+       "enters": "The 3rd house is about effort, courage and siblings."
+      }
+     ],
+     "other_planets": [
+      "Saturn stays in Mesha, your 11th house.",
+      "Rahu stays in Makara, your 8th house.",
+      "Ketu stays in Kataka, your 2nd house."
+     ],
+     "notes": []
+    }
+   },
+   {
+    "change": "Saturn change",
+    "when": "20 October 2027, 07:12 Sri Lanka time",
+    "from_rising_sign": {
+     "sign": "Mesha",
+     "moves": [
+      {
+       "move": "Saturn leaves your 1st house and enters your 12th house.",
+       "leaves": "The 1st house is about yourself and how you begin things.",
+       "enters": "The 12th house is about rest, spending and faraway places."
+      }
+     ],
+     "other_planets": [
+      "Jupiter stays in Simha, your 5th house.",
+      "Rahu stays in Makara, your 10th house.",
+      "Ketu stays in Kataka, your 4th house."
+     ],
+     "notes": []
+    },
+    "from_moon_sign": {
+     "sign": "Mithuna",
+     "moves": [
+      {
+       "move": "Saturn leaves your 11th house and enters your 10th house.",
+       "leaves": "The 11th house is about gains and friends.",
+       "enters": "The 10th house is about career and standing."
+      }
+     ],
+     "other_planets": [
+      "Jupiter stays in Simha, your 3rd house.",
+      "Rahu stays in Makara, your 8th house.",
+      "Ketu stays in Kataka, your 2nd house."
+     ],
+     "notes": []
+    }
+   }
+  ],
+  "sun_months_ahead": [
+   {
+    "sign": "Vrischika",
+    "from": "2026-11-25",
+    "until": "2026-12-16",
+    "house_from_rising_sign": 8,
+    "house_from_moon_sign": 6
+   },
+   {
+    "sign": "Dhanu",
+    "from": "2026-12-16",
+    "until": "2027-01-14",
+    "house_from_rising_sign": 9,
+    "house_from_moon_sign": 7
+   },
+   {
+    "sign": "Makara",
+    "from": "2027-01-14",
+    "until": "2027-02-13",
+    "house_from_rising_sign": 10,
+    "house_from_moon_sign": 8
+   },
+   {
+    "sign": "Kumbha",
+    "from": "2027-02-13",
+    "until": "2027-03-15",
+    "house_from_rising_sign": 11,
+    "house_from_moon_sign": 9
+   },
+   {
+    "sign": "Meena",
+    "from": "2027-03-15",
+    "until": "2027-04-14",
+    "house_from_rising_sign": 12,
+    "house_from_moon_sign": 10
+   },
+   {
+    "sign": "Mesha",
+    "from": "2027-04-14",
+    "until": "2027-05-15",
+    "house_from_rising_sign": 1,
+    "house_from_moon_sign": 11
+   },
+   {
+    "sign": "Vrishabha",
+    "from": "2027-05-15",
+    "until": "2027-06-15",
+    "house_from_rising_sign": 2,
+    "house_from_moon_sign": 12
+   },
+   {
+    "sign": "Mithuna",
+    "from": "2027-06-15",
+    "until": "2027-07-17",
+    "house_from_rising_sign": 3,
+    "house_from_moon_sign": 1
+   },
+   {
+    "sign": "Kataka",
+    "from": "2027-07-17",
+    "until": "2027-08-17",
+    "house_from_rising_sign": 4,
+    "house_from_moon_sign": 2
+   },
+   {
+    "sign": "Simha",
+    "from": "2027-08-17",
+    "until": "2027-09-17",
+    "house_from_rising_sign": 5,
+    "house_from_moon_sign": 3
+   },
+   {
+    "sign": "Kanya",
+    "from": "2027-09-17",
+    "until": "2027-10-18",
+    "house_from_rising_sign": 6,
+    "house_from_moon_sign": 4
+   },
+   {
+    "sign": "Tula",
+    "from": "2027-10-18",
+    "until": "2027-11-17",
+    "house_from_rising_sign": 7,
+    "house_from_moon_sign": 5
+   },
+   {
+    "sign": "Vrischika",
+    "from": "2027-11-17",
+    "until": "2027-11-25",
+    "house_from_rising_sign": 8,
+    "house_from_moon_sign": 6
+   }
+  ]
+ }
+}

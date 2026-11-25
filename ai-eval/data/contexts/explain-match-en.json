@@ -1,0 +1,390 @@
+{
+ "page": "match_result",
+ "language": "en",
+ "result": {
+  "bride": {
+   "birth_star": "Punarvasu",
+   "birth_star_id": "punarvasu",
+   "pada": 3,
+   "moon_sign": "Mithuna",
+   "rising_sign": "Mesha"
+  },
+  "groom": {
+   "birth_star": "Bharani",
+   "birth_star_id": "bharani",
+   "pada": 4,
+   "moon_sign": "Mesha",
+   "rising_sign": "Mesha"
+  },
+  "quick_match": false,
+  "provisional": true,
+  "score": {
+   "agree": 11,
+   "counted": 18
+  },
+  "summary": "More than half of the factors agree, and both essential checks pass.",
+  "essential_checks": [
+   {
+    "id": "rajju",
+    "name": "Rajju",
+    "meaning": "A traditional star check on the couple's wellbeing",
+    "passes": true,
+    "reason": "The bride's star is in the Nabhi (navel) rajju and the groom's in the Kati (waist) rajju. Different rajju is essential."
+   },
+   {
+    "id": "vedha",
+    "name": "Vedha",
+    "meaning": "Stars that must not afflict each other",
+    "passes": true,
+    "reason": "Punarvasu and Bharani are not an afflicting pair."
+   }
+  ],
+  "factors_not_agreeing": [
+   {
+    "id": "dina",
+    "name": "Nakath",
+    "meaning": "A traditional check on the couple's wellbeing",
+    "reason": "Counting from the bride's star, the groom's is number 23. The remainder after nine is 5, which is not favourable."
+   },
+   {
+    "id": "mahendra",
+    "name": "Mahendra",
+    "meaning": "Family growth",
+    "reason": "The groom's star is number 23 from the bride's, which is not one of the favourable counts."
+   },
+   {
+    "id": "rashyadhipathi",
+    "name": "Rashyadhipathi",
+    "meaning": "Rulers of the two signs",
+    "reason": "Mercury rules the bride's sign and Mars the groom's. They are counted as enemies."
+   },
+   {
+    "id": "vashya",
+    "name": "Vashya",
+    "meaning": "Mutual attraction",
+    "reason": "Neither sign, Mithuna or Mesha, is under the influence of the other.",
+    "softened_by": [
+     "Tradition softens this because the Rashi and Yoni factors agree."
+    ]
+   },
+   {
+    "id": "pakshi",
+    "name": "Pakshi",
+    "meaning": "Harmony between the two",
+    "reason": "The bird of the bride's star is the owl and of the groom's the eagle. They are counted as enemies.",
+    "softened_by": [
+     "Tradition softens this because Gana, Yoni, Rashi and Nadi all agree."
+    ]
+   },
+   {
+    "id": "linga",
+    "name": "Linga",
+    "meaning": "Masculine and feminine nature",
+    "reason": "The bride's star is male and the groom's is male. This pair does not agree.",
+    "softened_by": [
+     "Tradition softens this because the Yoni and Rashi factors agree."
+    ]
+   },
+   {
+    "id": "vruksha",
+    "name": "Vruksha",
+    "meaning": "A traditional check on children and family life",
+    "reason": "Both stars have hard trees. This pair does not agree."
+   }
+  ],
+  "factors_agreeing": [
+   {
+    "id": "gana",
+    "name": "Gana",
+    "meaning": "Temperament",
+    "reason": "The bride is Deva gana and the groom is Manushya gana. These go together."
+   },
+   {
+    "id": "stree_deergha",
+    "name": "Stree Deergha",
+    "meaning": "Wellbeing of the bride",
+    "reason": "The groom's star is number 23 from the bride's, more than 13, which is far enough."
+   },
+   {
+    "id": "yoni",
+    "name": "Yoni",
+    "meaning": "Physical compatibility",
+    "reason": "The animal of the bride's star is the cat and of the groom's the elephant. They are not enemies."
+   },
+   {
+    "id": "rashi",
+    "name": "Rashi",
+    "meaning": "Emotional bond",
+    "reason": "The groom's Moon sign is number 11 from the bride's, which is favourable."
+   },
+   {
+    "id": "gothra",
+    "name": "Gothra",
+    "meaning": "Family lineage",
+    "reason": "The bride's star is of the Atri gothra and the groom's of the Marichi gothra. A different gothra is favourable."
+   },
+   {
+    "id": "weekday",
+    "name": "Dina",
+    "meaning": "The days of birth",
+    "reason": "The bride was born on a Sunday and the groom on a Thursday. These days agree."
+   },
+   {
+    "id": "varna",
+    "name": "Varna",
+    "meaning": "Temperament and outlook",
+    "reason": "The bride's Moon sign is of the Shudra varna and the groom's of the Kshatriya varna. By the traditional varna table, these signs agree."
+   },
+   {
+    "id": "bhuta",
+    "name": "Bhutha",
+    "meaning": "The five elements",
+    "reason": "The bride's star is of water (Apo) and the groom's of earth (Pathavi). These elements are not opposed."
+   },
+   {
+    "id": "ayusha",
+    "name": "Ayusha",
+    "meaning": "A traditional check on the couple's wellbeing",
+    "reason": "The two stars are 6 apart in the count of 28 stars, which agrees."
+   },
+   {
+    "id": "graha",
+    "name": "Graha",
+    "meaning": "The ruling planets of both charts",
+    "reason": "3 of the 4 checks between the lagna lords (Mars and Mars) and the Moon sign lords (Mercury and Mars) are friendly or neutral, which agrees."
+   },
+   {
+    "id": "nadi",
+    "name": "Nadi",
+    "meaning": "A traditional check on the family's wellbeing",
+    "reason": "The bride is Aadi nadi and the groom is Madhya nadi. Different nadi is favourable."
+   }
+  ],
+  "factors_not_counted": [],
+  "mars_check": {
+   "bride": {
+    "present": true,
+    "reduced": true,
+    "reasons": [
+     "Mars is in the 4th house counted from the lagna.",
+     "Mars is in the 2nd house counted from the Moon.",
+     "Mars is in the 7th house counted from Venus.",
+     "Some conditions that reduce it apply. An astrologer should review it."
+    ],
+    "checks": [
+     {
+      "rule": "The lagna is Kataka or Simha",
+      "applies": false
+     },
+     {
+      "rule": "Mars is in its own or exalted sign",
+      "applies": false
+     },
+     {
+      "rule": "Jupiter looks at Mars",
+      "applies": true
+     },
+     {
+      "rule": "Mars is in a sign that is excused for its house",
+      "applies": false
+     },
+     {
+      "rule": "Mars is with the Moon",
+      "applies": false
+     },
+     {
+      "rule": "Mars is in Simha or Kumbha",
+      "applies": false
+     },
+     {
+      "rule": "Jupiter or Venus is in the lagna",
+      "applies": false
+     }
+    ]
+   },
+   "groom": {
+    "present": true,
+    "reduced": false,
+    "reasons": [
+     "Mars is in the 2nd house counted from the lagna.",
+     "Mars is in the 2nd house counted from the Moon."
+    ],
+    "checks": [
+     {
+      "rule": "The lagna is Kataka or Simha",
+      "applies": false
+     },
+     {
+      "rule": "Mars is in its own or exalted sign",
+      "applies": false
+     },
+     {
+      "rule": "Jupiter looks at Mars",
+      "applies": false
+     },
+     {
+      "rule": "Mars is in a sign that is excused for its house",
+      "applies": false
+     },
+     {
+      "rule": "Mars is with the Moon",
+      "applies": false
+     },
+     {
+      "rule": "Mars is in Simha or Kumbha",
+      "applies": false
+     },
+     {
+      "rule": "Jupiter or Venus is in the lagna",
+      "applies": false
+     }
+    ]
+   },
+   "comparison": "Both charts show Kuja dosha, so they are often read as balancing each other."
+  },
+  "wedding_dates": "on this page, below the match: works with the birth stars alone (quick or full match). The person picks the venue and how many months ahead (3, 6, 12 or 24), chooses the ceremonies and presses search. While it runs (or if it fails) also_on_page.wedding says so in its status; the dates found then appear there. With no also_on_page.wedding, no search has been made for this match",
+  "factor_themes": [
+   {
+    "theme": "Wellbeing",
+    "agree": 3,
+    "counted": 4,
+    "factors": [
+     "Nakath",
+     "Stree Deergha",
+     "Ayusha",
+     "Nadi"
+    ]
+   },
+   {
+    "theme": "Bond and temperament",
+    "agree": 5,
+    "counted": 8,
+    "factors": [
+     "Gana",
+     "Yoni",
+     "Rashi",
+     "Vashya",
+     "Pakshi",
+     "Linga",
+     "Varna",
+     "Bhutha"
+    ]
+   },
+   {
+    "theme": "Family and children",
+    "agree": 1,
+    "counted": 3,
+    "factors": [
+     "Mahendra",
+     "Gothra",
+     "Vruksha"
+    ]
+   },
+   {
+    "theme": "Planets and birth days",
+    "agree": 2,
+    "counted": 3,
+    "factors": [
+     "Rashyadhipathi",
+     "Dina",
+     "Graha"
+    ]
+   }
+  ],
+  "marriage_in_each_chart": {
+   "bride": {
+    "seventh_house_sign": "Tula",
+    "seventh_lord": "Venus",
+    "seventh_lord_in_house": 10,
+    "planets_in_seventh": [
+     "Rahu"
+    ],
+    "venus": {
+     "sign": "Makara",
+     "house": 10
+    },
+    "combinations": [
+     {
+      "name": "Budhaditya yoga",
+      "based_on": "Sun and Mercury together in house 11"
+     },
+     {
+      "name": "Sunapha yoga",
+      "based_on": "planets in the house after the Moon's house 3"
+     },
+     {
+      "name": "Neecha Bhanga Raja yoga",
+      "based_on": "Mars debilitated in Kataka, helped by Moon in house 3, an angle from the rising sign or the Moon"
+     },
+     {
+      "name": "Raja yoga",
+      "based_on": "Saturn (ruler of house 10 and 11) and Sun (ruler of house 5) together in house 11"
+     },
+     {
+      "name": "Dhana yoga",
+      "based_on": "Saturn (ruler of house 10 and 11) and Sun (ruler of house 5) together in house 11"
+     },
+     {
+      "name": "Vipareeta Raja yoga (Vimala)",
+      "based_on": "Jupiter, ruler of house 12, in house 8"
+     },
+     {
+      "name": "Amala yoga",
+      "based_on": "Venus in house 10, the 10th from the rising sign"
+     }
+    ]
+   },
+   "groom": {
+    "seventh_house_sign": "Tula",
+    "seventh_lord": "Venus",
+    "seventh_lord_in_house": 5,
+    "planets_in_seventh": [],
+    "venus": {
+     "sign": "Simha",
+     "house": 5
+    },
+    "combinations": [
+     {
+      "name": "Ravi-Sukra yoga",
+      "based_on": "Sun and Venus together in house 5"
+     },
+     {
+      "name": "Sunapha yoga",
+      "based_on": "planets in the house after the Moon's house 1"
+     },
+     {
+      "name": "Shasha yoga",
+      "based_on": "Saturn in its own sign Makara, in house 10"
+     },
+     {
+      "name": "Raja yoga",
+      "based_on": "Venus (ruler of house 2 and 7) and Sun (ruler of house 5) together in house 5"
+     },
+     {
+      "name": "Raja yoga",
+      "based_on": "Venus (ruler of house 2 and 7) and Jupiter (ruler of house 9 and 12) together in house 5"
+     },
+     {
+      "name": "Dhana yoga",
+      "based_on": "Venus (ruler of house 2 and 7) and Sun (ruler of house 5) together in house 5"
+     },
+     {
+      "name": "Dhana yoga",
+      "based_on": "Venus (ruler of house 2 and 7) and Jupiter (ruler of house 9 and 12) together in house 5"
+     },
+     {
+      "name": "Saraswati yoga",
+      "based_on": "Mercury in house 4, Jupiter in house 5, Venus in house 5, with Jupiter well placed in Simha"
+     }
+    ]
+   },
+   "provisional": true
+  },
+  "seventh_lords": {
+   "bride": "Venus",
+   "groom": "Venus",
+   "relation": "same planet",
+   "provisional": true
+  }
+ }
+}

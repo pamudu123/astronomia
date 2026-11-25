@@ -1,0 +1,358 @@
+{
+ "page": "chart_result",
+ "language": "en",
+ "result": {
+  "rising_sign": "Tula",
+  "moon_sign": "Meena",
+  "birth_star": "Uttara Bhadrapada",
+  "birth_star_id": "uttara_bhadrapada",
+  "pada": 1,
+  "birth_time_check": "the rising sign is the same for nearby birth times",
+  "planets": [
+   {
+    "planet": "Sun",
+    "sign": "Mithuna",
+    "house": 9,
+    "area": "luck, father, teachers, higher learning, long journeys",
+    "rules_houses": [
+     11
+    ]
+   },
+   {
+    "planet": "Moon",
+    "sign": "Meena",
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "rules_houses": [
+     10
+    ]
+   },
+   {
+    "planet": "Mars",
+    "sign": "Meena",
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "rules_houses": [
+     2,
+     7
+    ]
+   },
+   {
+    "planet": "Mercury",
+    "sign": "Vrishabha",
+    "house": 8,
+    "area": "change, shared money, research",
+    "rules_houses": [
+     9,
+     12
+    ]
+   },
+   {
+    "planet": "Jupiter",
+    "sign": "Vrishabha",
+    "house": 8,
+    "area": "change, shared money, research",
+    "rules_houses": [
+     3,
+     6
+    ]
+   },
+   {
+    "planet": "Venus",
+    "sign": "Vrishabha",
+    "house": 8,
+    "area": "change, shared money, research",
+    "strength": "own sign",
+    "rules_houses": [
+     1,
+     8
+    ]
+   },
+   {
+    "planet": "Saturn",
+    "sign": "Dhanu",
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "rules_houses": [
+     4,
+     5
+    ],
+    "yoga_karaka": true,
+    "retrograde": true
+   },
+   {
+    "planet": "Rahu",
+    "sign": "Kumbha",
+    "house": 5,
+    "area": "children, creativity, studies, romance",
+    "retrograde": true
+   },
+   {
+    "planet": "Ketu",
+    "sign": "Simha",
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "retrograde": true
+   }
+  ],
+  "houses": [
+   {
+    "house": 1,
+    "area": "self, body, how you start things",
+    "sign": "Tula",
+    "lord": "Venus",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "Mars"
+    ]
+   },
+   {
+    "house": 2,
+    "area": "family you were born into, savings, speech",
+    "sign": "Vrischika",
+    "lord": "Mars",
+    "lord_in_house": 6,
+    "aspected_by": [
+     "Mercury",
+     "Jupiter",
+     "Venus"
+    ]
+   },
+   {
+    "house": 3,
+    "area": "siblings, courage, communication, short trips",
+    "sign": "Dhanu",
+    "lord": "Jupiter",
+    "lord_in_house": 8,
+    "planets": [
+     "Saturn"
+    ],
+    "aspected_by": [
+     "Sun"
+    ]
+   },
+   {
+    "house": 4,
+    "area": "home, mother, property, inner peace",
+    "sign": "Makara",
+    "lord": "Saturn",
+    "lord_in_house": 3,
+    "aspected_by": [
+     "Jupiter"
+    ]
+   },
+   {
+    "house": 5,
+    "area": "children, creativity, studies, romance",
+    "sign": "Kumbha",
+    "lord": "Saturn",
+    "lord_in_house": 3,
+    "planets": [
+     "Rahu"
+    ],
+    "aspected_by": [
+     "Saturn"
+    ]
+   },
+   {
+    "house": 6,
+    "area": "daily work, health habits, debts, competition",
+    "sign": "Meena",
+    "lord": "Jupiter",
+    "lord_in_house": 8,
+    "planets": [
+     "Moon",
+     "Mars"
+    ]
+   },
+   {
+    "house": 7,
+    "area": "marriage, partnership",
+    "sign": "Mesha",
+    "lord": "Mars",
+    "lord_in_house": 6
+   },
+   {
+    "house": 8,
+    "area": "change, shared money, research",
+    "sign": "Vrishabha",
+    "lord": "Venus",
+    "lord_in_house": 8,
+    "planets": [
+     "Mercury",
+     "Jupiter",
+     "Venus"
+    ]
+   },
+   {
+    "house": 9,
+    "area": "luck, father, teachers, higher learning, long journeys",
+    "sign": "Mithuna",
+    "lord": "Mercury",
+    "lord_in_house": 8,
+    "planets": [
+     "Sun"
+    ],
+    "aspected_by": [
+     "Mars",
+     "Saturn"
+    ]
+   },
+   {
+    "house": 10,
+    "area": "career, status",
+    "sign": "Kataka",
+    "lord": "Moon",
+    "lord_in_house": 6
+   },
+   {
+    "house": 11,
+    "area": "income, gains, friends, networks",
+    "sign": "Simha",
+    "lord": "Sun",
+    "lord_in_house": 9,
+    "planets": [
+     "Ketu"
+    ]
+   },
+   {
+    "house": 12,
+    "area": "spending, rest, living abroad",
+    "sign": "Kanya",
+    "lord": "Mercury",
+    "lord_in_house": 8,
+    "aspected_by": [
+     "Moon",
+     "Mars",
+     "Jupiter",
+     "Saturn"
+    ]
+   }
+  ],
+  "combinations": [
+   {
+    "name": "Chandra-Mangala yoga",
+    "based_on": "Moon and Mars together in house 6"
+   },
+   {
+    "name": "Raja yoga",
+    "based_on": "Venus (ruler of house 1 and 8) and Mercury (ruler of house 9 and 12) together in house 8"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Harsha)",
+    "based_on": "Jupiter, ruler of house 6, in house 8"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Sarala)",
+    "based_on": "Venus, ruler of house 8, in house 8"
+   },
+   {
+    "name": "Vipareeta Raja yoga (Vimala)",
+    "based_on": "Mercury, ruler of house 12, in house 8"
+   },
+   {
+    "name": "Vasumathi yoga",
+    "based_on": "Mercury, Jupiter, Venus in houses of growth from the Moon"
+   }
+  ],
+  "combinations_not_in_this_chart": [
+   "Gajakesari yoga",
+   "Budhaditya yoga",
+   "Ruchaka yoga",
+   "Bhadra yoga",
+   "Hamsa yoga",
+   "Malavya yoga",
+   "Shasha yoga",
+   "Sunapha yoga",
+   "Anapha yoga",
+   "Durudhara yoga",
+   "Ravi-Sukra yoga",
+   "Kuja-Sukra yoga",
+   "Shani-Mangala yoga",
+   "Papa Kartari",
+   "Shubha Kartari",
+   "Neecha Bhanga Raja yoga",
+   "Dhana yoga",
+   "Guru-Chandala yoga",
+   "Angaraka yoga",
+   "Guru-Mangala yoga",
+   "Kala Sarpa",
+   "Amala yoga",
+   "Saraswati yoga",
+   "Kemadruma yoga"
+  ],
+  "life_period": {
+   "now": "Ketu",
+   "until": "2028-10-10T23:19:21.918550Z",
+   "sub_period": "Saturn",
+   "sub_until": "2027-10-14T18:22:21.918550Z",
+   "next": "Venus",
+   "next_from": "2028-10-10T23:19:21.918550Z"
+  },
+  "life_period_timeline": {
+   "sub_periods": [
+    {
+     "sub": "Ketu",
+     "from": "2021-10-11",
+     "until": "2022-03-09"
+    },
+    {
+     "sub": "Venus",
+     "from": "2022-03-09",
+     "until": "2023-05-09"
+    },
+    {
+     "sub": "Sun",
+     "from": "2023-05-09",
+     "until": "2023-09-14"
+    },
+    {
+     "sub": "Moon",
+     "from": "2023-09-14",
+     "until": "2024-04-14"
+    },
+    {
+     "sub": "Mars",
+     "from": "2024-04-14",
+     "until": "2024-09-10"
+    },
+    {
+     "sub": "Rahu",
+     "from": "2024-09-10",
+     "until": "2025-09-29"
+    },
+    {
+     "sub": "Jupiter",
+     "from": "2025-09-29",
+     "until": "2026-09-04"
+    },
+    {
+     "sub": "Saturn",
+     "from": "2026-09-04",
+     "until": "2027-10-14"
+    },
+    {
+     "sub": "Mercury",
+     "from": "2027-10-14",
+     "until": "2028-10-10"
+    }
+   ],
+   "later_periods": [
+    {
+     "period": "Venus",
+     "from": "2028-10-10",
+     "until": "2048-10-10"
+    },
+    {
+     "period": "Sun",
+     "from": "2048-10-10",
+     "until": "2054-10-11"
+    }
+   ]
+  },
+  "mars_check": {
+   "present": true,
+   "reduced": true
+  }
+ }
+}

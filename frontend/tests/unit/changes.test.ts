@@ -119,7 +119,7 @@ describe("changeTitle", () => {
     expect(changeTitle(en.changes, find("jupiter-2027-01"), "en")).toBe("Jupiter change 2027 back into Kataka");
     expect(changeTitle(en.changes, find("jupiter-2027-06"), "en")).toBe("Jupiter change 2027 back into Simha");
     expect(changeTitle(en.changes, find("jupiter-2027-11"), "en")).toBe("Jupiter change 2027 into Kanya");
-    expect(changeTitle(si.changes, find("saturn-2027-06"), "si")).toBe("2027 ශනි මාරුව: මේෂ රාශියට");
+    expect(changeTitle(si.changes, find("saturn-2027-06"), "si")).toBe("2027 සෙනසුරු මාරුව: මේෂ රාශියට");
   });
 
   it("gives every change its own title", () => {

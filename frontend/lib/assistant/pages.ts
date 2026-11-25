@@ -12,6 +12,7 @@ import {
   type Placement,
   carePeriods,
   combinations,
+  combinationsNotFound,
   houseFacts,
   lifeTimeline,
   periodTimeline,
@@ -88,6 +89,8 @@ export function chartContext(
       houses: houseFacts(chart, labels),
       // Well-known combinations (yogas) found from the placements above. Provisional rules.
       combinations: combinations(chart, labels),
+      // Looked for and not in this chart, for "do I have X yoga?".
+      combinations_not_in_this_chart: combinationsNotFound(chart, labels),
       // Current and next life periods only: the first period starts at birth.
       life_period: now
         ? {

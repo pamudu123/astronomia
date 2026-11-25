@@ -1,0 +1,35 @@
+{
+ "page": "good_times_day",
+ "language": "en",
+ "result": {
+  "date": "2026-11-25",
+  "weekday": "Wednesday",
+  "place": "Colombo",
+  "place_id": 1248991,
+  "timezone": "Asia/Colombo",
+  "sunrise": "06:04",
+  "sunset": "17:50",
+  "rahu_kalaya": "11:56 to 13:24",
+  "thithi": [
+   {
+    "name": "Dark 1 (Pratipada)",
+    "time": "20:24 on 2026-11-24 to 16:51"
+   },
+   {
+    "name": "Dark 2 (Dwitiya)",
+    "time": "16:51 to 13:16 on 2026-11-26"
+   }
+  ],
+  "nakatha": [
+   {
+    "name": "Rohini",
+    "time": "23:26 on 2026-11-24 to 20:37"
+   },
+   {
+    "name": "Mrigashira",
+    "time": "20:37 to 17:48 on 2026-11-26"
+   }
+  ],
+  "provisional": true
+ }
+}

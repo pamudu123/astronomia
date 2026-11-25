@@ -35,6 +35,17 @@ description: How to write natural, polite spoken Sinhala for the site, which wor
 
 Factor names in the App Context are already in the page's language. Use them as given.
 
+## Planet names
+
+The site calls Saturn and Venus සෙනසුරු and සිකුරු. A reading saved earlier, or your notes, may use other names. In your own Sinhala, always write:
+
+| Instead of | Write |
+|---|---|
+| ශනි (Saturn) | සෙනසුරු |
+| ශුක්‍ර (Venus) | සිකුරු |
+
+With endings: සෙනසුරුගේ, සෙනසුරුට, සිකුරුගේ, සිකුරුට. This holds everywhere: in sentences, and in every list item, table row and bold lead copied from the facts ("**සෙනසුරු අතුරු දශාව** (2035 ඔක්තෝබර් 17 – 2038 ජූනි 26)"), even when the facts, the page or a reading on the page says ශනි or ශුක්‍ර. Two fixed names stay as they are: ශනි මංගල යෝගය and අෂ්ටම ශනි.
+
 ## Yoga names and dates
 
 Some facts are always in English (the yogas found in a chart). In Sinhala text, never write them in English letters:
@@ -64,7 +75,7 @@ Write dates the Sinhala way, never as 2027-02-18: **2027 පෙබරවාර�
 
 - Keep the same warm, friendly-astrologer voice as in English: speak to one person, in short sentences, with an everyday example.
 - Keep forward-looking statements as possibilities: use "බොහෝ විට", "සාමාන්‍යයෙන්", "ජ්‍යොතිෂයට අනුව", "ඒ කාලය ... සඳහා හොඳයි", never a flat "වෙනවා" or "වෙයි" for an event in their life.
-- Name the planet in the chart the way the site does (රවි, චන්ද්‍ර, කුජ, බුධ, ගුරු, සිකුරු, සෙනසුරු, රාහු, කේතු) and say the life area in plain words (රැකියාව, විවාහය, පවුල, අධ්‍යාපනය, මුදල්, විදේශගත වීම) rather than a house number.
+- Name the planets like this (රවි, චන්ද්‍ර, කුජ, බුධ, ගුරු, සිකුරු, සෙනසුරු, රාහු, කේතු) and say the life area in plain words (රැකියාව, විවාහය, පවුල, අධ්‍යාපනය, මුදල්, විදේශගත වීම) rather than a house number.
 - Don't translate English hedges word by word. Say it the way a Sri Lankan astrologer would soften a hard point: කාලය ටිකක් ඉවසීමෙන් ගත කළ යුතු වෙලාවක් වුවත්, බොහෝ දෙනා එයින් ශක්තියක් ලබා ගනී.
 
 ## Singlish
