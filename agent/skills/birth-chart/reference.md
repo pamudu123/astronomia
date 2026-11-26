@@ -305,7 +305,7 @@ Sri Lankan writers list many more cancellations (lankaastrology.com lists twenty
 - Vedha (වේධ) lists star pairs said to strike each other. It is linked to obstacles and hardship.
 - Not everyone agrees. One Sri Lankan writer says Rajju alone should not end a match, and some traditions soften it when other factors are good.
 
-*Site note:* the site keeps Rajju and Vedha apart from the count and shows them as essential checks.
+*Site note:* the site counts all 20 factors, Rajju and Vedha too, and also shows those two on their own as essential checks.
 
 **The twenty factors.** Sri Lankan matching sites agree on these names. Naming varies a little. Some call the star-count check "Dina" instead of "Nakath", and some say "Graha Maitri" for the sign-lord check.
 

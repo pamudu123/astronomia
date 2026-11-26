@@ -1,19 +1,21 @@
-"""The yearly forecast by lagna. A paid feature, open to everyone for now (docs/07).
+"""The yearly forecast by lagna, open to everyone (docs/07).
 
-Every yearly endpoint depends on yearly_access(). That is the one place to add the paid
-check later.
+Every yearly endpoint depends on yearly_access(), the place for a paid check on the whole
+forecast. "Your own 2027" is part of a hadahan's full report: personal_year_access() checks it.
 """
 
 import datetime as dt
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Response, status
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.api.birth import resolve_birth
 from app.api.changes import CACHE, ChangeOut, CountedOut, change_out, counted_out
 from app.api.charts import EPHEMERIS, HadahanRequest
-from app.api.deps import PlacesDb
+from app.api.deps import Orders, PlacesDb
+from app.api.report_requests import HadahanReport
+from app.api.saved import Current, SettingsDep, input_hash
 from app.api.timeresolve import TimeResolveResponse
 from app.engine.changes import SRI_LANKA, count_from
 from app.engine.chart import compute_chart
@@ -22,6 +24,7 @@ from app.engine.yearly import YEARS, Stay, YearForecast, year_forecast
 from app.engine.zodiac import RASHI, Body
 from app.explain.labels import Lang, labels
 from app.reports.format import format_date
+from app.tiers import report_access
 
 router = APIRouter(tags=["yearly"])
 
@@ -34,6 +37,30 @@ def yearly_access() -> None:
 
 
 Access = Annotated[None, Depends(yearly_access)]
+
+PERSONAL_LOCKED = "your own year is in the full hadahan report"
+
+
+class PersonalYearRequest(HadahanRequest):
+    # The name on the hadahan, so the year belongs to that hadahan's report.
+    name: str = Field(default="", max_length=60)
+
+
+def personal_year_access(
+    body: PersonalYearRequest, session: Current, orders: Orders, settings: SettingsDep
+) -> None:
+    """Who may see "Your own 2027": whoever has the full report of that hadahan.
+
+    The report is the one POST /v1/reports/access asks about (the name and birth details), so
+    buying the hadahan opens the year too. While paid reports are switched off, everyone may.
+    """
+    birth = HadahanRequest.model_validate(body.model_dump(exclude={"name"}))
+    report = HadahanReport(kind="hadahan", name=body.name, birth=birth)
+    report_hash = input_hash(report.model_dump(mode="json"))
+    user = session.found.user if session.found else None
+    access = report_access(orders, user, "hadahan", report_hash, settings.paid_reports)
+    if not access.allows("personal_year"):
+        raise HTTPException(status.HTTP_402_PAYMENT_REQUIRED, PERSONAL_LOCKED)
 
 
 class StayOut(BaseModel):
@@ -187,10 +214,17 @@ def yearly(
 
 @router.post("/v1/yearly/{year}/personal", response_model=PersonalYearResponse)
 def personal_yearly(
-    year: int, body: HadahanRequest, db: PlacesDb, _: Access
+    year: int,
+    body: PersonalYearRequest,
+    db: PlacesDb,
+    _: Access,
+    session: Current,
+    orders: Orders,
+    settings: SettingsDep,
 ) -> PersonalYearResponse:
     """The year for one birth chart: from the lagna, and from the Moon sign (gochara)."""
     _year_or_404(year)
+    personal_year_access(body, session, orders, settings)
     birth = resolve_birth(body, db)
     if birth.utc is None:
         return PersonalYearResponse(

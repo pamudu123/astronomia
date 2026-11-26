@@ -13,19 +13,22 @@ import { KujaDials } from "@/components/KujaDials";
 import { NextSteps } from "@/components/NextSteps";
 import { ReportButton } from "@/components/ReportButton";
 import { SaveButton } from "@/components/account/SaveButton";
+import { Lock } from "@/components/Icons";
 import { FullReport } from "@/components/paid/FullReport";
-import { ReportScope } from "@/components/paid/ReportAccess";
+import { ReportScope, useCanUse } from "@/components/paid/ReportAccess";
+import { FreeNote, GetFullReport, VersionBadge } from "@/components/paid/ReportStatus";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { type PageContext, matchContext } from "@/lib/assistant/context";
 import { type ChapterId, MATCH_EXTRA, MATCH_PLACES, MATCH_READING } from "@/lib/assistant/explain";
 import { coupleYearsContext, matchReadingContext, weddingReadingContext } from "@/lib/assistant/pages";
-import { type Labels, fill } from "@/lib/hadahan";
+import { type Labels, fill, formatDate } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
   type Factor,
   type FactorFilter,
   type Person,
+  type PersonInput,
   type Porondam,
   type PorondamRequest,
   type Timeline,
@@ -102,6 +105,18 @@ function PorondamResultPage({
   readOnlyAction,
 }: Props) {
   const [filter, setFilter] = useState<FactorFilter>("all");
+  // "Factor by factor" folds away; a factor picked in the ring or "See why" opens it.
+  const [showFactors, setShowFactors] = useState(false);
+  const weddingOpen = useCanUse("wedding_dates");
+  const openFactors = () => {
+    setFilter("all");
+    setShowFactors(true);
+    // Once it is open, go to the factor the link named (not every browser opens it for us).
+    window.setTimeout(() => {
+      const id = window.location.hash.slice(1);
+      if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
+    }, 0);
+  };
   // What the AI assistant sees: this result, with no names or birth details.
   useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding)));
   // The diagrams Astro may show: drawn in the browser, from what this page shows.
@@ -158,44 +173,90 @@ function PorondamResultPage({
   const factorName = (factor: Factor) => labels.porondam_factor[factor.id];
   const uncounted = match.factors.filter((factor) => !isCounted(factor)).length;
 
-  const person = (who: Person, fallback: string, tone: string) => (
+  // Each person's card: who they are, when they were born (on their own match only: a shared
+  // page has no birth details), and their birth star, Moon sign and lagna.
+  const person = (who: Person, fallback: string, tone: string, input?: PersonInput) => (
     <div className={`${styles.who} ${tone}`}>
+      {who.name && <span className={styles.whoRole}>{fallback}</span>}
       <span className={styles.whoName}>{nameOf(who, fallback)}</span>
-      <span className="soft">
-        {fill(t.star, { star: labels.nakshatra[who.nakshatra], rashi: labels.rashi[who.rashi].name })}
+      {input && "date" in input && (
+        <span className={styles.whoBorn} data-born>
+          {fill(t.born, { date: formatDate(`${input.date}T00:00:00Z`, lang), time: input.time })}
+        </span>
+      )}
+      <span className={styles.whoFacts}>
+        <span>{fill(t.star, { star: labels.nakshatra[who.nakshatra], rashi: labels.rashi[who.rashi].name })}</span>
+        {who.lagna && <span>{fill(t.lagna, { lagna: labels.rashi[who.lagna].name })}</span>}
       </span>
-      {who.lagna && <span className="soft">{fill(t.lagna, { lagna: labels.rashi[who.lagna].name })}</span>}
     </div>
   );
+
+  const title = fill(t.title, { bride: nameOf(bride, f.bride), groom: nameOf(groom, f.groom) });
+  const report = request ? { kind: "porondam" as const, match: { ...request, lang } } : null;
 
   return (
     <>
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.couple}`}>
-        <h1 className={`display ${styles.title}`}>
-          {fill(t.title, { bride: nameOf(bride, f.bride), groom: nameOf(groom, f.groom) })}
-        </h1>
+        <VersionBadge />
+        <h1 className={`display ${styles.title}`}>{title}</h1>
         <div className={styles.pairRow}>
-          {person(bride, f.bride, styles.whoBride)}
+          {person(bride, f.bride, styles.whoBride, request?.bride)}
           <span aria-hidden="true" className={styles.link}>
             <span />
             <i />
             <span />
           </span>
-          {person(groom, f.groom, styles.whoGroom)}
+          {person(groom, f.groom, styles.whoGroom, request?.groom)}
         </div>
-        {request && onAgain && (
-          <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
-            {t.again}
-            <ArrowRight />
-          </button>
-        )}
+        {/* Everything to do with the result, at the top: the full report, the PDF, keeping and sharing it. */}
+        <div className={styles.topActions}>
+          {request && report ? (
+            <>
+              <GetFullReport lang={lang} />
+              <ReportButton request={report} reading={forPdf} aiNotice={aiNotice} t={t} />
+              {saveText && (
+                <SaveGate>
+                  <SaveButton key={JSON.stringify(request)} lang={lang} t={saveText} request={report} />
+                </SaveGate>
+              )}
+              {share && (
+                <ShareButton
+                  lang={lang}
+                  t={share}
+                  request={report}
+                  title={title}
+                  anonTitle={share.anonPorondam}
+                  summary={fill(share.summaryPorondam, {
+                    passed: match.score.passed,
+                    total: match.score.total,
+                  })}
+                  hasNames={Boolean(bride.name || groom.name)}
+                  names={title}
+                  plural
+                  fields={[share.fieldStars, share.fieldFactors, ...(result.kuja ? [share.fieldKujaPair] : [])]}
+                />
+              )}
+              {onAgain && (
+                <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
+                  {t.again}
+                  <ArrowRight />
+                </button>
+              )}
+            </>
+          ) : (
+            readOnlyAction
+          )}
+        </div>
+        <div className={styles.freeNote}>
+          <FreeNote />
+        </div>
       </section>
 
       {/*
-        Two answers with equal weight, side by side: how many traditional factors agree, and
-        the checks this rule set reports apart from that count. No single verdict on the
-        couple, and the count is never shown as a percentage (QA report, section D).
+        Two answers with equal weight, side by side: how many of the 20 traditional factors
+        agree (as a share in the ring, and as a count), and Rajju and Vedha on their own, which
+        count too but tradition treats seriously. No single verdict on the couple.
       */}
       <section className={`rise ${styles.compare}`} style={{ animationDelay: ".1s" }} aria-labelledby="compare-title">
         <div className={styles.compareHead}>
@@ -215,12 +276,12 @@ function PorondamResultPage({
               area, then every factor by name, each leading to its explanation further down.
             */}
             <MatchGlance
-              factors={match.factors}
+              factors={[...match.factors, ...match.hard_checks]}
               labels={labels}
               t={t}
               passed={match.score.passed}
               total={match.score.total}
-              onPick={() => setFilter("all")}
+              onPick={openFactors}
             >
               <p className={`display ${styles.panelCount}`}>
                 {fill(t.factorsCount, { passed: match.score.passed, total: match.score.total })}
@@ -265,11 +326,12 @@ function PorondamResultPage({
         </div>
 
         <div className={styles.nextActions}>
-          <a href="#factors-title" className={`btn btn-outline lift ${styles.nextLink}`}>
+          <a href="#factors-title" className={`btn btn-outline lift ${styles.nextLink}`} onClick={openFactors}>
             {t.seeWhy}
           </a>
           {request && wedding && (
             <a href="#wedding-title" className={`btn btn-primary lift ${styles.nextLink}`}>
+              {!weddingOpen && <Lock size={16} color="currentColor" />}
               {t.findDates}
               <ArrowRight />
             </a>
@@ -278,12 +340,25 @@ function PorondamResultPage({
       </section>
 
       <section className={styles.factorsSection} aria-labelledby="factors-title">
-        <div className={styles.factorsHead}>
-          <div>
-            <h2 id="factors-title" className={`display ${styles.sectionTitle}`}>
-              {t.factors}
-            </h2>
-            <p className="soft">{t.factorsLead}</p>
+        <details
+          className={styles.factorsFold}
+          open={showFactors}
+          onToggle={(event) => setShowFactors(event.currentTarget.open)}
+          data-factors-fold
+        >
+          <summary className={styles.factorsSummary}>
+            <span className={styles.factorsSummaryText}>
+              <h2 id="factors-title" className={`display ${styles.sectionTitle}`}>
+                {t.factors}
+              </h2>
+              <span className="soft">{t.factorsLead}</span>
+            </span>
+            <span className={`btn btn-outline ${styles.foldButton}`} aria-hidden="true">
+              {showFactors ? t.factorsHide : t.factorsShow}
+              <span className={styles.foldChevron} />
+            </span>
+          </summary>
+          <div className={styles.factorsHead}>
             <p className={styles.legend}>
               <span className="visually-hidden">{t.legend}: </span>
               <span className={styles.legendItem}>
@@ -295,27 +370,26 @@ function PorondamResultPage({
                 {nameOf(groom, f.groom)}
               </span>
             </p>
+            <div role="group" aria-label={t.filter} className={styles.toggle}>
+              {(
+                [
+                  ["all", t.all],
+                  ["agree", t.agreeOnly],
+                  ["disagree", t.disagree],
+                ] as const
+              ).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={filter === value}
+                  className={filter === value ? styles.toggleOn : styles.toggleOff}
+                  onClick={() => setFilter(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
-          <div role="group" aria-label={t.filter} className={styles.toggle}>
-            {(
-              [
-                ["all", t.all],
-                ["agree", t.agreeOnly],
-                ["disagree", t.disagree],
-              ] as const
-            ).map(([value, label]) => (
-              <button
-                key={value}
-                type="button"
-                aria-pressed={filter === value}
-                className={filter === value ? styles.toggleOn : styles.toggleOff}
-                onClick={() => setFilter(value)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
         <ul className={styles.factorGrid}>
           {filterFactors(match.factors, filter).map((factor, index) => {
             const counted = isCounted(factor);
@@ -352,6 +426,7 @@ function PorondamResultPage({
             );
           })}
         </ul>
+        </details>
       </section>
 
       <section className={`rise ${styles.panel}`} aria-labelledby="kuja-title">
@@ -436,63 +511,11 @@ function PorondamResultPage({
         pdf={Boolean(request)}
       />
 
-      <section className={styles.footRow}>
-        <div className={styles.footText}>
-          {match.provisional && <p className={styles.small}>{t.provisional}</p>}
-          <p className={styles.small}>{fill(t.method, { rules: match.rule_set })}</p>
-        </div>
-        <div className={styles.footActions}>
-          {request ? (
-            <>
-              <ReportButton
-                request={{ kind: "porondam", match: { ...request, lang } }}
-                reading={forPdf}
-                aiNotice={aiNotice}
-                t={t}
-              />
-              {saveText && (
-                <SaveGate>
-                  <SaveButton
-                    key={JSON.stringify(request)}
-                    lang={lang}
-                    t={saveText}
-                    request={{ kind: "porondam", match: { ...request, lang } }}
-                  />
-                </SaveGate>
-              )}
-              {share && (
-                <ShareButton
-                  lang={lang}
-                  t={share}
-                  request={{ kind: "porondam", match: { ...request, lang } }}
-                  title={fill(t.title, { bride: nameOf(bride, f.bride), groom: nameOf(groom, f.groom) })}
-                  anonTitle={share.anonPorondam}
-                  summary={fill(share.summaryPorondam, {
-                    passed: match.score.passed,
-                    total: match.score.total,
-                  })}
-                  hasNames={Boolean(bride.name || groom.name)}
-                  names={fill(t.title, { bride: nameOf(bride, f.bride), groom: nameOf(groom, f.groom) })}
-                  plural
-                  fields={[
-                    share.fieldStars,
-                    share.fieldFactors,
-                    ...(result.kuja ? [share.fieldKujaPair] : []),
-                  ]}
-                />
-              )}
-              {onAgain && (
-                <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
-                  {t.again}
-                  <ArrowRight />
-                </button>
-              )}
-            </>
-          ) : (
-            readOnlyAction
-          )}
-        </div>
-      </section>
+      {match.provisional && (
+        <section className={styles.footRow}>
+          <p className={styles.small}>{t.provisional}</p>
+        </section>
+      )}
 
       {request && next && (
         <NextSteps

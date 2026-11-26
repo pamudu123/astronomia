@@ -161,7 +161,7 @@ def test_full_porondam_report(client: TestClient) -> None:
     content = flat(reader)
     for expected in (
         "Nimali and Kasun",
-        "9 of 18 factors agree",
+        "11 of 20 factors agree",
         "The factors at a glance",
         "The serious checks",
         "Rajju",

@@ -41,8 +41,12 @@ class MatchResult:
 
     @property
     def scored(self) -> list[FactorResult]:
-        """The counted factors: not the essential checks, and only those that were checked."""
-        return [f for f in self.factors if not f.hard and f.checked]
+        """The counted factors: every factor that was checked, the essential checks too.
+
+        Rajju and Vedha count like the rest, so a full match is out of 20 as most people know
+        it. The page still shows them on their own as essential checks.
+        """
+        return [f for f in self.factors if f.checked]
 
     @property
     def unchecked(self) -> list[FactorResult]:

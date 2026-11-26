@@ -478,8 +478,13 @@ def render_porondam(
             charts.append(_chart(chart_out(found, lang), lang, "rashi", person["name"]))
 
     factors = [_factor(f, table) for f in result.factors]
+    hard_checks = [_factor(f, table) for f in result.hard_checks]
+    # All 20 around the ring, Rajju and Vedha too, as the score counts them.
     ring = factor_ring(
-        ["unchecked" if not f["checked"] else "pass" if f["passed"] else "fail" for f in factors]
+        [
+            "unchecked" if not f["checked"] else "pass" if f["passed"] else "fail"
+            for f in [*factors, *hard_checks]
+        ]
     )
     context = {
         "cover": {
@@ -500,7 +505,7 @@ def render_porondam(
         "score": report["score"].format(passed=result.score.passed, total=result.score.total),
         "summary": result.summary_text,
         "same_star": result.same_star_text,
-        "hard_checks": [_factor(f, table) for f in result.hard_checks],
+        "hard_checks": hard_checks,
         "factors": factors,
         "kuja": kuja,
         "charts": charts,

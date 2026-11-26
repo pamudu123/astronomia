@@ -103,8 +103,8 @@ def test_save_a_match(me: TestClient) -> None:
     assert created["porondam"] == {
         "bride": "Nimali",
         "groom": "Kasun",
-        "passed": 9,
-        "total": 18,
+        "passed": 11,
+        "total": 20,
         "mode": "full",
     }
     body = me.get(f"/v1/saved/{created['id']}").json()

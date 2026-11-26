@@ -321,10 +321,11 @@ export function matchReadingContext(
     return context;
   }
   const match = result.match;
-  // The factors by theme as the page's ring groups them, with the counts the page shows, so the
-  // reading doesn't group or count them itself (real-model check, 2026-11-19).
+  // The factors by theme as the page's ring groups them (all 20, Rajju and Vedha too), with the
+  // counts the page shows, so the reading doesn't group or count them itself (real-model check,
+  // 2026-11-19).
   const themes = match
-    ? groupFactors(match.factors, labels.porondam_theme).map((g) => ({
+    ? groupFactors([...match.factors, ...match.hard_checks], labels.porondam_theme).map((g) => ({
         theme: g.name || "other",
         agree: g.agree,
         counted: g.counted,

@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useId, useState } from "react";
 
 import { Download } from "@/components/Icons";
+import { BuyButton } from "@/components/paid/BuyInvite";
+import { PaidText } from "@/components/paid/ReportAccess";
+import { useReportVersion } from "@/components/paid/ReportStatus";
 import { AiNotice } from "@/components/assistant/AiNotice";
 import { fill } from "@/lib/hadahan";
 import {
@@ -29,8 +32,16 @@ type Props = {
   className?: string;
 };
 
-/** Downloads the PDF report of the result on the page. */
+/**
+ * Downloads the PDF report of the result on the page. While the report is the free version, it
+ * says so, and asks first: the free PDF now, or the full version from the buying page.
+ */
 export function ReportButton({ request, reading, aiNotice = false, t, className = "" }: Props) {
+  const paidText = useContext(PaidText);
+  const free = useReportVersion() === "free" && paidText !== null;
+  // The free PDF or the full version, asked when the button is pressed on the free version.
+  const [choosing, setChoosing] = useState(false);
+  const choiceId = useId();
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   // While the reading is written: chapters ready of all.
@@ -41,8 +52,10 @@ export function ReportButton({ request, reading, aiNotice = false, t, className 
   async function download() {
     setBusy(true);
     setFailed(false);
+    setChoosing(false);
     try {
-      const chapters = reading
+      // The free PDF prints no AI reading, so none is written for it.
+      const chapters = reading && !free
         ? await reading((done, total) => setWriting(done < total ? { done, total } : null))
         : [];
       setWriting(null);
@@ -61,20 +74,41 @@ export function ReportButton({ request, reading, aiNotice = false, t, className 
       ? fill(t.writingReading, { done: writing.done, total: writing.total })
       : busy
         ? t.preparing
-        : t.download;
+        : free && paidText
+          ? paidText.pdfFree
+          : t.download;
 
   return (
     <div className={`${styles.wrap} ${className}`}>
       <button
         type="button"
-        className={`btn btn-primary lift ${styles.button}`}
-        onClick={() => (aiNotice ? setAsking(true) : download())}
+        className={`btn ${free ? "btn-outline" : "btn-primary"} lift ${styles.button}`}
+        onClick={() => (free ? setChoosing(!choosing) : aiNotice ? setAsking(true) : download())}
         disabled={busy}
         aria-busy={busy}
+        aria-expanded={free ? choosing : undefined}
+        aria-controls={free ? choiceId : undefined}
+        data-pdf={free ? "free" : "full"}
       >
         <Download />
         <span aria-live="polite">{label}</span>
       </button>
+      {free && choosing && paidText && (
+        <div id={choiceId} className={styles.choice} role="group" aria-label={paidText.pdfChoiceTitle} data-pdf-choice>
+          <p className={styles.choiceTitle}>{paidText.pdfChoiceTitle}</p>
+          <div className={styles.option}>
+            <button type="button" className="btn btn-outline lift" onClick={() => void download()}>
+              <Download />
+              {paidText.pdfChoiceFree}
+            </button>
+            <p className={styles.note}>{paidText.pdfChoiceFreeNote}</p>
+          </div>
+          <div className={styles.option}>
+            <BuyButton label={paidText.pdfChoiceFull} className="btn btn-primary lift" />
+            <p className={styles.note}>{paidText.pdfChoiceFullNote}</p>
+          </div>
+        </div>
+      )}
       {asking && aiNotice && (
         <AiNotice
           onAccept={() => {

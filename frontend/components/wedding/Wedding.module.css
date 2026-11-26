@@ -158,3 +158,17 @@
   flex-direction: column;
   gap: 18px;
 }
+
+/* The finder before the full report is bought: its title with a lock, and the way to buy. */
+.lockedTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lockedText {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+}

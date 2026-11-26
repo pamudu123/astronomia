@@ -251,6 +251,12 @@ function CoupleView({
       >
         <canvas ref={canvas} className={road.canvas} aria-hidden="true" />
         <RoadDragHint text={words.dragHint} moved={moved} />
+        <RoadArrows
+          later={words.later}
+          earlier={words.earlier}
+          step={words.step}
+          onMove={(years) => go(target.current + years)}
+        />
         <div className={styles.nowRow} data-card="now">
           {people.map((person) => (
             <p key={person.role} className={`${styles.now} ${road[person.tone]}`} data-now={person.role}>
@@ -321,12 +327,6 @@ function CoupleView({
         >
           {words.next} ›
         </button>
-        <RoadArrows
-          later={words.later}
-          earlier={words.earlier}
-          step={words.step}
-          onMove={(years) => go(target.current + years)}
-        />
       </div>
 
       <div className={styles.mapRow}>

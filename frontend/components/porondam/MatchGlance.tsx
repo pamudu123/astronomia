@@ -50,12 +50,15 @@ function arc(start: number, end: number): string {
 }
 
 /**
- * The match at a glance: a ring with one segment per factor, grouped by life area, and every
- * factor by name under its group. The ring is a picture of the list, so screen readers get the
- * list alone. Rajju and Vedha are not here: the page shows them apart from the count.
+ * The match at a glance: a ring with one segment per factor, grouped by life area, with the share
+ * that agree in its middle, and every factor by name: under its group, or in one table for those
+ * who know porondam that way. The ring is a picture of the list, so screen readers get the list
+ * alone. All 20 factors count, Rajju and Vedha too.
  */
 export function MatchGlance({ factors, labels, t, passed, total, onPick, children }: Props) {
   const [active, setActive] = useState<string | null>(null);
+  const [view, setView] = useState<"groups" | "table">("groups");
+  const percent = total > 0 ? Math.round((passed / total) * 100) : 0;
   const groups = groupFactors(factors, labels.porondam_theme);
   const segments = ringSegments(
     groups.map((group) => group.factors.length),
@@ -90,16 +93,73 @@ export function MatchGlance({ factors, labels, t, passed, total, onPick, childre
       <div className={styles.top}>
         <svg viewBox="0 0 120 120" className={styles.ring} aria-hidden="true" data-ring>
           {ring}
-          <text x={CENTRE} y={CENTRE - 4} className={styles.ringCount}>
-            {passed}
+          <text x={CENTRE} y={CENTRE - 4} className={styles.ringCount} data-percent={percent}>
+            {fill(t.ringPercent, { percent })}
           </text>
           <text x={CENTRE} y={CENTRE + 15} className={styles.ringOf}>
-            {fill(t.ringOf, { total })}
+            {t.ringAgree}
           </text>
         </svg>
+        <span className="visually-hidden">{fill(t.percentLabel, { percent, passed, total })}</span>
         <div className={styles.side}>{children}</div>
       </div>
 
+      <div role="group" aria-label={t.views} className={`${page.toggle} ${styles.views}`}>
+        {(
+          [
+            ["groups", t.viewGroups],
+            ["table", t.viewTable],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            aria-pressed={view === value}
+            className={view === value ? page.toggleOn : page.toggleOff}
+            onClick={() => setView(value)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === "table" ? (
+        <div className={styles.tableWrap}>
+          <table className={styles.table} data-factor-table>
+            <thead>
+              <tr>
+                <th scope="col">{t.tableFactor}</th>
+                <th scope="col">{t.tableArea}</th>
+                <th scope="col">{t.tableResult}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {groups.flatMap((group) =>
+                group.factors.map((factor) => {
+                  const state = stateOf(factor);
+                  const name = labels.porondam_factor[factor.id]?.name ?? factor.id;
+                  return (
+                    <tr key={factor.id} data-row={state}>
+                      <th scope="row">
+                        <a href={`#factor-${factor.id}`} onClick={onPick} className={styles.tableLink}>
+                          {name}
+                        </a>
+                      </th>
+                      <td className={styles.tableArea}>{group.name}</td>
+                      <td>
+                        <span className={state === "off" ? page.pillOff : state === "pass" ? page.pillPass : page.pillFail}>
+                          {state !== "off" && <Check ok={state === "pass"} />}
+                          {status(state)}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                }),
+              )}
+            </tbody>
+          </table>
+        </div>
+      ) : (
       <div className={styles.groups}>
         {groups.map((group) => {
           const key = keyOf(group.id);
@@ -148,6 +208,7 @@ export function MatchGlance({ factors, labels, t, passed, total, onPick, childre
           );
         })}
       </div>
+      )}
       {groups.some((group) => group.name) && <p className={page.small}>{t.themesNote}</p>}
     </div>
   );

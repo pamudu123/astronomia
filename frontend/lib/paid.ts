@@ -94,20 +94,21 @@ export function unlockReport(report: ReportRequest, code: string): Promise<Unloc
   });
 }
 
-export type Include = "reading" | "readingStars" | "explain" | "kuja" | "pdf" | "kept";
+export type Include = "reading" | "readingStars" | "explain" | "kuja" | "pdf" | "year" | "wedding" | "kept";
 
 /**
  * What the full report adds to this one (docs/18, section 6; docs/20, gap 3). Only a chart with
  * Kuja dosha has rules to open on the page: a match has no extra detail there, and one made from
- * a birth star has no chart on that side to read from.
+ * a birth star has no chart on that side to read from. A hadahan also opens "Your own 2027" for
+ * that chart, and a match the wedding nakath finder for that couple.
  */
 export function fullReportIncludes(report: ReportRequest, kujaPresent = false): Include[] {
   if (report.kind === "hadahan") {
-    return ["reading", "explain", ...(kujaPresent ? (["kuja"] as const) : []), "pdf", "kept"];
+    return ["reading", "explain", ...(kujaPresent ? (["kuja"] as const) : []), "pdf", "year", "kept"];
   }
   const { bride, groom } = report.match;
   const stars = "nakshatra" in bride || "nakshatra" in groom;
-  return [stars ? "readingStars" : "reading", "explain", "pdf", "kept"];
+  return [stars ? "readingStars" : "reading", "explain", "pdf", "wedding", "kept"];
 }
 
 /** "LKR 800" or "USD 2.50": whole rupees, dollars with their cents. */

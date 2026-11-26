@@ -11,6 +11,8 @@ from app.engine.changes import SRI_LANKA
 from app.engine.ephemeris import SwissEphemeris
 from app.engine.yearly import year_bounds, year_forecast
 from app.engine.zodiac import RASHI, Body
+from app.store.orders import OrderStore
+from tests.test_api_paid import paid_reports, sign_in
 
 EPHEMERIS = SwissEphemeris()
 KANDY = 1241622
@@ -116,3 +118,24 @@ def test_every_yearly_endpoint_goes_through_the_access_check(client: TestClient)
     assert client.post("/v1/yearly/2027/personal", json=BIRTH).status_code == 402
     # Planet change pages stay free.
     assert client.get("/v1/changes/rahu-ketu-2026-12/makara").status_code == 200
+
+
+def test_your_own_year_is_in_the_full_hadahan_report(
+    client: TestClient, orders: OrderStore
+) -> None:
+    """Paid reports on: "Your own 2027" opens once that hadahan's report is unlocked."""
+    orders.create_coupon("pamudu", 100, max_uses=200, max_uses_per_account=10)
+    paid_reports(client)
+    sign_in(client)
+    mine = {**BIRTH, "name": "Nimali"}
+    assert client.post("/v1/yearly/2027/personal", json=mine).status_code == 402
+    # The lagna pages stay open.
+    assert client.get("/v1/yearly/2027/makara").status_code == 200
+    report = {"kind": "hadahan", "name": "Nimali", "birth": {**BIRTH, "lang": "en"}}
+    unlocked = client.post("/v1/reports/unlock", json={"report": report, "code": "pamudu"})
+    assert unlocked.status_code == 200, unlocked.text
+    assert "personal_year" in unlocked.json()["access"]["features"]
+    assert client.post("/v1/yearly/2027/personal", json={**mine, "lang": "si"}).status_code == 200
+    # Someone else's hadahan is not unlocked.
+    other = {**mine, "name": "Kasun"}
+    assert client.post("/v1/yearly/2027/personal", json=other).status_code == 402

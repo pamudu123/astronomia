@@ -1,20 +1,23 @@
-"""Wedding nakath finder. A paid feature, open to everyone for now (docs/07).
+"""Wedding nakath finder, part of the couple's full porondam report (docs/07).
 
-Every endpoint here depends on wedding_access(). That is the one place to add the paid check.
+Every endpoint here calls wedding_access(), the one place for the paid check: the couple's
+porondam report must be paid for, or paid reports switched off on the server.
 Birth details travel in the body of a POST, never in the URL.
 """
 
 import datetime as dt
 import zoneinfo
-from typing import Annotated, Any, Literal, Self
+from typing import Any, Literal, Self
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field, model_validator
 
 from app.api.charts import EPHEMERIS
-from app.api.deps import PlacesDb
+from app.api.deps import Orders, PlacesDb
 from app.api.panchanga import LocalTimeOut, offset_label, time_out
-from app.api.porondam import FullPerson, PorondamResponse, QuickPerson, _person
+from app.api.porondam import FullPerson, PorondamRequest, PorondamResponse, QuickPerson, _person
+from app.api.report_requests import PorondamReport
+from app.api.saved import Current, SettingsDep, input_hash
 from app.api.timeresolve import TimeResolveResponse
 from app.engine.panchanga import Place
 from app.engine.wedding import CEREMONIES, TARA_NAMES, Person, Suggestion, find_dates, load_rules
@@ -22,21 +25,13 @@ from app.engine.zodiac import RASHI
 from app.explain.labels import Lang, labels
 from app.geo.search import get_place
 from app.reports.format import format_date
+from app.tiers import report_access
 
 router = APIRouter(tags=["wedding"])
 
 COLOMBO = 1248991
+WEDDING_LOCKED = "the wedding nakath finder is in the full report"
 Ceremony = Literal["engagement", "poruwa", "homecoming"]
-
-
-def wedding_access() -> None:
-    """Who may use the wedding nakath finder. Everyone, for now.
-
-    The paid lock goes here: raise HTTPException(402) for a visitor without access.
-    """
-
-
-Access = Annotated[None, Depends(wedding_access)]
 
 
 def _all_ceremonies() -> list[Ceremony]:
@@ -105,6 +100,27 @@ class WeddingResponse(BaseModel):
     place: WeddingPlaceOut | None = None
     ceremonies: list[CeremonyOut] = []
     note: str | None = None
+
+
+def wedding_access(
+    body: WeddingRequest, session: Current, orders: Orders, settings: SettingsDep
+) -> None:
+    """Who may use the wedding nakath finder: whoever has this couple's full porondam report.
+
+    The report is the same one POST /v1/reports/access asks about, so buying it once opens
+    the finder too. While paid reports are switched off, everyone may use it.
+    """
+    report = PorondamReport(
+        kind="porondam",
+        match=PorondamRequest(bride=body.bride, groom=body.groom, lang=body.lang),
+    )
+    report_hash = input_hash(report.model_dump(mode="json"))
+    user = session.found.user if session.found else None
+    access = report_access(orders, user, "porondam", report_hash, settings.paid_reports)
+    if not access.allows("wedding_dates"):
+        raise HTTPException(
+            status.HTTP_402_PAYMENT_REQUIRED, "the wedding nakath finder is in the full report"
+        )
 
 
 def resolve_place(
@@ -190,8 +206,11 @@ def _capital(text: str, lang: Lang) -> str:
 
 
 @router.post("/v1/wedding-nakath", response_model=WeddingResponse)
-def wedding_nakath(body: WeddingRequest, db: PlacesDb, _: Access) -> WeddingResponse:
+def wedding_nakath(
+    body: WeddingRequest, db: PlacesDb, session: Current, orders: Orders, settings: SettingsDep
+) -> WeddingResponse:
     """Good dates and times for the engagement, the poruwa and the homecoming, with reasons."""
+    wedding_access(body, session, orders, settings)
     people: dict[str, Person] = {}
     for role in ("bride", "groom"):
         found = _person(getattr(body, role), db, role)

@@ -143,13 +143,13 @@ porondam_factor:
   vedha: {name: වේධ, meaning: "සම්ප්‍රදාය අනුව එකිනෙකට නොගැළපෙන නැකත් යුගල"}
 
 # The summary chart groups the counted factors by what each is traditionally said to relate
-# to. Rajju and Vedha are left out: the page shows them apart from the count. Not yet
-# reviewed by an astrologer.
+# to. Rajju and Vedha count too, in a group of their own. Not yet reviewed by an astrologer.
 porondam_theme:
   health: {name: "යහපැවැත්ම පිළිබඳ පොරොන්දම්", factors: [dina, stree_deergha, ayusha, nadi]}
   bond: {name: බැඳීම සහ ස්වභාවය, factors: [gana, yoni, rashi, vashya, pakshi, linga, varna, bhuta]}
   family: {name: පවුල සහ දරුවන්, factors: [mahendra, gothra, vruksha]}
   planets: {name: ග්‍රහයන් සහ උපන් දින, factors: [rashyadhipathi, weekday, graha]}
+  essential: {name: අත්‍යවශ්‍ය පරීක්ෂා, factors: [rajju, vedha]}
 
 porondam_reason:
   dina_pass: "මනාලියගේ නැකතේ සිට ගණන් කළ විට මනාලයාගේ නැකත {count} වැන්නයි. නවයෙන් බෙදූ විට ඉතිරිය {remainder} වන අතර එය යහපත්ය."
@@ -269,7 +269,7 @@ report:
   charts: රාශි කේන්දර
   about: මෙම වාර්තාව ගැන
   method_hadahan: "ලාහිරි අයනාංශය ({ayanamsa}°), සම්පූර්ණ රාශි භාව, මධ්‍යම රාහු, ස්විස් එෆෙමරිස්."
-  method_porondam: "ලාහිරි අයනාංශය. ගැළපීම එක් එක් අයගේ චන්ද්‍රයා අනුව කෙරේ. රජ්ජු සහ වේධ ගණනින් වෙන්ව තබා ඇත."
+  method_porondam: "ලාහිරි අයනාංශය. ගැළපීම එක් එක් අයගේ චන්ද්‍රයා අනුව කෙරේ. රජ්ජු සහ වේධ ද ඇතුළුව පොරොන්දම් 20ම ගණන් කෙරේ."
   rule_sets: "නීති මාලා: {rules}."
   provisional: "ප්‍රවීණ ජ්‍යෝතිෂවේදියකු තහවුරු කරන තුරු පොරොන්දම් සහ කුජ දෝෂ නීති තාවකාලිකය."
   porondam_provisional: "මෙම වාර්තාව සාම්ප්‍රදායික පොරොන්දම් කරුණු 20 ම භාවිත කරයි."

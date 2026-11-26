@@ -31,7 +31,7 @@ const PRICE = { amount: 80_000, currency: "LKR" };
 /** What the backend says about the report (docs/18): paid reports switched off, as today. */
 const OPEN = {
   paid: false,
-  features: ["ai_reading", "ai_explain", "full_detail", "full_pdf"],
+  features: ["ai_reading", "ai_explain", "full_detail", "full_pdf", "wedding_dates", "personal_year"],
   paid_reports: false,
   account: null,
   price: PRICE,
@@ -435,10 +435,12 @@ test("the free PDF asks the AI for nothing, even where this browser once held th
     route.fulfill({ contentType: "application/json", body: JSON.stringify(NOT_PAID) }),
   );
   await page.reload(); // the result is remembered in this tab
-  await expect(page.getByRole("button", { name: "Download PDF" })).toBeVisible();
+  // The free version: the PDF asks first, and the free one is downloaded.
+  await expect(page.getByRole("button", { name: "Download PDF (free version)" })).toBeVisible();
   const asked = calls.length;
   await expect(page.locator('[data-card="full-reading"] ol')).toHaveCount(0);
-  await page.getByRole("button", { name: "Download PDF" }).click();
+  await page.getByRole("button", { name: "Download PDF (free version)" }).click();
+  await page.locator("[data-pdf-choice]").getByRole("button", { name: "Download the free PDF" }).click();
   await expect.poll(() => made.length).toBe(2);
   expect(made[1].reading ?? []).toEqual([]);
   expect(calls.length).toBe(asked);

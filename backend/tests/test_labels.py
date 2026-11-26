@@ -67,10 +67,10 @@ def test_every_porondam_factor_has_names_and_both_reasons() -> None:
         assert "weekday_unchecked" in table["porondam_reason"]
 
 
-def test_every_counted_porondam_factor_sits_in_one_theme() -> None:
+def test_every_porondam_factor_sits_in_one_theme() -> None:
     from app.engine.porondam import load_rules
 
-    counted = [f["id"] for f in load_rules()["factors"] if not f.get("hard")]
+    counted = [f["id"] for f in load_rules()["factors"]]  # Rajju and Vedha count too
     themes = {lang: labels(lang)["porondam_theme"] for lang in ("si", "en")}
     # Both languages group the factors the same way, in the same order.
     assert {k: v["factors"] for k, v in themes["si"].items()} == {

@@ -3,10 +3,13 @@ import { join } from "node:path";
 
 import { type Page, expect, test } from "@playwright/test";
 
+import { openAccess } from "./access";
+
 /** The backend is not running in these tests: its answers are saved real responses. */
 const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
 
 async function mockBackend(page: Page, lang: "en" | "si", hadahan = `hadahan-${lang}.json`) {
+  await openAccess(page);
   await page.route("**/api/v1/labels/*", (route) =>
     route.fulfill({ contentType: "application/json", body: fixture(`labels-${lang}.json`) }),
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import changeStyles from "@/components/changes/Changes.module.css";
@@ -10,6 +10,9 @@ import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
 import { type PersonalYear, fetchPersonalYear } from "@/lib/yearly";
 
+import { Lock } from "@/components/Icons";
+import { BuyInvite } from "@/components/paid/BuyInvite";
+import { PaidText, ReportAccessProvider } from "@/components/paid/ReportAccess";
 import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
 import { PAGE_PLACES } from "@/lib/assistant/explain";
@@ -36,6 +39,8 @@ export function PersonalYearly({ t, names, hadahan, lang, year, ask }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PersonalYear | null>(null);
+  // The chart asked about, when its full hadahan report is not bought yet (the server's 402).
+  const [locked, setLocked] = useState<{ request: BirthRequest; name: string } | null>(null);
   // What the AI assistant sees: this result, with no birth details.
   const context = result ? personalYearContext(result, lang) : null;
   useAssistantContext(context);
@@ -45,20 +50,26 @@ export function PersonalYearly({ t, names, hadahan, lang, year, ask }: Props) {
   const title = fill(p.title, { year });
   const asked = ask ?? { title, lead: p.lead };
 
-  async function run(request: BirthRequest) {
+  async function run(request: BirthRequest, name: string) {
     setBusy(true);
     setError(null);
     setClock(false);
+    setLocked(null);
     try {
-      const answer = await fetchPersonalYear(year, request, lang);
+      const answer = await fetchPersonalYear(year, request, lang, name);
       if (answer.status === "ok") {
         setResult(answer);
         setShowForm(false);
       } else {
         setClock(true);
       }
-    } catch {
-      setError(hadahan.errors.failed);
+    } catch (failure) {
+      if ((failure as { status?: number }).status === 402) {
+        setLocked({ request, name });
+        setShowForm(false);
+      } else {
+        setError(hadahan.errors.failed);
+      }
     } finally {
       setBusy(false);
     }
@@ -100,6 +111,25 @@ export function PersonalYearly({ t, names, hadahan, lang, year, ask }: Props) {
     );
   }
 
+  if (locked) {
+    return (
+      <section
+        id="personal-year"
+        className={changeStyles.personal}
+        aria-labelledby="personal-year-title"
+        data-card="personal-year"
+        data-locked="personal_year"
+      >
+        <ReportAccessProvider report={{ kind: "hadahan", name: locked.name, birth: { ...locked.request, lang } }}>
+          <LockedYear lang={lang} title={title} year={year} />
+        </ReportAccessProvider>
+        <button type="button" className={changeStyles.linkButton} onClick={() => setLocked(null)}>
+          {p.again}
+        </button>
+      </section>
+    );
+  }
+
   return (
     <section id="personal-year" className={changeStyles.personal} aria-labelledby="personal-year-title" data-card="personal-year">
       {!showForm && (
@@ -114,7 +144,7 @@ export function PersonalYearly({ t, names, hadahan, lang, year, ask }: Props) {
                 type="button"
                 className="btn btn-primary lift"
                 disabled={busy}
-                onClick={() => void run(saved.request)}
+                onClick={() => void run(saved.request, saved.name)}
               >
                 {busy ? p.working : saved.name ? fill(p.useSavedNamed, { name: saved.name }) : p.useSaved}
               </button>
@@ -140,7 +170,7 @@ export function PersonalYearly({ t, names, hadahan, lang, year, ask }: Props) {
           embedded={{ title: asked.title, lead: asked.lead, submit: p.submit, working: p.working }}
           onSubmit={(request, values) => {
             setForm(values);
-            void run(request);
+            void run(request, values.name.trim());
           }}
         />
       )}
@@ -155,5 +185,20 @@ export function PersonalYearly({ t, names, hadahan, lang, year, ask }: Props) {
         </p>
       )}
     </section>
+  );
+}
+
+/** "Your own {year}" before the full hadahan report of that chart is bought. */
+function LockedYear({ lang, title, year }: { lang: Locale; title: string; year: number }) {
+  const t = useContext(PaidText);
+  return (
+    <>
+      <h2 id="personal-year-title" className={`display ${changeStyles.sectionTitle}`}>
+        <Lock size={22} color="var(--gold)" /> {title}
+        {t && <span className="visually-hidden"> ({t.locked})</span>}
+      </h2>
+      {t && <p className="soft">{fill(t.yearLocked, { year })}</p>}
+      <BuyInvite lang={lang} compact />
+    </>
   );
 }

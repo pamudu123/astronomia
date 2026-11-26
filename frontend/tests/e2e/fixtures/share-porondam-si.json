@@ -31,8 +31,8 @@
       "rule_set": "porondam_si_v3",
       "provisional": true,
       "score": {
-        "passed": 9,
-        "total": 18
+        "passed": 11,
+        "total": 20
       },
       "hard_checks": [
         {

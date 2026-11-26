@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { type Page, expect, test } from "@playwright/test";
 
+import { openAccess } from "./access";
+
 /** The backend is not running in these tests: its answers are saved real responses. */
 const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
 const json = (name: string) => ({ contentType: "application/json", body: fixture(name) });
@@ -11,6 +13,7 @@ const CODE = "k7Qm2xVd9RtYp3LwZs8aBc";
 const TOKEN = "delete-token-for-tests-0123456789";
 
 async function mockBackend(page: Page, lang: "en" | "si") {
+  await openAccess(page);
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json(`labels-${lang}.json`)));
   await page.route("**/api/v1/places?*", (route) => route.fulfill(json("places-kandy.json")));
   await page.route("**/api/v1/time/resolve", (route) => route.fulfill(json("time-kandy.json")));
@@ -158,7 +161,7 @@ test("a match can be shared", async ({ page }) => {
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.locator("[data-share-preview]")).toContainText("A porondam match");
-  await expect(dialog.locator("[data-share-preview]")).toContainText("11 of 16 factors agree");
+  await expect(dialog.locator("[data-share-preview]")).toContainText("13 of 18 factors agree");
   const fields = dialog.locator("[data-share-fields]");
   await expect(fields).toContainText(FIELDS_LEAD);
   await expect(fields.locator('[data-share-field="names"]')).toHaveText("NamesHidden");
