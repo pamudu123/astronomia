@@ -3,7 +3,7 @@
   "waiting_for": null,
   "time": null,
   "rule_set": "wedding_si_v1",
-  "provisional": true,
+  "provisional": false,
   "first": "2027-01-01",
   "last": "2027-06-30",
   "place": {

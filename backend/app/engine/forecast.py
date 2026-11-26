@@ -9,8 +9,8 @@ from app.engine.transits import SLOW_BODIES, retrograde_at, sign_changes, signs_
 from app.engine.zodiac import Body, whole_sign_house
 
 RULE_SET = "forecast_v1"
-# House themes and the choice of planets are waiting for an astrologer's confirmation.
-PROVISIONAL = True
+# House themes and the choice of planets are confirmed by a practising astrologer.
+PROVISIONAL = False
 
 
 @dataclass(frozen=True)

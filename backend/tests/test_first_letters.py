@@ -34,9 +34,9 @@ def _good_stars(day_star: str) -> set[str]:
     return {s for i, s in enumerate(NAKSHATRA) if tara(i, index) in GOOD}
 
 
-def test_the_rules_are_provisional_and_known() -> None:
+def test_the_rules_are_confirmed_and_known() -> None:
     rules = load_rules()
-    assert rules["provisional"] is True
+    assert rules["provisional"] is False
     assert set(rules["nakatha"]) <= set(NAKSHATRA)
     assert set(rules["lagna"]) == {"mithuna", "kanya", "dhanu", "meena"}
     assert rules["avoid_tara"] == [1, 3, 5, 7]
@@ -163,7 +163,7 @@ def test_the_finder_for_a_child(client: TestClient) -> None:
         json={"child": CHILD, "months": 1, "as_of": "2026-07-01", "lang": "en"},
     ).json()
     assert body["status"] == "ok"
-    assert (body["rule_set"], body["provisional"]) == ("first_letters_si_v1", True)
+    assert (body["rule_set"], body["provisional"]) == ("first_letters_si_v1", False)
     assert body["child"] == {"star": "purva_ashadha", "star_name": "Purva Ashadha", "mode": "full"}
     assert (body["first"], body["last"]) == ("2026-07-01", "2026-07-31")
     assert body["place"]["name"] == "Colombo" and body["place"]["offset"] == "UTC+05:30"

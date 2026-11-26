@@ -185,6 +185,64 @@ img {
   font-weight: 400;
 }
 
+/* The line under a page's title says what the page is for: a little larger than body text. */
+main h1 + p.soft {
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+@media (max-width: 640px) {
+  main h1 + p.soft {
+    font-size: 17px;
+  }
+}
+
+/* Links that take you to another page, in a page's header: drawn as buttons so they read as
+   clickable. Mark a link back or up a level with data-back; the rest point onwards. */
+.pill-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--gold);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* The arrows are decoration: the empty alt text keeps them out of the link's spoken name. */
+.pill-links a::after {
+  content: "→";
+  content: "→" / "";
+}
+
+.pill-links a[data-back]::after {
+  content: none;
+}
+
+.pill-links a[data-back]::before {
+  content: "←";
+  content: "←" / "";
+}
+
+.pill-links a:hover {
+  border-color: var(--gold);
+  background: rgb(var(--glow) / 10%);
+}
+
 html[lang="si"] .display {
   font-family: var(--font-sinhala-display);
   font-weight: 600;

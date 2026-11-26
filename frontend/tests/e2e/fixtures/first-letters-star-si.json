@@ -2,7 +2,7 @@
   "status": "ok",
   "time": null,
   "rule_set": "first_letters_si_v1",
-  "provisional": true,
+  "provisional": false,
   "first": "2026-12-01",
   "last": "2027-02-28",
   "place": {

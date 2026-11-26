@@ -127,6 +127,22 @@
   padding-left: 46px;
 }
 
+/* The optional Search button: beside the box, the same height. */
+.searchWrap:has(.searchButton) {
+  gap: 10px;
+}
+
+.searchButton {
+  flex: none;
+  min-height: 52px;
+}
+
+@media (max-width: 560px) {
+  .searchButton {
+    padding-inline: 18px;
+  }
+}
+
 .hint {
   font-size: 13px;
   color: var(--ink-soft);

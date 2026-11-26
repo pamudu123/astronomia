@@ -51,6 +51,12 @@
   font-size: 14px;
 }
 
+/* Where and when the times are for: read before the times, so body sized. */
+.meta {
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -73,21 +79,42 @@
   background: var(--night-raised);
 }
 
+/* The day form: fields line up at the top, so a hint under one box does not push the other
+   down, and the button sits level with the boxes (one label line and the gap below it). */
+.dayForm {
+  align-items: flex-start;
+}
+
+.dayForm > button {
+  min-height: 52px;
+  height: 52px;
+  margin-top: calc(14px * 1.6 + 8px);
+}
+
+@media (max-width: 640px) {
+  .dayForm > button {
+    margin-top: 0;
+  }
+}
+
 .control {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1 1 260px;
   min-width: 0;
 }
 
+/* The date field, drawn like the place search beside it (components/hadahan/BirthForm.module.css). */
 .label {
-  font-weight: 600;
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .input {
-  min-height: 44px;
-  padding: 8px 12px;
+  height: 52px;
+  padding: 0 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius-field);
   background: var(--night);
@@ -194,6 +221,70 @@
 }
 
 .note p + p {
+  margin-top: 8px;
+}
+
+/* The year row and the city shortcuts, under the page title. */
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pickerLabel {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.picker .chip,
+.picker .chipCurrent {
+  min-height: 44px;
+}
+
+.picker .chipCurrent[aria-current="page"] {
+  border-color: var(--gold-fill);
+  background: var(--gold-fill);
+  color: var(--on-gold);
+  font-weight: 600;
+}
+
+.more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--gold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.more > summary::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+}
+
+.more[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.more > summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.more > ul {
   margin-top: 8px;
 }
 

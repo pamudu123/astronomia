@@ -2,7 +2,7 @@
 
 Facts first: the dasha periods, Saturn's Erashtaka and Jupiter's returns to its birth sign are
 dates from the ephemeris. The "quality" number that shapes the road is a rule set
-(app/data/rules/journey_v1.yaml) that is provisional until an astrologer confirms it.
+(app/data/rules/journey_v1.yaml) confirmed by a practising astrologer.
 
 Every road runs to the same length, so nothing here says how long a life is.
 """

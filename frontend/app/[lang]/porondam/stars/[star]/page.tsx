@@ -84,9 +84,11 @@ export default async function StarPage({ params }: Params) {
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{fill(t.title, { star: star[lang] })}</h1>
         <p className="soft">{fill(t.lead, { star: star[lang] })}</p>
-        <Link href={`/${lang}/porondam/stars`} className={styles.back}>
-          {t.all}
-        </Link>
+        <div className={`pill-links ${styles.back}`}>
+          <Link href={`/${lang}/porondam/stars`} data-back>
+            {t.all}
+          </Link>
+        </div>
       </div>
       {/* The list is asked for at request time, so it streams in behind this boundary. */}
       <Suspense fallback={<p className={styles.status}>{t.loading}</p>}>

@@ -1,6 +1,6 @@
 {
   "rule_set": "panchanga_v1",
-  "provisional": true,
+  "provisional": false,
   "date": "2027-04-14",
   "place": {
     "id": 1248991,

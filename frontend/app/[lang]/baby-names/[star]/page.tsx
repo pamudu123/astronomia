@@ -68,9 +68,11 @@ export default async function StarLettersPage({ params }: Params) {
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{fill(t.starTitle, { star: star[lang] })}</h1>
         <p className="soft">{fill(t.starLead, { star: star[lang] })}</p>
-        <Link href={`/${lang}/baby-names`} className={styles.back}>
-          {t.all}
-        </Link>
+        <div className={`pill-links ${styles.back}`}>
+          <Link href={`/${lang}/baby-names`} data-back>
+            {t.all}
+          </Link>
+        </div>
       </div>
       {/* The letters are asked for at request time, so they stream in behind this boundary. */}
       <Suspense fallback={<p className={styles.status}>{t.loading}</p>}>

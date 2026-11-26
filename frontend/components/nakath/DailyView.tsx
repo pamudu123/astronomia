@@ -85,7 +85,7 @@ export function DailyView({ lang, t, day, initial }: Props) {
   return (
     <>
       <form
-        className={styles.controls}
+        className={`${styles.controls} ${styles.dayForm}`}
         onSubmit={(event) => {
           event.preventDefault();
           if (picked) router.push(`/${lang}/nakath/${picked}`);
@@ -113,8 +113,10 @@ export function DailyView({ lang, t, day, initial }: Props) {
         </button>
       </form>
 
-      <div className={styles.links}>
-        <Link href={`/${lang}/nakath/${shift(day, -1)}`}>{t.previous}</Link>
+      <div className={`pill-links ${styles.links}`}>
+        <Link href={`/${lang}/nakath/${shift(day, -1)}`} data-back>
+          {t.previous}
+        </Link>
         <Link href={`/${lang}/nakath/${shift(day, 1)}`}>{t.next}</Link>
       </div>
 
@@ -136,7 +138,7 @@ export function DailyView({ lang, t, day, initial }: Props) {
         </div>
       ) : (
         <>
-          <p className={styles.small} data-card="where">
+          <p className={styles.meta} data-card="where">
             {[shown.place.name, shown.weekday_name, shown.timezone_note].filter(Boolean).join(" · ")}
           </p>
           <AiExplain chapters={PAGE_PLACES.day} lang={lang} facts={context} />

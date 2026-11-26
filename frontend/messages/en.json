@@ -568,7 +568,7 @@
       "together": "Both together",
       "noOverlap": "Their Saturn periods do not overlap in these ten years.",
       "dashaQuick": "Dasha periods need the full birth details.",
-      "note": "These are dates only. How to read them for a marriage is waiting for an astrologer's confirmation. Dates are in UTC."
+      "note": "These are dates only. Dates are in UTC."
     },
     "road": {
       "title": "Your road together",
@@ -640,7 +640,6 @@
       "unavailable": "The service is not answering right now. It may be starting up. Your details are kept: please try again in a minute.",
       "invalid": "Some of these details could not be used. Please check them and try again.",
       "clock": "A birth time here happened twice because of a clock change. Please check the birth details first.",
-      "provisional": "The rules are provisional until a practising astrologer confirms them.",
       "ceremony": {
         "engagement": "Engagement",
         "poruwa": "Poruwa ceremony",
@@ -919,7 +918,7 @@
       {
         "title": "Rules can differ",
         "body": [
-          "Traditions differ, and some rules here are provisional until a practising astrologer confirms them. The pages mark these."
+          "Traditions differ, so another astrologer may follow a slightly different rule."
         ]
       },
       {
@@ -1016,7 +1015,7 @@
     "staying": "What stays",
     "rashiNote": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so the same houses apply to {lagna} as a Moon sign.",
     "rashiNoteAll": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so choose your Moon sign above instead of your lagna.",
-    "provisional": "The house meanings are provisional until a practising astrologer confirms them. This page shows where the planets move. It does not predict events.",
+    "provisional": "This page shows where the planets move. It does not predict events.",
     "method": "Lahiri ayanamsa, mean node. Times are Sri Lanka time (UTC+05:30).",
     "chooseLagna": "Choose your lagna",
     "otherLagnas": "The same change for the other lagnas",
@@ -1065,7 +1064,7 @@
     "open": "Read about this change",
     "rashiNote": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so the same houses apply to {lagna} as a Moon sign.",
     "rashiNoteAll": "Do you count from your Moon sign (rashi)? For gochara the houses are counted from the Moon sign, so choose your Moon sign instead of your lagna.",
-    "provisional": "The house meanings are provisional until a practising astrologer confirms them. This page shows where the planets stay. It does not predict events.",
+    "provisional": "This page shows where the planets stay. It does not predict events.",
     "method": "Lahiri ayanamsa, mean node. Dates are Sri Lanka time (UTC+05:30).",
     "otherLagnas": "The same year for the other lagnas",
     "all": "All 12 lagnas",
@@ -1119,6 +1118,9 @@
     "placeHint": "Type a city. Only its time zone is used.",
     "noPlaces": "No places found",
     "useBrowser": "Use my time zone",
+    "placePlaceholder": "Type a city, such as London",
+    "searchPlace": "Search",
+    "yearLabel": "Year",
     "showing": "Showing {zone} ({offset})",
     "dress": "Colour: {colour}. Direction: {direction}.",
     "compareTitle": "Our calculation and the official list",
@@ -1131,13 +1133,11 @@
     "noOfficial": "There is no official list for {year} yet. These times are calculated by us and are not official.",
     "abroad": "Some astrologers abroad prepare their own nakath for their city. Those times can differ from these.",
     "source": "Source: {source}",
-    "provisional": "Our calculation follows rules that are provisional until a practising astrologer confirms them.",
     "loading": "Loading the nakath",
     "failed": "We could not load the nakath. Please try again.",
     "retry": "Try again",
     "homeLink": "Avurudu nakath {year} in your own time zone",
     "footer": "Avurudu nakath",
-    "allYears": "All years",
     "starts": "Starts",
     "ends": "Ends",
     "ourTitle": "Our calculation"
@@ -1173,7 +1173,7 @@
     "untilDay": "until {time}, {date}",
     "from": "from {time}",
     "fromDay": "from {time}, {date}",
-    "provisional": "These rules are provisional until a practising astrologer confirms them. Times are to the minute, as Sri Lankan almanacs print them.",
+    "provisional": "Times are to the minute, as Sri Lankan almanacs print them.",
     "loading": "Working out the day",
     "failed": "We could not load this day. Please try again.",
     "unavailable": "The service is not answering right now. It may be starting up. Your details are kept: please try again in a minute.",
@@ -1227,7 +1227,7 @@
     "whichPada": "Which pada? It depends on the exact birth time. Enter the birth details to find it.",
     "findOwn": "Find the letter from a birth time",
     "all": "All 27 stars",
-    "provisional": "This letter table is provisional until a practising astrologer confirms it. Where Sri Lankan sources differ, we use the letter most of them give and show the others.",
+    "provisional": "Where Sri Lankan sources differ, we use the letter most of them give and show the others.",
     "method": "Table {rules}",
     "footer": "Baby name letters",
     "homeLink": "Baby name letters from the birth star",
@@ -1305,7 +1305,6 @@
     "unavailable": "The service is not answering right now. It may be starting up. Your details are kept: please try again in a minute.",
     "invalid": "Some of these details could not be used. Please check them and try again.",
     "clock": "That birth time happened twice, or not at all, because of a clock change. Please check the birth details.",
-    "provisional": "The rules are provisional until a practising astrologer confirms them.",
     "footer": "First letters nakath",
     "link": "First letters ceremony nakath"
   },
@@ -1371,7 +1370,7 @@
       "hours": "about {value} hours",
       "star": "Birth star {star}, pada {pada}",
       "starUntil": "{star}, pada {pada}, until {until}",
-      "provisional": "The search is provisional until an astrologer confirms it. A birth near the edge of a window may fall just outside it.",
+      "provisional": "A birth near the edge of a window may fall just outside it.",
       "again": "Change the drawing",
       "openHadahan": "Open as a hadahan",
       "asBride": "Use as the bride",

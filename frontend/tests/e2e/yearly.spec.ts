@@ -49,7 +49,8 @@ test("the year list leads to one lagna's year", async ({ page }) => {
   );
   await expect(main.getByRole("table")).toContainText("June");
   await expect(main.locator('[data-year="lagna"] [data-change]')).toHaveCount(5);
-  await expect(main.getByText(/provisional until a practising astrologer/)).toBeVisible();
+  await expect(main.getByText(/It does not predict events/)).toBeVisible();
+  await expect(main.getByText(/provisional/i)).toHaveCount(0);
   await noSidewaysScroll(page);
 
   await main

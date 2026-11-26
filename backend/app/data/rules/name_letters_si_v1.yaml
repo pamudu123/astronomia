@@ -1,12 +1,12 @@
 # Starting letters (akuru) for a name, from the birth star (nakatha) and its pada.
-# PROVISIONAL until a practising astrologer confirms it. Sources and choices: docs/12-baby-rules.md.
+# Confirmed by a practising astrologer. Sources and choices: docs/12-baby-rules.md.
 #
 # Each pada has one letter, chosen by the majority of four Sri Lankan sources: the almanac
 # Lanka Panchanga Grahasphuta Litha 2019-2020 (page 53, as quoted online), lankahandahana.com
 # (read back from 108 made-up births), laksara.com and Lankadeepa. A tie goes to the almanac.
 # The classical Indian table is a cross-check only. `others` lists what the other sources give.
 version: name_letters_si_v1
-provisional: true
+provisional: false
 
 stars:
   ashwini:

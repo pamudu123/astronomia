@@ -12,7 +12,7 @@
     "options": []
   },
   "rule_set": "changes_v1",
-  "provisional": true,
+  "provisional": false,
   "lagna": "simha",
   "moon_sign": "vrischika",
   "changes": [

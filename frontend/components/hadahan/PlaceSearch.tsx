@@ -16,6 +16,8 @@ type Props = {
   onChange: (place: Place | null) => void;
   /** Shown in the empty box: the place used when none is chosen, such as Colombo. */
   placeholder?: string;
+  /** When given, a button with this label beside the box: it picks the best match, searching first if needed. */
+  searchLabel?: string;
 };
 
 export function placeLabel(place: Place, lang: Locale): string {
@@ -43,7 +45,7 @@ export function distinctLabels(places: Place[], lang: Locale): string[] {
   });
 }
 
-export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeholder }: Props) {
+export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeholder, searchLabel }: Props) {
   const id = useId();
   const listId = `${id}-list`;
   const [query, setQuery] = useState(value ? placeLabel(value, lang) : "");
@@ -78,6 +80,24 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
     };
   }, [query]);
 
+  /** The Search button and Enter: choose the highlighted match, or search now and choose the best one. */
+  function searchNow() {
+    if (open && results.length > 0) {
+      choose(results[active >= 0 ? active : 0]);
+      return;
+    }
+    const text = query.trim();
+    if (text.length < 2) return;
+    searchPlaces(text)
+      .then((found) => {
+        setResults(found);
+        setSearched(true);
+        if (found.length > 0) choose(found[0]);
+        else setOpen(true);
+      })
+      .catch(() => undefined);
+  }
+
   function choose(place: Place) {
     skipNext.current = true;
     setQuery(placeLabel(place, lang));
@@ -86,6 +106,11 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (searchLabel && event.key === "Enter" && (!open || results.length === 0)) {
+      event.preventDefault();
+      searchNow();
+      return;
+    }
     if (!open || results.length === 0) return;
     if (event.key === "ArrowDown") {
       event.preventDefault();
@@ -139,6 +164,17 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           onFocus={() => results.length > 0 && !value && setOpen(true)}
         />
+        {searchLabel && (
+          <button
+            type="button"
+            className={`btn btn-primary ${styles.searchButton}`}
+            disabled={query.trim().length < 2 || Boolean(value)}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={searchNow}
+          >
+            {searchLabel}
+          </button>
+        )}
       </div>
       <p id={`${id}-hint`} className={styles.hint}>
         {hint}

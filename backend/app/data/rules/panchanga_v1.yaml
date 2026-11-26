@@ -1,8 +1,8 @@
 # The Sinhala panchanga: the five parts of the day, sunrise and Rahu kalaya.
-# PROVISIONAL until a practising astrologer confirms it. Sources and conflicts are in
+# Confirmed by a practising astrologer. Sources and conflicts are in
 # docs/11-nakath-rules.md. Names live in the label files; this file holds the rules.
 version: panchanga_v1
-provisional: true
+provisional: false
 
 # The day starts at sunrise, not at midnight. A moment before sunrise belongs to the day before.
 day_starts: sunrise

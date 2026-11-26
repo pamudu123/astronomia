@@ -13,7 +13,7 @@ def test_the_list(client: TestClient) -> None:
     response = client.get("/v1/changes?lang=en")
     assert response.headers["cache-control"] == "public, max-age=3600"
     body = response.json()
-    assert body["provisional"] is True
+    assert body["provisional"] is False
     assert [c["id"] for c in body["changes"]] == [
         "rahu-ketu-2026-12",
         "jupiter-2027-01",

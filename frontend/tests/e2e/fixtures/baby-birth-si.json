@@ -12,7 +12,7 @@
     "options": []
   },
   "rule_set": "name_letters_si_v1",
-  "provisional": true,
+  "provisional": false,
   "chart": {
     "star": "jyeshtha",
     "star_name": "දෙට",

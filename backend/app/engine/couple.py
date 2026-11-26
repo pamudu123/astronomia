@@ -15,8 +15,8 @@ from app.engine.transits import sign_changes, signs_at
 from app.engine.zodiac import Body, whole_sign_house
 
 RULE_SET = "couple_v1"
-# Which Saturn houses to show, and how to read any of this, wait for the astrologer.
-PROVISIONAL = True
+# Which Saturn houses to show is confirmed by a practising astrologer.
+PROVISIONAL = False
 
 YEARS = 10
 

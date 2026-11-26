@@ -164,7 +164,6 @@ export function WeddingFinder({
               </div>
             ))}
             {result.note && <p className={styles.small}>{result.note}</p>}
-            <p className={styles.small}>{t.provisional}</p>
             {explain}
           </>
         )}

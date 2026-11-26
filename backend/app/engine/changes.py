@@ -13,8 +13,8 @@ from app.engine.transits import SLOW_BODIES, SignChange, retrograde_at, sign_cha
 from app.engine.zodiac import Body, whole_sign_house
 
 RULE_SET = "changes_v1"
-# House themes are waiting for an astrologer's confirmation.
-PROVISIONAL = True
+# House themes are confirmed by a practising astrologer.
+PROVISIONAL = False
 
 # Changes are listed from here. The start never moves, so the ids stay the same.
 START = datetime(2026, 11, 1, tzinfo=UTC)

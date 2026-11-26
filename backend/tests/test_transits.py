@@ -89,7 +89,7 @@ def test_a_settled_month() -> None:
     assert (RASHI[by_body[Body.JUPITER].sign], by_body[Body.JUPITER].house) == ("simha", 1)
     assert (RASHI[by_body[Body.RAHU].sign], by_body[Body.RAHU].house) == ("kumbha", 7)
     assert (RASHI[by_body[Body.KETU].sign], by_body[Body.KETU].house) == ("simha", 1)
-    assert result.provisional is True
+    assert result.provisional is False
     assert not by_body[Body.RAHU].retrograde
 
 

@@ -1,6 +1,6 @@
 {
   "rule_set": "changes_v1",
-  "provisional": true,
+  "provisional": false,
   "change": {
     "id": "saturn-2027-06",
     "kind": "saturn",
