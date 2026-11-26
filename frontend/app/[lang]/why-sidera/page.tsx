@@ -213,7 +213,9 @@ export default async function WhySideraPage({ params }: PageProps<"/[lang]/why-s
       {/* 8. A small credit, with the ppworks wordmark where the language puts the name */}
       <p className={styles.credit}>
         {credit && <span>{credit.trim()}</span>}
-        <PpworksLogo className={styles.creditLogo} />
+        <a href="https://www.ppwrks.com/" target="_blank" rel="noopener noreferrer" className={styles.creditLink}>
+          <PpworksLogo className={styles.creditLogo} />
+        </a>
         {creditAfter && <span>{creditAfter.trim()}</span>}
       </p>
     </main>

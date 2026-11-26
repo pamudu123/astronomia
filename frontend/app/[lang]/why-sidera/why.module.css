@@ -405,6 +405,21 @@
   --pp-cyan: #06b6d4;
 }
 
+.creditLink {
+  display: block;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.creditLink:hover {
+  opacity: 0.8;
+}
+
+.creditLink:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
 .creditLogo {
   display: block;
   width: auto;
