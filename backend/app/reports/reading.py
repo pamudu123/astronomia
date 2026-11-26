@@ -9,7 +9,8 @@ bold words, simple lists and small tables. This turns it into blocks for the tem
 escapes every piece of text, so nothing in a chapter becomes markup.
 
 On the page each bold lead starts with an icon (an emoji). The report's fonts have no emoji, so
-they would print as empty boxes: the icons are left out of the PDF.
+they would print as empty boxes: the icons are left out of the PDF. What an icon says (a tip, a
+caution, good news) is kept as the part's tone, which the report tints like the page does.
 """
 
 import re
@@ -35,10 +36,26 @@ def without_icons(text: str) -> str:
     return ICON.sub("", text)
 
 
+def tone(text: str) -> str:
+    """What a lead's icon says, as the website reads it (frontend/lib/assistant/explain.ts)."""
+    found = ICON.match(text.lstrip("*# ").lstrip())
+    if not found:
+        return "plain"
+    icon = found[0].strip()
+    if icon.startswith("⚠"):
+        return "attention"
+    if icon.startswith("💡"):
+        return "tip"
+    if icon.startswith("✅"):
+        return "good"
+    return "plain"
+
+
 @dataclass(frozen=True)
 class Block:
     kind: str  # "paragraph", "lead", "list" or "table"
     spans: tuple[Span, ...] = ()
+    tone: str = "plain"  # a lead's: "plain", "tip", "attention" or "good"
     # A list's items, or a table's rows (the first row is the header).
     items: tuple[tuple[Span, ...], ...] = ()
     rows: tuple[tuple[tuple[Span, ...], ...], ...] = ()
@@ -96,12 +113,16 @@ def _flush(result: list[Block], paragraph: list[str], items: list[tuple[Span, ..
 def blocks(text: str) -> list[Block]:
     """The same reading of a chapter as the website's (frontend/lib/assistant/explain.ts)."""
     result: list[Block] = []
-    for chunk in BLANK_LINE.split(without_icons(text).replace("\r\n", "\n")):
-        lines = [line.strip() for line in chunk.split("\n") if line.strip()]
+    for chunk in BLANK_LINE.split(text.replace("\r\n", "\n")):
+        raw = [line.strip() for line in chunk.split("\n") if line.strip()]
+        tones = [tone(line) for line in raw]
+        lines = [without_icons(line).strip() for line in raw]
         paragraph: list[str] = []
         items: list[tuple[Span, ...]] = []
         rows: list[str] = []
-        for line in lines:
+        for line, line_tone in zip(lines, tones, strict=True):
+            if not line:
+                continue
             if _is_table_line(line):
                 if paragraph or items:
                     _flush(result, paragraph, items)
@@ -116,7 +137,7 @@ def blocks(text: str) -> list[Block]:
             elif heading or lead:
                 _flush(result, paragraph, items)
                 words = heading[1].replace("**", "") if heading else lead[1] if lead else ""
-                result.append(Block("lead", ((words, True),)))
+                result.append(Block("lead", ((words, True),), tone=line_tone))
             else:
                 if items:
                     _flush(result, paragraph, items)
@@ -124,3 +145,24 @@ def blocks(text: str) -> list[Block]:
         _flush_table(result, rows)
         _flush(result, paragraph, items)
     return result
+
+
+@dataclass(frozen=True)
+class Part:
+    lead: Block
+    blocks: tuple[Block, ...]
+
+
+def parts(items: list[Block]) -> tuple[tuple[Block, ...], tuple[Part, ...]]:
+    """A chapter in its pieces, as the page shows it: the short answer it opens with (the blocks
+    before the first lead), then each part, a lead with the blocks under it."""
+    answer: list[Block] = []
+    found: list[tuple[Block, list[Block]]] = []
+    for block in items:
+        if block.kind == "lead":
+            found.append((block, []))
+        elif found:
+            found[-1][1].append(block)
+        else:
+            answer.append(block)
+    return tuple(answer), tuple(Part(lead, tuple(rest)) for lead, rest in found)

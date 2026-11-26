@@ -42,7 +42,7 @@ export default async function FirstLettersPage({ params }: PageProps<"/[lang]/fi
           <Link href={`/${lang}/baby-names`}>{dict.babyNames.homeLink}</Link>
         </div>
       </div>
-      <FirstLettersFinder lang={lang} t={t} hadahan={dict.hadahan} />
+      <FirstLettersFinder lang={lang} t={t} hadahan={dict.hadahan} guardian={dict.guardian} />
     </main>
   );
 }

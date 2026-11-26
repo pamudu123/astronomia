@@ -12,6 +12,7 @@ import { DetailLocked, FullReport } from "@/components/paid/FullReport";
 import { PaidOnly, ReportScope } from "@/components/paid/ReportAccess";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
+import { SavedTime, type SavedTimes } from "@/components/account/SavedTime";
 import { UpcomingChanges } from "@/components/changes/UpcomingChanges";
 import { YearlyLink } from "@/components/yearly/YearlyLink";
 import {
@@ -25,15 +26,16 @@ import {
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
+import { ChartDiagram } from "@/components/assistant/ChapterDiagram";
 import { AiExplain, FullReading, TopicChips } from "@/components/assistant/Explain";
-import { useAssistantContext, useExplainText } from "@/components/assistant/PageContext";
+import { useAssistantContext, useAssistantVisuals } from "@/components/assistant/PageContext";
+import { useReading } from "@/components/assistant/useReading";
 import {
   CHART_EXTRA,
   CHART_PLACES,
   CHART_READING,
   CHART_TOPICS,
   type ChapterId,
-  writtenChapters,
 } from "@/lib/assistant/explain";
 import { chartContext, chartExtrasContext, chartReadingContext } from "@/lib/assistant/pages";
 import { type Upcoming, fetchUpcomingChanges } from "@/lib/changes";
@@ -73,6 +75,8 @@ type Props = {
   /** Next steps and Remember my chart. Left out on shared pages. */
   next?: Dictionary["next"];
   remember?: Dictionary["remember"];
+  /** Only on a saved report: labels the parts kept from that day and those worked out today. */
+  savedTimes?: SavedTimes;
 };
 
 /** What each step of the reading guide lights up: houses, and a planet to pick out. */
@@ -83,7 +87,24 @@ const GUIDE_FOCUS: ((moonHouse: number) => { houses: number[]; planet?: string }
   () => ({ houses: [] }),
 ];
 
-export function HadahanResult({
+/**
+ * The result, with what the account may use on this report around all of it: the reading and the
+ * PDF ask for it too, so nothing in the page sits outside.
+ */
+export function HadahanResult(props: Props) {
+  const { lang, request, name } = props;
+  return (
+    <ReportScope
+      report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null}
+      kind="hadahan"
+      kuja={props.result.kuja?.present ?? false}
+    >
+      <HadahanResultPage {...props} />
+    </ReportScope>
+  );
+}
+
+function HadahanResultPage({
   lang,
   t,
   labels,
@@ -101,10 +122,21 @@ export function HadahanResult({
   yearly,
   next,
   remember,
+  savedTimes,
 }: Props) {
   const [mode, setMode] = useState<"rashi" | "navamsha">("rashi");
   // What the AI assistant sees: this result, with no birth details.
   useAssistantContext(chartContext(result, labels, lang, !request));
+  // The diagrams Astro may show: drawn in the browser, from what this page shows.
+  const birth = request?.date ?? date;
+  // Compared by its words: a saved report's page makes the object anew on every render.
+  const { frozen, live } = savedTimes ?? {};
+  useAssistantVisuals(
+    useMemo(
+      () => ({ kind: "chart" as const, result, labels, birth, ...(frozen && live && { saved: { frozen, live } }) }),
+      [result, labels, birth, frozen, live],
+    ),
+  );
   // What the written reading gets: the same, with every later life period and the Mars
   // check's rules. Kept stable, so each chapter is written once per visit.
   const reading = chartReadingContext(result, labels, lang, !request);
@@ -135,14 +167,26 @@ export function HadahanResult({
     const withExtras = extras ? chartExtrasContext(facts, extras) : null;
     return Object.fromEntries(CHART_EXTRA.map((id) => [id, withExtras]));
   }, [request, extras, facts]);
-  // The PDF prints the chapters read so far: the reading's, then the topic-only ones.
-  const explainWords = useExplainText();
-  const readingForPdf = () => {
-    if (!explainWords) return [];
-    const ids: ChapterId[] = [...CHART_READING, ...CHART_TOPICS.filter((id) => !CHART_READING.includes(id))];
-    const factsFor = (id: ChapterId) => (extraFacts && id in extraFacts ? (extraFacts[id] ?? null) : facts);
-    return writtenChapters(ids, lang, factsFor).map(({ id, text }) => ({ title: explainWords.chapters[id], text }));
-  };
+  // The reading's chapters, then the topic-only ones: what the chat hears about and the PDF
+  // prints (the paid PDF writes any not written yet).
+  const { forPdf, aiNotice } = useReading(
+    {
+      ids: [...CHART_READING, ...CHART_TOPICS.filter((id) => !CHART_READING.includes(id))],
+      factsFor: (id: ChapterId) => (extraFacts && id in extraFacts ? (extraFacts[id] ?? null) : facts),
+    },
+    lang,
+    "chart",
+  );
+  // The diagram under each chapter's short answer; the PDF prints the same ones.
+  const diagram = (id: ChapterId) => (
+    <ChartDiagram
+      id={id}
+      result={result}
+      labels={labels}
+      birth={request?.date ?? date}
+      saved={savedTimes && <SavedTime times={savedTimes} part="frozen" />}
+    />
+  );
   const [step, setStep] = useState<number | null>(null);
   const chart = result.chart!;
   const kuja = result.kuja!;
@@ -177,7 +221,7 @@ export function HadahanResult({
       : fill(t.guide[step], { lagna: sign(lagna.sign).name, moon: sign(moon.sign).name, house: moonHouse });
 
   return (
-    <ReportScope report={request ? { kind: "hadahan", name, birth: { ...request, lang } } : null} kind="hadahan">
+    <>
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.top}`}>
         <div className={styles.topText}>
@@ -188,7 +232,8 @@ export function HadahanResult({
           <div className={styles.actions}>
             <ReportButton
               request={{ kind: "hadahan", name, birth: { ...request, lang } }}
-              reading={readingForPdf}
+              reading={forPdf}
+                aiNotice={aiNotice}
               t={t}
             />
             {saveText && (
@@ -234,10 +279,20 @@ export function HadahanResult({
       <section className={`rise ${styles.details}`} aria-label={t.detailsUsed} data-card="details">
         <div className={styles.detailsHead}>
           <span className={styles.detailsLabel}>{t.detailsUsed}</span>
-          {onEdit && (
-            <button type="button" className={styles.editButton} onClick={onEdit}>
-              {t.edit}
-            </button>
+          {(onEdit || onAgain) && (
+            <div className={styles.detailsActions}>
+              {onEdit && (
+                <button type="button" className={styles.editButton} onClick={onEdit}>
+                  {t.edit}
+                </button>
+              )}
+              {/* Also at the end of the page: nobody should have to scroll there to start again. */}
+              {onAgain && (
+                <button type="button" className={styles.editButton} onClick={onAgain}>
+                  {t.again}
+                </button>
+              )}
+            </div>
           )}
         </div>
         {/* Each detail with its own label, so a wrong date, time or place stands out. */}
@@ -392,7 +447,7 @@ export function HadahanResult({
           </div>
         </section>
 
-        <TopicChips chapters={CHART_TOPICS} lang={lang} facts={facts} />
+        <TopicChips chapters={CHART_TOPICS} lang={lang} facts={facts} diagram={diagram} />
       </div>
 
       {(result.dasha || request) && (
@@ -407,9 +462,18 @@ export function HadahanResult({
               lang={lang}
               t={t}
               explain={<AiExplain chapters={CHART_PLACES.periods} lang={lang} facts={facts} />}
+              note={<SavedTime times={savedTimes} part="frozen" />}
             />
           )}
-          {request && <LifeRoad lang={lang} t={t} labels={labels} request={request} />}
+          {request && (
+            <LifeRoad
+              lang={lang}
+              t={t}
+              labels={labels}
+              request={request}
+              note={<SavedTime times={savedTimes} part="live" />}
+            />
+          )}
         </section>
       )}
 
@@ -418,6 +482,7 @@ export function HadahanResult({
           <h2 id="coming-title" className={`display ${styles.groupTitle}`}>
             {t.comingTitle}
           </h2>
+          <SavedTime times={savedTimes} part="live" />
           <Forecast lang={lang} t={t} labels={labels} request={request} />
           <UpcomingChanges lang={lang} t={t} request={request} />
           {yearly && <YearlyLink t={yearly} lang={lang} lagna={lagna.sign} lagnaName={sign(lagna.sign).name} />}
@@ -439,7 +504,7 @@ export function HadahanResult({
             {kuja.present && <p className="soft">{fill(t.kujaStrength, { count: kuja.strength })}</p>}
             <KujaDials kuja={kuja} labels={labels} t={t} />
             {kuja.present && (
-              <PaidOnly feature="full_detail" locked={<DetailLocked />}>
+              <PaidOnly feature="full_detail" locked={<DetailLocked lang={lang} />}>
                 <h3 className={styles.subTitle}>{t.kujaChecks}</h3>
                 <ul className={styles.checks}>
                   {kuja.cancellations.map((check) => (
@@ -485,6 +550,7 @@ export function HadahanResult({
         facts={facts}
         extra={extraFacts}
         reading="chartReading"
+        diagram={diagram}
         pdf={Boolean(request)}
       />
 
@@ -512,11 +578,11 @@ export function HadahanResult({
         >
           {/* Only on the visitor's own result, which always has its birth details. */}
           {remember && (
-            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan }} />
+            <RememberChart t={remember} saved={{ name, placeLabel: placeText ?? "", request, result: result as Hadahan, lang }} />
           )}
         </NextSteps>
       )}
     </main>
-    </ReportScope>
+    </>
   );
 }

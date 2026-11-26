@@ -1,0 +1,93 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.panel:focus {
+  outline: none;
+}
+
+.short {
+  min-height: 374px;
+}
+
+.medium {
+  min-height: 532px;
+}
+
+.long {
+  min-height: 890px;
+}
+
+.tall {
+  min-height: calc(clamp(420px, 62vh, 560px) + 400px);
+}
+
+.title {
+  font-size: 22px;
+}
+
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  color: var(--ink-soft);
+}
+
+.retry {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  cursor: pointer;
+}
+
+.shape {
+  flex: 1;
+  border-radius: 16px;
+  background: linear-gradient(90deg, var(--line-soft), var(--line), var(--line-soft));
+  background-size: 200% 100%;
+  opacity: 0.35;
+}
+
+/* globals.css also stops every animation when less motion is asked for. */
+@media (prefers-reduced-motion: no-preference) {
+  .shape {
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 20px;
+  }
+
+  .short {
+    min-height: 580px;
+  }
+
+  .medium {
+    min-height: 1330px;
+  }
+
+  .long {
+    min-height: 1400px;
+  }
+}

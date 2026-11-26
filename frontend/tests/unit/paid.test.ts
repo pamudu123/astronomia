@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { type Access, canUse, isReportChapter } from "@/lib/entitlements";
-import { cleanCode, formatPrice } from "@/lib/paid";
+import { cleanCode, formatPrice, fullReportIncludes } from "@/lib/paid";
+import type { ReportRequest } from "@/lib/report";
 import { paidCheck } from "@/lib/paidCheck";
 import en from "@/messages/en.json";
 import si from "@/messages/si.json";
@@ -14,6 +15,7 @@ const PAID: Access = {
   paid_reports: true,
   account: "google",
   price: { amount: 80_000, currency: "LKR" },
+  checkout: null,
 };
 const FREE: Access = { ...PAID, paid: false, features: [], account: null };
 
@@ -25,6 +27,12 @@ describe("canUse", () => {
 
   it("waits for the backend on a report", () => {
     expect(canUse("ai_reading", { state: "loading" })).toBe(false);
+  });
+
+  it("allows nothing paid on a report when the check failed", () => {
+    for (const feature of ["ai_reading", "ai_explain", "full_detail", "full_pdf"] as const) {
+      expect(canUse(feature, { state: "failed" })).toBe(false);
+    }
   });
 
   it("follows the backend's answer for the report", () => {
@@ -53,6 +61,26 @@ describe("prices", () => {
   it("only trims a typed code", () => {
     expect(cleanCode("  Pam udu ")).toBe("Pam udu");
     expect(cleanCode("x".repeat(300))).toHaveLength(100);
+  });
+});
+
+describe("what the full report includes", () => {
+  const birth = { date: "1995-04-19", time: "14:35", place_id: 1241622, lang: "en" as const };
+  const chart = { kind: "hadahan", name: "Nimali", birth } as ReportRequest;
+  const full = { ...birth, name: "" };
+  const star = { name: "", nakshatra: "rohini", pada: 1 };
+  const match = (bride: object, groom: object) =>
+    ({ kind: "porondam", match: { bride, groom, lang: "en" } }) as unknown as ReportRequest;
+
+  it("promises the Kuja dosha rules only on a chart that has Kuja dosha", () => {
+    expect(fullReportIncludes(chart, true)).toEqual(["reading", "explain", "kuja", "pdf", "kept"]);
+    expect(fullReportIncludes(chart, false)).toEqual(["reading", "explain", "pdf", "kept"]);
+  });
+
+  it("promises no extra detail on a match, and says what a star match is read from", () => {
+    expect(fullReportIncludes(match(full, full))).toEqual(["reading", "explain", "pdf", "kept"]);
+    expect(fullReportIncludes(match(star, star))).toEqual(["readingStars", "explain", "pdf", "kept"]);
+    expect(fullReportIncludes(match(full, star))).toContain("readingStars");
   });
 });
 
@@ -119,13 +147,25 @@ describe("Get the full report text", () => {
 
   it("has every line in both languages", () => {
     expect(keys(si.paid).sort()).toEqual(keys(en.paid).sort());
-    expect(Object.keys(en.paid.problems)).toEqual(
+    expect(keys(si.buy).sort()).toEqual(keys(en.buy).sort());
+    expect(Object.keys(en.buy.problems)).toEqual(
       expect.arrayContaining(["unknown", "ended", "wrong_report", "used_up", "account_limit", "payment_not_available"]),
     );
   });
 
+  it("invites to buy where a place is locked, with no bare note left", () => {
+    for (const text of [en, si]) expect(text.assistant.explain).not.toHaveProperty("locked");
+    expect(JSON.stringify(en)).not.toContain("Part of the full report");
+    expect(en.paid.buy).toBe("Buy this report");
+  });
+
   it("names no plans or passes, only the report", () => {
-    expect(en.assistant.explain.locked).toBe("Part of the full report");
-    expect(JSON.stringify(en.paid)).not.toMatch(/plan|pass|subscri/i);
+    expect(JSON.stringify([en.paid, en.buy])).not.toMatch(/\bplans?\b|\bpass(es)?\b|subscri/i);
+  });
+
+  it("uses no emoji", () => {
+    for (const text of [en, si]) {
+      expect(JSON.stringify([text.paid, text.buy])).not.toMatch(/\p{Extended_Pictographic}/u);
+    }
   });
 });

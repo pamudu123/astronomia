@@ -1,0 +1,305 @@
+{
+ "status": "ok",
+ "waiting_for": null,
+ "time": null,
+ "bride": {
+  "name": "",
+  "mode": "quick",
+  "nakshatra": "rohini",
+  "pada": 2,
+  "rashi": "vrishabha",
+  "lagna": null,
+  "offset_label": null,
+  "placements": null
+ },
+ "groom": {
+  "name": "",
+  "mode": "quick",
+  "nakshatra": "hasta",
+  "pada": 3,
+  "rashi": "kanya",
+  "lagna": null,
+  "offset_label": null,
+  "placements": null
+ },
+ "match": {
+  "rule_set": "porondam_si_v3",
+  "provisional": true,
+  "score": {
+   "passed": 11,
+   "total": 16
+  },
+  "hard_checks": [
+   {
+    "id": "rajju",
+    "hard": true,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_rajju": "kantha",
+     "groom_rajju": "kantha"
+    },
+    "reason": "නැකත් දෙකම අයත් වන්නේ කණ්ඨ කාණ්ඩයටයි. ඒ නිසා රජ්ජු පොරොන්දම අනුව මේ නැකත් දෙක නොගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vedha",
+    "hard": true,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_star": "rohini",
+     "groom_star": "hasta"
+    },
+    "reason": "වේධ පොරොන්දමේ නොගැළපෙන යුගල අතරට රෙහෙණ සහ හත අයත් නැහැ.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "factors": [
+   {
+    "id": "dina",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 10,
+     "remainder": 1
+    },
+    "reason": "මනාලියගේ නැකතේ සිට ගණන් කළ විට මනාලයාගේ නැකත 10 වැන්නයි. නවයෙන් බෙදූ විට ඉතිරිය 1 වන අතර එය යහපත් නොවේ.",
+    "softened_by": [
+     "rashi_and_lords_agree"
+    ],
+    "softened_text": [
+     "රාශි සහ රාශ්‍යාධිපති පොරොන්දම් ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "gana",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gana": "manushya",
+     "groom_gana": "deva"
+    },
+    "reason": "මනාලිය මනුෂ්‍ය ගණයට ද මනාලයා දේව ගණයට ද අයත් වේ. මේවා එකිනෙකට ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "mahendra",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 10
+    },
+    "reason": "මනාලියගේ නැකතේ සිට ගණන් කළ විට මනාලයාගේ නැකත 10 වැන්නයි. මහේන්ද්‍ර පොරොන්දම අනුව එය සුබ ගණනක් ලෙස සැලකෙනවා.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "stree_deergha",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 10,
+     "threshold": 13
+    },
+    "reason": "මනාලයාගේ නැකත මනාලියගේ නැකතේ සිට 10 වැන්නයි. එය 13 ට වැඩි නොවන බැවින් ඉතා ළඟය.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "yoni",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_yoni": "snake",
+     "groom_yoni": "buffalo"
+    },
+    "reason": "මනාලියගේ නැකතට අයත් සතා සර්පයා. මනාලයාගේ නැකතට අයත් සතා මී හරකා. සම්ප්‍රදාය අනුව මේ සතුන් දෙදෙනා සතුරු යුගලයක් ලෙස සැලකෙන්නේ නැහැ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 5
+    },
+    "reason": "මනාලයාගේ චන්ද්‍ර රාශිය මනාලියගේ රාශියේ සිට 5 වැන්නයි. එය යහපත්ය.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashyadhipathi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_lord": "venus",
+     "groom_lord": "mercury"
+    },
+    "reason": "මනාලියගේ රාශියේ අධිපති සිකුරු ද මනාලයාගේ රාශියේ අධිපති බුධ ද වේ. ඔවුන් සතුරන් නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vashya",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_sign": "vrishabha",
+     "groom_sign": "kanya"
+    },
+    "reason": "වෘෂභ සහ කන්‍යා යන රාශි දෙකෙන් කිසිවක් අනෙකේ බලපෑමට යටත් නොවේ.",
+    "softened_by": [
+     "rashi_and_yoni_agree"
+    ],
+    "softened_text": [
+     "රාශි සහ යෝනි පොරොන්දම් ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "gothra",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gothra": "marichi",
+     "groom_gothra": "angirasa"
+    },
+    "reason": "මනාලියගේ නැකත මරීචි ගෝත්‍රයට ද මනාලයාගේ නැකත අංගිරස ගෝත්‍රයට ද අයත් වේ. වෙනස් ගෝත්‍ර යහපත්ය.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "pakshi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_pakshi": "eagle",
+     "groom_pakshi": "crow"
+    },
+    "reason": "මනාලියගේ නැකතේ පක්ෂියා රාජාලියා ද මනාලයාගේ නැකතේ පක්ෂියා කපුටා ද වේ. ඔවුන් සතුරන් නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "linga",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_linga": "male",
+     "groom_linga": "female"
+    },
+    "reason": "මනාලියගේ නැකත පුරුෂ ලිංග ද මනාලයාගේ නැකත ස්ත්‍රී ලිංග ද වේ. මෙම යුගලය නොගැළපේ.",
+    "softened_by": [
+     "yoni_and_rashi_agree"
+    ],
+    "softened_text": [
+     "යෝනි සහ රාශි පොරොන්දම් ගැළපෙන නිසා සම්ප්‍රදායට අනුව මෙම දෝෂය අඩු වේ."
+    ]
+   },
+   {
+    "id": "weekday",
+    "hard": false,
+    "passed": false,
+    "checked": false,
+    "facts": {},
+    "reason": "මෙයට දෙදෙනාගේම උපන් දින අවශ්‍ය වේ. එබැවින් නැකත් පමණක් දී ගැළපීමේදී මෙය ගණනට ඇතුළත් නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "varna",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_varna": "vaishya",
+     "groom_varna": "vaishya"
+    },
+    "reason": "මනාලියගේ චන්ද්‍ර රාශිය වෛශ්‍ය වර්ණයටත් මනාලයාගේ චන්ද්‍ර රාශිය වෛශ්‍ය වර්ණයටත් අයත්. සාම්ප්‍රදායික වර්ණ වගුව අනුව මේ රාශි දෙක ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "bhuta",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_bhuta": "pathavi",
+     "groom_bhuta": "tejo"
+    },
+    "reason": "මනාලියගේ නැකත පඨවි භූතයට ද මනාලයාගේ නැකත තේජෝ භූතයට ද අයත් වේ. මේවා එකිනෙකට විරුද්ධ නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vruksha",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_vruksha": "hara",
+     "groom_vruksha": "hara"
+    },
+    "reason": "නැකත් දෙකේම වෘක්ෂ හර ගස් වේ. මෙම යුගලය නොගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "ayusha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "distance": 10
+    },
+    "reason": "නැකත් 28 ගණනයේදී නැකත් දෙක අතර පරතරය 10 කි. එය ගැළපේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "graha",
+    "hard": false,
+    "passed": false,
+    "checked": false,
+    "facts": {},
+    "reason": "මෙයට දෙදෙනාගේම උපන් විස්තර අවශ්‍ය වේ. එබැවින් නැකත් පමණක් දී ගැළපීමේදී මෙය ගණනට ඇතුළත් නොවේ.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "nadi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_nadi": "antya",
+     "groom_nadi": "aadi"
+    },
+    "reason": "මනාලිය අන්ත්‍ය නාඩියට ද මනාලයා ආදි නාඩියට ද අයත් වේ. වෙනස් නාඩි යහපත්ය.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "summary": "essential_fail",
+  "summary_text": "රජ්ජු හෝ වේධ පොරොන්දම අනුව නොගැළපීමක් පෙනෙනවා. සම්ප්‍රදායේදී මේ කරුණු දෙක මුළු ලකුණෙන් වෙන්ව සලකනවා.",
+  "same_star": false,
+  "same_star_text": null
+ },
+ "kuja": null
+}

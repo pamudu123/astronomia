@@ -12,6 +12,7 @@ import {
   type FormValues,
   fill,
   resolveTime,
+  todayIn,
 } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { useHydrated } from "@/lib/useHydrated";
@@ -38,6 +39,8 @@ type Props = {
   initial: FormValues;
   busy: boolean;
   error: string | null;
+  /** Set when the form's names could not be loaded: says so, with a way to ask again. */
+  onRetry?: () => void;
   onSubmit: (
     request: BirthRequest,
     values: FormValues,
@@ -51,9 +54,13 @@ type Props = {
   notice?: string;
   /** Called as the values change, so a page can keep a draft. */
   onChange?: (values: FormValues) => void;
+  /** False where no name is needed (the child tools). */
+  askName?: boolean;
+  /** False keeps the birth details in the browser until submitted: no time zone lookup. */
+  lookUpTime?: boolean;
 };
 
-export type FieldProblem = "latitude" | "longitude" | "timezone";
+export type FieldProblem = "date" | "latitude" | "longitude" | "timezone";
 
 /** The time zone in its standard spelling, or null when it is not a real zone name. */
 export function canonicalTimezone(name: string): string | null {
@@ -71,18 +78,41 @@ const inRange = (text: string, limit: number) => {
   return text.trim() !== "" && Number.isFinite(value) && Math.abs(value) <= limit;
 };
 
+/** Today where the birth was (or where the visitor is, until a place is given). */
+export const latestBirth = (values: FormValues, now?: Date) =>
+  todayIn(canonicalTimezone(values.manual ? values.timezone : (values.place?.timezone ?? "")) ?? undefined, now);
+
+/** A five digit year, which a date box allows, is longer than any real date. */
+const isFuture = (values: FormValues, now?: Date) =>
+  values.date.length > 10 || values.date > latestBirth(values, now);
+
 /**
- * Typed coordinates or time zone that cannot work, so each can be named beside its field
+ * A date still to come, or typed coordinates or time zone that cannot work, so each can be named beside its field
  * instead of one generic failure after submitting (QA report AST-06). Empty fields are not
  * problems here: the form asks for missing details separately.
  */
-export function fieldProblems(values: FormValues): FieldProblem[] {
-  if (!values.manual) return [];
+export function fieldProblems(values: FormValues, now?: Date): FieldProblem[] {
   const problems: FieldProblem[] = [];
+  if (values.date && isFuture(values, now)) problems.push("date");
+  if (!values.manual) return problems;
   if (values.latitude.trim() && !inRange(values.latitude, 90)) problems.push("latitude");
   if (values.longitude.trim() && !inRange(values.longitude, 180)) problems.push("longitude");
   if (values.timezone.trim() && !canonicalTimezone(values.timezone)) problems.push("timezone");
   return problems;
+}
+
+export type MissingField = "date" | "time" | "place" | "latitude" | "longitude" | "timezone";
+
+/** The details still empty, in the order the form asks for them (QA-05). */
+export function missingFields(values: FormValues): MissingField[] {
+  const missing: MissingField[] = [];
+  if (!values.date) missing.push("date");
+  if (!values.time) missing.push("time");
+  if (!values.manual) return values.place ? missing : [...missing, "place"];
+  for (const field of ["latitude", "longitude", "timezone"] as const) {
+    if (!values[field].trim()) missing.push(field);
+  }
+  return missing;
 }
 
 export function toRequest(values: FormValues): BirthRequest | null {
@@ -113,11 +143,14 @@ export function BirthForm({
   initial,
   busy,
   error,
+  onRetry,
   onSubmit,
   embedded,
   kendara,
   notice,
   onChange,
+  askName = true,
+  lookUpTime = true,
 }: Props) {
   const hydrated = useHydrated();
   // Unique per form, so two forms on a page (or a page kept alive after navigation)
@@ -131,23 +164,34 @@ export function BirthForm({
     lon: `${uid}-lon`,
     tz: `${uid}-tz`,
     tzHint: `${uid}-tz-hint`,
+    place: `${uid}-place`,
   };
   const problemIds: Record<FieldProblem, string> = {
+    date: `${uid}-date-error`,
     latitude: `${uid}-lat-error`,
     longitude: `${uid}-lon-error`,
     timezone: `${uid}-tz-error`,
   };
-  const fieldIds: Record<FieldProblem, string> = { latitude: ids.lat, longitude: ids.lon, timezone: ids.tz };
+  const fieldIds: Record<FieldProblem | MissingField, string> = {
+    date: ids.date,
+    time: ids.time,
+    place: ids.place,
+    latitude: ids.lat,
+    longitude: ids.lon,
+    timezone: ids.tz,
+  };
   const [values, setValues] = useState<FormValues>(initial);
   const [unknownTime, setUnknownTime] = useState(false);
   const [offset, setOffset] = useState<string | null>(null);
-  const [missing, setMissing] = useState(false);
-  // Field problems show once the visitor has tried to submit, then update as they type.
+  // Problems and missing details show once the visitor has tried to submit, then update as they type.
   const [checked, setChecked] = useState(false);
   const f = t.form;
 
   const request = toRequest(values);
   const problems = checked ? fieldProblems(values) : [];
+  const missing = checked ? missingFields(values) : [];
+  const invalid = (field: MissingField | FieldProblem) =>
+    missing.some((item) => item === field) || problems.some((item) => item === field) || undefined;
   const problem = (field: FieldProblem) =>
     problems.includes(field) ? (
       <p id={problemIds[field]} className={styles.fieldError}>
@@ -157,13 +201,13 @@ export function BirthForm({
   const requestKey = request ? JSON.stringify(request) : "";
 
   useEffect(() => {
-    if (!requestKey) return;
+    if (!requestKey || !lookUpTime) return;
     const controller = new AbortController();
     resolveTime(JSON.parse(requestKey) as BirthRequest, controller.signal)
       .then((result) => setOffset(result.offset_label ?? null))
       .catch(() => setOffset(null));
     return () => controller.abort();
-  }, [requestKey]);
+  }, [requestKey, lookUpTime]);
 
   useEffect(() => {
     onChange?.(values);
@@ -178,20 +222,15 @@ export function BirthForm({
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
+    if (busy || unknownTime) return;
     setChecked(true);
-    const found = fieldProblems(values);
-    if (found.length > 0) {
-      setMissing(false);
-      // Take the visitor to the first field to fix; its message is read with it.
-      document.getElementById(fieldIds[found[0]])?.focus();
-      return;
-    }
+    const wrong = [...missingFields(values), ...fieldProblems(values)];
     const ready = toRequest(values);
-    if (!ready) {
-      setMissing(true);
+    if (wrong.length > 0 || !ready) {
+      // Take the visitor to the first field to fix; its message is read with it.
+      if (wrong.length > 0) document.getElementById(fieldIds[wrong[0]])?.focus();
       return;
     }
-    setMissing(false);
     const placeText = values.manual
       ? `${values.latitude}, ${values.longitude}`
       : values.place
@@ -219,20 +258,22 @@ export function BirthForm({
           </p>
         )}
 
-        <div className={styles.field}>
-          <label htmlFor={ids.name} className={styles.label}>
-            {f.name}
-          </label>
-          <input
-            id={ids.name}
-            className={styles.input}
-            type="text"
-            autoComplete="off"
-            maxLength={60}
-            value={values.name}
-            onChange={(e) => set("name", e.target.value)}
-          />
-        </div>
+        {askName && (
+          <div className={styles.field}>
+            <label htmlFor={ids.name} className={styles.label}>
+              {f.name}
+            </label>
+            <input
+              id={ids.name}
+              className={styles.input}
+              type="text"
+              autoComplete="off"
+              maxLength={60}
+              value={values.name}
+              onChange={(e) => set("name", e.target.value)}
+            />
+          </div>
+        )}
 
         <div className={styles.pair}>
           <div className={styles.field}>
@@ -244,11 +285,14 @@ export function BirthForm({
               className={styles.input}
               type="date"
               min="1800-01-01"
-              max="2200-12-31"
+              max={hydrated ? latestBirth(values) : undefined}
               required
+              aria-invalid={invalid("date")}
+              aria-describedby={problems.includes("date") ? problemIds.date : undefined}
               value={values.date}
               onChange={(e) => set("date", e.target.value)}
             />
+            {problem("date")}
           </div>
           <div className={styles.field}>
             <label htmlFor={ids.time} className={styles.label}>
@@ -259,6 +303,7 @@ export function BirthForm({
               className={styles.input}
               type="time"
               required
+              aria-invalid={invalid("time")}
               disabled={unknownTime}
               value={values.time}
               onChange={(e) => set("time", e.target.value)}
@@ -275,9 +320,13 @@ export function BirthForm({
           {f.unknownTime}
         </label>
         {unknownTime && (
-          <p className={styles.note} role="status">
-            {f.unknownTimeNote}
-          </p>
+          <div className={styles.note} role="status" data-unknown-time>
+            <p>{embedded ? f.unknownTimeShort : f.unknownTimeNote}</p>
+            <p className={styles.noteLinks}>
+              {!embedded && <Link href={`/${lang}/porondam?mode=stars`}>{f.unknownTimeStars}</Link>}
+              <Link href={`/${lang}/kendara`}>{f.unknownTimeOld}</Link>
+            </p>
+          </div>
         )}
 
         {values.manual ? (
@@ -292,7 +341,7 @@ export function BirthForm({
                   className={styles.input}
                   inputMode="decimal"
                   placeholder="7.2906"
-                  aria-invalid={problems.includes("latitude") || undefined}
+                  aria-invalid={invalid("latitude")}
                   aria-describedby={problems.includes("latitude") ? problemIds.latitude : undefined}
                   value={values.latitude}
                   onChange={(e) => set("latitude", e.target.value)}
@@ -308,7 +357,7 @@ export function BirthForm({
                   className={styles.input}
                   inputMode="decimal"
                   placeholder="80.6336"
-                  aria-invalid={problems.includes("longitude") || undefined}
+                  aria-invalid={invalid("longitude")}
                   aria-describedby={problems.includes("longitude") ? problemIds.longitude : undefined}
                   value={values.longitude}
                   onChange={(e) => set("longitude", e.target.value)}
@@ -326,7 +375,7 @@ export function BirthForm({
                 autoComplete="off"
                 placeholder="Asia/Colombo"
                 aria-describedby={problems.includes("timezone") ? `${problemIds.timezone} ${ids.tzHint}` : ids.tzHint}
-                aria-invalid={problems.includes("timezone") || undefined}
+                aria-invalid={invalid("timezone")}
                 value={values.timezone}
                 onChange={(e) => set("timezone", e.target.value)}
               />
@@ -344,6 +393,9 @@ export function BirthForm({
             empty={f.noPlaces}
             value={values.place}
             onChange={(place) => set("place", place)}
+            chosen={f.placeChosen}
+            inputId={ids.place}
+            invalid={invalid("place")}
           />
         )}
 
@@ -360,9 +412,18 @@ export function BirthForm({
           </button>
         </div>
 
-        {(missing || error) && (
+        {(missing.length > 0 || error) && (
           <p className={styles.error} role="alert">
-            {missing ? t.errors.missing : error}
+            {missing.length > 0 ? fill(t.errors.missing, { fields: missing.map((field) => f[field]).join(", ") }) : error}
+          </p>
+        )}
+
+        {onRetry && (
+          <p className={styles.error} role="alert">
+            {t.errors.loading}{" "}
+            <button type="button" className={styles.linkButton} onClick={onRetry}>
+              {t.errors.retry}
+            </button>
           </p>
         )}
 

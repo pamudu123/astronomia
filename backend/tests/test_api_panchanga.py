@@ -144,3 +144,23 @@ def test_month_in_sinhala_and_bad_queries(client: TestClient) -> None:
     ]
     for params in bad:
         assert client.get("/v1/panchanga/month", params=params).status_code == 422, params
+
+
+APIA = {"latitude": -13.8333, "longitude": -171.7667, "timezone": "Pacific/Apia"}
+
+
+def test_a_date_the_clocks_skipped(client: TestClient) -> None:
+    body = client.get("/v1/panchanga", params={"date": "2011-12-30", **APIA}).json()  # type: ignore[dict-item]
+    assert body["skipped"] is True
+    assert "did not happen" in body["skipped_note"]
+    assert body["sunrise"] is None and body["next_sunrise"] is None and body["thithi"] == []
+    real = client.get("/v1/panchanga", params={"date": "2011-12-31", **APIA}).json()  # type: ignore[dict-item]
+    assert real["skipped"] is False and real["skipped_note"] is None
+    assert real["sunrise"]["date"] == "2011-12-31"
+
+
+def test_a_month_with_a_skipped_date(client: TestClient) -> None:
+    body = client.get("/v1/panchanga/month", params={"year": 2011, "month": 12, **APIA}).json()  # type: ignore[dict-item]
+    assert len(body["days"]) == 31
+    assert [d["date"] for d in body["days"] if d["skipped"]] == ["2011-12-30"]
+    assert all(d["sunrise"]["date"] == d["date"] for d in body["days"] if not d["skipped"])

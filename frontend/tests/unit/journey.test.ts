@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   type Journey,
   buildRoad,
+  hasToday,
   fadeAt,
   mistAt,
   periodAt,
@@ -88,5 +89,32 @@ describe("the life road", () => {
     const today = withNow.stops.find((stop) => stop.kind === "today");
     expect(today?.y).toBeCloseTo(26, 1);
     expect(today?.tone).toBe("mixed");
+  });
+
+  const at = (now: string) => buildRoad({ ...JOURNEY, now });
+  const todayIn = (built: typeof road) => withToday(built, "Today", "text").stops.find((stop) => stop.kind === "today");
+
+  it("has no today before the birth, and opens at the birth (A-06)", () => {
+    const before = at("1999-06-01T00:00:00Z");
+    expect(hasToday(before)).toBe(false);
+    expect(todayIn(before)).toBeUndefined();
+    expect(before.today).toBe(0);
+    expect(stopNear(before, before.today)?.kind).toBe("birth");
+  });
+
+  it("has a today at the birth itself, and the birth stop can still be reached", () => {
+    const born = at("2000-01-01T00:00:00Z");
+    expect(todayIn(born)?.y).toBe(0);
+    const later = withToday(at("2000-02-01T00:00:00Z"), "Today", "text");
+    expect(stopNear(later, later.today)?.kind).toBe("today");
+    expect(stopNear(later, 0)?.kind).toBe("birth");
+    expect(stopBeside(later, 0, 1)?.kind).toBe("today");
+  });
+
+  it("has no today past the last stop, and opens there", () => {
+    const after = at("2097-01-01T00:00:00Z");
+    expect(hasToday(after)).toBe(false);
+    expect(todayIn(after)).toBeUndefined();
+    expect(after.today).toBe(after.last);
   });
 });

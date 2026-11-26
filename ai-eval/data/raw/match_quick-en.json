@@ -1,0 +1,305 @@
+{
+ "status": "ok",
+ "waiting_for": null,
+ "time": null,
+ "bride": {
+  "name": "",
+  "mode": "quick",
+  "nakshatra": "rohini",
+  "pada": 2,
+  "rashi": "vrishabha",
+  "lagna": null,
+  "offset_label": null,
+  "placements": null
+ },
+ "groom": {
+  "name": "",
+  "mode": "quick",
+  "nakshatra": "hasta",
+  "pada": 3,
+  "rashi": "kanya",
+  "lagna": null,
+  "offset_label": null,
+  "placements": null
+ },
+ "match": {
+  "rule_set": "porondam_si_v3",
+  "provisional": true,
+  "score": {
+   "passed": 11,
+   "total": 16
+  },
+  "hard_checks": [
+   {
+    "id": "rajju",
+    "hard": true,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_rajju": "kantha",
+     "groom_rajju": "kantha"
+    },
+    "reason": "Both stars are in the Kantha (neck) rajju. This essential check does not pass.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vedha",
+    "hard": true,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_star": "rohini",
+     "groom_star": "hasta"
+    },
+    "reason": "Rohini and Hasta are not an afflicting pair.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "factors": [
+   {
+    "id": "dina",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 10,
+     "remainder": 1
+    },
+    "reason": "Counting from the bride's star, the groom's is number 10. The remainder after nine is 1, which is not favourable.",
+    "softened_by": [
+     "rashi_and_lords_agree"
+    ],
+    "softened_text": [
+     "Tradition softens this because the Rashi and Rashyadhipathi factors agree."
+    ]
+   },
+   {
+    "id": "gana",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gana": "manushya",
+     "groom_gana": "deva"
+    },
+    "reason": "The bride is Manushya gana and the groom is Deva gana. These go together.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "mahendra",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 10
+    },
+    "reason": "The groom's star is number 10 from the bride's, one of the counts that favour family growth.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "stree_deergha",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "count": 10,
+     "threshold": 13
+    },
+    "reason": "The groom's star is number 10 from the bride's, not more than 13, which is too close.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "yoni",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_yoni": "snake",
+     "groom_yoni": "buffalo"
+    },
+    "reason": "The animal of the bride's star is the snake and of the groom's the buffalo. They are not enemies.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "count": 5
+    },
+    "reason": "The groom's Moon sign is number 5 from the bride's, which is favourable.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "rashyadhipathi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_lord": "venus",
+     "groom_lord": "mercury"
+    },
+    "reason": "Venus rules the bride's sign and Mercury the groom's. They are not enemies.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vashya",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_sign": "vrishabha",
+     "groom_sign": "kanya"
+    },
+    "reason": "Neither sign, Vrishabha or Kanya, is under the influence of the other.",
+    "softened_by": [
+     "rashi_and_yoni_agree"
+    ],
+    "softened_text": [
+     "Tradition softens this because the Rashi and Yoni factors agree."
+    ]
+   },
+   {
+    "id": "gothra",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_gothra": "marichi",
+     "groom_gothra": "angirasa"
+    },
+    "reason": "The bride's star is of the Marichi gothra and the groom's of the Angirasa gothra. A different gothra is favourable.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "pakshi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_pakshi": "eagle",
+     "groom_pakshi": "crow"
+    },
+    "reason": "The bird of the bride's star is the eagle and of the groom's the crow. They are not enemies.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "linga",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_linga": "male",
+     "groom_linga": "female"
+    },
+    "reason": "The bride's star is male and the groom's is female. This pair does not agree.",
+    "softened_by": [
+     "yoni_and_rashi_agree"
+    ],
+    "softened_text": [
+     "Tradition softens this because the Yoni and Rashi factors agree."
+    ]
+   },
+   {
+    "id": "weekday",
+    "hard": false,
+    "passed": false,
+    "checked": false,
+    "facts": {},
+    "reason": "This needs the birth dates of both people, so it is not counted when matching by birth stars only.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "varna",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_varna": "vaishya",
+     "groom_varna": "vaishya"
+    },
+    "reason": "The bride's Moon sign is of the Vaishya varna and the groom's of the Vaishya varna. By the traditional varna table, these signs agree.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "bhuta",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_bhuta": "pathavi",
+     "groom_bhuta": "tejo"
+    },
+    "reason": "The bride's star is of earth (Pathavi) and the groom's of fire (Thejo). These elements are not opposed.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "vruksha",
+    "hard": false,
+    "passed": false,
+    "checked": true,
+    "facts": {
+     "bride_vruksha": "hara",
+     "groom_vruksha": "hara"
+    },
+    "reason": "Both stars have hard trees. This pair does not agree.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "ayusha",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "distance": 10
+    },
+    "reason": "The two stars are 10 apart in the count of 28 stars, which agrees.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "graha",
+    "hard": false,
+    "passed": false,
+    "checked": false,
+    "facts": {},
+    "reason": "This needs the birth details of both people, so it is not counted when matching by birth stars only.",
+    "softened_by": [],
+    "softened_text": []
+   },
+   {
+    "id": "nadi",
+    "hard": false,
+    "passed": true,
+    "checked": true,
+    "facts": {
+     "bride_nadi": "antya",
+     "groom_nadi": "aadi"
+    },
+    "reason": "The bride is Antya nadi and the groom is Aadi nadi. Different nadi is favourable.",
+    "softened_by": [],
+    "softened_text": []
+   }
+  ],
+  "summary": "essential_fail",
+  "summary_text": "An essential check does not pass. Tradition treats this seriously, whatever the count.",
+  "same_star": false,
+  "same_star_text": null
+ },
+ "kuja": null
+}

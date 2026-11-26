@@ -44,14 +44,22 @@
 
 .detailsHead {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
+.detailsActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .detailsLabel {
-  color: var(--ink-soft);
+  color: var(--ink);
   font-size: 13px;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -197,7 +205,7 @@
   top: 0;
   z-index: 5;
   display: flex;
-  gap: 4px;
+  gap: 8px;
   margin-block: -16px;
   padding: 10px 0;
   overflow-x: auto;
@@ -212,17 +220,19 @@
   display: inline-flex;
   align-items: center;
   padding: 0 16px;
+  border: 1px solid var(--line);
   border-radius: 999px;
-  color: var(--ink-soft);
+  background: var(--panel);
+  color: var(--ink);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .sectionLink:hover,
 .sectionLink:focus-visible {
-  background: var(--panel-raised);
-  color: var(--ink);
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 /* A part of the page: a heading and its cards, with no box of its own around them. */
@@ -233,8 +243,13 @@
   scroll-margin-top: 72px;
 }
 
-/* A part whose cards all failed to load shows nothing, not a lone heading. */
-.group:not(:has(> :not(h2))) {
+/* A part whose cards all failed to load shows nothing, not a lone heading (or its saved label). */
+.group:not(:has(> :not(h2, [data-saved-time]))) {
+  display: none;
+}
+
+/* A saved report's label says when a part was worked out, so it goes while none of it has loaded. */
+.group:not(:has(> :not(h2, [data-saved-time], [data-section]))) > [data-saved-time] {
   display: none;
 }
 

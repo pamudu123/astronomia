@@ -91,6 +91,17 @@ test("a hadahan is saved quietly as a guest, and My reports appears", async ({ p
   expect(supabase.guests()).toBe(1);
   expect(tokens[0]).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/);
 
+  // The PDF carries the same sign in: the backend prints the AI reading only in the PDF of a
+  // report this account paid for, so a download without it would always print the free one.
+  const pdfTokens: (string | null)[] = [];
+  await page.route("**/api/v1/reports/pdf", async (route) => {
+    pdfTokens.push(await route.request().headerValue("x-sidera-token"));
+    return route.fulfill({ status: 200, contentType: "application/pdf", body: "%PDF-1.7" });
+  });
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => pdfTokens.length).toBe(1);
+  expect(pdfTokens[0]).toBe(tokens[0]);
+
   // The header now offers My reports, on phones too.
   await expect(page.locator("[data-my-reports]")).toBeVisible();
   await save.getByRole("link", { name: "Open My reports" }).click();
@@ -426,6 +437,141 @@ test("a saved hadahan opens with its PDF and Share buttons", async ({ page }) =>
   });
 });
 
+/** A road a hundred years long with one period, as the engine sends it. */
+function road(birth: string, now: string) {
+  const year = Number(birth.slice(0, 4));
+  const period = {
+    lord: "venus",
+    start: birth,
+    end: `${year + 101}-01-01T00:00:00Z`,
+    house: 4,
+    theme: "home",
+    tone: "good",
+  };
+  return {
+    rule_set: "journey_v1",
+    provisional: true,
+    birth,
+    end: `${year + 100}-01-01T00:00:00Z`,
+    now,
+    periods: [{ ...period, sub: [period] }],
+    erashtaka: [],
+    erashtaka_lagna: [],
+    guru_returns: [],
+    stops: [
+      { kind: "birth", at: birth, tone: "good", lord: "venus", title: "The road begins", text: "Here." },
+      { kind: "onward", at: `${year + 96}-01-01T00:00:00Z`, tone: "good", title: "The road goes on", text: "On." },
+    ],
+    quality: { step_days: 365.25, values: Array.from({ length: 101 }, () => 0.5) },
+  };
+}
+
+const NOW = "2027-06-01T00:00:00Z";
+const BORN = "1995-04-19T09:05:00Z";
+const BIRTH = { date: "1995-04-19", time: "14:35", place_id: 1241622, latitude: null, lang: "en" };
+
+async function openSavedHadahan(page: Page, lang: "en" | "si", journey: ReturnType<typeof road> | null) {
+  // Opened months after it was saved on 15 November 2026.
+  await page.clock.setFixedTime(new Date(NOW));
+  const shared = JSON.parse(fixture(`share-hadahan-${lang}.json`));
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json(`labels-${lang}.json`)));
+  await page.route("**/api/v1/forecast", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.route("**/api/v1/changes/personal", (route) => route.fulfill(json(`changes-personal-${lang}.json`)));
+  await page.route("**/api/v1/journey", (route) =>
+    journey ? route.fulfill(reply(200, { status: "ok", time: null, journey })) : route.fulfill({ status: 503, body: "" }),
+  );
+  await page.route(`**/api/v1/saved/${ID}?lang=${lang}`, (route) =>
+    route.fulfill(
+      reply(200, {
+        ...hadahanItem,
+        request: { kind: "hadahan", name: "Nimali", birth: { ...BIRTH, lang } },
+        hadahan_result: shared.hadahan,
+        porondam_result: null,
+      }),
+    ),
+  );
+  await page.goto(`/${lang}/my/${ID}`);
+  await expect(page.locator('[data-card="lagna"]')).toBeVisible();
+}
+
+for (const [lang, saved, today] of [
+  ["en", "15 November 2026", "1 June 2027"],
+  ["si", "2026 නොවැම්බර් 15", "2027 ජූනි 1"],
+] as const) {
+  test(`a saved hadahan says what was kept and what is worked out today, in ${lang} (A-08)`, async ({ page }) => {
+    await openSavedHadahan(page, lang, road(BORN, NOW));
+    await expect(page.locator("[data-saved-note]")).toContainText("PDF");
+    const frozen = page.locator('#periods [data-saved-time="frozen"]');
+    await expect(frozen).toHaveCount(1);
+    await expect(frozen).toContainText(saved);
+    await expect(page.locator('[data-card="road"] [data-saved-time="live"]')).toContainText(today);
+    await expect(page.locator('#coming > [data-saved-time="live"]')).toContainText(today);
+  });
+}
+
+test("a saved hadahan's label goes when its live parts cannot be loaded", async ({ page }) => {
+  await openSavedHadahan(page, "en", null);
+  await page.unroute("**/api/v1/changes/personal");
+  await page.route("**/api/v1/changes/personal", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.reload();
+  await expect(page.locator('#periods [data-saved-time="frozen"]')).toBeVisible();
+  // Each part says it could not load and can be tried again, but nothing claims to be worked out.
+  await expect(page.locator("#coming").getByRole("button", { name: /^Try again/ })).toHaveCount(2);
+  await expect(page.locator('[data-saved-time="live"]:visible')).toHaveCount(0);
+});
+
+test("a birth still to come has no Today on its road (A-06)", async ({ page }) => {
+  await openSavedHadahan(page, "en", road("2030-01-01T00:00:00Z", NOW));
+  const panel = page.locator('[data-card="road"]');
+  await expect(panel.locator('[data-card="stop"]')).toContainText("The road begins");
+  await expect(panel.getByRole("button", { name: "Today", exact: true })).toHaveCount(0);
+  await expect(panel.getByText("You are here")).toHaveCount(0);
+  // The road can still be travelled, and the birth reached again, from the keyboard.
+  const map = panel.getByRole("slider");
+  await map.focus();
+  await page.keyboard.press("End");
+  await expect(panel.locator('[data-card="stop"]')).toContainText("The road goes on");
+  await page.keyboard.press("Home");
+  await expect(panel.locator('[data-card="stop"]')).toContainText("The road begins");
+});
+
+test("a birth in the past still has its Today", async ({ page }) => {
+  await openSavedHadahan(page, "en", road(BORN, NOW));
+  await expect(page.locator('[data-card="road"]').getByRole("button", { name: "Today", exact: true })).toBeVisible();
+});
+
+test("a saved match says what was kept and what is worked out today (A-08)", async ({ page }) => {
+  await page.clock.setFixedTime(new Date(NOW));
+  const shared = JSON.parse(fixture("share-porondam-en.json"));
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/porondam/timeline", (route) => route.fulfill(json("timeline-full-en.json")));
+  await page.route("**/api/v1/journey/couple", (route) =>
+    route.fulfill(
+      reply(200, {
+        status: "ok",
+        waiting_for: null,
+        time: null,
+        bride: road(BORN, NOW),
+        groom: road("1992-08-03T04:30:00Z", NOW),
+      }),
+    ),
+  );
+  await page.route(`**/api/v1/saved/${MATCH_ID}?lang=en`, (route) =>
+    route.fulfill(
+      reply(200, {
+        ...matchItem,
+        request: { kind: "porondam", match: { bride: { ...BIRTH, name: "Nimali" }, groom: { ...BIRTH, date: "1992-08-03", name: "Kasun" } } },
+        hadahan_result: null,
+        porondam_result: shared.porondam,
+      }),
+    ),
+  );
+  await page.goto(`/en/my/${MATCH_ID}`);
+  await expect(page.locator("[data-saved-note]")).toContainText("kept as they were that day");
+  await expect(page.locator('[data-card="timeline"] [data-saved-time="live"]')).toContainText("1 June 2027");
+  await expect(page.locator('[data-card="couple-road"] [data-saved-time="live"]')).toContainText("1 June 2027");
+});
+
 test("a report from another browser is not there", async ({ page }) => {
   await page.route(`**/api/v1/saved/${ID}?lang=en`, (route) =>
     route.fulfill(reply(404, { detail: "no such saved report" })),
@@ -433,4 +579,99 @@ test("a report from another browser is not there", async ({ page }) => {
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
   await page.goto(`/en/my/${ID}`);
   await expect(page.locator("[data-saved-gone]")).toContainText("This report is not here");
+});
+
+test("a Google account with no reports can delete itself", async ({ page }) => {
+  await standInSupabase(page, { google: "return" });
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/saved", (route) => route.fulfill(reply(200, { reports: [] })));
+  const deleted: (string | null)[] = [];
+  await page.route("**/api/v1/me", async (route) => {
+    deleted.push(await route.request().headerValue("x-sidera-token"));
+    return route.fulfill({ status: 204, body: "" });
+  });
+  await page.goto("/en/my");
+  await expect(page.locator("[data-saved-empty]")).toContainText("Nothing saved yet");
+  // Nobody is signed in yet: there is no account to delete.
+  await expect(page.getByRole("button", { name: "Delete my account" })).toHaveCount(0);
+  await page.locator("#sign-in").getByRole("button", { name: "Continue with Google" }).click();
+  await expect(page.locator("#sign-in")).toContainText(`Signed in with Google as ${GOOGLE_EMAIL}.`);
+
+  await page.getByRole("button", { name: "Delete my account" }).click();
+  await page.getByRole("button", { name: "Yes, delete my account" }).click();
+  await expect(page.getByText("Everything is deleted. Nothing from it is kept.")).toBeVisible();
+  expect(deleted).toHaveLength(1);
+  expect(deleted[0]).toBeTruthy();
+  await expect(page.getByRole("button", { name: "Delete my account" })).toHaveCount(0);
+});
+
+const PAID_ACCESS = {
+  paid: true,
+  features: ["ai_reading", "ai_explain", "full_detail", "full_pdf"],
+  paid_reports: true,
+  account: "google",
+  price: { amount: 80_000, currency: "LKR" },
+  checkout: null,
+};
+
+test("a failed paid check shows the free report, and asks again when told to", async ({ page }) => {
+  let down = true;
+  await page.route("**/api/v1/reports/access", (route) =>
+    down ? route.fulfill({ status: 503, body: "" }) : route.fulfill(reply(200, PAID_ACCESS)),
+  );
+  await openSavedHadahan(page, "en", null);
+  const kuja = page.locator('[data-card="kuja"]');
+  await kuja.locator("summary").click();
+  await expect(kuja.locator('[data-locked="full_detail"]')).toBeVisible();
+  const card = page.locator('[data-card="full-report"]');
+  await expect(card).toContainText("We could not check whether this is a full report");
+  // Asking again while the backend is still away changes nothing.
+  const again = card.getByRole("button", { name: "Check again" });
+  await again.click();
+  await expect(again).toBeVisible();
+
+  down = false;
+  await again.click();
+  await expect(card.getByRole("heading", { name: "This is your full report" })).toBeVisible();
+  await expect(kuja.locator('[data-locked="full_detail"]')).toHaveCount(0);
+  await expect(page.locator("[data-check-failed]")).toHaveCount(0);
+});
+
+test("the full report of a chart with Kuja dosha promises its rules", async ({ page }) => {
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill(reply(200, { ...PAID_ACCESS, paid: false, features: [] })),
+  );
+  await openSavedHadahan(page, "en", null);
+  await expect(page.locator('[data-card="full-report"] li')).toHaveText([
+    "The full AI reading, chapter by chapter",
+    "Explain buttons on every main place",
+    "Every Kuja dosha rule, in full",
+    "The full PDF with the AI reading",
+    "Kept in My reports, and on any device if you sign in",
+  ]);
+});
+
+test("the full report of a match made from full details promises no Kuja dosha rules", async ({ page }) => {
+  const shared = JSON.parse(fixture("share-porondam-en.json"));
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill(reply(200, { ...PAID_ACCESS, paid: false, features: [] })),
+  );
+  await page.route(`**/api/v1/saved/${MATCH_ID}?lang=en`, (route) =>
+    route.fulfill(
+      reply(200, {
+        ...matchItem,
+        request: { kind: "porondam", match: { bride: { ...BIRTH, name: "Nimali" }, groom: { ...BIRTH, name: "Kasun" } } },
+        hadahan_result: null,
+        porondam_result: shared.porondam,
+      }),
+    ),
+  );
+  await page.goto(`/en/my/${MATCH_ID}`);
+  await expect(page.locator('[data-card="full-report"] li')).toHaveText([
+    "The full AI reading, chapter by chapter",
+    "Explain buttons on every main place",
+    "The full PDF with the AI reading",
+    "Kept in My reports, and on any device if you sign in",
+  ]);
 });

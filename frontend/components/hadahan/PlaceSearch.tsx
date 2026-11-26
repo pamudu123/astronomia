@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 
-import { type Place, searchPlaces } from "@/lib/hadahan";
+import { type Place, fill, searchPlaces } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
 import styles from "./BirthForm.module.css";
@@ -18,6 +18,21 @@ type Props = {
   placeholder?: string;
   /** When given, a button with this label beside the box: it picks the best match, searching first if needed. */
   searchLabel?: string;
+  /** Takes the hint's place once a place is chosen: "Chosen: {place} ({timezone})". */
+  chosen?: string;
+  /** The input's id, for a form that takes the visitor to it. */
+  inputId?: string;
+  /** Marks the input as still needed. */
+  invalid?: boolean;
+};
+
+/**
+ * Kept here, not in the message files: the box is used by tools that each have their own block
+ * of text, and all of them need these.
+ */
+const SEARCH_TEXT: Record<Locale, { searching: string; failed: string; retry: string }> = {
+  en: { searching: "Searching for places…", failed: "Places could not be searched.", retry: "Try again" },
+  si: { searching: "ස්ථාන සොයමින්…", failed: "ස්ථාන සෙවීමට නොහැකි විය.", retry: "නැවත උත්සාහ කරන්න" },
 };
 
 export function placeLabel(place: Place, lang: Locale): string {
@@ -45,15 +60,32 @@ export function distinctLabels(places: Place[], lang: Locale): string[] {
   });
 }
 
-export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeholder, searchLabel }: Props) {
-  const id = useId();
+export function PlaceSearch({
+  lang,
+  label,
+  hint,
+  empty,
+  value,
+  onChange,
+  placeholder,
+  chosen,
+  inputId,
+  invalid,
+  searchLabel,
+}: Props) {
+  const ownId = useId();
+  const id = inputId ?? ownId;
   const listId = `${id}-list`;
   const [query, setQuery] = useState(value ? placeLabel(value, lang) : "");
   const [results, setResults] = useState<Place[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [searched, setSearched] = useState(false);
-  const skipNext = useRef(false);
+  const [state, setState] = useState<"idle" | "searching" | "failed">("idle");
+  const [attempt, setAttempt] = useState(0);
+  const words = SEARCH_TEXT[lang];
+  // A place that is already chosen needs no search until its text changes.
+  const skipNext = useRef(value !== null);
   const labels = distinctLabels(results, lang);
 
   useEffect(() => {
@@ -70,15 +102,21 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
           setResults(found);
           setActive(found.length ? 0 : -1);
           setSearched(true);
+          setState("idle");
           setOpen(true);
         })
-        .catch(() => undefined);
+        .catch(() => {
+          if (controller.signal.aborted) return; // a newer search took over
+          setResults([]);
+          setOpen(false);
+          setState("failed");
+        });
     }, 200);
     return () => {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query]);
+  }, [query, attempt]);
 
   /** The Search button and Enter: choose the highlighted match, or search now and choose the best one. */
   function searchNow() {
@@ -88,20 +126,23 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
     }
     const text = query.trim();
     if (text.length < 2) return;
+    setState("searching");
     searchPlaces(text)
       .then((found) => {
         setResults(found);
         setSearched(true);
+        setState("idle");
         if (found.length > 0) choose(found[0]);
         else setOpen(true);
       })
-      .catch(() => undefined);
+      .catch(() => setState("failed"));
   }
 
   function choose(place: Place) {
     skipNext.current = true;
     setQuery(placeLabel(place, lang));
     setOpen(false);
+    setState("idle");
     onChange(place);
   }
 
@@ -148,13 +189,17 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
           aria-autocomplete="list"
           aria-activedescendant={open && active >= 0 ? `${listId}-${active}` : undefined}
           aria-describedby={`${id}-hint`}
+          aria-invalid={invalid || undefined}
           autoComplete="off"
           placeholder={placeholder}
           value={query}
           onChange={(event) => {
+            const text = event.target.value.trim();
+            skipNext.current = false;
             setQuery(event.target.value);
             setSearched(false);
-            if (event.target.value.trim().length < 2) {
+            setState(text.length < 2 ? "idle" : "searching");
+            if (text.length < 2) {
               setResults([]);
               setOpen(false);
             }
@@ -176,9 +221,38 @@ export function PlaceSearch({ lang, label, hint, empty, value, onChange, placeho
           </button>
         )}
       </div>
-      <p id={`${id}-hint`} className={styles.hint}>
-        {hint}
-      </p>
+      {/* One line for the hint and the search's state, so nothing below it moves. */}
+      <div className={styles.hintRow}>
+        <p
+          id={`${id}-hint`}
+          className={value && chosen ? styles.hintDone : styles.hint}
+          aria-live="polite"
+          data-place-hint
+          data-search={state}
+        >
+          {state === "searching"
+            ? words.searching
+            : state === "failed"
+              ? words.failed
+              : value && chosen
+                ? fill(chosen, { place: placeLabel(value, lang), timezone: value.timezone })
+                : hint}
+        </p>
+        {state === "failed" && (
+          <button
+            type="button"
+            className={styles.linkButton}
+            onClick={() => {
+              setState("searching");
+              setAttempt((count) => count + 1);
+              // The button goes while it searches, so the visitor stays in the box.
+              document.getElementById(id)?.focus();
+            }}
+          >
+            {words.retry}
+          </button>
+        )}
+      </div>
       {open && results.length > 0 && (
         <ul id={listId} role="listbox" className={styles.options}>
           {results.map((place, index) => (

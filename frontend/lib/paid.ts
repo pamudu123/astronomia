@@ -2,15 +2,15 @@
  * Getting the full report (docs/18, section 4): the price, coupons and unlocking one report.
  *
  * Prices come from the backend, never from this code, so a changed page cannot change a price.
- * There is no payment provider yet: only a coupon that takes 100% off can unlock a report.
+ * A coupon that leaves nothing to pay unlocks a report here; the rest is paid for (lib/buy.ts).
  */
-import { TOKEN_HEADER, saveReport } from "./account";
+import { TOKEN_HEADER, accountCall, oneSaveAtATime } from "./account";
 import type { components } from "./api-types";
 import type { Access } from "./entitlements";
 import type { Locale } from "./i18n";
 import type { ReportRequest } from "./report";
 import { ensureOk } from "./request";
-import { accessToken, continueWithGoogle, signInConfigured } from "./supabase";
+import { accessToken, signInConfigured } from "./supabase";
 
 export type Price = components["schemas"]["PriceOut"];
 export type CouponQuote = components["schemas"]["CouponQuote"];
@@ -80,17 +80,34 @@ export async function applyCoupon(kind: ReportRequest["kind"], code: string): Pr
   return (await response.json()) as CouponQuote;
 }
 
-/** Unlocks the report with a free coupon. It is kept in My reports as paid. */
-export async function unlockReport(report: ReportRequest, code: string): Promise<Unlocked> {
-  const response = await ensureOk(
-    await fetch(`${API}/reports/unlock`, {
-      method: "POST",
-      headers: { ...JSON_HEADERS, ...(await accountHeaders()) },
-      body: JSON.stringify({ report, code }),
-    }),
-  );
-  window.dispatchEvent(new Event("sidera:saved-changed"));
-  return (await response.json()) as Unlocked;
+/**
+ * Unlocks the report with a code that leaves nothing to pay. It is kept in My reports as paid. A
+ * browser with no sign in becomes a guest first, as with the first Save: nothing is asked.
+ */
+export function unlockReport(report: ReportRequest, code: string): Promise<Unlocked> {
+  return oneSaveAtATime(async () => {
+    const response = await ensureOk(
+      await accountCall("/reports/unlock", { method: "POST", body: { report, code }, signIn: true }),
+    );
+    window.dispatchEvent(new Event("sidera:saved-changed"));
+    return (await response.json()) as Unlocked;
+  });
+}
+
+export type Include = "reading" | "readingStars" | "explain" | "kuja" | "pdf" | "kept";
+
+/**
+ * What the full report adds to this one (docs/18, section 6; docs/20, gap 3). Only a chart with
+ * Kuja dosha has rules to open on the page: a match has no extra detail there, and one made from
+ * a birth star has no chart on that side to read from.
+ */
+export function fullReportIncludes(report: ReportRequest, kujaPresent = false): Include[] {
+  if (report.kind === "hadahan") {
+    return ["reading", "explain", ...(kujaPresent ? (["kuja"] as const) : []), "pdf", "kept"];
+  }
+  const { bride, groom } = report.match;
+  const stars = "nakshatra" in bride || "nakshatra" in groom;
+  return [stars ? "readingStars" : "reading", "explain", "pdf", "kept"];
 }
 
 /** "LKR 800" or "USD 2.50": whole rupees, dollars with their cents. */
@@ -107,22 +124,4 @@ export function formatPrice(price: Price, lang: Locale): string {
 /** Codes are compared without case or spaces on the server; this only trims what is sent. */
 export function cleanCode(text: string): string {
   return text.trim().slice(0, 100);
-}
-
-/**
- * "Continue with Google" from a result, so the report can be unlocked into a Google account.
- *
- * A result page lives only in this tab, and Google sends the browser back by address. So the
- * report is saved first (as a guest, if nobody is signed in), and Google brings the visitor back
- * to it in My reports. Linking Google keeps the guest's reports (lib/supabase.ts).
- */
-export async function signInForReport(lang: Locale, report: ReportRequest): Promise<void> {
-  let back = typeof window === "undefined" ? `/${lang}/my` : window.location.pathname;
-  try {
-    const saved = await saveReport(report);
-    back = `/${lang}/my/${saved.id}`;
-  } catch {
-    // My reports is full or saving failed: come back to this page instead.
-  }
-  await continueWithGoogle(lang, back);
 }

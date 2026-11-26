@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import styles from "@/components/changes/Changes.module.css";
 import { YearlyGate } from "@/components/yearly/YearlyGate";
+import { YourYear } from "@/components/yearly/YourYear";
 import { fill } from "@/lib/hadahan";
 import { hasLocale } from "@/lib/i18n";
 import { RASHI } from "@/lib/rashi";
@@ -36,7 +37,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function YearIndexPage({ params }: Params) {
   const { lang, year } = await params;
   if (!hasLocale(lang) || !hasYear(year)) notFound();
-  const t = (await getDictionary(lang)).yearly;
+  const dict = await getDictionary(lang);
+  const t = dict.yearly;
+  const names = { planet: dict.changes.planet, house: dict.changes.house };
 
   return (
     <main id="main" className={`container ${styles.page}`}>
@@ -49,6 +52,8 @@ export default async function YearIndexPage({ params }: Params) {
             <Link href={`/${lang}/changes`}>{t.changesLink}</Link>
           </div>
         </div>
+        <YourYear t={t} names={names} hadahan={dict.hadahan} lang={lang} year={Number(year)} />
+        <h2 className={`display ${styles.sectionTitle}`}>{t.chooseLagna}</h2>
         <ul className={styles.lagnas}>
           {RASHI.map((rashi) => (
             <li key={rashi.key}>

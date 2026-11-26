@@ -1,6 +1,7 @@
 """The PDF report helpers: dates, degrees, the kendara layout and the page header text."""
 
 import datetime as dt
+import itertools
 
 import pytest
 
@@ -71,3 +72,80 @@ def test_header_and_footer_text_is_a_safe_css_string() -> None:
     assert css_string('Say "hi" \\ there') == '"Say \\"hi\\" \\\\ there"'
     assert page_counter("Page {page} of {pages}") == ('"Page " counter(page) " of " counter(pages)')
     assert page_counter("{page} / {pages}") == 'counter(page) " / " counter(pages)'
+
+
+def test_crowded_planets_fan_out_around_where_they_are() -> None:
+    from app.reports.visuals import spread
+
+    shown = spread([55, 60.5, 62.2, 200], 15)
+    assert shown[0] < shown[1] < shown[2]
+    assert round(shown[1] - shown[0], 6) == round(shown[2] - shown[1], 6) == 15
+    assert shown[3] == 200
+    # Across 0 degrees, and a full circle shared evenly.
+    assert [round(a, 1) for a in spread([350, 355, 2], 15)] == [340.7, 355.7, 10.7]
+    full = sorted(spread([90.0] * 30, 15))
+    assert all(round(b - a, 6) == 12 for a, b in itertools.pairwise(full))
+
+
+def test_the_sky_wheel_puts_each_planet_name_over_it() -> None:
+    from app.reports.visuals import Placed, sky_wheel
+
+    wheel = sky_wheel(130.0, [Placed("sun", "Su", 130.0), Placed("moon", "Mo", 310.0)])
+    tags = wheel.tags
+    assert [tag.text for tag in tags] == ["Su", "Mo"]
+    # The lagna is on the left, so a planet on it sits left of the centre, the Moon right.
+    assert tags[0].left < 50 < tags[1].left
+    assert tags[1].kind == "moon"
+    assert "<text" in wheel.svg  # only numbers go inside the SVG
+
+
+def test_the_periods_bar_marks_today_inside_it() -> None:
+    from app.reports.visuals import Span, periods_bar
+
+    birth = dt.date(2000, 1, 1)
+    spans = [
+        Span("Ketu", dt.date(1995, 1, 1), dt.date(2005, 1, 1)),
+        Span("Venus", dt.date(2005, 1, 1), dt.date(2025, 1, 1), now=True),
+    ]
+    bar = periods_bar(birth, spans, dt.date(2020, 1, 1), "Today")
+    today = [tag for tag in bar.tags if tag.kind == "now"]
+    assert len(today) == 1 and 75 < today[0].left < 85
+    gone = periods_bar(birth, spans, dt.date(2040, 1, 1), "Today")
+    assert not [tag for tag in gone.tags if tag.kind == "now"]
+
+
+def test_every_picture_a_report_prints_exists() -> None:
+    from app.engine.zodiac import RASHI
+    from app.reports import artwork
+
+    allowed = set(artwork.art_files())
+    for chapter in [*artwork.CHAPTER_ART, None, "chart.future"]:
+        assert artwork.chapter_uri(chapter) in allowed, chapter
+    for sign in RASHI:
+        assert artwork.rashi_uri(sign) in allowed, sign
+    for uri in artwork.section_uris().values():
+        assert uri in allowed, uri
+    for name in ("cover-hadahan", "cover-porondam", "back-cover"):
+        assert artwork.cover_uri(name) in allowed, name
+    assert all(path.exists() for path in artwork.art_files().values())
+
+
+def test_a_chapter_picture_is_on_the_paper_colour() -> None:
+    """Laid on the page's own colour, so no box shows around it (report.css)."""
+    from PIL import Image
+
+    from app.reports.artwork import ART_DIR
+
+    for path in sorted((ART_DIR / "chapters").glob("*.jpg")):
+        corner = Image.open(path).convert("RGB").getpixel((3, 3))
+        assert isinstance(corner, tuple)
+        assert all(abs(a - b) <= 2 for a, b in zip(corner, (251, 248, 241), strict=True)), path
+
+
+def test_the_covers_fill_the_page_to_its_edges() -> None:
+    """The browser's default page margin once moved them 2 mm to the right."""
+    from app.reports.pdf import REPORTS_DIR
+
+    css = (REPORTS_DIR / "templates" / "report.css").read_text(encoding="utf-8")
+    assert "body {\n  margin: 0;\n}" in css
+    assert "width: 210mm;\n  height: 297mm;" in css

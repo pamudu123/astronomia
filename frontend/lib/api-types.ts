@@ -591,8 +591,9 @@ export interface paths {
          * Report Pdf
          * @description A print ready A4 report, in the language of the request (`lang`).
          *
-         *     The AI reading prints only in the full PDF of a paid report (docs/18, section 6); for any
-         *     other report it is left out and the rest prints as before.
+         *     A paid report gets the full PDF: the cover, the diagrams, every Kuja dosha condition and the
+         *     AI reading (docs/18, section 6). Any other report gets the short free PDF: what the free page
+         *     shows, with no AI text.
          */
         post: operations["report_pdf_v1_reports_pdf_post"];
         delete?: never;
@@ -661,8 +662,8 @@ export interface paths {
         post?: never;
         /**
          * Delete Me
-         * @description Deletes the signed in account: every report it keeps and its chat usage, then its
-         *     Supabase sign in.
+         * @description Deletes the signed in account: every report it keeps with its AI chapters, and its
+         *     chat usage, then its Supabase sign in.
          *
          *     The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
          *     are already gone and 502 asks the page to try again.
@@ -684,7 +685,8 @@ export interface paths {
         put?: never;
         /**
          * Merge Guest
-         * @description Moves a guest's reports into the Google account that just signed in, then removes the guest.
+         * @description Moves a guest's reports, with what the guest paid for, into the Google account that just
+         *     signed in, then removes the guest.
          *
          *     For a guest who presses "Continue with Google" with a Google account that already exists
          *     (from another phone): Supabase cannot link it, so the page signs in with Google and calls
@@ -743,7 +745,8 @@ export interface paths {
         post?: never;
         /**
          * Delete Saved
-         * @description Deletes one saved report.
+         * @description Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the
+         *     same report can be opened and read again.
          */
         delete: operations["delete_saved_v1_saved__report_id__delete"];
         options?: never;
@@ -808,7 +811,7 @@ export interface paths {
         put?: never;
         /**
          * Apply Coupon
-         * @description The price of one report after a coupon. Uses nothing up: Unlock does that.
+         * @description The price of one report after a coupon. Uses nothing up: Unlock or a payment does that.
          */
         post: operations["apply_coupon_v1_coupons_apply_post"];
         delete?: never;
@@ -828,11 +831,110 @@ export interface paths {
         put?: never;
         /**
          * Unlock
-         * @description Unlocks one report with a free coupon and keeps it in My reports as paid.
+         * @description Unlocks one report with a coupon that leaves nothing to pay, and keeps it in My reports
+         *     as paid.
          *
          *     A report already paid for gives back its order and uses nothing.
          */
         post: operations["unlock_v1_reports_unlock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start
+         * @description Starts a payment for one report. Nothing is unlocked by this.
+         */
+        post: operations["start_v1_checkout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/payments/{payment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Payment Status
+         * @description Where one of this account's payments stands.
+         */
+        get: operations["payment_status_v1_payments__payment_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/payments/{payment_id}/mock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Finish Mock Payment
+         * @description The stand-in provider: ends a test payment as the buyer chose, and tells this server so
+         *     with a signed notice, as a real provider would. No money is taken.
+         */
+        post: operations["finish_mock_payment_v1_payments__payment_id__mock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/chapters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kept Chapters
+         * @description A POST, so the birth details stay out of the address.
+         */
+        post: operations["kept_chapters_v1_reports_chapters_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reports/chapters/keep": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Keep Chapter */
+        post: operations["keep_chapter_v1_reports_chapters_keep_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -938,6 +1040,8 @@ export interface components {
             /** Account */
             account: ("guest" | "google") | null;
             price: components["schemas"]["PriceOut"];
+            /** Checkout */
+            checkout: "mock" | null;
         };
         /** AllLettersResponse */
         AllLettersResponse: {
@@ -1056,6 +1160,48 @@ export interface components {
             /** Offset */
             offset: string;
             time_check: components["schemas"]["TimeCheckOut"];
+        };
+        /** BabyLettersRequest */
+        BabyLettersRequest: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Time
+             * Format: time
+             */
+            time: string;
+            /**
+             * Place Id
+             * @description A place id from /v1/places
+             */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /**
+             * Timezone
+             * @description Needed with latitude and longitude
+             */
+            timezone?: string | null;
+            /** Fold */
+            fold?: (0 | 1) | null;
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+            /** As Of */
+            as_of?: string | null;
+            /**
+             * Guardian Consent
+             * @constant
+             */
+            guardian_consent: true;
         };
         /** BabyLettersResponse */
         BabyLettersResponse: {
@@ -1210,6 +1356,28 @@ export interface components {
             /** Moves */
             moves: components["schemas"]["PlanetMoveOut"][];
         };
+        /** ChaptersIn */
+        ChaptersIn: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "en" | "si";
+        };
+        /**
+         * ChaptersOut
+         * @description Chapter texts by id. Empty when the report is not paid for or has none yet.
+         */
+        ChaptersOut: {
+            /** Chapters */
+            chapters: {
+                [key: string]: string;
+            };
+            /** Keeps */
+            keeps: boolean;
+        };
         /** ChartOut */
         ChartOut: {
             /**
@@ -1266,6 +1434,13 @@ export interface components {
             /** Passed */
             passed: boolean;
         };
+        /** Checkout */
+        Checkout: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /** Code */
+            code?: string | null;
+        };
         /** ChildOut */
         ChildOut: {
             /** Star */
@@ -1320,8 +1495,9 @@ export interface components {
          * CouponQuote
          * @description The price after a coupon, or why the coupon does not work.
          *
-         *     - free: 100% off, the report can be unlocked now
-         *     - payment_not_available: a discount, but there is no way to pay the rest yet
+         *     - free: nothing left to pay, the report can be unlocked now
+         *     - discount: something is left to pay
+         *     - payment_not_available: something is left to pay, and there is no way to pay it yet
          *     - unknown: no such code (counts as a wrong guess)
          *     - ended: switched off or past its end date
          *     - wrong_report: not for this kind of report
@@ -1330,10 +1506,11 @@ export interface components {
          */
         CouponQuote: {
             /** Result */
-            result: ("free" | "payment_not_available") | ("unknown" | "ended" | "wrong_report" | "used_up" | "account_limit");
+            result: ("free" | "discount" | "payment_not_available") | ("unknown" | "ended" | "wrong_report" | "used_up" | "account_limit");
             /** Percent Off */
             percent_off?: number | null;
             price: components["schemas"]["PriceOut"];
+            discount?: components["schemas"]["PriceOut"] | null;
             new_price?: components["schemas"]["PriceOut"] | null;
         };
         /** DashaMainOut */
@@ -1430,6 +1607,11 @@ export interface components {
             child: components["schemas"]["FullPerson"] | components["schemas"]["QuickPerson"];
             /** Birth Date */
             birth_date?: string | null;
+            /**
+             * Guardian Consent
+             * @default false
+             */
+            guardian_consent: boolean;
             /** Place Id */
             place_id?: number | null;
             /** Latitude */
@@ -1744,6 +1926,20 @@ export interface components {
             time: components["schemas"]["TimeResolveResponse"];
             journey: components["schemas"]["JourneyOut"] | null;
         };
+        /** KeepIn */
+        KeepIn: {
+            /** Report */
+            report: components["schemas"]["HadahanReport"] | components["schemas"]["PorondamReport"];
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "en" | "si";
+            /** Id */
+            id: string;
+            /** Text */
+            text: string;
+        };
         /** KendaraMatchOut */
         KendaraMatchOut: {
             start: components["schemas"]["LocalTimeOut"];
@@ -1843,6 +2039,11 @@ export interface components {
             cut_off: boolean;
             /** Note */
             note?: string | null;
+        };
+        /** KeptOut */
+        KeptOut: {
+            /** Text */
+            text: string;
         };
         /** KeyDateOut */
         KeyDateOut: {
@@ -2011,6 +2212,14 @@ export interface components {
             /** Ephemeris */
             ephemeris: string;
         };
+        /** MockResult */
+        MockResult: {
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "paid" | "failed" | "cancelled";
+        };
         /** MonthDayOut */
         MonthDayOut: {
             /**
@@ -2030,6 +2239,11 @@ export interface components {
             /** Poya */
             poya: boolean;
             full_moon: components["schemas"]["LocalTimeOut"] | null;
+            /**
+             * Skipped
+             * @default false
+             */
+            skipped: boolean;
         };
         /** MonthOut */
         MonthOut: {
@@ -2289,6 +2503,40 @@ export interface components {
             yoga: components["schemas"]["PanchangaPartOut"][];
             /** Karana */
             karana: components["schemas"]["PanchangaPartOut"][];
+            /**
+             * Skipped
+             * @default false
+             */
+            skipped: boolean;
+            /** Skipped Note */
+            skipped_note?: string | null;
+        };
+        /** PaymentOut */
+        PaymentOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "hadahan" | "porondam";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending" | "paid" | "failed" | "cancelled";
+            price: components["schemas"]["PriceOut"];
+            /** Percent Off */
+            percent_off: number;
+            amount: components["schemas"]["PriceOut"];
+            /**
+             * Provider
+             * @constant
+             */
+            provider: "mock";
         };
         /** PeriodOut */
         PeriodOut: {
@@ -2591,8 +2839,13 @@ export interface components {
         /**
          * ReadingChapter
          * @description One AI chapter as the person read it. Long enough for the longest chapter.
+         *
+         *     The id (`chart.periods`) picks the chapter's picture and diagram; a chapter without one
+         *     prints with a general picture.
          */
         ReadingChapter: {
+            /** Id */
+            id?: string | null;
             /** Title */
             title: string;
             /** Text */
@@ -4309,7 +4562,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["HadahanRequest"];
+                "application/json": components["schemas"]["BabyLettersRequest"];
             };
         };
         responses: {
@@ -4957,14 +5210,14 @@ export interface operations {
                     "application/json": components["schemas"]["Unlocked"];
                 };
             };
-            /** @description Not signed in with Google */
+            /** @description No account: the page makes a guest first */
             401: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            /** @description The coupon leaves something to pay (payment_not_available) */
+            /** @description The coupon leaves something to pay: nothing is unlocked */
             402: {
                 headers: {
                     [name: string]: unknown;
@@ -4993,6 +5246,215 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    start_v1_checkout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Checkout"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentOut"];
+                };
+            };
+            /** @description No account: the page makes a guest first */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description There is no way to pay yet (payment_not_available) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description already_paid, nothing_to_pay, free_now, or why a coupon is refused */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Too many wrong codes, or too many payments, in the last hour */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    payment_status_v1_payments__payment_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                payment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    finish_mock_payment_v1_payments__payment_id__mock_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                payment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MockResult"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentOut"];
+                };
+            };
+            /** @description No such payment, or the mock provider is off */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The payment is over */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    kept_chapters_v1_reports_chapters_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChaptersIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChaptersOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    keep_chapter_v1_reports_chapters_keep_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Chat-Key"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KeepIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeptOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };

@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from app.api.birth import resolve_birth
 from app.api.charts import EPHEMERIS, HadahanRequest
 from app.api.deps import PlacesDb
+from app.api.instant import Instant
 from app.api.porondam import FullPerson, PorondamRequest, QuickPerson, Role
 from app.api.timeresolve import TimeResolveResponse
 from app.engine.chart import Chart, compute_chart
@@ -234,7 +235,7 @@ def journey(body: HadahanRequest, db: PlacesDb) -> JourneyResponse:
 
 
 class CoupleJourneyRequest(PorondamRequest):
-    as_of: dt.datetime | None = None  # "today"; for tests
+    as_of: Instant | None = None  # "today"; for tests
 
 
 class CoupleJourneyResponse(BaseModel):

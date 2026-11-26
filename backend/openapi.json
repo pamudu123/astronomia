@@ -1384,7 +1384,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/HadahanRequest"
+                "$ref": "#/components/schemas/BabyLettersRequest"
               }
             }
           }
@@ -1658,7 +1658,7 @@
           "reports"
         ],
         "summary": "Report Pdf",
-        "description": "A print ready A4 report, in the language of the request (`lang`).\n\nThe AI reading prints only in the full PDF of a paid report (docs/18, section 6); for any\nother report it is left out and the rest prints as before.",
+        "description": "A print ready A4 report, in the language of the request (`lang`).\n\nA paid report gets the full PDF: the cover, the diagrams, every Kuja dosha condition and the\nAI reading (docs/18, section 6). Any other report gets the short free PDF: what the free page\nshows, with no AI text.",
         "operationId": "report_pdf_v1_reports_pdf_post",
         "requestBody": {
           "content": {
@@ -1891,7 +1891,7 @@
           "saved"
         ],
         "summary": "Delete Me",
-        "description": "Deletes the signed in account: every report it keeps and its chat usage, then its\nSupabase sign in.\n\nThe page signs out of this browser afterwards. If Supabase cannot be reached, the reports\nare already gone and 502 asks the page to try again.",
+        "description": "Deletes the signed in account: every report it keeps with its AI chapters, and its\nchat usage, then its Supabase sign in.\n\nThe page signs out of this browser afterwards. If Supabase cannot be reached, the reports\nare already gone and 502 asks the page to try again.",
         "operationId": "delete_me_v1_me_delete",
         "responses": {
           "204": {
@@ -1909,7 +1909,7 @@
           "saved"
         ],
         "summary": "Merge Guest",
-        "description": "Moves a guest's reports into the Google account that just signed in, then removes the guest.\n\nFor a guest who presses \"Continue with Google\" with a Google account that already exists\n(from another phone): Supabase cannot link it, so the page signs in with Google and calls\nthis with both tokens. Both are checked, so only the browser that holds the guest's sign in\ncan move its reports.",
+        "description": "Moves a guest's reports, with what the guest paid for, into the Google account that just\nsigned in, then removes the guest.\n\nFor a guest who presses \"Continue with Google\" with a Google account that already exists\n(from another phone): Supabase cannot link it, so the page signs in with Google and calls\nthis with both tokens. Both are checked, so only the browser that holds the guest's sign in\ncan move its reports.",
         "operationId": "merge_guest_v1_me_merge_guest_post",
         "requestBody": {
           "content": {
@@ -2142,7 +2142,7 @@
           "saved"
         ],
         "summary": "Delete Saved",
-        "description": "Deletes one saved report.",
+        "description": "Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the\nsame report can be opened and read again.",
         "operationId": "delete_saved_v1_saved__report_id__delete",
         "parameters": [
           {
@@ -2283,7 +2283,7 @@
           "paid"
         ],
         "summary": "Apply Coupon",
-        "description": "The price of one report after a coupon. Uses nothing up: Unlock does that.",
+        "description": "The price of one report after a coupon. Uses nothing up: Unlock or a payment does that.",
         "operationId": "apply_coupon_v1_coupons_apply_post",
         "requestBody": {
           "content": {
@@ -2325,7 +2325,7 @@
           "paid"
         ],
         "summary": "Unlock",
-        "description": "Unlocks one report with a free coupon and keeps it in My reports as paid.\n\nA report already paid for gives back its order and uses nothing.",
+        "description": "Unlocks one report with a coupon that leaves nothing to pay, and keeps it in My reports\nas paid.\n\nA report already paid for gives back its order and uses nothing.",
         "operationId": "unlock_v1_reports_unlock_post",
         "requestBody": {
           "content": {
@@ -2349,16 +2349,269 @@
             }
           },
           "401": {
-            "description": "Not signed in with Google"
+            "description": "No account: the page makes a guest first"
           },
           "402": {
-            "description": "The coupon leaves something to pay (payment_not_available)"
+            "description": "The coupon leaves something to pay: nothing is unlocked"
           },
           "409": {
             "description": "The coupon was refused: the reason, as in CouponQuote"
           },
           "429": {
             "description": "Too many wrong codes in the last hour"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/checkout": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Start",
+        "description": "Starts a payment for one report. Nothing is unlocked by this.",
+        "operationId": "start_v1_checkout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Checkout"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No account: the page makes a guest first"
+          },
+          "402": {
+            "description": "There is no way to pay yet (payment_not_available)"
+          },
+          "409": {
+            "description": "already_paid, nothing_to_pay, free_now, or why a coupon is refused"
+          },
+          "429": {
+            "description": "Too many wrong codes, or too many payments, in the last hour"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payments/{payment_id}": {
+      "get": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Payment Status",
+        "description": "Where one of this account's payments stands.",
+        "operationId": "payment_status_v1_payments__payment_id__get",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Payment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/payments/{payment_id}/mock": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Finish Mock Payment",
+        "description": "The stand-in provider: ends a test payment as the buyer chose, and tells this server so\nwith a signed notice, as a real provider would. No money is taken.",
+        "operationId": "finish_mock_payment_v1_payments__payment_id__mock_post",
+        "parameters": [
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Payment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockResult"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such payment, or the mock provider is off"
+          },
+          "409": {
+            "description": "The payment is over"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/chapters": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Kept Chapters",
+        "description": "A POST, so the birth details stay out of the address.",
+        "operationId": "kept_chapters_v1_reports_chapters_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChaptersIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChaptersOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/chapters/keep": {
+      "post": {
+        "tags": [
+          "paid"
+        ],
+        "summary": "Keep Chapter",
+        "operationId": "keep_chapter_v1_reports_chapters_keep_post",
+        "parameters": [
+          {
+            "name": "X-Chat-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Chat-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeepIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeptOut"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -2671,6 +2924,18 @@
           },
           "price": {
             "$ref": "#/components/schemas/PriceOut"
+          },
+          "checkout": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "mock"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checkout"
           }
         },
         "type": "object",
@@ -2679,7 +2944,8 @@
           "features",
           "paid_reports",
           "account",
-          "price"
+          "price",
+          "checkout"
         ],
         "title": "AccessOut",
         "description": "What the person may use on one report, and what it costs to unlock."
@@ -3043,6 +3309,118 @@
           "time_check"
         ],
         "title": "BabyChartOut"
+      },
+      "BabyLettersRequest": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "time": {
+            "type": "string",
+            "format": "time",
+            "title": "Time"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id",
+            "description": "A place id from /v1/places"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "Needed with latitude and longitude"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "guardian_consent": {
+            "type": "boolean",
+            "const": true,
+            "title": "Guardian Consent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "time",
+          "guardian_consent"
+        ],
+        "title": "BabyLettersRequest"
       },
       "BabyLettersResponse": {
         "properties": {
@@ -3514,6 +3892,64 @@
         ],
         "title": "ChangeOut"
       },
+      "ChaptersIn": {
+        "properties": {
+          "report": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Report",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "en",
+              "si"
+            ],
+            "title": "Language"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report",
+          "language"
+        ],
+        "title": "ChaptersIn"
+      },
+      "ChaptersOut": {
+        "properties": {
+          "chapters": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Chapters"
+          },
+          "keeps": {
+            "type": "boolean",
+            "title": "Keeps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chapters",
+          "keeps"
+        ],
+        "title": "ChaptersOut",
+        "description": "Chapter texts by id. Empty when the report is not paid for or has none yet."
+      },
       "ChartOut": {
         "properties": {
           "utc": {
@@ -3708,6 +4144,45 @@
         ],
         "title": "CheckOut"
       },
+      "Checkout": {
+        "properties": {
+          "report": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Report",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report"
+        ],
+        "title": "Checkout"
+      },
       "ChildOut": {
         "properties": {
           "star": {
@@ -3893,6 +4368,7 @@
                 "type": "string",
                 "enum": [
                   "free",
+                  "discount",
                   "payment_not_available"
                 ]
               },
@@ -3923,6 +4399,16 @@
           "price": {
             "$ref": "#/components/schemas/PriceOut"
           },
+          "discount": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "new_price": {
             "anyOf": [
               {
@@ -3940,7 +4426,7 @@
           "price"
         ],
         "title": "CouponQuote",
-        "description": "The price after a coupon, or why the coupon does not work.\n\n- free: 100% off, the report can be unlocked now\n- payment_not_available: a discount, but there is no way to pay the rest yet\n- unknown: no such code (counts as a wrong guess)\n- ended: switched off or past its end date\n- wrong_report: not for this kind of report\n- used_up: no uses left in total\n- account_limit: this account has used it as many times as it may"
+        "description": "The price after a coupon, or why the coupon does not work.\n\n- free: nothing left to pay, the report can be unlocked now\n- discount: something is left to pay\n- payment_not_available: something is left to pay, and there is no way to pay it yet\n- unknown: no such code (counts as a wrong guess)\n- ended: switched off or past its end date\n- wrong_report: not for this kind of report\n- used_up: no uses left in total\n- account_limit: this account has used it as many times as it may"
       },
       "DashaMainOut": {
         "properties": {
@@ -4146,6 +4632,11 @@
               }
             ],
             "title": "Birth Date"
+          },
+          "guardian_consent": {
+            "type": "boolean",
+            "title": "Guardian Consent",
+            "default": false
           },
           "place_id": {
             "anyOf": [
@@ -5087,6 +5578,56 @@
         ],
         "title": "JourneyResponse"
       },
+      "KeepIn": {
+        "properties": {
+          "report": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HadahanReport"
+              },
+              {
+                "$ref": "#/components/schemas/PorondamReport"
+              }
+            ],
+            "title": "Report",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "hadahan": "#/components/schemas/HadahanReport",
+                "porondam": "#/components/schemas/PorondamReport"
+              }
+            }
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "en",
+              "si"
+            ],
+            "title": "Language"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(chart|match)\\.[a-z]+$",
+            "title": "Id"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 8000,
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report",
+          "language",
+          "id",
+          "text"
+        ],
+        "title": "KeepIn"
+      },
       "KendaraMatchOut": {
         "properties": {
           "start": {
@@ -5406,6 +5947,19 @@
           "last"
         ],
         "title": "KendaraResponse"
+      },
+      "KeptOut": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "KeptOut"
       },
       "KeyDateOut": {
         "properties": {
@@ -5849,6 +6403,24 @@
         ],
         "title": "MethodOut"
       },
+      "MockResult": {
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "paid",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Outcome"
+          }
+        },
+        "type": "object",
+        "required": [
+          "outcome"
+        ],
+        "title": "MockResult"
+      },
       "MonthDayOut": {
         "properties": {
           "date": {
@@ -5927,6 +6499,11 @@
                 "type": "null"
               }
             ]
+          },
+          "skipped": {
+            "type": "boolean",
+            "title": "Skipped",
+            "default": false
           }
         },
         "type": "object",
@@ -6621,6 +7198,22 @@
             },
             "type": "array",
             "title": "Karana"
+          },
+          "skipped": {
+            "type": "boolean",
+            "title": "Skipped",
+            "default": false
+          },
+          "skipped_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Skipped Note"
           }
         },
         "type": "object",
@@ -6643,6 +7236,59 @@
           "karana"
         ],
         "title": "PanchangaResponse"
+      },
+      "PaymentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hadahan",
+              "porondam"
+            ],
+            "title": "Kind"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "paid",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Status"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "percent_off": {
+            "type": "integer",
+            "title": "Percent Off"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "provider": {
+            "type": "string",
+            "const": "mock",
+            "title": "Provider"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "price",
+          "percent_off",
+          "amount",
+          "provider"
+        ],
+        "title": "PaymentOut"
       },
       "PeriodOut": {
         "properties": {
@@ -7528,6 +8174,19 @@
       },
       "ReadingChapter": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^[a-z]+\\.[a-z]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "title": {
             "type": "string",
             "maxLength": 120,
@@ -7547,7 +8206,7 @@
           "text"
         ],
         "title": "ReadingChapter",
-        "description": "One AI chapter as the person read it. Long enough for the longest chapter."
+        "description": "One AI chapter as the person read it. Long enough for the longest chapter.\n\nThe id (`chart.periods`) picks the chapter's picture and diagram; a chapter without one\nprints with a general picture."
       },
       "Rename": {
         "properties": {

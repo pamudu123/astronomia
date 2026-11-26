@@ -2,7 +2,8 @@
 
 Date: 2026-11-21. Steps 3 and 4 of the build order in `docs/18-saving-paid-and-compare.md`, built in
 PR #66. Docs/18 is the plan; this file records what was built, how it is switched on, and the gaps
-that are known and left open.
+that are known and left open. Since 2026-11-23 a report is bought on its own page, without signing in
+first: see `docs/23-buying-a-report.md`, which replaces the parts here about sign in and the form.
 
 ## What was built
 
@@ -13,7 +14,7 @@ that are known and left open.
 | Endpoints: price, paid check, apply a coupon, unlock with a free coupon | `backend/app/api/paid.py` |
 | The paid check, one place | `report_access()` in `backend/app/tiers/__init__.py` |
 | Website check | `canUse()` in `frontend/lib/entitlements.ts`, `frontend/components/paid/` |
-| Sign in for a report | `signInForReport()` in `frontend/lib/paid.ts`: saves the report (as a guest if needed), then "Continue with Google" brings the visitor back to it in My reports |
+| Buying, and sign in after | `docs/23-buying-a-report.md` |
 | AI route check (chart and match chapters) | `frontend/app/api/explain/route.ts`, `frontend/lib/paidCheck.ts` |
 | The owner's coupon script | `backend/scripts/coupons.py` (create, list, on, off, void) |
 
@@ -22,6 +23,17 @@ rule) and the full PDF with the AI reading. Every unlock is an order with the pr
 coupon and amount paid (0 for a free coupon), method `coupon`. There is no payment provider, so
 only 100% coupons can unlock a report; discount coupons show their price and answer "payment not
 available yet".
+
+## The kept AI reading (2026-11-23)
+
+A paid report's AI chapters are kept on the server per order and language
+(`sidera.report_chapters`, docs/17 section 6a). The website's AI route saves each one after the AI
+has finished it, with the key only the two servers hold, so a browser cannot put words into a report.
+
+- Reopening the report shows the kept chapters; only missing ones are written.
+- The paid PDF prints every kept chapter and nothing the browser sent. Without
+  `ASTRONOMIA_CHAT_KEY` (local runs) nothing is kept and the PDF prints what the page sent.
+- Deleting the saved report or the account deletes its chapters. The order stays.
 
 ## The switch
 

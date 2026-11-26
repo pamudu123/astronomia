@@ -1,19 +1,18 @@
-import type { BabyLetters } from "@/lib/babynames";
 import type { PersonalChange, Upcoming } from "@/lib/changes";
-import type { FirstLetters } from "@/lib/firstletters";
 import type { AnyHadahan, Labels, Place } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import type { KendaraResult } from "@/lib/kendara";
 import { type Avurudu, type MonthPanchanga, type Panchanga, SRI_LANKA } from "@/lib/nakath";
 import type { Journey } from "@/lib/journey";
 import { type Person, type Porondam, type Timeline, groupFactors } from "@/lib/porondam";
-import type { Wedding } from "@/lib/wedding";
+import type { Ceremony, Wedding, WeddingChoice } from "@/lib/wedding";
 import type { PersonalYear } from "@/lib/yearly";
 
 import {
   type Placement,
   carePeriods,
   combinations,
+  combinationsNotFound,
   houseFacts,
   lifeTimeline,
   periodTimeline,
@@ -29,6 +28,9 @@ import { type Json, type PageContext, matchContext } from "./context";
  * The rule for every builder: only results the page shows. Never names, birth dates, birth
  * times or birth places. Where a result would reveal a birth date (the old horoscope search,
  * the first life period), it is left out.
+ *
+ * The child tools (baby name letters, first letters) have no builder: the assistant knows which
+ * page is open, never the child's result (docs/09).
  *
  * Pages whose address already says what they show (a month, a sign, a planet change) need no
  * builder: the assistant reads the address and looks the facts up itself.
@@ -87,6 +89,8 @@ export function chartContext(
       houses: houseFacts(chart, labels),
       // Well-known combinations (yogas) found from the placements above. Provisional rules.
       combinations: combinations(chart, labels),
+      // Looked for and not in this chart, for "do I have X yoga?".
+      combinations_not_in_this_chart: combinationsNotFound(chart, labels),
       // Current and next life periods only: the first period starts at birth.
       life_period: now
         ? {
@@ -393,6 +397,7 @@ export function dayContext(data: Panchanga, place: Place | null, language: Local
       rahu_kalaya: data.rahu_kalaya ? range(data.rahu_kalaya.start, data.rahu_kalaya.end, day) : null,
       thithi: parts(data.thithi),
       nakatha: parts(data.nakatha),
+      ...(data.skipped ? { skipped_date: data.skipped_note ?? null } : {}),
       provisional: data.provisional,
     },
   };
@@ -459,29 +464,7 @@ export function avuruduContext(data: Avurudu, language: Locale): PageContext {
   };
 }
 
-/** Baby name letters for a birth: the star and its letters. No birth details. */
-export function babyLettersContext(result: BabyLetters, language: Locale): PageContext {
-  const { chart, letter } = result;
-  if (!chart || !letter) return { page: "baby_names", language };
-  return {
-    page: "baby_names_result",
-    language,
-    result: {
-      birth_star: chart.star_name,
-      birth_star_id: chart.star,
-      pada: chart.pada,
-      moon_sign: chart.rashi_name,
-      rising_sign: chart.lagna_name,
-      first_letter: letter.letter,
-      sounds_like: letter.latin,
-      also_used: letter.others,
-      nearby_letters: result.nearby.map((n) => n.letter),
-      provisional: result.provisional,
-    },
-  };
-}
-
-function suggestions(items: FirstLetters["suggestions"] | Wedding["ceremonies"][number]["suggestions"]): Json {
+function suggestions(items: Wedding["ceremonies"][number]["suggestions"]): Json {
   return items.slice(0, 8).map((s) => ({
     date: s.date_text,
     weekday: s.weekday,
@@ -493,20 +476,30 @@ function suggestions(items: FirstLetters["suggestions"] | Wedding["ceremonies"][
   }));
 }
 
-/** First letters ceremony: the times found. The child's birth details stay out. */
-export function firstLettersContext(result: FirstLetters, language: Locale): PageContext {
+/**
+ * The wedding dates search while it runs, or after it failed, so Astro does not ask the person
+ * to start a search that is already running (QA-03). Dates still on screen from before it, or
+ * in the page's other language, go along.
+ */
+export function weddingSearchContext(
+  status: "running" | "failed",
+  choice: WeddingChoice,
+  shown: Wedding | null,
+  language: Locale,
+  names: Record<Ceremony, string>,
+): PageContext {
   return {
-    page: "first_letters_result",
+    page: "wedding_dates_search",
     language,
     result: {
-      child_birth_star: result.child?.star_name ?? null,
-      searched_from: result.first ?? null,
-      searched_to: result.last ?? null,
-      place: result.place?.name ?? null,
-      times_found: suggestions(result.suggestions),
-      none_found: result.none_text ?? null,
-      age_note: result.age_note ?? null,
-      provisional: result.provisional ?? null,
+      status:
+        status === "running"
+          ? "this search is running now on the page; its dates appear there when it finishes"
+          : "the last search did not finish; the person can press search again",
+      months_ahead: choice.months,
+      ceremonies: choice.ceremonies.map((ceremony) => names[ceremony]),
+      place: choice.place?.name ?? "Colombo (used when no place is chosen)",
+      ...(shown ? { dates_already_on_screen: weddingContext(shown, language).result ?? null } : {}),
     },
   };
 }

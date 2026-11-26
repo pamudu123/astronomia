@@ -188,7 +188,7 @@ The traditional calendar is **lunisolar**: months of 29 or 30 days follow the Mo
 
 - Each month falls about 11 days earlier in the Gregorian calendar than the year before, then jumps about 19 days later after an adhi month. So Vesak poya can be anywhere from late April to late May.
 - The **New Year is solar**: it follows the Sun's entry into Aries, so it stays at 13 or 14 April, within the month of Bak.
-- Example dates: 2026 Il Poya 24 November, Unduvap 23 December; 2027 Duruthu 22 January. Always check the official calendar.
+- Which poya it is: November 2026 is Il, December 2026 is Unduvap, January 2027 is Duruthu (official calendar). These notes hold no poya dates on purpose: the date comes from the page or the tool.
 
 Sources:
 - https://www.serenecolombo.org/?p=7813
@@ -215,6 +215,45 @@ Sources:
 - https://rithihi.com/?p=1504273 (a saree retailer's blog; low authority)
 - https://www.sjp.ac.lk/blog/poruwa-ceremony-sinhalese-buddhists-marriage-ritual/
 - https://dekhopanchang.com/en/nivas-shool
+
+---
+
+## 7. What a day's star and lunar day are linked to
+
+Indian almanacs sort the 27 stars into seven groups by the kind of work each suits, and the lunar days into five. The groups are the same in every source read; the work listed for each differs a little, so only what they share is kept here. Sri Lankan newspapers call the day's star the most important of the five parts, but no Sri Lankan source giving these groups was found (**unverified for Sri Lankan practice**). Say "traditionally linked to", never "good day" or "bad day". Harsh uses some sources list for the fierce and sharp stars are left out on purpose: never mention them.
+
+| Group | Stars | Traditionally linked to |
+|---|---|---|
+| Fixed | Rohini රෙහෙණ, Uttara Phalguni උත්තරපල්, Uttara Ashadha උත්තරසල, Uttara Bhadrapada උත්තරපුටුප | Things meant to last: building, foundations, planting and farming, starting a job |
+| Movable | Punarvasu පුනාවස, Swati සා, Shravana සුවණ, Dhanishta දෙනට, Shatabhisha සියාවස | Things that move: journeys, vehicles, going from one place to another |
+| Light | Ashwini අස්විද, Pushya පුෂ, Hasta හත | Quick, practical starts: opening a shop, buying and selling, beginning studies, crafts |
+| Gentle | Mrigashira මුවසිරස, Chitra සිත, Anuradha අනුර, Revati රේවතී | Pleasant, friendly things: music and arts, clothes, making friends |
+| Mixed | Krittika කැති, Vishakha විසා | Ordinary work, and work with fire or heat (cooking, metalwork) |
+| Fierce | Bharani බෙරණ, Magha මා, Purva Phalguni පුවපල්, Purva Ashadha පුවසල, Purva Bhadrapada පුවපුටුප | Firm, forceful work (clearing, breaking down); gentle new starts are often kept for another day |
+| Sharp | Ardra අද, Ashlesha අස්ලිය, Jyeshtha දෙට, Mula මුල | Work that needs focus and discipline; gentle new starts are often kept for another day |
+
+The lunar days run in five groups, the same in the bright half (පුර) and the dark half (අව):
+
+| Group | Lunar days | Traditionally linked to |
+|---|---|---|
+| Nanda | 1, 6, 11 | Joy: gatherings, celebrations |
+| Bhadra | 2, 7, 12 | Steady, useful starts: work, business, building. Some sources prefer finishing to starting on the 2nd |
+| Jaya | 3, 8, 13 | Effort against a challenge: exams, competitions |
+| Rikta ("empty") | 4, 9, 14 | Clearing away and finishing: paying debts, tidying up. New ventures are usually put off |
+| Purna ("full") | 5, 10, 15 | Completing things, learning, giving |
+
+On the new-moon day (අමාවක) new ventures are usually put off; it is kept for honouring ancestors and for quiet observance. The full-moon day is poya (section 4).
+
+**For a wedding** this table doesn't apply. A Sri Lankan newspaper lists 11 stars as fit for marriage, and the site's wedding search has its own rules: point to that search.
+
+When the star and the lunar day point different ways, say both plainly. Astrologers weigh all five parts and the person's own chart.
+
+Sources:
+- https://www.drikpanchang.com/panchang/nakshatra/classification/nakshatra-seven-category.html
+- https://jyotishkalpadrum.blogspot.com/2015/12/classification-of-tithi.html (a blog; low authority)
+- https://dekhopanchang.com/learn/tithis
+- https://www.dailymirror.lk/jyotisha-news/Fine-tuning-of-Muhurta-Science-of-timing-for-success/312-198118
+- https://dailymirror.lk/jyotisha-news/Significance-of-Nakshatra-in-Marriage-Muhurta/312-206681
 
 ---
 

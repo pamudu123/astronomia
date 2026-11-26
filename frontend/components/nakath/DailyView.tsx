@@ -6,18 +6,22 @@ import { useEffect, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
-import { type Place, fill } from "@/lib/hadahan";
+import type { Place } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { failureText } from "@/lib/request";
-import { COLOMBO, type Panchanga, type PanchangaPart, type PlaceChoice, fetchPanchanga } from "@/lib/nakath";
+import { COLOMBO, type Panchanga, type PanchangaPart, type PlaceChoice, fetchPanchanga, hasNakathDay } from "@/lib/nakath";
 
 import { AiExplain } from "@/components/assistant/Explain";
 import { useAssistantContext } from "@/components/assistant/PageContext";
 import { PAGE_PLACES } from "@/lib/assistant/explain";
 import { dayContext } from "@/lib/assistant/pages";
 
+import dayStyles from "./Day.module.css";
+import { DayAnswer } from "./DayAnswer";
+import { DayForYou } from "./DayForYou";
+import { DayMoon } from "./DayMoon";
 import styles from "./Nakath.module.css";
-import { localDate } from "./format";
+import { partTime } from "./format";
 
 type Props = {
   lang: Locale;
@@ -33,19 +37,18 @@ const shift = (day: string, days: number) => {
   return moment.toISOString().slice(0, 10);
 };
 
-function Parts({ title, parts, day, t, lang }: { title: string; parts: PanchangaPart[]; day: string; t: Dictionary["nakath"]; lang: Locale }) {
-  const at = (time: PanchangaPart["end"], one: string, other: string) =>
-    time.date === day ? fill(one, { time: time.clock }) : fill(other, { time: time.clock, date: localDate(time, lang) });
+type PartsProps = { title: string; means: string; parts: PanchangaPart[]; day: string; t: Dictionary["nakath"]; lang: Locale };
+
+function Parts({ title, means, parts, day, t, lang }: PartsProps) {
   return (
     <div className={styles.item} data-part={title}>
       <p className={styles.itemName}>{title}</p>
+      <p className={styles.small}>{means}</p>
       <ul className={styles.parts}>
         {parts.map((part, index) => (
           <li key={`${part.key}-${index}`}>
             <strong>{part.name}</strong>
-            <span className={styles.small}>
-              {index === 0 ? at(part.end, t.until, t.untilDay) : `${at(part.start, t.from, t.fromDay)}`}
-            </span>
+            <span className={styles.small}>{partTime(part, index, day, t, lang)}</span>
           </li>
         ))}
       </ul>
@@ -84,40 +87,14 @@ export function DailyView({ lang, t, day, initial }: Props) {
 
   return (
     <>
-      <form
-        className={`${styles.controls} ${styles.dayForm}`}
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (picked) router.push(`/${lang}/nakath/${picked}`);
-        }}
-      >
-        <div className={styles.control}>
-          <PlaceSearch
-            lang={lang}
-            label={t.place}
-            hint={t.placeHint}
-            empty={t.noPlaces}
-            value={place}
-            onChange={setPlace}
-            placeholder={shown?.place.name ?? undefined}
-          />
-        </div>
-        <div className={styles.control}>
-          <label htmlFor="nakath-date" className={styles.label}>
-            {t.date}
-          </label>
-          <input id="nakath-date" className={styles.input} type="date" value={picked} onChange={(e) => setPicked(e.target.value)} />
-        </div>
-        <button type="submit" className="btn btn-outline lift">
-          {t.show}
-        </button>
-      </form>
-
       <div className={`pill-links ${styles.links}`}>
-        <Link href={`/${lang}/nakath/${shift(day, -1)}`} data-back>
-          {t.previous}
-        </Link>
-        <Link href={`/${lang}/nakath/${shift(day, 1)}`}>{t.next}</Link>
+        {hasNakathDay(shift(day, -1)) && (
+          <Link href={`/${lang}/nakath/${shift(day, -1)}`} data-back>
+            {t.previous}
+          </Link>
+        )}
+        {hasNakathDay(shift(day, 1)) && <Link href={`/${lang}/nakath/${shift(day, 1)}`}>{t.next}</Link>}
+        <a href="#another-day">{t.day.another}</a>
       </div>
 
       {!shown ? (
@@ -141,39 +118,78 @@ export function DailyView({ lang, t, day, initial }: Props) {
           <p className={styles.meta} data-card="where">
             {[shown.place.name, shown.weekday_name, shown.timezone_note].filter(Boolean).join(" · ")}
           </p>
-          <AiExplain chapters={PAGE_PLACES.day} lang={lang} facts={context} />
-          <div className={styles.day}>
-            <div className={styles.item} data-card="sun">
-              <p className={styles.itemName}>
-                {t.sunrise} · {t.sunset}
-              </p>
-              {shown.sunrise && shown.sunset ? (
-                <p className={styles.clock}>
-                  {shown.sunrise.clock} · {shown.sunset.clock}
-                </p>
-              ) : (
-                <p>{t.noSunrise}</p>
-              )}
-            </div>
-            <div className={styles.itemKey} data-card="rahu">
-              <p className={styles.itemName}>{t.rahu}</p>
-              {shown.rahu_kalaya ? (
-                <p className={styles.clock}>
-                  {shown.rahu_kalaya.start.clock} · {shown.rahu_kalaya.end.clock}
-                </p>
-              ) : (
-                <p>{t.noSunrise}</p>
-              )}
-              <p className={styles.small}>{t.rahuNote}</p>
-            </div>
-            <Parts title={t.thithi} parts={shown.thithi} day={day} t={t} lang={lang} />
-            <Parts title={t.nakatha} parts={shown.nakatha} day={day} t={t} lang={lang} />
-            <Parts title={t.yoga} parts={shown.yoga} day={day} t={t} lang={lang} />
-            <Parts title={t.karana} parts={shown.karana} day={day} t={t} lang={lang} />
-          </div>
-          <p className={styles.note}>{t.provisional}</p>
+          {shown.skipped ? (
+            <p className={styles.note} role="status" data-skipped>
+              {shown.skipped_note}
+            </p>
+          ) : (
+            <DayDetails lang={lang} t={t} day={day} shown={shown} facts={context} />
+          )}
         </>
       )}
+
+      <form
+        id="another-day"
+        aria-label={t.day.another}
+        className={`${styles.controls} ${styles.dayForm}`}
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (picked) router.push(`/${lang}/nakath/${picked}`);
+        }}
+      >
+        <div className={styles.control}>
+          <PlaceSearch
+            lang={lang}
+            label={t.place}
+            hint={t.placeHint}
+            empty={t.noPlaces}
+            value={place}
+            onChange={setPlace}
+            placeholder={shown?.place.name ?? undefined}
+          />
+        </div>
+        <div className={styles.control}>
+          <label htmlFor="nakath-date" className={styles.label}>
+            {t.date}
+          </label>
+          <input id="nakath-date" className={styles.input} type="date" value={picked} onChange={(e) => setPicked(e.target.value)} />
+        </div>
+        <div className={styles.action}>
+          <span className={styles.label} aria-hidden="true">
+            &nbsp;
+          </span>
+          <button type="submit" className="btn btn-outline lift">
+            {t.show}
+          </button>
+        </div>
+      </form>
+    </>
+  );
+}
+
+type DetailsProps = Pick<Props, "lang" | "t" | "day"> & {
+  shown: Panchanga;
+  facts: ReturnType<typeof dayContext> | null;
+};
+
+function DayDetails({ lang, t, day, shown, facts }: DetailsProps) {
+  return (
+    <>
+      <DayAnswer t={t} shown={shown} />
+      <div className={dayStyles.pair}>
+        <DayForYou lang={lang} t={t} day={day} shown={shown} />
+        <DayMoon t={t} shown={shown} />
+      </div>
+      <AiExplain chapters={PAGE_PLACES.day} lang={lang} facts={facts} />
+      <details className={dayStyles.almanac} data-card="almanac">
+        <summary>{t.day.almanac}</summary>
+        <div className={`${styles.day} ${dayStyles.almanacBody}`}>
+          {(["thithi", "nakatha", "yoga", "karana"] as const).map((part) => (
+            <Parts key={part} title={t[part]} means={t.day.means[part]} parts={shown[part]} day={day} t={t} lang={lang} />
+          ))}
+        </div>
+      </details>
+      <p className={styles.note}>{t.provisional}</p>
     </>
   );
 }

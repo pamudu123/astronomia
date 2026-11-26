@@ -1,0 +1,461 @@
+{
+ "run": {
+  "label": "repeats/haiku-4",
+  "when_utc": "2026-11-25T09:46:04+00:00",
+  "model": "anthropic/claude-haiku-5.5",
+  "thinking": "none",
+  "cases": "ground_truth",
+  "questions": "a6d2c5e4a4",
+  "prompts": "not recorded"
+ },
+ "answers": {
+  "chart-rising": {
+   "turns": [
+    {
+     "question": "What is my rising sign?",
+     "text": "Your rising sign is Mesha (Aries). It is the sign that was rising on the eastern horizon at your birth, and it shapes how you come across and how you start things. The planet that looks after it, Mars, sits in Kataka in your chart, in the part linked to home and inner peace, where it is weaker and works harder, so the drive of Mesha tends to show most when you are settling something close to home.",
+     "first_event": 0.03,
+     "first_text": 1.22,
+     "final_text_start": 1.22,
+     "error": null,
+     "total": 1.94,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.86,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17631,
+        "cached": 17627,
+        "output": 128,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17631,
+      "cached": 17627,
+      "output": 128
+     }
+    }
+   ]
+  },
+  "chart-abroad": {
+   "turns": [
+    {
+     "question": "Is there any chance for me to go abroad?",
+     "text": "I'll read the personal reading guidance first, since this is a question about your own chart.\n\nNow the reference notes for the travel and abroad chapter.\n\nGoing abroad is a question for your chart's 12th house (living far from home), 9th house (long journeys) and 3rd house (short trips), along with Rahu. Let me look at those placements.\n\nYour chart has a few clear pointers:\n\n**🌍 Rahu, the pull of far places**\n\nRahu sits in your 7th house (partnership), not in the 12th or 9th, so it doesn't point straight at living abroad. Traditionally, though, Rahu brings a strong appetite for new places and wider horizons, and in a partnership area it can show up as a partner from a different background or a life that looks beyond the familiar.\n\n**✈️ The 12th house: Jupiter as its ruler**\n\nYour 12th house (spending, rest, living away from home) is in Meena, ruled by Jupiter. Jupiter sits in your 8th house, in Vrischika, and it is a helpful planet to have there. Traditionally, Jupiter placed like this in the 8th connects the \"far away\" area with growth, research and study, which often shows up as settling somewhere new for learning or work.\n\n**🧭 The 9th house: long journeys**\n\nYour 9th house (long journeys, higher learning, the father) is in Dhanu, ruled by Jupiter as well. Its sign has a natural love of travel and learning. Because Jupiter is strong in your chart, the 9th house tends to bring its results through teachers, study and wider experience.\n\n**🧳 Your running period**\n\nYou are in a Mercury life period until 2038, currently in the Venus sub-period until 19 September 2027. Mercury rules travel for study and work, trade and networks. After that, the Sun sub-period runs from 19 September 2027 to 26 July 2028, a stretch for recognition and authority. Traditionally, Mercury periods suit study, trade and skills that can be used anywhere, so this is a stretch where a course or work offer from overseas could fit well.\n\n**Balance**\n\nYour chart shows a real pull toward wider horizons, but the Venus sub-period currently running leans toward home, comfort and relationships, so a move abroad is more likely to come in a planned way. Good preparation helps: a skill or qualification that travels, savings for the first months, and a clear plan for family ties.\n\nThis is a tendency, not a promise: a visa, a job offer or a move depends on many things outside any chart. Would you like me to look at how the coming sub-periods change the picture, or your 12th and 9th houses in more detail?",
+     "first_event": 0.03,
+     "first_text": 1.06,
+     "final_text_start": 4.53,
+     "error": null,
+     "total": 8.98,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/reference.md\", \"limit\": 1000}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.38,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17637,
+        "cached": 17633,
+        "output": 113,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.55,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 25352,
+        "cached": 25350,
+        "output": 105,
+        "reasoning": 0
+       },
+       {
+        "seconds": 5.91,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 47072,
+        "cached": 25350,
+        "output": 802,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 90061,
+      "cached": 68333,
+      "output": 1020
+     }
+    }
+   ]
+  },
+  "chart-yoga": {
+   "turns": [
+    {
+     "question": "Do I have Gajakesari yoga?",
+     "text": "No. Gajakesari yoga is not in your chart. It is one of the combinations the site checked for and did not find, so I can't read it as part of your reading.\n\nWhat your chart does have is a set of other combinations that are listed on your page. Among them, the one closest to a \"lifting\" theme is the Raja yoga: Saturn, who looks after your career and income houses (the 10th and 11th), sits together with the Sun in your 11th house, the part of the chart linked to income, gains and networks. Astrologers often read that as a steady rise through effort and good connections, rather than a sudden jump.\n\nIf you'd like, I can go through your Raja yoga and Dhana yoga in more detail, or look at how your current life period (Mercury, running until 2038) shapes work and money.",
+     "first_event": 0.04,
+     "first_text": 1.14,
+     "final_text_start": 1.14,
+     "error": null,
+     "total": 2.67,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.57,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 17637,
+        "cached": 17633,
+        "output": 247,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 17637,
+      "cached": 17633,
+      "output": 247
+     }
+    }
+   ]
+  },
+  "rahu-la": {
+   "turns": [
+    {
+     "question": "I'm in Los Angeles. When is Rahu kalaya today here?",
+     "text": "I'll look up Los Angeles's time zone first, since its date may differ from Sri Lanka's.\n\nLos Angeles is currently on 2026-11-24, so I'll look up that date there.\n\nIn Los Angeles today, Rahu kalaya is from **14:10 to 15:26** (Tuesday, 24 November 2026, local time). It has already passed, since it is now 20:30 there.\n\nThis is the daily window people traditionally avoid starting new things in. Tomorrow's window, 25 November, is a different time, so I can look that up if you'd like to plan something for then.",
+     "first_event": 0.04,
+     "first_text": 1.13,
+     "final_text_start": 4.53,
+     "error": null,
+     "total": 5.14,
+     "tool_calls": [
+      {
+       "name": "find_place",
+       "args": "{\"query\": \"Los Angeles\"}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\": \"America/Los_Angeles\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-11-24\", \"place_id\": 5368361}"
+      }
+     ],
+     "messages_written": 3,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.46,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14245,
+        "cached": 14241,
+        "output": 140,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.45,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14763,
+        "cached": 14241,
+        "output": 110,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.79,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 15492,
+        "cached": 14761,
+        "output": 125,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/Los_Angeles'}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "find_place",
+        "input": "{'query': 'Los Angeles'}",
+        "seconds": 0.28,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 5368361}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 44500,
+      "cached": 43243,
+      "output": 375
+     }
+    }
+   ]
+  },
+  "next-poya": {
+   "turns": [
+    {
+     "question": "When is the next poya day and what is it about?",
+     "text": "The App Context shows the December 2026 almanac for Colombo, and it lists one poya day that month: 24 December 2026. Today is 25 November, so that is the next one, about four weeks away.\n\nPoya days fall on the full moon, and in Sri Lanka they are important Buddhist observance days. Many people go to the temple, keep the eight precepts, and take part in sil observances, and the day is a public holiday. The calculated full moon date is shown here, but the official Sri Lankan calendar can differ by a day, so check it closer to the time for religious observances.\n\nIf you'd like, I can look at the rest of the month's almanac, or the day's times for 24 December.",
+     "first_event": 0.03,
+     "first_text": 1.2,
+     "final_text_start": 1.2,
+     "error": null,
+     "total": 2.46,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.38,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14358,
+        "cached": 14354,
+        "output": 215,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 14358,
+      "cached": 14354,
+      "output": 215
+     }
+    }
+   ]
+  },
+  "compare-days": {
+   "turns": [
+    {
+     "question": "I want to open my new shop at 9 in the morning. Which of 7, 8 or 9 December is best in Colombo?",
+     "text": "I'll check the almanac for each of the three days at 9 in the morning in Colombo.\n\n**Colombo (place****_id 1248991), Wednesday 2026-12-09**\n\n- **Sunrise:** 06:10 | **Sunset:** 17:54\n- **Rahu kalaya:** 12:02Colombo, Monday 2026-12-07 (place_id 1Colombo, Tuesday 2026-12-08, to 13:30\n- **At 09:00:** not inside Rahu kalaya.\n-248991)** **Thithi at 09\n\n**:00:** Bright At 09:00:**1 (Pratipada\n- Rahu kalaya: **inside** (07:37 to 09:05)\n- Thithi: Dark at 09:00 (provisional)**\n\n- **At 09:00:** Not inside Rahu kalaya.\n- **Thithi:** New moon (), running from 06:22 to 08:47 on 2026-12-10.\n- **Nakatha at 09:00:** Jyeshtha, running from 18:17 on 14 (Chaturdashi), running until 04:13 on 2026-12-08\n- Nakatha: Vishakha, running until 15:49\n- Yoga: SAmavaka), running 04:14 to 06:22 on 2026-12-09.\n- **Nakatha:** Anuradha, running 15:49 on 2026-12-07 to 18:17.ukarma (from 08:07 is the next yoga; at 09:00 the yoga is Sukarma, which runs until 08:07 on 2026-12-08) Jyeshtha follows from 18:17 to 21:01 on 2026- 2026-12-08 to 21:01. The next nakatha, Mula, runs from 21:01 to 23:59 on 2026-12-10.\n- **Yoga at 09:00:** Shula, running from 08:40 to 09:25 on 2026-12-10. The previous yoga, Dhriti, ran from\n- Karana: Vishti, running until 15:16\n\n**Day times:**\n- Sunrise: 06:09\n- Sunset: 17:54\n\n**Other details12-09.\n- **Yoga at 09:00:** Dhriti, running 08:07 to 08:40 on 2026-12-09. (Sukarma ran 07:47 on 2026-12-07 to 08:07, so it 08:07 on 2026-12-08 to 08:41.\n- **Karana at 09:00:** Kimstugh:na, running from 06:22**\n- Rahu k to 19:33. Thealaya for previous karana, Naga the day: 07:37 to 09:05\n- Nakatha Anuradha beg is not active at 09:00.)\n- **Karana at 09:00:** Chatushpada, running 04:14 to 17:16. Naga follows from 17:16 to 06:22 on 2026-, ran from 17:16 on 2026-12-08 to 06:22.\n\n**Provisional:** the tool marks these resultsins at 15:49 and runs until 18:17  as provisional.on 2026-12-08\n\nThe tool marks these results as **provisional**. Times are in Asia/\n\n12-09.\n- **Sunrise:** 06:10\n- **Sunset:** 17:54\n- **Rahu kalaya for the day:** 14:58Colombo (UTC+05:30). to 16:26\n\nAll times are Asia/Colombo (UTC+05:30).\n\nFor a 9 am opening in Colombo, **Tuesday 8 December** looks best of the three.\n\n- **Monday 7 December:** 9 am falls inside Rahu kalaya (07:37 to 09:05), the daily time traditionally avoided for starting things. The nakatha at that hour is Vishakha. I would not choose this day.\n- **Tuesday 8 December:** 9 am is clear of Rahu kalaya, which for this day runs 14:58 to 16:26. The nakatha is Anuradha until 18:17, and the day is a new moon (Amavaka), which many people treat as a quieter day for beginnings, so this is a matter of tradition rather than a strict rule.\n- **Wednesday 9 December:** 9 am is also clear of Rahu kalaya (12:02 to 13:30), and the nakatha is Jyeshtha. It is a good second choice if the 8th does not suit your shop's paperwork or your family's schedule.\n\nThese times are marked provisional by the almanac, so it is worth confirming with your astrologer or family elder before fixing the hour. Would you like me to look at the monthly calendar for December, or check your own birth chart to see whether one of these days suits you personally?",
+     "first_event": 0.04,
+     "first_text": 1.08,
+     "final_text_start": 8.09,
+     "error": null,
+     "total": 10.15,
+     "tool_calls": [
+      {
+       "name": "task",
+       "args": "{\"subagent_type\": \"date-checker\", \"description\": \"Look up the almanac for Colombo (place_id 1248991) on 2026-12-07 using good_times_for_day with time \\\"09:00\\\". Return: the at_time result for 09:00 (whether 09:00 falls in Rahu kalaya, the thithi, nakatha, yoga and karana at that time and their end times), plus sunrise and sunset. Research only, do not write advice.\"}"
+      },
+      {
+       "name": "task",
+       "args": "{\"subagent_type\": \"date-checker\", \"description\": \"Look up the almanac for Colombo (place_id 1248991) on 2026-12-08 using good_times_for_day with time \\\"09:00\\\". Return: the at_time result for 09:00 (whether 09:00 falls in Rahu kalaya, the thithi, nakatha, yoga and karana at that time and their end times), plus sunrise and sunset. Research only, do not write advice.\"}"
+      },
+      {
+       "name": "task",
+       "args": "{\"subagent_type\": \"date-checker\", \"description\": \"Look up the almanac for Colombo (place_id 1248991) on 2026-12-09 using good_times_for_day with time \\\"09:00\\\". Return: the at_time result for 09:00 (whether 09:00 falls in Rahu kalaya, the thithi, nakatha, yoga and karana at that time and their end times), plus sunrise and sunset. Research only, do not write advice.\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2026-12-09\", \"place_id\": 1248991, \"time\": \"09:00\"}"
+      }
+     ],
+     "messages_written": 4,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.96,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 14260,
+        "cached": 14256,
+        "output": 611,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.25,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 2876,
+        "cached": 0,
+        "output": 104,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.34,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 2876,
+        "cached": 0,
+        "output": 104,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.38,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 2876,
+        "cached": 0,
+        "output": 104,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.22,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 3550,
+        "cached": 2872,
+        "output": 391,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.18,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 3573,
+        "cached": 2872,
+        "output": 333,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.24,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 3467,
+        "cached": 2872,
+        "output": 376,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.08,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 16040,
+        "cached": 14256,
+        "output": 399,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "task",
+        "input": "{'subagent_type': 'date-checker', 'description': 'Look up the almanac for Colombo (place_id 1248991) on 2026-12-09 using good_times_for_day with time \"09:00\". Return: the at_time result for 09:00 (whether 09:00 falls in Rahu kalaya, the thithi, nakatha, yoga and karana at that time and their end tim",
+        "seconds": 3.81,
+        "status": "success"
+       },
+       {
+        "name": "task",
+        "input": "{'subagent_type': 'date-checker', 'description': 'Look up the almanac for Colombo (place_id 1248991) on 2026-12-08 using good_times_for_day with time \"09:00\". Return: the at_time result for 09:00 (whether 09:00 falls in Rahu kalaya, the thithi, nakatha, yoga and karana at that time and their end tim",
+        "seconds": 3.95,
+        "status": "success"
+       },
+       {
+        "name": "task",
+        "input": "{'subagent_type': 'date-checker', 'description': 'Look up the almanac for Colombo (place_id 1248991) on 2026-12-07 using good_times_for_day with time \"09:00\". Return: the at_time result for 09:00 (whether 09:00 falls in Rahu kalaya, the thithi, nakatha, yoga and karana at that time and their end tim",
+        "seconds": 3.86,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-09', 'place_id': 1248991, 'time': '09:00'}",
+        "seconds": 0.27,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-07', 'place_id': 1248991, 'time': '09:00'}",
+        "seconds": 0.27,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-12-08', 'place_id': 1248991, 'time': '09:00'}",
+        "seconds": 0.27,
+        "status": "success"
+       }
+      ],
+      "input": 49518,
+      "cached": 37128,
+      "output": 2422
+     }
+    }
+   ]
+  },
+  "singlish-porondam": {
+   "turns": [
+    {
+     "question": "mage porondam hari da? rajju eka fail kiyala thiyenawa, baya wenna ona da?",
+     "text": "Ov, mage porondam eka hondada kiyala balanna, pahasu wenna ona. Rajju eka fail weyi kiyanne eka wadagatama wadi wenna ona, ehema nisa mama ehi detail gannawa.\n\nRajju kiyanne oyage star dekai (Rohini, pada 2) saha mage star ekai (Hasta, pada 3) dekama Kantha (neck) rajju ekata wadena nisa. Meka parampara vishesha check ekak, ehi \"dekama oba dekgema sukhaya\" kiyana eka gena balana eka. Ehe nisa, score eka (11 out of 16) hondayi kiyala penuth, parampara anuwa meka ganan wenama ganna baya ekak.\n\nMekata ahanna tiyena deyak:\n- Rajju fail weema, ehema nam bayawenna epa kiyala meka laa kara.\n- Vedha check eka pass wela, ehe kiyanne ekata ekata wadinna ba kiyala ekak nathi wenawa.\n- Nakath, Stree Deergha, Vashya, Linga, Vruksha wage factor kiidhakma agree wenne nehe. Ehenam, Rashi, Rashyadhipathi, Yoni, Gana, Mahendra wage factor wadi nisa, parampara anuwa softened wenawa.\n\nAhanna tiyenne: \"fail\" kiyanne parampara ekata wadi weyi, madi dhayakayakma nehe. Kasi thiyanawanam mage ekata wada, nisa poruwa karanna kalin, wedding nakath saha pirisi pudgalaya gena balanna. Oyata meka pilibanda thawa prashnayak thiyenawanam, match page eke porondam astrologer ekkak ekka kathaa karanna hondai.",
+     "first_event": 0.08,
+     "first_text": 1.19,
+     "final_text_start": 1.19,
+     "error": null,
+     "total": 7.08,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 6.92,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 16441,
+        "cached": 16437,
+        "output": 625,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 16441,
+      "cached": 16437,
+      "output": 625
+     }
+    }
+   ]
+  },
+  "ch-chart-care-en": {
+   "turns": [
+    {
+     "text": "**🌿 Looking after yourself**\n\nYour chart draws the most attention to your home life, your health and your daily routines. None of this is a warning. It simply shows where looking after yourself early tends to pay off.\n\nThe reason is Mars, your strongest source of energy. It sits in your home area (the 4th house) and is weaker here, so it works harder. Mars is also linked to heat, inflammation and haste, so keep routine check-ups and do not ignore small signs.\n\n**🩺 Health and daily habits**\n\nThe area of health and daily routine (the 6th house) is ruled by Mercury, which sits in your gains area (the 11th house). Mercury governs nerves, sleep and overthinking, so the stretch here is mostly mental strain.\n\nSteady routines, enough rest and a check-up now and then tend to keep small problems from growing. If anything is worrying you, please see a doctor.\n\n**🏠 Home, family and peace of mind**\n\nYour home area is steadied by the Moon, which sits in the 3rd house. Peace at home matters more to you than most things. Keep a calm base at home and talk early with your mother and family when small disagreements come up.\n\n**💰 Money and spending**\n\nThe 2nd house, which holds savings, is ruled by Venus, placed in your career area (the 10th house). Your 8th house, which covers shared money and sudden change, is ruled by Mars. Mars is also the planet that looks after your home, so money and home can pull on each other. Keep a clear savings plan and avoid large, sudden commitments without advice. A qualified financial adviser can help with real decisions.\n\n**🤝 Partnership and marriage**\n\nRahu sits in your partnership area (the 7th house), and Mars looks at it. Tradition reads this as an area that asks for patience and open talk. Couples who talk early and avoid letting small things build up usually handle this well. A human astrologer can read both charts together.\n\n**🧭 What helps**\n\nBuild steady routines, keep your home a peaceful base, save with a clear plan and talk openly with the people closest to you. This is a chart that rewards preparation.",
+     "first_text": 1.14,
+     "error": null,
+     "tool_calls": [],
+     "total": 4.82,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 4.81,
+        "model": "anthropic/claude-haiku-5.5anthropic/claude-haiku-5.5",
+        "input": 43665,
+        "cached": 43661,
+        "output": 681,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 43665,
+      "cached": 43661,
+      "output": 681
+     }
+    }
+   ]
+  }
+ }
+}

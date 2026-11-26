@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/tools">): 
   };
 }
 
-type Need = "nothing" | "birth" | "two" | "paper";
+type Need = "nothing" | "birth" | "two" | "stars" | "paper";
 type Item = "hadahan" | "forecast" | "changes" | "porondam" | "stars" | "kuja" | "wedding" | "babyNames" | "firstLetters" | "nakath" | "litha" | "avurudu" | "kendara";
 type Group = "chart" | "marriage" | "baby" | "daily" | "newYear" | "old";
 
@@ -42,7 +42,8 @@ const GROUPS: { id: Group; tools: { item: Item; path: string; need: Need }[] }[]
       { item: "porondam", path: "/porondam", need: "two" },
       { item: "stars", path: "/porondam/stars", need: "nothing" },
       { item: "kuja", path: "/hadahan", need: "birth" },
-      { item: "wedding", path: "/porondam", need: "two" },
+      // The search is under a match, which then opens on it.
+      { item: "wedding", path: "/porondam?for=wedding", need: "stars" },
     ],
   },
   {
@@ -66,7 +67,8 @@ const GROUPS: { id: Group; tools: { item: Item; path: string; need: Need }[] }[]
 export default async function ToolsPage({ params }: PageProps<"/[lang]/tools">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const t = (await getDictionary(lang)).allTools;
+  const dict = await getDictionary(lang);
+  const t = dict.allTools;
 
   return (
     <main id="main" className={`container ${styles.page}`}>
@@ -115,6 +117,24 @@ export default async function ToolsPage({ params }: PageProps<"/[lang]/tools">) 
           </div>
         </section>
       ))}
+
+      <section className={styles.group} aria-labelledby="about-title">
+        <h2 id="about-title" className={`display ${styles.groupTitle}`}>
+          {t.aboutTitle}
+        </h2>
+        <div className={styles.grid}>
+          <Link href={`/${lang}/why-sidera`} className={`lift ${styles.card}`} data-about="why-sidera">
+            <span className={styles.cardTop}>
+              <span className={`display ${styles.cardName}`}>{dict.nav.how}</span>
+            </span>
+            <span className="soft">{t.aboutWhy}</span>
+            <span className={styles.cardFoot}>
+              <span />
+              <ArrowRight size={16} />
+            </span>
+          </Link>
+        </div>
+      </section>
 
       <section className={styles.hidden} aria-labelledby="hidden-title">
         <h2 id="hidden-title" className={`display ${styles.groupTitle}`}>

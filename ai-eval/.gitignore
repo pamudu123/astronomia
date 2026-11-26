@@ -1,0 +1,3 @@
+data/.vite/
+results/**/agent.log
+__pycache__/

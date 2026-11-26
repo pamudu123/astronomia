@@ -1,0 +1,969 @@
+{
+ "status": "ok",
+ "time": {
+  "status": "ok",
+  "timezone": "Asia/Colombo",
+  "local": "1992-08-20T22:10:00",
+  "utc": "1992-08-20T16:40:00Z",
+  "offset_seconds": 19800,
+  "offset_label": "UTC+05:30",
+  "abbreviation": "+0530",
+  "clock_change": null,
+  "options": []
+ },
+ "chart": {
+  "utc": "1992-08-20T16:40:00Z",
+  "latitude": 7.2906,
+  "longitude": 80.6336,
+  "lagna": {
+   "longitude": 10.045703,
+   "sign": "mesha",
+   "sign_number": 1,
+   "degree": 10.045703,
+   "nakshatra": "ashwini",
+   "nakshatra_number": 1,
+   "pada": 4,
+   "navamsha_sign": "kataka"
+  },
+  "moon": {
+   "longitude": 25.451585,
+   "sign": "mesha",
+   "sign_number": 1,
+   "degree": 25.451585,
+   "nakshatra": "bharani",
+   "nakshatra_number": 2,
+   "pada": 4,
+   "navamsha_sign": "vrischika"
+  },
+  "planets": [
+   {
+    "longitude": 124.133156,
+    "sign": "simha",
+    "sign_number": 5,
+    "degree": 4.133156,
+    "nakshatra": "magha",
+    "nakshatra_number": 10,
+    "pada": 2,
+    "navamsha_sign": "vrishabha",
+    "body": "sun",
+    "house": 5,
+    "navamsha_house": 11,
+    "retrograde": false
+   },
+   {
+    "longitude": 25.451585,
+    "sign": "mesha",
+    "sign_number": 1,
+    "degree": 25.451585,
+    "nakshatra": "bharani",
+    "nakshatra_number": 2,
+    "pada": 4,
+    "navamsha_sign": "vrischika",
+    "body": "moon",
+    "house": 1,
+    "navamsha_house": 5,
+    "retrograde": false
+   },
+   {
+    "longitude": 52.630324,
+    "sign": "vrishabha",
+    "sign_number": 2,
+    "degree": 22.630324,
+    "nakshatra": "rohini",
+    "nakshatra_number": 4,
+    "pada": 4,
+    "navamsha_sign": "kataka",
+    "body": "mars",
+    "house": 2,
+    "navamsha_house": 1,
+    "retrograde": false
+   },
+   {
+    "longitude": 105.663041,
+    "sign": "kataka",
+    "sign_number": 4,
+    "degree": 15.663041,
+    "nakshatra": "pushya",
+    "nakshatra_number": 8,
+    "pada": 4,
+    "navamsha_sign": "vrischika",
+    "body": "mercury",
+    "house": 4,
+    "navamsha_house": 5,
+    "retrograde": false
+   },
+   {
+    "longitude": 145.345071,
+    "sign": "simha",
+    "sign_number": 5,
+    "degree": 25.345071,
+    "nakshatra": "purva_phalguni",
+    "nakshatra_number": 11,
+    "pada": 4,
+    "navamsha_sign": "vrischika",
+    "body": "jupiter",
+    "house": 5,
+    "navamsha_house": 5,
+    "retrograde": false
+   },
+   {
+    "longitude": 142.750293,
+    "sign": "simha",
+    "sign_number": 5,
+    "degree": 22.750293,
+    "nakshatra": "purva_phalguni",
+    "nakshatra_number": 11,
+    "pada": 3,
+    "navamsha_sign": "tula",
+    "body": "venus",
+    "house": 5,
+    "navamsha_house": 4,
+    "retrograde": false
+   },
+   {
+    "longitude": 290.398114,
+    "sign": "makara",
+    "sign_number": 10,
+    "degree": 20.398114,
+    "nakshatra": "shravana",
+    "nakshatra_number": 22,
+    "pada": 4,
+    "navamsha_sign": "kataka",
+    "body": "saturn",
+    "house": 10,
+    "navamsha_house": 1,
+    "retrograde": true
+   },
+   {
+    "longitude": 243.725642,
+    "sign": "dhanu",
+    "sign_number": 9,
+    "degree": 3.725642,
+    "nakshatra": "mula",
+    "nakshatra_number": 19,
+    "pada": 2,
+    "navamsha_sign": "vrishabha",
+    "body": "rahu",
+    "house": 9,
+    "navamsha_house": 11,
+    "retrograde": true
+   },
+   {
+    "longitude": 63.725642,
+    "sign": "mithuna",
+    "sign_number": 3,
+    "degree": 3.725642,
+    "nakshatra": "mrigashira",
+    "nakshatra_number": 5,
+    "pada": 4,
+    "navamsha_sign": "vrischika",
+    "body": "ketu",
+    "house": 3,
+    "navamsha_house": 5,
+    "retrograde": true
+   }
+  ],
+  "time_check": {
+   "stable": true,
+   "lagna_changes_within": null,
+   "nakshatra_changes_within": null,
+   "pada_changes_within": null,
+   "reason": "The lagna and birth star stay the same even if the time is off by 15 minutes."
+  },
+  "method": {
+   "ayanamsa": "lahiri",
+   "ayanamsa_degrees": 23.754223,
+   "node": "mean",
+   "house_system": "whole_sign",
+   "ephemeris": "moshier"
+  }
+ },
+ "dasha": {
+  "system": "vimshottari",
+  "balance_years": 1.8226,
+  "periods": [
+   {
+    "lord": "venus",
+    "start": "1974-06-17T09:46:52.811349Z",
+    "end": "1994-06-17T09:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "venus",
+      "start": "1974-06-17T09:46:52.811349Z",
+      "end": "1977-10-16T21:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "1977-10-16T21:46:52.811349Z",
+      "end": "1978-10-17T03:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "1978-10-17T03:46:52.811349Z",
+      "end": "1980-06-16T21:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "1980-06-16T21:46:52.811349Z",
+      "end": "1981-08-17T00:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "1981-08-17T00:46:52.811349Z",
+      "end": "1984-08-16T18:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "1984-08-16T18:46:52.811349Z",
+      "end": "1987-04-17T18:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "1987-04-17T18:46:52.811349Z",
+      "end": "1990-06-17T09:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "1990-06-17T09:46:52.811349Z",
+      "end": "1993-04-17T06:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "ketu",
+      "start": "1993-04-17T06:46:52.811349Z",
+      "end": "1994-06-17T09:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "sun",
+    "start": "1994-06-17T09:46:52.811349Z",
+    "end": "2000-06-16T21:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "sun",
+      "start": "1994-06-17T09:46:52.811349Z",
+      "end": "1994-10-04T23:34:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "1994-10-04T23:34:52.811349Z",
+      "end": "1995-04-05T14:34:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "1995-04-05T14:34:52.811349Z",
+      "end": "1995-08-11T10:40:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "1995-08-11T10:40:52.811349Z",
+      "end": "1996-07-05T04:04:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "1996-07-05T04:04:52.811349Z",
+      "end": "1997-04-23T08:52:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "1997-04-23T08:52:52.811349Z",
+      "end": "1998-04-05T08:34:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "1998-04-05T08:34:52.811349Z",
+      "end": "1999-02-09T19:40:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "ketu",
+      "start": "1999-02-09T19:40:52.811349Z",
+      "end": "1999-06-17T15:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "1999-06-17T15:46:52.811349Z",
+      "end": "2000-06-16T21:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "moon",
+    "start": "2000-06-16T21:46:52.811349Z",
+    "end": "2010-06-17T09:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "moon",
+      "start": "2000-06-16T21:46:52.811349Z",
+      "end": "2001-04-17T06:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "2001-04-17T06:46:52.811349Z",
+      "end": "2001-11-16T08:16:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "2001-11-16T08:16:52.811349Z",
+      "end": "2003-05-18T05:16:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "2003-05-18T05:16:52.811349Z",
+      "end": "2004-09-16T05:16:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "2004-09-16T05:16:52.811349Z",
+      "end": "2006-04-17T12:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "2006-04-17T12:46:52.811349Z",
+      "end": "2007-09-16T23:16:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "ketu",
+      "start": "2007-09-16T23:16:52.811349Z",
+      "end": "2008-04-17T00:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "2008-04-17T00:46:52.811349Z",
+      "end": "2009-12-16T18:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "2009-12-16T18:46:52.811349Z",
+      "end": "2010-06-17T09:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "mars",
+    "start": "2010-06-17T09:46:52.811349Z",
+    "end": "2017-06-17T03:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "mars",
+      "start": "2010-06-17T09:46:52.811349Z",
+      "end": "2010-11-13T13:13:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "2010-11-13T13:13:52.811349Z",
+      "end": "2011-12-02T01:31:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "2011-12-02T01:31:52.811349Z",
+      "end": "2012-11-06T23:07:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "2012-11-06T23:07:52.811349Z",
+      "end": "2013-12-16T18:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "2013-12-16T18:46:52.811349Z",
+      "end": "2014-12-13T23:43:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "ketu",
+      "start": "2014-12-13T23:43:52.811349Z",
+      "end": "2015-05-12T03:10:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "2015-05-12T03:10:52.811349Z",
+      "end": "2016-07-11T06:10:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "2016-07-11T06:10:52.811349Z",
+      "end": "2016-11-16T02:16:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "2016-11-16T02:16:52.811349Z",
+      "end": "2017-06-17T03:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "rahu",
+    "start": "2017-06-17T03:46:52.811349Z",
+    "end": "2035-06-17T15:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "rahu",
+      "start": "2017-06-17T03:46:52.811349Z",
+      "end": "2020-02-28T07:58:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "2020-02-28T07:58:52.811349Z",
+      "end": "2022-07-23T22:22:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "2022-07-23T22:22:52.811349Z",
+      "end": "2025-05-29T21:28:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "2025-05-29T21:28:52.811349Z",
+      "end": "2027-12-17T06:46:52.811349Z",
+      "sub": [
+       {
+        "lord": "mercury",
+        "start": "2025-05-29T21:28:52.811349Z",
+        "end": "2025-10-08T20:11:55.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "ketu",
+        "start": "2025-10-08T20:11:55.811349Z",
+        "end": "2025-12-02T04:08:28.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "venus",
+        "start": "2025-12-02T04:08:28.811349Z",
+        "end": "2026-05-06T09:41:28.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "sun",
+        "start": "2026-05-06T09:41:28.811349Z",
+        "end": "2026-06-21T23:21:22.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "moon",
+        "start": "2026-06-21T23:21:22.811349Z",
+        "end": "2026-09-07T14:07:52.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "mars",
+        "start": "2026-09-07T14:07:52.811349Z",
+        "end": "2026-10-31T22:04:25.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "rahu",
+        "start": "2026-10-31T22:04:25.811349Z",
+        "end": "2027-03-20T15:04:07.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "jupiter",
+        "start": "2027-03-20T15:04:07.811349Z",
+        "end": "2027-07-22T19:30:31.811349Z",
+        "sub": []
+       },
+       {
+        "lord": "saturn",
+        "start": "2027-07-22T19:30:31.811349Z",
+        "end": "2027-12-17T06:46:52.811349Z",
+        "sub": []
+       }
+      ]
+     },
+     {
+      "lord": "ketu",
+      "start": "2027-12-17T06:46:52.811349Z",
+      "end": "2029-01-03T19:04:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "2029-01-03T19:04:52.811349Z",
+      "end": "2032-01-04T13:04:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "2032-01-04T13:04:52.811349Z",
+      "end": "2032-11-28T06:28:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "2032-11-28T06:28:52.811349Z",
+      "end": "2034-05-30T03:28:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "2034-05-30T03:28:52.811349Z",
+      "end": "2035-06-17T15:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "jupiter",
+    "start": "2035-06-17T15:46:52.811349Z",
+    "end": "2051-06-17T15:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "jupiter",
+      "start": "2035-06-17T15:46:52.811349Z",
+      "end": "2037-08-04T20:34:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "2037-08-04T20:34:52.811349Z",
+      "end": "2040-02-16T03:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "2040-02-16T03:46:52.811349Z",
+      "end": "2042-05-24T01:22:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "ketu",
+      "start": "2042-05-24T01:22:52.811349Z",
+      "end": "2043-04-29T22:58:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "2043-04-29T22:58:52.811349Z",
+      "end": "2045-12-28T22:58:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "2045-12-28T22:58:52.811349Z",
+      "end": "2046-10-17T03:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "2046-10-17T03:46:52.811349Z",
+      "end": "2048-02-16T03:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "2048-02-16T03:46:52.811349Z",
+      "end": "2049-01-22T01:22:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "2049-01-22T01:22:52.811349Z",
+      "end": "2051-06-17T15:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "saturn",
+    "start": "2051-06-17T15:46:52.811349Z",
+    "end": "2070-06-17T09:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "saturn",
+      "start": "2051-06-17T15:46:52.811349Z",
+      "end": "2054-06-20T10:49:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "2054-06-20T10:49:52.811349Z",
+      "end": "2057-02-27T13:58:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "ketu",
+      "start": "2057-02-27T13:58:52.811349Z",
+      "end": "2058-04-08T09:37:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "2058-04-08T09:37:52.811349Z",
+      "end": "2061-06-08T00:37:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "2061-06-08T00:37:52.811349Z",
+      "end": "2062-05-21T00:19:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "2062-05-21T00:19:52.811349Z",
+      "end": "2063-12-20T07:49:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "2063-12-20T07:49:52.811349Z",
+      "end": "2065-01-28T03:28:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "2065-01-28T03:28:52.811349Z",
+      "end": "2067-12-05T02:34:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "2067-12-05T02:34:52.811349Z",
+      "end": "2070-06-17T09:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "mercury",
+    "start": "2070-06-17T09:46:52.811349Z",
+    "end": "2087-06-17T15:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "mercury",
+      "start": "2070-06-17T09:46:52.811349Z",
+      "end": "2072-11-13T01:13:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "ketu",
+      "start": "2072-11-13T01:13:52.811349Z",
+      "end": "2073-11-10T06:10:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "2073-11-10T06:10:52.811349Z",
+      "end": "2076-09-10T03:10:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "2076-09-10T03:10:52.811349Z",
+      "end": "2077-07-17T14:16:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "2077-07-17T14:16:52.811349Z",
+      "end": "2078-12-17T00:46:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "2078-12-17T00:46:52.811349Z",
+      "end": "2079-12-14T05:43:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "2079-12-14T05:43:52.811349Z",
+      "end": "2082-07-02T15:01:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "2082-07-02T15:01:52.811349Z",
+      "end": "2084-10-07T12:37:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "2084-10-07T12:37:52.811349Z",
+      "end": "2087-06-17T15:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   },
+   {
+    "lord": "ketu",
+    "start": "2087-06-17T15:46:52.811349Z",
+    "end": "2094-06-17T09:46:52.811349Z",
+    "sub": [
+     {
+      "lord": "ketu",
+      "start": "2087-06-17T15:46:52.811349Z",
+      "end": "2087-11-13T19:13:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "venus",
+      "start": "2087-11-13T19:13:52.811349Z",
+      "end": "2089-01-12T22:13:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "sun",
+      "start": "2089-01-12T22:13:52.811349Z",
+      "end": "2089-05-20T18:19:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "moon",
+      "start": "2089-05-20T18:19:52.811349Z",
+      "end": "2089-12-19T19:49:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mars",
+      "start": "2089-12-19T19:49:52.811349Z",
+      "end": "2090-05-17T23:16:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "rahu",
+      "start": "2090-05-17T23:16:52.811349Z",
+      "end": "2091-06-05T11:34:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "jupiter",
+      "start": "2091-06-05T11:34:52.811349Z",
+      "end": "2092-05-11T09:10:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "saturn",
+      "start": "2092-05-11T09:10:52.811349Z",
+      "end": "2093-06-20T04:49:52.811349Z",
+      "sub": []
+     },
+     {
+      "lord": "mercury",
+      "start": "2093-06-20T04:49:52.811349Z",
+      "end": "2094-06-17T09:46:52.811349Z",
+      "sub": []
+     }
+    ]
+   }
+  ],
+  "current": [
+   {
+    "lord": "rahu",
+    "start": "2017-06-17T03:46:52.811349Z",
+    "end": "2035-06-17T15:46:52.811349Z",
+    "sub": []
+   },
+   {
+    "lord": "mercury",
+    "start": "2025-05-29T21:28:52.811349Z",
+    "end": "2027-12-17T06:46:52.811349Z",
+    "sub": []
+   },
+   {
+    "lord": "rahu",
+    "start": "2026-10-31T22:04:25.811349Z",
+    "end": "2027-03-20T15:04:07.811349Z",
+    "sub": []
+   }
+  ]
+ },
+ "kuja": {
+  "rule_set": "kuja_v2",
+  "provisional": true,
+  "present": true,
+  "strength": 2,
+  "reduced": false,
+  "houses": [
+   1,
+   2,
+   4,
+   7,
+   8,
+   12
+  ],
+  "points": [
+   {
+    "point": "lagna",
+    "house": 2,
+    "counts": true
+   },
+   {
+    "point": "moon",
+    "house": 2,
+    "counts": true
+   },
+   {
+    "point": "venus",
+    "house": 10,
+    "counts": false
+   }
+  ],
+  "cancellations": [
+   {
+    "id": "lagna_kataka_simha",
+    "applies": false,
+    "facts": {
+     "sign": "mesha"
+    },
+    "reason": "The lagna is Mesha."
+   },
+   {
+    "id": "mars_own_or_exalted",
+    "applies": false,
+    "facts": {
+     "sign": "vrishabha"
+    },
+    "reason": "Mars is in Vrishabha, which is neither its own nor its exalted sign."
+   },
+   {
+    "id": "jupiter_aspects_mars",
+    "applies": false,
+    "facts": {
+     "jupiter_sign": "simha",
+     "mars_sign": "vrishabha"
+    },
+    "reason": "Jupiter in Simha does not look at Mars in Vrishabha."
+   },
+   {
+    "id": "mars_house_sign_exception",
+    "applies": false,
+    "facts": {
+     "house": 2,
+     "sign": "vrishabha"
+    },
+    "reason": "This exception does not cover Mars in the 2nd house in Vrishabha."
+   },
+   {
+    "id": "mars_with_moon",
+    "applies": false,
+    "facts": {
+     "sign": "vrishabha"
+    },
+    "reason": "Mars in Vrishabha is not with the Moon."
+   },
+   {
+    "id": "mars_simha_kumbha",
+    "applies": false,
+    "facts": {
+     "sign": "vrishabha"
+    },
+    "reason": "Mars is in Vrishabha, not Simha or Kumbha."
+   },
+   {
+    "id": "benefic_in_lagna",
+    "applies": false,
+    "facts": {
+     "sign": "mesha"
+    },
+    "reason": "Neither Jupiter nor Venus is in the lagna, Mesha."
+   }
+  ],
+  "reasons": [
+   "Mars is in the 2nd house counted from the lagna.",
+   "Mars is in the 2nd house counted from the Moon."
+  ]
+ },
+ "birth_table": {
+  "weekday": {
+   "key": "thursday",
+   "name": "Thursday"
+  },
+  "calendar_weekday": null,
+  "thithi": {
+   "key": "krishna_7",
+   "name": "Dark 7 (Saptami)"
+  },
+  "yoga": {
+   "key": "dhruva",
+   "name": "Dhruva"
+  },
+  "karana": {
+   "key": "bava",
+   "name": "Bava"
+  },
+  "star": {
+   "gana": {
+    "key": "manushya",
+    "name": "Manushya"
+   },
+   "yoni": {
+    "key": "elephant",
+    "name": "elephant"
+   },
+   "nadi": {
+    "key": "madhya",
+    "name": "Madhya"
+   },
+   "rajju": {
+    "key": "kati",
+    "name": "Kati (waist)"
+   },
+   "pakshi": {
+    "key": "eagle",
+    "name": "eagle"
+   },
+   "bhuta": {
+    "key": "pathavi",
+    "name": "earth (Pathavi)"
+   },
+   "vruksha": {
+    "key": "hara",
+    "name": "hard"
+   },
+   "gothra": {
+    "key": "marichi",
+    "name": "Marichi"
+   },
+   "linga": {
+    "key": "male",
+    "name": "male"
+   }
+  },
+  "rule_sets": [
+   "panchanga_v1",
+   "porondam_si_v3"
+  ],
+  "provisional": true
+ }
+}

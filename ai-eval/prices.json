@@ -1,0 +1,19 @@
+{
+ "current": {
+  "input": 0.1,
+  "cached": 0.01,
+  "output": 0.5
+ },
+ "fixed": {
+  "input": 0.1,
+  "cached": 0.01,
+  "output": 0.5
+ },
+ "sinhala/luna": {"input": 0.1, "cached": 0.01, "output": 0.5},
+ "sinhala/haiku-5.5": {"input": 0.1, "cached": 0.01, "output": 0.5},
+ "haiku-5.5": {
+  "input": 0.1,
+  "cached": 0.01,
+  "output": 0.5
+ }
+}

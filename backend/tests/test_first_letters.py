@@ -2,8 +2,10 @@
 
 import datetime as dt
 import json
+import logging
 import zoneinfo
 from pathlib import Path
+from typing import Any
 
 import pytest
 from fastapi import HTTPException
@@ -11,6 +13,7 @@ from fastapi.testclient import TestClient
 
 from app.api.charts import EPHEMERIS
 from app.api.first_letters import first_letters_access
+from app.api.guardian import WORDING
 from app.engine.ephemeris import julian_day
 from app.engine.first_letters import _day, age_on, check, find_dates, load_rules
 from app.engine.panchanga import Place, day_panchanga
@@ -160,7 +163,13 @@ CHILD = {"date": "2023-05-10", "time": "08:15", "place_id": KANDY}
 def test_the_finder_for_a_child(client: TestClient) -> None:
     body = client.post(
         "/v1/first-letters",
-        json={"child": CHILD, "months": 1, "as_of": "2026-07-01", "lang": "en"},
+        json={
+            "child": CHILD,
+            "guardian_consent": True,
+            "months": 1,
+            "as_of": "2026-07-01",
+            "lang": "en",
+        },
     ).json()
     assert body["status"] == "ok"
     assert (body["rule_set"], body["provisional"]) == ("first_letters_si_v1", False)
@@ -204,6 +213,7 @@ def test_an_age_outside_the_usual_range_gets_a_note(client: TestClient) -> None:
         json={
             "child": {"nakshatra": "ashwini", "pada": 1},
             "birth_date": "2026-01-01",
+            "guardian_consent": True,
             "months": 1,
             "as_of": "2026-07-01",
         },
@@ -247,6 +257,27 @@ def test_bad_requests(client: TestClient) -> None:
     )
 
 
+def test_birth_details_need_a_guardians_consent(
+    client: TestClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    star = {"child": {"nakshatra": "ashwini", "pada": 1}, "months": 1, "as_of": "2026-07-01"}
+    details: list[dict[str, Any]] = [{"child": CHILD}, {"birth_date": "2023-05-10"}]
+    with caplog.at_level(logging.INFO, logger="astronomia.consent"):
+        for detail in details:
+            body = {**star, **detail}
+            assert client.post("/v1/first-letters", json=body).status_code == 422
+            refused = client.post("/v1/first-letters", json={**body, "guardian_consent": False})
+            assert refused.status_code == 422
+        # A birth star alone says nothing about when the child was born.
+        assert client.post("/v1/first-letters", json=star).status_code == 200
+        agreed = client.post(
+            "/v1/first-letters", json={**star, "child": CHILD, "guardian_consent": True}
+        )
+    assert agreed.status_code == 200
+    consent = [r.getMessage() for r in caplog.records if r.name == "astronomia.consent"]
+    assert consent == [f"guardian consent tool=first_letters wording={WORDING} lang=en"]
+
+
 def test_locking_the_finder_leaves_the_letters_open(client: TestClient) -> None:
     def locked() -> None:
         raise HTTPException(402, "paid feature")
@@ -256,3 +287,52 @@ def test_locking_the_finder_leaves_the_letters_open(client: TestClient) -> None:
     assert client.post("/v1/first-letters", json={"child": child}).status_code == 402
     assert client.get("/v1/baby/letters/ashwini").status_code == 200
     assert client.get("/v1/baby/names", params={"letters": "අ"}).status_code == 200
+
+
+def search_for(client: TestClient, **changes: Any) -> dict[str, Any]:
+    body = {
+        "child": {"nakshatra": "ashwini", "pada": 1},
+        "guardian_consent": True,
+        "months": 1,
+        "as_of": "2026-07-01",
+        **changes,
+    }
+    answer: dict[str, Any] = client.post("/v1/first-letters", json=body).json()
+    return answer
+
+
+def test_no_dates_before_the_child_is_born(client: TestClient) -> None:
+    body = search_for(client, birth_date="2027-01-01")
+    assert body["status"] == "ok"
+    assert body["suggestions"] == []
+    assert body["none_text"].startswith("The child is born after the last day searched.")
+    assert "උපදින්නේ" in search_for(client, birth_date="2027-01-01", lang="si")["none_text"]
+
+
+def test_a_search_that_crosses_the_birth_starts_after_it(client: TestClient) -> None:
+    assert search_for(client)["suggestions"][0]["date"] < "2026-07-10"
+    body = search_for(client, birth_date="2026-07-10")
+    assert (body["first"], body["last"]) == ("2026-07-11", "2026-07-31")
+    assert body["suggestions"]
+    assert all(i["date"] > "2026-07-10" for i in body["suggestions"])
+    assert all("-" not in i["age"] for i in body["suggestions"])
+
+
+def test_a_birth_on_the_first_or_last_day_searched(client: TestClient) -> None:
+    assert search_for(client, birth_date="2026-07-01")["first"] == "2026-07-02"
+    assert search_for(client, birth_date="2026-06-30")["first"] == "2026-07-01"
+    last = search_for(client, birth_date="2026-07-31")
+    assert last["suggestions"] == [] and "born after" in last["none_text"]
+
+
+def test_a_full_birth_bounds_the_search_too(client: TestClient) -> None:
+    child = {"date": "2026-07-10", "time": "23:30", "place_id": KANDY}
+    assert search_for(client, child=child)["first"] == "2026-07-11"
+    # By then it is already the 11th in Auckland, so the search there starts on the 12th.
+    auckland = {"latitude": -36.85, "longitude": 174.76, "timezone": "Pacific/Auckland"}
+    assert search_for(client, child=child, **auckland)["first"] == "2026-07-12"
+
+
+def test_no_birth_date_searches_the_whole_range(client: TestClient) -> None:
+    body = search_for(client)
+    assert body["first"] == "2026-07-01" and body["suggestions"]

@@ -82,6 +82,8 @@ export type SavedResult = {
   result: Hadahan;
   /** The form as submitted. Missing on results saved before it was kept. */
   form?: FormValues;
+  /** The language the result is in. Missing on older saves. */
+  lang?: Locale;
 };
 
 const API = "/api";
@@ -135,6 +137,20 @@ export async function fetchForecast(request: BirthRequest, lang: Locale): Promis
       body: JSON.stringify({ ...request, lang }),
     }),
   );
+}
+
+/** Today as "YYYY-MM-DD" in a time zone, or where the visitor is when none is given. */
+export function todayIn(timezone?: string, now = new Date()): string {
+  const parts = new Intl.DateTimeFormat("en", {
+    timeZone: timezone,
+    calendar: "gregory",
+    numberingSystem: "latn",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(now);
+  const part = (type: string) => parts.find((item) => item.type === type)?.value ?? "";
+  return `${part("year")}-${part("month")}-${part("day")}`;
 }
 
 /** "{name}'s hadahan" with {name} filled in. */

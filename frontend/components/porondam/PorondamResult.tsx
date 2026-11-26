@@ -3,8 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { MatchDiagram } from "@/components/assistant/ChapterDiagram";
+import { SavedTime, type SavedTimes } from "@/components/account/SavedTime";
 import { AiExplain, FullReading } from "@/components/assistant/Explain";
-import { useAssistantContext, useExplainText } from "@/components/assistant/PageContext";
+import { useAssistantContext, useAssistantVisuals } from "@/components/assistant/PageContext";
+import { useReading } from "@/components/assistant/useReading";
 import { ArrowRight } from "@/components/Icons";
 import { KujaDials } from "@/components/KujaDials";
 import { NextSteps } from "@/components/NextSteps";
@@ -15,7 +18,7 @@ import { ReportScope } from "@/components/paid/ReportAccess";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { type PageContext, matchContext } from "@/lib/assistant/context";
-import { type ChapterId, MATCH_EXTRA, MATCH_PLACES, MATCH_READING, writtenChapters } from "@/lib/assistant/explain";
+import { type ChapterId, MATCH_EXTRA, MATCH_PLACES, MATCH_READING } from "@/lib/assistant/explain";
 import { coupleYearsContext, matchReadingContext, weddingReadingContext } from "@/lib/assistant/pages";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
@@ -57,6 +60,8 @@ type Props = {
   timeline?: Dictionary["porondam"]["timeline"];
   /** Text for the couple's road. That section needs the request too, with both birth times. */
   road?: CoupleRoadText;
+  /** Only on a saved match: labels the parts that are worked out today. */
+  savedTimes?: SavedTimes;
   /** Text for the wedding nakath finder. Needs the request too. */
   wedding?: Dictionary["porondam"]["wedding"];
   /** Next steps under the match. Left out on shared pages. */
@@ -66,7 +71,20 @@ type Props = {
   readOnlyAction?: React.ReactNode;
 };
 
-export function PorondamResult({
+/**
+ * The result, with what the account may use on this report around all of it: the reading and the
+ * PDF ask for it too, so nothing in the page sits outside.
+ */
+export function PorondamResult(props: Props) {
+  const { lang, request } = props;
+  return (
+    <ReportScope report={request ? { kind: "porondam", match: { ...request, lang } } : null} kind="porondam">
+      <PorondamResultPage {...props} />
+    </ReportScope>
+  );
+}
+
+function PorondamResultPage({
   lang,
   t,
   f,
@@ -77,6 +95,7 @@ export function PorondamResult({
   request,
   timeline,
   road,
+  savedTimes,
   wedding,
   next,
   onAgain,
@@ -85,6 +104,8 @@ export function PorondamResult({
   const [filter, setFilter] = useState<FactorFilter>("all");
   // What the AI assistant sees: this result, with no names or birth details.
   useAssistantContext(matchContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding)));
+  // The diagrams Astro may show: drawn in the browser, from what this page shows.
+  useAssistantVisuals(useMemo(() => ({ kind: "match" as const, result, labels }), [result, labels]));
   // The written explanations get the same, plus each chart's marriage facts with full birth
   // details. Kept stable, so each chapter is written once.
   const reading = matchReadingContext(result, labels, lang, Boolean(readOnlyAction), Boolean(request && wedding));
@@ -116,22 +137,19 @@ export function PorondamResult({
   );
   // The years ahead only on the couple's own match (a shared one has no birth details to ask
   // with); the wedding dates once a search has found some.
-  // The PDF prints the chapters read so far, in reading order.
-  const explainWords = useExplainText();
-  const readingForPdf = () => {
-    if (!explainWords) return [];
-    const extraFor: Partial<Record<ChapterId, PageContext | null>> = {
-      "match.years": yearsFacts,
-      "match.wedding": weddingFacts,
-    };
-    const factsFor = (id: ChapterId) => (id in extraFor ? (extraFor[id] ?? null) : facts);
-    return writtenChapters(MATCH_READING, lang, factsFor).map(({ id, text }) => ({
-      title: explainWords.chapters[id],
-      text,
-    }));
-  };
   const chapters = MATCH_READING.filter(
     (id) => !MATCH_EXTRA.includes(id) || (id === "match.years" ? Boolean(request && timeline) : Boolean(weddingFacts)),
+  );
+  // The match chapters: what the chat hears about and the PDF prints (the paid PDF writes any
+  // not written yet).
+  const extraFor: Partial<Record<ChapterId, PageContext | null>> = {
+    "match.years": yearsFacts,
+    "match.wedding": weddingFacts,
+  };
+  const { forPdf, aiNotice } = useReading(
+    { ids: chapters, factsFor: (id) => (id in extraFor ? (extraFor[id] ?? null) : facts) },
+    lang,
+    "match",
   );
   const match = result.match!;
   const bride = result.bride!;
@@ -151,7 +169,7 @@ export function PorondamResult({
   );
 
   return (
-    <ReportScope report={request ? { kind: "porondam", match: { ...request, lang } } : null} kind="porondam">
+    <>
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.couple}`}>
         <h1 className={`display ${styles.title}`}>
@@ -377,6 +395,7 @@ export function PorondamResult({
           brideName={nameOf(bride, f.bride)}
           groomName={nameOf(groom, f.groom)}
           explain={yearsFacts && <AiExplain chapters={MATCH_PLACES.years} lang={lang} facts={yearsFacts} />}
+          note={<SavedTime times={savedTimes} part="live" />}
         />
       )}
 
@@ -389,6 +408,7 @@ export function PorondamResult({
           request={request}
           brideName={nameOf(bride, f.bride)}
           groomName={nameOf(groom, f.groom)}
+          note={<SavedTime times={savedTimes} part="live" />}
         />
       )}
 
@@ -412,6 +432,7 @@ export function PorondamResult({
         facts={facts}
         extra={{ "match.years": yearsFacts, "match.wedding": weddingFacts }}
         reading="matchReading"
+        diagram={(id) => <MatchDiagram id={id} result={result} labels={labels} />}
         pdf={Boolean(request)}
       />
 
@@ -425,7 +446,8 @@ export function PorondamResult({
             <>
               <ReportButton
                 request={{ kind: "porondam", match: { ...request, lang } }}
-                reading={readingForPdf}
+                reading={forPdf}
+                aiNotice={aiNotice}
                 t={t}
               />
               {saveText && (
@@ -483,6 +505,6 @@ export function PorondamResult({
         />
       )}
     </main>
-    </ReportScope>
+    </>
   );
 }

@@ -79,24 +79,6 @@
   background: var(--night-raised);
 }
 
-/* The day form: fields line up at the top, so a hint under one box does not push the other
-   down, and the button sits level with the boxes (one label line and the gap below it). */
-.dayForm {
-  align-items: flex-start;
-}
-
-.dayForm > button {
-  min-height: 52px;
-  height: 52px;
-  margin-top: calc(14px * 1.6 + 8px);
-}
-
-@media (max-width: 640px) {
-  .dayForm > button {
-    margin-top: 0;
-  }
-}
-
 .control {
   display: flex;
   flex-direction: column;
@@ -105,11 +87,21 @@
   min-width: 0;
 }
 
-/* The date field, drawn like the place search beside it (components/hadahan/BirthForm.module.css). */
+/* The day form lines its fields up by their labels, so the place hint hangs below without
+   pushing the date field out of line. The label and field match the place search beside it. */
+.dayForm {
+  align-items: flex-start;
+  container-type: inline-size;
+}
+
+.dayForm .control {
+  gap: 8px;
+}
+
 .label {
-  color: var(--ink-soft);
   font-size: 14px;
   font-weight: 500;
+  color: var(--ink-soft);
 }
 
 .input {
@@ -120,6 +112,28 @@
   background: var(--night);
   color: var(--ink);
   font: inherit;
+}
+
+.input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Holds the button level with the fields: an empty line the height of a label sits above it. */
+.action {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.action button {
+  min-height: 52px;
+}
+
+@container (max-width: 700px) {
+  .action > .label {
+    display: none;
+  }
 }
 
 .linkButton {
@@ -352,5 +366,29 @@
   .item,
   .itemKey {
     padding: 16px;
+  }
+}
+
+/* A text link is one line tall. An unseen box around it gives a finger at least 44px. */
+.links a,
+.linkButton {
+  position: relative;
+}
+
+.links a::after,
+.linkButton::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
+/* Wrapped links are far enough apart that their boxes do not overlap. */
+@media (max-width: 640px) {
+  .links {
+    row-gap: 20px;
   }
 }

@@ -1,0 +1,786 @@
+{
+ "label": "holdout2/final-3",
+ "model": "default",
+ "effort": "default",
+ "site_limit_seconds": 60,
+ "answers": {
+  "h2-yoga-1": {
+   "turns": [
+    {
+     "question": "Do I have Gajakesari yoga?",
+     "text": "No—Gajakesari yoga isn’t listed in your chart. Your chart does list other special combinations, including Chandra-Mangala yoga, formed by the Moon and Mars together in the part of your chart linked to daily work and health habits.",
+     "first_event": 0.06,
+     "first_text": 2.17,
+     "final_text_start": 2.17,
+     "error": null,
+     "total": 2.67,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.01,
+        "model": "gpt-6-luna",
+        "input": 11155,
+        "cached": 11152,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.44,
+        "model": "gpt-6-luna",
+        "input": 13382,
+        "cached": 13379,
+        "output": 55,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 24537,
+      "cached": 24531,
+      "output": 91
+     }
+    }
+   ]
+  },
+  "h2-yoga-2": {
+   "turns": [
+    {
+     "question": "Do I have Budhaditya yoga?",
+     "text": "No—Budhaditya yoga is not listed among the special combinations in your chart. Your chart does list **Chandra-Mangala yoga**, based on the Moon and Mars being together in the part linked to daily work, health habits and competition.",
+     "first_event": 0.09,
+     "first_text": 2.26,
+     "final_text_start": 2.26,
+     "error": null,
+     "total": 2.84,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.97,
+        "model": "gpt-6-luna",
+        "input": 11154,
+        "cached": 11151,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.54,
+        "model": "gpt-6-luna",
+        "input": 13381,
+        "cached": 13378,
+        "output": 54,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 24535,
+      "cached": 24529,
+      "output": 90
+     }
+    }
+   ]
+  },
+  "h2-yoga-3": {
+   "turns": [
+    {
+     "question": "Do I have Hamsa yoga?",
+     "text": "No—Hamsa yoga isn’t listed among the special combinations in your chart. Your chart does list Chandra-Mangala yoga, formed by the Moon and Mars together in your daily-work area; tradition links it with drive and resourcefulness in handling work and challenges.",
+     "first_event": 0.23,
+     "first_text": 4.01,
+     "final_text_start": 4.01,
+     "error": null,
+     "total": 4.51,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.29,
+        "model": "gpt-6-luna",
+        "input": 11154,
+        "cached": 11151,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.04,
+        "model": "gpt-6-luna",
+        "input": 13381,
+        "cached": 13378,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.45,
+        "model": "gpt-6-luna",
+        "input": 18872,
+        "cached": 18869,
+        "output": 59,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.02,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 43407,
+      "cached": 43398,
+      "output": 131
+     }
+    }
+   ]
+  },
+  "h2-yoga-yes": {
+   "turns": [
+    {
+     "question": "Do I have Chandra-Mangala yoga?",
+     "text": "Yes. Your chart lists **Chandra-Mangala yoga**, based on the Moon and Mars being together in the part of your chart linked to daily work, health habits, debts and competition. Traditionally, astrologers associate this combination with drive and resourcefulness in handling practical challenges.",
+     "first_event": 0.12,
+     "first_text": 2.5,
+     "final_text_start": 2.5,
+     "error": null,
+     "total": 2.99,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.13,
+        "model": "gpt-6-luna",
+        "input": 11156,
+        "cached": 11153,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.55,
+        "model": "gpt-6-luna",
+        "input": 13383,
+        "cached": 13380,
+        "output": 60,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 24539,
+      "cached": 24533,
+      "output": 96
+     }
+    }
+   ]
+  },
+  "h2-abroad": {
+   "turns": [
+    {
+     "question": "Could I end up living abroad?",
+     "text": "Yes—your chart does lean toward the possibility of travel or living away from home, including abroad, though it can’t promise a move or a visa.\n\nYour **12th-house ruler, Mercury, is in the part of your chart linked to change, shared matters and research**, and your **9th-house ruler, Mercury, is there too**. Astrologers read this connection between long journeys and time away from home as a theme worth taking seriously. The 12th house is also the part linked to living abroad.\n\nThe practical side matters: this can show up as studying, working with overseas contacts, or spending a period away—not necessarily settling permanently. Think of someone exploring a job abroad while carefully weighing family responsibilities, costs and paperwork. Making plans step by step and checking the real-world details will help you judge what suits you.\n\nYou’re in a **Ketu life period until 10 October 2028**; it traditionally emphasises reassessing what matters and simplifying. The next main period is Venus, beginning then, which shifts the focus toward relationships, comfort and enjoyment. That isn’t a travel prediction, but it marks a change in the overall tone. Treat this reading as a traditional reflection, not a guarantee; would you like me to look more closely at the chart’s travel and abroad themes?",
+     "first_event": 0.18,
+     "first_text": 4.14,
+     "final_text_start": 4.14,
+     "error": null,
+     "total": 6.45,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/personal-reading/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/birth-chart/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.56,
+        "model": "gpt-6-luna",
+        "input": 11153,
+        "cached": 11150,
+        "output": 84,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.04,
+        "model": "gpt-6-luna",
+        "input": 18881,
+        "cached": 18878,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.35,
+        "model": "gpt-6-luna",
+        "input": 32825,
+        "cached": 32822,
+        "output": 269,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 62859,
+      "cached": 62850,
+      "output": 387
+     }
+    }
+   ]
+  },
+  "h2-home": {
+   "turns": [
+    {
+     "question": "What about my home and family life?",
+     "text": "Your chart suggests that home life can become a source of steadiness, though peace at home may take patience and deliberate care.\n\nThe planet that looks after your home and inner peace, Saturn, sits in the area linked to communication and siblings. Astrologers read this as home matters being shaped by practical conversations, shared responsibilities and steady effort. Saturn is also marked as a helpful planet for your rising sign, so patient work can become a real strength here. Think of a family agreeing on chores or plans for an elder: clear, calm conversations can make a noticeable difference.\n\nFor family life and speech, Mars—the planet that looks after that area—sits with the Moon in the part of your chart linked to daily routines and work. That can bring a protective, active way of caring for family, but feelings may run hot when everyone is tired or busy. Pausing before replying, and raising small concerns early, can help keep disagreements from building.\n\nYour chart also links the father and teachers with learning and guidance: the Sun is in that area, while its ruler Mercury sits in the part connected with change and research. That can point to thoughtful, sometimes complex conversations around beliefs or life choices. With children, creativity and study are prominent themes, though Rahu there can make the path feel unconventional; keeping expectations flexible may help.\n\nYou’re in a Ketu life period until **10 October 2028**, with the Saturn sub-period running until **14 October 2027**. Traditionally, this can be a more inward, responsibility-focused stretch; steady routines and patient family discussions may serve you well. This is a traditional reading, not a guarantee—your choices and conversations matter most.",
+     "first_event": 0.06,
+     "first_text": 3.52,
+     "final_text_start": 3.52,
+     "error": null,
+     "total": 6.77,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.17,
+        "model": "gpt-6-luna",
+        "input": 11154,
+        "cached": 11151,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.05,
+        "model": "gpt-6-luna",
+        "input": 16645,
+        "cached": 11151,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.26,
+        "model": "gpt-6-luna",
+        "input": 30589,
+        "cached": 16642,
+        "output": 342,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 58388,
+      "cached": 38944,
+      "output": 412
+     }
+    }
+   ]
+  },
+  "h2-health": {
+   "turns": [
+    {
+     "question": "Should I worry about my health?",
+     "text": "Your chart gives **some reason to be attentive to health routines, but not a reason to assume something is wrong**. Astrology can’t diagnose or predict illness; if you have a symptom or a concern, please check with a doctor.\n\nIn traditional chart reading, your Moon and Mars are together in the part linked to daily work and health habits. Astrologers associate this with an active, service-minded approach, while noting that stress, rushing, or irregular routines can make looking after yourself more important. Think of someone who stays busy helping at work and only later notices they need proper rest.\n\nYour current Ketu life period runs until **10 October 2028**; this Saturn sub-period runs until **14 October 2027**. The chart alone doesn’t establish a health problem or a special health-risk window. A steady routine, enough rest, and regular check-ups are sensible ways to look after yourself—and if something is worrying you, a doctor is the right person to assess it.",
+     "first_event": 0.08,
+     "first_text": 3.92,
+     "final_text_start": 3.92,
+     "error": null,
+     "total": 5.76,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.09,
+        "model": "gpt-6-luna",
+        "input": 11153,
+        "cached": 11150,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.55,
+        "model": "gpt-6-luna",
+        "input": 16644,
+        "cached": 16641,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.67,
+        "model": "gpt-6-luna",
+        "input": 30588,
+        "cached": 30585,
+        "output": 203,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 58385,
+      "cached": 58376,
+      "output": 273
+     }
+    }
+   ]
+  },
+  "h2-rising": {
+   "turns": [
+    {
+     "question": "What's my lagna?",
+     "text": "Your rising sign (lagna) is **Tula** (Libra). You may come across as considerate and diplomatic, with a natural eye for balance. Venus looks after your rising sign and sits in the part of your chart linked to change and shared resources, adding depth and steadiness when you handle life’s turning points.",
+     "first_event": 0.24,
+     "first_text": 2.09,
+     "final_text_start": 2.09,
+     "error": null,
+     "total": 2.99,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.38,
+        "model": "gpt-6-luna",
+        "input": 11151,
+        "cached": 11148,
+        "output": 70,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 11151,
+      "cached": 11148,
+      "output": 70
+     }
+    }
+   ]
+  },
+  "h2-erashtaka": {
+   "turns": [
+    {
+     "question": "Am I in a Saturn period now?",
+     "text": "No—your main life period is **Ketu**, running until **10 October 2028**. You’re in its **Saturn sub-period** until **14 October 2027**, so Saturn’s themes of responsibility, steady effort and patience are colouring this Ketu period, but it isn’t a main Saturn period. After that, the Mercury sub-period runs until the Ketu period ends, followed by your Venus main period.",
+     "first_event": 0.36,
+     "first_text": 5.18,
+     "final_text_start": 5.18,
+     "error": null,
+     "total": 5.94,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.15,
+        "model": "gpt-6-luna",
+        "input": 11154,
+        "cached": 11151,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.07,
+        "model": "gpt-6-luna",
+        "input": 13381,
+        "cached": 11151,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.07,
+        "model": "gpt-6-luna",
+        "input": 18872,
+        "cached": 13378,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.75,
+        "model": "gpt-6-luna",
+        "input": 32816,
+        "cached": 18869,
+        "output": 92,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 76223,
+      "cached": 54549,
+      "output": 198
+     }
+    }
+   ]
+  },
+  "h2-rahu-toronto": {
+   "turns": [
+    {
+     "question": "What time is Rahu kalaya today in Toronto?",
+     "text": "Today in Toronto, **Tuesday, November 24, 2026**, Rahu kalaya is **2:23–3:33 p.m.** local time. It has already passed today. Traditionally, people avoid starting important new activities during this period.",
+     "first_event": 0.07,
+     "first_text": 9.57,
+     "final_text_start": 9.57,
+     "error": null,
+     "total": 10.01,
+     "tool_calls": [
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"Toronto\",\"limit\":5}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\": \"America/Toronto\"}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/calendar-and-nakath/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-24\",\"place_id\":6167865,\"lang\":\"en\",\"time\":null}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 3.61,
+        "model": "gpt-6-luna",
+        "input": 9168,
+        "cached": 9165,
+        "output": 22,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.71,
+        "model": "gpt-6-luna",
+        "input": 9326,
+        "cached": 9323,
+        "output": 71,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.85,
+        "model": "gpt-6-luna",
+        "input": 10604,
+        "cached": 10601,
+        "output": 40,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.59,
+        "model": "gpt-6-luna",
+        "input": 11169,
+        "cached": 11166,
+        "output": 57,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "find_place",
+        "input": "{'query': 'Toronto', 'limit': 5}",
+        "seconds": 0.82,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/Toronto'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 6167865, 'lang': 'en', 'time': None}",
+        "seconds": 0.06,
+        "status": "success"
+       }
+      ],
+      "input": 40267,
+      "cached": 40255,
+      "output": 190
+     }
+    }
+   ]
+  },
+  "h2-compare": {
+   "turns": [
+    {
+     "question": "Is 2 pm on 20 or 21 January 2027 better to sign a contract in Colombo?",
+     "text": "**20 January 2027 at 2 pm looks more suitable by these general almanac checks.** It is outside Rahu kalaya, while 2 pm on 21 January falls within it (13:48–15:16), a period traditionally avoided for starting something important.\n\nAt 2 pm on the 20th, the lunar day is Bright 13 and the star is Mrigashira, traditionally linked with pleasant, cooperative activities. On the 21st, it is Bright 14 and Punarvasu, traditionally linked with journeys and movement. These are traditional associations, not a guarantee that a contract will go well.\n\nThe site’s calculations are marked as still being confirmed, and it doesn’t judge contract-signing times for your personal chart. For an important agreement, consider asking your astrologer to check the exact time; also rely on the contract’s terms and appropriate professional advice.",
+     "first_event": 0.08,
+     "first_text": 9.54,
+     "final_text_start": 9.54,
+     "error": null,
+     "total": 10.93,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/reference.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2027-01-20\", \"place_id\": 1248991, \"lang\": \"en\", \"time\": \"14:00\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2027-01-21\", \"place_id\": 1248991, \"lang\": \"en\", \"time\": \"14:00\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.03,
+        "model": "gpt-6-luna",
+        "input": 9179,
+        "cached": 9176,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.43,
+        "model": "gpt-6-luna",
+        "input": 10356,
+        "cached": 10353,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.11,
+        "model": "gpt-6-luna",
+        "input": 16688,
+        "cached": 16685,
+        "output": 96,
+        "reasoning": 0
+       },
+       {
+        "seconds": 3.49,
+        "model": "gpt-6-luna",
+        "input": 17710,
+        "cached": 17707,
+        "output": 189,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2027-01-20', 'place_id': 1248991, 'lang': 'en', 'time': '14:00'}",
+        "seconds": 0.33,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2027-01-21', 'place_id': 1248991, 'lang': 'en', 'time': '14:00'}",
+        "seconds": 0.34,
+        "status": "success"
+       }
+      ],
+      "input": 53933,
+      "cached": 53921,
+      "output": 359
+     }
+    }
+   ]
+  },
+  "h2-ch-care": {
+   "turns": [
+    {
+     "text": "The chart points to steady care around health routines, close relationships, money and practical plans. These are areas to prepare for, not fixed outcomes; small, consistent choices can make a real difference.\n\n**🩺 Health and daily habits**\n\nYour chart shows a stretch that calls for extra care with health and safety: the Mercury sub-period, from 14 October 2027 to 10 October 2028. Mercury sits in the part of the chart linked to change and things outside your control (the 8th house).\n\nThis is a sensitive area best discussed with a human astrologer who can read the whole chart, along with regular medical advice. Helpful steps include keeping steady routines, getting enough rest, and taking care with driving and travel. See a doctor about any real concern.\n\n**💞 Relationships**\n\nThe partnership area is connected with daily work, routines and competition because Mars, the planet of drive, looks after it from that part of your chart (the 6th house). This can make patience during disagreements especially useful.\n\nYour Mars check is present but reduced: Mars is with the Moon, one of the conditions that softens it. The check is a traditional pointer, not a verdict about a relationship. Talk through differences early, pause before reacting, and seek support when it would help. A human astrologer can consider both partners’ charts together.\n\n**💰 Money and shared plans**\n\nThe chart draws attention to shared money and sudden changes: Mercury, Jupiter and Venus are together in that part of your chart (the 8th house). Treat this as a reason for clear communication and careful planning, not as a prediction of loss.\n\nKeep shared commitments transparent, maintain a sensible reserve where possible, and consult a qualified financial professional for important money decisions.\n\n**🧭 Travel and legal matters**\n\nNo particular travel or legal concern stands out from the care-period information here. For important travel or legal decisions, check the practical details carefully and seek qualified advice where needed.",
+     "first_text": 5.92,
+     "error": null,
+     "tool_calls": [],
+     "total": 9.28,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 9.25,
+        "model": "gpt-6-luna",
+        "input": 29840,
+        "cached": 29837,
+        "output": 402,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 29840,
+      "cached": 29837,
+      "output": 402
+     }
+    }
+   ]
+  }
+ }
+}

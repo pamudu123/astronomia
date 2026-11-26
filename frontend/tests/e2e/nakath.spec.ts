@@ -110,13 +110,70 @@ test("a day's nakath, and another place", async ({ page }) => {
   await expect(main.locator('[data-card="where"]')).toContainText("Colombo · Wednesday");
   await noSidewaysScroll(page);
 
-  await main.getByRole("combobox").fill("london");
-  await page.getByRole("option").first().click();
+  await main.getByRole("combobox", { name: "Place" }).fill("london");
+  await page.getByRole("listbox").getByRole("option").first().click();
   await expect(main.locator('[data-card="where"]')).toContainText("Europe/London (UTC+01:00)");
   expect(asked.at(-1)).toContain("place_id=2643743");
 
   await main.getByRole("link", { name: "Next day" }).click();
   await expect(page).toHaveURL(/\/en\/nakath\/2027-04-15$/);
+});
+
+test("the day gives its answer first, then the almanac to open", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.clock.setFixedTime(new Date("2027-04-14T07:00:00Z")); // 12:30 in Colombo
+  await page.goto("/en/nakath/2027-04-14");
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 2 }).first()).toHaveText(
+    "Rahu kalaya now: wait until 13:38 to start important things",
+  );
+  await expect(main.locator('[data-card="moon"]')).toContainText("Growing Moon");
+  const thithi = main.locator('[data-part="Thithi"]');
+  await expect(thithi).toBeHidden();
+  await main.getByText("Full almanac").click();
+  await expect(thithi).toBeVisible();
+});
+
+test("a birth star is checked against the day in the browser, and sent nowhere", async ({ page }) => {
+  const asked = await mockBackend(page, "en");
+  await page.goto("/en/nakath/2027-04-14");
+  const card = page.locator('[data-card="for-you"]');
+  await card.getByLabel("Your birth star").selectOption("ashwini");
+  // The day runs Punarvasu (7th from Ashwini, avoided) into Pushya (8th, good).
+  await expect(card.locator("[data-tone]").nth(0)).toHaveAttribute("data-tone", "careful");
+  await expect(card.locator("[data-tone]").nth(1)).toHaveAttribute("data-tone", "good");
+  await expect(card.locator("[data-tone]").nth(1)).toContainText("from 10:53");
+  expect(asked.join()).not.toContain("ashwini");
+  expect(page.url()).not.toContain("ashwini");
+  await noSidewaysScroll(page);
+});
+
+test("a date that never happened at a place says so, with no empty times (A-04)", async ({ page }) => {
+  const note = "This date did not happen here.";
+  await mockBackend(page, "en");
+  await page.route("**/api/v1/panchanga?*", (route) =>
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...JSON.parse(fixture("panchanga-2027-04-14-colombo-en.json")),
+        sunrise: null,
+        sunset: null,
+        next_sunrise: null,
+        rahu_kalaya: null,
+        thithi: [],
+        nakatha: [],
+        yoga: [],
+        karana: [],
+        skipped: true,
+        skipped_note: note,
+      }),
+    }),
+  );
+  await page.goto("/en/nakath/2027-04-14");
+  const main = page.getByRole("main");
+  await expect(main.locator("[data-skipped]")).toHaveText(note);
+  await expect(main.locator('[data-card="rahu"]')).toHaveCount(0);
+  await expect(main.locator("[data-part]")).toHaveCount(0);
 });
 
 test("the daily page in Sinhala", async ({ page }) => {

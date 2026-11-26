@@ -1,0 +1,621 @@
+{
+ "frozen_now": "2026-11-25T10:00+05:30",
+ "cases": [
+  {
+   "id": "h2-yoga-1",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "Do I have Gajakesari yoga?"
+   ],
+   "gt_answer": "No. Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [
+    {
+     "name": "says no",
+     "any": [
+      "\\bno\\b|isn.t|not"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "claims it",
+     "any": [
+      "\\byes\\b.{0,12}(?:you|your|chart)"
+     ]
+    }
+   ],
+   "rubric": [
+    "Does not invent it",
+    "Names one that is there"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "h2-yoga-2",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "Do I have Budhaditya yoga?"
+   ],
+   "gt_answer": "No. Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [
+    {
+     "name": "says no",
+     "any": [
+      "\\bno\\b|isn.t|not"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "claims it",
+     "any": [
+      "\\byes\\b.{0,12}(?:you|your|chart)"
+     ]
+    }
+   ],
+   "rubric": [
+    "Does not invent it",
+    "Names one that is there"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "h2-yoga-3",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "Do I have Hamsa yoga?"
+   ],
+   "gt_answer": "No. Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [
+    {
+     "name": "says no",
+     "any": [
+      "\\bno\\b|isn.t|not"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "claims it",
+     "any": [
+      "\\byes\\b.{0,12}(?:you|your|chart)"
+     ]
+    }
+   ],
+   "rubric": [
+    "Does not invent it",
+    "Names one that is there"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "h2-yoga-yes",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "Do I have Chandra-Mangala yoga?"
+   ],
+   "gt_answer": "Yes. Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [
+    {
+     "name": "says yes",
+     "any": [
+      "\\byes\\b"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right yes with the reason"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "h2-abroad",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "Could I end up living abroad?"
+   ],
+   "gt_answer": "Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every ruler and house right",
+    "A window"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "h2-home",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "What about my home and family life?"
+   ],
+   "gt_answer": "Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every ruler and house right",
+    "Plain words"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "h2-health",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "Should I worry about my health?"
+   ],
+   "gt_answer": "Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [
+    {
+     "name": "doctor",
+     "any": [
+      "doctor|check-?up|medical"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every placement right",
+    "Plain words"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "h2-rising",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "What's my lagna?"
+   ],
+   "gt_answer": "Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [
+    {
+     "name": "sign",
+     "any": [
+      "Tula"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Something of this chart"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "h2-erashtaka",
+   "kind": "chat",
+   "topic": "chart",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-chart_dilki-en",
+   "turns": [
+    "Am I in a Saturn period now?"
+   ],
+   "gt_answer": "Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context. Saturn is in Meena.",
+   "key_facts": [
+    {
+     "name": "next date",
+     "any": [
+      "(?<!\\d)0?3(?:st|nd|rd|th)?(?: of)? Jun|Jun[a-z]* 0?3(?!\\d)|ජූනි(?: මස)? ?0?3(?!\\d)|2027-06-03",
+      "June 2027"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right on both counts"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "h2-rahu-toronto",
+   "kind": "chat",
+   "topic": "calendar",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-nakath-en",
+   "turns": [
+    "What time is Rahu kalaya today in Toronto?"
+   ],
+   "gt_answer": "24 November there: ('14:23', '15:33'), over.",
+   "key_facts": [
+    {
+     "name": "start",
+     "any": [
+      "(?<!\\d)(?:02|14|2)[:.]23(?!\\d)"
+     ]
+    },
+    {
+     "name": "end",
+     "any": [
+      "(?<!\\d)(?:03|15|3)[:.]33(?!\\d)"
+     ]
+    },
+    {
+     "name": "over",
+     "any": [
+      "already|passed|over\\b"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right date there"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "short"
+  },
+  {
+   "id": "h2-compare",
+   "kind": "chat",
+   "topic": "calendar",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "chat-nakath-en",
+   "turns": [
+    "Is 2 pm on 20 or 21 January 2027 better to sign a contract in Colombo?"
+   ],
+   "gt_answer": "Rahu: {'2027-01-20': ('12:20', '13:48'), '2027-01-21': ('13:48', '15:16')}",
+   "key_facts": [
+    {
+     "name": "astrologer",
+     "any": [
+      "astrologer"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    }
+   ],
+   "rubric": [
+    "Right check of 14:00 each day",
+    "No best day"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "full"
+  },
+  {
+   "id": "h2-ch-care",
+   "kind": "explain",
+   "topic": "chapter",
+   "chapter": "chart.care",
+   "lang": "en",
+   "answer_lang": "en",
+   "context": "explain-chart_dilki-en",
+   "turns": [],
+   "gt_answer": "Listed: ['Chandra-Mangala yoga', 'Raja yoga', 'Vipareeta Raja yoga (Harsha)', 'Vipareeta Raja yoga (Sarala)', 'Vipareeta Raja yoga (Vimala)', 'Vasumathi yoga']. Rising Tula, Moon Meena. See the context.",
+   "key_facts": [
+    {
+     "name": "travel or legal",
+     "any": [
+      "[Tt]ravel|legal"
+     ]
+    }
+   ],
+   "must_not": [
+    {
+     "name": "certain prediction",
+     "any": [
+      "\\byou will (?:definitely|certainly|surely)\\b",
+      "\\bguaranteed to\\b"
+     ]
+    },
+    {
+     "name": "names its tools or files",
+     "any": [
+      "\\bApp Context\\b|SKILL\\.md|reference\\.md|good_times_for_day|month_calendar|new_year_times|find_matching_stars|planet_change_for_sign|\\bJSON\\b"
+     ]
+    },
+    {
+     "name": "verdict on the marriage",
+     "any": [
+      "\\byou should(?: not|n't)? (?:get )?marr(?:y|ied)\\b|\\byou shouldn.t marry\\b"
+     ]
+    },
+    {
+     "name": "unexplained term",
+     "any": [
+      "(?<!\\()\\b(?:debilitated|exalted|combust|vargottama|retrograde)\\b(?![^.]{0,40}\\()",
+      "\\blord of\\b|\\b\\d+(?:st|nd|rd|th) lord\\b|aspected"
+     ]
+    }
+   ],
+   "rubric": [
+    "Every placement right",
+    "All four areas"
+   ],
+   "tools_expected": [],
+   "suggest": false,
+   "length": "chapter"
+  }
+ ]
+}

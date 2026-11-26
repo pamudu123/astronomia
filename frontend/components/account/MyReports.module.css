@@ -283,3 +283,9 @@
   margin-top: 24px;
   font-size: 15px;
 }
+
+.bannerNote {
+  flex-basis: 100%;
+  color: var(--ink-soft);
+  font-size: 14px;
+}

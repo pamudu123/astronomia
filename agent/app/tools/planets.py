@@ -1,7 +1,7 @@
 """Planet change tools: when Saturn, Jupiter, Rahu and Ketu change signs, and what that means
 for each rising sign. General readings for a sign, never for a person."""
 
-from typing import Annotated, Any
+from typing import Annotated, Any, get_args
 
 from langchain_core.tools import BaseTool, StructuredTool
 from pydantic import BaseModel, Field
@@ -12,8 +12,19 @@ LangField = Annotated[Lang, Field(description="Language of the names: 'en' or 's
 SignField = Annotated[Sign, Field(description="The rising sign (lagna) to read the change for.")]
 
 
+SIGNS: tuple[str, ...] = get_args(Sign)
+
+
 class ListArgs(BaseModel):
     lang: LangField = "en"
+    moon_sign: Annotated[
+        Sign | None,
+        Field(description="The person's Moon sign, for a question about erashtaka or Saturn."),
+    ] = None
+    rising_sign: Annotated[
+        Sign | None,
+        Field(description="The person's rising sign, for the same question, when it is known."),
+    ] = None
 
 
 class ChangeArgs(BaseModel):
@@ -39,10 +50,45 @@ def summary(change: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def saturn_from(saturn: str, base: str, *, moon: bool) -> dict[str, Any]:
+    """Saturn counted from a sign, its own sign being 1: the 12th, 1st and 2nd are the three parts
+    of erashtaka, and the 8th from the Moon sign is ashtama shani (backend/app/engine/couple.py).
+    Worked out here because the model gets the count wrong."""
+    place = (SIGNS.index(saturn) - SIGNS.index(base)) % 12 + 1
+    part = {12: "first", 1: "middle", 2: "last"}.get(place)
+    return {
+        "counted_from": base,
+        "erashtaka_running": part is not None,
+        **({"part": part} if part else {}),
+        **({"ashtama_shani_running": place == 8} if moon else {}),
+    }
+
+
+def saturn_now(
+    changes: list[dict[str, Any]], moon_sign: str | None, rising_sign: str | None
+) -> dict[str, Any] | None:
+    """The sign Saturn is in now (the one its next change leaves), counted from the person's."""
+    moves = (m for c in changes for m in c["moves"] if m["body"] == "saturn")
+    sign = next((m["from_sign"] for m in moves), None)
+    if sign is None:
+        return None
+    out: dict[str, Any] = {"saturn_is_in": sign}
+    if moon_sign:
+        out["by_moon_sign"] = saturn_from(sign, moon_sign, moon=True)
+    if rising_sign:
+        out["by_rising_sign"] = saturn_from(sign, rising_sign, moon=False)
+    return out
+
+
 def tools(engine: EngineClient) -> list[BaseTool]:
-    async def upcoming_planet_changes(lang: Lang = "en") -> dict[str, Any]:
+    async def upcoming_planet_changes(
+        lang: Lang = "en", moon_sign: Sign | None = None, rising_sign: Sign | None = None
+    ) -> dict[str, Any]:
         body = await engine.get("/v1/changes", {"lang": lang})
+        asked = moon_sign or rising_sign
+        now = saturn_now(body["changes"], moon_sign, rising_sign) if asked else None
         return {
+            **({"saturn_now": now} if now else {}),
             "changes": [summary(c) for c in body["changes"]],
             "provisional": body["provisional"],
         }
@@ -91,7 +137,8 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             name="upcoming_planet_changes",
             description=(
                 "The coming sign changes of Saturn, Jupiter, Rahu and Ketu, with dates and "
-                "change ids."
+                "change ids. Given a person's Moon sign and rising sign, also whether erashtaka or "
+                "ashtama shani is running for them now, in `saturn_now`."
             ),
             args_schema=ListArgs,
             handle_tool_error=True,

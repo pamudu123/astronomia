@@ -11,8 +11,10 @@ from typing import Annotated, Literal, Self
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field, model_validator
 
+from app.api.birth import resolve_birth
 from app.api.charts import EPHEMERIS
 from app.api.deps import PlacesDb
+from app.api.guardian import MISSING, record_consent
 from app.api.panchanga import LocalTimeOut, offset_label, time_out
 from app.api.porondam import FullPerson, PorondamResponse, QuickPerson, _person
 from app.api.timeresolve import TimeResolveResponse
@@ -46,6 +48,8 @@ class FirstLettersRequest(BaseModel):
     child: FullPerson | QuickPerson
     # Needed for the child's age when only the birth star is given.
     birth_date: dt.date | None = None
+    # A parent or guardian agreed. Needed for birth details or a birth date, not a star alone.
+    guardian_consent: bool = False
     # Where the ceremony takes place: its sunrise and lagna. Colombo when not given.
     place_id: int | None = None
     latitude: float | None = Field(default=None, gt=-90, lt=90)
@@ -54,6 +58,16 @@ class FirstLettersRequest(BaseModel):
     months: Literal[1, 3, 6] = 3
     as_of: dt.date | None = None  # the first day to search; today when not given (for tests)
     lang: Lang = "en"
+
+    @property
+    def has_birth_details(self) -> bool:
+        return isinstance(self.child, FullPerson) or self.birth_date is not None
+
+    @model_validator(mode="after")
+    def guardian_agreed(self) -> Self:
+        if self.has_birth_details and not self.guardian_consent:
+            raise ValueError(MISSING)
+        return self
 
     @model_validator(mode="after")
     def one_place(self) -> Self:
@@ -155,6 +169,8 @@ def _count(units: dict[str, str], n: int) -> str:
 @router.post("/v1/first-letters", response_model=FirstLettersResponse)
 def first_letters(body: FirstLettersRequest, db: PlacesDb, _: Access) -> FirstLettersResponse:
     """Good dates and times for a child's first letters, from the child's birth star."""
+    if body.has_birth_details:
+        record_consent("first_letters", body.lang)
     found = _person(body.child, db, "bride")
     if isinstance(found, PorondamResponse):
         return FirstLettersResponse(status=found.status, time=found.time)
@@ -166,7 +182,22 @@ def first_letters(body: FirstLettersRequest, db: PlacesDb, _: Access) -> FirstLe
     zone = zoneinfo.ZoneInfo(place.timezone)
     first = body.as_of or dt.datetime.now(zone).date()
     last = _add_months(first, body.months) - dt.timedelta(days=1)
-    items = find_dates(EPHEMERIS, place, first, (last - first).days + 1, moon.nakshatra)
+    # Never a day before the child is born. The birth day itself is left out too: the time of
+    # day may not be known, so part of it can come before the birth.
+    unborn = False
+    if birth is not None:
+        born_on = birth
+        if isinstance(body.child, FullPerson):
+            # The date at the ceremony, which can be a day ahead of the date at the birth place.
+            utc = resolve_birth(body.child, db).utc
+            if utc is not None:
+                born_on = max(birth, utc.astimezone(zone).date())
+        if born_on >= last:
+            unborn = True
+        else:
+            first = max(first, born_on + dt.timedelta(days=1))
+    days = 0 if unborn else (last - first).days + 1
+    items = find_dates(EPHEMERIS, place, first, days, moon.nakshatra)
     rules = load_rules()
     text = labels(body.lang)["first_letters"]
     age_note = None
@@ -194,7 +225,7 @@ def first_letters(body: FirstLettersRequest, db: PlacesDb, _: Access) -> FirstLe
             mode="quick" if isinstance(body.child, QuickPerson) else "full",
         ),
         suggestions=[_suggestion(item, body.lang, zone, birth) for item in items],
-        none_text=None if items else text["none"],
+        none_text=None if items else text["before_birth" if unborn else "none"],
         age_note=age_note,
         note=text["note"],
     )

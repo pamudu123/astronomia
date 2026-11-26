@@ -254,6 +254,21 @@ class AccountStore:
                 (to_user, self._ts(self.clock()), from_user, to_user),
             )
             moved = int(cursor.rowcount)
+            # A report both keep, paid for only as the guest: the account's copy becomes paid,
+            # so it stops expiring.
+            paid = self._run(
+                db,
+                "SELECT input_hash, purchase_id FROM {saved_reports} "
+                "WHERE user_id = ? AND purchase_id IS NOT NULL",
+                (from_user,),
+            ).fetchall()
+            for input_hash, purchase_id in paid:
+                self._run(
+                    db,
+                    "UPDATE {saved_reports} SET purchase_id = ?, expires_at = NULL, "
+                    "updated_at = ? WHERE user_id = ? AND input_hash = ? AND purchase_id IS NULL",
+                    (purchase_id, self._ts(self.clock()), to_user, input_hash),
+                )
             self._delete_users(db, [from_user])
         return moved
 
@@ -428,6 +443,16 @@ class AccountStore:
                 (title, self._ts(now), user_id, report_id, self._ts(now)),
             )
             return bool(cursor.rowcount)
+
+    def order_of(self, user_id: str, report_id: str) -> str | None:
+        """The order that paid for a saved report, if it is this account's and paid."""
+        with self._connect() as db:
+            row = self._run(
+                db,
+                "SELECT purchase_id FROM {saved_reports} WHERE user_id = ? AND id = ?",
+                (user_id, report_id),
+            ).fetchone()
+        return None if row is None or row[0] is None else self._read_id(row[0])
 
     def delete_saved(self, user_id: str, report_id: str) -> bool:
         with self._connect() as db:

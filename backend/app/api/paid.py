@@ -1,28 +1,35 @@
 """Paid reports: the price, coupons and unlocking one report (docs/18, sections 4 and 6).
 
 Only single reports are sold, at LKR 800 in Sri Lanka and USD 2.50 elsewhere (app/tiers/prices).
-There is no payment provider yet, so a report is unlocked only by a coupon that takes 100% off.
-A discount coupon shows its price but answers "payment not available yet".
+A coupon that leaves nothing to pay unlocks a report at once, here. Anything left to pay goes
+through a payment (app/api/checkout.py), and nothing unlocks until it is paid.
 
-Coupons and unlocking need a Google account: a paid report belongs to the account, on any
-device. Wrong codes are limited per account, so codes cannot be guessed one after another.
+Nobody has to sign in: buying on a browser with no account makes a guest, as the first Save does,
+and the report belongs to that guest. "Continue with Google" afterwards turns the guest into a
+Google account, or moves its reports and orders into one (app/api/saved.py). A coupon can be
+tried with no account at all. Wrong codes are limited per account and per network address, so
+codes cannot be guessed one after another, nor by making one guest after another.
 
 A report is named by its kind and the hash of its request, the same hash My reports keeps
 (app/api/saved.py), so a report bought here is the same report when it is saved or opened.
 """
 
+from functools import lru_cache
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, Field
 
+from app.api.chat import network_of
 from app.api.deps import Accounts, Orders, PlacesDb
 from app.api.report_requests import HadahanReport, PorondamReport, ReportRequest
 from app.api.saved import (
     Current,
     CurrentSession,
+    RateLimit,
     SavedOut,
     SettingsDep,
+    _client_address,
     _new_report,
     _out,
     _set_hint,
@@ -32,7 +39,7 @@ from app.api.saved import (
 from app.config import Settings
 from app.store.accounts import LimitReached, User
 from app.store.orders import CouponRefused, Order, OrderStore, PaymentNeeded, Refusal
-from app.tiers import CHECKOUT_AVAILABLE, Feature, report_access
+from app.tiers import Feature, report_access
 from app.tiers.prices import (
     Currency,
     Price,
@@ -46,9 +53,10 @@ router = APIRouter(tags=["paid"])
 
 # Vercel puts the visitor's country in this header on every request it forwards.
 COUNTRY_HEADER = "x-vercel-ip-country"
-SIGN_IN = "sign in with Google first"
+SIGN_IN = "sign in first"
 TOO_MANY = "too many wrong codes: try again in an hour"
 PAYMENT_NOT_AVAILABLE = "payment_not_available"
+PAYMENT_NEEDED = "payment_needed"
 
 
 def buyer_country(request: Request, settings: SettingsDep) -> str:
@@ -58,6 +66,57 @@ def buyer_country(request: Request, settings: SettingsDep) -> str:
 
 
 Country = Annotated[str, Depends(buyer_country)]
+
+
+@lru_cache
+def _miss_limit(limit: int) -> RateLimit:
+    return RateLimit(limit)
+
+
+def miss_limit(settings: SettingsDep) -> RateLimit:
+    """Wrong codes per network address."""
+    return _miss_limit(settings.coupon_misses_per_hour_address)
+
+
+def buyer_network(request: Request) -> str:
+    return network_of(_client_address(request))
+
+
+class CouponGuard:
+    """Stops codes being guessed. Counts wrong codes for the account, when there is one, and for
+    the network address."""
+
+    def __init__(
+        self,
+        request: Request,
+        session: Current,
+        orders: Orders,
+        settings: SettingsDep,
+        limiter: Annotated[RateLimit, Depends(miss_limit)],
+    ) -> None:
+        self._user = session.found.user if session.found else None
+        self._orders = orders
+        self._settings = settings
+        self._limiter = limiter
+        self._network = buyer_network(request)
+
+    def check(self) -> None:
+        """429 once there were too many wrong codes, even for the right code."""
+        account = self._user is not None and (
+            self._orders.misses_last_hour(self._user.id) >= self._settings.coupon_misses_per_hour
+        )
+        if account or self._limiter.full(self._network):
+            raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, TOO_MANY)
+
+    def refused(self, reason: Refusal) -> None:
+        if reason != "unknown":
+            return
+        self._limiter.allow(self._network)
+        if self._user is not None:
+            self._orders.record_miss(self._user.id)
+
+
+Guard = Annotated[CouponGuard, Depends()]
 
 
 # Shapes
@@ -83,9 +142,12 @@ class AccessOut(BaseModel):
     features: list[Feature]
     # Off while paid features are switched off on the server: then everyone has every feature.
     paid_reports: bool
-    # None: no account on this browser. Only a Google account can unlock a report.
+    # None: no account on this browser. Buying one makes a guest.
     account: Literal["guest", "google"] | None
     price: PriceOut
+    # How the price is paid. None: it cannot be paid yet, so only a free code unlocks the report.
+    # mock: a stand-in that takes no money (app/payments/mock.py).
+    checkout: Literal["mock"] | None
 
 
 class ApplyCoupon(BaseModel):
@@ -96,8 +158,9 @@ class ApplyCoupon(BaseModel):
 class CouponQuote(BaseModel):
     """The price after a coupon, or why the coupon does not work.
 
-    - free: 100% off, the report can be unlocked now
-    - payment_not_available: a discount, but there is no way to pay the rest yet
+    - free: nothing left to pay, the report can be unlocked now
+    - discount: something is left to pay
+    - payment_not_available: something is left to pay, and there is no way to pay it yet
     - unknown: no such code (counts as a wrong guess)
     - ended: switched off or past its end date
     - wrong_report: not for this kind of report
@@ -105,10 +168,11 @@ class CouponQuote(BaseModel):
     - account_limit: this account has used it as many times as it may
     """
 
-    result: Literal["free", "payment_not_available"] | Refusal
+    result: Literal["free", "discount", "payment_not_available"] | Refusal
     percent_off: int | None = None
     price: PriceOut
-    new_price: PriceOut | None = None
+    discount: PriceOut | None = None  # what the coupon takes off
+    new_price: PriceOut | None = None  # what is left to pay
 
 
 class Unlock(BaseModel):
@@ -146,15 +210,11 @@ def _order(order: Order) -> OrderOut:
     )
 
 
-def _google_user(session: CurrentSession) -> User:
-    if session.found is None or session.found.user.kind != "google":
+def buyer(session: CurrentSession) -> User:
+    """The account that buys: a guest or a Google account."""
+    if session.found is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, SIGN_IN)
     return session.found.user
-
-
-def _not_too_many(orders: OrderStore, user: User, settings: Settings) -> None:
-    if orders.misses_last_hour(user.id) >= settings.coupon_misses_per_hour:
-        raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, TOO_MANY)
 
 
 def _access(
@@ -173,6 +233,7 @@ def _access(
         paid_reports=settings.paid_reports,
         account=user.kind if user else None,
         price=_price(price_for(kind, country)),
+        checkout=settings.checkout,
     )
 
 
@@ -212,25 +273,29 @@ def apply_coupon(
     body: ApplyCoupon,
     session: Current,
     orders: Orders,
+    guard: Guard,
     country: Country,
     settings: SettingsDep,
 ) -> CouponQuote:
-    """The price of one report after a coupon. Uses nothing up: Unlock does that."""
-    user = _google_user(session)
-    _not_too_many(orders, user, settings)
+    """The price of one report after a coupon. Uses nothing up: Unlock or a payment does that."""
+    guard.check()
+    user = session.found.user if session.found else None
     price = price_for(body.kind, country)
     try:
-        coupon = orders.check_coupon(user.id, body.code, body.kind)
+        coupon = orders.check_coupon(user.id if user else None, body.code, body.kind)
     except CouponRefused as refused:
-        if refused.reason == "unknown":
-            orders.record_miss(user.id)
+        guard.refused(refused.reason)
         return CouponQuote(result=refused.reason, price=_price(price))
-    free = coupon.percent_off == 100
+    final = discounted(price, coupon.percent_off)
+    result: Literal["free", "discount", "payment_not_available"] = "free"
+    if final.amount > 0:
+        result = "discount" if settings.checkout else "payment_not_available"
     return CouponQuote(
-        result="free" if free or CHECKOUT_AVAILABLE else "payment_not_available",
+        result=result,
         percent_off=coupon.percent_off,
         price=_price(price),
-        new_price=_price(discounted(price, coupon.percent_off)),
+        discount=PriceOut(amount=price.amount - final.amount, currency=price.currency),
+        new_price=_price(final),
     )
 
 
@@ -239,8 +304,8 @@ def apply_coupon(
     response_model=Unlocked,
     dependencies=[Depends(same_site)],
     responses={
-        401: {"description": "Not signed in with Google"},
-        402: {"description": "The coupon leaves something to pay (payment_not_available)"},
+        401: {"description": "No account: the page makes a guest first"},
+        402: {"description": "The coupon leaves something to pay: nothing is unlocked"},
         409: {"description": "The coupon was refused: the reason, as in CouponQuote"},
         429: {"description": "Too many wrong codes in the last hour"},
     },
@@ -251,15 +316,17 @@ def unlock(
     session: Current,
     accounts: Accounts,
     orders: Orders,
+    guard: Guard,
     db: PlacesDb,
     country: Country,
     settings: SettingsDep,
 ) -> Unlocked:
-    """Unlocks one report with a free coupon and keeps it in My reports as paid.
+    """Unlocks one report with a coupon that leaves nothing to pay, and keeps it in My reports
+    as paid.
 
     A report already paid for gives back its order and uses nothing."""
-    user = _google_user(session)
-    _not_too_many(orders, user, settings)
+    user = buyer(session)
+    guard.check()
     report = _new_report(body.report, db)  # the request is checked before a coupon is used
     kind = body.report.kind
     try:
@@ -267,11 +334,11 @@ def unlock(
             user.id, body.code, kind, report.input_hash, price_for(kind, country)
         )
     except CouponRefused as refused:
-        if refused.reason == "unknown":
-            orders.record_miss(user.id)
+        guard.refused(refused.reason)
         raise HTTPException(status.HTTP_409_CONFLICT, refused.reason) from refused
     except PaymentNeeded as needed:
-        raise HTTPException(status.HTTP_402_PAYMENT_REQUIRED, PAYMENT_NOT_AVAILABLE) from needed
+        detail = PAYMENT_NEEDED if settings.checkout else PAYMENT_NOT_AVAILABLE
+        raise HTTPException(status.HTTP_402_PAYMENT_REQUIRED, detail) from needed
     saved: SavedOut | None
     try:
         item, _ = accounts.save(user.id, report, settings.paid_saved_limit, order.id)

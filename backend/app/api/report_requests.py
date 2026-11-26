@@ -16,8 +16,13 @@ NEEDS_CHOICE = "the birth time happened twice or not at all on that date: choose
 
 
 class ReadingChapter(BaseModel):
-    """One AI chapter as the person read it. Long enough for the longest chapter."""
+    """One AI chapter as the person read it. Long enough for the longest chapter.
 
+    The id (`chart.periods`) picks the chapter's picture and diagram; a chapter without one
+    prints with a general picture.
+    """
+
+    id: str | None = Field(default=None, max_length=40, pattern=r"^[a-z]+\.[a-z]+$")
     title: str = Field(min_length=1, max_length=120)
     text: str = Field(min_length=1, max_length=8000)
 

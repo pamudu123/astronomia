@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import sitemap from "@/app/sitemap";
-import { YEARS, dayOfYear, daysInYear, hasYear, yearlyPath } from "@/lib/yearly";
+import { AREA_SPOTS, YEARS, type Year as FullYear, areasOf, dayOfYear, daysInYear, hasYear, yearlyPath } from "@/lib/yearly";
 import en from "@/messages/en.json";
 import si from "@/messages/si.json";
 
@@ -35,6 +35,18 @@ describe("yearly", () => {
       // A change day belongs to both stays, so a planet that moves counts it twice.
       expect(days - (planet.stays.length - 1)).toBe(daysInYear(year.year));
     }
+  });
+
+  it("groups the year by part of life, the longest visited first", () => {
+    const areas = areasOf(fixture<FullYear>("yearly-2027-makara-en.json"));
+    expect(areas.map((area) => area.house)).toEqual([7, 1, 3, 8, 4, 9]);
+    // Saturn starts and ends the year in the 3rd; Jupiter starts in the 8th. Neither is new.
+    expect(areas.filter((area) => area.isNew).map((area) => area.house)).toEqual([4, 9]);
+    expect(areas[0].visits.map((visit) => visit.body)).toEqual(["jupiter", "ketu"]);
+  });
+
+  it("has a name and a picture for each of the 12 houses", () => {
+    expect([AREA_SPOTS.length, en.yearly.areas.length, si.yearly.areas.length]).toEqual([12, 12, 12]);
   });
 
   it("has the same text keys in both languages", () => {

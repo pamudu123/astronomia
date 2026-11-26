@@ -69,6 +69,9 @@ class PanchangaResponse(BaseModel):
     nakatha: list[PanchangaPartOut]
     yoga: list[PanchangaPartOut]
     karana: list[PanchangaPartOut]
+    # True for a date the place's clocks skipped (crossing the date line): no times at all.
+    skipped: bool = False
+    skipped_note: str | None = None
 
 
 class PanchangaQuery(BaseModel):
@@ -158,6 +161,8 @@ def panchanga_out(
         nakatha=_spans(result.nakatha, "nakatha", lang, zone),
         yoga=_spans(result.yoga, "yoga", lang, zone),
         karana=_spans(result.karana, "karana", lang, zone),
+        skipped=result.skipped,
+        skipped_note=table["panchanga"]["skipped"] if result.skipped else None,
     )
 
 
@@ -216,6 +221,7 @@ class MonthDayOut(BaseModel):
     nakatha: PanchangaPartOut | None
     poya: bool  # the full moon falls in this Sinhala day (calculated)
     full_moon: LocalTimeOut | None  # the moment of the full moon, on a poya day
+    skipped: bool = False  # the place's clocks skipped this date
 
 
 class MonthPanchangaResponse(BaseModel):
@@ -276,6 +282,7 @@ def month_day_out(result: DayPanchanga, lang: Lang) -> MonthDayOut:
         nakatha=day.nakatha[0] if day.nakatha else None,
         poya=full_moon is not None,
         full_moon=None if full_moon is None else time_out(full_moon, zone),
+        skipped=result.skipped,
     )
 
 

@@ -1,5 +1,5 @@
 import type { components } from "./api-types";
-import type { BirthRequest, Labels } from "./hadahan";
+import { type BirthRequest, EMPTY_FORM, type FormValues, type Labels, loadSession, saveSession } from "./hadahan";
 import type { Locale } from "./i18n";
 
 export type Porondam = components["schemas"]["PorondamResponse"];
@@ -13,9 +13,69 @@ export type PersonInput = QuickInput | FullInput;
 
 export type PorondamRequest = { bride: PersonInput; groom: PersonInput };
 
-export type SavedMatch = { request: PorondamRequest; result: Porondam };
+export type Role = "bride" | "groom";
+export type MatchMode = "full" | "quick";
+
+/** The match form as typed, for both ways of matching. */
+export type MatchForm = {
+  mode: MatchMode;
+  full: Record<Role, FormValues>;
+  quick: Record<Role, QuickInput>;
+};
+
+/** Stars named in the page's address, from a star link. */
+export type LinkedStars = Partial<Record<Role, { nakshatra: string; pada: number }>>;
+
+export type SavedMatch = {
+  request: PorondamRequest;
+  result: Porondam;
+  /** The link the match was made from (see linkOf), the language and the form. Missing on older saves. */
+  link?: string;
+  lang?: Locale;
+  form?: MatchForm;
+};
 
 export const PORONDAM_KEY = "astronomia.porondam";
+
+/**
+ * The form while it is being filled in, so switching language or reloading keeps it. This tab
+ * only. `link` is what the address asked for then: the same address brings back what was typed,
+ * a new star link starts from its own stars.
+ */
+export type MatchDraft = MatchForm & { link: string };
+const DRAFT_KEY = "astronomia.porondam.draft";
+
+export const saveMatchDraft = (draft: MatchDraft | null) => saveSession(DRAFT_KEY, draft);
+
+export function loadMatchDraft(): MatchDraft | null {
+  const draft = loadSession<MatchDraft>(DRAFT_KEY);
+  return draft?.full?.bride && draft.full.groom && draft.quick?.bride && draft.quick.groom ? draft : null;
+}
+
+const EMPTY_QUICK: QuickInput = { name: "", nakshatra: "", pada: 1 };
+export const EMPTY_MATCH: MatchForm = {
+  mode: "full",
+  full: { bride: EMPTY_FORM, groom: EMPTY_FORM },
+  quick: { bride: EMPTY_QUICK, groom: EMPTY_QUICK },
+};
+
+/** What the address asks of the form, as one text: "" when it asks nothing. */
+export function linkOf(linked: LinkedStars | null, starsFirst: boolean): string {
+  const star = (role: Role) => (linked?.[role] ? `${role}=${linked[role].nakshatra}.${linked[role].pada}` : "");
+  const stars = [star("bride"), star("groom")].filter(Boolean).join("&");
+  return stars || (starsFirst ? "mode=stars" : "");
+}
+
+/** The form to open with: the draft, with what a new link asks for on top. */
+export function openingForm(draft: MatchDraft | null, link: string, linked: LinkedStars | null): MatchForm {
+  const { mode, full, quick } = draft ?? EMPTY_MATCH;
+  if (!link || draft?.link === link) return { mode, full, quick };
+  const from = (role: Role): QuickInput => (linked?.[role] ? { ...EMPTY_QUICK, ...linked[role] } : quick[role]);
+  return { mode: "quick", full, quick: { bride: from("bride"), groom: from("groom") } };
+}
+
+/** A link from the star pages asks for a new match, unless this match was made from that link. */
+export const keepsMatch = (saved: SavedMatch, link: string) => !link || saved.link === link;
 
 /** Birth details go in the body of a POST, never in the URL. */
 export async function fetchPorondam(request: PorondamRequest, lang: Locale): Promise<Porondam> {

@@ -1,0 +1,610 @@
+{
+ "ho-yoga-malavya": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 4.0,
+  "total": 4.88,
+  "model_calls": 4,
+  "tokens_in": 70000,
+  "tokens_out": 223,
+  "reasoning": 0,
+  "cost_usd": 0.002199,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 83,
+   "longest_paragraph": 43,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 43 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-yoga-gaja": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 4.11,
+  "total": 4.84,
+  "model_calls": 4,
+  "tokens_in": 69996,
+  "tokens_out": 205,
+  "reasoning": 0,
+  "cost_usd": 0.00649,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 69,
+   "longest_paragraph": 40,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "ho-yoga-shasha": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.71,
+  "total": 2.3,
+  "model_calls": 2,
+  "tokens_in": 21699,
+  "tokens_out": 116,
+  "reasoning": 0,
+  "cost_usd": 0.000776,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 61,
+   "longest_paragraph": 61,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 61 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-abroad-kasun": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 2.93,
+  "total": 4.73,
+  "model_calls": 3,
+  "tokens_in": 54070,
+  "tokens_out": 306,
+  "reasoning": 0,
+  "cost_usd": 0.001966,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 180,
+   "longest_paragraph": 71,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 71 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-home-nimali": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [
+   "unexplained term: «debilitated»"
+  ],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 3.19,
+  "total": 6.87,
+  "model_calls": 3,
+  "tokens_in": 53992,
+  "tokens_out": 413,
+  "reasoning": 0,
+  "cost_usd": 0.002178,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 287,
+   "longest_paragraph": 97,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 97 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-health-kasun": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 3.04,
+  "total": 4.38,
+  "model_calls": 3,
+  "tokens_in": 54070,
+  "tokens_out": 243,
+  "reasoning": 0,
+  "cost_usd": 0.00184,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 138,
+   "longest_paragraph": 64,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 64 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-moon-kasun": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 2,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 2.44,
+  "total": 2.64,
+  "model_calls": 2,
+  "tokens_in": 21697,
+  "tokens_out": 65,
+  "reasoning": 0,
+  "cost_usd": 0.000674,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 16,
+   "longest_paragraph": 16,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "ho-star-nimali": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 3,
+  "missing": [
+   "something of this chart"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 2.63,
+  "total": 3.01,
+  "model_calls": 2,
+  "tokens_in": 21637,
+  "tokens_out": 74,
+  "reasoning": 0,
+  "cost_usd": 0.00069,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 21,
+   "longest_paragraph": 21,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "ho-erashtaka-nimali": {
+  "error": null,
+  "facts_found": 2,
+  "facts_total": 4,
+  "missing": [
+   "rising sign count",
+   "next date"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 3.2,
+  "total": 4.41,
+  "model_calls": 3,
+  "tokens_in": 41753,
+  "tokens_out": 217,
+  "reasoning": 0,
+  "cost_usd": 0.003798,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 103,
+   "longest_paragraph": 61,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 61 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-offtopic": {
+  "error": null,
+  "facts_found": 1,
+  "facts_total": 2,
+  "missing": [
+   "back to the site"
+  ],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 0.83,
+  "total": 1.27,
+  "model_calls": 1,
+  "tokens_in": 8162,
+  "tokens_out": 7,
+  "reasoning": 0,
+  "cost_usd": 0.000219,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 1,
+   "longest_paragraph": 1,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "ho-rahu-ny": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 4,
+  "missing": [
+   "already over"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "find_place",
+   "current_date",
+   "read_file",
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 3,
+  "first_text": 4.52,
+  "total": 5.0,
+  "model_calls": 4,
+  "tokens_in": 35595,
+  "tokens_out": 191,
+  "reasoning": 0,
+  "cost_usd": 0.001275,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 31,
+   "longest_paragraph": 31,
+   "sinhala_share": 0.0,
+   "issues": []
+  }
+ },
+ "ho-compare": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 4,
+  "missing": [
+   "16 Rahu"
+  ],
+  "must_not": [
+   "calls one best: «14 January at 11 am looks the most suitable»"
+  ],
+  "tools_used": [
+   "read_file",
+   "find_place",
+   "good_times_for_day",
+   "good_times_for_day",
+   "good_times_for_day"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 4,
+  "first_text": 4.85,
+  "total": 6.29,
+  "model_calls": 4,
+  "tokens_in": 36879,
+  "tokens_out": 368,
+  "reasoning": 0,
+  "cost_usd": 0.001661,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 118,
+   "longest_paragraph": 43,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 43 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-si-poya": {
+  "error": null,
+  "facts_found": 1,
+  "facts_total": 3,
+  "missing": [
+   "Unduvap",
+   "Sanghamitta"
+  ],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "read_file"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 3.86,
+  "total": 5.92,
+  "model_calls": 3,
+  "tokens_in": 33136,
+  "tokens_out": 248,
+  "reasoning": 0,
+  "cost_usd": 0.001326,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 50,
+   "longest_paragraph": 50,
+   "sinhala_share": 1.0,
+   "issues": [
+    "a paragraph of 50 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-saturn-kanya": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [
+   "read_file",
+   "upcoming_planet_changes",
+   "planet_change_for_sign"
+  ],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 2,
+  "first_text": 3.84,
+  "total": 5.42,
+  "model_calls": 4,
+  "tokens_in": 39833,
+  "tokens_out": 239,
+  "reasoning": 0,
+  "cost_usd": 0.001477,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 108,
+   "longest_paragraph": 62,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 62 words (limit about 40)"
+   ]
+  }
+ },
+ "ho-ch-care-kasun": {
+  "error": null,
+  "facts_found": 5,
+  "facts_total": 5,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 0.95,
+  "total": 4.12,
+  "model_calls": 1,
+  "tokens_in": 27997,
+  "tokens_out": 365,
+  "reasoning": 0,
+  "cost_usd": 0.001431,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 291,
+   "longest_paragraph": 57,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 57 words (limit about 40)",
+    "opening of 37 words (limit 35)"
+   ]
+  }
+ },
+ "ho-ch-day-en": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 1.01,
+  "total": 2.63,
+  "model_calls": 1,
+  "tokens_in": 11211,
+  "tokens_out": 241,
+  "reasoning": 0,
+  "cost_usd": 0.000763,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 155,
+   "longest_paragraph": 36,
+   "sinhala_share": 0.0,
+   "issues": [
+    "opening of 36 words (limit 35)"
+   ]
+  }
+ },
+ "ho-ch-avurudu-si": {
+  "error": null,
+  "facts_found": 5,
+  "facts_total": 6,
+  "missing": [
+   "milk or kiribath"
+  ],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 0.91,
+  "total": 5.97,
+  "model_calls": 1,
+  "tokens_in": 12121,
+  "tokens_out": 664,
+  "reasoning": 0,
+  "cost_usd": 0.001632,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 189,
+   "longest_paragraph": 27,
+   "sinhala_share": 1.0,
+   "issues": []
+  }
+ },
+ "ho-ch-saturn-kasun": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 3,
+  "missing": [],
+  "must_not": [
+   "far ahead: «2062»"
+  ],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 2.74,
+  "total": 5.25,
+  "model_calls": 1,
+  "tokens_in": 22246,
+  "tokens_out": 572,
+  "reasoning": 136,
+  "cost_usd": 0.001701,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 295,
+   "longest_paragraph": 38,
+   "sinhala_share": 0.0,
+   "issues": [
+    "opening of 37 words (limit 35)"
+   ]
+  }
+ },
+ "ho-ch-nature-kasun": {
+  "error": null,
+  "facts_found": 3,
+  "facts_total": 4,
+  "missing": [
+   "a combination"
+  ],
+  "must_not": [],
+  "tools_used": [],
+  "tools_failed": [],
+  "tools_ok": true,
+  "engine_calls": 0,
+  "first_text": 0.84,
+  "total": 4.31,
+  "model_calls": 1,
+  "tokens_in": 27994,
+  "tokens_out": 362,
+  "reasoning": 0,
+  "cost_usd": 0.001425,
+  "models": [
+   "gpt-6-luna"
+  ],
+  "style": {
+   "words": 288,
+   "longest_paragraph": 59,
+   "sinhala_share": 0.0,
+   "issues": [
+    "a paragraph of 59 words (limit about 40)"
+   ]
+  }
+ }
+}

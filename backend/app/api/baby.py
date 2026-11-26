@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from app.api.birth import resolve_birth
 from app.api.charts import EPHEMERIS, HadahanRequest, TimeCheckOut, chart_out
 from app.api.deps import PlacesDb
+from app.api.guardian import record_consent
 from app.api.panchanga import CACHE, offset_label
 from app.api.timeresolve import TimeResolveResponse
 from app.engine import babynames, names
@@ -89,6 +90,11 @@ class BabyChartOut(BaseModel):
     time_check: TimeCheckOut
 
 
+class BabyLettersRequest(HadahanRequest):
+    # A parent or guardian agreed to the use of these details (app/api/guardian.py).
+    guardian_consent: Literal[True]
+
+
 class BabyLettersResponse(BaseModel):
     status: str
     time: TimeResolveResponse
@@ -158,8 +164,9 @@ def letters_for_star(
 
 
 @router.post("/v1/baby/letters", response_model=BabyLettersResponse)
-def letters_for_birth(body: HadahanRequest, db: PlacesDb) -> BabyLettersResponse:
+def letters_for_birth(body: BabyLettersRequest, db: PlacesDb) -> BabyLettersResponse:
     """The birth star, pada, Moon sign, lagna and weekday, and the letters they give."""
+    record_consent("baby_letters", body.lang)
     version, provisional = _rule_set()
     birth = resolve_birth(body, db)
     if birth.utc is None:

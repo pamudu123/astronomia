@@ -154,9 +154,13 @@ def network_hash(address: str, settings: Settings) -> str:
     return digest.hexdigest()[:32]
 
 
-def _paid_user(request: Request, accounts: Accounts, tokens: Tokens) -> str | None:
-    """The account behind the sign in token, if any. A token that fails the check counts as no
-    account: the chat goes on with free questions rather than stopping. No account is made here."""
+def _paid_user(
+    request: Request, accounts: Accounts, tokens: Tokens, orders: OrderStore
+) -> str | None:
+    """The account behind the sign in token, if any. A guest counts only once a report was
+    unlocked: until then a guest's questions are the browser's free ones. A token that fails the
+    check counts as no account: the chat goes on with free questions rather than stopping. No
+    account is made here."""
     token = bearer_token(request.headers.get("authorization"))
     if token is None or tokens is None:
         return None
@@ -164,10 +168,10 @@ def _paid_user(request: Request, accounts: Accounts, tokens: Tokens) -> str | No
         caller = tokens.check(token)
     except (BadToken, KeysUnavailable):
         return None
-    if caller.kind != "google":  # only a Google account can hold paid reports
-        return None
     user = accounts.find_user(caller.id, caller.kind)
-    return user.id if user else None
+    if user is None or (user.kind == "guest" and not orders.paid_count(user.id)):
+        return None
+    return user.id
 
 
 def _who(asker: Asker, user_id: str | None, settings: Settings) -> Who:
@@ -219,7 +223,7 @@ def chat_status(
 ) -> ChatStatus:
     """What is left for this browser and account, in questions."""
     response.headers.update(PRIVATE)
-    user_id = _paid_user(request, accounts, tokens)
+    user_id = _paid_user(request, accounts, tokens, orders)
     return _look(chats, _who(body, user_id, settings), _paid_reports(orders, user_id), settings)
 
 
@@ -244,7 +248,7 @@ def ask(
 ) -> TurnOut | JSONResponse:
     """Allows one question, free or paid, and records it; or says which limit stops it."""
     response.headers.update(PRIVATE)
-    user_id = _paid_user(request, accounts, tokens)
+    user_id = _paid_user(request, accounts, tokens, orders)
     who = _who(body, user_id, settings)
     paid_reports = _paid_reports(orders, user_id)
     if body.length > settings.chat_max_length:

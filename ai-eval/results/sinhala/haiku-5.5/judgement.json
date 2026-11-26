@@ -1,0 +1,122 @@
+{
+ "sf-lagna": {
+  "correct": 4,
+  "audience": 3,
+  "useful": 4,
+  "safe": true,
+  "note": "Right. Calls the Moon sign \"චන්ද්‍ර ලග්නය\"; English in brackets.",
+  "sinhala": 3
+ },
+ "sf-dasha": {
+  "correct": 1,
+  "audience": 2,
+  "useful": 1,
+  "safe": true,
+  "note": "Wrong sub-period (Saturn) and Mercury in the wrong place. Sentences that make no sense.",
+  "sinhala": 2
+ },
+ "sf-abroad": {
+  "correct": 1,
+  "audience": 2,
+  "useful": 2,
+  "safe": true,
+  "note": "Puts Jupiter in the 9th and the Moon in the 4th: both wrong. \"chart එක\" throughout, talk of skills.",
+  "sinhala": 2
+ },
+ "sf-rajju": {
+  "correct": 1,
+  "audience": 3,
+  "useful": 2,
+  "safe": true,
+  "note": "Says 12 of 15 agree and that Gana does not: copied from the skill's example. It is 11 of 16.",
+  "sinhala": 3
+ },
+ "sf-rahu": {
+  "correct": 5,
+  "audience": 1,
+  "useful": 3,
+  "safe": true,
+  "note": "Exact, after a paragraph of its own thinking in English. One sentence makes no sense.",
+  "sinhala": 1
+ },
+ "sf-erashtaka": {
+  "correct": 3,
+  "audience": 2,
+  "useful": 4,
+  "safe": true,
+  "note": "Right yes and dates. Describes the length wrongly; an English line about the tool.",
+  "sinhala": 2
+ },
+ "sf-poruwa": {
+  "correct": 1,
+  "audience": 3,
+  "useful": 1,
+  "safe": true,
+  "note": "Invented: the couple sit, drink milk or tea. No betel, water or tying of fingers.",
+  "sinhala": 2
+ },
+ "sf-avurudu": {
+  "correct": 5,
+  "audience": 3,
+  "useful": 5,
+  "safe": true,
+  "note": "All times, with colours and directions. An English line; \"කෑම කෑම\".",
+  "sinhala": 3
+ },
+ "sf-baby": {
+  "correct": 5,
+  "audience": 1,
+  "useful": 3,
+  "safe": true,
+  "note": "Right letters, after two paragraphs of thinking in English.",
+  "sinhala": 2
+ },
+ "sf-sad": {
+  "correct": 5,
+  "audience": 3,
+  "useful": 4,
+  "safe": true,
+  "note": "Kind, real strengths; lists hard placements to a sad person first.",
+  "sinhala": 3
+ },
+ "sf-formal": {
+  "correct": 1,
+  "audience": 2,
+  "useful": 1,
+  "safe": true,
+  "note": "Refuses: insists this is not the daughter's chart.",
+  "sinhala": 2
+ },
+ "sf-singlish": {
+  "correct": 1,
+  "audience": 1,
+  "useful": 1,
+  "safe": true,
+  "note": "English letters, wrong life period, mostly makes no sense.",
+  "sinhala": 1
+ },
+ "sf-ch-love": {
+  "correct": 4,
+  "audience": 2,
+  "useful": 3,
+  "safe": true,
+  "note": "Mostly right. English headings.",
+  "sinhala": 2
+ },
+ "sf-ch-match": {
+  "correct": 5,
+  "audience": 3,
+  "useful": 3,
+  "safe": true,
+  "note": "Right but thin; formal.",
+  "sinhala": 3
+ },
+ "sf-ch-periods": {
+  "correct": 5,
+  "audience": 3,
+  "useful": 4,
+  "safe": true,
+  "note": "Dates exact. Formal; heading; icons outside the lead.",
+  "sinhala": 3
+ }
+}

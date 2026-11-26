@@ -110,10 +110,43 @@ test("a time that happened twice asks which one", async ({ page }) => {
 test("missing details are reported", async ({ page }) => {
   await mockBackend(page, "en");
   await page.goto("/en/hadahan");
-  await page.getByRole("button", { name: "Show my hadahan" }).click();
-  await expect(
-    page.getByRole("alert").filter({ hasText: "Please fill in the date, time and place." }),
-  ).toBeVisible();
+  const alert = page.locator("form").getByRole("alert");
+  const submit = page.getByRole("button", { name: "Show my hadahan" });
+  await submit.click();
+  await expect(alert).toHaveText("Still needed: Date of birth, Time of birth, Place of birth.");
+  await expect(page.getByLabel("Date of birth")).toBeFocused();
+  await expect(page.getByLabel("Date of birth")).toHaveAttribute("aria-invalid", "true");
+
+  // Each one goes as it is filled in (QA-05).
+  await page.getByRole("combobox").fill("kandy");
+  await page.getByRole("option").first().click();
+  await expect(alert).toHaveText("Still needed: Date of birth, Time of birth.");
+  const hint = page.locator("[data-place-hint]");
+  await expect(hint).toContainText("Chosen: Kandy");
+  await expect(hint).toContainText("Asia/Colombo");
+  await expect(page.getByRole("combobox")).not.toHaveAttribute("aria-invalid", "true");
+  await page.getByLabel("Date of birth").fill("1995-04-19");
+  await expect(alert).toHaveText("Still needed: Time of birth.");
+  await submit.click();
+  await expect(page.getByLabel("Time of birth")).toBeFocused();
+  await page.getByLabel("Time of birth").fill("14:35");
+  await expect(alert).toHaveCount(0);
+
+  // Changing the place again needs it again, and the hint says how.
+  await page.getByRole("combobox").fill("k");
+  await expect(alert).toHaveText("Still needed: Place of birth.");
+  await expect(hint).toHaveText("Type at least two letters of a town or village");
+  await page.getByRole("button", { name: /coordinates/i }).click();
+  await expect(alert).toHaveText("Still needed: Latitude, Longitude, Time zone.");
+});
+
+test("missing details are named in Sinhala too", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.goto("/si/hadahan");
+  await page.locator('form button[type="submit"]').click();
+  await expect(page.locator("form").getByRole("alert")).toHaveText(
+    "තව ඇතුළත් කළ යුතු තොරතුරු: උපන් දිනය, උපන් වේලාව, උපන් ස්ථානය.",
+  );
 });
 
 test("the result downloads as a PDF report", async ({ page }) => {
@@ -194,6 +227,16 @@ test("the hadahan still shows when the forecast fails", async ({ page }) => {
   await page.getByRole("button", { name: "Show my hadahan" }).click();
   await expect(page.locator('[data-card="kuja"]')).toBeVisible();
   await expect(page.locator('[data-card="forecast"]')).toHaveCount(0);
+
+  // It says so in one line, and trying again brings it.
+  const section = page.locator('[data-section="forecast"]');
+  await expect(section).toContainText("We could not load this section.");
+  await page.unroute("**/api/v1/forecast");
+  await page.route("**/api/v1/forecast", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture("forecast-en.json") }),
+  );
+  await section.getByRole("button", { name: "Try again" }).click();
+  await expect(page.locator('[data-card="forecast"]')).toBeVisible();
 });
 
 test("the result shows the planet changes for you", async ({ page }) => {
@@ -254,6 +297,16 @@ test("the hadahan still shows when the planet changes fail", async ({ page }) =>
   await page.getByRole("button", { name: "Show my hadahan" }).click();
   await expect(page.locator('[data-card="forecast"]')).toBeVisible();
   await expect(page.locator('[data-card="changes"]')).toHaveCount(0);
+
+  // It says so in one line, and trying again brings it.
+  const section = page.locator('[data-section="changes"]');
+  await expect(section).toContainText("We could not load this section.");
+  await page.unroute("**/api/v1/changes/personal");
+  await page.route("**/api/v1/changes/personal", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture("changes-personal-en.json") }),
+  );
+  await section.getByRole("button", { name: "Try again" }).click();
+  await expect(page.locator('[data-card="changes"]')).toBeVisible();
 });
 
 test("Edit details brings back every field, also after a reload (QA AST-01)", async ({ page }) => {
@@ -336,6 +389,7 @@ test("the result leads with the birth details and three plain answers", async ({
   await expect(details).toContainText("Kandy");
   await expect(details).toContainText("UTC+05:30 on that date");
   await expect(details.getByRole("button", { name: "Edit details" })).toBeVisible();
+  await expect(details.getByRole("button", { name: "Check another chart" })).toBeVisible();
 
   // Plain titles first, the traditional term beside them.
   await expect(page.getByRole("heading", { name: "Your chart at a glance" })).toBeVisible();
@@ -377,4 +431,154 @@ test("the reading guide walks through the chart", async ({ page }) => {
   await guide.getByRole("button", { name: "Close" }).click();
   await expect(guide).toHaveCount(0);
   await expect(page.getByRole("button", { name: "How to read this chart" })).toBeVisible();
+});
+
+test("an unknown birth time leads to the birth star match", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await page.getByLabel("I don't know the exact time").check();
+  const note = page.locator("[data-unknown-time]");
+  await expect(note.getByRole("link", { name: "Find the time from an old horoscope" })).toHaveAttribute("href", "/en/kendara");
+  await note.getByRole("link", { name: "Match two birth stars" }).click();
+  await expect(page).toHaveURL(/\/en\/porondam\?mode=stars$/);
+  await expect(page.locator('[data-mode="quick"]')).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByLabel("Birth star (nakath)")).toHaveCount(2);
+});
+
+test("an unknown birth time has its next step in Sinhala too", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.goto("/si/hadahan");
+  await page.getByRole("checkbox").check();
+  await expect(page.getByRole("link", { name: "උපන් නැකත් දෙකක් ගළපන්න" })).toHaveAttribute("href", "/si/porondam?mode=stars");
+});
+
+test("the form recovers when its names cannot be loaded, keeping what was typed", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.route("**/api/v1/labels/*", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.goto("/en/hadahan");
+  const alert = page.locator("form").getByRole("alert");
+  await expect(alert).toContainText("What you typed is kept.");
+  await fillForm(page);
+  await page.route("**/api/v1/labels/*", (route) =>
+    route.fulfill({ contentType: "application/json", body: fixture("labels-en.json") }),
+  );
+  await alert.getByRole("button", { name: "Try again" }).click();
+  await expect(alert).toHaveCount(0);
+  await expect(page.getByLabel(/Name/)).toHaveValue("Nimali");
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.locator('[data-card="lagna"]')).toContainText("Simha");
+});
+
+test("sections hold their place while they load, still when less motion is asked for", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await mockBackend(page, "en");
+  let release = () => {};
+  const held = new Promise<void>((resolve) => (release = resolve));
+  for (const path of ["journey", "forecast", "changes/personal"]) {
+    await page.route(`**/api/v1/${path}`, async (route) => {
+      await held;
+      await route.fulfill({ status: 503, body: "" });
+    });
+  }
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  for (const [id, height] of [["road", 600], ["forecast", 400], ["changes", 250]] as const) {
+    const section = page.locator(`[data-section="${id}"]`);
+    await expect(section).toHaveAttribute("aria-busy", "true");
+    await expect(section.getByRole("status")).toHaveText("Loading…");
+    expect((await section.boundingBox())!.height).toBeGreaterThan(height);
+    expect(await section.locator('[aria-hidden="true"]').evaluate((item) => getComputedStyle(item).animationName)).toBe("none");
+  }
+  release();
+  for (const id of ["road", "forecast", "changes"]) {
+    await expect(page.locator(`[data-section="${id}"]`)).toContainText("We could not load this section.");
+  }
+});
+
+test("the place search says when it is searching and when it failed", async ({ page }) => {
+  await mockBackend(page, "en");
+  let release = () => {};
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let fail = true;
+  await page.route("**/api/v1/places?*", async (route) => {
+    await held;
+    await route.fulfill(
+      fail ? { status: 503, body: "" } : { contentType: "application/json", body: fixture("places-kandy.json") },
+    );
+  });
+  await page.goto("/en/hadahan");
+  const box = page.getByRole("combobox");
+  const hint = page.locator("[data-place-hint]");
+  await box.fill("kandy");
+  await expect(hint).toHaveText("Searching for places…");
+  await expect(box).toHaveAccessibleDescription("Searching for places…");
+  release();
+  await expect(hint).toHaveText("Places could not be searched.");
+  fail = false;
+  await page.getByRole("button", { name: "Try again" }).click();
+  await expect(box).toBeFocused();
+  await page.getByRole("option").first().click();
+  await expect(hint).toContainText("Chosen: Kandy");
+});
+
+test("the place search fails in Sinhala too", async ({ page }) => {
+  await mockBackend(page, "si");
+  await page.route("**/api/v1/places?*", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.goto("/si/hadahan");
+  await page.getByRole("combobox").fill("kandy");
+  await expect(page.locator("[data-place-hint]")).toHaveText("ස්ථාන සෙවීමට නොහැකි විය.");
+});
+
+test("a birth date still to come is refused", async ({ page }) => {
+  const requests = await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  const date = page.getByLabel("Date of birth");
+  await expect(date).toHaveAttribute("max", /^20\d\d-\d\d-\d\d$/);
+  await date.fill("2199-01-01");
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(date).toBeFocused();
+  await expect(date).toHaveAccessibleDescription("Date of birth cannot be in the future.");
+  expect(requests).toHaveLength(0);
+  await date.fill("1995-04-19");
+  await expect(page.getByText("cannot be in the future")).toHaveCount(0);
+});
+
+test("a finished chart stays when the backend does not answer after a reload", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  const lagna = page.locator('[data-card="lagna"]');
+  await expect(lagna).toContainText("Simha");
+  const kept = () => page.evaluate(() => sessionStorage.getItem("astronomia.hadahan"));
+
+  await page.route("**/api/v1/hadahan", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.reload();
+  await expect(lagna).toContainText("Simha");
+
+  // In the other language the English words are not shown: the form has the details instead.
+  await mockBackend(page, "si");
+  await page.route("**/api/v1/hadahan", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.goto("/si/hadahan");
+  await expect(page.locator('input[type="date"]')).toHaveValue("1995-04-19");
+  expect(await kept()).not.toBeNull();
+
+  // Back in English, once the backend answers, the chart is there.
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await expect(lagna).toContainText("Simha");
+});
+
+test("a kept chart whose details are refused goes back to the form", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/hadahan");
+  await fillForm(page);
+  await page.getByRole("button", { name: "Show my hadahan" }).click();
+  await expect(page.locator('[data-card="lagna"]')).toBeVisible();
+  await page.route("**/api/v1/hadahan", (route) => route.fulfill({ status: 404, body: "" }));
+  await page.reload();
+  await expect(page.getByLabel("Date of birth")).toHaveValue("1995-04-19");
+  expect(await page.evaluate(() => sessionStorage.getItem("astronomia.hadahan"))).toBeNull();
 });

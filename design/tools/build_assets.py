@@ -6,26 +6,47 @@ Needs Pillow and numpy. The originals are never modified.
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC, WEB = ROOT / "assets" / "source", ROOT / "assets" / "web"
 WEB.mkdir(parents=True, exist_ok=True)
 
-# Rashi number and name -> original file. Simha has no original yet (see design/README.md).
+# Rashi number and name -> original file.
 RASHI = {
     "01-mesha": "01_first_set/02_mesha_aries.png",
     "02-vrishabha": "01_first_set/03_vrishabha_taurus.png",
     "03-mithuna": "01_first_set/04_mithuna_gemini.png",
     "04-kataka": "01_first_set/05_karka_cancer.png",
-    "06-kanya": "01_first_set/06_kanya_virgo.png",
+    "05-simha": "05_uniform_set/rashi-05-simha.png",
+    "06-kanya": "05_uniform_set/rashi-06-kanya.png",
     "07-tula": "01_first_set/07_tula_libra.png",
     "08-vrischika": "01_first_set/08_vrischika_scorpio.png",
     "09-dhanu": "01_first_set/09_dhanu_sagittarius.png",
-    "10-makara": "02_remaining_set/04_makara_capricorn.png",
-    "11-kumbha": "02_remaining_set/02_kumbha_aquarius_person.png",
-    "12-meena": "02_remaining_set/01_meena_pisces.png",
+    "10-makara": "05_uniform_set/rashi-10-makara.png",
+    "11-kumbha": "05_uniform_set/rashi-11-kumbha.png",
+    "12-meena": "05_uniform_set/rashi-12-meena.png",
 }
+
+# Each picture's thin gold ring, as fractions of the picture: centre x, centre y, half width, half
+# height. Measured on the originals (the stars on the ring give its top and bottom). The rings were
+# drawn at different sizes, off centre and up to 7% oval, so a row of signs looked uneven.
+RINGS = {
+    "01-mesha": (0.4990, 0.4722, 0.3504, 0.3579),
+    "02-vrishabha": (0.4951, 0.4731, 0.3689, 0.3599),
+    "03-mithuna": (0.4980, 0.4863, 0.3500, 0.3711),
+    "04-kataka": (0.4951, 0.4805, 0.3854, 0.3955),
+    "05-simha": (0.4941, 0.4995, 0.3537, 0.3530),
+    "06-kanya": (0.4893, 0.5039, 0.3360, 0.3477),
+    "07-tula": (0.4941, 0.4829, 0.3526, 0.3687),
+    "08-vrischika": (0.4902, 0.4839, 0.3521, 0.3765),
+    "09-dhanu": (0.4922, 0.4868, 0.3676, 0.3784),
+    "10-makara": (0.4941, 0.5005, 0.3332, 0.3394),
+    "11-kumbha": (0.4922, 0.5068, 0.3616, 0.3730),
+    "12-meena": (0.4951, 0.4897, 0.3287, 0.3481),
+}
+RASHI_SIZE = 512
+RING_RADIUS = 184  # on the 512 x 512 picture: the ring and its stars fit, with a margin
 
 # Panels inside the composite image, as (left, top, right, bottom), inside the white divider lines.
 COMPOSITE = "02_remaining_set/07_composite_all_remaining_visuals.png"
@@ -50,10 +71,70 @@ def hero():
     )
 
 
+def blurred(mask, sigma):
+    """A 0 to 1 mask, softened."""
+    im = Image.fromarray((np.clip(mask, 0, 1) * 255).astype(np.uint8))
+    return np.asarray(im.filter(ImageFilter.GaussianBlur(sigma))).astype(np.float32) / 255
+
+
+def glow(im):
+    """Light a flat picture of the fifth set like the first set: pale gold lines that glow inside
+    the dark figure, white-hot stars at its joints, and a paler ring."""
+    px = np.asarray(im).astype(np.float32)
+    rgb, alpha = px[..., :3], px[..., 3] / 255
+    lum = rgb @ np.array([0.299, 0.587, 0.114], dtype=np.float32)
+    gold = np.clip((lum - 105) / 60, 0, 1) * alpha
+
+    # The figure: its dark fill, without hairlines, grown to take in the lines drawn on it.
+    dark = Image.fromarray((((lum < 105) & (alpha > 0.8)) * 255).astype(np.uint8))
+    fill = dark.filter(ImageFilter.MinFilter(3)).filter(ImageFilter.MaxFilter(13))
+    figure = blurred(np.asarray(fill) / 255, 1.5) * (alpha > 0)
+
+    # Lines on the figure: a touch wider and paler, with amber light around them.
+    wide = Image.fromarray((gold * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))
+    line = np.maximum(gold, 0.75 * np.asarray(wide) / 255 * figure)
+    light = figure * np.clip(0.75 * blurred(gold, 5) + 0.55 * blurred(gold, 14), 0, 1)
+    # Stars at the joints are the only gold thicker than a line.
+    core = Image.fromarray((gold * figure * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(7))
+    core = (np.asarray(core) > 90).astype(np.float32)
+    hot = figure * np.clip(1.6 * blurred(core, 3.5), 0, 1)
+    halo = figure * np.clip(3.2 * blurred(core, 13), 0, 1)
+
+    def screen(base, colour, amount):
+        add = np.array(colour, dtype=np.float32) * amount[..., None]
+        return 255 - (255 - base) * (255 - add) / 255
+
+    def mix(base, colour, amount):
+        return base + (np.array(colour, dtype=np.float32) - base) * amount[..., None]
+
+    out = screen(rgb, (214, 150, 72), np.clip(light * 0.62 + halo * 0.55, 0, 1))
+    out = mix(out, (255, 226, 160), line * figure * 0.9)
+    out = mix(out, (255, 250, 232), hot)
+    out = mix(out, (236, 208, 146), gold * (1 - figure) * 0.6)
+    return Image.fromarray(
+        np.dstack([np.clip(out, 0, 255), alpha * 255]).round().astype(np.uint8), "RGBA"
+    )
+
+
 def rashi():
+    """The twelve signs, scaled and centred so every ring is the same circle."""
     for name, src in RASHI.items():
-        im = Image.open(SRC / src).convert("RGBA").resize((512, 512), Image.LANCZOS)
-        im.save(WEB / f"rashi-{name}.webp", quality=88, method=6)
+        im = Image.open(SRC / src).convert("RGBA")
+        if src.startswith("05_uniform_set/"):
+            im = glow(im)
+        cx, cy, rx, ry = RINGS[name]
+        half = RASHI_SIZE / 2
+        # The part of the original that fills the picture. It can reach past the original's edge,
+        # where the new pixels are transparent.
+        w, h = im.width * rx * half / RING_RADIUS, im.height * ry * half / RING_RADIUS
+        box = (im.width * cx - w, im.height * cy - h, im.width * cx + w, im.height * cy + h)
+        pad = im.width // 2
+        canvas = Image.new("RGBA", (im.width + 2 * pad, im.height + 2 * pad))
+        canvas.paste(im, (pad, pad))
+        out = canvas.resize(
+            (RASHI_SIZE, RASHI_SIZE), Image.LANCZOS, box=tuple(edge + pad for edge in box)
+        )
+        out.save(WEB / f"rashi-{name}.webp", quality=88, method=6)
 
 
 def cards():

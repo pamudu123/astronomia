@@ -21,6 +21,7 @@ import swisseph as swe
 import yaml
 
 from app.engine.ephemeris import Ephemeris, julian_day
+from app.engine.skycurve import sun_moon
 from app.engine.zodiac import DEGREES_PER_NAKSHATRA, NAKSHATRA, normalize
 
 RULES_DIR = Path(__file__).resolve().parents[1] / "data" / "rules"
@@ -156,7 +157,7 @@ def spans_between(
     """Every thithi, nakatha, yoga or karana that touches [start, end), in order."""
 
     def index_at(jd: float) -> int:
-        sun, moon = ephemeris.sun_moon(jd)
+        sun, moon = sun_moon(ephemeris, jd)
         if part == "thithi":
             return thithi_index(sun, moon)
         if part == "karana":
@@ -212,15 +213,38 @@ class DayPanchanga:
     karana: tuple[Span, ...]
     rule_set: str
     provisional: bool
+    skipped: bool = False  # the date never happened there (Samoa, 30 December 2011)
+
+
+def day_exists(day: date, timezone: str) -> bool:
+    """False for a date the place's clocks skipped, as when Samoa crossed the date line."""
+    zone = zoneinfo.ZoneInfo(timezone)
+    noon = datetime.combine(day, time(12, 0), tzinfo=zone)
+    return noon.astimezone(UTC).astimezone(zone).date() == day
+
+
+def _step_day(day: date, timezone: str, by: int) -> date:
+    """The nearest date after (by=1) or before (by=-1) this one that really happened."""
+    day += timedelta(days=by)
+    while not day_exists(day, timezone):
+        day += timedelta(days=by)
+    return day
 
 
 def _local_midnight(day: date, timezone: str) -> datetime:
     return datetime.combine(day, time(0, 0), tzinfo=zoneinfo.ZoneInfo(timezone))
 
 
-def _rise(ephemeris: Ephemeris, after: datetime, place: Place) -> datetime | None:
-    jd = ephemeris.sunrise(julian_day(after), place.latitude, place.longitude)
-    return None if jd is None else _sun_event(jd)
+def sunrise_on(ephemeris: Ephemeris, day: date, place: Place) -> datetime | None:
+    """The sunrise on this local date, or None: near the poles, or on a date that never was."""
+    midnight = _local_midnight(day, place.timezone)
+    jd = ephemeris.sunrise(julian_day(midnight), place.latitude, place.longitude)
+    if jd is None:
+        return None
+    rise = _sun_event(jd)
+    # The search runs on past midnight, so it can find the next date's sunrise.
+    local = rise.astimezone(zoneinfo.ZoneInfo(place.timezone))
+    return rise if local.date() == day else None
 
 
 def rahu_kalaya(sunrise: datetime, sunset: datetime, weekday: str) -> tuple[datetime, datetime]:
@@ -255,10 +279,31 @@ def day_panchanga(ephemeris: Ephemeris, day: date, place: Place) -> DayPanchanga
         _DAYS.clear()
 
     rules = load_rules()
+    weekday = WEEKDAYS[day.weekday()]
+    if not day_exists(day, place.timezone):
+        result = DayPanchanga(
+            day=day,
+            place=place,
+            sunrise=None,
+            sunset=None,
+            next_sunrise=None,
+            weekday=weekday,
+            rahu_kalaya=None,
+            thithi=(),
+            nakatha=(),
+            yoga=(),
+            karana=(),
+            rule_set=str(rules["version"]),
+            provisional=bool(rules["provisional"]),
+            skipped=True,
+        )
+        _DAYS[cache_key] = result
+        return result
     midnight = _local_midnight(day, place.timezone)
-    sunrise = _rise(ephemeris, midnight, place)
-    next_midnight = _local_midnight(day + timedelta(days=1), place.timezone)
-    next_sunrise = _rise(ephemeris, next_midnight, place)
+    sunrise = sunrise_on(ephemeris, day, place)
+    next_day = _step_day(day, place.timezone, 1)
+    next_midnight = _local_midnight(next_day, place.timezone)
+    next_sunrise = sunrise_on(ephemeris, next_day, place)
     sunset = None
     if sunrise is not None:
         jd = ephemeris.sunset(julian_day(sunrise), place.latitude, place.longitude)
@@ -266,7 +311,6 @@ def day_panchanga(ephemeris: Ephemeris, day: date, place: Place) -> DayPanchanga
     # Where the Sun does not rise (near the poles), the day runs midnight to midnight.
     opens = sunrise or midnight.astimezone(UTC)
     closes = next_sunrise or next_midnight.astimezone(UTC)
-    weekday = WEEKDAYS[day.weekday()]
     result = DayPanchanga(
         day=day,
         place=place,
@@ -291,5 +335,5 @@ def sinhala_day(ephemeris: Ephemeris, moment: datetime, place: Place) -> date:
     local = moment.astimezone(zoneinfo.ZoneInfo(place.timezone))
     today = day_panchanga(ephemeris, local.date(), place)
     if today.sunrise is not None and moment < today.sunrise:
-        return local.date() - timedelta(days=1)
+        return _step_day(local.date(), place.timezone, -1)
     return local.date()

@@ -1,19 +1,20 @@
 "use client";
 
-import { type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type PointerEvent, type ReactNode, useCallback, useMemo, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionState } from "@/components/SectionState";
 import { useAssistantOn } from "@/components/assistant/PageContext";
 import { askAssistant } from "@/lib/assistant/panel";
 import { type BirthRequest, type Labels, fill, formatMonthYear } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
   ROAD_YEARS,
-  type Journey,
   type Road,
   type RoadStop,
   buildRoad,
   fetchJourney,
+  hasToday,
   mistAt,
   periodAt,
   qualityAt,
@@ -26,15 +27,19 @@ import {
 } from "@/lib/journey";
 import { type RoadText, drawRoad } from "@/lib/journeyDraw";
 import { type RoadFonts, useRoadTravel } from "@/lib/useRoadTravel";
+import { useSection } from "@/lib/useSection";
 
 import styles from "./LifeRoad.module.css";
 import { RoadArrows } from "./RoadArrows";
+import { RoadDragHint } from "./RoadDragHint";
 
 type Props = {
   lang: Locale;
   t: Dictionary["hadahan"]["result"];
   labels: Labels;
   request: BirthRequest;
+  /** On a saved report: says the road is worked out today, not when it was saved. */
+  note?: ReactNode;
 };
 
 /** What the card and the header show. It changes only when the road passes a stop or a period. */
@@ -43,22 +48,10 @@ type View = { key: string; age: number; stop: RoadStop | null };
 const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(high, value));
 
 /** The life road: the dasha periods as a road to travel along, the same length for everyone. */
-export function LifeRoad({ lang, t, labels, request }: Props) {
+export function LifeRoad({ lang, t, labels, request, note }: Props) {
   const text = t.road;
-  const [journey, setJourney] = useState<Journey | null>(null);
-
-  useEffect(() => {
-    let current = true;
-    fetchJourney(request, lang)
-      .then((result) => {
-        if (current && result.journey) setJourney(result.journey);
-      })
-      // The rest of the hadahan stands without this section.
-      .catch(() => undefined);
-    return () => {
-      current = false;
-    };
-  }, [request, lang]);
+  const section = useSection(fetchJourney, request, lang);
+  const journey = section.status === "ready" ? section.value.journey : null;
 
   const road = useMemo(() => {
     if (!journey) return null;
@@ -72,8 +65,13 @@ export function LifeRoad({ lang, t, labels, request }: Props) {
     return withToday(base, text.today, line);
   }, [journey, labels, text]);
 
-  if (!journey || !road) return null;
-  return <RoadView lang={lang} t={t} labels={labels} road={road} />;
+  if (section.status !== "ready") {
+    return (
+      <SectionState id="road" title={text.title} status={section.status} t={text.load} onRetry={section.retry} height="tall" />
+    );
+  }
+  if (!road) return null;
+  return <RoadView lang={lang} t={t} labels={labels} road={road} note={note} />;
 }
 
 function RoadView({
@@ -81,6 +79,7 @@ function RoadView({
   t,
   labels,
   road,
+  note,
 }: Omit<Props, "request"> & { road: Road }) {
   const text = t.road;
   const marker = useRef<HTMLDivElement>(null);
@@ -111,7 +110,7 @@ function RoadView({
     [road],
   );
   // Where the viewer is and where they are heading, in years of age.
-  const { stage, canvas, title, target, go, dragging, onKey, stageHandlers } = useRoadTravel({
+  const { stage, canvas, title, target, go, dragging, moved, onKey, stageHandlers } = useRoadTravel({
     start: road.today,
     min: 0,
     max: road.last,
@@ -158,6 +157,7 @@ function RoadView({
             {text.title}
           </h3>
           <p className="soft">{text.lead}</p>
+          {note}
         </div>
         <p className={styles.age}>
           <b>{Math.floor(age)}</b>
@@ -176,6 +176,7 @@ function RoadView({
         {...stageHandlers}
       >
         <canvas ref={canvas} className={styles.canvas} aria-hidden="true" />
+        <RoadDragHint text={text.dragHint} moved={moved} />
         <p className={`${styles.roadNow} ${styles[quality.tone]}`} data-card="now">
           <i />
           <small>{text.roadNow}</small>
@@ -243,21 +244,30 @@ function RoadView({
         </article>
       </div>
 
+      <p className={styles.travel}>{text.travel}</p>
+
       <div className={styles.controls}>
         <button type="button" className={styles.button} onClick={() => go(stopBeside(road, target.current, -1)?.y ?? 0)}>
           ‹ {text.prev}
         </button>
-        <button type="button" className={styles.buttonMain} onClick={() => go(road.today)}>
-          {text.today}
-        </button>
+        {hasToday(road) && (
+          <button type="button" className={styles.button} onClick={() => go(road.today)}>
+            {text.today}
+          </button>
+        )}
         <button
           type="button"
-          className={styles.button}
+          className={styles.buttonMain}
           onClick={() => go(stopBeside(road, target.current, 1)?.y ?? road.last)}
         >
           {text.next} ›
         </button>
-        <RoadArrows later={text.later} earlier={text.earlier} onMove={(years) => go(target.current + years)} />
+        <RoadArrows
+          later={text.later}
+          earlier={text.earlier}
+          step={text.step}
+          onMove={(years) => go(target.current + years)}
+        />
       </div>
 
       <div>
@@ -302,7 +312,9 @@ function RoadView({
             <polyline points={wave} />
           </svg>
           <div className={styles.mapFade} />
-          <div className={styles.todayMark} style={{ left: `${(road.today / ROAD_YEARS) * 100}%` }} />
+          {hasToday(road) && (
+            <div className={styles.todayMark} style={{ left: `${(road.today / ROAD_YEARS) * 100}%` }} />
+          )}
           <div ref={marker} className={styles.marker} style={{ left: `${(road.today / ROAD_YEARS) * 100}%` }} />
         </div>
         <div className={styles.scale} aria-hidden="true">

@@ -21,7 +21,11 @@ export function parseTheme(value: string | null | undefined): ThemeChoice {
  */
 export const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
 
+// A choice the browser would not save (blocked or full storage): it holds until the page reloads.
+let unsaved: ThemeChoice | null = null;
+
 export function readTheme(): ThemeChoice {
+  if (unsaved !== null) return unsaved;
   try {
     return parseTheme(window.localStorage.getItem(THEME_KEY));
   } catch {
@@ -34,10 +38,22 @@ export function applyTheme(choice: ThemeChoice, root: HTMLElement = document.doc
   try {
     if (choice === "system") window.localStorage.removeItem(THEME_KEY);
     else window.localStorage.setItem(THEME_KEY, choice);
+    unsaved = null;
   } catch {
     // Storage can be blocked (private windows); the choice still applies to this page.
+    unsaved = choice;
   }
+  show(choice, root);
+  window.dispatchEvent(new Event(THEME_EVENT));
+}
+
+/** Another tab saved a choice: this page follows it, over any choice of its own it could not save. */
+export function followSavedTheme(root: HTMLElement = document.documentElement) {
+  unsaved = null;
+  show(readTheme(), root);
+}
+
+function show(choice: ThemeChoice, root: HTMLElement) {
   if (choice === "system") root.removeAttribute("data-theme");
   else root.setAttribute("data-theme", choice);
-  window.dispatchEvent(new Event(THEME_EVENT));
 }

@@ -112,8 +112,8 @@ def test_sinhala_text_has_no_stray_latin_words() -> None:
         **table["karana"],
         **table["baby"],
     }.items():
-        # "AI" stays in Latin letters in Sinhala too, as on the website (Sinhala review).
-        cleaned = re.sub(r"\{[a-z_]+\}|\d+|\bAI\b", "", text)
+        # "AI" and the brand stay in Latin letters in Sinhala too, as on the website.
+        cleaned = re.sub(r"\{[a-z_]+\}|\d+|\bAI\b|\bSidera\b", "", text)
         assert not re.search(r"[A-Za-z]", cleaned), code
 
 

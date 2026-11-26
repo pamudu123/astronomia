@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from app.api.charts import EPHEMERIS
 from app.api.deps import PlacesDb
+from app.api.instant import Instant
 from app.api.panchanga import LocalTimeOut, offset_label, time_out
 from app.engine.zodiac import NAKSHATRA, RASHI, Body
 from app.explain.labels import Lang, labels
@@ -66,7 +67,7 @@ class KendaraRequest(BaseModel):
     latitude: float | None = Field(default=None, gt=-90, lt=90)
     longitude: float | None = Field(default=None, ge=-180, le=180)
     timezone: str | None = None
-    as_of: dt.datetime | None = None  # the end of the search; now when not given (for tests)
+    as_of: Instant | None = None  # the end of the search; now when not given (for tests)
     lang: Lang = "en"
 
     @model_validator(mode="after")
@@ -142,7 +143,7 @@ def _place(
 
 def _bounds(body: KendaraRequest, zone: zoneinfo.ZoneInfo) -> tuple[dt.datetime, dt.datetime]:
     """The stretch of time to search, in UTC: a known date, or a year range, within 1900 to now."""
-    now = (body.as_of or dt.datetime.now(dt.UTC)).astimezone(dt.UTC)
+    now = body.as_of or dt.datetime.now(dt.UTC)
     if body.date is not None:
         first, last = body.date, body.date + dt.timedelta(days=1)
     else:
@@ -262,7 +263,13 @@ def kendara_search(body: KendaraRequest, db: PlacesDb, _access: Access) -> Kenda
     response.matches = [_match(match, zone, lang) for match in result.matches]
     response.cut_off = result.cut_off
     if result.cut_off:
-        response.note = str(text["cut_off"]).format(count=len(result.matches))
+        count = len(result.matches)
+        if result.stopped_at is not None:
+            reached = format_date(result.stopped_at.astimezone(zone).date(), lang)
+            response.note = str(text["time_limit"]).format(count=count, date=reached)
+        else:
+            key = "cut_off_star" if body.nakshatra else "cut_off"
+            response.note = str(text[key]).format(count=count)
     elif not result.matches:
         response.note = str(text["none"])
     return response

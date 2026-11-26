@@ -7,8 +7,10 @@ from app.api import (
     avurudu,
     baby,
     changes,
+    chapters,
     charts,
     chat,
+    checkout,
     first_letters,
     forecast,
     journey,
@@ -36,6 +38,9 @@ def create_app() -> FastAPI:
     if settings.environment == "production" and not settings.database_url:
         # Accounts and saved reports must outlive a restart; SQLite on a passing disk would not.
         raise RuntimeError("ASTRONOMIA_DATABASE_URL is required in production")
+    if settings.environment == "production" and settings.payment_provider == "mock":
+        # It unlocks reports without any money.
+        raise RuntimeError("ASTRONOMIA_PAYMENT_PROVIDER=mock is not for production")
 
     app = FastAPI(
         title="Astronomia API",
@@ -64,6 +69,8 @@ def create_app() -> FastAPI:
     app.include_router(shares.router)
     app.include_router(saved.router)
     app.include_router(paid.router)
+    app.include_router(checkout.router)
+    app.include_router(chapters.router)
     app.include_router(chat.router)
     return app
 

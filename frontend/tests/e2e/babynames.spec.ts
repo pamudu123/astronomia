@@ -49,13 +49,21 @@ async function noSidewaysScroll(page: Page) {
   expect(overflow).toBeLessThanOrEqual(0);
 }
 
+const consentBox = (page: Page) =>
+  page.getByRole("checkbox", { name: /(parent or legal guardian|නීත්‍යානුකූල භාරකරු)/ });
+
 async function enterBirth(page: Page, date: string, time: string, submit: string) {
+  await consentBox(page).check();
+  await fillBirth(page, date, time);
+  await page.getByRole("button", { name: submit }).click();
+}
+
+async function fillBirth(page: Page, date: string, time: string) {
   const form = page.locator('[data-card="baby-form"]');
   await form.getByRole("textbox", { name: /^(Date of birth|උපන් දිනය)$/ }).fill(date);
   await form.getByRole("textbox", { name: /^(Time of birth|උපන් වේලාව)$/ }).fill(time);
   await page.getByRole("combobox").fill("kandy");
   await page.getByRole("option").first().click();
-  await page.getByRole("button", { name: submit }).click();
 }
 
 test("the letters for a birth come from a POST, never the page address", async ({ page }) => {
@@ -79,7 +87,12 @@ test("the letters for a birth come from a POST, never the page address", async (
   await expect(result.locator("[data-pada]")).toHaveCount(4);
   await expect(result.locator('[data-pada="4"]')).toContainText("This birth");
   await expect(result).toContainText("Simha lagna");
-  expect(JSON.parse(posted[0])).toMatchObject({ date: "1995-04-19", time: "14:35", lang: "en" });
+  expect(JSON.parse(posted[0])).toMatchObject({
+    date: "1995-04-19",
+    time: "14:35",
+    guardian_consent: true,
+    lang: "en",
+  });
   expect(page.url()).not.toContain("1995");
   await noSidewaysScroll(page);
 
@@ -192,4 +205,115 @@ test("names in Sinhala", async ({ page }) => {
   await expect(names.locator('[data-name="Kusal"]')).toContainText("කුසලය, පින");
   await expect(names.locator('[data-name="Kusal"]')).toContainText("Merit, wholesome deeds");
   await noSidewaysScroll(page);
+});
+
+test("names from an earlier filter go away when the next one fails, and come back when it works (A-10)", async ({ page }) => {
+  await mockBackend(page, "en");
+  let girls: "slow" | "fail" | "ok" = "fail";
+  let release = () => {};
+  await page.route("**/api/v1/baby/names?*gender=girl*", async (route) => {
+    if (girls === "fail") return route.fulfill({ status: 500, body: "down" });
+    if (girls === "slow") await new Promise<void>((resolve) => (release = resolve));
+    return route.fallback();
+  });
+  await page.goto("/en/baby-names/krittika");
+  const names = page.locator('[data-card="names"]');
+  const list = names.locator("[data-name]");
+  const girl = names.getByRole("button", { name: "Girl", exact: true });
+  await expect(list).toHaveCount(26);
+
+  await girl.click();
+  await expect(names.getByRole("alert")).toBeVisible();
+  await expect(girl).toHaveAttribute("aria-pressed", "true");
+  await expect(list).toHaveCount(0);
+  await expect(names).not.toContainText("26 names");
+
+  // Back to a filter that works, then Girl again: slow this time. The old names stay, marked.
+  await names.getByRole("button", { name: "All", exact: true }).click();
+  await expect(list).toHaveCount(26);
+  await expect(names.getByRole("alert")).toHaveCount(0);
+  girls = "slow";
+  await girl.click();
+  await expect(names.locator("ul")).toHaveAttribute("aria-busy", "true");
+  await expect(names).toContainText("Finding names");
+  await expect(names).not.toContainText("26 names");
+  release();
+  await expect(list).toHaveCount(7);
+  await expect(names).toContainText("7 names");
+  await expect(names.locator("ul")).toHaveAttribute("aria-busy", "false");
+});
+
+test("an answer with no names says so, and the earlier ones are gone (A-10)", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.route("**/api/v1/baby/names?*gender=girl*", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify({ letters: [], names: [] }) }),
+  );
+  await page.goto("/en/baby-names/krittika");
+  const names = page.locator('[data-card="names"]');
+  await expect(names.locator("[data-name]")).toHaveCount(26);
+  await names.getByRole("button", { name: "Girl", exact: true }).click();
+  await expect(names.locator("[data-name]")).toHaveCount(0);
+  await expect(names).toContainText("No names in our list");
+});
+
+for (const [lang, submit, error] of [
+  ["en", "Find the letters", "Tick this box to continue."],
+  ["si", "අකුරු සොයන්න", "ඉදිරියට යාමට මෙම කොටුව ලකුණු කරන්න."],
+] as const) {
+  test(`no birth details leave the page without a guardian's consent (${lang})`, async ({ page }) => {
+    const posted = await mockBackend(page, lang);
+    const sent: string[] = [];
+    page.on("request", (request) => {
+      if (request.method() === "POST") sent.push(`${request.url()} ${request.postData() ?? ""}`);
+    });
+    await page.goto(`/${lang}/baby-names`);
+    const box = consentBox(page);
+    await expect(box).not.toBeChecked();
+    // A child's name is not needed, so it is not asked.
+    await expect(page.locator('[data-card="baby-form"]').locator('input[type="text"][maxlength="60"]')).toHaveCount(0);
+
+    await fillBirth(page, "1995-04-19", "14:35");
+    await page.getByRole("button", { name: submit }).click();
+    await expect(box).toBeFocused();
+    await expect(box).toHaveAttribute("aria-invalid", "true");
+    await expect(box).toHaveAccessibleDescription(new RegExp(error.replace(".", "\\.")));
+    expect(posted).toHaveLength(0);
+    // Nor the time zone lookup, which carries the birth too.
+    expect(sent.filter((line) => line.includes("1995-04-19"))).toEqual([]);
+    await noSidewaysScroll(page);
+
+    await box.check();
+    await expect(box).not.toHaveAttribute("aria-invalid");
+    await page.getByRole("button", { name: submit }).click();
+    await expect(page.locator('[data-card="baby-result"]')).toBeVisible();
+    expect(posted).toHaveLength(1);
+  });
+}
+
+test("another child needs consent again, and a saved birth is not sent without it", async ({ page }) => {
+  const posted = await mockBackend(page, "en");
+  await page.goto("/en/baby-names");
+  await page.evaluate(() =>
+    sessionStorage.setItem(
+      "astronomia.hadahan",
+      JSON.stringify({ name: "", request: { date: "1995-04-19", time: "14:35", place_id: 1241622 } }),
+    ),
+  );
+  await page.reload();
+  const saved = page.getByRole("button", { name: "Use the saved birth details" });
+  await saved.click();
+  await expect(consentBox(page)).toBeFocused();
+  expect(posted).toHaveLength(0);
+
+  await consentBox(page).check();
+  await saved.click();
+  const result = page.locator('[data-card="baby-result"]');
+  await expect(result).toBeVisible();
+  // No AI, share or save on a child's result.
+  await expect(result.getByRole("button")).toHaveText(["Another birth"]);
+  await result.getByRole("button", { name: "Another birth" }).click();
+  await expect(consentBox(page)).not.toBeChecked();
+  await saved.click();
+  await expect(consentBox(page)).toBeFocused();
+  expect(posted).toHaveLength(1);
 });

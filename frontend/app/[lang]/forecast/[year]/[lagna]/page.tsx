@@ -89,6 +89,7 @@ export default async function YearLagnaPage({ params }: Params) {
             <Link href={`/${lang}/forecast/${year}`} data-back>
               {t.all}
             </Link>
+            <a href="#personal-year">{t.notSure}</a>
             <Link href={`/${lang}/changes`}>{t.changesLink}</Link>
           </div>
         </div>

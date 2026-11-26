@@ -7,7 +7,8 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
-from app.api import reports
+from app.api import paid, reports
+from app.api.saved import RateLimit
 from app.config import Settings, get_settings
 from app.store.accounts import AccountStore
 from app.store.orders import OrderStore
@@ -86,12 +87,22 @@ def test_only_reports_have_a_price(client: TestClient) -> None:
 # Coupons
 
 
-def test_coupons_need_a_google_account(client: TestClient, pamudu: None) -> None:
-    assert apply(client, "pamudu", status=401)["detail"] == "sign in with Google first"
-    assert unlock(client, "pamudu").status_code == 401
+def test_a_coupon_can_be_tried_by_anyone_and_used_by_a_guest(
+    client: TestClient, pamudu: None
+) -> None:
+    paid_reports(client)
+    assert apply(client, "pamudu")["result"] == "free"  # no account at all
+    refused = unlock(client, "pamudu")  # but a report needs an account to belong to
+    assert (refused.status_code, refused.json()["detail"]) == (401, "sign in first")
     sign_in(client, kind="guest")
-    apply(client, "pamudu", status=401)
-    assert unlock(client, "pamudu").status_code == 401
+    assert unlock(client, "pamudu").status_code == 200
+    found = access(client)
+    assert (found["account"], found["paid"], found["features"]) == ("guest", True, PAID)
+    # It is this guest's: another guest, and nobody, get the free result.
+    sign_in(client, kind="guest")
+    assert access(client)["features"] == []
+    client.headers.pop("authorization")
+    assert access(client)["features"] == []
 
 
 def test_a_free_coupon_shows_a_price_of_nothing(client: TestClient, pamudu: None) -> None:
@@ -101,20 +112,42 @@ def test_a_free_coupon_shows_a_price_of_nothing(client: TestClient, pamudu: None
         "result": "free",
         "percent_off": 100,
         "price": {"amount": 80_000, "currency": "LKR"},
+        "discount": {"amount": 80_000, "currency": "LKR"},
         "new_price": {"amount": 0, "currency": "LKR"},
     }
 
 
-def test_a_discount_coupon_waits_for_payments(client: TestClient, orders: OrderStore) -> None:
+@pytest.mark.parametrize(
+    ("provider", "result", "detail"),
+    [
+        ("off", "payment_not_available", "payment_not_available"),
+        ("mock", "discount", "payment_needed"),
+    ],
+)
+def test_a_discount_coupon_unlocks_nothing(
+    client: TestClient, orders: OrderStore, provider: str, result: str, detail: str
+) -> None:
+    paid_reports(client, payment_provider=provider)
     orders.create_coupon("sidera20", 20)
     sign_in(client)
     quote = apply(client, "SIDERA20")
-    assert quote["result"] == "payment_not_available"
+    assert quote["result"] == result
+    assert quote["discount"] == {"amount": 16_000, "currency": "LKR"}
     assert quote["new_price"] == {"amount": 64_000, "currency": "LKR"}
     response = unlock(client, "sidera20")
-    assert response.status_code == 402
-    assert response.json()["detail"] == "payment_not_available"
+    assert (response.status_code, response.json()["detail"]) == (402, detail)
     assert access(client)["paid"] is False
+    assert access(client)["features"] == []
+
+
+def test_only_a_whole_discount_is_free(client: TestClient, orders: OrderStore) -> None:
+    """99% off still leaves LKR 8: the final amount decides, not the size of the discount."""
+    paid_reports(client)
+    orders.create_coupon("almost", 99)
+    sign_in(client, kind="guest")
+    assert apply(client, "almost")["new_price"] == {"amount": 800, "currency": "LKR"}
+    assert unlock(client, "almost").status_code == 402
+    assert access(client)["features"] == []
 
 
 def test_coupons_that_do_not_work_say_why(client: TestClient, orders: OrderStore) -> None:
@@ -145,6 +178,28 @@ def test_wrong_guesses_are_limited_per_account(client: TestClient, pamudu: None)
     assert apply(client, "pamudu")["result"] == "free"
 
 
+def test_wrong_guesses_are_limited_per_address(client: TestClient, pamudu: None) -> None:
+    """Making one guest after another, or having no account at all, does not get round it."""
+    paid_reports(client)
+    misses = RateLimit(4)
+    client.app.dependency_overrides[paid.miss_limit] = lambda: misses  # type: ignore[attr-defined]
+    for number in range(3):
+        sign_in(client, kind="guest")
+        assert apply(client, f"guess{number}")["result"] == "unknown"
+    client.headers.pop("authorization")
+    assert apply(client, "guess3")["result"] == "unknown"
+    apply(client, "pamudu", status=429)
+    sign_in(client, kind="guest")
+    assert unlock(client, "pamudu").status_code == 429
+    # Another address is not held up.
+    elsewhere = client.post(
+        "/v1/coupons/apply",
+        json={"kind": "hadahan", "code": "pamudu"},
+        headers={"x-forwarded-for": "203.0.113.9"},
+    )
+    assert elsewhere.json()["result"] == "free"
+
+
 def test_codes_that_exist_are_not_wrong_guesses(client: TestClient, orders: OrderStore) -> None:
     orders.create_coupon("off", 100)
     orders.set_active("off", False)
@@ -167,6 +222,7 @@ def test_unlock_with_a_free_coupon(client: TestClient, pamudu: None) -> None:
         "paid_reports": True,
         "account": "google",
         "price": {"amount": 80_000, "currency": "LKR"},
+        "checkout": "mock",
     }
     response = unlock(client, "pamudu")
     assert response.status_code == 200, response.text
@@ -277,11 +333,11 @@ def test_with_paid_reports_on_free_users_keep_the_free_result(client: TestClient
 
 
 @pytest.fixture
-def printed(monkeypatch: pytest.MonkeyPatch) -> list[list[tuple[str, str]]]:
+def printed(monkeypatch: pytest.MonkeyPatch) -> list[list[tuple[str | None, str, str]]]:
     """The AI chapters each PDF was asked to print."""
-    calls: list[list[tuple[str, str]]] = []
+    calls: list[list[tuple[str | None, str, str]]] = []
 
-    def fake(*args: Any) -> bytes:
+    def fake(*args: Any, full: bool) -> bytes:
         calls.append(list(args[-1]))
         return b"%PDF-1.7"
 
@@ -294,7 +350,7 @@ READING = [{"title": "Your nature", "text": "Calm and steady."}]
 
 
 def test_the_full_pdf_needs_a_paid_report(
-    client: TestClient, pamudu: None, printed: list[list[tuple[str, str]]]
+    client: TestClient, pamudu: None, printed: list[list[tuple[str | None, str, str]]]
 ) -> None:
     pdf = {**hadahan(), "reading": READING}
     assert client.post("/v1/reports/pdf", json=pdf).status_code == 200  # paid reports off
@@ -305,5 +361,5 @@ def test_the_full_pdf_needs_a_paid_report(
     assert client.post("/v1/reports/pdf", json=pdf).status_code == 200  # paid
     match = {**porondam(), "reading": READING}
     assert client.post("/v1/reports/pdf", json=match).status_code == 200  # another report
-    chapter = [("Your nature", "Calm and steady.")]
+    chapter = [(None, "Your nature", "Calm and steady.")]  # id, title, text
     assert printed == [chapter, [], chapter, []]

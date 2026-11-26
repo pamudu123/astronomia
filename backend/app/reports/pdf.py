@@ -1,8 +1,8 @@
 """Turn report HTML into PDF bytes with WeasyPrint.
 
 WeasyPrint shapes text with Pango and HarfBuzz, which joins Sinhala letters correctly.
-Reports may only load the bundled fonts: no files elsewhere on the server, and no web
-addresses, whatever ends up in the HTML.
+Reports may only load the bundled fonts and pictures (app/reports/artwork.py): no files
+elsewhere on the server, and no web addresses, whatever ends up in the HTML.
 """
 
 from pathlib import Path
@@ -11,6 +11,8 @@ from typing import Any
 from weasyprint import CSS, HTML
 from weasyprint.text.fonts import FontConfiguration
 from weasyprint.urls import URLFetcher, URLFetcherResponse, URLFetchingError
+
+from app.reports.artwork import art_files
 
 REPORTS_DIR = Path(__file__).resolve().parent
 FONTS_DIR = REPORTS_DIR / "fonts"
@@ -35,15 +37,19 @@ def _font_faces() -> str:
     )
 
 
+TYPES = {".ttf": "font/ttf", ".jpg": "image/jpeg", ".webp": "image/webp"}
+
+
 class BundledFontsOnly(URLFetcher):  # type: ignore[misc]  # WeasyPrint has no type information
-    """Serves the bundled font files and refuses every other address."""
+    """Serves the bundled font and picture files and refuses every other address."""
 
     def fetch(self, url: str, headers: Any = None) -> URLFetcherResponse:
         allowed = {(FONTS_DIR / name).as_uri(): FONTS_DIR / name for _, _, name in FONT_FILES}
+        allowed.update(art_files())
         path = allowed.get(url)
         if path is None:
             raise URLFetchingError(f"reports may not load {url[:80]}")
-        return URLFetcherResponse(url, path.read_bytes(), {"Content-Type": "font/ttf"})
+        return URLFetcherResponse(url, path.read_bytes(), {"Content-Type": TYPES[path.suffix]})
 
 
 def html_to_pdf(html: str, stylesheet: str = "") -> bytes:

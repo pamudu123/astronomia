@@ -17,6 +17,7 @@ from pathlib import Path
 import pytest
 
 from app.engine import panchanga as P
+from app.engine import wedding as W
 from app.engine.ephemeris import SwissEphemeris, julian_day
 from app.engine.zodiac import NAKSHATRA
 
@@ -176,3 +177,76 @@ def test_days_are_worked_out_once_and_quickly() -> None:
     assert time.perf_counter() - started < 5
     first = P.day_panchanga(EPHEMERIS, date(2028, 1, 1), place)
     assert P.day_panchanga(EPHEMERIS, date(2028, 1, 1), place) is first
+
+
+# ---------- dates that never happened ----------
+
+APIA = P.Place(-13.8333, -171.7667, "Pacific/Apia")
+
+
+def test_a_skipped_date_has_no_sunrise() -> None:
+    # Samoa crossed the date line: 29 December 2011 was followed by the 31st.
+    skipped = P.day_panchanga(EPHEMERIS, date(2011, 12, 30), APIA)
+    assert skipped.skipped
+    assert skipped.sunrise is skipped.sunset is skipped.next_sunrise is None
+    assert skipped.rahu_kalaya is None
+    assert not (skipped.thithi or skipped.nakatha or skipped.yoga or skipped.karana)
+
+    before = P.day_panchanga(EPHEMERIS, date(2011, 12, 29), APIA)
+    after = P.day_panchanga(EPHEMERIS, date(2011, 12, 31), APIA)
+    assert not before.skipped and not after.skipped
+    assert before.sunrise and before.next_sunrise and after.sunrise and after.next_sunrise
+    assert before.next_sunrise == after.sunrise
+    assert timedelta(hours=23) < before.next_sunrise - before.sunrise < timedelta(hours=25)
+    assert after.sunrise < after.next_sunrise
+    assert before.thithi and after.thithi
+
+
+def test_the_sinhala_day_before_a_skipped_date() -> None:
+    # 3 in the morning of the 31st, before sunrise: the day that opened on the 29th.
+    early = datetime(2011, 12, 31, 3, 0, tzinfo=zoneinfo.ZoneInfo("Pacific/Apia"))
+    assert P.sinhala_day(EPHEMERIS, early, APIA) == date(2011, 12, 29)
+
+
+def test_a_wedding_search_leaves_a_skipped_date_out() -> None:
+    assert W._day(EPHEMERIS, date(2011, 12, 30), APIA) is None
+    assert W._day(EPHEMERIS, date(2011, 12, 31), APIA) is not None
+
+
+@pytest.mark.parametrize(
+    ("place", "day"),
+    [
+        # Clocks going forward at midnight, and at 1 in the morning: short days, but real ones.
+        (P.Place(-23.55, -46.63, "America/Sao_Paulo"), date(2018, 11, 4)),
+        (P.Place(51.5074, -0.1278, "Europe/London"), date(2026, 3, 29)),
+        (P.Place(51.5074, -0.1278, "Europe/London"), date(2026, 10, 25)),
+    ],
+)
+def test_a_clock_change_is_not_a_skipped_date(place: P.Place, day: date) -> None:
+    found = P.day_panchanga(EPHEMERIS, day, place)
+    assert not found.skipped
+    assert found.sunrise and found.next_sunrise
+    zone = zoneinfo.ZoneInfo(place.timezone)
+    assert found.sunrise.astimezone(zone).date() == day
+    assert found.next_sunrise.astimezone(zone).date() == day + timedelta(days=1)
+
+
+def test_a_polar_day_is_not_a_skipped_date() -> None:
+    place = P.Place(78.22, 15.65, "Arctic/Longyearbyen")
+    found = P.day_panchanga(EPHEMERIS, date(2026, 6, 21), place)
+    assert not found.skipped
+    assert found.sunrise is None and found.thithi
+
+
+def test_a_sunrise_always_falls_on_its_own_date() -> None:
+    # Near the Arctic circle the Sun can go a whole date without rising, then rise just after
+    # midnight. That rise belongs to the next date.
+    place = P.Place(66.0, 25.0, "Europe/Helsinki")
+    zone = zoneinfo.ZoneInfo(place.timezone)
+    for offset in range(60):
+        day = date(2026, 5, 20) + timedelta(days=offset)
+        found = P.day_panchanga(EPHEMERIS, day, place)
+        assert found.sunrise is None or found.sunrise.astimezone(zone).date() == day
+        if found.sunrise and found.next_sunrise:
+            assert found.sunrise < found.next_sunrise
+        assert found.thithi

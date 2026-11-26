@@ -28,7 +28,7 @@ from typing import Annotated, Any, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, Field, TypeAdapter
 
-from app.api.deps import Accounts, Admin, Chats, Orders, PlacesDb, Tokens
+from app.api.deps import Accounts, Admin, Chapters, Chats, Orders, PlacesDb, Tokens
 from app.api.porondam import PorondamResponse
 from app.api.report_requests import HadahanReport, PorondamReport, ReportRequest
 from app.api.snapshots import (
@@ -152,6 +152,12 @@ class RateLimit:
             if len(self._events) > 10_000:  # forget quiet addresses
                 self._events = {k: v for k, v in self._events.items() if v}
             return True
+
+    def full(self, key: str) -> bool:
+        """Whether the next event would be refused. Counts nothing."""
+        now = self.clock()
+        with self._lock:
+            return sum(at > now - 3600 for at in self._events.get(key, ())) >= self.limit
 
 
 @lru_cache
@@ -348,17 +354,21 @@ def delete_me(
     me: Annotated[SignedIn, Depends(signed_in)],
     accounts: Accounts,
     chats: Chats,
+    chapters: Chapters,
+    orders: Orders,
     admin: Admin,
     settings: SettingsDep,
     response: Response,
 ) -> None:
-    """Deletes the signed in account: every report it keeps and its chat usage, then its
-    Supabase sign in.
+    """Deletes the signed in account: every report it keeps with its AI chapters, and its
+    chat usage, then its Supabase sign in.
 
     The page signs out of this browser afterwards. If Supabase cannot be reached, the reports
     are already gone and 502 asks the page to try again.
     """
     chats.forget_user(me.user.id)
+    chapters.forget_user(me.user.id)
+    orders.forget_payments(me.user.id)
     accounts.delete_user(me.user.id)
     _set_hint(response, settings, 0)
     if admin is None:
@@ -391,12 +401,16 @@ def merge_guest(
     body: GuestMerge,
     me: Annotated[SignedIn, Depends(signed_in)],
     accounts: Accounts,
+    orders: Orders,
+    chapters: Chapters,
+    chats: Chats,
     tokens: Tokens,
     admin: Admin,
     settings: SettingsDep,
     response: Response,
 ) -> MergeOut:
-    """Moves a guest's reports into the Google account that just signed in, then removes the guest.
+    """Moves a guest's reports, with what the guest paid for, into the Google account that just
+    signed in, then removes the guest.
 
     For a guest who presses "Continue with Google" with a Google account that already exists
     (from another phone): Supabase cannot link it, so the page signs in with Google and calls
@@ -420,6 +434,10 @@ def merge_guest(
         raise HTTPException(status.HTTP_409_CONFLICT, "that is not a guest")
     if guest.id == me.user.id:
         return MergeOut(moved=0, saved=accounts.count_saved(me.user.id))
+    # What was paid for goes first: if this stops half way, the guest is still there to try again.
+    orders.move_user(guest.id, me.user.id)
+    chapters.move_user(guest.id, me.user.id)
+    chats.move_user(guest.id, me.user.id)
     moved = accounts.move_reports(guest.id, me.user.id)
     if admin is not None:
         try:
@@ -541,11 +559,16 @@ def delete_saved(
     report_id: uuid.UUID,
     session: Current,
     accounts: Accounts,
+    chapters: Chapters,
     settings: SettingsDep,
     response: Response,
 ) -> None:
-    """Deletes one saved report."""
+    """Deletes one saved report, with the AI chapters a paid one keeps. The order stays, so the
+    same report can be opened and read again."""
     user_id = _owned(session)
+    order_id = accounts.order_of(user_id, str(report_id))
+    if order_id is not None:
+        chapters.forget_order(order_id, user_id)
     if not accounts.delete_saved(user_id, str(report_id)):
         raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_FOUND, headers=PRIVATE)
     _set_hint(response, settings, accounts.count_saved(user_id))

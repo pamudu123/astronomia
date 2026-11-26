@@ -21,13 +21,16 @@ const MORE_PAGES = ["tools", "nakath", "litha", "avurudu", "first-letters", "bab
 export const isMorePage = (lang: Locale, pathname: string) =>
   MORE_PAGES.some((page) => pathname === `/${lang}/${page}` || pathname.startsWith(`/${lang}/${page}/`));
 
+/** On phones, More also leads to Why Sidera. On wide screens that has a header link of its own. */
+const isMoreTab = (lang: Locale, pathname: string) => isMorePage(lang, pathname) || pathname === `/${lang}/why-sidera`;
+
 /** The tabs for a given page address. Also the stand-in while the address is not known. */
 export function MobileTabs({ lang, dict, pathname }: Props & { pathname: string }) {
   const tabs = [
     { href: `/${lang}`, label: dict.nav.homeTab, icon: <HomeIcon />, active: pathname === `/${lang}` },
     { href: `/${lang}/hadahan`, label: dict.nav.hadahan, icon: <ChartIcon />, active: pathname === `/${lang}/hadahan` },
     { href: `/${lang}/porondam`, label: dict.nav.porondam, icon: <MatchIcon />, active: pathname === `/${lang}/porondam` },
-    { href: `/${lang}/tools`, label: dict.nav.more, icon: <MoreIcon />, active: isMorePage(lang, pathname) },
+    { href: `/${lang}/tools`, label: dict.nav.more, icon: <MoreIcon />, active: isMoreTab(lang, pathname) },
   ];
   return (
     <nav className={styles.bar} aria-label={dict.nav.main}>

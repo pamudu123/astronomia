@@ -9,6 +9,7 @@ from app import clock as today
 from app.tools.engine import COLOMBO, EngineClient, Lang, clock, span
 
 DATE = r"^\d{4}-\d{2}-\d{2}$"
+TIME = r"^([01]\d|2[0-3]):[0-5]\d$"
 SRI_LANKA = today.SRI_LANKA
 LangField = Annotated[Lang, Field(description="Language of the names: 'en' or 'si'.")]
 PlaceField = Annotated[
@@ -39,6 +40,16 @@ class DayArgs(BaseModel):
     date: Annotated[str, Field(pattern=DATE, description="The day, as YYYY-MM-DD.")]
     place_id: PlaceField = COLOMBO
     lang: LangField = "en"
+    time: Annotated[
+        str | None,
+        Field(
+            pattern=TIME,
+            description=(
+                "A local time the person asks about, as HH:MM (24 hours). Give it whenever they "
+                "name an hour: the answer then says what holds at that time, in `at_time`."
+            ),
+        ),
+    ] = None
 
 
 class MonthArgs(BaseModel):
@@ -69,6 +80,44 @@ def parts(items: list[dict[str, Any]], day: str) -> list[dict[str, Any]]:
         {"name": p["name"], "from": clock(p["start"], day), "to": clock(p["end"], day)}
         for p in items
     ]
+
+
+def at_time(body: dict[str, Any], day: str, time: str) -> dict[str, Any]:
+    """What holds at one local time: inside Rahu kalaya or not, and the parts running then."""
+    asked = (day, time)
+
+    def holds(part: dict[str, Any]) -> bool:
+        start, end = part["start"], part["end"]
+        return (start["date"], start["clock"]) <= asked < (end["date"], end["clock"])
+
+    rahu = body.get("rahu_kalaya")
+    return {
+        "time": time,
+        "inside_rahu_kalaya": holds(rahu) if rahu else None,
+        **{k: next((p["name"] for p in body[k] if holds(p)), None) for k in ("thithi", "nakatha")},
+    }
+
+
+def rahu_now(body: dict[str, Any], day: str) -> str | None:
+    """For today at that place: whether Rahu kalaya is still ahead, running, or over for the day."""
+    rahu, timezone = body.get("rahu_kalaya"), (body.get("place") or {}).get("timezone")
+    if not rahu or not timezone or today.local_days(timezone)["today"] != day:
+        return None
+    now = (day, today.local_days(timezone)["local_time"])
+    if now < (rahu["start"]["date"], rahu["start"]["clock"]):
+        return "still ahead today"
+    if now < (rahu["end"]["date"], rahu["end"]["clock"]):
+        return "running now"
+    return "already over for today"
+
+
+def now_there(body: dict[str, Any]) -> str | None:
+    """The date and time now at the place: the model has looked up another place's "today"."""
+    timezone = (body.get("place") or {}).get("timezone")
+    if not timezone:
+        return None
+    days = today.local_days(timezone)
+    return f"{days['local_time']} on {days['weekday']} {days['today']}"
 
 
 def on_day(moment: dict[str, Any]) -> str:
@@ -109,22 +158,26 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             raise ToolException(str(error)) from error
 
     async def good_times_for_day(
-        date: str, place_id: int = COLOMBO, lang: Lang = "en"
+        date: str, place_id: int = COLOMBO, lang: Lang = "en", time: str | None = None
     ) -> dict[str, Any]:
         body = await engine.get("/v1/panchanga", {"date": date, "place_id": place_id, "lang": lang})
         return {
             "date": body["date"],
             "weekday": body["weekday_name"],
             "place": body["place"]["name"],
+            **({"now_there": moment} if (moment := now_there(body)) else {}),
             "sunrise": clock(body["sunrise"], date),
             "sunset": clock(body["sunset"], date),
             "rahu_kalaya": span(body["rahu_kalaya"], date),
+            **({"rahu_kalaya_now": state} if (state := rahu_now(body, date)) else {}),
             "thithi": parts(body["thithi"], date),
             "nakatha": parts(body["nakatha"], date),
             "yoga": parts(body["yoga"], date),
             "karana": parts(body["karana"], date),
             "times_note": body["timezone_note"],
             "provisional": body["provisional"],
+            **({"at_time": at_time(body, date, time)} if time else {}),
+            **({"skipped_date": body["skipped_note"]} if body.get("skipped") else {}),
         }
 
     async def month_calendar(
@@ -151,6 +204,7 @@ def tools(engine: EngineClient) -> list[BaseTool]:
                     "rahu_kalaya": span(d["rahu_kalaya"], d["date"]),
                     "thithi_at_sunrise": (d.get("thithi") or {}).get("name"),
                     "nakatha_at_sunrise": (d.get("nakatha") or {}).get("name"),
+                    **({"skipped_date": True} if d.get("skipped") else {}),
                 }
                 for d in days
             ],
@@ -232,8 +286,10 @@ def tools(engine: EngineClient) -> list[BaseTool]:
             description=(
                 "The day's almanac for a place: sunrise, sunset, Rahu kalaya, and the thithi, "
                 "nakatha, yoga and karana with the times each starts and ends. Needs an exact "
-                "date (YYYY-MM-DD) and a place id. For 'today', 'tomorrow' or 'yesterday', use "
-                "the date from the Today note (Sri Lanka) or from current_date (elsewhere)."
+                "date (YYYY-MM-DD) and a place id. For an hour ('at 9 in the morning'), give "
+                "`time` too and use `at_time` from the answer. For 'today', 'tomorrow' or "
+                "'yesterday', use the date from the Today note (Sri Lanka) or from current_date "
+                "(elsewhere)."
             ),
             args_schema=DayArgs,
             handle_tool_error=True,

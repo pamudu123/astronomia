@@ -1,13 +1,14 @@
 "use client";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import type { FormValues } from "@/components/hadahan/BirthForm";
+import { type FormValues, type MissingField, latestBirth } from "@/components/hadahan/BirthForm";
 import formStyles from "@/components/hadahan/BirthForm.module.css";
 import { PlaceSearch } from "@/components/hadahan/PlaceSearch";
 import type { Labels } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import { NAKSHATRA } from "@/lib/nakshatra";
 import type { QuickInput } from "@/lib/porondam";
+import { useHydrated } from "@/lib/useHydrated";
 
 import styles from "./Porondam.module.css";
 
@@ -25,10 +26,21 @@ type Props = {
   /** Updates are functions of the current values, so quick edits never overwrite each other. */
   onFull: (update: (current: FormValues) => FormValues) => void;
   onQuick: (update: (current: QuickInput) => QuickInput) => void;
+  /** The details still needed, once the visitor has tried to match. */
+  missing: PersonField[];
+  /** What is wrong with the date, once the visitor has tried to match. */
+  dateError?: string;
 };
 
-export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull, onQuick }: Props) {
-  const id = (field: string) => `${role}-${field}`;
+export type PersonField = MissingField | "star";
+
+/** The id of one person's field, so the form can take the visitor to it. */
+export const fieldId = (role: "bride" | "groom", field: string) => `${role}-${field}`;
+
+export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull, onQuick, missing, dateError }: Props) {
+  const hydrated = useHydrated();
+  const id = (field: string) => fieldId(role, field);
+  const needed = (field: PersonField) => missing.includes(field) || undefined;
   const title = role === "bride" ? t.bride : t.groom;
   const setFull = <K extends keyof FormValues>(key: K, value: FormValues[K]) =>
     onFull((current) => ({ ...current, [key]: value }));
@@ -65,10 +77,17 @@ export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull
                 className={formStyles.input}
                 type="date"
                 min="1800-01-01"
-                max="2200-12-31"
+                max={hydrated ? latestBirth(full) : undefined}
+                aria-invalid={needed("date") || Boolean(dateError) || undefined}
+                aria-describedby={dateError ? id("date-error") : undefined}
                 value={full.date}
                 onChange={(e) => setFull("date", e.target.value)}
               />
+              {dateError && (
+                <p id={id("date-error")} className={formStyles.fieldError}>
+                  {dateError}
+                </p>
+              )}
             </div>
             <div className={formStyles.field}>
               <label htmlFor={id("time")} className={formStyles.label}>
@@ -78,6 +97,7 @@ export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull
                 id={id("time")}
                 className={formStyles.input}
                 type="time"
+                aria-invalid={needed("time")}
                 value={full.time}
                 onChange={(e) => setFull("time", e.target.value)}
               />
@@ -90,6 +110,9 @@ export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull
             empty={h.noPlaces}
             value={full.place}
             onChange={(place) => setFull("place", place)}
+            chosen={h.placeChosen}
+            inputId={id("place")}
+            invalid={needed("place")}
           />
         </>
       ) : (
@@ -101,6 +124,7 @@ export function PersonCard({ role, lang, mode, full, quick, labels, t, h, onFull
             <select
               id={id("star")}
               className={formStyles.input}
+              aria-invalid={needed("star")}
               value={quick.nakshatra}
               onChange={(e) => setQuick("nakshatra", e.target.value)}
             >

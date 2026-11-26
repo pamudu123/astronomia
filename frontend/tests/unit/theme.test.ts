@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { THEME_KEY, THEME_SCRIPT, applyTheme, parseTheme } from "@/lib/theme";
+import { THEME_KEY, THEME_SCRIPT, applyTheme, followSavedTheme, parseTheme, readTheme } from "@/lib/theme";
 
 /** A stand-in for <html> and localStorage, enough for the theme code. */
 function fakePage(saved: string | null = null) {
@@ -88,5 +88,44 @@ describe("applyTheme", () => {
     applyTheme("system", page.root as unknown as HTMLElement);
     expect(page.store.has(THEME_KEY)).toBe(false);
     expect(page.attributes.has("data-theme")).toBe(false);
+  });
+});
+
+describe("with blocked storage (A-07)", () => {
+  function block() {
+    const blocked = () => {
+      throw new Error("blocked");
+    };
+    const page = fakePage();
+    vi.stubGlobal("window", {
+      localStorage: { getItem: blocked, setItem: blocked, removeItem: blocked },
+      dispatchEvent: () => true,
+    });
+    return page;
+  }
+  const root = (page: ReturnType<typeof fakePage>) => page.root as unknown as HTMLElement;
+
+  it("remembers the choice for this page, and what is shown agrees with it", () => {
+    const page = block();
+    for (const choice of ["light", "dark", "system"] as const) {
+      applyTheme(choice, root(page));
+      expect(readTheme()).toBe(choice);
+      expect(page.attributes.get("data-theme")).toBe(choice === "system" ? undefined : choice);
+    }
+  });
+
+  it("goes back to what is saved once saving works, or another tab saves a choice", () => {
+    applyTheme("light", root(block()));
+    const working = fakePage("dark");
+    vi.stubGlobal("window", { localStorage: working.localStorage, dispatchEvent: () => true });
+    expect(readTheme()).toBe("light");
+    followSavedTheme(root(working));
+    expect(readTheme()).toBe("dark");
+    expect(working.attributes.get("data-theme")).toBe("dark");
+
+    applyTheme("light", root(block()));
+    vi.stubGlobal("window", { localStorage: working.localStorage, dispatchEvent: () => true });
+    applyTheme("system", root(working));
+    expect(readTheme()).toBe("system");
   });
 });

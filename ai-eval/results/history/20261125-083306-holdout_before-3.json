@@ -1,0 +1,1142 @@
+{
+ "run": {
+  "label": "holdout/before-3",
+  "when_utc": "2026-11-25T08:33:06+00:00",
+  "model": "gpt-6-luna (default)",
+  "thinking": "low (default)",
+  "cases": "holdout",
+  "questions": "99bb65bd48",
+  "prompts": "before the fixes"
+ },
+ "answers": {
+  "ho-yoga-malavya": {
+   "turns": [
+    {
+     "question": "I heard I have Malavya yoga. Is it true?",
+     "text": "No—**your chart doesn’t list Malavya yoga**. In the usual rule, it needs Venus in its own sign or exalted sign, placed in an angular house; your Venus is shown in Simha, in the part of the chart linked to creativity, learning and romance.\n\nYou do have other Venus combinations listed, including Ravi-Sukra yoga and Raja and Dhana yogas involving Venus. Those are separate from Malavya yoga. Traditions and chart methods can differ, so another astrologer may be using a different calculation or definition.",
+     "first_event": 0.03,
+     "first_text": 4.0,
+     "final_text_start": 4.0,
+     "error": null,
+     "total": 4.88,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.88,
+        "model": "gpt-6-luna",
+        "input": 9843,
+        "cached": 9840,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.93,
+        "model": "gpt-6-luna",
+        "input": 11868,
+        "cached": 11865,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.98,
+        "model": "gpt-6-luna",
+        "input": 17187,
+        "cached": 17184,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.9,
+        "model": "gpt-6-luna",
+        "input": 31102,
+        "cached": 31099,
+        "output": 117,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 70000,
+      "cached": 69988,
+      "output": 223
+     }
+    }
+   ]
+  },
+  "ho-yoga-gaja": {
+   "turns": [
+    {
+     "question": "Do I have Gajakesari yoga in my horoscope?",
+     "text": "No—your chart does **not** list Gajakesari yoga. In the usual rule, Jupiter needs to be in an angle from the Moon; your Moon is in the 1st house and Jupiter is in the 5th, so it doesn’t meet that condition.\n\nThat doesn’t mean your chart lacks strengths: it lists other combinations, including Saraswati and Raja yogas. Traditionally, these are read as possibilities and strengths to work with, not guarantees.",
+     "first_event": 0.05,
+     "first_text": 4.11,
+     "final_text_start": 4.11,
+     "error": null,
+     "total": 4.84,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.89,
+        "model": "gpt-6-luna",
+        "input": 9842,
+        "cached": 9839,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.95,
+        "model": "gpt-6-luna",
+        "input": 11867,
+        "cached": 11864,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.27,
+        "model": "gpt-6-luna",
+        "input": 17186,
+        "cached": 11864,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.52,
+        "model": "gpt-6-luna",
+        "input": 31101,
+        "cached": 17183,
+        "output": 99,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 69996,
+      "cached": 50750,
+      "output": 205
+     }
+    }
+   ]
+  },
+  "ho-yoga-shasha": {
+   "turns": [
+    {
+     "question": "Do I have Shasha yoga?",
+     "text": "Yes. Your chart lists **Shasha yoga** because Saturn is in its own sign, Makara, in the part of your chart linked to work and status. Traditionally, this yoga is associated with discipline, responsibility and the ability to build authority steadily over time. It’s a supportive theme, not a guarantee; how it shows up depends on the whole chart and your choices.",
+     "first_event": 0.04,
+     "first_text": 1.71,
+     "final_text_start": 1.71,
+     "error": null,
+     "total": 2.3,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.89,
+        "model": "gpt-6-luna",
+        "input": 9837,
+        "cached": 9834,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.29,
+        "model": "gpt-6-luna",
+        "input": 11862,
+        "cached": 11859,
+        "output": 80,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 21699,
+      "cached": 21693,
+      "output": 116
+     }
+    }
+   ]
+  },
+  "ho-abroad-kasun": {
+   "turns": [
+    {
+     "question": "Will I get to live in another country?",
+     "text": "Your chart has a **real traditional leaning toward foreign travel and possibly living abroad**, but it can’t promise a move or a visa.\n\nThe clearest sign is **Rahu in your 9th house**, which astrologers link with long journeys, foreign connections and exploring a wider world. Your **12th-house ruler, Jupiter, is in the 5th house** with the Sun and Venus; that adds a link between time away from home and learning, creativity or personal interests, rather than showing a straightforward guarantee of settlement.\n\nYou’re in a Rahu life period until **17 June 2035**, currently with a Mercury sub-period that runs until **17 December 2027**. Traditionally, Rahu brings ambition, change and foreign links; Mercury can bring learning, communication and work connections. This may be a useful stretch to explore study or job routes abroad and prepare applications carefully. Think of someone who keeps building skills and applying through setbacks until an overseas opportunity becomes practical.\n\nThe chart points to possibility, not certainty. Real opportunities, finances, family needs and immigration rules matter most; treat this reading as a traditional reflection, not a guarantee.",
+     "first_event": 0.04,
+     "first_text": 2.93,
+     "final_text_start": 2.93,
+     "error": null,
+     "total": 4.73,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.12,
+        "model": "gpt-6-luna",
+        "input": 9839,
+        "cached": 9836,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.94,
+        "model": "gpt-6-luna",
+        "input": 15158,
+        "cached": 15155,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.48,
+        "model": "gpt-6-luna",
+        "input": 29073,
+        "cached": 29070,
+        "output": 236,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 54070,
+      "cached": 54061,
+      "output": 306
+     }
+    }
+   ]
+  },
+  "ho-home-nimali": {
+   "turns": [
+    {
+     "question": "What does my chart say about my home life and my mother?",
+     "text": "Your chart suggests a home life that matters deeply to your sense of security, but may need **patience and deliberate care** to feel settled. It also points to a bond with your mother that can be caring and supportive, though feelings around home may sometimes run high.\n\nThe part of your chart linked to home and your mother has **Mars** in it, and Mars is marked debilitated. The Moon, which is linked with feelings and the mother, rules that part of your chart and sits in the communication area. Traditionally, this can show strong energy around home and property, alongside a need to talk through family differences calmly. Your **Punarvasu** birth star is traditionally associated with being home-loving and able to bounce back.\n\nThe helpful side is that Mars’s debility is supported in your chart by conditions the site identifies as a cancellation combination; it needn’t be read as simply weak. The stretch is that quick reactions or unresolved disagreements could disturb the peace. Think of a family discussion about a house move or repairs: pausing before responding and making decisions together can help keep practical issues from becoming personal.\n\nYour Moon is also marked vargottama, which tradition treats as an added strength for its themes of feelings and care. During your current Mercury period, communication and family conversations may be more prominent; the Venus sub-period is running until the date shown on your chart, and Venus rules your home area’s next-door theme of close partnership? I’ll keep this focused: Venus sits in your career area, so work and responsibilities may also shape how much time and attention you can give home. A steady routine and open conversations with your mother can help you protect that connection.",
+     "first_event": 0.03,
+     "first_text": 3.19,
+     "final_text_start": 3.19,
+     "error": null,
+     "total": 6.87,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.12,
+        "model": "gpt-6-luna",
+        "input": 9813,
+        "cached": 9810,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.02,
+        "model": "gpt-6-luna",
+        "input": 15132,
+        "cached": 15129,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 4.55,
+        "model": "gpt-6-luna",
+        "input": 29047,
+        "cached": 29044,
+        "output": 343,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 53992,
+      "cached": 53983,
+      "output": 413
+     }
+    }
+   ]
+  },
+  "ho-health-kasun": {
+   "turns": [
+    {
+     "question": "Is my health okay according to my chart?",
+     "text": "Astrologically, your chart doesn’t give a medical verdict, and I can’t tell from it whether you’re healthy. It does suggest a few gentle reminders around caring for your energy and wellbeing.\n\nYour Moon is in the 1st house, which astrologers traditionally link with feelings and mood being closely tied to how you feel day to day. Mars is in your 2nd house, and Saturn is strong in your 10th; neither placement alone points to a health problem. The practical takeaway is to keep steady routines, make room for rest, and avoid rushing when you’re tired.\n\nIf something is worrying you or you have symptoms, please speak with a doctor rather than relying on a chart. A human astrologer can also look at the full chart with you, but astrology is a tradition of interpretation, not a health test.",
+     "first_event": 0.04,
+     "first_text": 3.04,
+     "final_text_start": 3.04,
+     "error": null,
+     "total": 4.38,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/personal-reading/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.97,
+        "model": "gpt-6-luna",
+        "input": 9839,
+        "cached": 9836,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.87,
+        "model": "gpt-6-luna",
+        "input": 15158,
+        "cached": 15155,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.33,
+        "model": "gpt-6-luna",
+        "input": 29073,
+        "cached": 29070,
+        "output": 173,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/personal-reading/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 54070,
+      "cached": 54061,
+      "output": 243
+     }
+    }
+   ]
+  },
+  "ho-moon-kasun": {
+   "turns": [
+    {
+     "question": "What is my Moon sign?",
+     "text": "Your Moon sign is **Mesha (Aries)**. Your chart also shows your Moon in the 1st house.",
+     "first_event": 0.05,
+     "first_text": 2.44,
+     "final_text_start": 2.44,
+     "error": null,
+     "total": 2.64,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.19,
+        "model": "gpt-6-luna",
+        "input": 9836,
+        "cached": 9833,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.26,
+        "model": "gpt-6-luna",
+        "input": 11861,
+        "cached": 11858,
+        "output": 29,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       }
+      ],
+      "input": 21697,
+      "cached": 21691,
+      "output": 65
+     }
+    }
+   ]
+  },
+  "ho-star-nimali": {
+   "turns": [
+    {
+     "question": "What is my birth star?",
+     "text": "Your birth star is **Punarvasu**, in its **third quarter**. Traditionally, Punarvasu is associated with renewal and returning to a steady path.",
+     "first_event": 0.08,
+     "first_text": 2.63,
+     "final_text_start": 2.63,
+     "error": null,
+     "total": 3.01,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.54,
+        "model": "gpt-6-luna",
+        "input": 9806,
+        "cached": 9803,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.15,
+        "model": "gpt-6-luna",
+        "input": 11831,
+        "cached": 11828,
+        "output": 38,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 21637,
+      "cached": 21631,
+      "output": 74
+     }
+    }
+   ]
+  },
+  "ho-erashtaka-nimali": {
+   "turns": [
+    {
+     "question": "Is erashtaka affecting me these days?",
+     "text": "By the traditional Moon-sign count, **your chart alone isn’t enough to confirm whether erashtaka is affecting you now**: you have a Mithuna Moon, but the chart shown here doesn’t list Saturn’s current sign or your erashtaka dates. Astrologers call the seven-and-a-half-year period erashtaka when Saturn moves through the sign before, the same sign as, and the sign after your Moon sign.\n\nYou can check the chart page’s **Saturn periods** section for whether one is marked as running now. It’s a period astrologers watch, not a promise of misfortune—many people do well during it, and patience, steady habits and realistic plans are traditionally advised.",
+     "first_event": 0.08,
+     "first_text": 3.2,
+     "final_text_start": 3.2,
+     "error": null,
+     "total": 4.41,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.15,
+        "model": "gpt-6-luna",
+        "input": 9809,
+        "cached": 9806,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.0,
+        "model": "gpt-6-luna",
+        "input": 11834,
+        "cached": 9806,
+        "output": 34,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.95,
+        "model": "gpt-6-luna",
+        "input": 20110,
+        "cached": 11831,
+        "output": 147,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 41753,
+      "cached": 31443,
+      "output": 217
+     }
+    }
+   ]
+  },
+  "ho-offtopic": {
+   "turns": [
+    {
+     "question": "What is the capital of Australia?",
+     "text": "Canberra.",
+     "first_event": 0.06,
+     "first_text": 0.83,
+     "final_text_start": 0.83,
+     "error": null,
+     "total": 1.27,
+     "tool_calls": [],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.1,
+        "model": "gpt-6-luna",
+        "input": 8162,
+        "cached": 8159,
+        "output": 7,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 8162,
+      "cached": 8159,
+      "output": 7
+     }
+    }
+   ]
+  },
+  "ho-rahu-ny": {
+   "turns": [
+    {
+     "question": "I'm in New York. When is Rahu kalaya today?",
+     "text": "In New York City, Rahu kalaya today, **Tuesday, November 24, 2026**, is **2:05–3:17 p.m.** local time. Traditionally, people avoid beginning important new activities during this period. The day’s timings are provisional.",
+     "first_event": 0.05,
+     "first_text": 4.52,
+     "final_text_start": 4.52,
+     "error": null,
+     "total": 5.0,
+     "tool_calls": [
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"New York\",\"limit\":5}"
+      },
+      {
+       "name": "current_date",
+       "args": "{\"timezone\": \"America/New_York\"}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\": \"/skills/calendar-and-nakath/SKILL.md\", \"offset\": 0, \"limit\": 1000}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\":\"2026-11-24\",\"place_id\":5128581,\"lang\":\"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.84,
+        "model": "gpt-6-luna",
+        "input": 8169,
+        "cached": 8166,
+        "output": 23,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.99,
+        "model": "gpt-6-luna",
+        "input": 8371,
+        "cached": 8368,
+        "output": 71,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.38,
+        "model": "gpt-6-luna",
+        "input": 9262,
+        "cached": 9259,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.07,
+        "model": "gpt-6-luna",
+        "input": 9793,
+        "cached": 9790,
+        "output": 61,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "find_place",
+        "input": "{'query': 'New York', 'limit': 5}",
+        "seconds": 0.41,
+        "status": "success"
+       },
+       {
+        "name": "current_date",
+        "input": "{'timezone': 'America/New_York'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2026-11-24', 'place_id': 5128581, 'lang': 'en'}",
+        "seconds": 0.02,
+        "status": "success"
+       }
+      ],
+      "input": 35595,
+      "cached": 35583,
+      "output": 191
+     }
+    }
+   ]
+  },
+  "ho-compare": {
+   "turns": [
+    {
+     "question": "We want to move into our new house at 11 am in Kandy on 14, 15 or 16 January 2027. Which is best?",
+     "text": "**14 January at 11 am looks the most suitable of your three choices by the almanac details.** In Kandy, 11 am is outside Rahu kalaya that day, and it falls during Bright 6 (Shashthi). Rahu kalaya begins at 1:44 pm.\n\nFor comparison, 11 am on **15 January** falls within Rahu kalaya (10:48 am–12:16 pm), which tradition advises avoiding for a new beginning. On **16 January**, Rahu kalaya ends at 10:48 am, so 11 am is outside it; the thithi is Bright 8 (Ashtami).\n\nThese are general almanac details, not a personalised house-entry time. The site’s calculations are marked provisional, and for an important griha-pravesh, it’s best to have a family astrologer choose the exact time for your household.",
+     "first_event": 0.05,
+     "first_text": 4.85,
+     "final_text_start": 4.85,
+     "error": null,
+     "total": 6.29,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "find_place",
+       "args": "{\"query\":\"Kandy\",\"limit\":5}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2027-01-14\", \"place_id\": 1241622, \"lang\": \"en\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2027-01-15\", \"place_id\": 1241622, \"lang\": \"en\"}"
+      },
+      {
+       "name": "good_times_for_day",
+       "args": "{\"date\": \"2027-01-16\", \"place_id\": 1241622, \"lang\": \"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.95,
+        "model": "gpt-6-luna",
+        "input": 8189,
+        "cached": 8186,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.94,
+        "model": "gpt-6-luna",
+        "input": 8979,
+        "cached": 8976,
+        "output": 23,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.19,
+        "model": "gpt-6-luna",
+        "input": 9185,
+        "cached": 9182,
+        "output": 116,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.06,
+        "model": "gpt-6-luna",
+        "input": 10526,
+        "cached": 10523,
+        "output": 191,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "find_place",
+        "input": "{'query': 'Kandy', 'limit': 5}",
+        "seconds": 0.02,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2027-01-16', 'place_id': 1241622, 'lang': 'en'}",
+        "seconds": 0.01,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2027-01-14', 'place_id': 1241622, 'lang': 'en'}",
+        "seconds": 0.7,
+        "status": "success"
+       },
+       {
+        "name": "good_times_for_day",
+        "input": "{'date': '2027-01-15', 'place_id': 1241622, 'lang': 'en'}",
+        "seconds": 0.7,
+        "status": "success"
+       }
+      ],
+      "input": 36879,
+      "cached": 36867,
+      "output": 368
+     }
+    }
+   ]
+  },
+  "ho-si-poya": {
+   "turns": [
+    {
+     "question": "දෙසැම්බර් පෝය කවදද, ඒ පෝයෙන් සිහිපත් කරන්නේ මොකක්ද?",
+     "text": "කොළඹ සඳහා මේ පිටුවේ ගණනය අනුව **දෙසැම්බර් පෝය 2026 දෙසැම්බර් 24** දාට යෙදෙනවා. එය දුරුතු පෝය ලෙස හඳුන්වන අතර, සම්ප්‍රදාය අනුව බුදුන් වහන්සේගේ ශ්‍රී ලංකාවට පළමු වැඩම කිරීම—මහියංගණයේ යක්ෂ–නාග ගැටුම සමථයකට පත් කිරීම—සිහිපත් කරනවා. ආගමික කටයුතු සඳහා යොදාගන්නේ නම්, නිල දින දර්ශනයත් පරීක්ෂා කරගන්න; පෝය දිනය දිනකින් වෙනස් විය හැකියි.",
+     "first_event": 0.06,
+     "first_text": 3.86,
+     "final_text_start": 3.86,
+     "error": null,
+     "total": 5.92,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/calendar-and-nakath/reference.md\",\"offset\":0,\"limit\":1000}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 1.02,
+        "model": "gpt-6-luna",
+        "input": 8724,
+        "cached": 8721,
+        "output": 38,
+        "reasoning": 0
+       },
+       {
+        "seconds": 1.89,
+        "model": "gpt-6-luna",
+        "input": 9514,
+        "cached": 9511,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.75,
+        "model": "gpt-6-luna",
+        "input": 14898,
+        "cached": 14895,
+        "output": 174,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/calendar-and-nakath/reference.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.01,
+        "status": "success"
+       }
+      ],
+      "input": 33136,
+      "cached": 33127,
+      "output": 248
+     }
+    }
+   ]
+  },
+  "ho-saturn-kanya": {
+   "turns": [
+    {
+     "question": "How long will Saturn's next sign last for Kanya rising sign, and what does it bring?",
+     "text": "For **Kanya rising**, Saturn’s next move into Mesha is shown for **3 June 2027**. The site’s next listed change has Saturn stepping back into Meena on **20 October 2027**, so that first stretch in Mesha lasts about **four and a half months**; these dates are provisional.\n\nTraditionally, Saturn moving from the partnership area into the area of change and shared matters can bring a more serious, slower tone around joint finances, responsibilities, and adjustments in close relationships. It’s a time to be patient, check agreements carefully, and talk through shared obligations early—not a prediction that something bad must happen. Knowing the dates ahead gives you room to plan.",
+     "first_event": 0.14,
+     "first_text": 3.84,
+     "final_text_start": 3.84,
+     "error": null,
+     "total": 5.42,
+     "tool_calls": [
+      {
+       "name": "read_file",
+       "args": "{\"file_path\":\"/skills/birth-chart/SKILL.md\",\"offset\":0,\"limit\":1000}"
+      },
+      {
+       "name": "upcoming_planet_changes",
+       "args": "{\"lang\":\"en\"}"
+      },
+      {
+       "name": "planet_change_for_sign",
+       "args": "{\"change_id\":\"saturn-2027-06\",\"sign\":\"kanya\",\"lang\":\"en\"}"
+      }
+     ],
+     "messages_written": 1,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 0.83,
+        "model": "gpt-6-luna",
+        "input": 8175,
+        "cached": 8172,
+        "output": 36,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.74,
+        "model": "gpt-6-luna",
+        "input": 10200,
+        "cached": 10197,
+        "output": 21,
+        "reasoning": 0
+       },
+       {
+        "seconds": 0.86,
+        "model": "gpt-6-luna",
+        "input": 10601,
+        "cached": 10598,
+        "output": 37,
+        "reasoning": 0
+       },
+       {
+        "seconds": 2.18,
+        "model": "gpt-6-luna",
+        "input": 10857,
+        "cached": 10854,
+        "output": 145,
+        "reasoning": 0
+       }
+      ],
+      "tools": [
+       {
+        "name": "read_file",
+        "input": "{'file_path': '/skills/birth-chart/SKILL.md', 'offset': 0, 'limit': 1000}",
+        "seconds": 0.0,
+        "status": "success"
+       },
+       {
+        "name": "upcoming_planet_changes",
+        "input": "{'lang': 'en'}",
+        "seconds": 0.31,
+        "status": "success"
+       },
+       {
+        "name": "planet_change_for_sign",
+        "input": "{'change_id': 'saturn-2027-06', 'sign': 'kanya', 'lang': 'en'}",
+        "seconds": 0.02,
+        "status": "success"
+       }
+      ],
+      "input": 39833,
+      "cached": 39821,
+      "output": 239
+     }
+    }
+   ]
+  },
+  "ho-ch-care-kasun": {
+   "turns": [
+    {
+     "text": "This chart points to a few areas where steady care can be useful, especially around health routines, close relationships and careful choices. These are possibilities, not fixed outcomes; awareness and practical habits give you room to steer.\n\n**🩺 Looking after health**\n\nThere is no health-care period singled out in the chart at present. Still, the Moon in your rising area (the 1st house) can make feelings and wellbeing closely connected, while Mercury in the daily-routines area (the 6th house) links care to steady habits.\n\n- Keep a regular routine for rest and everyday wellbeing.\n- Arrange routine check-ups, and speak with a doctor about any real concern.\n\n**💞 Giving relationships care**\n\nThe Mars check is present and not reduced: Mars sits in the family and speech area (the 2nd house), which is one of the positions this tradition checks. This can point to strong words or quick reactions becoming a source of friction, rather than predict a relationship outcome.\n\nKnowing this ahead is useful: pause before responding in an argument, talk through small differences early, and make space for each other’s pace. The whole chart matters, and a human astrologer can compare both charts before any marriage decision.\n\n**💰 Handling money carefully**\n\nMars in the family and savings area (the 2nd house) can traditionally call for care with spending and speech around money. This is a tendency you can work with: keep a simple budget, build savings steadily, and take time before major financial commitments. For financial decisions, rely on a qualified adviser as well as the real figures.\n\n**🧭 Other matters**\n\nThe chart shows no specific pointer here for extra caution with business, travel or legal matters. For significant decisions, weigh the practical details and advice from people you trust.",
+     "first_text": 0.95,
+     "error": null,
+     "tool_calls": [],
+     "total": 4.12,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 4.11,
+        "model": "gpt-6-luna",
+        "input": 27997,
+        "cached": 27994,
+        "output": 365,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 27997,
+      "cached": 27994,
+      "output": 365
+     }
+    }
+   ]
+  },
+  "ho-ch-day-en": {
+   "turns": [
+    {
+     "text": "Saturday, 12 December 2026 in Kandy has a changing lunar day and the nakatha Uttara Ashadha. Traditionally, the day is best judged by the time and the purpose; avoid starting important new things during Rahu kalaya.\n\n**🗓️ The day’s signs**\n\nThe thithi (lunar day) is Bright 3 (Tritiya) until 14:07, then Bright 4 (Chaturthi) begins. The nakatha is Uttara Ashadha throughout the day, ending at 06:13 on 13 December.\n\nTraditions give different meanings to these signs, and astrologers may weigh them differently. A family astrologer can choose a suitable time for a major personal event.\n\n**⚠️ Rahu kalaya**\n\nIn Kandy, Rahu kalaya is 09:03 to 10:30. Traditionally, people avoid starting important new things during this period; work already underway can continue.\n\n**🧭 Choosing a time**\n\nThe rules used for these calculations are still being confirmed. For a wedding or another major event, have a family astrologer check the time against the people and purpose involved.",
+     "first_text": 1.01,
+     "error": null,
+     "tool_calls": [],
+     "total": 2.63,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 2.62,
+        "model": "gpt-6-luna",
+        "input": 11211,
+        "cached": 11208,
+        "output": 241,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 11211,
+      "cached": 11208,
+      "output": 241
+     }
+    }
+   ]
+  },
+  "ho-ch-avurudu-si": {
+   "turns": [
+    {
+     "text": "අවුරුදු චාරිත්‍ර සිදුවන්නේ දින කිහිපයක් පුරා, නියමිත නැකත් වේලාවන්ටයි. 2027 සඳහා මෙහි දැක්වෙන්නේ නිල නැකත් ලැයිස්තුවයි.\n\n**🕯️ අවුරුද්දට පෙර**\n\nපරණ අවුරුද්ද සඳහා ස්නානය අප්‍රේල් 12 දාට යෙදී තිබේ. චන්ද්‍ර වර්ෂය සඳහා නව සඳ බැලීම අප්‍රේල් 9 දාත්, සූර්ය වර්ෂය සඳහා එය මැයි 7 දාත් යෙදී ඇත.\n\n**🗓️ අවුරුදු උදාව සහ නොනගතය**\n\nඅලුත් අවුරුදු උදාව 2027 අප්‍රේල් 14 ප.ව. 3:29ටයි. පුණ්‍ය කාලය (නොනගතය) එදින පෙ.ව. 9:05 සිට ප.ව. 9:53 දක්වායි.\n\nසාමාන්‍යයෙන් මේ මධ්‍ය කාලයේදී පවුල් ආගමික කටයුතුවල යෙදෙන අතර, අලුත් වැඩ ආරම්භ කිරීමෙන් වැළකී සිටිති. පවුල් අනුව චාරිත්‍ර පිළිපදින ආකාරය වෙනස් විය හැකියි.\n\n**🏠 නැකත් චාරිත්‍ර**\n\nනොනගතය අතරතුරින් පසු යෙදෙන චාරිත්‍ර වේලාවන් මෙසේයි:\n\n- **ආහාර පිසීම:** අප්‍රේල් 14 ප.ව. 6:18\n- **වැඩ ඇල්ලීම, ගනුදෙනු කිරීම හා ආහාර අනුභවය:** අප්‍රේල් 14 ප.ව. 8:18\n\nමේ චාරිත්‍රවලදී පවුලේ අය ආහාර පිසීම, වසරේ පළමු ගනුදෙනුව සහ පළමු ආහාරය සම්ප්‍රදායට අනුව සිදු කරති.\n\n**🪔 ඉදිරි දිනවල චාරිත්‍ර**\n\nඅවුරුදු උදාවෙන් පසු ඇති නැකත් වේලාවන් මෙසේයි:\n\n- **හිසතෙල් ගෑම:** අප්‍රේල් 17 පෙ.ව. 7:04\n- **රැකීරක්ෂා සඳහා පිටත්ව යෑම:** අප්‍රේල් 21 පෙ.ව. 6:15\n- **පැළ සිටුවීම:** අප්‍රේල් 22 පෙ.ව. 11:38\n\nමෙම වේලාවන් ශ්‍රී ලංකා වේලාවෙන් වන අතර, නිල ලැයිස්තුව සංස්කෘතික කටයුතු දෙපාර්තමේන්තුවේ 2027 අවුරුදු නැකත් ලැයිස්තුවෙන් ලබාගෙන ඇත.",
+     "first_text": 0.91,
+     "error": null,
+     "tool_calls": [],
+     "total": 5.97,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 5.96,
+        "model": "gpt-6-luna",
+        "input": 12121,
+        "cached": 12118,
+        "output": 664,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 12121,
+      "cached": 12118,
+      "output": 664
+     }
+    }
+   ]
+  },
+  "ho-ch-saturn-kasun": {
+   "turns": [
+    {
+     "text": "This is a stretch for patience and steady routines, not a fixed run of misfortune. Your current Saturn period is counted the same way from both your Moon sign and rising sign, and the two counts overlap.\n\n**⏳ Saturn’s slower stretches**\n\nTraditionally, erashtaka can bring delays or extra pressure around work, money, health and family. These are possibilities, not certainties; many people do well during such periods.\n\n- **Past:** 2 June 1995 to 8 April 2003\n- **Now:** 30 March 2025 to 31 May 2032\n- **Next:** 15 May 2054 to 7 March 2062\n- **Later:** 20 March 2084 to 21 May 2091\n\nThe Moon-sign count is usually given more weight in Sri Lankan readings. Here, the rising-sign count has the same dates, so the two periods overlap completely. The site’s period rules are provisional.\n\n**🌟 Steady ground in your chart**\n\nSaturn is in its own sign, Makara, in your work and status area (the 10th house). Traditionally, this can support persistence and responsibility, helping you build progress gradually, even when results take time.\n\n**💡 What helps during this stretch**\n\nKeep plans realistic, give important choices time, and stay consistent with rest and routine check-ups. If pressure builds, talk things through early and lean on people you trust; patient, fair effort can help you steer this period well.\n\nJupiter’s returns to its birth sign are traditionally treated as lighter, more supportive windows:\n\n| Window | Dates |\n|---|---|\n| **Now** | 31 October 2026 to 24 July 2028 |\n| **Next** | 7 October 2038 to 29 June 2040 |\n| **Later** | 19 September 2050 to 17 October 2051 |\n| **Later** | 3 September 2062 to 2 October 2063 |\n\nThese windows may offer a more encouraging counterbalance, though they are not guarantees.",
+     "first_text": 2.74,
+     "error": null,
+     "tool_calls": [],
+     "total": 5.25,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 5.24,
+        "model": "gpt-6-luna",
+        "input": 22246,
+        "cached": 22243,
+        "output": 572,
+        "reasoning": 136
+       }
+      ],
+      "tools": [],
+      "input": 22246,
+      "cached": 22243,
+      "output": 572
+     }
+    }
+   ]
+  },
+  "ho-ch-nature-kasun": {
+   "turns": [
+    {
+     "text": "You come across as direct and energetic, with a warm, expressive side and a serious capacity to build steadily over time.\n\n**🙂 How you approach life**\n\nYou may prefer to act promptly and take the lead, while your feelings are close to the surface. Mesha rising gives a direct, pioneering approach; the Moon in your first house makes your emotions and care more visible to others.\n\nYour rising-sign ruler, Mars, sits in the family and savings area (the 2nd house). Traditionally, this links your drive with building security and speaking plainly; pausing before reacting can help keep your words as constructive as your intentions.\n\n**💭 What you need inside**\n\nYou may feel things quickly and strongly, and feel more settled when you can respond honestly rather than hide what is on your mind. Your Moon is in Mesha, a direct and action-oriented sign, and Jupiter looks at it from your 5th house, traditionally adding perspective and good judgement.\n\n**✨ Your finer qualities**\n\nBharani is traditionally associated with strong feelings, responsibility and the ability to carry duties. Its fourth quarter adds the finer tone of your birth star.\n\nSun, Jupiter and Venus gather in your creativity and learning area (the 5th house), making that part of life a prominent theme. Your Sun is at home and steady (own sign) in Simha, traditionally supporting confidence and expressive leadership. Saturn is also strong in your work area (the 10th house), suggesting patience and a serious, steady approach to responsibilities.\n\n**🌱 Your balance**\n\nThe same directness that helps you begin things can sometimes turn into impatience, especially when emotions rise. Taking a moment before answering, and giving yourself time to consider another person’s pace, can help your courage and warmth work together.",
+     "first_text": 0.84,
+     "error": null,
+     "tool_calls": [],
+     "total": 4.31,
+     "usage": {
+      "calls": [
+       {
+        "seconds": 4.3,
+        "model": "gpt-6-luna",
+        "input": 27994,
+        "cached": 27991,
+        "output": 362,
+        "reasoning": 0
+       }
+      ],
+      "tools": [],
+      "input": 27994,
+      "cached": 27991,
+      "output": 362
+     }
+    }
+   ]
+  }
+ }
+}

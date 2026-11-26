@@ -1,0 +1,289 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-top: 48px;
+  padding-bottom: 96px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 640px;
+}
+
+.title {
+  font-size: clamp(32px, 5vw, 44px);
+  line-height: 1.15;
+}
+
+.title:focus {
+  outline: none;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  min-width: 0;
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+}
+
+.card p {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.smallTitle {
+  margin: 4px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.includes {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  font-size: 15px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--night);
+  color: var(--ink);
+  font: inherit;
+}
+
+.input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--coral);
+}
+
+.apply {
+  min-height: 48px;
+  padding: 0 20px;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.apply:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.applied {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-field);
+  background: var(--night);
+}
+
+.codeName {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.sums {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.sum {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sum dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.total {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.total dd {
+  color: var(--gold);
+}
+
+.main {
+  width: 100%;
+  border: 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.main:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.note {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.note svg {
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+.warning {
+  padding: 12px 16px;
+  border: 1px solid var(--coral);
+  border-radius: var(--radius-field);
+  color: var(--ink);
+}
+
+.test {
+  max-width: 640px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.primary,
+.outline {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  border: 0;
+}
+
+.outline {
+  background: none;
+}
+
+.linkButton {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+a.linkButton {
+  display: inline-flex;
+  align-items: center;
+}
+
+.link,
+.back {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.back {
+  align-self: flex-start;
+}
+
+.error {
+  color: var(--coral);
+  font-size: 14px;
+}
+
+.done {
+  align-items: flex-start;
+  max-width: 720px;
+}
+
+.tick {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgb(var(--glow) / 16%);
+  color: var(--gold);
+}
+
+@media (max-width: 860px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding-top: 28px;
+  }
+
+  .card {
+    padding: 22px 18px;
+  }
+}

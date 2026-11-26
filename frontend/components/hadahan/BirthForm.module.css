@@ -62,7 +62,6 @@
   background: var(--night);
   color: var(--ink);
   font: inherit;
-  color-scheme: dark;
 }
 
 .input:focus {
@@ -101,6 +100,38 @@
   background: var(--night);
   color: var(--ink-soft);
   font-size: 15px;
+}
+
+.noteLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+.noteLinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--gold);
+}
+
+/* A place search's hint, with its retry button beside it. */
+.hintRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 12px;
+}
+
+/* The partner confirmation on the match form. */
+.consent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.consent .check input {
+  flex: none;
 }
 
 .manual {
@@ -292,4 +323,14 @@
 
 .input[aria-invalid="true"] {
   border-color: var(--coral);
+}
+
+/* The hint once a place is chosen. */
+.hintDone {
+  color: var(--teal);
+  font-size: 14px;
+}
+
+.errorLine {
+  display: block;
 }

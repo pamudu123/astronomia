@@ -11,7 +11,6 @@
     "hadahan": "Hadahan",
     "porondam": "Porondam",
     "how": "Why Sidera",
-    "plans": "Plans",
     "tools": "All tools",
     "more": "More",
     "language": "Language",
@@ -27,7 +26,6 @@
     "lead": "Your hadahan and porondam, worked out precisely and explained in plain Sinhala or English.",
     "ctaHadahan": "Create my hadahan",
     "ctaPorondam": "Match two charts",
-    "privacy": "No sign up. Nothing is stored unless you save or share it.",
     "wheelLabel": "A slowly turning zodiac wheel with the twelve rashi named in Sinhala and planets in orbit"
   },
   "tools": {
@@ -238,12 +236,14 @@
     "changes": "Planet changes",
     "signIn": "Already saved? Sign in"
   },
-  "soon": {
-    "title": "Coming soon",
-    "text": "This part of the site is being built.",
-    "back": "Back to home"
+  "notFound": {
+    "metaTitle": "Page not found · Sidera",
+    "title": "This page could not be found.",
+    "text": "The address may be mistyped, or the page may have moved. You can carry on from here."
   },
   "hadahan": {
+    "metaTitle": "Hadahan: your Sri Lankan birth chart · Sidera",
+    "metaDescription": "Make your hadahan from your date, time and place of birth: lagna, rashi, nakatha, the nine planets, your kendara and your life periods, in Sinhala or English.",
     "form": {
       "eyebrow": "හඳහන",
       "title": "Tell us when and where you were born",
@@ -252,9 +252,13 @@
       "date": "Date of birth",
       "time": "Time of birth",
       "unknownTime": "I don't know the exact time",
-      "unknownTimeNote": "The lagna and houses need the birth time. Without it, use Porondam with birth stars, which needs only the nakath.",
+      "unknownTimeNote": "The lagna and houses need the birth time. Without it, you can still match two birth stars, which needs only the nakath.",
+      "unknownTimeStars": "Match two birth stars",
+      "unknownTimeOld": "Find the time from an old horoscope",
+      "unknownTimeShort": "This needs the birth time.",
       "place": "Place of birth",
       "placeHint": "Type at least two letters of a town or village",
+      "placeChosen": "Chosen: {place} ({timezone})",
       "noPlaces": "No places found. Try another spelling, or enter coordinates.",
       "timezoneOnDate": "Time zone on that date: {offset}",
       "coordinates": "Enter coordinates instead",
@@ -280,9 +284,12 @@
       "choose": "Use this time"
     },
     "errors": {
-      "missing": "Please fill in the date, time and place.",
+      "missing": "Still needed: {fields}.",
       "failed": "We could not work out the chart. Please try again.",
       "notFound": "That place was not found. Please search again.",
+      "loading": "The form could not finish loading. What you typed is kept.",
+      "retry": "Try again",
+      "date": "Date of birth cannot be in the future.",
       "latitude": "Latitude must be a number from -90 to 90, such as 6.9271.",
       "longitude": "Longitude must be a number from -180 to 180, such as 79.8612.",
       "timezone": "That time zone is not recognised. Use a name such as Asia/Colombo or Europe/London."
@@ -318,6 +325,11 @@
       "dashaNow": "Now: {main} main period, {sub} sub period.",
       "dashaSub": "Sub periods of the {main} main period",
       "road": {
+        "load": {
+          "loading": "Loading…",
+          "failed": "We could not load this section.",
+          "retry": "Try again"
+        },
         "title": "Life road",
         "lead": "Your life periods drawn as a road: wide and bright in good times, narrow in hard times.",
         "canvasLabel": "A night road running toward the horizon. Good years are wide and lit with lamps, hard years are narrow, dark and broken. Signposts mark major years.",
@@ -342,6 +354,9 @@
         "today": "Today",
         "prev": "Previous stop",
         "next": "Next stop",
+        "travel": "Travel along the road: press Next stop, drag the road, or tap anywhere on the bar below.",
+        "dragHint": "Drag the road to travel",
+        "step": "1 year",
         "later": "Move the road a year later",
         "earlier": "Move the road a year earlier",
         "period": "{planet} main period",
@@ -387,6 +402,7 @@
       "ayanamsaLahiri": "Lahiri",
       "download": "Download PDF",
       "preparing": "Preparing the PDF…",
+      "writingReading": "Writing your full reading: {done} of {total}…",
       "downloadFailed": "The PDF could not be made. Please try again.",
       "forecast": "This month",
       "forecastHouse": "{house} house",
@@ -446,6 +462,8 @@
     }
   },
   "porondam": {
+    "metaTitle": "Porondam: marriage matching from two charts · Sidera",
+    "metaDescription": "Match two people's porondam from their birth details or birth stars. See each factor with its reason, with Rajju, Vedha and Kuja dosha shown on their own.",
     "form": {
       "eyebrow": "පොරොන්දම්",
       "title": "Match two charts",
@@ -460,13 +478,17 @@
       "choose": "Choose",
       "submit": "Match the charts",
       "working": "Matching the charts",
-      "privacy": "Nothing is stored. Details are used once.",
+      "consent": "Both people are adults, and both have agreed to this match using their birth details.",
+      "consentNeeded": "Please confirm this before matching with full birth details.",
+      "consentOther": "Can't confirm this? A match by birth stars does not need it.",
+      "consentSwitch": "Match birth stars instead",
       "fullText": "Most complete, with Kuja dosha. Needs birth times.",
       "quickText2": "When you don't know the birth times. Kuja dosha is left out."
     },
+    "weddingFirst": "Wedding dates are found from both birth stars, so match the two of you first. Birth stars alone are enough. The date search then opens on this page.",
     "clockFor": "For the {who}:",
     "errors": {
-      "missing": "Please fill in the details for both people.",
+      "missing": "Still needed for the {who}: {fields}.",
       "failed": "We could not match the charts. Please try again.",
       "notFound": "A place was not found. Please search again."
     },
@@ -497,6 +519,7 @@
       "lagna": "Lagna {lagna}",
       "download": "Download PDF",
       "preparing": "Preparing the PDF…",
+      "writingReading": "Writing your full reading: {done} of {total}…",
       "downloadFailed": "The PDF could not be made. Please try again.",
       "kujaFrom": "From {point}",
       "kujaHouse": "{house} house",
@@ -556,6 +579,11 @@
       "homeLink": "See which birth stars match yours"
     },
     "timeline": {
+      "load": {
+        "loading": "Loading…",
+        "failed": "We could not load this section.",
+        "retry": "Try again"
+      },
       "title": "Years ahead for the couple",
       "lead": "The next ten years for both of you: Saturn periods and dasha periods.",
       "saturn": "Saturn",
@@ -628,7 +656,15 @@
       "placeHint": "Its sunrise and lagna are used. Colombo when left empty.",
       "noPlaces": "No places found",
       "find": "Find dates",
-      "working": "Searching. Two years can take a few seconds.",
+      "working": "Searching…",
+      "progress": {
+        "start": "Searching the next {range} for: {ceremonies}.",
+        "longer": "Still searching the next {range} for: {ceremonies}. A longer range takes longer.",
+        "waking": "Still searching the next {range} for: {ceremonies}. The service may have been asleep, and waking up can take a minute or more. If it has not answered after {limit} seconds, the search stops and you can try again.",
+        "seconds": "{seconds} seconds so far"
+      },
+      "translating": "These dates were found in Sinhala. Getting them in English…",
+      "notTranslated": "These dates are in Sinhala. Press Find dates to get them in English.",
       "pickOne": "Choose at least one ceremony.",
       "time": "{start} to {end}",
       "zone": "Times are in {zone} ({offset}).",
@@ -719,6 +755,10 @@
     "groupPorondam": "Porondam matches",
     "groupHadahan": "Hadahan charts",
     "savedOn": "Saved {date}",
+    "frozen": "As it was when saved, on {date}",
+    "live": "Worked out today, {date}. It can differ from the saved part.",
+    "savedNoteHadahan": "The chart and its life periods are kept as they were that day. The life road, the forecast and the planet changes ahead are worked out today, and a new PDF or share link is made fresh too.",
+    "savedNotePorondam": "The score and its checks are kept as they were that day. The years ahead and the couple's road are worked out today, and a new PDF or share link is made fresh too.",
     "quick": "Quick match by birth star",
     "openReport": "Open",
     "rename": "Rename",
@@ -773,92 +813,188 @@
   },
   "paid": {
     "title": "Get the full report",
-    "leadHadahan": "Everything about this chart, kept in your account.",
-    "leadPorondam": "Everything about this match, kept in your account.",
+    "leadHadahan": "Everything about this chart, kept in My reports.",
+    "leadPorondam": "Everything about this match, kept in My reports.",
     "perReport": "for this report",
-    "includes": [
-      "The full AI reading, chapter by chapter",
-      "Explain buttons on every main place",
-      "Every Kuja dosha rule, in full",
-      "The full PDF with the AI reading",
-      "Kept in your account, on any device"
-    ],
-    "continueGoogle": "Continue with Google",
-    "opening": "Opening Google…",
-    "signInWhy": "A full report belongs to your Google account, so you can open it on any device. Any Google account works.",
-    "haveCoupon": "Have a coupon?",
-    "couponLabel": "Coupon code",
-    "apply": "Apply",
-    "applying": "Checking…",
-    "freeNote": "This code makes the report free.",
-    "discountNote": "{percent}% off: {price} for this report.",
-    "paymentLater": "Payment is not available yet. For now only codes that make a report free can be used.",
-    "unlockFree": "Unlock free",
-    "unlocking": "Unlocking…",
+    "includes": {
+      "reading": "The full AI reading, chapter by chapter",
+      "readingStars": "The full AI reading, from the two birth stars",
+      "explain": "Explain buttons on every main place",
+      "kuja": "Every Kuja dosha rule, in full",
+      "pdf": "The full PDF with the AI reading",
+      "kept": "Kept in My reports, and on any device if you sign in"
+    },
+    "buy": "Buy this report",
+    "buyNote": "No sign in needed. You can use a coupon or discount code on the next page.",
+    "inviteTitle": "This is in the full report",
+    "inviteHadahan": "Buy it to read the AI reading of this chart chapter by chapter, open every Explain button, and get the full PDF.",
+    "invitePorondam": "Buy it to read the AI reading of this match chapter by chapter, open every Explain button, and get the full PDF.",
+    "inviteShared": "This is a shared result, so its full report cannot be bought here. Make your own to get its full report.",
+    "makeHadahan": "Make a hadahan",
+    "makePorondam": "Match two charts",
+    "checkFailed": "We could not check whether this is a full report, so the free result is shown.",
+    "checkAgain": "Check again",
+    "checking": "Checking…",
     "paidBadge": "Full report",
     "paidTitle": "This is your full report",
-    "paidText": "Everything in it is unlocked, and it is kept in your account.",
-    "detailLocked": "Every rule, one by one, is part of the full report.",
+    "paidText": "Everything in it is unlocked, and it is kept in My reports.",
+    "detailLocked": "Buy it to see every Kuja dosha rule one by one, with the AI reading and the full PDF.",
     "openMyReports": "Open My reports",
+    "google": {
+      "title": "Save your reports with Google",
+      "text": "Optional. Sign in with Google to open your reports on any device, and to keep them if you clear this browser. Without it they stay on this browser.",
+      "button": "Sign in with Google",
+      "opening": "Opening Google…",
+      "failed": "Google sign in could not start. Your report is still unlocked here. Please try again."
+    }
+  },
+  "buy": {
+    "title": "Buy the full report",
+    "lead": "Check the report, add a code if you have one, and unlock it.",
+    "loading": "Getting your order ready…",
+    "checkFailed": "The price could not be checked just now. Nothing was charged.",
+    "noneTitle": "Choose a report first",
+    "noneText": "Make a hadahan or a porondam match, or open one from My reports, then press Buy this report on it.",
+    "makeHadahan": "Make a hadahan",
+    "makePorondam": "Match two charts",
+    "allOpen": "Every report is open for free right now. There is nothing to pay.",
+    "reportLabel": "Your report",
+    "hadahan": "Full hadahan report",
+    "hadahanFor": "Full hadahan report for {name}",
+    "porondam": "Full porondam report",
+    "porondamFor": "Full porondam report for {bride} and {groom}",
+    "born": "Born {date}",
+    "includesTitle": "What you get",
+    "orderTitle": "Your order",
+    "codeLabel": "Coupon or discount code (optional)",
+    "apply": "Apply",
+    "applying": "Checking…",
+    "applied": "applied: {percent}% off",
+    "remove": "Remove code",
+    "price": "Price",
+    "discount": "Discount",
+    "total": "Amount to pay",
+    "unlock": "Unlock the report",
+    "unlocking": "Unlocking…",
+    "pay": "Pay {price}",
+    "starting": "Starting the payment…",
+    "notOpen": "Paying online is not open yet, so this report stays locked for now. A code that makes it free works today.",
+    "testMode": "Payment is in test mode: no money is taken.",
+    "noSignIn": "You do not need to sign in to buy.",
+    "haveAccount": "Already bought reports with Google? Sign in",
+    "back": "Back to the report",
+    "backToOrder": "Back to the order",
+    "doneTitle": "Your full report is unlocked",
+    "doneText": "{report} is open. You can read it now and find it again in My reports.",
+    "openReport": "Open the report",
+    "inGoogle": "It is kept in your Google account, on any device.",
+    "skip": "Continue without signing in",
+    "waitingTitle": "Checking your payment",
+    "waiting": "Waiting for the payment to be confirmed. This can take a minute.",
+    "slow": "The payment has not been confirmed yet. Your report unlocks as soon as it is. You can check again.",
+    "failedTitle": "The payment did not go through",
+    "failedText": "Nothing was unlocked. You can go back to your order and try again.",
+    "cancelledTitle": "The payment was cancelled",
+    "cancelledText": "Nothing was unlocked. Your order is still there if you want to try again.",
+    "paymentGone": "This payment could not be found on this browser just now.",
+    "paidElsewhere": "The payment is confirmed. Open the same report again, or look in My reports.",
+    "myReports": "Open My reports",
+    "checkAgain": "Check again",
+    "test": {
+      "title": "Test payment",
+      "note": "This is a test page. No payment provider is connected yet, no money is taken and no card is asked for.",
+      "choose": "Choose how the payment should end.",
+      "approve": "Approve the test payment",
+      "decline": "Decline it",
+      "cancel": "Cancel and go back"
+    },
     "problems": {
       "unknown": "That code is not right. Check it and try again.",
       "ended": "This code has ended.",
       "wrong_report": "This code is not for this kind of report.",
       "used_up": "This code has been used as many times as it can be.",
       "account_limit": "You have already used this code as many times as it allows.",
-      "payment_not_available": "Payment is not available yet. For now only codes that make a report free can be used.",
+      "payment_not_available": "Something is left to pay, and paying online is not open yet. The report stays locked.",
       "tooMany": "Too many wrong codes. Please try again in an hour.",
-      "signInFailed": "Google sign in could not start. Please try again.",
-      "signIn": "Please continue with Google first.",
-      "failed": "That did not work. Please try again."
+      "busy": "Too many tries from here. Please try again later.",
+      "failed": "That did not work, and nothing was unlocked or charged. Please try again."
     }
   },
   "legal": {
     "draft": "Draft: to be reviewed before the site goes public.",
-    "updated": "Last updated: 15 November 2026",
+    "updated": "Last updated: 23 November 2026",
     "contactTodo": "A contact address will be added here before launch."
   },
   "privacy": {
     "title": "Privacy",
-    "lead": "Sidera works out charts without keeping them. This page says exactly what happens to the details you give.",
+    "lead": "Sidera works out charts without keeping them, unless you ask it to. This page says what happens to the details you give, who handles them and how to delete them.",
     "glance": [
       {
         "icon": "account",
-        "title": "No sign up",
-        "text": "You never sign up or sign in. Saving a report only gives this browser a private key."
+        "title": "Sign in only if you want",
+        "text": "The free tools need no account. Save makes a guest account with no email or password. Google sign in is never required: it lets you open your reports on another device."
       },
       {
         "icon": "nothing",
         "title": "Nothing kept by default",
-        "text": "A chart or a match is worked out and shown to you. A copy is kept only if you press Save or create a share link."
+        "text": "A chart or a match is worked out and shown to you. A copy is kept only if you press Save, unlock a full report or create a share link. Free saved reports are deleted after 7 days."
       },
       {
         "icon": "share",
         "title": "Saving and sharing are your choice",
-        "text": "Only Save and share links keep a copy, and you can delete either at any time."
+        "text": "You can delete a saved report, a share link or your whole account at any time."
       },
       {
         "icon": "logs",
         "title": "No birth details in logs",
-        "text": "Logs hold only the page, the result code and the time taken."
+        "text": "Logs hold only the page, the result code and the time taken. There are no adverts and no tracking."
       }
     ],
     "sections": [
       {
         "title": "What you give",
         "body": [
-          "The date, time and place of birth (or a latitude, longitude and time zone), and a name if you want one. For a match, the same for two people, or only their birth stars.",
-          "These are sent in the body of the request, never in the page address, and are used only to work out the result."
+          "The date, time and place of birth (or a latitude, longitude and time zone), and a name if you want one. A name is never needed. For a match, the same for two people, or only their birth stars.",
+          "These are sent in the body of the request, never in the page address, and are used to work out the result you asked for. An ordinary calculation is not saved.",
+          "If you enter another adult's details, please have their permission and tell them about this page. Permission to work out a chart is not permission to save it, share it or ask the AI about it."
         ]
       },
       {
-        "title": "What is kept",
+        "title": "Why we use it",
         "body": [
-          "Nothing, unless you press Save on a result or Create link in the Share dialog.",
-          "When you create a share link, a copy of that result is kept, in Sinhala and English, with the birth date, time and place line, and the name or names unless you chose to hide them. The link code and its delete code are kept only as hashes, a one-way scramble that cannot be turned back into the codes.",
-          "A share link closes after 30 days and is then deleted. The device that made it can delete it sooner.",
-          "When you press Save, a copy of that result is kept for My reports, in Sinhala and English, with the details it was made from (name, birth date, time and place), so you can open it, download it and share it again. It belongs to a guest account that holds nothing else about you: no email, no name of yours and no password.",
-          "A guest account that is not used for a year is deleted with its reports. You can delete one report, or all of them, from My reports at any time."
+          "To give you the chart, match, PDF, saved report or AI explanation you ask for; to keep the site safe from misuse; and where the law requires it.",
+          "You can leave out the optional fields, such as names. Without the birth details a calculation needs, we cannot work it out.",
+          "We do not sell personal information, show adverts or use tracking or analytics."
+        ]
+      },
+      {
+        "title": "Saved reports and your account",
+        "body": [
+          "When you first press Save, this browser signs in to Supabase as a guest. A guest account is an id with no email, name or password. Supabase keeps that sign in in this browser's storage, not in a cookie.",
+          "A saved report keeps the result in Sinhala and English, with the details it was made from (names, birth date, time and place), so you can open it, download it and share it again.",
+          "A report you save without the full report is a free report. It is kept for 7 days from when you saved it and then deleted automatically, within an hour after its 7 days. Saving it again does not restart the 7 days. You can keep up to 20 free reports at a time, and you can delete them sooner in My reports.",
+          "A full report is kept until you delete it or your account. If you get the full report for a free report you saved, it stops expiring and is kept the same way.",
+          "You can continue with Google to open your reports on another device, for example after getting a full report. Supabase then keeps what Google shares at sign in: your Google account id, email address, name and picture address, and when you signed in. The site shows your email in My reports. Our server reads only your account id and whether you are a guest. Free reports in a Google account are still deleted after 7 days.",
+          "If you continue with Google on a browser that has guest reports, they and the full reports unlocked there move to your Google account. If that Google account already has reports from another device, the guest's reports join them and the guest account is deleted.",
+          "A guest account with nothing saved, no order and no use for 7 days is deleted automatically, once a day. Clearing this browser's data signs a guest out for good: its reports can no longer be opened from this browser, so continue with Google first if you want to keep them."
+        ]
+      },
+      {
+        "title": "Full reports and coupons",
+        "body": [
+          "A full report needs no sign in. It is kept in the guest account on this browser, or in your Google account if you continue with Google, until you delete it or the account. Real payment is not available yet: for now a full report can be unlocked only with a coupon code that makes it free, or with a test payment that takes no money where the site offers one.",
+          "When a coupon or a payment unlocks a report, we keep an order record: the kind of report, its price, the coupon, the amount paid and the time. A payment you start is noted the same way, and deleted with your account. Instead of the birth details it holds a one-way fingerprint of them, which cannot be turned back into the details. If you delete your account, the order record stays with no link to you.",
+          "We note the time of each wrong coupon code, to stop guessing. These notes are deleted with your account. Wrong codes are also counted for your network address, in the server's memory only, for an hour."
+        ]
+      },
+      {
+        "title": "Sharing",
+        "body": [
+          "When you create a share link, a copy of that result is kept in Sinhala and English. Names and birth details (date, time, place, time zone and coordinates) are left out unless you switch them on, and what you leave out is removed before the copy is stored. A match link never includes birth details.",
+          "Before you create the link, the Share dialog shows every field the other person will see. Even with names and birth details hidden, the chart itself (planet positions, the lagna and the life period dates) can let someone who knows astrology work out roughly when and where a person was born.",
+          "Anyone who has the link can read and forward what it shows. The link's preview in messaging apps never shows names. Share pages ask search engines not to list them, and ask browsers not to store them or pass their address on. The link code and its delete code are kept only as hashes, a one-way scramble that cannot be turned back into the codes.",
+          "A share link closes after 30 days and is then deleted. The browser that made it keeps the delete code, so you can delete the link sooner with Delete this link, but only on that device.",
+          "Deleting a saved report does not delete its share links; delete each link too. Deleting a link cannot take back screenshots or downloads someone already made."
         ]
       },
       {
@@ -866,83 +1002,150 @@
         "body": [
           "Your last result is kept in this browser tab, so a reload does not lose it. It is cleared when the tab closes.",
           "If you tick Remember my chart on this device, that chart is kept in this browser until you press Forget. It is never kept on our servers.",
-          "When you make a share link, its delete code is kept in this browser so you can delete the link later.",
-          "When you first press Save, the site sets two cookies: a private key that tells our server which reports are yours (your browser keeps it hidden from the page), and a small marker that shows the My reports link. Without Save there are no cookies.",
-          "There are no adverts and no tracking or analytics."
+          "When you press I understand on the AI notice, this browser remembers it so the notice does not show again.",
+          "Cookies: sidera_saved, set when you save, only shows the My reports link and holds no id; it lasts up to a year. sidera_chat, set when you ask Astro a question, holds a random id that counts this browser's free questions; it lasts up to a year. sidera_chat_turn links the suggested follow-up questions to the question just asked; it lasts 30 minutes. All three are needed for the site to work, and there are no other cookies.",
+          "Other people who use this device may see what it keeps."
+        ]
+      },
+      {
+        "title": "The AI helper",
+        "body": [
+          "Before anything goes to the AI, the site shows a short notice. Nothing is sent until you press I understand.",
+          "When you ask Astro a question or press an Explain button, our AI server sends the chart facts on the page and your message to OpenAI, which writes the answer. AI is switched off for child results.",
+          "Sidera does not add names, birth dates, birth times or places of birth to what it sends. Your own message can include them, and chart facts can point to a person in context. Please leave out names, children's details, contact details and sensitive information about yourself or anyone else.",
+          "We ask OpenAI not to store the answers. Under OpenAI's API terms, what we send is not used to train its models, but OpenAI may keep it in abuse-monitoring records for up to 30 days.",
+          "Our AI server keeps the conversation only in its memory, so it can follow up on your questions. It is never written to disk or to a database, and it is deleted after 30 minutes without a new message, or sooner if the server restarts. Our logs do not hold message text.",
+          "For each question you ask Astro, we keep when it was asked, how much text (tokens) the answer used and what it cost. We never keep your questions or Astro's answers. For free questions this record is linked to the random id in the sidera_chat cookie and to a scrambled form of your network address that cannot be turned back into the address, and it is deleted after 8 days. For questions that use the chat that came with a full report, it is linked to your account and deleted when you delete your account.",
+          "AI explanations can be wrong. Sidera never uses them to make a decision about you."
         ]
       },
       {
         "title": "Logs",
         "body": [
-          "The servers record each request's method, page path, result code and time taken. Share codes are hidden in the path. Logs never hold names, birth details or anything you typed."
+          "The servers record each request's method, page path, result code and time taken. Share codes are hidden in the path. Logs never hold names, birth details, AI messages or anything you typed.",
+          "The companies that host the site see network details such as IP addresses. We use IP addresses in memory to limit misuse. To limit how many free Astro questions can be asked from one network, we keep only a scrambled form of the address, for 8 days."
         ]
       },
       {
         "title": "PDF reports",
         "body": [
-          "A PDF is made on the server when you ask for it and sent straight to you. It is not kept."
+          "A PDF is made on the server when you ask for it and sent straight to you. It is not kept. Copies you download are yours to keep or delete."
         ]
       },
       {
         "title": "Who runs the site",
         "body": [
-          "The pages are served by Vercel. The calculations, share links and saved reports run on Render, in Singapore. Fonts and pictures come from the site itself, so your browser does not contact other services."
+          "Vercel serves the pages. Render runs the calculations and the AI server, in Singapore. Supabase runs the database (saved reports, share links, accounts, orders and chat usage) and sign in, also in Singapore. OpenAI writes the AI answers; its systems may run in the United States and other countries. Google handles Google sign in.",
+          "Fonts and pictures come from the site itself. Your browser talks to Supabase for sign in and saved reports, and to Google only when you continue with Google.",
+          "We share information with these services only to run the site, or where the law requires it."
         ]
       },
       {
-        "title": "Questions and deletion",
+        "title": "Children",
+        "body": [
+          "Sidera is for adults aged 18 or over. A parent or legal guardian may use the child tools, such as first letters, for their own child. We ask for the guardian's consent first, and record only that it was given and when. A child's name is never needed. Child results are not saved, are never sent to the AI and have no share link. A guardian can withdraw consent by leaving the box unticked, or later by contacting us."
+        ]
+      },
+      {
+        "title": "Your choices and deletion",
         "body": [
           "To delete a share link, open it on the device that made it and press Delete this link.",
-          "To delete a saved report, or all of them, open My reports in the same browser."
+          "In My reports you can delete one report or all of them, sign out of this phone, sign out everywhere, or delete your account. Deleting your account deletes every saved report and then your sign in.",
+          "To remove a remembered chart, press Forget.",
+          "You can also ask us to show, correct or delete information about you, or to stop using it, at the contact address that will be added below. We date every change at the top of this page and tell you about big changes before a new use begins."
         ]
       }
     ]
   },
   "terms": {
     "title": "Terms of use",
-    "lead": "Please read these short terms before using the site.",
+    "lead": "These terms cover Sidera's free features and reports unlocked with a coupon. The privacy page explains how your information is handled.",
     "sections": [
       {
         "title": "What the site is",
         "body": [
-          "A tool that works out a Sri Lankan birth chart (hadahan) and a marriage match (porondam) from astronomical calculations and traditional rules, in Sinhala and English."
+          "Sidera works out Sri Lankan birth charts (hadahan), marriage matches (porondam), auspicious times (nakath), first letters and related results from astronomical positions and the traditional rules named on each page, in Sinhala and English."
         ]
       },
       {
         "title": "For guidance only",
         "body": [
-          "The results are for guidance and cultural interest. They do not predict events, health or outcomes, and the site never tells anyone whether to marry.",
-          "For important decisions, speak with your family and a practising astrologer."
+          "Readings are for cultural interest and personal reflection. A porondam score shows agreement under the stated traditional rules. It does not say whether a relationship will succeed or whether two people should marry.",
+          "Sidera does not give medical, legal or financial advice, judge fertility or predict lifespan. For important decisions, speak with your family and a practising astrologer."
         ]
       },
       {
         "title": "Rules can differ",
         "body": [
-          "Traditions differ, so another astrologer may follow a slightly different rule."
+          "Traditions differ, so another astrologer may follow a slightly different rule. Official annual ritual times are shown apart from our own calculations."
         ]
       },
       {
         "title": "Accuracy",
         "body": [
-          "A result is only as good as the birth time and place given. A few minutes' difference can change the lagna, and the page warns when that is likely."
+          "A result depends on the date, time, place, time zone history and method. A few minutes' difference in birth time can change the lagna, and the page warns when that is likely."
+        ]
+      },
+      {
+        "title": "AI explanations",
+        "body": [
+          "Before anything goes to the AI, the site shows a notice, and nothing is sent until you agree. AI explanations are marked as such and can contain mistakes of fact, interpretation or translation. Please check anything important against the calculated result."
+        ]
+      },
+      {
+        "title": "Astro chat",
+        "body": [
+          "Anyone can ask Astro 2 free questions a week on a browser, the week starting at the first question. Each full report adds a chat allowance of about 20 questions, measured by how much the answers use. It is kept until used and has no cash value.",
+          "To keep the chat fair and its cost in hand, there is also a limit per network, a daily limit per account and a limit of 1,000 characters a message, and free questions may pause on very busy days. These limits may change."
+        ]
+      },
+      {
+        "title": "Who can use Sidera",
+        "body": [
+          "You must be 18 or older. You may use a child tool for a child who is yours or in your legal care.",
+          "Use another adult's details only with their permission for what you are doing: working out a chart, saving it, sharing it or asking the AI about it."
         ]
       },
       {
         "title": "Sharing",
         "body": [
-          "You choose what to share. Please do not share another person's birth details without their agreement."
+          "You choose what to share. Before sharing, check what the other person will see, and respect anyone who asks you to remove their details or delete a link."
+        ]
+      },
+      {
+        "title": "Your reports",
+        "body": [
+          "What you enter stays yours. We use it only to give you the features you ask for, as the privacy page describes.",
+          "You may save, print and share your reports privately, with family or an adviser, when you have any permission needed. Sidera keeps its rights in its own software, design and text. Material from others, such as place names, fonts and planet positions, stays under its own licences, listed on the Credits page linked at the foot of every page. These terms do not reduce what those licences or the law allow."
+        ]
+      },
+      {
+        "title": "Saved reports, full reports and coupons",
+        "body": [
+          "A free saved report is deleted 7 days after you save it, and you can keep up to 20 at a time. A full report needs no sign in. It is kept on this browser, or in your Google account if you sign in, until you delete it or the account.",
+          "Payment is not available yet, so for now a full report can be unlocked only with a coupon code that makes it free. Each coupon has its own limits, such as an end date, the kinds of report it covers and how many times it can be used. Terms for paid reports will be added here before payment opens."
         ]
       },
       {
         "title": "Fair use",
         "body": [
-          "Please do not try to break, overload or copy the site in bulk."
+          "Please do not try to open someone else's reports, get around access controls or limits, break or overload the site, pretend to be someone else, or copy the site in bulk to resell it.",
+          "We may reasonably limit access to stop misuse or protect other people. If you think a limit was a mistake, please tell us."
         ]
       },
       {
-        "title": "Changes",
+        "title": "Availability and responsibility",
         "body": [
-          "These terms may change. The date at the top shows the latest version."
+          "We take reasonable care in running the site. If something does not work, please tell us so we can look into it. We cannot promise that every reading matches every tradition, or that the site will always be available.",
+          "Nothing in these terms takes away rights the law gives you that cannot be excluded, including for fraud, or for death or personal injury caused by negligence."
+        ]
+      },
+      {
+        "title": "Changes, law and language",
+        "body": [
+          "These terms may change. We date every change at the top of this page, give fair notice of important changes and ask for your agreement again where the law requires it.",
+          "Sri Lankan law governs these terms, along with any protection the law where you live gives you and that cannot be excluded.",
+          "The Sinhala and English versions say the same thing. If you find a difference, please tell us; neither version is used against you."
         ]
       }
     ]
@@ -1047,16 +1250,15 @@
   "yearly": {
     "eyebrow": "වාර්ෂික පලාපල",
     "indexTitle": "{year} forecast by lagna",
-    "indexLead": "Where Saturn, Jupiter, Rahu and Ketu stay through {year}, month by month, for each of the 12 lagnas. Choose yours.",
+    "indexLead": "Which parts of life the slow planets visit in {year}, and when: home, work, marriage, money and more.",
     "metaIndexTitle": "{year} forecast for each lagna · Sidera",
     "metaIndexDescription": "Where Saturn, Jupiter, Rahu and Ketu stay through {year} for each of the 12 lagnas, month by month, with every sign change in Sri Lanka time.",
     "title": "{year} forecast for {lagna} lagna",
     "metaTitle": "{year} forecast for {lagna} lagna · Sidera",
     "metaDescription": "Where Saturn, Jupiter, Rahu and Ketu stay through {year} for {lagna} lagna, month by month, with the date of every sign change.",
-    "lead": "Where the slow planets stay through {year}, counted from {lagna} lagna.",
-    "planetsTitle": "The year for each planet",
+    "lead": "The parts of life the slow planets visit in {year}, for {lagna} lagna.",
+    "planetsTitle": "When, planet by planet",
     "barLabel": "{planet} through the year",
-    "monthsTitle": "Month by month",
     "monthsLead": "The house each planet is in as the month begins. A dot marks a month with a sign change.",
     "month": "Month",
     "changeMark": "A sign change this month",
@@ -1090,7 +1292,45 @@
     "hadahanTitle": "Your {year}",
     "hadahanLead": "Month by month for {lagna} lagna.",
     "hadahanOpen": "See your {year}",
-    "footer": "{year} forecast"
+    "footer": "{year} forecast",
+    "chooseLagna": "Know your lagna? Choose it",
+    "askTitle": "Don't know your lagna?",
+    "askLead": "Enter your birth details to see your own year. They are used to work it out and are not saved.",
+    "yoursNamed": "{year} for {name}",
+    "yoursLagna": "{lagna} lagna, from the hadahan in this browser.",
+    "yoursOpen": "Open it",
+    "notSure": "Not sure this is your lagna?",
+    "areasTitle": "Parts of life this year",
+    "areasLead": "Where the slow planets spend the most time comes first. This shows where attention goes, not whether it is good or bad.",
+    "areas": [
+      "You and new beginnings",
+      "Family and savings",
+      "Effort, brothers and sisters",
+      "Home and peace of mind",
+      "Children and learning",
+      "Daily work and challenges",
+      "Marriage and partnership",
+      "Change and shared things",
+      "Fortune and beliefs",
+      "Career and standing",
+      "Gains and friends",
+      "Rest, spending and faraway places"
+    ],
+    "newArea": "Begins this year",
+    "sameArea": "Carries on from last year",
+    "allYear": "all year",
+    "untilDay": "until {to}",
+    "fromDay": "from {from}",
+    "betweenDays": "{from} to {to}",
+    "role": {
+      "saturn": "Responsibility, patience and the long haul",
+      "jupiter": "Growth, learning and good fortune",
+      "rahu": "Ambition and the unfamiliar",
+      "ketu": "Letting go and the inner life"
+    },
+    "moves": "{from} → {to}",
+    "signsAndHouses": "Signs and houses",
+    "monthsMore": "Houses month by month"
   },
   "avurudu": {
     "eyebrow": "අලුත් අවුරුදු නැකත්",
@@ -1146,7 +1386,7 @@
     "eyebrow": "දිනපතා නැකත්",
     "title": "Today's nakath",
     "dateTitle": "Nakath for {date}",
-    "lead": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for a place. The day begins at sunrise.",
+    "lead": "What time to leave free of important starts, and whether the day suits your birth star. The day begins at sunrise.",
     "metaTitle": "Today's nakath: Rahu kalaya, thithi and nakatha · Sidera",
     "metaDescription": "Sunrise, Rahu kalaya, thithi, nakatha, yoga and karana for today, for Colombo or any place in the world, with start and end times.",
     "metaDateTitle": "Nakath for {date}: Rahu kalaya, thithi and nakatha · Sidera",
@@ -1163,7 +1403,6 @@
     "sunset": "Sunset",
     "noSunrise": "The Sun does not rise here on this day.",
     "rahu": "Rahu kalaya",
-    "rahuNote": "Daylight in eight parts. The part for this weekday is avoided for good work.",
     "weekday": "Day",
     "thithi": "Thithi",
     "nakatha": "Nakatha",
@@ -1180,7 +1419,50 @@
     "invalid": "Some of these details could not be used. Please check them and try again.",
     "retry": "Try again",
     "footer": "Daily nakath",
-    "homeLink": "Today's nakath and Rahu kalaya"
+    "homeLink": "Today's nakath and Rahu kalaya",
+    "day": {
+      "planned": "Keep important starts away from {start} to {end}",
+      "before": "Start important things before {start}, or after {end}",
+      "during": "Rahu kalaya now: wait until {end} to start important things",
+      "after": "Rahu kalaya is over for today",
+      "rahuPlain": "Rahu kalaya is a part of the daytime when many families do not start something important, such as a journey or a new venture. It moves with the weekday.",
+      "barLabel": "Daylight from {sunrise} to {sunset}. Rahu kalaya from {start} to {end}.",
+      "avoid": "Avoid",
+      "now": "Now",
+      "moon": {
+        "growing": "Growing Moon",
+        "full": "Full moon",
+        "shrinking": "Shrinking Moon",
+        "new": "New moon",
+        "day": "Day {day} of 15"
+      },
+      "star": {
+        "title": "Does this day suit you?",
+        "titleNamed": "Does this day suit {name}?",
+        "lead": "Choose your birth star to see whether the day's star suits it. Your choice stays in this browser.",
+        "pick": "Your birth star",
+        "choose": "Choose",
+        "unknown": "Don't know your birth star? Find it from your birth details",
+        "yours": "Birth star: {star}",
+        "dayStar": "The day's star: {star}",
+        "good": "Good",
+        "goodText": "A good day's star for starting something new.",
+        "careful": "Take it easy",
+        "carefulText": "Better for everyday work. If you can, leave a big new start for another day.",
+        "own": "Birth star day",
+        "ownText": "The Moon is in this birth star. Some people leave big new starts for another day.",
+        "note": "Counted from the birth star to the day's star (tara bala), as in our wedding dates. It is one sign among many.",
+        "change": "Choose another star"
+      },
+      "almanac": "Full almanac: thithi, nakatha, yoga and karana",
+      "means": {
+        "thithi": "The Moon's day: how far it is from new to full, or back again.",
+        "nakatha": "The star group the Moon is in. Birth stars are named after it.",
+        "yoga": "From the Sun and Moon together. Looked at when choosing times for ceremonies.",
+        "karana": "Half of a thithi. Looked at when choosing times for ceremonies."
+      },
+      "another": "Another day or place"
+    }
   },
   "babyNames": {
     "eyebrow": "නම් අකුරු",
@@ -1189,7 +1471,7 @@
     "metaTitle": "Baby name letters by birth star (nakatha) · Sidera",
     "metaDescription": "Find the starting letter for a baby's name from the birth time: nakatha, pada, Moon sign and lagna, with the letters for all 27 stars in Sinhala and English.",
     "formTitle": "Letters from the birth time",
-    "formLead": "The Moon's star and pada at the moment of birth give the letter. Birth details stay in this browser tab and are not saved.",
+    "formLead": "The Moon's star and pada at the moment of birth give the letter. Birth details are used for this result and are not saved.",
     "submit": "Find the letters",
     "working": "Working out the letters",
     "useSaved": "Use the saved birth details",
@@ -1250,12 +1532,22 @@
         "long": "4 or more"
       },
       "count": "{count} names",
+      "loading": "Finding names…",
       "none": "No names in our list start with these letters yet. Some letters are rare at the start of a name.",
       "pickLetter": "Pick at least one letter.",
       "sourceName": "Wikipedia name page",
       "sourcePerson": "A person with this name (Wikipedia)",
       "note": "Names come from Wikipedia's Sinhalese given names, or were added by us with a person on Wikipedia who has the name. The spellings and meanings are provisional until a native speaker checks them. A long and a short vowel count as the same letter."
     }
+  },
+  "guardian": {
+    "consent": {
+      "babyNames": "I am this child's parent or legal guardian and consent to Sidera using these birth details to work out the name letters.",
+      "firstLetters": "I am this child's parent or legal guardian and consent to Sidera using these birth details to find first letters ceremony times."
+    },
+    "note": "The details are used only for this result. They are not saved, shared or sent to the AI. We record that consent was given and when, without the birth details. Untick the box to withdraw it before sending; to withdraw later, see the privacy page.",
+    "privacy": "Privacy",
+    "error": "Tick this box to continue. A parent or legal guardian has to agree first."
   },
   "firstLetters": {
     "eyebrow": "අකුරු කියවීම",
@@ -1269,7 +1561,7 @@
       "star": "Birth star only"
     },
     "formTitle": "The child's birth details",
-    "formLead": "The birth star is worked out from these. They stay in this browser tab and are not saved.",
+    "formLead": "The birth star is worked out from these. They are used for this result and are not saved.",
     "useDetails": "Use these details",
     "useSaved": "Use the saved birth details",
     "useSavedNamed": "Use the birth details for {name}",
@@ -1415,6 +1707,7 @@
     "note": "AI answers, based on what is on your screen. A guide, not a decision.",
     "placeholder": "Ask about this page…",
     "welcome": "Hello! I'm Astro. Ask me about anything on this page, in Sinhala or English.",
+    "newChat": "New chat",
     "close": "Close the chat",
     "resize": "Resize the chat. Drag, or use the arrow keys",
     "notice": {
@@ -1435,8 +1728,41 @@
       "writing": "Writing…",
       "failed": "This couldn't be written just now.",
       "retry": "Try again",
-      "locked": "Part of the full report",
-      "inPdf": "Chapters you open are added to the PDF report.",
+      "inPdf": "The PDF report includes every chapter, with its picture and diagram.",
+      "diagram": {
+        "lagna": "Lagna",
+        "rashi": "Rashi",
+        "nakath": "Nakath",
+        "period": "Life period now",
+        "pillarLagna": "How you meet the world",
+        "pillarRashi": "Your mind and feelings",
+        "pillarStar": "The star you were born under",
+        "pillarPeriod": "The life period you are in now",
+        "starPada": "{star}, pada {pada}",
+        "periodNow": "{main}, {sub} sub-period",
+        "house": "House {number}",
+        "today": "Today",
+        "wheelNote": "Each planet where it stood at birth. The lagna is on the left; signs and houses run anticlockwise from it.",
+        "barNote": "From birth: each life period as wide as it is long. Gold is running now; ages under the bar.",
+        "marsWhere": "Where Mars sits",
+        "marsPoint": "From {point}: house {house}",
+        "counts": "counts",
+        "notCounts": "does not count",
+        "marsRules": "Conditions that reduce it",
+        "marsRulesCount": "{count} of {total} apply",
+        "marsResult": "Result",
+        "kujaPresent": "Present",
+        "kujaReduced": "Present, reduced",
+        "kujaAbsent": "Not present",
+        "pass": "Agrees",
+        "fail": "Does not agree",
+        "notCounted": "Not counted",
+        "score": "{passed} of {total} agree",
+        "bride": "Bride",
+        "groom": "Groom",
+        "kuja": "Kuja dosha",
+        "kujaQuick": "Needs full birth details for both"
+      },
       "inShort": "In short",
       "next": "Next: {title}",
       "matchReading": {
@@ -1485,14 +1811,22 @@
         "match.wedding": "Wedding dates",
         "nakath.day": "What kind of day it is",
         "avurudu.times": "The Avurudu timetable",
-        "names.letters": "The name letters",
-        "names.first": "Choosing a time",
         "changes.mine": "What this change means for you",
         "yearly.mine": "Your year ahead",
         "kendara.dates": "Possible birth dates"
       }
     },
     "cards": {
+      "visual": {
+        "pillars": "Chart at a glance",
+        "wheel": "The sky at birth",
+        "houses": "The 12 parts of life",
+        "periods": "Life periods",
+        "mars": "The Mars check",
+        "people": "The couple",
+        "ring": "Factors that agree",
+        "checks": "The serious checks"
+      },
       "status": {
         "find_place": [
           "Finding the place…",
@@ -1610,7 +1944,7 @@
         "What is erashtaka?"
       ],
       "babyNames": [
-        "Which letter should the name start with?",
+        "How does a birth star give a name letter?",
         "Show me some names"
       ],
       "firstLetters": [
@@ -1641,6 +1975,7 @@
     "fullMoon": "Full moon {time}",
     "rahu": "Rahu",
     "today": "Today",
+    "toToday": "Go to today",
     "failed": "The calendar could not be loaded just now. Try again in a moment.",
     "retry": "Try again",
     "loading": "Loading the calendar",
@@ -1658,6 +1993,7 @@
       "nothing": "Nothing",
       "birth": "Birth details",
       "two": "Two people's birth details",
+      "stars": "Two birth stars, or birth details",
       "paper": "A paper horoscope"
     },
     "groups": {
@@ -1695,7 +2031,7 @@
       },
       "wedding": {
         "name": "Wedding nakath",
-        "text": "Good times for the wedding ceremonies, found from a porondam match."
+        "text": "Good dates and times for the wedding ceremonies. First match the two of you, then the date search opens."
       },
       "babyNames": {
         "name": "Baby name letters",
@@ -1722,6 +2058,8 @@
         "text": "Enter a paper kendara and find the dates and times it fits."
       }
     },
+    "aboutTitle": "About Sidera",
+    "aboutWhy": "How the results are worked out, and how to check them yourself.",
     "hiddenTitle": "Also inside the results",
     "hidden": [
       {

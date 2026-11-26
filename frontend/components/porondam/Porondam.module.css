@@ -192,18 +192,6 @@
 
 .submitRow {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.privacy {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--ink-soft);
-  font-size: 15px;
 }
 
 .submit {

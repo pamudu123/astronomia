@@ -1,6 +1,18 @@
 import { describe, expect, it } from "vitest";
 
-import { type Placement, combinations, combust, isYogaKaraka, relation, seventhLord } from "@/lib/assistant/chartFacts";
+import {
+  COMBINATIONS,
+  HOUSE_AREA,
+  type Placement,
+  combinations,
+  combinationsNotFound,
+  combust,
+  houseFacts,
+  isYogaKaraka,
+  planetFacts,
+  relation,
+  seventhLord,
+} from "@/lib/assistant/chartFacts";
 import {
   chartExtrasContext,
   chartReadingContext,
@@ -35,6 +47,36 @@ function placed(houses: Record<string, number>): Placement[] {
 
 const names = (planets: Placement[]) =>
   combinations({ planets }, labels).map((c) => (c as { name: string }).name);
+
+describe("facts the model would otherwise get wrong", () => {
+  it("lists every combination either as found or as not found, never both", () => {
+    const base = (name: string) => name.replace(/ \(.*\)$/, "");
+    const charts = [
+      chart.chart!.planets as Placement[],
+      placed({ moon: 4, jupiter: 7 }),
+      placed({ sun: 5, venus: 5, mars: 9, saturn: 9, moon: 3, jupiter: 3 }),
+      placed({ rahu: 1, ketu: 7, sun: 2, moon: 3, mars: 4, mercury: 5, jupiter: 6, venus: 2, saturn: 3 }),
+    ];
+    for (const planets of charts) {
+      const found = new Set(combinations({ planets }, labels).map((c) => base((c as { name: string }).name)));
+      const missing = combinationsNotFound({ planets }, labels);
+      // A name the site can find but that is not on the list would be neither.
+      for (const name of found) expect(COMBINATIONS).toContain(name);
+      expect(missing.filter((name) => found.has(name))).toEqual([]);
+      expect(found.size + missing.length).toBe(COMBINATIONS.length);
+    }
+    expect(combinationsNotFound({ planets: placed({ moon: 4, jupiter: 8 }) }, labels)).toContain("Gajakesari yoga");
+    expect(combinationsNotFound({ planets: placed({ moon: 4, jupiter: 7 }) }, labels)).not.toContain("Gajakesari yoga");
+  });
+
+  it("names the life area of every house and of each planet's house", () => {
+    const houses = houseFacts(chart.chart!, labels) as { house: number; area: string }[];
+    expect(houses.map((h) => h.area)).toEqual(Array.from({ length: 12 }, (_, i) => HOUSE_AREA[i + 1]));
+    const planets = planetFacts(chart.chart!, labels) as { house: number; area: string }[];
+    for (const p of planets) expect(p.area).toBe(HOUSE_AREA[p.house]);
+    expect(Object.values(HOUSE_AREA).join(" ")).not.toMatch(/death|dying|lifespan/i);
+  });
+});
 
 describe("planet friendship", () => {
   it("follows the classical table, both ways", () => {

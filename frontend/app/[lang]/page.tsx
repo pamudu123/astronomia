@@ -64,10 +64,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 {dict.hero.ctaPorondam}
               </Link>
             </div>
-            <p className={`rise soft ${styles.privacy}`} style={{ animationDelay: ".4s" }}>
-              <Lock />
-              {dict.hero.privacy}
-            </p>
           </div>
           <div className={`rise ${styles.heroWheel}`} style={{ animationDelay: ".2s" }}>
             <ZodiacWheel label={dict.hero.wheelLabel} />

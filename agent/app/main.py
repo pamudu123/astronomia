@@ -16,7 +16,6 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from ag_ui_langgraph import add_langgraph_fastapi_endpoint
-from copilotkit import LangGraphAGUIAgent
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from langchain_core.language_models import BaseChatModel
@@ -28,11 +27,18 @@ from app.graph import build_agent, build_model
 from app.memory import ExpiringMemorySaver, run_sweeper
 from app.security import AccessKeyMiddleware
 from app.suggest import build_suggester
-from app.tools import EngineClient, engine_tools
+from app.tools import EngineClient, assistant_tools
 from app.usage import ChatLimitMiddleware, Ledger
+from app.wire import ChatAgent
 
 AGENT_NAME = "guide"
 SUGGEST_NAME = "suggest"
+
+# How many graph steps one answer may take. A model call with its lookups is about five steps,
+# so this is about twenty calls: far above a normal answer, and still an end to a run that loops.
+# It must be set here: the AG-UI adapter otherwise runs with LangGraph's default of 25, which
+# replaces the limit Deep Agents sets on the graph and ends an answer after five calls.
+MAX_STEPS = 100
 
 
 def create_app(
@@ -52,7 +58,7 @@ def create_app(
     # Each graph keeps its conversations in memory, deleted after a fixed idle time.
     idle = dt.timedelta(minutes=settings.conversation_idle_minutes)
     memories = (ExpiringMemorySaver(idle), ExpiringMemorySaver(idle))
-    graph = build_agent(settings, engine_tools(engine), model=model, checkpointer=memories[0])
+    graph = build_agent(settings, assistant_tools(engine), model=model, checkpointer=memories[0])
     if ledger is None and settings.chat_key.get_secret_value():
         ledger = Ledger(settings)
 
@@ -89,10 +95,15 @@ def create_app(
 
     add_langgraph_fastapi_endpoint(
         app,
-        LangGraphAGUIAgent(
+        ChatAgent(
             name=AGENT_NAME,
             description="Explains results on the page in plain words.",
             graph=graph,
+            config={"recursion_limit": MAX_STEPS},
+            # Helpers run at the same time and write reports for the guide. By default their words
+            # stream into the chat as they come, mixed together. The chat sees only that a helper
+            # was started; what it found reaches the person in the guide's own answer.
+            subagent_visibility="hidden",
             # The raw LangGraph events are only for debugging and make every event large.
             emit_raw_events=False,
         ),
@@ -100,7 +111,7 @@ def create_app(
     )
     add_langgraph_fastapi_endpoint(
         app,
-        LangGraphAGUIAgent(
+        ChatAgent(
             name=SUGGEST_NAME,
             description="Writes the follow-up questions shown under each answer.",
             graph=build_suggester(settings, model=model, checkpointer=memories[1]),

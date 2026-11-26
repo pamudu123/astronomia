@@ -47,6 +47,15 @@ test("the year list leads to one lagna's year", async ({ page }) => {
   await expect(main.locator('[data-year="lagna"] [data-planet="rahu"]')).toContainText(
     "Rahu is in Makara, your 1st house, all year.",
   );
+  // Parts of life come first; only the ones no planet was in before are marked.
+  const areas = main.locator('[data-year="lagna"] [data-area]');
+  await expect(areas).toHaveCount(6);
+  await expect(areas.first()).toContainText("Marriage and partnership");
+  await expect(areas.first()).toContainText("Jupiter 25 January to 26 June");
+  await expect(areas.filter({ hasText: "Begins this year" })).toHaveCount(2);
+  // Signs, houses and the month table are there to open.
+  await expect(main.getByRole("table")).toHaveCount(0);
+  await main.getByText("Houses month by month").click();
   await expect(main.getByRole("table")).toContainText("June");
   await expect(main.locator('[data-year="lagna"] [data-change]')).toHaveCount(5);
   await expect(main.getByText(/It does not predict events/)).toBeVisible();
@@ -95,6 +104,30 @@ test("your own year comes from a POST, never the page address", async ({ page })
   expect(JSON.parse(personal[0])).toMatchObject({ date: "1995-04-19", time: "14:35", lang: "en" });
   expect(page.url()).not.toContain("1995");
   await noSidewaysScroll(page);
+});
+
+test("someone who does not know their lagna can find their year from the list", async ({ page }) => {
+  await mockBackend(page, "en");
+  await page.goto("/en/forecast/2027");
+  await expect(page.getByRole("heading", { name: "Don't know your lagna?" })).toBeVisible();
+  await page.getByRole("button", { name: "Enter birth details" }).click();
+  await expect(page.getByLabel("Date of birth")).toBeVisible();
+});
+
+test("a chart kept on the device leads straight to its year", async ({ page }) => {
+  const kept = {
+    name: "Nimal",
+    placeLabel: "Kandy",
+    request: { date: "1995-04-19", time: "14:35", place_id: 1 },
+    result: JSON.parse(fixture("hadahan-en.json")),
+  };
+  await page.addInitScript((value) => localStorage.setItem("astronomia.hadahan.device", JSON.stringify(value)), kept);
+  await mockBackend(page, "en");
+  await page.goto("/en/forecast/2027");
+  const card = page.locator('[data-card="your-year"]');
+  await expect(card).toContainText("2027 for Nimal");
+  await expect(card.getByRole("link")).toHaveAttribute("href", "/en/forecast/2027/simha");
+  await expect(page.getByText("Don't know your lagna?")).toHaveCount(0);
 });
 
 test("an unknown year or lagna is not found", async ({ page }) => {

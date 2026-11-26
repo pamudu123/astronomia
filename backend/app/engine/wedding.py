@@ -152,7 +152,8 @@ def _day(ephemeris: Ephemeris, day: date, place: Place) -> _Day | None:
     zone = zoneinfo.ZoneInfo(place.timezone)
     midnight = datetime.combine(day, time(0, 0), tzinfo=zone)
     sunrise = _sun_event(ephemeris, midnight, place, rise=True)
-    if sunrise is None:
+    # No sunrise on this date: near the poles, or a date the place's clocks skipped.
+    if sunrise is None or sunrise.astimezone(zone).date() != day:
         return None
     sunset = _sun_event(ephemeris, sunrise, place, rise=False)
     if sunset is None:

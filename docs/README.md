@@ -26,6 +26,9 @@ Planning documents for the Sri Lankan hadahan (jathaka) and porondam website.
 | [19-supabase-build-plan.md](19-supabase-build-plan.md) | Supabase for the database and sign in (anonymous guests and Google), Vercel for the website, Render for the backend: where each part runs, what is already set up, the design, settings and the five build steps |
 | [20-paid-reports.md](20-paid-reports.md) | Paid reports as built (docs/18 steps 3 and 4): prices, coupons, orders, the paid check, the on switch, what is on staging, and the known gaps (2026-11-21) |
 | [21-chat-limits.md](21-chat-limits.md) | Astro chat limits as built (docs/18 step 5): 2 free questions a week, the allowance each paid report adds, the cost ceilings, where they are enforced, the settings and how to turn them on (2026-11-22) |
+| [22-report-images.md](22-report-images.md) | Images the owner will generate for the PDF report: names, sizes, where each goes and prompts (2026-11-23) |
+| [23-buying-a-report.md](23-buying-a-report.md) | Buying a full report as built: the invitation, the buying page, codes, the mock payment provider, optional Google sign in after, what to do before deploying, and how to connect a real provider (2026-11-23) |
+| [24-chat-visuals-plan.md](24-chat-visuals-plan.md) | Chart and match diagrams in the Astro chat, as built: one agent tool names a diagram, the browser draws it from the result the question was about; decisions, which diagram when, known gaps and checks (2026-11-25) |
 | [policies/](policies/README.md) | The reviewed privacy notice, terms of use and refunds policy from the 2026-11-20 legal review, the placeholders still to fill, and what must be built before they go live |
 | [reviews/](reviews/) | Material for outside reviewers: the Sinhala wording spreadsheet |
 

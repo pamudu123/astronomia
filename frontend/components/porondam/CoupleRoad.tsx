@@ -1,11 +1,13 @@
 "use client";
 
-import { type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type PointerEvent, type ReactNode, useCallback, useMemo, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionState } from "@/components/SectionState";
 import { useAssistantOn } from "@/components/assistant/PageContext";
 import road from "@/components/hadahan/LifeRoad.module.css";
 import { RoadArrows } from "@/components/hadahan/RoadArrows";
+import { RoadDragHint } from "@/components/hadahan/RoadDragHint";
 import { askAssistant } from "@/lib/assistant/panel";
 import { type CoupleText, drawCoupleRoad } from "@/lib/coupleDraw";
 import {
@@ -16,6 +18,7 @@ import {
   ageOf,
   bothFull,
   buildCouple,
+  coupleHasToday,
   coupleYear,
   fetchCoupleJourney,
   mistOf,
@@ -25,9 +28,10 @@ import {
 } from "@/lib/coupleJourney";
 import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
-import { type Journey, ROAD_YEARS, roadWord, stopBeside, stopNear } from "@/lib/journey";
+import { ROAD_YEARS, roadWord, stopBeside, stopNear } from "@/lib/journey";
 import type { PorondamRequest } from "@/lib/porondam";
 import { type RoadFonts, useRoadTravel } from "@/lib/useRoadTravel";
+import { useSection } from "@/lib/useSection";
 
 import styles from "./CoupleRoad.module.css";
 
@@ -44,6 +48,8 @@ type Props = CoupleRoadText & {
   request: PorondamRequest;
   brideName: string;
   groomName: string;
+  /** On a saved match: says the road is worked out today, not when it was saved. */
+  note?: ReactNode;
 };
 
 /** What the card and the header show. It changes only when the road passes a stop or a period. */
@@ -55,35 +61,30 @@ const clamp = (value: number, low: number, high: number) => Math.max(low, Math.m
  * The couple's road: both life roads side by side, apart before today and together after it.
  * It needs a birth time for both people, so a birth star only match does not show it.
  */
-export function CoupleRoad({ lang, text, words, labels, request, brideName, groomName }: Props) {
-  const [journeys, setJourneys] = useState<Record<Role, Journey> | null>(null);
+export function CoupleRoad({ lang, text, words, labels, request, brideName, groomName, note }: Props) {
   const full = bothFull(request);
-
-  useEffect(() => {
-    if (!full) return;
-    let current = true;
-    fetchCoupleJourney(request, lang)
-      .then((result) => {
-        if (current && result.bride && result.groom) setJourneys({ bride: result.bride, groom: result.groom });
-      })
-      // The match stands without this section.
-      .catch(() => undefined);
-    return () => {
-      current = false;
-    };
-  }, [request, lang, full]);
+  const section = useSection(fetchCoupleJourney, request, lang, full);
+  const bride = section.status === "ready" ? section.value.bride : null;
+  const groom = section.status === "ready" ? section.value.groom : null;
 
   const couple = useMemo(
     () =>
-      journeys &&
-      buildCouple(journeys.bride, journeys.groom, {
+      bride &&
+      groom &&
+      buildCouple(bride, groom, {
         today: { title: text.todayTitle, text: text.todayText },
         bothMist: { title: text.bothMistTitle, text: text.bothMistText, helps: text.bothMistHelps },
       }),
-    [journeys, text],
+    [bride, groom, text],
   );
 
-  if (!full || !journeys || !couple) return null;
+  if (!full) return null;
+  if (section.status !== "ready") {
+    return (
+      <SectionState id="couple-road" title={text.title} status={section.status} t={words.load} onRetry={section.retry} height="tall" />
+    );
+  }
+  if (!bride || !groom || !couple) return null;
   return (
     <CoupleView
       text={text}
@@ -91,7 +92,8 @@ export function CoupleRoad({ lang, text, words, labels, request, brideName, groo
       labels={labels}
       couple={couple}
       names={{ bride: brideName, groom: groomName }}
-      provisional={journeys.bride.provisional || journeys.groom.provisional}
+      provisional={bride.provisional || groom.provisional}
+      note={note}
     />
   );
 }
@@ -103,10 +105,17 @@ function CoupleView({
   couple,
   names,
   provisional,
-}: CoupleRoadText & { labels: Labels; couple: Couple; names: Record<Role, string>; provisional: boolean }) {
+  note,
+}: CoupleRoadText & {
+  labels: Labels;
+  couple: Couple;
+  names: Record<Role, string>;
+  provisional: boolean;
+  note?: ReactNode;
+}) {
   const marker = useRef<HTMLDivElement>(null);
   const map = useRef<HTMLDivElement>(null);
-  const [view, setView] = useState<View>(() => viewAt(couple, couple.today));
+  const [view, setView] = useState<View>(() => viewAt(couple, couple.open));
   const canAsk = useAssistantOn();
   // The ribbon runs from the start of the road to the elder's hundredth year.
   const span = ROAD_YEARS - couple.start;
@@ -141,8 +150,8 @@ function CoupleView({
     [couple, span],
   );
   // Where the viewer is and where they are heading, in years from the elder's birth.
-  const { stage, canvas, title, target, go, dragging, onKey, stageHandlers } = useRoadTravel({
-    start: couple.today,
+  const { stage, canvas, title, target, go, dragging, moved, onKey, stageHandlers } = useRoadTravel({
+    start: couple.open,
     min: couple.start,
     max: couple.last,
     draw,
@@ -217,6 +226,7 @@ function CoupleView({
             {text.title}
           </h2>
           <p className="soft">{fill(text.lead, { bride: names.bride, groom: names.groom })}</p>
+          {note}
         </div>
         <p className={road.age}>
           <b>{year}</b>
@@ -240,6 +250,7 @@ function CoupleView({
         {...stageHandlers}
       >
         <canvas ref={canvas} className={road.canvas} aria-hidden="true" />
+        <RoadDragHint text={words.dragHint} moved={moved} />
         <div className={styles.nowRow} data-card="now">
           {people.map((person) => (
             <p key={person.role} className={`${styles.now} ${road[person.tone]}`} data-now={person.role}>
@@ -288,6 +299,8 @@ function CoupleView({
         </article>
       </div>
 
+      <p className={road.travel}>{words.travel}</p>
+
       <div className={road.controls}>
         <button
           type="button"
@@ -296,17 +309,24 @@ function CoupleView({
         >
           ‹ {words.prev}
         </button>
-        <button type="button" className={road.buttonMain} onClick={() => go(couple.today)}>
-          {words.today}
-        </button>
+        {coupleHasToday(couple) && (
+          <button type="button" className={road.button} onClick={() => go(couple.today)}>
+            {words.today}
+          </button>
+        )}
         <button
           type="button"
-          className={road.button}
+          className={road.buttonMain}
           onClick={() => go(stopBeside(couple, target.current, 1)?.y ?? couple.last)}
         >
           {words.next} ›
         </button>
-        <RoadArrows later={words.later} earlier={words.earlier} onMove={(years) => go(target.current + years)} />
+        <RoadArrows
+          later={words.later}
+          earlier={words.earlier}
+          step={words.step}
+          onMove={(years) => go(target.current + years)}
+        />
       </div>
 
       <div className={styles.mapRow}>
@@ -368,8 +388,8 @@ function CoupleView({
             ))}
           </svg>
           <div className={road.mapFade} />
-          <div className={road.todayMark} style={{ left: share(couple.today) }} />
-          <div ref={marker} className={road.marker} style={{ left: share(couple.today) }} />
+          {coupleHasToday(couple) && <div className={road.todayMark} style={{ left: share(couple.today) }} />}
+          <div ref={marker} className={road.marker} style={{ left: share(couple.open) }} />
         </div>
         <div className={`${road.scale} ${styles.scale}`} aria-hidden="true">
           {[0, 1, 2, 3, 4].map((mark) => (

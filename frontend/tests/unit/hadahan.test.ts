@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { fill, formatDate, formatDegree, formatMonthYear, formatYear } from "@/lib/hadahan";
+import { fill, formatDate, formatDegree, formatMonthYear, formatYear, todayIn } from "@/lib/hadahan";
 
 describe("formatDate", () => {
   it("writes English dates day first", () => {
@@ -32,5 +32,13 @@ describe("other formats", () => {
   it("fills templates and keeps unknown placeholders", () => {
     expect(fill("{name}'s hadahan", { name: "Nimali" })).toBe("Nimali's hadahan");
     expect(fill("{a} and {b}", { a: 1 })).toBe("1 and {b}");
+  });
+});
+
+describe("todayIn", () => {
+  it("is the date in that zone, not in UTC", () => {
+    const now = new Date("2026-01-01T00:30:00Z");
+    expect(todayIn("Asia/Colombo", now)).toBe("2026-01-01");
+    expect(todayIn("America/New_York", now)).toBe("2025-12-31");
   });
 });

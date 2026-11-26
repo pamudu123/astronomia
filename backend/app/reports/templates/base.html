@@ -1,18 +1,46 @@
+{% import "visuals.html" as v %}
 <!doctype html>
 <html lang="{{ lang }}">
 <head>
 <meta charset="utf-8">
-<title>{{ kind }} · Astronomia</title>
-<meta name="generator" content="Astronomia">
+<title>{{ kind }} · {{ r.brand }}</title>
+<meta name="generator" content="{{ r.brand }}">
 </head>
 <body>
+{% if full %}
+{# The cover: the night sky, the brand, the title and the person's artwork. #}
+<section class="cover{% block cover_class %}{% endblock %}" style="background-image: url({{ cover.picture }})">
+  <div class="cover-frame">
+    <p class="cover-brand">{{ v.star("4.2mm") }} {{ r.brand }}</p>
+    <div class="cover-words">
+    <p class="cover-eyebrow">{{ cover.eyebrow }}</p>
+    <h1 class="cover-title{% if title | length > 32 %} long{% endif %}">{{ title }}</h1>
+    {% block cover %}{% endblock %}
+    </div>
+    <div class="cover-foot">
+      <p class="cover-tagline">{{ r.tagline }}</p>
+      <p class="cover-made">{{ cover.made }}</p>
+    </div>
+  </div>
+</section>
+{% endif %}
+
 {% block content %}{% endblock %}
 
-<section class="box box-quiet" aria-label="{{ r.about }}">
+<section class="box box-quiet about" aria-label="{{ r.about }}">
   <h3>{{ r.about }}</h3>
   {% for line in about %}
   <p class="small{% if not loop.first %} soft{% endif %}">{{ line }}</p>
   {% endfor %}
 </section>
+
+{% if full %}
+<section class="cover back-cover" style="background-image: url({{ cover.back }})">
+  <div class="back-words">
+    <p class="cover-brand">{{ v.star("4.2mm") }} {{ r.brand }}</p>
+    <p class="cover-tagline">{{ r.tagline }}</p>
+  </div>
+</section>
+{% endif %}
 </body>
 </html>

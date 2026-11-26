@@ -5,10 +5,19 @@ import { type ReactNode, useCallback, useMemo, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { PageContext } from "@/lib/assistant/context";
+import { type HeldVisuals, type PageVisuals, offers } from "@/lib/assistant/pageVisuals";
 import type { Locale } from "@/lib/i18n";
 
 import { NoticeText } from "./AiNotice";
-import { AssistantOn, ExplainText, PageContextSetter, type Slot } from "./PageContext";
+import {
+  AssistantOn,
+  ExplainText,
+  HeldVisualsContext,
+  PageContextSetter,
+  PageVisualsSetter,
+  type Slot,
+  type VisualWords,
+} from "./PageContext";
 
 // CopilotKit reads the clock while rendering, which server prerendering does not allow, and
 // it is large. So the chat loads in the browser only, once the page is up.
@@ -26,6 +35,22 @@ export function combine(slots: Slots): PageContext | null {
     ...main,
     also_on_page: Object.fromEntries(extra.map(([slot, part]) => [slot, part!.result!])),
   };
+}
+
+type Held = HeldVisuals<VisualWords>;
+
+/** The results handed over so far, by id, and the one on screen. */
+type Visuals = { held: ReadonlyMap<string, Held>; now: Held | null };
+
+/** Enough for any one chat: the oldest result goes first. Only this tab's memory holds them. */
+const HELD_MAX = 60;
+
+function hold(current: Visuals, page: PageVisuals | null, words: VisualWords): Visuals {
+  if (!page || !offers(page).length) return current.now ? { ...current, now: null } : current;
+  // A random id says nothing about the result, and no two pages share one.
+  const now: Held = { id: crypto.randomUUID().slice(0, 8), at: new Date(), visuals: page, words };
+  const held = new Map([...current.held].slice(-(HELD_MAX - 1)));
+  return { held: held.set(now.id, now), now };
 }
 
 /**
@@ -55,16 +80,30 @@ export function Assistant({
       return { ...current, [slot]: context };
     });
   }, []);
-  const page = useMemo(() => combine(slots), [slots]);
+  const [visuals, setVisuals] = useState<Visuals>({ held: new Map(), now: null });
+  const words = useMemo<VisualWords>(() => ({ explain: t.explain, titles: t.cards.visual }), [t]);
+  const setPageVisuals = useCallback(
+    (handed: PageVisuals | null) => setVisuals((current) => hold(current, handed, words)),
+    [words],
+  );
+  const page = useMemo(() => {
+    const summary = combine(slots);
+    if (!summary || !visuals.now) return summary;
+    return { ...summary, visuals: { id: visuals.now.id, offers: offers(visuals.now.visuals) } };
+  }, [slots, visuals.now]);
   const notice = useMemo(() => ({ t: t.notice, lang }), [t.notice, lang]);
   return (
     <PageContextSetter value={set}>
-      <NoticeText value={notice}>
-        <AssistantOn value>
-          <ExplainText value={t.explain}>{children}</ExplainText>
-        </AssistantOn>
-        <Chat lang={lang} t={t} tools={tools} page={page} />
-      </NoticeText>
+      <PageVisualsSetter value={setPageVisuals}>
+        <NoticeText value={notice}>
+          <AssistantOn value>
+            <ExplainText value={t.explain}>{children}</ExplainText>
+          </AssistantOn>
+          <HeldVisualsContext value={visuals.held}>
+            <Chat lang={lang} t={t} tools={tools} page={page} />
+          </HeldVisualsContext>
+        </NoticeText>
+      </PageVisualsSetter>
     </PageContextSetter>
   );
 }

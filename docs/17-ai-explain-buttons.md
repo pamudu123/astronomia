@@ -149,8 +149,8 @@ Each place joins several components that people read together, so one explanatio
 |---|---|---|---|---|
 | 9 | **Today's nakath** | `DailyView`: Rahu kalaya, thithi, nakatha, yoga, karana, sunrise | "What kind of day is today, and what is it good for?" | calendar-and-nakath |
 | 10 | **Avurudu timetable** | `AvuruduView`: every nakath, official vs calculated, times abroad | "What do we do, and when?" | avurudu |
-| 11 | **Baby name letters** | `BabyLettersApp`, `StarLetters`, extra letters, `NameSuggestions` | "Which letter, and why?" | ceremonies-and-names |
-| 12 | **First letters times** | `FirstLettersFinder` result | "Which time for akuru kiyaweema?" | ceremonies-and-names |
+| 11 | **Baby name letters** (removed 2026-11-23: no AI on child results, docs/09) | `BabyLettersApp`, `StarLetters`, extra letters, `NameSuggestions` | "Which letter, and why?" | ceremonies-and-names |
+| 12 | **First letters times** (removed 2026-11-23, same reason) | `FirstLettersFinder` result | "Which time for akuru kiyaweema?" | ceremonies-and-names |
 | 13 | **This change for me** | `ChangeDetail`, Moon sign notes, `PersonalChange` | "How does this planet change affect me?" | birth-chart, personal-reading |
 | 14 | **My year ahead** | `YearView`, `PersonalYearly` | "What does next year look like for me?" | birth-chart, personal-reading |
 | 15 | **Possible birth dates** | `KendaraApp` results | "Why several dates, and how do I find the right one?" | old-horoscope (new) |
@@ -220,6 +220,22 @@ Same privacy rule as the chat: **no names, birth dates, birth times or birth pla
 - **Free once paid** (owner decides): the full reading's chapter list and the first chapter as a taste, plus places 6 and 9.
 - **Paid reports are saved:** a bought full reading is kept in "My reports" (file 16), so it isn't written again.
 - **Cost:** a full chart reading is about 11 model calls. Each chapter is cached by its facts hash, so reopening or downloading the PDF costs nothing. Places 9 and 10 are the same for everyone in a city on a day, so they are cached on the agent side.
+
+## 6a. The PDF reports (built 2026-11-22, changed 2026-11-23)
+
+**Free PDF:** a short report of what the free page shows: the chart, the planets, the life periods, the navamsa and the Kuja dosha result (for a match: the two people, the factors and the checks). No cover, no AI text, and none of the Kuja dosha conditions the page locks (`full_detail`).
+
+**Paid PDF** (`full_pdf`, and everyone while paid reports are off, docs/18): the cover, a contents page, the sky wheel, the 12 houses, every condition that applies, and the whole AI reading, whether or not the person opened it on the page.
+
+- **Every chapter is written first.** Download PDF writes each chapter not written yet (four at a time, a failed one asked for once more), with "Writing your full reading: 5 of 15…" on the button. Chart: the 12 reading chapters and the 3 topic-only ones. Match: the reading's chapters, with the years ahead and wedding dates when the page has them. A paid PDF with a chapter missing is not handed over: trying again writes only the missing ones.
+- **The AI notice comes first.** If it has not been accepted, it shows under the button and nothing goes to the AI until it is.
+- **Written once, kept with the report.** The first text of each chapter is the one a paid report keeps, per order and language (`sidera.report_chapters`, `backend/app/store/chapters.py`). The AI route (`frontend/app/api/explain`) looks there before asking the AI and keeps a chapter once it is complete (`frontend/lib/keptChapters.ts`). So the words never change, on any device of the account, and the PDF prints every kept chapter, and only those, whatever the browser sends (titles and order: `backend/app/reports/chapter_titles.py`). Before the PDF is asked for, a chapter this device holds but the server does not keep is written again. Only the website's server can keep a chapter (`CHAT_KEY`, the key shared for the chat limits): **without `CHAT_KEY` in Vercel and `ASTRONOMIA_CHAT_KEY` in Render nothing is kept on the server.** The chapters go when the account, or the saved report, is deleted; the order stays, so the report can be read again.
+- **On the device too**, for 30 days (`KEEP_DAYS` in `frontend/lib/assistant/explain.ts`), so a page reload asks nothing. A report that isn't paid shows none of them.
+- **The chat knows.** The written chapters go to Astro under `also_on_page.reading`: each one's title, short answer and part headings (`frontend/components/assistant/useReading.ts`). `guide.md` tells Astro to stay in step with them and point to the chapter.
+- **The design** (`backend/app/reports/`): diagrams drawn from the person's own results (`visuals.py`), then one chapter a page, each with its picture, its short answer, its diagram and its parts tinted like the page. Artwork is in `backend/app/reports/art/` (its README says how it is made; the brief was `docs/22-report-images.md`). The website shows the same chapter pictures (`frontend/lib/assistant/chapterArt.ts`).
+- **The same diagrams on the website**, under each reading chapter (`components/assistant/ChapterDiagram.tsx`). Which chapter shows which is one table on each side, kept in step: `CHAPTER_VISUAL` in `frontend/lib/assistant/visuals.ts` and in `backend/app/reports/render.py`.
+
+**Database:** `supabase/migrations/20261123030734_report_chapters.sql`, applied to staging on 2026-11-23. Apply it to production before deploying the backend there: the PDF and account deletion need its table. The privacy notice must say that a paid report's AI chapters are stored, and that the device keeps AI text for 30 days (owner: later).
 
 ## 7. Build steps
 
