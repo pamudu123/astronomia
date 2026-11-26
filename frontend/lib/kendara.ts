@@ -10,8 +10,12 @@ export type KendaraMatch = KendaraResult["matches"][number];
 export const BODIES = ["sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "rahu", "ketu"] as const;
 export type BodyKey = (typeof BODIES)[number];
 
-/** One kendara being drawn: the lagna sign, and the house each planet has been put in. */
-export type DrawingState = { lagna: string; houses: Partial<Record<BodyKey, number>> };
+/**
+ * One kendara being drawn: the lagna sign, and the house each planet has been put in. A house of
+ * null means the planet is not drawn on this kendara (old papers sometimes leave planets out);
+ * like a planet not placed yet, it is left out of the search.
+ */
+export type DrawingState = { lagna: string; houses: Partial<Record<BodyKey, number | null>> };
 
 export const EMPTY_DRAWING: DrawingState = { lagna: "", houses: {} };
 
@@ -35,7 +39,7 @@ export const HOUSE_SHAPES: Record<number, string> = {
   12: "200,0 300,0 200,100",
 };
 
-/** The next planet still to place, after `from`, or null when all are placed. */
+/** The next planet still to place, after `from`, or null when each is placed or marked as not drawn. */
 export function nextUnplaced(houses: DrawingState["houses"], from?: BodyKey): BodyKey | null {
   const start = from ? BODIES.indexOf(from) + 1 : 0;
   for (let i = 0; i < BODIES.length; i++) {
@@ -46,7 +50,12 @@ export function nextUnplaced(houses: DrawingState["houses"], from?: BodyKey): Bo
 }
 
 export function placedCount(drawing: DrawingState): number {
-  return BODIES.filter((body) => drawing.houses[body] !== undefined).length;
+  return BODIES.filter((body) => typeof drawing.houses[body] === "number").length;
+}
+
+/** How many planets are marked as not drawn on this kendara. */
+export function absentCount(drawing: DrawingState): number {
+  return BODIES.filter((body) => drawing.houses[body] === null).length;
 }
 
 /** The drawing as the API takes it, or null without a lagna. */
@@ -55,7 +64,7 @@ export function toDrawing(drawing: DrawingState): KendaraRequest["rashi"] | null
   const houses: Record<string, number> = {};
   for (const body of BODIES) {
     const house = drawing.houses[body];
-    if (house !== undefined) houses[body] = house;
+    if (typeof house === "number") houses[body] = house;
   }
   return { lagna: drawing.lagna, houses };
 }

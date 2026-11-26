@@ -46,6 +46,38 @@
   background: var(--panel);
 }
 
+/* The card can carry a close button in its top-right corner (the navamsha kendara). */
+.card:has(> .close) {
+  position: relative;
+}
+
+/* Sits on the card's top border, level with the title, so it never covers a field. */
+.close {
+  position: absolute;
+  top: -34px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.close:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
 .legend {
   padding: 0 8px;
   color: var(--gold);
@@ -75,6 +107,30 @@
   font: inherit;
 }
 
+/* The birth year as a range: two short inputs on one line. */
+.yearRange {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.yearRange > legend {
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.yearPair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-soft);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
@@ -89,7 +145,8 @@
 
 .chip,
 .chipOn,
-.chipDone {
+.chipDone,
+.chipOff {
   min-height: 44px;
   padding: 0;
   border: 1px solid var(--line);
@@ -111,6 +168,34 @@
 .chipDone {
   border-color: var(--teal);
   color: var(--teal);
+}
+
+/* Marked as not drawn on this kendara. */
+.chipOff {
+  border-style: dashed;
+  border-color: var(--mist);
+  background: transparent;
+  color: var(--mist);
+  text-decoration: line-through 2px;
+  opacity: 0.75;
+}
+
+.hintRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.hintRow .hint {
+  margin: 0;
+}
+
+.rowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
 }
 
 .hint {
@@ -329,4 +414,13 @@
   .chips {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
+}
+
+/* A small text button under a field, such as switching the birth year to a range. */
+.field > .linkButton,
+.yearRange > .linkButton {
+  align-self: flex-start;
+  min-height: 32px;
+  font-size: 14px;
+  text-align: start;
 }
