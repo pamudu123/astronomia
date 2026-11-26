@@ -21,6 +21,9 @@ export function monthPath(year: number, month: number, placeId: number, lang: Lo
   })}`;
 }
 
+/** How long the server keeps a litha month, in seconds: as long as the backend lets caches keep it. */
+export const MONTH_KEPT = 3600;
+
 /** "2026-11" for a month page address. */
 export const isMonth = (value: string) => /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
 

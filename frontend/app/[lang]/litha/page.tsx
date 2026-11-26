@@ -8,7 +8,7 @@ import { LithaCalendar, monthTitle } from "@/components/litha/LithaCalendar";
 import { backendJson } from "@/lib/backend";
 import { fill } from "@/lib/hadahan";
 import { type Locale, hasLocale } from "@/lib/i18n";
-import { COLOMBO, type MonthPanchanga, SRI_LANKA, monthPath, todayIn } from "@/lib/nakath";
+import { COLOMBO, MONTH_KEPT, type MonthPanchanga, SRI_LANKA, monthPath, todayIn } from "@/lib/nakath";
 
 import { getDictionary } from "../dictionaries";
 
@@ -32,6 +32,7 @@ async function ThisMonth({ lang, t }: { lang: Locale; t: T }) {
   const month = today.slice(0, 7);
   const data = await backendJson<MonthPanchanga>(
     monthPath(Number(month.slice(0, 4)), Number(month.slice(5)), COLOMBO, lang),
+    MONTH_KEPT,
   );
   return (
     <>

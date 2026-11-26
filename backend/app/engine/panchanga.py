@@ -21,6 +21,7 @@ import swisseph as swe
 import yaml
 
 from app.engine.ephemeris import Ephemeris, julian_day
+from app.engine.skycurve import sun_moon
 from app.engine.zodiac import DEGREES_PER_NAKSHATRA, NAKSHATRA, normalize
 
 RULES_DIR = Path(__file__).resolve().parents[1] / "data" / "rules"
@@ -156,7 +157,7 @@ def spans_between(
     """Every thithi, nakatha, yoga or karana that touches [start, end), in order."""
 
     def index_at(jd: float) -> int:
-        sun, moon = ephemeris.sun_moon(jd)
+        sun, moon = sun_moon(ephemeris, jd)
         if part == "thithi":
             return thithi_index(sun, moon)
         if part == "karana":
