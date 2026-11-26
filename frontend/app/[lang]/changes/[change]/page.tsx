@@ -60,8 +60,10 @@ export default async function ChangeHubPage({ params }: Params) {
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{changeTitle(t, change, lang)}</h1>
         <p className="soft">{t.hubLead}</p>
-        <div className={styles.links}>
-          <Link href={`/${lang}/changes`}>{t.all}</Link>
+        <div className={`pill-links ${styles.links}`}>
+          <Link href={`/${lang}/changes`} data-back>
+            {t.all}
+          </Link>
         </div>
       </div>
       <ChangeSummary t={t} change={change} lang={lang} />

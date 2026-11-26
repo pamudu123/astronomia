@@ -6,9 +6,9 @@ def by_id(result: KujaResult, rule: str) -> bool:
     return next(c.applies for c in result.cancellations if c.id == rule)
 
 
-def test_rules_are_marked_provisional() -> None:
+def test_rules_are_confirmed() -> None:
     rules = load_rules()
-    assert rules["provisional"] is True
+    assert rules["provisional"] is False
     assert rules["houses"] == [1, 2, 4, 7, 8, 12]
 
 

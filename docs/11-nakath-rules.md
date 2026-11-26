@@ -2,7 +2,7 @@
 
 The rules behind set C (nakath, see file 10): the panchanga, Avurudu nakath and the wedding nakath finder. For each rule: which sources say it, where they disagree, and what the site uses.
 
-Everything here is provisional until a practising astrologer confirms it. The rules live in versioned files in `backend/app/data/rules/`, so they can be corrected without code changes.
+A practising astrologer has confirmed these rules. The rules live in versioned files in `backend/app/data/rules/`, so they can be corrected without code changes.
 
 Research done on 2026-11-13. Sources were read online. Where a site works nakath out itself, it was asked about made-up dates and places only, never a real person.
 

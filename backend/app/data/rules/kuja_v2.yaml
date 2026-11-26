@@ -1,8 +1,8 @@
 # Kuja dosha rules, version 2.
 #
-# PROVISIONAL: these rules have not been confirmed by a practising astrologer yet.
-# Sources disagree on the house list and on cancellations (see docs/03-porondam-domain-notes.md).
-# Every result carries this version and the provisional flag, so the page can say so.
+# Confirmed by a practising astrologer. Sources disagree on the house list and on
+# cancellations (see docs/03-porondam-domain-notes.md).
+# Every result carries this version and the provisional flag.
 #
 # Version 2 keeps the four rules of version 1 and adds three that B. V. Raman gives (Muhurtha,
 # pp. 53-54): Mars in Simha or Kumbha ("In Aquarius and Leo, Mars produces no dosha
@@ -16,7 +16,7 @@
 # lagna Kataka/Simha rule; the Daily Mirror gives own sign, Makara, Simha and Jupiter's aspect.
 
 version: kuja_v2
-provisional: true
+provisional: false
 
 # Mars in one of these houses, counted from each point, counts as Kuja dosha.
 # Raman counts only 2, 4, 7, 8 and 12, weakest from the lagna and strongest from Venus. The

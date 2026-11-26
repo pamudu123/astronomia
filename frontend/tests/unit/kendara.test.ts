@@ -5,6 +5,7 @@ import {
   BODIES,
   HOUSE_SHAPES,
   type KendaraMatch,
+  absentCount,
   type KendaraResult,
   clearHandoff,
   handoffSnapshot,
@@ -58,6 +59,15 @@ describe("drawing helpers", () => {
       lagna: "simha",
       houses: { sun: 9, moon: 4 },
     });
+  });
+
+  it("leaves out planets marked as not on the kendara", () => {
+    const drawing = { lagna: "simha", houses: { sun: 9, moon: null, rahu: null } };
+    expect(placedCount(drawing)).toBe(1);
+    expect(absentCount(drawing)).toBe(2);
+    expect(toDrawing(drawing)).toEqual({ lagna: "simha", houses: { sun: 9 } });
+    // A planet marked as not drawn is done with, so the next one to place skips it.
+    expect(nextUnplaced(drawing.houses, "sun")).toBe("mars");
   });
 
   it("says how long a window is", () => {

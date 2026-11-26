@@ -1,11 +1,11 @@
 # Old horoscope search, version 1.
 #
-# PROVISIONAL: the margins allow for older horoscopes drawn with another ayanamsa (Raman,
+# Confirmed by a practising astrologer. The margins allow for older horoscopes drawn with another ayanamsa (Raman,
 # Thirukanitam or one based on the Surya Siddhanta) or the true node instead of the mean node.
 # These differ from ours (Lahiri, mean node) by up to about 2 degrees. See docs/13-old-horoscopes.md.
 
 version: kendara_v1
-provisional: true
+provisional: false
 
 # A planet or the lagna this close to the edge of the sign drawn still counts, graded "near".
 sign_margin: 2.0

@@ -8,7 +8,7 @@
 #   and others.
 # - Varna uses the Moon sign table and the "groom equal or higher" rule most sources give.
 # - Graha uses lankahandahana.com's lagna lord and Moon sign lord method.
-# Not yet confirmed by a practising astrologer.
+# Confirmed by a practising astrologer.
 #
 # "count" is the groom's star counted from the bride's star, both included (1 to 27).
 # "sign_count" is the groom's Moon sign counted from the bride's (1 to 12).
@@ -17,7 +17,7 @@
 # the nearer way round between the two stars, 1 (the same star) to 15.
 
 version: porondam_si_v3
-provisional: true
+provisional: false
 
 tables:
   gana:
@@ -195,7 +195,7 @@ factors:
 # They never change whether a factor agrees, the count or the summary, which follow the rules
 # above. A factor that does not agree lists the exceptions that apply, so the page and the
 # assistant can say "this is not counted as agreeing, but tradition softens it because...".
-# PROVISIONAL, like the rest of this file.
+# Confirmed, like the rest of this file.
 #
 # Sources: lankaastrology.com's twenty factor articles and "porondam-nogalapunoth-vivaha-weema-
 # dosha-bhanga" (November 2026). The Nadi, Gana and Rashi exceptions are also the classical ones

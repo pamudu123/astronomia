@@ -19,7 +19,7 @@ type Calls = string[];
 
 /** The reviewed AI notice (docs/policies/refunds.md), shown before anything goes to the AI. */
 const NOTICE =
-  "This is an AI helper. Your message and selected chart facts go to OpenAI. Please leave out names, " +
+  "This is an AI helper. Your message and selected chart facts go to an AI service to write the answer. Please leave out names, " +
   "children's details, and health or other sensitive information. AI can make mistakes.";
 
 /** Marks the AI notice as acknowledged in this browser, as after an earlier visit. */

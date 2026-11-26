@@ -517,6 +517,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/baby/names/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Check Names
+         * @description Which letter each Sinhala name starts with, by the same rule as the names list.
+         *
+         *     For names the site did not write itself (the AI search, agent/app/names.py), so a name
+         *     is only shown for a letter when it really starts with that letter.
+         */
+        get: operations["check_names_v1_baby_names_check_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/baby/names": {
         parameters: {
             query?: never;
@@ -2297,6 +2320,24 @@ export interface components {
             to_house: number;
             /** Text */
             text: string;
+        };
+        /** NameCheckOut */
+        NameCheckOut: {
+            /** Si */
+            si: string;
+            /** Letter */
+            letter: string | null;
+            /** Matches */
+            matches: boolean;
+            /** Syllables */
+            syllables: number;
+            /** Length */
+            length: string | null;
+        };
+        /** NameCheckResponse */
+        NameCheckResponse: {
+            /** Names */
+            names: components["schemas"]["NameCheckOut"][];
         };
         /** NameOut */
         NameOut: {
@@ -4648,6 +4689,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StarLettersResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_names_v1_baby_names_check_get: {
+        parameters: {
+            query: {
+                letters: string[];
+                names: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NameCheckResponse"];
                 };
             };
             /** @description Validation Error */

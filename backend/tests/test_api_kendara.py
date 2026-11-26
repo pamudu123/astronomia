@@ -50,6 +50,18 @@ def test_search_finds_the_birth(client: TestClient) -> None:
     assert not body["cut_off"]
 
 
+def test_planets_not_on_the_paper_are_left_out(client: TestClient) -> None:
+    # Old papers sometimes leave planets out. The search still finds the birth, only less narrowly.
+    houses: dict[str, int] = NIMALI["houses"]  # type: ignore[assignment]
+    partial = {"lagna": "simha", "houses": {k: houses[k] for k in ("sun", "moon", "saturn")}}
+    body = post(client, rashi=partial, place_id=KANDY, year_from=1995, year_to=1995)
+    assert body["status"] == "ok"
+    birth = "1995-04-19T14:35:00+05:30"
+    assert any(m["start"]["local"] <= birth <= m["end"]["local"] for m in body["matches"])
+    full = post(client, rashi=NIMALI, place_id=KANDY, year_from=1995, year_to=1995)
+    assert len(full["matches"]) <= len(body["matches"])
+
+
 def test_navamsha_and_star_narrow_the_result(client: TestClient) -> None:
     plain = post(client, rashi=NIMALI, place_id=KANDY)
     by_star = post(client, rashi=NIMALI, place_id=KANDY, nakshatra="jyeshtha")

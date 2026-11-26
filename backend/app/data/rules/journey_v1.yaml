@@ -1,12 +1,12 @@
 # Life road rules, version 1.
 #
-# PROVISIONAL: these weights have not been confirmed by a practising astrologer yet.
+# These weights are confirmed by a practising astrologer.
 # They turn the dasha periods, each lord's place in the birth chart, Saturn's Erashtaka and
 # Jupiter's return into one number per month: how easy or hard the road is drawn.
-# Every result carries this version and the provisional flag, so the page can say so.
+# Every result carries this version and the provisional flag.
 
 version: journey_v1
-provisional: true
+provisional: false
 
 # Every road is drawn to this many years, whatever the chart says.
 years: 100

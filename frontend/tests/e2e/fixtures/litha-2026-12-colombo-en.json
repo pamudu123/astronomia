@@ -1,6 +1,6 @@
 {
   "rule_set": "panchanga_v1",
-  "provisional": true,
+  "provisional": false,
   "year": 2026,
   "month": 12,
   "place": {

@@ -124,7 +124,8 @@ test("a star page shows its four padas", async ({ page }) => {
   await expect(padas.nth(0)).toContainText("Mithuna 6°40′ to 10°00′");
   await expect(padas.nth(3)).toContainText("Chha");
   await expect(padas.nth(3)).toContainText("Other sources give: ච ජ");
-  await expect(main.getByText(/provisional until a practising astrologer/)).toBeVisible();
+  await expect(main.getByText(/Where Sri Lankan sources differ/)).toBeVisible();
+  await expect(main.getByText(/until a practising astrologer/)).toHaveCount(0);
   await noSidewaysScroll(page);
 });
 

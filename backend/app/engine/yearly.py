@@ -13,8 +13,8 @@ from app.engine.transits import SLOW_BODIES, signs_at
 from app.engine.zodiac import Body, whole_sign_house
 
 RULE_SET = "yearly_v1"
-# House themes are waiting for an astrologer's confirmation.
-PROVISIONAL = True
+# House themes are confirmed by a practising astrologer.
+PROVISIONAL = False
 # The years with a forecast. Each needs its changes inside the change list.
 YEARS = (2027,)
 

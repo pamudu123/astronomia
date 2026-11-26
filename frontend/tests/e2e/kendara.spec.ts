@@ -50,7 +50,8 @@ test("draw a kendara and see the births that fit it", async ({ page }) => {
   await expect(page.getByText("9 of 9 planets placed")).toBeVisible();
   await expect(page.locator('[data-drawing="rashi"] [data-placed="venus"]')).toBeVisible();
 
-  await page.getByLabel("Born from year").fill("1990");
+  // One known year is sent as a range of that year alone.
+  await page.getByLabel("Birth year, if known").fill("1990");
   await page.getByLabel("Birth star, if written").selectOption("jyeshtha");
   await page.getByRole("button", { name: "Find the births" }).click();
 
@@ -62,7 +63,7 @@ test("draw a kendara and see the births that fit it", async ({ page }) => {
   // The drawing goes in the body of the request, never in the address.
   const body = JSON.parse(sent[0]);
   expect(body.rashi).toEqual({ lagna: "simha", houses: HOUSES });
-  expect(body).toMatchObject({ year_from: 1990, nakshatra: "jyeshtha", lang: "en" });
+  expect(body).toMatchObject({ year_from: 1990, year_to: 1990, nakshatra: "jyeshtha", lang: "en" });
   expect(page.url()).not.toContain("simha");
 
   await page.getByRole("button", { name: "Change the drawing" }).click();

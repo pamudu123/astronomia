@@ -399,6 +399,7 @@ test("an empty My reports points to the tools", async ({ page }) => {
 });
 
 test("a saved hadahan opens with its PDF and Share buttons", async ({ page }) => {
+  await openAccess(page);
   const shared = JSON.parse(fixture("share-hadahan-en.json"));
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
   await page.route("**/api/v1/forecast", (route) => route.fulfill(json("forecast-en.json")));

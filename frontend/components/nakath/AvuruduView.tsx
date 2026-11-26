@@ -133,6 +133,8 @@ export function AvuruduView({ lang, t, year, zone: initialZone, fixed, initial }
               label={t.choosePlace}
               hint={t.placeHint}
               empty={t.noPlaces}
+              placeholder={t.placePlaceholder}
+              searchLabel={t.searchPlace}
               value={place}
               onChange={(chosen) => {
                 setPlace(chosen);
@@ -140,7 +142,7 @@ export function AvuruduView({ lang, t, year, zone: initialZone, fixed, initial }
               }}
             />
           </div>
-          <p className={styles.small} aria-live="polite">
+          <p className={styles.meta} aria-live="polite">
             {fill(t.showing, { zone: shownZone, offset: shown.offset })}
           </p>
           {browser && browser !== shownZone && (
@@ -212,7 +214,6 @@ export function AvuruduView({ lang, t, year, zone: initialZone, fixed, initial }
         ))}
         <p>{t.abroad}</p>
         {shown.source && <p>{fill(t.source, { source: shown.source })}</p>}
-        <p>{t.provisional}</p>
       </div>
     </>
   );

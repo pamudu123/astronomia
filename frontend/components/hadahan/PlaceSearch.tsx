@@ -16,6 +16,8 @@ type Props = {
   onChange: (place: Place | null) => void;
   /** Shown in the empty box: the place used when none is chosen, such as Colombo. */
   placeholder?: string;
+  /** When given, a button with this label beside the box: it picks the best match, searching first if needed. */
+  searchLabel?: string;
   /** Takes the hint's place once a place is chosen: "Chosen: {place} ({timezone})". */
   chosen?: string;
   /** The input's id, for a form that takes the visitor to it. */
@@ -69,6 +71,7 @@ export function PlaceSearch({
   chosen,
   inputId,
   invalid,
+  searchLabel,
 }: Props) {
   const ownId = useId();
   const id = inputId ?? ownId;
@@ -115,6 +118,26 @@ export function PlaceSearch({
     };
   }, [query, attempt]);
 
+  /** The Search button and Enter: choose the highlighted match, or search now and choose the best one. */
+  function searchNow() {
+    if (open && results.length > 0) {
+      choose(results[active >= 0 ? active : 0]);
+      return;
+    }
+    const text = query.trim();
+    if (text.length < 2) return;
+    setState("searching");
+    searchPlaces(text)
+      .then((found) => {
+        setResults(found);
+        setSearched(true);
+        setState("idle");
+        if (found.length > 0) choose(found[0]);
+        else setOpen(true);
+      })
+      .catch(() => setState("failed"));
+  }
+
   function choose(place: Place) {
     skipNext.current = true;
     setQuery(placeLabel(place, lang));
@@ -124,6 +147,11 @@ export function PlaceSearch({
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (searchLabel && event.key === "Enter" && (!open || results.length === 0)) {
+      event.preventDefault();
+      searchNow();
+      return;
+    }
     if (!open || results.length === 0) return;
     if (event.key === "ArrowDown") {
       event.preventDefault();
@@ -181,6 +209,17 @@ export function PlaceSearch({
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           onFocus={() => results.length > 0 && !value && setOpen(true)}
         />
+        {searchLabel && (
+          <button
+            type="button"
+            className={`btn btn-primary ${styles.searchButton}`}
+            disabled={query.trim().length < 2 || Boolean(value)}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={searchNow}
+          >
+            {searchLabel}
+          </button>
+        )}
       </div>
       {/* One line for the hint and the search's state, so nothing below it moves. */}
       <div className={styles.hintRow}>

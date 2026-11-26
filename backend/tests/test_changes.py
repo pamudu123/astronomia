@@ -103,7 +103,7 @@ def test_houses_for_every_lagna(lagna: str) -> None:
     counted = count_from(change, RASHI.index(lagna))
     assert tuple((m.from_house, m.to_house) for m in counted.moves) == BY_HAND[lagna]
     assert {body for body, _, _ in counted.others} == {Body.SATURN, Body.JUPITER}
-    assert counted.provisional is True
+    assert counted.provisional is False
 
 
 def test_a_return_after_a_backward_step_is_marked() -> None:

@@ -143,7 +143,7 @@ porondam_factor:
   vedha: {name: වේධ, meaning: "සම්ප්‍රදාය අනුව එකිනෙකට නොගැළපෙන නැකත් යුගල"}
 
 # The summary chart groups the counted factors by what each is traditionally said to relate
-# to. Rajju and Vedha count too, in a group of their own. Not yet reviewed by an astrologer.
+# to. Rajju and Vedha count too, in a group of their own.
 porondam_theme:
   health: {name: "යහපැවැත්ම පිළිබඳ පොරොන්දම්", factors: [dina, stree_deergha, ayusha, nadi]}
   bond: {name: බැඳීම සහ ස්වභාවය, factors: [gana, yoni, rashi, vashya, pakshi, linga, varna, bhuta]}
@@ -271,9 +271,8 @@ report:
   method_hadahan: "ලාහිරි අයනාංශය ({ayanamsa}°), සම්පූර්ණ රාශි භාව, මධ්‍යම රාහු, ස්විස් එෆෙමරිස්."
   method_porondam: "ලාහිරි අයනාංශය. ගැළපීම එක් එක් අයගේ චන්ද්‍රයා අනුව කෙරේ. රජ්ජු සහ වේධ ද ඇතුළුව පොරොන්දම් 20ම ගණන් කෙරේ."
   rule_sets: "නීති මාලා: {rules}."
-  provisional: "ප්‍රවීණ ජ්‍යෝතිෂවේදියකු තහවුරු කරන තුරු පොරොන්දම් සහ කුජ දෝෂ නීති තාවකාලිකය."
   porondam_provisional: "මෙම වාර්තාව සාම්ප්‍රදායික පොරොන්දම් කරුණු 20 ම භාවිත කරයි."
-  kendara_note: "භාව ඉහළ ලග්න කොටුවේ සිට ගණන් කෙරේ. භාවවල දිශාව ජ්‍යෝතිෂවේදියකු විසින් තහවුරු කිරීමට නියමිතය."
+  kendara_note: "භාව ඉහළ ලග්න කොටුවේ සිට ගණන් කෙරේ."
   guide: "මේ විස්තරය හඳහන් දෙක තේරුම් ගැනීමට මඟපෙන්වීමක්. විවාහය ගැන තීරණය ඔබ දෙදෙනා සතුයි. අවශ්‍ය නම් පවුලේ අය හෝ ජ්‍යෝතිෂවේදියකු සමඟ මේ ගැන කතා කරන්න."
   disclaimer: "මේ විස්තර මඟපෙන්වීමක් ලබාගැනීමටත් අපේ සම්ප්‍රදාය ගැන දැනගැනීමටත් උපකාරී වේ. වැදගත් තීරණයක් ගැනීමට පෙර ඔබේ පවුලේ අය සහ පළපුරුදු ජ්‍යෝතිෂවේදියකු සමඟ කතා කරන්න."
   made_on: "සකස් කළ දිනය {date}."

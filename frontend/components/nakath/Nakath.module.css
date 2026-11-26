@@ -51,6 +51,12 @@
   font-size: 14px;
 }
 
+/* Where and when the times are for: read before the times, so body sized. */
+.meta {
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -76,7 +82,7 @@
 .control {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1 1 260px;
   min-width: 0;
 }
@@ -232,6 +238,70 @@
   margin-top: 8px;
 }
 
+/* The year row and the city shortcuts, under the page title. */
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pickerLabel {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.picker .chip,
+.picker .chipCurrent {
+  min-height: 44px;
+}
+
+.picker .chipCurrent[aria-current="page"] {
+  border-color: var(--gold-fill);
+  background: var(--gold-fill);
+  color: var(--on-gold);
+  font-weight: 600;
+}
+
+.more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--gold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.more > summary::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+}
+
+.more[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.more > summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.more > ul {
+  margin-top: 8px;
+}
+
 .years,
 .cities {
   list-style: none;
@@ -300,12 +370,13 @@
 }
 
 /* A text link is one line tall. An unseen box around it gives a finger at least 44px. */
-.links a,
+/* Pill links (globals.css) are 44px tall already and draw their arrow with ::after. */
+.links:not(:global(.pill-links)) a,
 .linkButton {
   position: relative;
 }
 
-.links a::after,
+.links:not(:global(.pill-links)) a::after,
 .linkButton::after {
   content: "";
   position: absolute;

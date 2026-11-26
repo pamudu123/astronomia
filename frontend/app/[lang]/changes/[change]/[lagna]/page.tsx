@@ -88,9 +88,13 @@ export default async function ChangeLagnaPage({ params }: Params) {
       <div className={`rise ${styles.head}`}>
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{title}</h1>
-        <div className={styles.links}>
-          <Link href={`/${lang}/changes/${change.id}`}>{fill(t.hubLink, { name })}</Link>
-          <Link href={`/${lang}/changes`}>{t.all}</Link>
+        <div className={`pill-links ${styles.links}`}>
+          <Link href={`/${lang}/changes/${change.id}`} data-back>
+            {fill(t.hubLink, { name })}
+          </Link>
+          <Link href={`/${lang}/changes`} data-back>
+            {t.all}
+          </Link>
         </div>
       </div>
       <ChangeSummary t={t} change={change} lang={lang} />

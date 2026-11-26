@@ -69,7 +69,7 @@ def test_yearly_endpoint(client: TestClient) -> None:
     response = client.get("/v1/yearly/2027/makara?lang=en")
     assert response.headers["cache-control"] == "public, max-age=3600"
     body = response.json()
-    assert (body["year"], body["sign"], body["provisional"]) == (2027, "makara", True)
+    assert (body["year"], body["sign"], body["provisional"]) == (2027, "makara", False)
     saturn = next(p for p in body["planets"] if p["body"] == "saturn")
     assert [s["text"] for s in saturn["stays"]] == [
         "Saturn is in Meena, your 3rd house, until 3 June 2027.",

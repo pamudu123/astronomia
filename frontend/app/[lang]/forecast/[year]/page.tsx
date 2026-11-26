@@ -48,7 +48,7 @@ export default async function YearIndexPage({ params }: Params) {
           <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
           <h1 className={`display ${styles.title}`}>{fill(t.indexTitle, { year })}</h1>
           <p className="soft">{fill(t.indexLead, { year })}</p>
-          <div className={styles.links}>
+          <div className={`pill-links ${styles.links}`}>
             <Link href={`/${lang}/changes`}>{t.changesLink}</Link>
           </div>
         </div>

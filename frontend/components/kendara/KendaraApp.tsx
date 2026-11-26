@@ -37,8 +37,17 @@ import { KendaraInput } from "./KendaraInput";
 
 type Props = { lang: Locale; dict: Dictionary };
 
-type Facts = { yearFrom: string; yearTo: string; date: string; star: string; place: Place | null };
-const NO_FACTS: Facts = { yearFrom: "", yearTo: "", date: "", star: "", place: null };
+/** What else is known. The birth year is one year, or a range when only roughly known. */
+type Facts = {
+  year: string;
+  range: boolean;
+  yearFrom: string;
+  yearTo: string;
+  date: string;
+  star: string;
+  place: Place | null;
+};
+const NO_FACTS: Facts = { year: "", range: false, yearFrom: "", yearTo: "", date: "", star: "", place: null };
 
 /** Old horoscopes: draw the paper kendara, and see the births that fit it. */
 export function KendaraApp({ lang, dict }: Props) {
@@ -75,9 +84,15 @@ export function KendaraApp({ lang, dict }: Props) {
     }
     const request: KendaraRequest = { rashi: drawing, navamsha: nav };
     if (facts.date) request.date = facts.date;
-    else {
-      if (facts.yearFrom) request.year_from = Number(facts.yearFrom);
-      if (facts.yearTo) request.year_to = Number(facts.yearTo);
+    else if (!facts.range) {
+      // One known year is a range of that year alone.
+      if (facts.year) request.year_from = request.year_to = Number(facts.year);
+    } else {
+      const years = [facts.yearFrom, facts.yearTo].filter(Boolean).map(Number);
+      if (years.length === 2) years.sort((a, b) => a - b); // a range typed backwards still works
+      if (facts.yearFrom && facts.yearTo) [request.year_from, request.year_to] = years;
+      else if (facts.yearFrom) request.year_from = years[0];
+      else if (facts.yearTo) request.year_to = years[0];
     }
     if (facts.star) request.nakshatra = facts.star;
     if (facts.place) request.place_id = facts.place.id;
@@ -144,56 +159,87 @@ export function KendaraApp({ lang, dict }: Props) {
               drawing={navamsha}
               disabled={locked}
               onChange={(update) => setNavamsha(update)}
+              onRemove={() => setWithNavamsha(false)}
+              removeLabel={f.removeNavamsha}
             />
           )}
         </div>
-        <div className={styles.row}>
-          <button
-            type="button"
-            className="btn btn-outline lift"
-            disabled={locked}
-            aria-pressed={withNavamsha}
-            onClick={() => setWithNavamsha((value) => !value)}
-          >
-            {withNavamsha ? f.removeNavamsha : f.addNavamsha}
-          </button>
-          <span className={styles.small}>{f.navamshaHint}</span>
-        </div>
+        {/* Once added, the navamsha card carries its own close and remove buttons. */}
+        {!withNavamsha && (
+          <div className={styles.row}>
+            <button type="button" className="btn btn-outline lift" disabled={locked} onClick={() => setWithNavamsha(true)}>
+              {f.addNavamsha}
+            </button>
+            <span className={styles.small}>{f.navamshaHint}</span>
+          </div>
+        )}
 
         <fieldset className={styles.card} disabled={locked}>
           <legend className={styles.legend}>{f.factsTitle}</legend>
           <p className={styles.small}>{f.factsLead}</p>
           <div className={styles.grid}>
-            <div className={styles.field}>
-              <label htmlFor="year-from" className={styles.label}>
-                {f.yearFrom}
-              </label>
-              <input
-                id="year-from"
-                className={styles.input}
-                type="number"
-                inputMode="numeric"
-                min={1900}
-                max={2100}
-                value={facts.yearFrom}
-                onChange={(e) => setFacts({ ...facts, yearFrom: e.target.value })}
-              />
-            </div>
-            <div className={styles.field}>
-              <label htmlFor="year-to" className={styles.label}>
-                {f.yearTo}
-              </label>
-              <input
-                id="year-to"
-                className={styles.input}
-                type="number"
-                inputMode="numeric"
-                min={1900}
-                max={2100}
-                value={facts.yearTo}
-                onChange={(e) => setFacts({ ...facts, yearTo: e.target.value })}
-              />
-            </div>
+            {facts.range ? (
+              <fieldset className={styles.yearRange}>
+                <legend className={styles.label}>{f.yearRange}</legend>
+                <div className={styles.yearPair}>
+                  <input
+                    id="year-from"
+                    className={styles.input}
+                    type="number"
+                    inputMode="numeric"
+                    min={1900}
+                    max={2100}
+                    placeholder={f.yearFrom}
+                    aria-label={f.yearFrom}
+                    value={facts.yearFrom}
+                    onChange={(e) => setFacts({ ...facts, yearFrom: e.target.value })}
+                  />
+                  <span aria-hidden="true">–</span>
+                  <input
+                    id="year-to"
+                    className={styles.input}
+                    type="number"
+                    inputMode="numeric"
+                    min={1900}
+                    max={2100}
+                    placeholder={f.yearTo}
+                    aria-label={f.yearTo}
+                    value={facts.yearTo}
+                    onChange={(e) => setFacts({ ...facts, yearTo: e.target.value })}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className={styles.linkButton}
+                  onClick={() => setFacts({ ...facts, range: false, year: facts.yearFrom || facts.yearTo })}
+                >
+                  {f.useYear}
+                </button>
+              </fieldset>
+            ) : (
+              <div className={styles.field}>
+                <label htmlFor="birth-year" className={styles.label}>
+                  {f.year}
+                </label>
+                <input
+                  id="birth-year"
+                  className={styles.input}
+                  type="number"
+                  inputMode="numeric"
+                  min={1900}
+                  max={2100}
+                  value={facts.year}
+                  onChange={(e) => setFacts({ ...facts, year: e.target.value })}
+                />
+                <button
+                  type="button"
+                  className={styles.linkButton}
+                  onClick={() => setFacts({ ...facts, range: true, yearFrom: facts.year, yearTo: facts.year })}
+                >
+                  {f.useRange}
+                </button>
+              </div>
+            )}
             <div className={styles.field}>
               <label htmlFor="known-date" className={styles.label}>
                 {f.date}

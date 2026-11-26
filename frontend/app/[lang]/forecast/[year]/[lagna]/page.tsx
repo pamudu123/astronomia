@@ -85,8 +85,10 @@ export default async function YearLagnaPage({ params }: Params) {
           <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
           <h1 className={`display ${styles.title}`}>{fill(t.title, { year, lagna: lagna[lang] })}</h1>
           <p className="soft">{fill(t.lead, { year, lagna: lagna[lang] })}</p>
-          <div className={styles.links}>
-            <Link href={`/${lang}/forecast/${year}`}>{t.all}</Link>
+          <div className={`pill-links ${styles.links}`}>
+            <Link href={`/${lang}/forecast/${year}`} data-back>
+              {t.all}
+            </Link>
             <a href="#personal-year">{t.notSure}</a>
             <Link href={`/${lang}/changes`}>{t.changesLink}</Link>
           </div>

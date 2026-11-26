@@ -15,6 +15,7 @@ import { useHydrated } from "@/lib/useHydrated";
 
 import styles from "./FirstLetters.module.css";
 import { FirstLettersGate } from "./FirstLettersGate";
+import { SearchLines } from "./SearchLines";
 
 type Props = {
   lang: Locale;
@@ -215,6 +216,7 @@ export function FirstLettersFinder({ lang, t, hadahan, guardian }: Props) {
             {busy ? t.working : t.find}
           </button>
         </form>
+        {busy && <SearchLines t={t.progress} range={t.months[String(months) as keyof typeof t.months]} />}
 
         {result?.place && result.first && result.last && (
           <div className={styles.ceremony} data-card="first-letters-result">
@@ -261,7 +263,6 @@ export function FirstLettersFinder({ lang, t, hadahan, guardian }: Props) {
               ))}
             </ul>
             {result.note && <p className={styles.small}>{result.note}</p>}
-            <p className={styles.small}>{t.provisional}</p>
           </div>
         )}
       </section>

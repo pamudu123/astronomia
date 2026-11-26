@@ -13,7 +13,7 @@ def test_a_star_page(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.headers["cache-control"] == "public, max-age=3600"
     body = response.json()
-    assert (body["rule_set"], body["provisional"]) == ("name_letters_si_v1", True)
+    assert (body["rule_set"], body["provisional"]) == ("name_letters_si_v1", False)
     assert (body["star"], body["star_name"], body["star_number"]) == ("ardra", "Ardra", 6)
     assert [p["letter"] for p in body["padas"]] == ["කු", "ඝ", "ඞ", "ඡ"]
     assert [p["latin"] for p in body["padas"]] == ["Ku", "Gha", "Nga", "Chha"]
@@ -197,6 +197,33 @@ def test_names_in_english_with_a_length(client: TestClient) -> None:
         "long",
         4,
     )
+
+
+def test_check_names_by_their_first_letter(client: TestClient) -> None:
+    response = client.get(
+        "/v1/baby/names/check",
+        params=[
+            ("letters", "පි"),
+            ("letters", "අ"),
+            ("names", "ප්‍රියා"),
+            ("names", "ආලෝක"),
+            ("names", "පාලිත"),
+            ("names", "Priya"),
+        ],
+    )
+    assert response.status_code == 200
+    got = [(n["si"], n["letter"], n["matches"], n["length"]) for n in response.json()["names"]]
+    assert got == [
+        ("ප්‍රියා", "පි", True, "short"),
+        ("ආලෝක", "අ", True, "medium"),
+        ("පාලිත", "ප", False, "medium"),
+        ("Priya", None, False, None),
+    ]
+
+
+def test_check_names_needs_letters_and_names(client: TestClient) -> None:
+    assert client.get("/v1/baby/names/check", params={"names": "නිමාලි"}).status_code == 422
+    assert client.get("/v1/baby/names/check", params={"letters": "නි"}).status_code == 422
 
 
 def test_names_need_a_letter_from_the_table(client: TestClient) -> None:

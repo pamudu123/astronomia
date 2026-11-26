@@ -29,7 +29,7 @@ Background facts for the site's assistant. Everything here describes **tradition
 
 So the Sri Lankan chart works like the North Indian one, but uses boxes and triangles instead of diamonds. Chart software lists it as a separate style.
 
-*Site note:* the site draws house 1 at top centre and counts anticlockwise. The code marks the direction provisional until an astrologer confirms it.
+*Site note:* the site draws house 1 at top centre and counts anticlockwise. A practising astrologer has confirmed the direction.
 
 **Sources (section 1)**
 - https://www.cambridge.org/core/journals/journal-of-asian-studies/article/abs/sinhalese-astrology-south-asian-caste-systems-and-the-notion-of-individuality/92F0E2F27BB41283BB3B0846B81C6867 (Kemper, *Journal of Asian Studies* 38(3), 1979)

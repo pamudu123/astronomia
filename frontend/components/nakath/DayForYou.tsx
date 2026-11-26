@@ -16,9 +16,9 @@ import { partTime } from "./format";
 
 type Props = { lang: Locale; t: Dictionary["nakath"]; day: string; shown: Panchanga };
 
-const TONE: Record<StarTone, string> = { good: styles.good, careful: styles.careful, own: styles.own };
+const TONE: Record<StarTone, string> = { good: styles.good, moderate: styles.moderate };
 // A mark as well as a colour, so the meaning never rests on colour alone.
-const MARK: Record<StarTone, string> = { good: "M3 8.5 6.5 12 13 4.5", careful: "M8 3v6M8 12.5v.5", own: "M3 8h10" };
+const MARK: Record<StarTone, string> = { good: "M3 8.5 6.5 12 13 4.5", moderate: "M3 8h10" };
 
 /** The day's star against one birth star: from the chart kept in this browser, or chosen here. */
 export function DayForYou({ lang, t, day, shown }: Props) {

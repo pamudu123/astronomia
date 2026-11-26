@@ -126,7 +126,7 @@ def test_the_finder_in_english(client: TestClient) -> None:
     assert response.status_code == 200
     assert "1995" not in str(response.url)
     body = response.json()
-    assert body["status"] == "ok" and body["provisional"] is True
+    assert body["status"] == "ok" and body["provisional"] is False
     assert (body["first"], body["last"]) == ("2027-01-01", "2027-03-31")
     assert body["place"]["name"] == "Colombo"
     (ceremony,) = body["ceremonies"]

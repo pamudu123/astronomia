@@ -66,4 +66,4 @@ def test_strength_follows_the_rules() -> None:
     rules = load_rules()
     jupiter, rahu = strength(CHART, Body.JUPITER, rules), strength(CHART, Body.RAHU, rules)
     assert jupiter > rahu
-    assert rules["provisional"] is True and JOURNEY.provisional is True
+    assert rules["provisional"] is False and JOURNEY.provisional is False
