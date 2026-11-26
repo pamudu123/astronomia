@@ -1535,6 +1535,15 @@
       "loading": "Finding names…",
       "none": "No names in our list start with these letters yet. Some letters are rare at the start of a name.",
       "pickLetter": "Pick at least one letter.",
+      "aiSearch": "Search with AI",
+      "aiMore": "More names from AI",
+      "aiSearching": "Asking AI for more names…",
+      "aiTag": "AI",
+      "aiTagTitle": "Suggested by AI, not from our list",
+      "aiFound": "AI found {count} more, shown first.",
+      "aiNone": "AI found no more names that start with these letters.",
+      "aiFailed": "The AI search did not work this time. Please try again.",
+      "aiNote": "Names tagged AI are suggestions. Each was checked to start with your letters, but check the spelling and meaning with family or someone who knows Sinhala names.",
       "sourceName": "Wikipedia name page",
       "sourcePerson": "A person with this name (Wikipedia)",
       "note": "Names come from Wikipedia's Sinhalese given names, or were added by us with a person on Wikipedia who has the name. The spellings and meanings are provisional until a native speaker checks them. A long and a short vowel count as the same letter."
@@ -1585,6 +1594,22 @@
     "noPlaces": "No places found",
     "find": "Find dates",
     "working": "Searching",
+    "progress": {
+      "start": "Searching the next {range} for good times.",
+      "waking": "This is taking longer than usual. The service may have been asleep, and waking up can take a minute.",
+      "seconds": "Seconds so far: {seconds}",
+      "lines": [
+        "Leaving out Tuesdays and Saturdays, the days tradition avoids for a first lesson.",
+        "Checking which nakatha the Moon is in during the daylight of each day.",
+        "Skipping the thithis tradition avoids, such as the 4th, 9th and 14th.",
+        "Looking for a Mithuna, Kanya, Dhanu or Meena lagna: the signs of Mercury and Jupiter, the planets of learning.",
+        "Counting the tara from the child's birth star, so the day's star suits the child.",
+        "Keeping clear of Rahu kalaya and the Vishti karana.",
+        "Making sure the 8th house from the lagna is empty.",
+        "Finding the minute each good time starts and ends.",
+        "Keeping the best time on each day."
+      ]
+    },
     "needChild": "Enter the child's birth details, or choose a birth star.",
     "forChild": "For a child born in {star}.",
     "rangeText": "Searched {first} to {last}.",

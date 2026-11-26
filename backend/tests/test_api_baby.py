@@ -199,6 +199,33 @@ def test_names_in_english_with_a_length(client: TestClient) -> None:
     )
 
 
+def test_check_names_by_their_first_letter(client: TestClient) -> None:
+    response = client.get(
+        "/v1/baby/names/check",
+        params=[
+            ("letters", "පි"),
+            ("letters", "අ"),
+            ("names", "ප්‍රියා"),
+            ("names", "ආලෝක"),
+            ("names", "පාලිත"),
+            ("names", "Priya"),
+        ],
+    )
+    assert response.status_code == 200
+    got = [(n["si"], n["letter"], n["matches"], n["length"]) for n in response.json()["names"]]
+    assert got == [
+        ("ප්‍රියා", "පි", True, "short"),
+        ("ආලෝක", "අ", True, "medium"),
+        ("පාලිත", "ප", False, "medium"),
+        ("Priya", None, False, None),
+    ]
+
+
+def test_check_names_needs_letters_and_names(client: TestClient) -> None:
+    assert client.get("/v1/baby/names/check", params={"names": "නිමාලි"}).status_code == 422
+    assert client.get("/v1/baby/names/check", params={"letters": "නි"}).status_code == 422
+
+
 def test_names_need_a_letter_from_the_table(client: TestClient) -> None:
     assert client.get("/v1/baby/names").status_code == 422
     assert client.get("/v1/baby/names", params={"letters": "x"}).status_code == 422

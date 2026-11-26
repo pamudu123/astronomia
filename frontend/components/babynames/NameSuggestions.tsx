@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { type GenderFilter, type LengthFilter, type Names, fetchNames } from "@/lib/babynames";
+import { AiNotice, useAiAcknowledged } from "@/components/assistant/AiNotice";
+import { useAssistantOn } from "@/components/assistant/PageContext";
+import { type AiName, type GenderFilter, type LengthFilter, type Names, fetchAiNames, fetchNames } from "@/lib/babynames";
 import { fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 
@@ -23,7 +25,13 @@ type Props = {
 const GENDERS: GenderFilter[] = ["any", "boy", "girl"];
 const LENGTHS: LengthFilter[] = ["any", "short", "medium", "long"];
 
-/** Real names that start with the chosen letters, with filters for letter, gender and length. */
+/** The AI search for the filters as they are: its names, and whether it is asking now. */
+type AiSearch = { key: string; names: AiName[]; status: "loading" | "done" | "failed" };
+
+/**
+ * Real names that start with the chosen letters, with filters for letter, gender and length.
+ * Where the AI is on, "Search with AI" adds more names for the same filters, tagged AI, at the top.
+ */
 export function NameSuggestions({ t, lang, letters, selected, initial = null }: Props) {
   const n = t.names;
   const [picked, setPicked] = useState<string[]>(selected);
@@ -31,6 +39,11 @@ export function NameSuggestions({ t, lang, letters, selected, initial = null }: 
   const [length, setLength] = useState<LengthFilter>("any");
   const [fetched, setFetched] = useState<{ key: string; data: Names } | null>(null);
   const [failedKey, setFailedKey] = useState<string | null>(null);
+  const aiOn = useAssistantOn();
+  const acknowledged = useAiAcknowledged();
+  const [noticeOpen, setNoticeOpen] = useState(false);
+  const [ai, setAi] = useState<AiSearch | null>(null);
+  const aiRequest = useRef<AbortController | null>(null);
   const key = JSON.stringify([picked, gender, length, lang]);
   // The server's answer covers the first view, so the browser asks only after a filter changes.
   const useInitial = initial !== null && picked.join() === selected.join() && gender === "any" && length === "any";
@@ -63,6 +76,29 @@ export function NameSuggestions({ t, lang, letters, selected, initial = null }: 
     );
   const counts = new Map(data?.letters.map((c) => [c.letter, c.count]) ?? []);
   const shown = picked.length === 0 ? [] : ((data ?? last)?.names ?? []);
+  // AI names belong to the filters they were asked for: a filter change puts them away.
+  const aiNow = ai?.key === key ? ai : null;
+  const aiNames = aiNow?.names ?? [];
+  const aiBusy = aiNow?.status === "loading";
+
+  // A search still running when the filters change, or the page closes, is dropped.
+  useEffect(() => () => aiRequest.current?.abort(), [key]);
+
+  function searchAi() {
+    if (!data || aiBusy) return;
+    setNoticeOpen(false);
+    const before = aiNames;
+    const controller = new AbortController();
+    aiRequest.current = controller;
+    setAi({ key, names: before, status: "loading" });
+    // The names on screen, the AI's own included, so a second press brings new ones.
+    const onScreen = [...before.map((name) => name.si), ...data.names.map((name) => name.si)];
+    fetchAiNames(picked, gender, length, onScreen, controller.signal)
+      .then((found) => setAi({ key, names: [...before, ...found], status: "done" }))
+      .catch((error: unknown) => {
+        if ((error as Error).name !== "AbortError") setAi({ key, names: before, status: "failed" });
+      });
+  }
 
   return (
     <section className={styles.panel} aria-labelledby="names-title" data-card="names">
@@ -135,9 +171,50 @@ export function NameSuggestions({ t, lang, letters, selected, initial = null }: 
           {data ? fill(n.count, { count: shown.length }) : n.loading}
         </p>
       )}
-      {picked.length > 0 && data && shown.length === 0 && <p className={styles.small}>{n.none}</p>}
-      {shown.length > 0 && (
+      {picked.length > 0 && data && shown.length === 0 && aiNames.length === 0 && <p className={styles.small}>{n.none}</p>}
+      {aiOn && picked.length > 0 && data && (
+        <div className={styles.aiSearch} data-ai-names>
+          <button
+            type="button"
+            className={`btn btn-outline lift ${styles.aiButton}`}
+            disabled={aiBusy}
+            aria-expanded={noticeOpen && !acknowledged ? true : undefined}
+            onClick={() => (acknowledged ? searchAi() : setNoticeOpen(true))}
+          >
+            <span aria-hidden="true">✦</span> {aiBusy ? n.aiSearching : aiNames.length > 0 ? n.aiMore : n.aiSearch}
+          </button>
+          {noticeOpen && !acknowledged && <AiNotice onAccept={searchAi} />}
+          <p className={styles.small} aria-live="polite">
+            {aiNow?.status === "failed" && n.aiFailed}
+            {aiNow?.status === "done" && (aiNames.length > 0 ? fill(n.aiFound, { count: aiNames.length }) : n.aiNone)}
+          </p>
+        </div>
+      )}
+      {aiNames.length > 0 && <p className={styles.small}>{n.aiNote}</p>}
+      {(shown.length > 0 || aiNames.length > 0) && (
         <ul className={loading ? `${styles.names} ${styles.namesBefore}` : styles.names} aria-busy={loading}>
+          {aiNames.map((name) => {
+            const meaning = lang === "si" ? name.meaning_si : name.meaning_en;
+            const other = lang === "si" ? name.meaning_en : name.meaning_si;
+            return (
+              <li key={`ai-${name.si}`} className={`${styles.name} ${styles.nameAi}`} data-name={name.en} data-ai-name>
+                <div className={styles.nameHead}>
+                  <span className={styles.tagAi} title={n.aiTagTitle}>
+                    <span aria-hidden="true">✦</span> {n.aiTag}
+                  </span>
+                  <span className={`sinhala ${styles.nameSi}`} lang="si">
+                    {name.si}
+                  </span>
+                  <span className={styles.nameEn}>{name.en}</span>
+                  <span className={styles.tagSoft}>{n.genders[name.gender as "boy" | "girl"] ?? n.both}</span>
+                </div>
+                {meaning && <p>{meaning}</p>}
+                {other && (
+                  <p className={styles.small}>{lang === "si" ? other : <span lang="si">{other}</span>}</p>
+                )}
+              </li>
+            );
+          })}
           {shown.map((name) => (
             <li key={name.en} className={styles.name} data-name={name.en}>
               <div className={styles.nameHead}>
