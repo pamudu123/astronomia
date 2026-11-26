@@ -78,9 +78,10 @@ describe("tara", () => {
   });
 
   it("gives each star its tone", () => {
-    expect(starTone("ashwini", "ashwini")).toBe("own");
+    // Only good or moderate: the weaker stars and the birth star's own day are moderate.
+    expect(starTone("ashwini", "ashwini")).toBe("moderate");
     expect(starTone("ashwini", "bharani")).toBe("good");
-    expect(starTone("ashwini", "krittika")).toBe("careful");
+    expect(starTone("ashwini", "krittika")).toBe("moderate");
     expect(starTone("", "krittika")).toBeNull();
   });
 

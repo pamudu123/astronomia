@@ -1447,10 +1447,8 @@
         "dayStar": "The day's star: {star}",
         "good": "Good",
         "goodText": "A good day's star for starting something new.",
-        "careful": "Take it easy",
-        "carefulText": "Better for everyday work. If you can, leave a big new start for another day.",
-        "own": "Birth star day",
-        "ownText": "The Moon is in this birth star. Some people leave big new starts for another day.",
+        "moderate": "Moderate",
+        "moderateText": "A steady day's star, fine for everyday work and plans.",
         "note": "Counted from the birth star to the day's star (tara bala), as in our wedding dates. It is one sign among many.",
         "change": "Choose another star"
       },
@@ -1712,7 +1710,7 @@
     "resize": "Resize the chat. Drag, or use the arrow keys",
     "notice": {
       "title": "Before you use the AI helper",
-      "text": "This is an AI helper. Your message and selected chart facts go to OpenAI. Please leave out names, children's details, and health or other sensitive information. AI can make mistakes.",
+      "text": "This is an AI helper. Your message and selected chart facts go to an AI service to write the answer. Please leave out names, children's details, and health or other sensitive information. AI can make mistakes.",
       "accept": "I understand",
       "privacy": "How we handle your information",
       "newTab": "(opens in a new tab)",
