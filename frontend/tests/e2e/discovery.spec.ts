@@ -298,7 +298,7 @@ test("text links and the example arrows have a 44px hit area on a phone", async 
   test.skip(!isMobile, "tap targets are for phones");
   const targets = [
     ["/en/forecast/2027", 'main a[href="/en/changes"]'],
-    ["/en/avurudu/2027", 'main a[href="/en/avurudu"]'],
+    ["/en/avurudu/2027", 'main nav a[href="/en/avurudu/2026"]'],
     ["/en/porondam/stars/rohini", 'main a[href="/en/porondam/stars"]'],
     ["/en/baby-names/rohini", 'main a[href="/en/baby-names"]'],
     ["/en/why-sidera", "figure button >> nth=0"],

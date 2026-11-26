@@ -68,7 +68,8 @@ export default async function StarLettersPage({ params }: Params) {
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{fill(t.starTitle, { star: star[lang] })}</h1>
         <p className="soft">{fill(t.starLead, { star: star[lang] })}</p>
-        <div className={`pill-links ${styles.back}`}>
+        {/* No .back here: its unseen tap box would cover the link, which is 44px tall already. */}
+        <div className="pill-links">
           <Link href={`/${lang}/baby-names`} data-back>
             {t.all}
           </Link>
