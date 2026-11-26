@@ -115,7 +115,6 @@ def _about(lang: Lang, method: str, rule_sets: list[str], made_on: dt.date) -> l
     return [
         report["disclaimer"],
         f"{method} {report['rule_sets'].format(rules=', '.join(rule_sets))}",
-        report["provisional"],
         report["made_on"].format(date=format_date(made_on, lang)),
     ]
 

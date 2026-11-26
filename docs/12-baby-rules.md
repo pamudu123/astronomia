@@ -2,7 +2,7 @@
 
 The rules behind set D (baby and child, see file 10): the starting letters for a baby's name and the names list. The first letters ceremony rules are with the other nakath rules, in file 11, section 7. For each rule: which sources say it, where they disagree, and what the site uses.
 
-Everything here is provisional until a practising astrologer confirms it. The tables live in versioned files in `backend/app/data/rules/`, so they can be corrected without code changes.
+A practising astrologer has confirmed these tables (the name list's spellings still wait for a native speaker). The tables live in versioned files in `backend/app/data/rules/`, so they can be corrected without code changes.
 
 Research done on 2026-11-13. Where a site works the letters out itself, it was asked about made-up births only, never a real person.
 

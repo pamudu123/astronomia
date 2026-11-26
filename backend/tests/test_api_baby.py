@@ -13,7 +13,7 @@ def test_a_star_page(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.headers["cache-control"] == "public, max-age=3600"
     body = response.json()
-    assert (body["rule_set"], body["provisional"]) == ("name_letters_si_v1", True)
+    assert (body["rule_set"], body["provisional"]) == ("name_letters_si_v1", False)
     assert (body["star"], body["star_name"], body["star_number"]) == ("ardra", "Ardra", 6)
     assert [p["letter"] for p in body["padas"]] == ["කු", "ඝ", "ඞ", "ඡ"]
     assert [p["latin"] for p in body["padas"]] == ["Ku", "Gha", "Nga", "Chha"]

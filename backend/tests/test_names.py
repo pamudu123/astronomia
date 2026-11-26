@@ -39,9 +39,9 @@ def test_every_star_has_four_padas() -> None:
     assert all(len(rows) == 4 for rows in stars.values())
 
 
-def test_the_table_is_provisional() -> None:
+def test_the_table_is_confirmed() -> None:
     rules = names.load_rules()
-    assert rules["provisional"] is True
+    assert rules["provisional"] is False
     assert rules["version"] == "name_letters_si_v1"
 
 

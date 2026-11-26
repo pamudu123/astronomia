@@ -132,11 +132,8 @@
   color: var(--teal);
 }
 
-.careful {
-  color: var(--coral);
-}
-
-.own {
+/* Moderate is calm, not a warning: the soft text colour, never the coral of an alert. */
+.moderate {
   color: var(--ink-soft);
 }
 

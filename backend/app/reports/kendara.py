@@ -1,8 +1,8 @@
 """The Sri Lankan square kendara for the PDF.
 
 The same drawing as the website's (frontend/components/hadahan/Kendara.tsx): house 1, the
-lagna, is the box at the top centre, and houses run anticlockwise. PROVISIONAL: the direction
-is waiting for an astrologer's confirmation (docs/08).
+lagna, is the box at the top centre, and houses run anticlockwise. The direction is
+confirmed by a practising astrologer (docs/08).
 
 The lines are SVG. The planet names are placed over them as ordinary text, because the PDF
 renderer does not join Sinhala letters inside SVG text.

@@ -38,9 +38,10 @@ export default async function FirstLettersPage({ params }: PageProps<"/[lang]/fi
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{t.title}</h1>
         <p className="soft">{t.lead}</p>
-        <Link href={`/${lang}/baby-names`} className={styles.back}>
-          {dict.babyNames.homeLink}
-        </Link>
+        {/* No .back here: its unseen tap box would cover the link, which is 44px tall already. */}
+        <div className="pill-links">
+          <Link href={`/${lang}/baby-names`}>{dict.babyNames.homeLink}</Link>
+        </div>
       </div>
       <FirstLettersFinder lang={lang} t={t} hadahan={dict.hadahan} guardian={dict.guardian} />
     </main>

@@ -29,7 +29,7 @@
     },
     "match": {
       "rule_set": "porondam_si_v3",
-      "provisional": true,
+      "provisional": false,
       "score": {
         "passed": 9,
         "total": 18
@@ -267,7 +267,7 @@
     "kuja": {
       "bride": {
         "rule_set": "kuja_v1",
-        "provisional": true,
+        "provisional": false,
         "present": true,
         "strength": 1,
         "reduced": true,
@@ -339,7 +339,7 @@
       },
       "groom": {
         "rule_set": "kuja_v1",
-        "provisional": true,
+        "provisional": false,
         "present": false,
         "strength": 0,
         "reduced": false,

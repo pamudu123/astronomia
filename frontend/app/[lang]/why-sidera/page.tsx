@@ -7,6 +7,7 @@ import { ArrowRight } from "@/components/Icons";
 import { Starfield } from "@/components/Starfield";
 import { CalcCard } from "@/components/why/CalcCard";
 import { PillarArt } from "@/components/why/PillarArt";
+import { PpworksLogo } from "@/components/why/PpworksLogo";
 import { WhyIcon } from "@/components/why/WhyIcons";
 import { ARTICLES } from "@/lib/articles";
 import { fill } from "@/lib/hadahan";
@@ -29,7 +30,7 @@ export default async function WhySideraPage({ params }: PageProps<"/[lang]/why-s
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
   const page = dict.whyPage;
-  // The credit keeps "ppworks" in bold wherever the language puts it.
+  // The credit shows the ppworks wordmark wherever the language puts {name}.
   const [credit, creditAfter] = page.builtBy.split("{name}");
 
   const actions = (
@@ -209,11 +210,13 @@ export default async function WhySideraPage({ params }: PageProps<"/[lang]/why-s
         <p className={styles.note}>{page.disclaimer}</p>
       </section>
 
-      {/* 8. A small credit */}
+      {/* 8. A small credit, with the ppworks wordmark where the language puts the name */}
       <p className={styles.credit}>
-        {credit}
-        <strong>ppworks</strong>
-        {creditAfter}
+        {credit && <span>{credit.trim()}</span>}
+        <a href="https://www.ppwrks.com/" target="_blank" rel="noopener noreferrer" className={styles.creditLink}>
+          <PpworksLogo className={styles.creditLogo} />
+        </a>
+        {creditAfter && <span>{creditAfter.trim()}</span>}
       </p>
     </main>
   );

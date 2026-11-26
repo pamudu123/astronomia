@@ -86,11 +86,13 @@ describe("the AI notice", () => {
 
   it("uses the reviewed English wording, and has Sinhala words for every part", () => {
     expect(en.assistant.notice.text).toBe(
-      "This is an AI helper. Your message and selected chart facts go to OpenAI. Please leave out names, " +
+      "This is an AI helper. Your message and selected chart facts go to an AI service to write the answer. Please leave out names, " +
         "children's details, and health or other sensitive information. AI can make mistakes.",
     );
     expect(Object.keys(si.assistant.notice).sort()).toEqual(Object.keys(en.assistant.notice).sort());
-    expect(si.assistant.notice.text).toContain("OpenAI");
+    // The notice says "an AI service"; the provider is named on the privacy page.
+    expect(si.assistant.notice.text).toContain("AI සේවාවකට");
+    expect(en.assistant.notice.text + si.assistant.notice.text).not.toContain("OpenAI");
   });
 });
 

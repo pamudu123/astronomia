@@ -375,17 +375,56 @@
   justify-content: center;
 }
 
+/* ppworks brand colours: the lighter tints on dark, the originals on light. */
 .credit {
-  padding: 18px var(--gutter) 40px;
+  --pp-indigo: #818cf8;
+  --pp-cyan: #22d3ee;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  margin: 0;
+  padding: 24px var(--gutter) 44px;
   border-top: 1px solid var(--line-soft);
   color: var(--ink-soft);
   font-size: 13px;
+  letter-spacing: 0.02em;
   text-align: center;
 }
 
-.credit strong {
+@media (prefers-color-scheme: light) {
+  :global(:root:not([data-theme="dark"])) .credit {
+    --pp-indigo: #4f46e5;
+    --pp-cyan: #06b6d4;
+  }
+}
+
+:global(:root[data-theme="light"]) .credit {
+  --pp-indigo: #4f46e5;
+  --pp-cyan: #06b6d4;
+}
+
+.creditLink {
+  display: block;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.creditLink:hover {
+  opacity: 0.8;
+}
+
+.creditLink:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.creditLogo {
+  display: block;
+  width: auto;
+  height: 20px;
   color: var(--ink);
-  font-weight: 600;
 }
 
 /* Cards and layers rise in as they scroll into view, where the browser supports it.

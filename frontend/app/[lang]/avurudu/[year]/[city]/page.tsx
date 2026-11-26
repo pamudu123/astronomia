@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AvuruduView } from "@/components/nakath/AvuruduView";
+import { AvuruduYears } from "@/components/nakath/AvuruduYears";
 import styles from "@/components/nakath/Nakath.module.css";
 import { backendJson } from "@/lib/backend";
 import { fill } from "@/lib/hadahan";
@@ -52,10 +52,7 @@ export default async function AvuruduCity({ params }: Params) {
         <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
         <h1 className={`display ${styles.title}`}>{fill(t.cityTitle, { year, city: city[lang] })}</h1>
         <p className="soft">{t.lead}</p>
-        <div className={styles.links}>
-          <Link href={`/${lang}/avurudu/${year}`}>{fill(t.title, { year })}</Link>
-          <Link href={`/${lang}/avurudu`}>{t.allYears}</Link>
-        </div>
+        <AvuruduYears lang={lang} t={t} year={FEATURED_YEAR} city={city.key} />
       </div>
       <Suspense fallback={<p className={styles.status}>{t.loading}</p>}>
         <Loaded lang={lang} t={t} city={city} />

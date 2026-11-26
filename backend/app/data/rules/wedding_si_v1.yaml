@@ -1,9 +1,9 @@
 # Wedding nakath finder: rules for the engagement, the poruwa ceremony and the homecoming.
-# PROVISIONAL until a practising astrologer confirms it. Sources and conflicts are in
+# Confirmed by a practising astrologer. Sources and conflicts are in
 # docs/11-nakath-rules.md (section 4). S8 is the Sri Lankan Daily Mirror column, S9 the
 # classical texts (Muhurta Chintamani, Raman's Muhurtha) as quoted by several sites.
 version: wedding_si_v1
-provisional: true
+provisional: false
 
 # How far ahead the person may search, in months. The most is two years.
 search_months: [3, 6, 12, 24]

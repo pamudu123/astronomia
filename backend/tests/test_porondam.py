@@ -20,10 +20,10 @@ def factor(
     return next(f for f in result.factors if f.id == factor_id)
 
 
-def test_rules_are_provisional_and_have_all_twenty_factors() -> None:
+def test_rules_are_confirmed_and_have_all_twenty_factors() -> None:
     rules = load_rules()
     assert rules["version"] == "porondam_si_v3"
-    assert rules["provisional"] is True
+    assert rules["provisional"] is False
     assert [f["id"] for f in rules["factors"]] == [
         "dina",
         "gana",

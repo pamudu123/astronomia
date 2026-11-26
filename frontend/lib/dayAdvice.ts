@@ -61,7 +61,12 @@ export function moonOf(day: Panchanga): { phase: MoonPhase; day: number; age: nu
   return { phase: growing ? "growing" : "shrinking", day: count, age: first.number - 0.5 };
 }
 
-export type StarTone = "good" | "careful" | "own";
+/**
+ * How the day's star sits with a birth star: only ever "good" or "moderate". The stars tradition
+ * counts as weaker (AVOID_TARA) and the birth star's own day (WEAK_TARA) are shown as moderate,
+ * never as a warning: a reading can upset someone, and it is one sign among many.
+ */
+export type StarTone = "good" | "moderate";
 
 /**
  * Tara bala: the day's star counted from the birth star, in nines. Must match tara(),
@@ -80,6 +85,5 @@ export function tara(birthStar: string, dayStar: string): number | null {
 export function starTone(birthStar: string, dayStar: string): StarTone | null {
   const count = tara(birthStar, dayStar);
   if (count === null) return null;
-  if (AVOID_TARA.includes(count)) return "careful";
-  return WEAK_TARA.includes(count) ? "own" : "good";
+  return AVOID_TARA.includes(count) || WEAK_TARA.includes(count) ? "moderate" : "good";
 }

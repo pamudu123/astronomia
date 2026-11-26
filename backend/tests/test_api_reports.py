@@ -101,7 +101,7 @@ def test_hadahan_report_in_english(client: TestClient) -> None:
     assert "For guidance and cultural interest" in last
     assert "Lahiri ayanamsa" in last
     assert "kuja_v2" in last
-    assert "provisional" in last
+    assert "provisional" not in last
     assert "Made on 12 November 2026." in last
 
 

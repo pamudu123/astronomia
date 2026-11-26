@@ -12,7 +12,7 @@
     "options": []
   },
   "rule_set": "changes_v1",
-  "provisional": true,
+  "provisional": false,
   "change": {
     "id": "rahu-ketu-2026-12",
     "kind": "rahu-ketu",

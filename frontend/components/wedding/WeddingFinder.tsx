@@ -237,9 +237,6 @@ export function WeddingFinder({
               </div>
             ))}
             {shown.note && <p className={styles.small}>{shown.note}</p>}
-            <p className={styles.small} lang={lang}>
-              {t.provisional}
-            </p>
             {result && explain}
           </div>
         )}

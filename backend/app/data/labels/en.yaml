@@ -143,8 +143,7 @@ porondam_factor:
   vedha: {name: Vedha, meaning: Stars that must not afflict each other}
 
 # The summary chart groups the counted factors by what each is traditionally said to relate
-# to. Rajju and Vedha are left out: the page shows them apart from the count. Not yet
-# reviewed by an astrologer.
+# to. Rajju and Vedha are left out: the page shows them apart from the count.
 porondam_theme:
   health: {name: Wellbeing, factors: [dina, stree_deergha, ayusha, nadi]}
   bond: {name: Bond and temperament, factors: [gana, yoni, rashi, vashya, pakshi, linga, varna, bhuta]}
@@ -204,7 +203,7 @@ porondam_reason:
   kuja_groom_only: "The groom's chart shows Kuja dosha and the bride's does not. This is something to review."
 
 # Traditional exceptions that soften a factor that does not agree (dosha bhanga). Information
-# only: the factor still counts as not agreeing. Provisional, like the rules.
+# only: the factor still counts as not agreeing.
 porondam_softening:
   rashi_and_lords_agree: "Tradition softens this because the Rashi and Rashyadhipathi factors agree."
   lords_friendly: "Tradition softens this because the rulers of the two Moon signs are friendly (Rashyadhipathi agrees)."
@@ -287,9 +286,8 @@ report:
   method_hadahan: "Lahiri ayanamsa ({ayanamsa}°), whole sign houses, mean node, Swiss Ephemeris."
   method_porondam: "Lahiri ayanamsa. Matching uses the Moon of each person. Rajju and Vedha are kept apart from the count."
   rule_sets: "Rule sets: {rules}."
-  provisional: "The porondam and Kuja dosha rules are provisional until a practising astrologer confirms them."
   porondam_provisional: "This report uses all 20 traditional porondam factors."
-  kendara_note: "Houses run from the lagna box at the top. The direction of the houses is waiting for an astrologer's confirmation."
+  kendara_note: "Houses run from the lagna box at the top."
   guide: "This is a guide to the charts, not a decision. Share it with your family and your astrologer."
   disclaimer: "For guidance and cultural interest. For important decisions, speak with your family and a practising astrologer."
   made_on: "Made on {date}."
@@ -335,7 +333,7 @@ report:
   people_title: The two of you
   and: and
 
-# What each house is about, 1 to 12, in a few plain words. PROVISIONAL: for the astrologer.
+# What each house is about, 1 to 12, in a few plain words.
 house_theme:
   - yourself and how you begin things
   - family, speech and savings

@@ -10,7 +10,7 @@ def test_a_settled_month_in_english(client: TestClient) -> None:
     ).json()
     assert body["status"] == "ok"
     forecast = body["forecast"]
-    assert forecast["provisional"] is True
+    assert forecast["provisional"] is False
     assert forecast["rule_set"] == "forecast_v1"
     assert forecast["month"] == {
         "year": 2026,

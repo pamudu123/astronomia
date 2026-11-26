@@ -821,7 +821,7 @@
       },
       "kuja": {
         "rule_set": "kuja_v1",
-        "provisional": true,
+        "provisional": false,
         "present": true,
         "strength": 1,
         "reduced": true,

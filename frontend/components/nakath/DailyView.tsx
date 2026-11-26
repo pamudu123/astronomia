@@ -87,8 +87,12 @@ export function DailyView({ lang, t, day, initial }: Props) {
 
   return (
     <>
-      <div className={styles.links}>
-        {hasNakathDay(shift(day, -1)) && <Link href={`/${lang}/nakath/${shift(day, -1)}`}>{t.previous}</Link>}
+      <div className={`pill-links ${styles.links}`}>
+        {hasNakathDay(shift(day, -1)) && (
+          <Link href={`/${lang}/nakath/${shift(day, -1)}`} data-back>
+            {t.previous}
+          </Link>
+        )}
         {hasNakathDay(shift(day, 1)) && <Link href={`/${lang}/nakath/${shift(day, 1)}`}>{t.next}</Link>}
         <a href="#another-day">{t.day.another}</a>
       </div>
@@ -111,7 +115,7 @@ export function DailyView({ lang, t, day, initial }: Props) {
         </div>
       ) : (
         <>
-          <p className={styles.small} data-card="where">
+          <p className={styles.meta} data-card="where">
             {[shown.place.name, shown.weekday_name, shown.timezone_note].filter(Boolean).join(" · ")}
           </p>
           {shown.skipped ? (

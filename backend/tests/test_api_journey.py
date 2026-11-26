@@ -18,7 +18,7 @@ def journey(client: TestClient, lang: str = "en") -> dict[str, Any]:
 def test_the_road_in_english(client: TestClient) -> None:
     road = journey(client)
     assert road["rule_set"] == "journey_v1"
-    assert road["provisional"] is True
+    assert road["provisional"] is False
     assert road["birth"].startswith("1995-04-19")
     assert road["end"].startswith("2095-04-")
     assert road["now"].startswith("2026-11-12")

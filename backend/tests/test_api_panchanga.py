@@ -10,7 +10,7 @@ def test_a_day_in_colombo(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.headers["cache-control"] == "public, max-age=3600"
     body = response.json()
-    assert body["provisional"] is True
+    assert body["provisional"] is False
     assert body["rule_set"] == "panchanga_v1"
     assert body["place"]["name"] == "Colombo"
     assert body["offset"] == "UTC+05:30"

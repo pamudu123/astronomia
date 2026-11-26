@@ -1,8 +1,8 @@
 """Vimshottari dasha: the 120 year cycle of planetary periods, from the Moon's nakshatra.
 
 Three levels: maha dasha (main period), antar dasha (sub period) and pratyantar dasha.
-A year is taken as 365.25 days, the usual choice in software. This is a setting the
-astrologer review may change.
+A year is taken as 365.25 days, the usual choice in software, confirmed by a practising
+astrologer.
 """
 
 from dataclasses import dataclass

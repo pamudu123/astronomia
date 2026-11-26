@@ -263,7 +263,6 @@ export function FirstLettersFinder({ lang, t, hadahan, guardian }: Props) {
               ))}
             </ul>
             {result.note && <p className={styles.small}>{result.note}</p>}
-            <p className={styles.small}>{t.provisional}</p>
           </div>
         )}
       </section>

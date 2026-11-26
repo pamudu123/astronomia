@@ -140,7 +140,7 @@ test("a birth star is checked against the day in the browser, and sent nowhere",
   const card = page.locator('[data-card="for-you"]');
   await card.getByLabel("Your birth star").selectOption("ashwini");
   // The day runs Punarvasu (7th from Ashwini, avoided) into Pushya (8th, good).
-  await expect(card.locator("[data-tone]").nth(0)).toHaveAttribute("data-tone", "careful");
+  await expect(card.locator("[data-tone]").nth(0)).toHaveAttribute("data-tone", "moderate");
   await expect(card.locator("[data-tone]").nth(1)).toHaveAttribute("data-tone", "good");
   await expect(card.locator("[data-tone]").nth(1)).toContainText("from 10:53");
   expect(asked.join()).not.toContain("ashwini");

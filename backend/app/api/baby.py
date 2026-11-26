@@ -2,7 +2,7 @@
 
 A star page needs no birth details, so it is a GET that browsers and caches may keep.
 The letters for a birth take the birth details in a POST body, never in the address.
-The table is provisional: see docs/12-baby-rules.md.
+The table is confirmed by a practising astrologer: see docs/12-baby-rules.md.
 """
 
 import zoneinfo

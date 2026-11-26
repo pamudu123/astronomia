@@ -21,7 +21,7 @@ def test_quick_match(client: TestClient) -> None:
     assert weekday["checked"] is False
     assert weekday["reason"].startswith("This needs the birth dates of both people")
     assert [h["id"] for h in body["match"]["hard_checks"]] == ["rajju", "vedha"]
-    assert body["match"]["provisional"] is True
+    assert body["match"]["provisional"] is False
     assert body["kuja"] is None  # needs full birth details
     assert body["bride"]["rashi"] == "vrischika"
     assert body["bride"]["placements"] is None  # only with full birth details
@@ -105,7 +105,7 @@ def test_stars_that_match_one_star(client: TestClient) -> None:
     assert body["name"] == "Anuradha"
     assert body["rashi"] == "vrischika"
     assert body["role"] == "bride"
-    assert body["provisional"] is True
+    assert body["provisional"] is False
     assert len(body["matches"]) == 36
     rohini = next(m for m in body["matches"] if m["nakshatra"] == "rohini")
     # The same pair as the quick match above.
@@ -140,7 +140,7 @@ def test_timeline_for_a_full_couple(client: TestClient) -> None:
     timeline = body["timeline"]
     assert (timeline["start"], timeline["end"]) == ("2026-11-12", "2036-11-12")
     assert timeline["rule_set"] == "couple_v1"
-    assert timeline["provisional"] is True
+    assert timeline["provisional"] is False
     bride, groom = timeline["bride"], timeline["groom"]
     # Nimali's Moon is in Vrischika and Kasun's in Kanya. Saturn in Mithuna (2032 to 2034) is
     # the 8th from Vrischika; Saturn in Simha (from 2036) is the 12th from Kanya.

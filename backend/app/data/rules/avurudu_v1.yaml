@@ -1,10 +1,10 @@
-# Sinhala and Tamil New Year (Avurudu). PROVISIONAL. Sources in docs/11-nakath-rules.md.
+# Sinhala and Tamil New Year (Avurudu). Confirmed by a practising astrologer. Sources in docs/11-nakath-rules.md.
 #
 # Only two things are calculated: the dawn of the new year (the Sun entering Mesha) and the
 # punya kalaya around it. Every other nakath is chosen each year by the national nakath
 # committee, so it is published only from the official list below, never calculated.
 version: avurudu_v1
-provisional: true
+provisional: false
 
 # Punya kalaya: this many minutes either side of the dawn (6 hours 24 minutes).
 # Every official list from 2022 to 2027 fits this exactly.

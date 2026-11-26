@@ -71,7 +71,8 @@ test("the list leads to the change and then to one lagna", async ({ page }) => {
   await expect(page.locator('[data-counted="lagna"]')).toContainText("Saturn stays in Meena, your 3rd house.");
   // Earlier pages may stay in the document, hidden; the main landmark is the visible one.
   const main = page.getByRole("main");
-  await expect(main.getByText(/provisional until a practising astrologer/)).toBeVisible();
+  await expect(main.getByText(/It does not predict events/)).toBeVisible();
+  await expect(main.getByText(/provisional/i)).toHaveCount(0);
   await expect(main.locator('[data-lagna="makara"]')).toHaveAttribute("aria-current", "page");
   await noSidewaysScroll(page);
 });

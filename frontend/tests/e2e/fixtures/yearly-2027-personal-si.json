@@ -13,7 +13,7 @@
   },
   "lagna": {
     "rule_set": "yearly_v1",
-    "provisional": true,
+    "provisional": false,
     "year": 2027,
     "sign": "simha",
     "sign_name": "සිංහ",
@@ -591,7 +591,7 @@
   },
   "gochara": {
     "rule_set": "yearly_v1",
-    "provisional": true,
+    "provisional": false,
     "year": 2027,
     "sign": "vrischika",
     "sign_name": "වෘශ්චික",
