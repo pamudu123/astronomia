@@ -306,6 +306,57 @@ def table_letters() -> set[str]:
     return {babynames.fold(letter) for letter in found}
 
 
+class NameCheckOut(BaseModel):
+    si: str
+    letter: str | None  # the letter it starts with, folded; None when it is not a Sinhala word
+    matches: bool  # starts with one of the asked letters
+    syllables: int
+    length: str | None
+
+
+class NameCheckResponse(BaseModel):
+    names: list[NameCheckOut]
+
+
+MAX_CHECKED = 40
+
+
+@router.get("/v1/baby/names/check", response_model=NameCheckResponse)
+def check_names(
+    response: Response,
+    letters: Annotated[list[str], Query(min_length=1, max_length=MAX_LETTERS)],
+    names_: Annotated[
+        list[Annotated[str, Query(max_length=40)]],
+        Query(alias="names", min_length=1, max_length=MAX_CHECKED),
+    ],
+) -> NameCheckResponse:
+    """Which letter each Sinhala name starts with, by the same rule as the names list.
+
+    For names the site did not write itself (the AI search, agent/app/names.py), so a name
+    is only shown for a letter when it really starts with that letter.
+    """
+    wanted = {babynames.fold(letter.strip()) for letter in letters}
+    out = []
+    for word in names_:
+        word = word.strip()
+        try:
+            letter = babynames.first_letter(word)
+        except ValueError:
+            out.append(NameCheckOut(si=word, letter=None, matches=False, syllables=0, length=None))
+            continue
+        out.append(
+            NameCheckOut(
+                si=word,
+                letter=letter,
+                matches=letter in wanted,
+                syllables=babynames.syllables(word),
+                length=babynames.length_of(word),
+            )
+        )
+    response.headers.update(CACHE)
+    return NameCheckResponse(names=out)
+
+
 @router.get("/v1/baby/names", response_model=NamesResponse)
 def names_for_letters(
     response: Response,
