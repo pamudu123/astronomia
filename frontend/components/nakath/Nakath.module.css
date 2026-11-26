@@ -81,18 +81,53 @@
   min-width: 0;
 }
 
+/* The day form lines its fields up by their labels, so the place hint hangs below without
+   pushing the date field out of line. The label and field match the place search beside it. */
+.dayForm {
+  align-items: flex-start;
+  container-type: inline-size;
+}
+
+.dayForm .control {
+  gap: 8px;
+}
+
 .label {
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
 }
 
 .input {
-  min-height: 44px;
-  padding: 8px 12px;
+  height: 52px;
+  padding: 0 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius-field);
   background: var(--night);
   color: var(--ink);
   font: inherit;
+}
+
+.input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Holds the button level with the fields: an empty line the height of a label sits above it. */
+.action {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.action button {
+  min-height: 52px;
+}
+
+@container (max-width: 700px) {
+  .action > .label {
+    display: none;
+  }
 }
 
 .linkButton {

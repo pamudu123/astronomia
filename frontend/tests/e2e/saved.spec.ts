@@ -91,6 +91,17 @@ test("a hadahan is saved quietly as a guest, and My reports appears", async ({ p
   expect(supabase.guests()).toBe(1);
   expect(tokens[0]).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/);
 
+  // The PDF carries the same sign in: the backend prints the AI reading only in the PDF of a
+  // report this account paid for, so a download without it would always print the free one.
+  const pdfTokens: (string | null)[] = [];
+  await page.route("**/api/v1/reports/pdf", async (route) => {
+    pdfTokens.push(await route.request().headerValue("x-sidera-token"));
+    return route.fulfill({ status: 200, contentType: "application/pdf", body: "%PDF-1.7" });
+  });
+  await page.getByRole("button", { name: "Download PDF" }).click();
+  await expect.poll(() => pdfTokens.length).toBe(1);
+  expect(pdfTokens[0]).toBe(tokens[0]);
+
   // The header now offers My reports, on phones too.
   await expect(page.locator("[data-my-reports]")).toBeVisible();
   await save.getByRole("link", { name: "Open My reports" }).click();

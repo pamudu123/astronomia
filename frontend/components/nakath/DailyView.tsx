@@ -127,7 +127,7 @@ export function DailyView({ lang, t, day, initial }: Props) {
       <form
         id="another-day"
         aria-label={t.day.another}
-        className={styles.controls}
+        className={`${styles.controls} ${styles.dayForm}`}
         onSubmit={(event) => {
           event.preventDefault();
           if (picked) router.push(`/${lang}/nakath/${picked}`);
@@ -150,9 +150,14 @@ export function DailyView({ lang, t, day, initial }: Props) {
           </label>
           <input id="nakath-date" className={styles.input} type="date" value={picked} onChange={(e) => setPicked(e.target.value)} />
         </div>
-        <button type="submit" className="btn btn-outline lift">
-          {t.show}
-        </button>
+        <div className={styles.action}>
+          <span className={styles.label} aria-hidden="true">
+            &nbsp;
+          </span>
+          <button type="submit" className="btn btn-outline lift">
+            {t.show}
+          </button>
+        </div>
       </form>
     </>
   );

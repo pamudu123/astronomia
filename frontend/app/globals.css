@@ -243,6 +243,8 @@ html[lang="si"] .display {
   border-radius: 999px;
   font-weight: 600;
   font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
 }
 .btn-primary {
   background: var(--gold-fill);
@@ -254,6 +256,7 @@ html[lang="si"] .display {
 }
 .btn-outline {
   border: 1px solid var(--gold);
+  background: transparent;
   color: var(--gold);
 }
 
