@@ -3,6 +3,7 @@
 POST /agent          AG-UI run (server-sent events): the guide, who answers
 POST /agent/suggest  AG-UI run: the follow-up questions shown under each answer
 POST /agent/explain  plain text stream: one chapter of a full reading, or an explain button
+POST /agent/names    JSON: AI name suggestions for the baby names page's letters
 GET  /healthz        health check, always open
 
 Run with `uvicorn app.main:create_app --factory`. The app is built when the server starts,
@@ -12,11 +13,12 @@ not on import, so importing this module (tests, CI) needs no OpenAI key.
 import asyncio
 import contextlib
 import datetime as dt
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from ag_ui_langgraph import add_langgraph_fastapi_endpoint
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Response, status
 from fastapi.responses import StreamingResponse
 from langchain_core.language_models import BaseChatModel
 
@@ -25,11 +27,15 @@ from app.config import Settings, get_settings
 from app.explain import ExplainRequest, stream_chapter
 from app.graph import build_agent, build_model
 from app.memory import ExpiringMemorySaver, run_sweeper
+from app.names import NamesRequest, NamesResponse, NamesUnavailable
+from app.names import suggest as suggest_names
 from app.security import AccessKeyMiddleware
 from app.suggest import build_suggester
 from app.tools import EngineClient, assistant_tools
 from app.usage import ChatLimitMiddleware, Ledger
 from app.wire import ChatAgent
+
+log = logging.getLogger(__name__)
 
 AGENT_NAME = "guide"
 SUGGEST_NAME = "suggest"
@@ -131,5 +137,14 @@ def create_app(
             media_type="text/plain; charset=utf-8",
             headers={"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"},
         )
+
+    @app.post("/agent/names", tags=["names"])
+    async def names(request: NamesRequest, response: Response) -> NamesResponse:
+        response.headers["Cache-Control"] = "no-store"
+        try:
+            return await suggest_names(writer, engine, request)
+        except NamesUnavailable as error:
+            log.warning("AI names failed: %s", error)
+            raise HTTPException(status.HTTP_502_BAD_GATEWAY, "could not find names") from error
 
     return app

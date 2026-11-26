@@ -1470,6 +1470,69 @@
         }
       }
     },
+    "/v1/baby/names/check": {
+      "get": {
+        "tags": [
+          "baby"
+        ],
+        "summary": "Check Names",
+        "description": "Which letter each Sinhala name starts with, by the same rule as the names list.\n\nFor names the site did not write itself (the AI search, agent/app/names.py), so a name\nis only shown for a letter when it really starts with that letter.",
+        "operationId": "check_names_v1_baby_names_check_get",
+        "parameters": [
+          {
+            "name": "letters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "maxItems": 16,
+              "title": "Letters"
+            }
+          },
+          {
+            "name": "names",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "minItems": 1,
+              "maxItems": 40,
+              "title": "Names"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameCheckResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/baby/names": {
       "get": {
         "tags": [
@@ -6639,6 +6702,69 @@
           "text"
         ],
         "title": "MoveOut"
+      },
+      "NameCheckOut": {
+        "properties": {
+          "si": {
+            "type": "string",
+            "title": "Si"
+          },
+          "letter": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Letter"
+          },
+          "matches": {
+            "type": "boolean",
+            "title": "Matches"
+          },
+          "syllables": {
+            "type": "integer",
+            "title": "Syllables"
+          },
+          "length": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Length"
+          }
+        },
+        "type": "object",
+        "required": [
+          "si",
+          "letter",
+          "matches",
+          "syllables",
+          "length"
+        ],
+        "title": "NameCheckOut"
+      },
+      "NameCheckResponse": {
+        "properties": {
+          "names": {
+            "items": {
+              "$ref": "#/components/schemas/NameCheckOut"
+            },
+            "type": "array",
+            "title": "Names"
+          }
+        },
+        "type": "object",
+        "required": [
+          "names"
+        ],
+        "title": "NameCheckResponse"
       },
       "NameOut": {
         "properties": {

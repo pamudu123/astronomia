@@ -104,3 +104,38 @@ export async function fetchNames(
   if (!response.ok) throw new Error(`request failed: ${response.status}`);
   return (await response.json()) as Names;
 }
+
+/** A name the AI suggested (agent/app/names.py). The engine checked its first letter. */
+export type AiName = {
+  si: string;
+  en: string;
+  gender: "boy" | "girl" | "both";
+  meaning_en: string;
+  meaning_si: string;
+  letter: string;
+  length: string;
+};
+
+/**
+ * More names from the AI for the same letters and filters (app/api/names-ai). Only the filters
+ * and the names already shown are sent: no birth details. At most 200 shown names go, so the AI
+ * avoids repeating them; any repeat beyond those is dropped here.
+ */
+export async function fetchAiNames(
+  letters: string[],
+  gender: GenderFilter,
+  length: LengthFilter,
+  shown: string[],
+  signal?: AbortSignal,
+): Promise<AiName[]> {
+  const response = await fetch("/api/names-ai", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ letters, gender, length, already_shown: shown.slice(0, 200) }),
+    signal,
+  });
+  if (!response.ok) throw new Error(`request failed: ${response.status}`);
+  const { names } = (await response.json()) as { names: AiName[] };
+  const known = new Set(shown);
+  return names.filter((name) => !known.has(name.si));
+}

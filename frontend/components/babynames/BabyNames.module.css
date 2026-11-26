@@ -390,6 +390,38 @@
   font-size: 12px;
 }
 
+/* The AI search: its button, and the names it found, tagged AI at the top of the list. */
+.aiSearch {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.aiSearch p:empty {
+  display: none;
+}
+
+.aiButton {
+  gap: 6px;
+}
+
+.nameAi {
+  border-color: var(--gold);
+  border-style: dashed;
+}
+
+.tagAi {
+  align-self: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--gold-fill);
+  color: var(--on-gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
 .source {
   align-self: flex-start;
   font-size: 13px;
