@@ -75,6 +75,44 @@
   color: var(--coral);
 }
 
+/* A running search: what it is checking, one line at a time. */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--night-raised);
+}
+
+.progress p {
+  margin: 0;
+}
+
+/* Two lines tall, so the box does not jump as shorter and longer lines take turns. */
+.progressLine {
+  min-height: 3em;
+  animation: line-in 0.5s ease-out;
+}
+
+.progressSpark {
+  color: var(--gold);
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressLine {
+    animation: none;
+  }
+}
+
 .ceremony {
   display: flex;
   flex-direction: column;

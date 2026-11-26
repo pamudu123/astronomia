@@ -1585,6 +1585,22 @@
     "noPlaces": "No places found",
     "find": "Find dates",
     "working": "Searching",
+    "progress": {
+      "start": "Searching the next {range} for good times.",
+      "waking": "This is taking longer than usual. The service may have been asleep, and waking up can take a minute.",
+      "seconds": "Seconds so far: {seconds}",
+      "lines": [
+        "Leaving out Tuesdays and Saturdays, the days tradition avoids for a first lesson.",
+        "Checking which nakatha the Moon is in during the daylight of each day.",
+        "Skipping the thithis tradition avoids, such as the 4th, 9th and 14th.",
+        "Looking for a Mithuna, Kanya, Dhanu or Meena lagna: the signs of Mercury and Jupiter, the planets of learning.",
+        "Counting the tara from the child's birth star, so the day's star suits the child.",
+        "Keeping clear of Rahu kalaya and the Vishti karana.",
+        "Making sure the 8th house from the lagna is empty.",
+        "Finding the minute each good time starts and ends.",
+        "Keeping the best time on each day."
+      ]
+    },
     "needChild": "Enter the child's birth details, or choose a birth star.",
     "forChild": "For a child born in {star}.",
     "rangeText": "Searched {first} to {last}.",
