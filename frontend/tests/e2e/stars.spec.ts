@@ -34,7 +34,7 @@ test("the list of stars leads to one star's matches", async ({ page }) => {
   await expect(page.locator("[data-star]")).toHaveCount(36);
   const first = page.locator("[data-star]").first();
   await expect(first).toHaveAttribute("data-star", "jyeshtha");
-  await expect(first.getByRole("img", { name: "13 of 16 factors agree" })).toBeVisible();
+  await expect(first.getByRole("img", { name: "15 of 18 factors agree" })).toBeVisible();
   await expect(first.locator('[data-check="rajju"]')).toContainText("passes");
   await expect(page.getByRole("heading", { name: "An essential check does not pass" })).toBeVisible();
 });

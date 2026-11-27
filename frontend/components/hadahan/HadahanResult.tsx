@@ -10,6 +10,7 @@ import { ReportButton } from "@/components/ReportButton";
 import { SaveButton } from "@/components/account/SaveButton";
 import { DetailLocked, FullReport } from "@/components/paid/FullReport";
 import { PaidOnly, ReportScope } from "@/components/paid/ReportAccess";
+import { FreeNote, GetFullReport, VersionBadge } from "@/components/paid/ReportStatus";
 import { SaveGate } from "@/components/account/SaveGate";
 import { ShareButton } from "@/components/ShareButton";
 import { SavedTime, type SavedTimes } from "@/components/account/SavedTime";
@@ -225,11 +226,15 @@ function HadahanResultPage({
     <main id="main" className={`container ${styles.page}`}>
       <section className={`rise ${styles.top}`}>
         <div className={styles.topText}>
-          <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
+          <span className={styles.eyebrowRow}>
+            <span className={`sinhala ${styles.eyebrow}`}>{t.eyebrow}</span>
+            <VersionBadge />
+          </span>
           <h1 className={`display ${styles.title}`}>{title}</h1>
         </div>
         {request && (
           <div className={styles.actions}>
+            <GetFullReport lang={lang} />
             <ReportButton
               request={{ kind: "hadahan", name, birth: { ...request, lang } }}
               reading={forPdf}
@@ -269,6 +274,18 @@ function HadahanResultPage({
                 ]}
               />
             )}
+            {/* Another person's chart, from the top: nobody should have to scroll to start again. */}
+            {onAgain && (
+              <button type="button" className={`btn btn-outline lift ${styles.again}`} onClick={onAgain}>
+                {t.again}
+                <ArrowRight />
+              </button>
+            )}
+          </div>
+        )}
+        {request && (
+          <div className={styles.freeNote}>
+            <FreeNote />
           </div>
         )}
       </section>

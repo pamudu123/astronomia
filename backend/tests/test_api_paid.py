@@ -15,7 +15,7 @@ from app.store.orders import OrderStore
 from tests.auth import bearer, token
 from tests.test_api_saved import hadahan, porondam
 
-PAID = ["ai_reading", "ai_explain", "full_detail", "full_pdf"]
+PAID = ["ai_reading", "ai_explain", "full_detail", "full_pdf", "wedding_dates", "personal_year"]
 
 
 def sign_in(client: TestClient, kind: str = "google") -> str:

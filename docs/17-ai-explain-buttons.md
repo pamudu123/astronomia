@@ -98,7 +98,7 @@ Data: ✓ the engine has it today · ◐ a small addition (a look-up table or on
 | Divisional charts D2 to D12 | Only the navamsa (D9) is calculated. Others are simple to add if a chapter needs them |
 | Lucky numbers, colours, days | Left out on purpose (file 14, "Personal readings") |
 | Gems, rudraksha, mantras, yantras, fasting | Left out on purpose. No remedy selling. If someone asks Astro, it describes the tradition as personal belief |
-| A percentage for the match | We show the count, never a percentage (file 03) |
+| A percentage for the match | Since 2026-11-26 the page shows the share of the 20 factors that agree in the middle of its ring, beside the count (owner's decision). The AI still gives no verdict |
 
 ### 2.3 Match: chapters
 

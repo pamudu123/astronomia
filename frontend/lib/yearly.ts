@@ -27,13 +27,26 @@ export async function fetchYear(year: number, lagna: string, lang: Locale): Prom
 }
 
 /** Birth details go in the body of a POST, never in the URL. */
-export async function fetchPersonalYear(year: number, request: BirthRequest, lang: Locale): Promise<PersonalYear> {
+/**
+ * "Your own {year}", part of the full hadahan report of that chart: the name goes with the
+ * birth details, so the server can find the hadahan's report. A 402 means it is not bought yet.
+ */
+export async function fetchPersonalYear(
+  year: number,
+  request: BirthRequest,
+  lang: Locale,
+  name = "",
+): Promise<PersonalYear> {
   const response = await fetch(`/api/v1/yearly/${year}/personal`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ ...request, lang }),
+    body: JSON.stringify({ ...request, lang, name }),
   });
-  if (!response.ok) throw new Error(`request failed: ${response.status}`);
+  if (!response.ok) {
+    const error = new Error(`request failed: ${response.status}`) as Error & { status: number };
+    error.status = response.status;
+    throw error;
+  }
   return (await response.json()) as PersonalYear;
 }
 

@@ -177,6 +177,12 @@ function RoadView({
       >
         <canvas ref={canvas} className={styles.canvas} aria-hidden="true" />
         <RoadDragHint text={text.dragHint} moved={moved} />
+        <RoadArrows
+          later={text.later}
+          earlier={text.earlier}
+          step={text.step}
+          onMove={(years) => go(target.current + years)}
+        />
         <p className={`${styles.roadNow} ${styles[quality.tone]}`} data-card="now">
           <i />
           <small>{text.roadNow}</small>
@@ -262,12 +268,6 @@ function RoadView({
         >
           {text.next} ›
         </button>
-        <RoadArrows
-          later={text.later}
-          earlier={text.earlier}
-          step={text.step}
-          onMove={(years) => go(target.current + years)}
-        />
       </div>
 
       <div>

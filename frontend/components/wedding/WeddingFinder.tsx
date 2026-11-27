@@ -132,7 +132,7 @@ export function WeddingFinder({
     );
 
   return (
-    <WeddingGate>
+    <WeddingGate lang={lang} title={t.title} lead={t.lead}>
       <section className={`rise ${styles.panel}`} aria-labelledby="wedding-title" data-card="wedding">
         <h2 id="wedding-title" className="display">
           {t.title}

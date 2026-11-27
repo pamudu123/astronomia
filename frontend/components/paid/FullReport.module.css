@@ -82,17 +82,50 @@
   font-size: 14px;
 }
 
+/* The free version, when the paid check had no answer: says so and offers the full report. */
 .checkFailed {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px 12px;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgb(var(--glow) / 8%), transparent 60%),
+    var(--panel);
   color: var(--ink-soft);
   font-size: 14px;
 }
 
 .checkFailed p {
   margin: 0;
+}
+
+.checkWords {
+  display: flex;
+  flex: 1 1 280px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.checkActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+}
+
+.freeBadge {
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .error {

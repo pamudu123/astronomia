@@ -3,10 +3,13 @@ import { join } from "node:path";
 
 import { type Page, expect, test } from "@playwright/test";
 
+import { openAccess } from "./access";
+
 /** The backend is not running in these tests: its answers are saved real responses. */
 const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
 
 async function mockBackend(page: Page, lang: "en" | "si") {
+  await openAccess(page);
   await page.route("**/api/v1/yearly/2027/makara?*", (route) =>
     route.fulfill({ contentType: "application/json", body: fixture(`yearly-2027-makara-${lang}.json`) }),
   );
@@ -104,6 +107,48 @@ test("your own year comes from a POST, never the page address", async ({ page })
   expect(JSON.parse(personal[0])).toMatchObject({ date: "1995-04-19", time: "14:35", lang: "en" });
   expect(page.url()).not.toContain("1995");
   await noSidewaysScroll(page);
+});
+
+test("your own year is part of the full hadahan report: locked until that is bought", async ({ page }) => {
+  await mockBackend(page, "en");
+  const asked: string[] = [];
+  await page.route("**/api/v1/yearly/2027/personal", (route) => {
+    asked.push(route.request().postData() ?? "");
+    return route.fulfill({ status: 402, contentType: "application/json", body: '{"detail":"locked"}' });
+  });
+  const reports: string[] = [];
+  await page.route("**/api/v1/reports/access", (route) => {
+    reports.push(route.request().postData() ?? "");
+    return route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        paid: false,
+        features: [],
+        paid_reports: true,
+        account: null,
+        price: { amount: 80_000, currency: "LKR" },
+        checkout: null,
+      }),
+    });
+  });
+  await page.goto("/en/forecast/2027/makara");
+  const panel = page.locator('[data-card="personal-year"]');
+  await panel.getByRole("button", { name: "Enter birth details" }).click();
+  await page.getByLabel(/Name/).fill("Nimali");
+  await page.getByLabel("Date of birth").fill("1995-04-19");
+  await page.getByLabel("Time of birth").fill("14:35");
+  await page.getByRole("combobox").fill("kandy");
+  await page.getByRole("option").first().click();
+  await panel.getByRole("button", { name: "Show my year" }).click();
+
+  await expect(panel).toHaveAttribute("data-locked", "personal_year");
+  await expect(panel).toContainText("Your own 2027 is part of the full hadahan report for this chart.");
+  await expect(panel.getByRole("link", { name: "Buy this report" })).toHaveAttribute("href", "/en/buy");
+  // The name goes with the birth details, so the server finds that hadahan's report.
+  expect(JSON.parse(asked[0])).toMatchObject({ name: "Nimali", date: "1995-04-19", time: "14:35" });
+  expect(JSON.parse(reports[0])).toMatchObject({ kind: "hadahan", name: "Nimali", birth: { date: "1995-04-19" } });
+  await panel.getByRole("button", { name: "Use other birth details" }).click();
+  await expect(panel).not.toHaveAttribute("data-locked", "personal_year");
 });
 
 test("someone who does not know their lagna can find their year from the list", async ({ page }) => {

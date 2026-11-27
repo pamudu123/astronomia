@@ -1,0 +1,24 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.full {
+  border-color: transparent;
+  background: rgb(var(--glow) / 16%);
+  color: var(--gold);
+}
+
+.full svg {
+  width: 14px;
+  height: 14px;
+}

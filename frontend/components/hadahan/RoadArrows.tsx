@@ -9,10 +9,14 @@ type Props = {
   onMove: (years: number) => void;
 };
 
-/** Up and down buttons that move a road a year at a time. Shared by the life road and the couple road. */
+/**
+ * Up and down buttons that move a road a year at a time, on the road itself (its right edge), so
+ * it is plain they move that road. Shared by the life road and the couple road. A press here
+ * does not start a drag of the road under it.
+ */
 export function RoadArrows({ later, earlier, step, onMove }: Props) {
   return (
-    <div className={styles.arrows}>
+    <div className={styles.arrows} onPointerDown={(event) => event.stopPropagation()} data-road-arrows>
       <span className={styles.step} aria-hidden="true">
         {step}
       </span>

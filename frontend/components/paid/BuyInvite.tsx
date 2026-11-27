@@ -12,18 +12,29 @@ import styles from "./BuyInvite.module.css";
 import { CheckFailed, PaidText, useReportAccess } from "./ReportAccess";
 
 /** To the buying page, with the report on this page. */
-export function BuyButton({ lang, className = "btn btn-primary lift" }: { lang: Locale; className?: string }) {
+export function BuyButton({
+  lang,
+  className = "btn btn-primary lift",
+  label,
+}: {
+  /** The page's language. Taken from the report when left out. */
+  lang?: Locale;
+  className?: string;
+  /** Other words than "Buy this report". */
+  label?: string;
+}) {
   const t = useContext(PaidText);
   const { report, kuja } = useReportAccess();
   if (!t || !report) return null;
+  const language = lang ?? (report.kind === "hadahan" ? report.birth.lang : report.match.lang) ?? "en";
   return (
     <Link
-      href={buyPath(lang)}
+      href={buyPath(language)}
       className={className}
       data-buy
       onClick={() => keepBasket({ report, kuja, back: window.location.pathname + window.location.search })}
     >
-      {t.buy}
+      {label ?? t.buy}
     </Link>
   );
 }

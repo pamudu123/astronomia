@@ -19,11 +19,21 @@ if TYPE_CHECKING:  # app.store.orders imports the price list from this package
     from app.store.accounts import User
     from app.store.orders import OrderStore
 
-Feature = Literal["ai_reading", "ai_explain", "full_detail", "full_pdf"]
+Feature = Literal[
+    "ai_reading", "ai_explain", "full_detail", "full_pdf", "wedding_dates", "personal_year"
+]
 
 # What a paid report adds: the AI reading in chapters, the explain buttons, the full detail
-# (every Kuja dosha cancellation rule) and the PDF with all of it.
-PAID_FEATURES: tuple[Feature, ...] = ("ai_reading", "ai_explain", "full_detail", "full_pdf")
+# (every Kuja dosha cancellation rule), the PDF with all of it, the wedding nakath finder for
+# a porondam match's couple and "Your own 2027" for a hadahan's chart.
+PAID_FEATURES: tuple[Feature, ...] = (
+    "ai_reading",
+    "ai_explain",
+    "full_detail",
+    "full_pdf",
+    "wedding_dates",
+    "personal_year",
+)
 
 
 @dataclass(frozen=True)

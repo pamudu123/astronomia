@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { type Page, expect, test } from "@playwright/test";
 
+import { openAccess } from "./access";
+
 import { GOOGLE_EMAIL, SUPABASE, standInSupabase } from "./supabase";
 
 /** The backend is not running in these tests: its answers are saved real responses. */
@@ -38,6 +40,7 @@ const matchItem = {
 };
 
 async function mockTools(page: Page) {
+  await openAccess(page);
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
   await page.route("**/api/v1/places?*", (route) => route.fulfill(json("places-kandy.json")));
   await page.route("**/api/v1/time/resolve", (route) => route.fulfill(json("time-kandy.json")));
@@ -396,6 +399,7 @@ test("an empty My reports points to the tools", async ({ page }) => {
 });
 
 test("a saved hadahan opens with its PDF and Share buttons", async ({ page }) => {
+  await openAccess(page);
   const shared = JSON.parse(fixture("share-hadahan-en.json"));
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json("labels-en.json")));
   await page.route("**/api/v1/forecast", (route) => route.fulfill(json("forecast-en.json")));
@@ -473,6 +477,7 @@ const BIRTH = { date: "1995-04-19", time: "14:35", place_id: 1241622, latitude: 
 async function openSavedHadahan(page: Page, lang: "en" | "si", journey: ReturnType<typeof road> | null) {
   // Opened months after it was saved on 15 November 2026.
   await page.clock.setFixedTime(new Date(NOW));
+  await openAccess(page);
   const shared = JSON.parse(fixture(`share-hadahan-${lang}.json`));
   await page.route("**/api/v1/labels/*", (route) => route.fulfill(json(`labels-${lang}.json`)));
   await page.route("**/api/v1/forecast", (route) => route.fulfill({ status: 503, body: "" }));
@@ -607,14 +612,14 @@ test("a Google account with no reports can delete itself", async ({ page }) => {
 
 const PAID_ACCESS = {
   paid: true,
-  features: ["ai_reading", "ai_explain", "full_detail", "full_pdf"],
+  features: ["ai_reading", "ai_explain", "full_detail", "full_pdf", "wedding_dates", "personal_year"],
   paid_reports: true,
   account: "google",
   price: { amount: 80_000, currency: "LKR" },
   checkout: null,
 };
 
-test("a failed paid check shows the free report, and asks again when told to", async ({ page }) => {
+test("a failed paid check shows the free version, offers the full one, and asks again when told to", async ({ page }) => {
   let down = true;
   await page.route("**/api/v1/reports/access", (route) =>
     down ? route.fulfill({ status: 503, body: "" }) : route.fulfill(reply(200, PAID_ACCESS)),
@@ -624,15 +629,25 @@ test("a failed paid check shows the free report, and asks again when told to", a
   await kuja.locator("summary").click();
   await expect(kuja.locator('[data-locked="full_detail"]')).toBeVisible();
   const card = page.locator('[data-card="full-report"]');
-  await expect(card).toContainText("We could not check whether this is a full report");
+  // At the top: this is the free version, with the full analysis on offer.
+  // The first of them: each locked place (Kuja dosha's rules here) offers it too.
+  const note = page.locator("[data-check-failed]").first();
+  await expect(note).toContainText("We could not check whether this is a full report, so the free version is shown.");
+  await expect(page.locator('[data-version="free"]')).toHaveText("Free version");
+  await expect(page.getByRole("link", { name: "Get the full report" })).toBeVisible();
+  // Each locked place offers the full analysis, as Kuja dosha's rules do here.
+  await expect(kuja.getByRole("link", { name: "Get the full analysis" })).toBeVisible();
+  // The card further down still offers the full report, with no price to show.
+  await expect(card.getByRole("link", { name: "Buy this report" })).toBeVisible();
   // Asking again while the backend is still away changes nothing.
-  const again = card.getByRole("button", { name: "Check again" });
+  const again = note.getByRole("button", { name: "Check again" });
   await again.click();
   await expect(again).toBeVisible();
 
   down = false;
   await again.click();
   await expect(card.getByRole("heading", { name: "This is your full report" })).toBeVisible();
+  await expect(page.locator('[data-version="full"]')).toHaveText("Full report");
   await expect(kuja.locator('[data-locked="full_detail"]')).toHaveCount(0);
   await expect(page.locator("[data-check-failed]")).toHaveCount(0);
 });
@@ -647,6 +662,7 @@ test("the full report of a chart with Kuja dosha promises its rules", async ({ p
     "Explain buttons on every main place",
     "Every Kuja dosha rule, in full",
     "The full PDF with the AI reading",
+    "Your own 2027, counted from this chart",
     "Kept in My reports, and on any device if you sign in",
   ]);
 });
@@ -672,6 +688,7 @@ test("the full report of a match made from full details promises no Kuja dosha r
     "The full AI reading, chapter by chapter",
     "Explain buttons on every main place",
     "The full PDF with the AI reading",
+    "Wedding nakath for this couple: engagement, poruwa and homecoming",
     "Kept in My reports, and on any device if you sign in",
   ]);
 });

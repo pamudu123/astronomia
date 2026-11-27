@@ -6,6 +6,9 @@
 }
 
 .top {
+  /* Above the sections after it, so the PDF choice opens over them. */
+  position: relative;
+  z-index: 3;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
@@ -17,6 +20,21 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.eyebrowRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.freeNote {
+  flex-basis: 100%;
+}
+
+.freeNote:empty {
+  display: none;
 }
 
 .title {

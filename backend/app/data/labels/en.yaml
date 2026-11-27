@@ -143,12 +143,13 @@ porondam_factor:
   vedha: {name: Vedha, meaning: Stars that must not afflict each other}
 
 # The summary chart groups the counted factors by what each is traditionally said to relate
-# to. Rajju and Vedha are left out: the page shows them apart from the count.
+# to. Rajju and Vedha count too, in a group of their own.
 porondam_theme:
   health: {name: Wellbeing, factors: [dina, stree_deergha, ayusha, nadi]}
   bond: {name: Bond and temperament, factors: [gana, yoni, rashi, vashya, pakshi, linga, varna, bhuta]}
   family: {name: Family and children, factors: [mahendra, gothra, vruksha]}
   planets: {name: Planets and birth days, factors: [rashyadhipathi, weekday, graha]}
+  essential: {name: Essential checks, factors: [rajju, vedha]}
 
 porondam_reason:
   dina_pass: "Counting from the bride's star, the groom's is number {count}. The remainder after nine is {remainder}, which is favourable."
@@ -284,7 +285,7 @@ report:
   charts: Rashi charts
   about: About this report
   method_hadahan: "Lahiri ayanamsa ({ayanamsa}°), whole sign houses, mean node, Swiss Ephemeris."
-  method_porondam: "Lahiri ayanamsa. Matching uses the Moon of each person. Rajju and Vedha are kept apart from the count."
+  method_porondam: "Lahiri ayanamsa. Matching uses the Moon of each person. All 20 factors count, Rajju and Vedha too."
   rule_sets: "Rule sets: {rules}."
   porondam_provisional: "This report uses all 20 traditional porondam factors."
   kendara_note: "Houses run from the lagna box at the top."

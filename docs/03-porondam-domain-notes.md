@@ -89,6 +89,8 @@ The engine applies all 20 factors from `backend/app/data/rules/porondam_si_v3.ya
 | Rajju (essential) | Different rajju |
 | Vedha (essential) | Not an afflicting star pair |
 
+**The count (2026-11-26, owner's decision):** all 20 factors count, Rajju and Vedha too, so a full match is out of 20 as most people know it (a birth star only match is out of 18: Dina and Graha need birth details). Rajju and Vedha are still shown on their own as essential checks, and a failed one still makes the summary "essential_fail". The ring shows the share that agree as a percentage, with the count beside it.
+
 The star count factor was shown as "Dina" until rule set 2. The Sri Lankan sites call it the Nakath porondama and use "Dina" for the birth weekdays, so the names now follow them. The ids did not change.
 
 ## The 20 factors, and where the added four came from (2026-11-12)

@@ -4,14 +4,14 @@ import time as clock
 from datetime import date, datetime, timedelta, timezone
 
 import pytest
-from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
-from app.api import wedding as wedding_api
 from app.engine import panchanga as P
 from app.engine.ephemeris import SwissEphemeris, julian_day
 from app.engine.wedding import Person, _combust, find_dates, load_rules, tara
 from app.engine.zodiac import NAKSHATRA, RASHI, Body, sign_index, whole_sign_house
+from app.store.orders import OrderStore
+from tests.test_api_paid import paid_reports, sign_in
 
 EPHEMERIS = SwissEphemeris()
 COLOMBO = P.Place(6.9271, 79.8612, "Asia/Colombo")
@@ -177,16 +177,30 @@ def test_bad_input(client: TestClient) -> None:
     assert post(place_id=999999999) == 404
 
 
-def test_the_access_check_covers_the_finder(client: TestClient) -> None:
-    """The paid lock is added in wedding_access(); locking it locks the finder only."""
-
-    def locked() -> None:
-        raise HTTPException(402, "paid")
-
-    client.app.dependency_overrides[wedding_api.wedding_access] = locked  # type: ignore[attr-defined]
+def test_the_finder_is_in_the_full_report(client: TestClient, orders: OrderStore) -> None:
+    """Paid reports on: the finder opens once this couple's porondam report is unlocked."""
+    orders.create_coupon("pamudu", 100, max_uses=200, max_uses_per_account=10)
+    paid_reports(client)
+    sign_in(client)
     assert client.post("/v1/wedding-nakath", json=BODY).status_code == 402
+    # Other pages stay open.
     assert (
         client.get("/v1/panchanga", params={"date": "2027-01-01", "place_id": 1248991}).status_code
         == 200
     )
-    assert client.get("/v1/avurudu/2027").status_code == 200
+    match = {"bride": BODY["bride"], "groom": BODY["groom"], "lang": "si"}
+    unlocked = client.post(
+        "/v1/reports/unlock",
+        json={"report": {"kind": "porondam", "match": match}, "code": "pamudu"},
+    )
+    assert unlocked.status_code == 200, unlocked.text
+    assert "wedding_dates" in unlocked.json()["access"]["features"]
+    # The same couple, in either language, with any place or months.
+    assert client.post("/v1/wedding-nakath", json={**BODY, "lang": "en"}).status_code == 200
+    # Another couple is not unlocked.
+    other = {**BODY, "bride": {"nakshatra": "ashwini", "pada": 1}}
+    assert client.post("/v1/wedding-nakath", json=other).status_code == 402
+
+
+def test_with_paid_reports_off_the_finder_is_open(client: TestClient) -> None:
+    assert client.post("/v1/wedding-nakath", json=BODY).status_code == 200

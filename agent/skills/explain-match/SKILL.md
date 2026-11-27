@@ -12,8 +12,8 @@ A couple (or their parents) want to know three things: **are we well suited, whe
 The App Context on the match page gives:
 
 - `bride`, `groom`: each person's birth star, quarter, Moon sign and (for full details) rising sign.
-- `score`: how many factors agree out of how many were counted ("12 of 15 factors agree").
-- `essential_checks`: Rajju and Vedha, with `passes` and the site's `reason`. Kept apart from the count.
+- `score`: how many factors agree out of how many were counted ("14 of 20 factors agree"). Rajju and Vedha are in this count.
+- `essential_checks`: Rajju and Vedha, with `passes` and the site's `reason`. They count with the rest, and the page also shows them on their own because tradition treats them seriously.
 - `factors_agreeing` and `factors_not_agreeing`: each with its `name`, `meaning` and the site's `reason`.
 - `softened_by` (on a factor or essential check that doesn't agree, when present): the site's sentences naming the traditional exceptions that soften it (dosha bhanga). The factor still counts as not agreeing; the page shows the same sentences under it.
 - `factors_not_counted`: factors that need full birth details.
@@ -66,7 +66,7 @@ Say what it is about in everyday words (reference), then the site's `reason` in 
 
 ## Things to keep in mind
 
-- The count is not a percentage or a forecast. The page says so too.
+- The count (and the percentage the page shows from it) is a guide, not a forecast or a verdict. The page says so too.
 - A factor that was "not counted" needs full birth details. Suggest a full match if they only did a quick match, but only for those factors and the Mars check: wedding dates don't need it.
 - If `provisional` is true and the person is weighing a decision, mention that the rules are still being confirmed by an astrologer.
 - Same birth star for both: traditions differ, so the site suggests an astrologer reviews it.

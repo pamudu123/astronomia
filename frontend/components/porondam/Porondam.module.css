@@ -228,11 +228,33 @@
 /* Result */
 
 .couple {
+  /* Above the sections after it, so the PDF choice opens over them. */
+  position: relative;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   text-align: center;
+}
+
+/* The result's actions, at the top: the full report, the PDF, save, share and another match. */
+.topActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+}
+
+.freeNote {
+  width: 100%;
+  max-width: 860px;
+  text-align: left;
+}
+
+.freeNote:empty {
+  display: none;
 }
 
 .pairRow {
@@ -246,28 +268,73 @@
 }
 
 .who {
-  flex: 1 1 240px;
+  position: relative;
+  flex: 1 1 260px;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 18px 24px;
+  gap: 6px;
+  padding: 20px 24px 20px 28px;
+  overflow: hidden;
   border-radius: 20px;
   background: var(--panel);
   text-align: left;
+}
+
+/* A band of the person's colour down the left edge. */
+.who::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
 }
 
 .whoBride {
   border: 1px solid var(--teal);
 }
 
+.whoBride::before {
+  background: var(--teal);
+}
+
 .whoGroom {
   border: 1px solid var(--gold);
 }
 
-.whoName {
-  font-size: 20px;
+.whoGroom::before {
+  background: var(--gold);
+}
+
+.whoRole {
+  color: var(--ink-soft);
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.whoName {
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.whoBorn {
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--line-soft);
+  color: var(--ink);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.whoFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  color: var(--ink-soft);
+  font-size: 15px;
 }
 
 .link {
@@ -561,6 +628,74 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+/* "Factor by factor" folds away: its heading is the summary, with a show or hide button. */
+.factorsFold {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.factorsFold[open] > .factorsSummary {
+  margin-bottom: 24px;
+}
+
+.factorsSummary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--panel);
+  cursor: pointer;
+  list-style: none;
+}
+
+.factorsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.factorsSummaryText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.factorsSummaryText h2 {
+  margin: 0;
+}
+
+.foldButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.foldChevron {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.factorsFold[open] .foldChevron {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+.factorsSummary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.factorsFold .factorsHead {
+  margin-bottom: 24px;
 }
 
 .factorsHead {

@@ -51,9 +51,9 @@ def test_rules_are_confirmed_and_have_all_twenty_factors() -> None:
 def test_version_one_still_loads() -> None:
     old = match(star_point("anuradha", 2), star_point("rohini", 1), version="porondam_si_v1")
     assert old.rule_set == "porondam_si_v1"
-    assert len(old.scored) == 9
+    assert len(old.scored) == 11
     two = match(star_point("anuradha", 2), star_point("rohini", 1), version="porondam_si_v2")
-    assert len(two.scored) == 12
+    assert len(two.scored) == 14
 
 
 @pytest.mark.parametrize(
@@ -159,13 +159,13 @@ def test_vedha_in_both_directions() -> None:
 
 def test_score_and_summary() -> None:
     result = match(star_point("anuradha", 2), star_point("rohini", 1))
-    # A birth star only match has no weekdays or lagnas: 16 counted factors, and 18 with them.
-    assert len(result.scored) == 16
+    # A birth star only match has no weekdays or lagnas: 18 counted factors, and all 20 with them.
+    assert len(result.scored) == 18
     assert [f.id for f in result.unchecked] == ["weekday", "graha"]
     assert len(result.hard_checks) == 2
-    assert result.passed == 11
+    assert result.passed == 13
     full = match(star_point("anuradha", 2), star_point("rohini", 1), weekdays=(0, 1), lagnas=(0, 4))
-    assert len(full.scored) == 18
+    assert len(full.scored) == 20
     assert full.unchecked == []
     assert result.summary == "majority_pass"
     failed = match(star_point("ashwini", 1), star_point("jyeshtha", 1))

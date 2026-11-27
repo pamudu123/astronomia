@@ -1057,7 +1057,7 @@ export interface components {
             /** Paid */
             paid: boolean;
             /** Features */
-            features: ("ai_reading" | "ai_explain" | "full_detail" | "full_pdf")[];
+            features: ("ai_reading" | "ai_explain" | "full_detail" | "full_pdf" | "wedding_dates" | "personal_year")[];
             /** Paid Reports */
             paid_reports: boolean;
             /** Account */
@@ -2646,6 +2646,48 @@ export interface components {
             change: components["schemas"]["ChangeOut"];
             lagna: components["schemas"]["CountedOut"] | null;
             gochara: components["schemas"]["CountedOut"] | null;
+        };
+        /** PersonalYearRequest */
+        PersonalYearRequest: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Time
+             * Format: time
+             */
+            time: string;
+            /**
+             * Place Id
+             * @description A place id from /v1/places
+             */
+            place_id?: number | null;
+            /** Latitude */
+            latitude?: number | null;
+            /** Longitude */
+            longitude?: number | null;
+            /**
+             * Timezone
+             * @description Needed with latitude and longitude
+             */
+            timezone?: string | null;
+            /** Fold */
+            fold?: (0 | 1) | null;
+            /**
+             * Lang
+             * @default en
+             * @enum {string}
+             */
+            lang: "si" | "en";
+            /** As Of */
+            as_of?: string | null;
+            /**
+             * Name
+             * @default
+             */
+            name: string;
         };
         /** PersonalYearResponse */
         PersonalYearResponse: {
@@ -4399,7 +4441,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["HadahanRequest"];
+                "application/json": components["schemas"]["PersonalYearRequest"];
             };
         };
         responses: {

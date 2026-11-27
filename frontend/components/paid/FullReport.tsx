@@ -8,7 +8,7 @@ import { formatPrice, fullReportIncludes } from "@/lib/paid";
 
 import { BuyButton, BuyInvite } from "./BuyInvite";
 import styles from "./FullReport.module.css";
-import { CheckFailed, PaidText, useReportAccess } from "./ReportAccess";
+import { PaidText, useReportAccess } from "./ReportAccess";
 import { SaveWithGoogle } from "./SaveWithGoogle";
 
 /** The card's id: My reports links a free report's "Get the full report" here, to keep it. */
@@ -41,15 +41,14 @@ export function FullReport({ lang }: { lang: Locale }) {
   const { access, report, kuja } = useReportAccess();
   const base = useId();
 
-  if (t && report && access.state === "failed") {
-    return (
-      <div id={FULL_REPORT} ref={scrollIfAsked} data-card="full-report">
-        <CheckFailed />
-      </div>
-    );
-  }
-  if (!t || !report || access.state !== "ready" || !access.access.paid_reports) return null;
-  const { paid, account, price } = access.access;
+  if (!t || !report) return null;
+  // No answer from the paid check: this is the free version, so the card still offers the
+  // full report (with no price, which comes from the same answer) and a way to ask again.
+  const failed = access.state === "failed";
+  if (!failed && (access.state !== "ready" || !access.access.paid_reports)) return null;
+  const { paid, account, price } = failed
+    ? { paid: false, account: null, price: null }
+    : access.access;
 
   if (paid) {
     return (
@@ -89,10 +88,12 @@ export function FullReport({ lang }: { lang: Locale }) {
           </h2>
           <p className="soft">{report.kind === "hadahan" ? t.leadHadahan : t.leadPorondam}</p>
         </div>
-        <p className={styles.price} data-price>
-          {formatPrice(price, lang)}
-          <span className={styles.per}>{t.perReport}</span>
-        </p>
+        {price && (
+          <p className={styles.price} data-price>
+            {formatPrice(price, lang)}
+            <span className={styles.per}>{t.perReport}</span>
+          </p>
+        )}
       </div>
 
       <ul className={styles.includes}>

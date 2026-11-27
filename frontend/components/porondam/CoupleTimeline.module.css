@@ -262,3 +262,17 @@
     display: none;
   }
 }
+
+/* Ten years is a window, not an end: the tracks fade out at the right, with a note under them. */
+.goesOn .track,
+.goesOn .trackEmpty {
+  mask-image: linear-gradient(to right, #000 92%, transparent);
+}
+
+.continues {
+  align-self: flex-end;
+  margin: -8px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-style: italic;
+}

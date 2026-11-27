@@ -343,12 +343,14 @@ function drawMatch(t: Words, { visual, result, labels }: MatchParts & { visual: 
         </div>
       );
     case "ring": {
-      const count = match.factors.length;
+      // All 20, Rajju and Vedha too, as the page's ring and the score count them.
+      const all = [...match.factors, ...match.hard_checks];
+      const count = all.length;
       const gap = 2.4;
       return (
         <div className={styles.ringRow}>
           <svg className={styles.factorRing} viewBox="0 0 300 300" role="img" aria-label={fill(t.score, { passed: match.score.passed, total: match.score.total })}>
-            {match.factors.map((factor, index) => {
+            {all.map((factor, index) => {
               const a0 = 90 - (index * 360) / count - gap / 2;
               const a1 = 90 - ((index + 1) * 360) / count + gap / 2;
               const [x1, y1] = point(a0, 140);

@@ -122,6 +122,7 @@ Notes:
   - Backend: `yearly_access()` in `backend/app/api/yearly.py`. Every yearly endpoint depends on it. A test proves that locking it locks every yearly endpoint and leaves the change pages open.
   - Frontend: `YearlyGate` in `frontend/components/yearly/YearlyGate.tsx`. Every yearly page and the "Your 2027" link on the hadahan go through it.
 - The 12 general yearly pages stay public for now, for search. When the lock comes, the choice is to keep them public and lock only the personal version, or lock both.
+- **Decided 2026-11-26:** the 12 yearly pages stay public, and "Your own 2027" is part of a hadahan's full report: buying that hadahan opens it, with no payment of its own. The backend checks it in `personal_year_access()` (`backend/app/api/yearly.py`, feature `personal_year`), from the hadahan's name and birth details; the page shows a lock and the way to buy that hadahan when the server says 402.
 
 ### 4.7 Nakath (2026-11-13)
 
@@ -137,6 +138,7 @@ Notes:
 - The wedding nakath finder is paid by decision, but built open until payments exist. Its code is kept apart so the lock goes in one place on each side:
   - Backend: `wedding_access()` in `backend/app/api/wedding.py`. The finder endpoint depends on it. A test proves that locking it locks the finder and leaves the daily and Avurudu nakath open.
   - Frontend: `WeddingGate` in `frontend/components/wedding/WeddingGate.tsx`. The finder on the porondam result goes through it.
+- **Decided 2026-11-26:** the finder is part of the couple's full porondam report. Buying the report opens it, with no payment of its own. `wedding_access()` now checks the couple's report (feature `wedding_dates`) and answers 402 without it; `WeddingGate` shows the finder's title with a lock and the way to buy the report.
 - The old horoscope search is free for now. It is kept apart so a paid check can go in one place: `kendara_access()` in `backend/app/api/kendara.py`, and the page in `frontend/components/kendara/`.
 
 ### 4.8 Baby and child (2026-11-13)

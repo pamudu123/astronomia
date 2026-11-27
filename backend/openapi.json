@@ -934,7 +934,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/HadahanRequest"
+                "$ref": "#/components/schemas/PersonalYearRequest"
               }
             }
           }
@@ -2960,7 +2960,9 @@
                 "ai_reading",
                 "ai_explain",
                 "full_detail",
-                "full_pdf"
+                "full_pdf",
+                "wedding_dates",
+                "personal_year"
               ]
             },
             "type": "array",
@@ -7627,6 +7629,118 @@
           "gochara"
         ],
         "title": "PersonalChangeResponse"
+      },
+      "PersonalYearRequest": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "time": {
+            "type": "string",
+            "format": "time",
+            "title": "Time"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id",
+            "description": "A place id from /v1/places"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 90.0,
+                "exclusiveMinimum": -90.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "Needed with latitude and longitude"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "si",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "en"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "title": "Name",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "time"
+        ],
+        "title": "PersonalYearRequest"
       },
       "PersonalYearResponse": {
         "properties": {

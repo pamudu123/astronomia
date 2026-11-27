@@ -80,7 +80,7 @@ def test_share_a_match(client: TestClient) -> None:
     assert body["kind"] == "porondam"
     match = body["porondam"]
     assert (match["bride"]["name"], match["groom"]["name"]) == ("Nimali", "Kasun")
-    assert match["match"]["score"] == {"passed": 9, "total": 18}
+    assert match["match"]["score"] == {"passed": 11, "total": 20}
     assert match["kuja"]["comparison"] == "bride_only"
     assert match["bride"]["offset_label"] == "UTC+05:30"
 
@@ -164,7 +164,7 @@ def test_names_and_birth_details_are_hidden_by_default(
     for role in ("bride", "groom"):
         assert match["porondam"][role]["name"] == ""
         assert match["porondam"][role]["offset_label"] is None
-    assert match["porondam"]["match"]["score"] == {"passed": 9, "total": 18}
+    assert match["porondam"]["match"]["score"] == {"passed": 11, "total": 20}
 
 
 def test_names_can_be_shown_without_birth_details(client: TestClient, shares: ShareStore) -> None:

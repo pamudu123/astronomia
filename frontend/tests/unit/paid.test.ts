@@ -73,13 +73,13 @@ describe("what the full report includes", () => {
     ({ kind: "porondam", match: { bride, groom, lang: "en" } }) as unknown as ReportRequest;
 
   it("promises the Kuja dosha rules only on a chart that has Kuja dosha", () => {
-    expect(fullReportIncludes(chart, true)).toEqual(["reading", "explain", "kuja", "pdf", "kept"]);
-    expect(fullReportIncludes(chart, false)).toEqual(["reading", "explain", "pdf", "kept"]);
+    expect(fullReportIncludes(chart, true)).toEqual(["reading", "explain", "kuja", "pdf", "year", "kept"]);
+    expect(fullReportIncludes(chart, false)).toEqual(["reading", "explain", "pdf", "year", "kept"]);
   });
 
-  it("promises no extra detail on a match, and says what a star match is read from", () => {
-    expect(fullReportIncludes(match(full, full))).toEqual(["reading", "explain", "pdf", "kept"]);
-    expect(fullReportIncludes(match(star, star))).toEqual(["readingStars", "explain", "pdf", "kept"]);
+  it("promises the wedding dates on a match, and says what a star match is read from", () => {
+    expect(fullReportIncludes(match(full, full))).toEqual(["reading", "explain", "pdf", "wedding", "kept"]);
+    expect(fullReportIncludes(match(star, star))).toEqual(["readingStars", "explain", "pdf", "wedding", "kept"]);
     expect(fullReportIncludes(match(full, star))).toContain("readingStars");
   });
 });

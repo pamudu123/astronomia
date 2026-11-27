@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionState } from "@/components/SectionState";
-import type { Labels } from "@/lib/hadahan";
+import { type Labels, fill } from "@/lib/hadahan";
 import type { Locale } from "@/lib/i18n";
 import {
   type PersonTimeline,
@@ -114,6 +114,7 @@ export function CoupleTimeline({
     ["groom", groomName, timeline.groom],
   ];
   const ticks = yearTicks(timeline.start, timeline.end);
+  const lastYear = ticks.length ? ticks[ticks.length - 1].year : new Date(timeline.end).getUTCFullYear();
 
   return (
     <section className={`rise ${styles.panel}`} aria-labelledby="timeline-title" data-card="timeline">
@@ -126,7 +127,8 @@ export function CoupleTimeline({
         {explain}
       </div>
 
-      <div className={styles.chart} aria-hidden="true">
+      {/* The window is ten years, not the end of anything: the tracks fade out at the right and say so. */}
+      <div className={`${styles.chart} ${styles.goesOn}`} aria-hidden="true">
         <div className={styles.row}>
           <span />
           <div className={styles.axis}>
@@ -176,6 +178,10 @@ export function CoupleTimeline({
           </div>
         </div>
       </div>
+      <p className={styles.continues} data-continues>
+        {fill(t.continues, { year: lastYear })}
+        <span aria-hidden="true"> →</span>
+      </p>
 
       <ul className={styles.legend}>
         <li>

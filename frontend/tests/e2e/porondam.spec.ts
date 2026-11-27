@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { type Locator, type Page, expect, test } from "@playwright/test";
 
+import { OPEN_ACCESS, openAccess } from "./access";
+
 /** The backend is not running in these tests: its answers are saved real responses. */
 const fixture = (name: string) => readFileSync(join(__dirname, "fixtures", name), "utf-8");
 
@@ -18,8 +20,13 @@ async function mockBackend(page: Page, lang: "en" | "si", porondam: string) {
     requests.push(route.request().postData() ?? "");
     return route.fulfill({ contentType: "application/json", body: fixture(porondam) });
   });
+  // Paid reports switched off, so everything is open. Tests about buying answer it themselves.
+  await openAccess(page);
   return requests;
 }
+
+/** Opens "Factor by factor", which starts folded away. */
+const openFactors = (page: Page) => page.locator("[data-factors-fold] summary").click();
 
 async function quickForm(page: Page, brideStar = "anuradha") {
   await page.getByRole("button", { name: "Birth stars only" }).click();
@@ -39,7 +46,7 @@ test("a quick match by birth stars", async ({ page }) => {
   await page.getByRole("button", { name: "Match the charts" }).click();
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nimali and Kasun");
-  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 16 agree");
+  await expect(page.locator('[data-panel="factors"]')).toContainText("13 of 18 agree");
   await expect(page.locator('[data-check="rajju"]')).toContainText("Pass");
   await expect(page.locator('[data-check="vedha"]')).toContainText("Pass");
   // 16 counted factors, and Dina and Graha shown as not counted (they need the birth details).
@@ -87,38 +94,51 @@ test("a result without checked counts every factor, and names stay in their cell
   expect(overflowing).toEqual([]);
 });
 
-test("the summary ring groups the factors by life area, with Rajju and Vedha kept apart", async ({ page }) => {
+test("the summary ring groups all 20 factors by life area, with the share that agree in its middle", async ({ page }) => {
   await mockBackend(page, "en", "porondam-quick-en.json");
   await page.goto("/en/porondam");
   await quickForm(page);
   await page.getByRole("button", { name: "Match the charts" }).click();
 
   const factors = page.locator('[data-panel="factors"]');
-  // One segment per factor: 16 counted, and Dina and Graha drawn as not counted.
+  // One segment per factor, all 20: 18 counted, and Dina and Graha drawn as not counted.
   const ring = factors.locator("[data-ring]");
   await expect(ring).toHaveAttribute("aria-hidden", "true");
-  await expect(ring.locator("[data-segment]")).toHaveCount(18);
+  await expect(ring.locator("[data-segment]")).toHaveCount(20);
   await expect(ring.locator('[data-segment="off"]')).toHaveCount(2);
-  await expect(ring.locator('[data-segment="pass"]')).toHaveCount(11);
-  await expect(ring).toContainText("of 16");
+  await expect(ring.locator('[data-segment="pass"]')).toHaveCount(13);
+  // The middle shows the share that agree, 13 of 18; screen readers hear it with the count.
+  await expect(ring).toContainText("72%");
+  await expect(factors).toContainText("72% of the counted factors agree (13 of 18)");
 
   const themes = factors.locator("[data-theme]");
-  await expect(themes).toHaveCount(4);
+  await expect(themes).toHaveCount(5);
   await expect(themes.locator("h3")).toHaveText([
     "Long life and health4 of 4 agree",
     "Bond and temperament5 of 8 agree",
     "Family and children1 of 3 agree",
     "Planets and birth days1 of 1 agree",
+    "Essential checks2 of 2 agree",
   ]);
   await expect(factors.locator('[data-theme="planets"] [data-marker="off"]')).toHaveCount(2);
   await expect(factors).toContainText("Grouped by what each factor is traditionally said to relate to.");
-  // Rajju and Vedha stay in their own panel, not in the ring or the count.
-  await expect(factors.getByRole("link", { name: /^(Rajju|Vedha):/ })).toHaveCount(0);
+  // Rajju and Vedha are in the ring and the count, and still have their own panel.
+  await expect(factors.getByRole("link", { name: /^(Rajju|Vedha):/ })).toHaveCount(2);
   await expect(page.locator('[data-panel="checks"] [data-check]')).toHaveCount(2);
 
   // Pointing at a life area makes the rest of the ring step back.
   await factors.locator('[data-theme="health"]').hover();
-  await expect(ring.locator("path[class*=dim]")).toHaveCount(14);
+  await expect(ring.locator("path[class*=dim]")).toHaveCount(16);
+
+  // The same factors as one table, for those who know porondam that way.
+  await factors.getByRole("button", { name: "Table" }).click();
+  const table = factors.locator("[data-factor-table]");
+  await expect(table.locator("tbody tr")).toHaveCount(20);
+  await expect(table.locator("tbody tr").first()).toContainText("Long life and health");
+  await expect(table.locator('tbody tr[data-row="off"]')).toHaveCount(2);
+  await expect(factors.locator("[data-theme]")).toHaveCount(0);
+  await factors.getByRole("button", { name: "Groups" }).click();
+  await expect(factors.locator("[data-theme]")).toHaveCount(5);
 });
 
 test("labels with no life areas still show every factor in the summary", async ({ page }) => {
@@ -133,8 +153,8 @@ test("labels with no life areas still show every factor in the summary", async (
   await page.getByRole("button", { name: "Match the charts" }).click();
 
   const factors = page.locator('[data-panel="factors"]');
-  await expect(factors.locator("[data-ring] [data-segment]")).toHaveCount(18);
-  await expect(factors.locator("[data-marker]")).toHaveCount(18);
+  await expect(factors.locator("[data-ring] [data-segment]")).toHaveCount(20);
+  await expect(factors.locator("[data-marker]")).toHaveCount(20);
   await expect(factors.locator("[data-theme] h3")).toHaveCount(0);
   await expect(factors).not.toContainText("Grouped by");
 });
@@ -164,6 +184,9 @@ test("the factor filter", async ({ page }) => {
   await page.goto("/en/porondam");
   await quickForm(page);
   await page.getByRole("button", { name: "Match the charts" }).click();
+  // "Factor by factor" starts folded away.
+  await expect(page.locator("[data-factor]").first()).toBeHidden();
+  await openFactors(page);
   await page.getByRole("button", { name: "Do not agree" }).click();
   await expect(page.locator("[data-factor]")).toHaveCount(5);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
@@ -182,7 +205,9 @@ test("a full match shows Kuja dosha for both", async ({ page }) => {
   }
   await page.locator("#match-consent").check();
   await page.getByRole("button", { name: "Match the charts" }).click();
-  await expect(page.locator('[data-panel="factors"]')).toContainText("9 of 18 agree");
+  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 20 agree");
+  // Each person's card, at the top, says when they were born.
+  await expect(page.locator("[data-born]")).toHaveText(["Born 19 April 1995, 10:00", "Born 3 August 1992, 10:00"]);
   await expect(page.locator('[data-factor="graha"]')).toHaveAttribute("data-counted", "true");
   await expect(page.locator('[data-factor="weekday"]')).toHaveAttribute("data-counted", "true");
   await expect(page.getByRole("heading", { name: "Kuja dosha" })).toBeVisible();
@@ -533,7 +558,7 @@ test("the wedding finder asks for at least one ceremony, and survives a failure"
   await section.getByLabel("Poruwa ceremony").check();
   await section.getByRole("button", { name: "Find dates" }).click();
   await expect(section.getByRole("alert")).toHaveText("We could not search. Please try again.");
-  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 16 agree");
+  await expect(page.locator('[data-panel="factors"]')).toContainText("13 of 18 agree");
 });
 
 test("each way of matching says what it compares, before anything is typed", async ({ page }) => {
@@ -557,19 +582,21 @@ test("the result shows the count and the separate checks side by side, with no v
   const factors = page.locator('[data-panel="factors"]');
   const checks = page.locator('[data-panel="checks"]');
   await expect(factors).toContainText("Traditional factors");
-  await expect(factors).toContainText("11 of 16 agree");
+  await expect(factors).toContainText("13 of 18 agree");
   await expect(factors).toContainText("2 not counted here");
-  await expect(factors).toContainText("not a percentage or a forecast");
+  await expect(factors).toContainText("a guide, not a forecast");
   await expect(checks).toContainText("Separate traditional checks");
   await expect(checks).toContainText("Rajju and Vedha");
-  await expect(checks).toContainText("apart from the count");
-  await expect(page.locator("main")).not.toContainText("%");
+  await expect(checks).toContainText("in the count of 20 too");
+  // The method line is not shown.
+  await expect(page.locator("main")).not.toContainText("porondam_si_v3");
 
   // Every factor is named, with its outcome in words as well as colour.
-  await expect(factors.locator("[data-marker]")).toHaveCount(18);
+  await expect(factors.locator("[data-marker]")).toHaveCount(20);
   await expect(factors.getByRole("link", { name: "Graha: Not counted" })).toBeVisible();
 
   // A factor's link opens its explanation, even when the filter would hide it.
+  await openFactors(page);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
   await factors.getByRole("link", { name: "Graha: Not counted" }).click();
   await expect(page.locator("#factor-graha")).toBeInViewport();
@@ -638,6 +665,7 @@ test("a star match's full report lists what it gains", async ({ page }) => {
     "The full AI reading, from the two birth stars",
     "Explain buttons on every main place",
     "The full PDF with the AI reading",
+    "Wedding nakath for this couple: engagement, poruwa and homecoming",
     "Kept in My reports, and on any device if you sign in",
   ];
   const form = page.locator('[data-card="full-report"]');
@@ -680,7 +708,7 @@ test("a match from full birth details asks that both adults agreed", async ({ pa
   await consent.check();
   await expect(page.getByText("Please confirm this before matching")).toHaveCount(0);
   await submitMatch(page);
-  await expect(page.locator('[data-panel="factors"]')).toContainText("9 of 18 agree");
+  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 20 agree");
   // Asked again for the next match.
   await page.getByRole("button", { name: "Try another match" }).first().click();
   await expect(consent).not.toBeChecked();
@@ -761,7 +789,7 @@ test("a finished match stays when the backend does not answer after a reload", a
   await expect(page.locator('[data-panel="factors"]')).toBeVisible();
   await page.route("**/api/v1/porondam", (route) => route.fulfill({ status: 503, body: "" }));
   await page.reload();
-  await expect(page.locator('[data-panel="factors"]')).toContainText("11 of 16 agree");
+  await expect(page.locator('[data-panel="factors"]')).toContainText("13 of 18 agree");
 });
 
 test("the match form recovers when its names cannot be loaded, keeping what was typed", async ({ page }) => {
@@ -817,4 +845,87 @@ test("the couple's road holds its place while it loads, and can be tried again",
   await expect(road).toContainText("We could not load this section.");
   await road.getByRole("button", { name: "Try again" }).click();
   await expect.poll(() => calls).toBe(2);
+});
+
+const FREE_ACCESS = { ...OPEN_ACCESS, features: [], paid_reports: true };
+
+test("the free version says so at the top, and offers the full report there", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await timeline(page, "timeline-quick-en.json");
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify(FREE_ACCESS) }),
+  );
+  const reports: string[] = [];
+  await page.route("**/api/v1/reports/pdf", (route) => {
+    reports.push(route.request().postData() ?? "");
+    return route.fulfill({ contentType: "application/pdf", body: "%PDF-1.7\n%test\n" });
+  });
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await submitMatch(page);
+
+  const top = page.locator("main > section").first();
+  await expect(top.locator('[data-version="free"]')).toHaveText("Free version");
+  await expect(top.getByRole("link", { name: "Get the full report" })).toBeVisible();
+  // The actions sit at the top, with Try another match.
+  await expect(top.getByRole("button", { name: "Try another match" })).toBeVisible();
+  await expect(top.getByRole("button", { name: "Save" })).toBeVisible();
+
+  // The PDF asks first: the free one now, or the full version.
+  const pdf = top.getByRole("button", { name: "Download PDF (free version)" });
+  await pdf.click();
+  const choice = top.locator("[data-pdf-choice]");
+  await expect(choice).toContainText("Which PDF would you like?");
+  const download = page.waitForEvent("download");
+  await choice.getByRole("button", { name: "Download the free PDF" }).click();
+  expect((await download).suggestedFilename()).toBe("sidera-porondam.pdf");
+  expect(JSON.parse(reports[0]).reading).toBeUndefined();
+  await pdf.click();
+  await expect(choice.getByRole("link", { name: "Get the full version" })).toHaveAttribute("href", "/en/buy");
+
+  // The wedding finder is in the full report: locked, with the way to buy it.
+  const wedding = page.locator('[data-card="wedding"]');
+  await expect(wedding).toHaveAttribute("data-locked", "wedding_dates");
+  await expect(wedding).toContainText("Buy the report once and this opens too");
+  await expect(wedding.getByRole("link", { name: "Buy this report" })).toBeVisible();
+  await expect(wedding.locator("form")).toHaveCount(0);
+
+  await top.getByRole("link", { name: "Get the full report" }).click();
+  await expect(page).toHaveURL(/\/en\/buy$/);
+});
+
+test("a failed paid check shows the free version, with the full analysis on offer", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.route("**/api/v1/reports/access", (route) => route.fulfill({ status: 503, body: "" }));
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await submitMatch(page);
+
+  const top = page.locator("main > section").first();
+  const note = top.locator("[data-check-failed]");
+  await expect(note).toContainText("We could not check whether this is a full report, so the free version is shown.");
+  await expect(note.getByRole("button", { name: "Check again" })).toBeVisible();
+  await expect(top.getByRole("link", { name: "Get the full report" })).toBeVisible();
+  // The card further down offers it too, without a price the failed check could not give.
+  const card = page.locator('[data-card="full-report"]');
+  await expect(card.getByRole("link", { name: "Buy this report" })).toBeVisible();
+  await expect(card.locator("[data-price]")).toHaveCount(0);
+});
+
+test("a paid report says so, and opens the wedding finder with no payment of its own", async ({ page }) => {
+  await mockBackend(page, "en", "porondam-quick-en.json");
+  await page.route("**/api/v1/reports/access", (route) =>
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({ ...OPEN_ACCESS, paid: true, paid_reports: true, account: "guest" }),
+    }),
+  );
+  await page.goto("/en/porondam");
+  await quickForm(page);
+  await submitMatch(page);
+  const top = page.locator("main > section").first();
+  await expect(top.locator('[data-version="full"]')).toHaveText("Full report");
+  await expect(top.getByRole("link", { name: "Get the full report" })).toHaveCount(0);
+  await expect(top.getByRole("button", { name: "Download PDF", exact: true })).toBeVisible();
+  await expect(page.locator('[data-card="wedding"]')).not.toHaveAttribute("data-locked", "wedding_dates");
 });

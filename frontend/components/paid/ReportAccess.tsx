@@ -8,6 +8,7 @@ import { onSavedChange } from "@/lib/account";
 import { fetchAccess, fetchPaidReportsOn } from "@/lib/paid";
 import type { ReportRequest } from "@/lib/report";
 
+import { BuyButton } from "./BuyInvite";
 import styles from "./FullReport.module.css";
 
 type Value = {
@@ -172,23 +173,42 @@ function SharedAccess({ kind, children }: { kind: ReportRequest["kind"]; childre
   );
 }
 
-/** In place of the paid check's answer when there was none: says so, and asks again. */
-export function CheckFailed({ text }: { text?: string }) {
+/**
+ * In place of the paid check's answer when there was none. The page is then the free version,
+ * so this says so, offers the full analysis, and can ask the backend again.
+ */
+export function CheckFailed({
+  text,
+  buy = true,
+  badge = true,
+}: {
+  text?: string;
+  /** False where a buy button is beside it already. */
+  buy?: boolean;
+  /** False where the page says "Free version" beside it already. */
+  badge?: boolean;
+}) {
   const t = useContext(PaidText);
-  const { retry, retrying } = useReportAccess();
+  const { retry, retrying, report } = useReportAccess();
   if (!t) return null;
   return (
     <div className={styles.checkFailed} data-check-failed>
-      <p role="status">{text ?? t.checkFailed}</p>
-      {/* Kept enabled while asking, so the keyboard does not lose its place. */}
-      <button
-        type="button"
-        className={styles.linkButton}
-        onClick={() => !retrying && retry()}
-        aria-busy={retrying}
-      >
-        {retrying ? t.checking : t.checkAgain}
-      </button>
+      <div className={styles.checkWords}>
+        {badge && <span className={styles.freeBadge}>{t.freeBadge}</span>}
+        <p role="status">{text ?? t.checkFailed}</p>
+      </div>
+      <div className={styles.checkActions}>
+        {buy && report && <BuyButton label={t.getFullAnalysis} className="btn btn-primary lift" />}
+        {/* Kept enabled while asking, so the keyboard does not lose its place. */}
+        <button
+          type="button"
+          className={styles.linkButton}
+          onClick={() => !retrying && retry()}
+          aria-busy={retrying}
+        >
+          {retrying ? t.checking : t.checkAgain}
+        </button>
+      </div>
     </div>
   );
 }
